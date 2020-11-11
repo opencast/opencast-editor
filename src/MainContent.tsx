@@ -4,7 +4,14 @@ import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 
+import { useSelector } from 'react-redux'
+import {
+  selectMainMenuState,
+} from './mainMenuSlice'
+
 const MainContent: React.FC<{}> = () => {
+
+  const mainMenuState = useSelector(selectMainMenuState)
 
   const toolboxContentStyle = {
     backgroundColor: 'rgba(245, 245, 220, 1)',
@@ -21,9 +28,12 @@ const MainContent: React.FC<{}> = () => {
 
   return (
     <div css={toolboxContentStyle} title="ToolboxContext">
-        <Video />
+        {mainMenuState}
+        <div css={{width: '100%', display: 'flex', flexDirection: 'row' as const, justifyContent: 'space-around', gap: "20px"}}>
+          <Video />
+          <CuttingActions />
+        </div>
         <Timeline />
-        <CuttingActions />
     </div>
   );
 };

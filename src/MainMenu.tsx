@@ -1,9 +1,15 @@
 import React, { useState }  from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faFilm, faListUl, faPhotoVideo, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { css } from '@emotion/core'
+
+import { useDispatch } from 'react-redux'
+import {
+  setState,
+} from './mainMenuSlice'
+
 
 const MainMenu: React.FC<{}> = () => {
 
@@ -21,17 +27,20 @@ const MainMenu: React.FC<{}> = () => {
 
   return (
     <div style={toolboxStyle} title="Toolbox">
-      <ToolboxButton />
-      <ToolboxButton />
-      <ToolboxButton />
-      <ToolboxButton />
+      <ToolboxButton iconName={faFilm} stateName="Cutting"/>
+      <ToolboxButton iconName={faListUl} stateName="Metadata"/>
+      <ToolboxButton iconName={faPhotoVideo} stateName="Thumbnail"/>
+      <ToolboxButton iconName={faCut} stateName="Start Workflow"/>
     </div>
   );
 };
 
-const ToolboxButton: React.FC<{}> = () => {
+const ToolboxButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {
+
+  const dispatch = useDispatch();
 
   const [isActive, setisActive] = useState(false); 
+  //const [stateName, setStateName] = useState("Oh no");
 
   const iconStyle = {
     borderRadius: '25px',
@@ -53,9 +62,13 @@ const ToolboxButton: React.FC<{}> = () => {
 
   return (
     <>
-    <FontAwesomeIcon css={iconStyle} icon={faCut} size="5x" 
-      onClick={() => setisActive(!isActive)}
-    />
+      <FontAwesomeIcon css={iconStyle} icon={iconName} size="7x" 
+        onClick={() => { 
+          setisActive(!isActive); 
+          dispatch(setState(stateName)); 
+        }}
+      />
+      {stateName}
     </>
   );
 };
