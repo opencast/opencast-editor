@@ -7,8 +7,13 @@ import CuttingActions from './CuttingActions';
 import { useSelector } from 'react-redux'
 import {
   selectMainMenuState,
-} from './mainMenuSlice'
+} from '../redux/mainMenuSlice'
 
+/**
+ * A container for the main functionality
+ * Holds different components depending on the state off the app
+ * TODO: Add component switching
+ */
 const MainContent: React.FC<{}> = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)

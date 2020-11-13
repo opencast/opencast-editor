@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+/**
+ * Slice for the main menu state
+ */
 export const mainMenuSlice = createSlice({
   name: 'mainMenuState',
   initialState: {

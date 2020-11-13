@@ -8,9 +8,11 @@ import { css } from '@emotion/core'
 import { useDispatch } from 'react-redux'
 import {
   setState,
-} from './mainMenuSlice'
+} from '../redux/mainMenuSlice'
 
-
+/**
+ * A container for selecting the functionality shown in the main part of the app
+ */
 const MainMenu: React.FC<{}> = () => {
 
   const toolboxStyle = {
@@ -27,20 +29,24 @@ const MainMenu: React.FC<{}> = () => {
 
   return (
     <div style={toolboxStyle} title="Toolbox">
-      <ToolboxButton iconName={faFilm} stateName="Cutting"/>
-      <ToolboxButton iconName={faListUl} stateName="Metadata"/>
-      <ToolboxButton iconName={faPhotoVideo} stateName="Thumbnail"/>
-      <ToolboxButton iconName={faCut} stateName="Start Workflow"/>
+      <MainMenuButton iconName={faFilm} stateName="Cutting"/>
+      <MainMenuButton iconName={faListUl} stateName="Metadata"/>
+      <MainMenuButton iconName={faPhotoVideo} stateName="Thumbnail"/>
+      <MainMenuButton iconName={faCut} stateName="Start Workflow"/>
     </div>
   );
 };
 
-const ToolboxButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {
+/**
+ * A button to set the state of the app
+ * TODO: Complete Styling
+ * @param param0 
+ */
+const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {
 
   const dispatch = useDispatch();
 
   const [isActive, setisActive] = useState(false); 
-  //const [stateName, setStateName] = useState("Oh no");
 
   const iconStyle = {
     borderRadius: '25px',

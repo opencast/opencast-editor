@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
-    "redux-devtools": "^3.7.0"
+    "redux-devtools": "^3.7.0",
+    "use-resize-observer": "^7.0.0"
   }
 }

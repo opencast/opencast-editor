@@ -5,6 +5,10 @@ import { faCut, faEyeSlash, faTrash, IconDefinition } from "@fortawesome/free-so
 
 import { css, SerializedStyles } from '@emotion/core'
 
+/**
+ * Defines the different actions a user can perform while in cutting mode
+ * TODO: Shape this like a proper grid
+ */
 const CuttingActions: React.FC<{}> = () => {
 
   const cuttingActionsStyle = css({
@@ -12,15 +16,12 @@ const CuttingActions: React.FC<{}> = () => {
     borderRadius: '25px',
     display: 'flex',
     flexDirection: 'row' as const,
-    //justifyContent: 'stretch',
-    //flexBasis: 0,
     padding: '10px',
     gap: '20px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
   });
 
   const columnStyle = css({
-    //border: 'solid',
     flex: 1,
     display: 'flex',
     flexDirection: 'column' as const,
@@ -45,6 +46,12 @@ const CuttingActions: React.FC<{}> = () => {
   );
 };
 
+/**
+ * A button representing a single action a user can take while cutting
+ * TODO: Add functionality
+ * TODO: Complete styling
+ * @param param0 
+ */
 const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: string}> = ({iconName, actionName}) => {
 
   const iconStyle = {

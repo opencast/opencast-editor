@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { Segment, Segments } from './types'
+import { Segment, Segments } from '../types'
 
-// TODO: Add id that can be used as a key in react components
-
+/**
+ * Slice for the segments
+ */
 const initialState: Segments = {
   segments: [{startTime: 0, endTime: 120, state: "alive"},
             {startTime: 120, endTime: 1220, state: "Hello there"}]  // Testvalues
