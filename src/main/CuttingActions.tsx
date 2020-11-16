@@ -5,6 +5,11 @@ import { faCut, faEyeSlash, faTrash, IconDefinition } from "@fortawesome/free-so
 
 import { css, SerializedStyles } from '@emotion/core'
 
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  selectSegments, cut
+} from '../redux/videoSlice'
+
 /**
  * Defines the different actions a user can perform while in cutting mode
  * TODO: Shape this like a proper grid
@@ -33,14 +38,14 @@ const CuttingActions: React.FC<{}> = () => {
   return (
     <div css={cuttingActionsStyle} title="CuttingActions">
       <div css={columnStyle}>
-      <CuttingActionsButton iconName={faCut} actionName="Schneiden" />
-      <CuttingActionsButton iconName={faEyeSlash} actionName="Verstecken" />
+      <CuttingActionsButton iconName={faCut} actionName="Schneiden" action={cut}/>
+      <CuttingActionsButton iconName={faEyeSlash} actionName="Verstecken" action={cut}/>
       </div>
       <div css={columnStyle}>
-      <CuttingActionsButton iconName={faTrash} actionName="Löschen" />
+      <CuttingActionsButton iconName={faTrash} actionName="Löschen" action={cut}/>
       </div>
       <div css={columnStyle}>
-      <CuttingActionsButton iconName={faCut} actionName="Schneiden" />
+      <CuttingActionsButton iconName={faCut} actionName="Schneiden" action={cut}/>
       </div>
     </div>
   );
@@ -52,9 +57,11 @@ const CuttingActions: React.FC<{}> = () => {
  * TODO: Complete styling
  * @param param0 
  */
-const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: string}> = ({iconName, actionName}) => {
+const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: string, action: any}> = ({iconName, actionName, action}) => {
 
-  const iconStyle = {
+  const dispatch = useDispatch();
+
+  const cuttingActionButtonStyle = {
     borderRadius: '25px',
     cursor: "pointer",
     transitionDuration: "0.3s",
@@ -65,14 +72,18 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
     "&:active": {
       transform: 'scale(0.9)',
     },
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    gap: '10px',
   };
 
   return (
-    <>
-      <FontAwesomeIcon css={iconStyle} icon={iconName} size="5x" 
+    <div css={cuttingActionButtonStyle} title={actionName} onClick={() => dispatch(action())}>
+      <FontAwesomeIcon icon={iconName} size="5x" 
       />
       {actionName}
-    </>
+    </div>
   );
 };
 

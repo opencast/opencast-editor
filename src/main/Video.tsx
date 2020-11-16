@@ -7,7 +7,7 @@ import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, setIsPlaying, setCurrentlyAt, setDuration,
+  selectIsPlaying, selectCurrentlyAt, setIsPlaying, setCurrentlyAt, setDuration, selectDuration, addSegment
 } from '../redux/videoSlice'
 import { fetchVideoURL, selectVideoURL, videoURL } from '../redux/videoURLSlice'
 
@@ -93,6 +93,8 @@ const VideoPlayer: React.FC<{url: string}> = ({url}) => {
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
   let currentlyAt = useSelector(selectCurrentlyAt)
+  const duration  = useSelector(selectDuration)
+  const [ready, setReady] = useState(false);
 
   // Init state variables
   const ref = useRef<ReactPlayer>(null);
@@ -100,7 +102,6 @@ const VideoPlayer: React.FC<{url: string}> = ({url}) => {
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
     dispatch(setCurrentlyAt(state.playedSeconds))
-    currentlyAt = state.playedSeconds
   }
 
   // Callback to get video duration
@@ -109,15 +110,20 @@ const VideoPlayer: React.FC<{url: string}> = ({url}) => {
   }
 
   // Callback for checking whether the video element is ready
-  const [ready, setReady] = useState(false);
   const onReadyCallback = () => {
     setReady(true);
+  }
+
+  const onEndedCallback = () => {
+    dispatch(setIsPlaying(false));
+    dispatch(setCurrentlyAt(duration)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
   }
 
   useEffect(() => {
     // Seek if the position in the video got changed externally
     if(!isPlaying && ref.current && ready) {
-      ref.current.seekTo(currentlyAt)
+      console.log("useEffect seekTO CurrentlyAt: "+currentlyAt)
+      ref.current.seekTo(currentlyAt, "seconds")
     }
   })
 
@@ -132,6 +138,7 @@ const VideoPlayer: React.FC<{url: string}> = ({url}) => {
         progressInterval={100}
         onDuration={onDurationCallback}
         onReady={onReadyCallback}
+        onEnded={onEndedCallback}
       />
     </div>
   );
@@ -186,7 +193,7 @@ const VideoControls: React.FC<{}> = () => {
       </div>
       <div css={videoControlsRowStyle} title="Video Controls Bottom Row">
         <div>
-          {new Date(currentlyAt * 1000).toISOString().substr(11, 12)}
+          {new Date((currentlyAt ? currentlyAt : 0) * 1000).toISOString().substr(11, 12)}
         </div>        
       </div>
     </div>

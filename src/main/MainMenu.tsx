@@ -48,7 +48,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
 
   const [isActive, setisActive] = useState(false); 
 
-  const iconStyle = {
+  const mainMenuButtonStyle = {
     borderRadius: '25px',
     cursor: "pointer",
     transitionDuration: "0.3s",
@@ -64,18 +64,22 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
     "&:active": {
       transform: 'scale(0.9)',
     },
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    gap: '10px',
   };
 
   return (
-    <>
-      <FontAwesomeIcon css={iconStyle} icon={iconName} size="7x" 
+    <div css={mainMenuButtonStyle}>
+      <FontAwesomeIcon  icon={iconName} size="7x" 
         onClick={() => { 
           setisActive(!isActive); 
           dispatch(setState(stateName)); 
         }}
       />
       {stateName}
-    </>
+    </div>
   );
 };
 

@@ -5,12 +5,9 @@ import Draggable, { ControlPosition } from 'react-draggable';
 import { css, SerializedStyles } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
+import { Segment } from '../types'
 import {
-  selectSegments, segmentAdded,
-} from '../redux/segmentsSlice'
-import { Segment, Segments } from '../types'
-import {
-  selectIsPlaying, selectCurrentlyAt, selectDuration, setIsPlaying, setCurrentlyAt
+  selectIsPlaying, selectCurrentlyAt, selectDuration, selectSegments, setIsPlaying, setCurrentlyAt, addSegment, cut
 } from '../redux/videoSlice'
 
 import store from '../redux/store'
@@ -51,6 +48,8 @@ const Timeline: React.FC<{}> = () => {
 /**
  * Displays and defines the current position in the video
  * TODO: Fix position fail when starting and then quickly stopping the video
+ *       Possibly because state.playedSceonds in Video is faulty for small values
+ * TODO: Fix timeline width changes
  * @param param0 
  */
 const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
@@ -74,26 +73,27 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   })
 
   // Reposition scrubber when the timeline width changes
-  useEffect(() => {
-    setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
-  }, [timelineWidth])
+  // useEffect(() => {
+  //   setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
+  // }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
   const onControlledDrag = (e: any, position: any) => {
     const {x, y} = position;
-    setControlledPosition({x, y});
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
-    console.log("onControlledDrag was called.")
   };
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {
     const {x, y} = controlledPosition;
     setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y});
-    console.log("CurrentlyAt: "+currentlyAt+"; Duration: "+duration+"; timelineWidth: "+timelineWidth)
-    console.log("Result: "+(currentlyAt / duration) * (timelineWidth))
-    console.log("X: "+controlledPosition.x)
   };
+
+  const onStopDrag = (e: any, position: any) => {
+    const {x, y} = position;
+    setControlledPosition({x, y});
+    dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
+  }
 
   const scrubberStyle = css({
     backgroundColor: 'rgba(255, 0, 0, 1)',
@@ -123,7 +123,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   })
 
   return (
-    <Draggable onDrag={onControlledDrag}
+    <Draggable 
+      //onDrag={onControlledDrag}
+      onStop={onStopDrag}
       axis="x"
       bounds="parent"
       position={controlledPosition}
@@ -138,12 +140,6 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   );
 };
 
-// store.dispatch(segmentAdded({
-//   startTime: 0,
-//   endTime: 0,
-//   state: "Hello there",
-// })); 
-
 /**
  * Container responsible for rendering the segments that are created when cuting
  * TODO: Complete styling
@@ -153,29 +149,24 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   // Init redux variables
   const segments = useSelector(selectSegments)
+  const duration = useSelector(selectDuration)  
 
   // Render the individual segments
   const renderedSegments = () => {
-    const segmentsArray = segments.segments;
-
-    const segmentStyles: SerializedStyles[] = []
-    segmentsArray.map( (segment: Segment) => (
-      segmentStyles.push(css({
-        backgroundColor: segment.state === "alive" ? 'blue' : 'pink',
-        borderRadius: '25px',
-        width: (segment.endTime - segment.startTime) / (timelineWidth / 100.0) + '%',
-        height: '200px',
-        opacity: '0.4',
-      }))
-    ));
-
     return (
-      segmentStyles.map( (style) => (
-        <div css={style} title="A segment">
+      segments.map( (segment: Segment) => (
+        <div key={segment.id} title="Segment" css={{
+          backgroundColor: segment.state === "alive" ? 'blue' : 'pink',
+          borderRadius: '25px',
+          width: ((segment.endTime - segment.startTime) / duration) * 100 + '%',
+          height: '200px',
+          opacity: '0.4',
+        }}>
         </div>
-      )));
+        
+      ))
+    );
   }
-
 
   const segmentsStyle = css({
     display: 'flex',
