@@ -7,23 +7,26 @@ import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, setIsPlaying, setCurrentlyAt, setDuration, selectDuration, addSegment
+  selectIsPlaying, selectCurrentlyAt, setIsPlaying, setCurrentlyAt, setDuration, addSegment
 } from '../redux/videoSlice'
-import { fetchVideoURL, selectVideoURL, videoURL } from '../redux/videoURLSlice'
+import { fetchVideoURL, selectVideoURL, selectVideoCount, selectDuration, } from '../redux/videoURLSlice'
 
 import ReactPlayer from 'react-player'
 
 /**
  * Container for the videos and their controls
  * TODO: Complete fetching
+ * TODO: Move fetching to a more central part of the app
  */
 const Video: React.FC<{}> = () => {
 
   // Init redux variables
   const dispatch = useDispatch()
-  const videoURL = useSelector(selectVideoURL)
-  const videoURLStatus = useSelector((state: videoURL) => state.videoURL.status);
-  const error = useSelector((state: videoURL) => state.videoURL.error)
+  const videoURLs = useSelector(selectVideoURL)
+  const videoCount = useSelector(selectVideoCount)
+  const videoDuration = useSelector(selectDuration)
+  const videoURLStatus = useSelector((state: { videoURL: { status: string } }) => state.videoURL.status);
+  const error = useSelector((state: { videoURL: { error: any } }) => state.videoURL.error)
 
   // Init state
   const [numberOfVideos, setNumberOfVideos] = useState(2);
@@ -39,7 +42,7 @@ const Video: React.FC<{}> = () => {
   let content
   if (videoURLStatus === 'loading') {
     content = <div className="loader">Loading...</div>
-  } else if (videoURLStatus === 'succeeded') {
+  } else if (videoURLStatus === 'success') {
     content = <div className="loader">Success...</div>
   } else if (videoURLStatus === 'failed') {
     content = <div>{error}</div>
@@ -47,16 +50,18 @@ const Video: React.FC<{}> = () => {
   
   // Initialize video players
   const videoPlayers: JSX.Element[] = [];
-  for (let i = 0; i < numberOfVideos; i++) {  
-    videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
+  for (let i = 0; i < videoCount; i++) {  
+    // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
+    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i === 0 ? true : false}/>);
   }
 
   // Style
   const videoAreaStyle = {
-    backgroundColor: 'rgba(245, 245, 0, 1)',
+    backgroundColor: 'wheat',
     borderRadius: '25px',
     display: 'flex',
     width: 'auto',
+    flex: '7',
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '10px',
@@ -64,6 +69,7 @@ const Video: React.FC<{}> = () => {
   };
 
   const videoPlayerAreaStyle = {
+    backgroundColor: 'black',
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'center',
@@ -87,7 +93,7 @@ const Video: React.FC<{}> = () => {
  * A single video player
  * @param param0 
  */
-const VideoPlayer: React.FC<{url: string}> = ({url}) => {
+const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) => {
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -128,19 +134,18 @@ const VideoPlayer: React.FC<{url: string}> = ({url}) => {
   })
 
   return (
-    <div>
-      <ReactPlayer url={url}
-        ref={ref}
-        width='320px' 
-        height='240px'
-        playing={isPlaying}
-        onProgress={onProgressCallback}
-        progressInterval={100}
-        onDuration={onDurationCallback}
-        onReady={onReadyCallback}
-        onEnded={onEndedCallback}
-      />
-    </div>
+    <ReactPlayer url={url}
+      ref={ref}
+      // width='320px' 
+      // height='240px'
+      playing={isPlaying}
+      muted={isMuted}
+      onProgress={onProgressCallback}
+      progressInterval={100}
+      onDuration={onDurationCallback}
+      onReady={onReadyCallback}
+      onEnded={onEndedCallback}
+    />
   );
 
   // return (
@@ -184,10 +189,22 @@ const VideoControls: React.FC<{}> = () => {
     padding: '10px',
   };
 
+  const playButtonStyle = {
+    cursor: "pointer",
+    transitionDuration: "0.3s",
+    transitionProperty: "transform",
+    "&:hover": {
+      transform: 'scale(1.1)',
+    },
+    "&:active": {
+      transform: 'scale(0.9)',
+    },
+  }
+
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} size="5x" 
+        <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="5x" 
           onClick={() => dispatch(setIsPlaying(isPlaying ? false : true))} 
         />
       </div>

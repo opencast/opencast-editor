@@ -4,6 +4,11 @@ import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTools} from "@fortawesome/free-solid-svg-icons";
+
+import { css, keyframes } from '@emotion/core'
+
 import { useSelector } from 'react-redux'
 import {
   selectMainMenuState,
@@ -18,7 +23,7 @@ const MainContent: React.FC<{}> = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)
 
-  const toolboxContentStyle = {
+  const mainContentStyle = {
     backgroundColor: 'rgba(245, 245, 220, 1)',
     borderRadius: '25px',
     flex: '1',
@@ -31,14 +36,31 @@ const MainContent: React.FC<{}> = () => {
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
   };
 
+
+  const renderSwitch = (state : string) => {
+    switch(state) {
+      case "Cutting":
+        return (
+          <>
+            <div css={{width: '100%', display: 'flex', flexDirection: 'row' as const, justifyContent: 'space-around', gap: "20px"}}>
+              <Video />
+              <CuttingActions />
+            </div>
+            <Timeline />
+          </>);
+      default:
+        return (
+          <>
+            <FontAwesomeIcon icon={faTools} size="10x" />
+            Under Construction
+          </>);
+    }
+  }
+
   return (
-    <div css={toolboxContentStyle} title="ToolboxContext">
+    <div css={mainContentStyle} title="MainMenuContext">
         {mainMenuState}
-        <div css={{width: '100%', display: 'flex', flexDirection: 'row' as const, justifyContent: 'space-around', gap: "20px"}}>
-          <Video />
-          <CuttingActions />
-        </div>
-        <Timeline />
+        {renderSwitch(mainMenuState)}
     </div>
   );
 };

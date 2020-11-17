@@ -5,9 +5,9 @@ import { faCut, faFilm, faListUl, faPhotoVideo, IconDefinition } from "@fortawes
 
 import { css } from '@emotion/core'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
-  setState,
+  setState, selectMainMenuState
 } from '../redux/mainMenuSlice'
 
 /**
@@ -15,8 +15,8 @@ import {
  */
 const MainMenu: React.FC<{}> = () => {
 
-  const toolboxStyle = {
-    backgroundColor: 'rgba(0, 245, 220, 1)',
+  const mainMenuStyle = {
+    backgroundColor: 'rgba(56, 142, 214, 1)',
     borderRadius: '25px',
     width: '200px',
     display: 'flex',
@@ -28,7 +28,7 @@ const MainMenu: React.FC<{}> = () => {
   };
 
   return (
-    <div style={toolboxStyle} title="Toolbox">
+    <div style={mainMenuStyle} title="MainMenu">
       <MainMenuButton iconName={faFilm} stateName="Cutting"/>
       <MainMenuButton iconName={faListUl} stateName="Metadata"/>
       <MainMenuButton iconName={faPhotoVideo} stateName="Thumbnail"/>
@@ -45,17 +45,17 @@ const MainMenu: React.FC<{}> = () => {
 const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {
 
   const dispatch = useDispatch();
-
-  const [isActive, setisActive] = useState(false); 
+  const activeState = useSelector(selectMainMenuState)
 
   const mainMenuButtonStyle = {
+    color: "snow",
     borderRadius: '25px',
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
     //boxShadow: isActive ? 'inset 0 0 5px #000000' : '0',
-    ...isActive && {
-      stroke: "red",
+    ...(activeState === stateName) && {
+      stroke: "black",
       strokeWidth: "10",
     },
     "&:hover": {
@@ -71,10 +71,9 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
   };
 
   return (
-    <div css={mainMenuButtonStyle}>
+    <div css={mainMenuButtonStyle} title={stateName}>
       <FontAwesomeIcon  icon={iconName} size="7x" 
         onClick={() => { 
-          setisActive(!isActive); 
           dispatch(setState(stateName)); 
         }}
       />

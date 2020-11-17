@@ -13,7 +13,7 @@ export const videoSlice = createSlice({
     isPlaying: false,
     currentlyAt: 0.0,   // Position in the video in seconds
     duration: 0.0,      // Video duration in seconds
-    segments: [{id: nanoid(), startTime: 0, endTime: 25.835102, state: "alive"}]    
+    segments: [{id: nanoid(), startTime: 0, endTime: 64.733, state: "alive"}]    
   },
   reducers: {
     setIsPlaying: (state, action) => {
@@ -63,7 +63,7 @@ export const { setIsPlaying, setCurrentlyAt, setDuration, addSegment, cut } = vi
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectIsPlaying = (state: { videoState: { isPlaying: any; }; }) => state.videoState.isPlaying
 export const selectCurrentlyAt = (state: { videoState: { currentlyAt: any; }; }) => state.videoState.currentlyAt
-export const selectDuration = (state: { videoState: { duration: any; }; }) => state.videoState.duration
+//export const selectDuration = (state: { videoState: { duration: any; }; }) => state.videoState.duration
 export const selectSegments = (state: { videoState: { segments: any } }) => state.videoState.segments
 
 

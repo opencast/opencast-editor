@@ -7,8 +7,10 @@ import { css, SerializedStyles } from '@emotion/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment } from '../types'
 import {
-  selectIsPlaying, selectCurrentlyAt, selectDuration, selectSegments, setIsPlaying, setCurrentlyAt, addSegment, cut
+  selectIsPlaying, selectCurrentlyAt, selectSegments, setIsPlaying, setCurrentlyAt, addSegment, cut
 } from '../redux/videoSlice'
+
+import { selectDuration, } from '../redux/videoURLSlice'
 
 import store from '../redux/store'
 
@@ -32,7 +34,7 @@ const Timeline: React.FC<{}> = () => {
     position: 'relative' as 'relative',     // Need to set position for Draggable bounds to work
     borderRadius: '10px',
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    height: '200px',
+    height: '250px',
     width: '100%',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   };
@@ -97,7 +99,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const scrubberStyle = css({
     backgroundColor: 'rgba(255, 0, 0, 1)',
-    height: '200px',
+    height: '250px',
     width: '1px',
     position: 'absolute' as 'absolute',
     zIndex: 1,
@@ -115,6 +117,15 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     justifyContent: 'center',
     alignItems: 'center',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    cursor: "pointer",
+    transitionDuration: "0.3s",
+    transitionProperty: "transform",
+    "&:hover": {
+      transform: 'scale(1.1)',
+    },
+    "&:active": {
+      transform: 'scale(0.9)',
+    },
   })
 
   const scrubberDragHandleIconStyle = css({
@@ -159,7 +170,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
           backgroundColor: segment.state === "alive" ? 'blue' : 'pink',
           borderRadius: '25px',
           width: ((segment.endTime - segment.startTime) / duration) * 100 + '%',
-          height: '200px',
+          height: '250px',
           opacity: '0.4',
         }}>
         </div>

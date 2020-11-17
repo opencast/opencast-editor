@@ -6,7 +6,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const mainMenuSlice = createSlice({
   name: 'mainMenuState',
   initialState: {
-    value: "cutting"
+    value: "Cutting"
   },
   reducers: {
     setState: (state, action) => {
