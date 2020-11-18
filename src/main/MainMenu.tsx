@@ -1,9 +1,7 @@
-import React, { useState }  from "react";
+import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCut, faFilm, faListUl, faPhotoVideo, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-
-import { css } from '@emotion/core'
 
 import { useDispatch, useSelector } from 'react-redux'
 import {

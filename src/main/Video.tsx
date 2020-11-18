@@ -3,11 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
 
-import { css } from '@emotion/core'
-
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, setIsPlaying, setCurrentlyAt, setDuration, addSegment
+  selectIsPlaying, selectCurrentlyAt, setIsPlaying, setCurrentlyAt, setDuration
 } from '../redux/videoSlice'
 import { fetchVideoURL, selectVideoURL, selectVideoCount, selectDuration, } from '../redux/videoURLSlice'
 
@@ -24,12 +22,8 @@ const Video: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
-  const videoDuration = useSelector(selectDuration)
   const videoURLStatus = useSelector((state: { videoURL: { status: string } }) => state.videoURL.status);
   const error = useSelector((state: { videoURL: { error: any } }) => state.videoURL.error)
-
-  // Init state
-  const [numberOfVideos, setNumberOfVideos] = useState(2);
 
   // Try to fetch URL from external API
   useEffect(() => {
@@ -75,7 +69,6 @@ const Video: React.FC<{}> = () => {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    padding: '10px',
   };
 
   return (

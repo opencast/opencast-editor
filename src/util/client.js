@@ -8,15 +8,13 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   const headers = { 'Content-Type': 'application/json' }
 
   const encoded = btoa(unescape(encodeURIComponent(
-    "admin" + ':' + "opencast"
+    "admin:opencast"
   )));
   const authHeaders = { 'Authorization': `Basic ${encoded}` };
 
   const config = {
     method: body ? 'POST' : 'GET',
     ...customConfig,
-    user: "admin",
-    password: "opencast",
     headers: {
       ...headers,
       ...customConfig.headers,

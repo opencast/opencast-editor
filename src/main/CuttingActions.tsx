@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCut, faEyeSlash, faTrash, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-import { css, SerializedStyles } from '@emotion/core'
+import { css } from '@emotion/core'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
-  selectSegments, cut
+  cut
 } from '../redux/videoSlice'
 
 /**

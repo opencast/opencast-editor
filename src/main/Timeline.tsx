@@ -1,23 +1,20 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
-import Draggable, { ControlPosition } from 'react-draggable';
+import Draggable from 'react-draggable';
 
-import { css, SerializedStyles } from '@emotion/core'
+import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment } from '../types'
 import {
-  selectIsPlaying, selectCurrentlyAt, selectSegments, setIsPlaying, setCurrentlyAt, addSegment, cut
+  selectIsPlaying, selectCurrentlyAt, selectSegments, setCurrentlyAt
 } from '../redux/videoSlice'
 
 import { selectDuration, } from '../redux/videoURLSlice'
 
-import store from '../redux/store'
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-import ReactDOM from "react-dom";
 import useResizeObserver from "use-resize-observer";
 
 import myImg from '../img/placeholder_waveform.png'
@@ -38,7 +35,7 @@ const Timeline: React.FC<{}> = () => {
     height: '250px',
     width: '100%',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    // backgroundImage: "url({myImg})",
+    //backgroundImage: `url({myImg})`,
   });
   
   return (
@@ -83,14 +80,14 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
-  const onControlledDrag = (e: any, position: any) => {
-    const {x, y} = position;
-    dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
-  };
+  // const onControlledDrag = (e: any, position: any) => {
+  //   const {x, y} = position;
+  //   dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
+  // };
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {
-    const {x, y} = controlledPosition;
+    const y = controlledPosition.y;
     setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y});
   };
 

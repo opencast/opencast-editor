@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
 /**
@@ -38,6 +38,7 @@ const videoURLSlice = createSlice({
     builder.addCase(
       fetchVideoURL.fulfilled, (state, action) => {
         state.status = 'success'
+        // eslint-disable-next-line no-sequences
         state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = action.payload.previews.length
         state.duration = action.payload.duration / 1000.0
