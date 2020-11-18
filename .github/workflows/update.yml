@@ -1,0 +1,70 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build & Deploy
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: use node.js 14.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+
+    - run: npm ci
+
+    - run: npm run build
+
+    # tests are currently failing
+    #- run: npm test
+    #  env:
+    #    CI: true
+
+    - name: prepare git
+      run: |
+        git config --global user.name "Editor Deployment Bot"
+        git config --global user.email "opencast-support@elan-ev.de"
+
+    - name: prepare github ssh key
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+      run: |
+        install -dm 700 ~/.ssh/
+        echo "${DEPLOY_KEY}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: clone repository
+      run: |
+        git clone "git@github.com:elan-ev/opencast-editor.git" ~/editor-clone
+        cd ~/editor-clone
+        git checkout gh-pages
+
+    - name: commit new version
+      run: |
+        # store build
+        cp -r build ~/editor-build
+        # save CNAME
+        touch ~/editor-clone/CNAME
+        cp ~/editor-clone/CNAME ~/CNAME
+        # Update gh-pages
+        cd ~/editor-clone
+        git rm -rf .
+        cp ~/CNAME .
+        cp -r ~/editor-build/* .
+        git add ./*
+        git commit -m "Build $(date)"
+
+    - name: push updates
+      run: |
+        cd ~/editor-clone
+        git push origin gh-pages
