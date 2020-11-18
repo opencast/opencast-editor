@@ -20,6 +20,8 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ReactDOM from "react-dom";
 import useResizeObserver from "use-resize-observer";
 
+import myImg from '../img/placeholder_waveform.png'
+
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
  * the current position in the video
@@ -27,20 +29,21 @@ import useResizeObserver from "use-resize-observer";
  */
 const Timeline: React.FC<{}> = () => {
 
-  //const [width, setWidth] = useState(0)
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
 
-  const timelineStyle = {
+  const timelineStyle = css({
     position: 'relative' as 'relative',     // Need to set position for Draggable bounds to work
     borderRadius: '10px',
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     height: '250px',
     width: '100%',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-  };
+    // backgroundImage: "url({myImg})",
+  });
   
   return (
   <div ref={ref} css={timelineStyle} title="Timeline">
+    <img alt='waveform2' src={myImg} style={{position: "absolute" as "absolute", height: '250px', width: '100%'}}></img>
     <Scrubber timelineWidth={width}/>
     <SegmentsList timelineWidth={width}/>
   </div>

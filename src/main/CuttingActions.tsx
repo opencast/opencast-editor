@@ -50,7 +50,7 @@ const CuttingActions: React.FC<{}> = () => {
   //   </div>
   // );
     const cuttingActionsStyle = css({
-    backgroundColor: 'rgba(56, 142, 214, 1)',
+    backgroundColor: 'rgba(36, 66, 92, 1);',
     borderRadius: '25px',
     flex: '3',
     display: 'grid',

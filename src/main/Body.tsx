@@ -10,7 +10,7 @@ const Body: React.FC<{}> = () => {
     flex: '1',
     flexDirection: 'row' as const,
     padding: '10px',
-    gap: '20px',
+    gap: '50px',
   };
 
   return (
