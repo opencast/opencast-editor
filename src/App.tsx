@@ -3,7 +3,7 @@ import Body from './main/Body';
 
 function App() {
   return (
-    <div className="App">
+    <div css={{backgroundColor: "snow"}} className="App">
       <Body />
     </div>
   );

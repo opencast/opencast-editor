@@ -14,15 +14,15 @@ import {
 const MainMenu: React.FC<{}> = () => {
 
   const mainMenuStyle = {
-    backgroundColor: 'rgba(56, 142, 214, 1)',
-    borderRadius: '25px',
-    width: '200px',
+    backgroundColor: 'snow',
+    borderRadius: '10px',
+    width: '150px',
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    padding: '10px',
+    //padding: '20px',
     gap: '20px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
+    //boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
   };
 
   return (
@@ -46,15 +46,18 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
   const activeState = useSelector(selectMainMenuState)
 
   const mainMenuButtonStyle = {
-    color: "snow",
-    borderRadius: '25px',
+    backgroundColor: 'snow',
+    borderRadius: '10px',
+    fontSize: 'large',
+    width: '100%',
+    height: '150px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
     //boxShadow: isActive ? 'inset 0 0 5px #000000' : '0',
     ...(activeState === stateName) && {
-      stroke: "black",
-      strokeWidth: "10",
+      backgroundColor: 'lightblue',
     },
     "&:hover": {
       transform: 'scale(1.1)',
@@ -64,18 +67,18 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
     },
     display: 'flex',
     flexDirection: 'column' as const,
+    justifyContent: 'center',
     alignItems: 'center',
     gap: '10px',
   };
 
   return (
-    <div css={mainMenuButtonStyle} title={stateName}>
-      <FontAwesomeIcon  icon={iconName} size="7x" 
-        onClick={() => { 
-          dispatch(setState(stateName)); 
-        }}
-      />
-      {stateName}
+    <div css={mainMenuButtonStyle} title={stateName}         
+      onClick={() => { 
+        dispatch(setState(stateName)); 
+      }}>
+      <FontAwesomeIcon  icon={iconName} size="3x"/>
+      <div>{stateName}</div>
     </div>
   );
 };
