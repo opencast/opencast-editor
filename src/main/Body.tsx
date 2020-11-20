@@ -15,8 +15,8 @@ const Body: React.FC<{}> = () => {
 
   return (
     <div css={bodyStyle} title="Body">
-      <MainContent />
       <MainMenu />
+      <MainContent />
     </div>
   );
 };

@@ -36,7 +36,7 @@ const MainContent: React.FC<{}> = () => {
       case "Cutting":
         return (
           <>
-            <div css={{width: '100%', display: 'flex', flexDirection: 'row' as const, justifyContent: 'space-around', gap: "20px"}}>
+            <div css={{width: '100%', display: 'flex', flexDirection: 'column' as const, justifyContent: 'space-around', gap: "20px"}}>
               <Video />
               <CuttingActions />
             </div>

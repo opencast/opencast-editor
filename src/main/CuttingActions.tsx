@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faEyeSlash, faTrash, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faQuestion, faTrash, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { css } from '@emotion/core'
 
@@ -16,17 +16,19 @@ import {
  */
 const CuttingActions: React.FC<{}> = () => {
 
-    const cuttingStyle =  css({
-      backgroundColor: 'snow',
-      borderRadius: '15px',
-      boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-      flex: '3',
-      display: 'flex',
-      flexDirection: 'column' as const,
-      padding: '20px',
-    })
+  const cuttingStyle =  css({
+    backgroundColor: 'snow',
+    borderRadius: '10px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    flex: '3',
+    display: 'flex',
+    // flexDirection: 'column' as const,
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between',
+    padding: '20px',
+  })
 
-    const cuttingActionsStyle = css({
+  const cuttingActionsStyle = css({
     backgroundColor: 'snow',
     flex: '3',
     display: 'flex',
@@ -41,15 +43,35 @@ const CuttingActions: React.FC<{}> = () => {
     textAlign: 'left' as const,
   }
 
+  const styleA = css({
+    backgroundColor: 'snow',
+    display: 'flex',
+    flexDirection: 'row' as const,
+    gap: '30px',
+  })
+
+  const styleB = css({
+    backgroundColor: 'snow',
+    display: 'flex',
+    flexDirection: 'row' as const,
+    gap: '30px',
+  })
+
   return (
     <div css={cuttingStyle}>
-      <h1 css={textStyle}>Cutting Tools</h1>
-      <div css={cuttingActionsStyle} title="CuttingActions">
-        <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
-        <CuttingActionsButton iconName={faEyeSlash} actionName="Mark as Hidden" action={cut}/>
-        <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={cut}/>
-        <CuttingActionsButton iconName={faCut} actionName="Some other action" action={cut}/>
-      </div>
+      {/* <h1 css={textStyle}>Cutting Tools</h1> */}
+      {/* <div css={cuttingActionsStyle} title="CuttingActions"> */}
+        <div css={styleA}>
+          <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
+          <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={cut}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Left" action={cut}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Right" action={cut}/>
+        </div>
+        <div css={styleB}>
+          <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={cut}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={cut}/>
+        </div>
+      {/* </div> */}
     </div>
   );
 };

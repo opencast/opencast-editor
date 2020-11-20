@@ -7,7 +7,9 @@ import { client } from '../util/client'
 export interface videoURL {
   videoURLs: string[],
   videoCount: number,
-  duration: number,
+  duration: number,   // Video duration in milliseconds
+  title: string,
+  presenters: string[],
   status: string,
   error: any
 }
@@ -16,6 +18,8 @@ const initialState : videoURL = {
   videoURLs: [],
   videoCount: 0,
   duration: 0,
+  title: '',
+  presenters: [],
   status: 'idle',
   error: null
 }
@@ -41,7 +45,9 @@ const videoURLSlice = createSlice({
         // eslint-disable-next-line no-sequences
         state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = action.payload.previews.length
-        state.duration = action.payload.duration / 1000.0
+        state.duration = action.payload.duration
+        state.title = action.payload.title
+        state.presenters = action.payload.presenters
     })
     builder.addCase(
       fetchVideoURL.rejected, (state, action) => {
@@ -54,6 +60,9 @@ const videoURLSlice = createSlice({
 export const selectVideoURL = (state: { videoURL: { videoURLs: string[] } }) => state.videoURL.videoURLs
 export const selectVideoCount = (state: { videoURL: { videoCount: number } }) => state.videoURL.videoCount
 export const selectDuration = (state: { videoURL: { duration: number } }) => state.videoURL.duration
+export const selectDurationInSeconds = (state: { videoURL: { duration: number } }) => state.videoURL.duration / 1000
+export const selectTitle = (state: { videoURL: { title: string } }) => state.videoURL.title
+export const selectPresenters = (state: { videoURL: { presenters: string[] } }) => state.videoURL.presenters
 
 export default videoURLSlice.reducer
 
