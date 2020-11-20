@@ -37,7 +37,7 @@ const Video: React.FC<{}> = () => {
   if (videoURLStatus === 'loading') {
     content = <div className="loader">Loading...</div>
   } else if (videoURLStatus === 'success') {
-    content = <div className="loader">Success...</div>
+    content = ""//<div className="loader">Success...</div>
   } else if (videoURLStatus === 'failed') {
     content = <div>{error}</div>
   }
@@ -51,12 +51,13 @@ const Video: React.FC<{}> = () => {
 
   // Style
   const videoAreaStyle = {
-    backgroundColor: 'wheat',
-    borderRadius: '25px',
+    backgroundColor: 'snow',
+    borderRadius: '15px',
     display: 'flex',
     width: 'auto',
     flex: '7',
     flexDirection: 'column' as const,
+    justifyContent: 'center',
     alignItems: 'center',
     padding: '10px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
@@ -129,8 +130,8 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   return (
     <ReactPlayer url={url}
       ref={ref}
-      // width='320px' 
-      // height='240px'
+      width='100%'
+      height='auto'
       playing={isPlaying}
       muted={isMuted}
       onProgress={onProgressCallback}

@@ -16,55 +16,40 @@ import {
  */
 const CuttingActions: React.FC<{}> = () => {
 
-  // const cuttingActionsStyle = css({
-  //   backgroundColor: 'rgba(0, 245, 220, 1)',
-  //   borderRadius: '25px',
-  //   display: 'flex',
-  //   flexDirection: 'row' as const,
-  //   padding: '10px',
-  //   gap: '20px',
-  //   boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
-  // });
+    const cuttingStyle =  css({
+      backgroundColor: 'snow',
+      borderRadius: '15px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+      flex: '3',
+      display: 'flex',
+      flexDirection: 'column' as const,
+      padding: '20px',
+    })
 
-  // const columnStyle = css({
-  //   flex: 1,
-  //   display: 'flex',
-  //   flexDirection: 'column' as const,
-  //   alignItems: 'center',
-  //   padding: '10px',
-  //   gap: '20px',
-  // });
-
-  // return (
-  //   <div css={cuttingActionsStyle} title="CuttingActions">
-  //     <div css={columnStyle}>
-  //     <CuttingActionsButton iconName={faCut} actionName="Schneiden" action={cut}/>
-  //     <CuttingActionsButton iconName={faEyeSlash} actionName="Verstecken" action={cut}/>
-  //     </div>
-  //     <div css={columnStyle}>
-  //     <CuttingActionsButton iconName={faTrash} actionName="Löschen" action={cut}/>
-  //     </div>
-  //     <div css={columnStyle}>
-  //     <CuttingActionsButton iconName={faCut} actionName="Schneiden" action={cut}/>
-  //     </div>
-  //   </div>
-  // );
     const cuttingActionsStyle = css({
-    backgroundColor: 'rgba(36, 66, 92, 1);',
-    borderRadius: '25px',
+    backgroundColor: 'snow',
     flex: '3',
-    display: 'grid',
-    gridTemplateColumns: 'auto auto auto',
-    padding: '10px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
+    display: 'flex',
+    flexDirection: 'row' as const,
+    flexWrap: 'wrap' as const,
+    justifyContent: 'space-around',
+    alignContent: 'top',
+    gap: '30px',
   });
 
+  const textStyle = {
+    textAlign: 'left' as const,
+  }
+
   return (
-    <div css={cuttingActionsStyle} title="CuttingActions">
-      <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
-      <CuttingActionsButton iconName={faEyeSlash} actionName="Mark as Hidden" action={cut}/>
-      <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={cut}/>
-      <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
+    <div css={cuttingStyle}>
+      <h1 css={textStyle}>Cutting Tools</h1>
+      <div css={cuttingActionsStyle} title="CuttingActions">
+        <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
+        <CuttingActionsButton iconName={faEyeSlash} actionName="Mark as Hidden" action={cut}/>
+        <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={cut}/>
+        <CuttingActionsButton iconName={faCut} actionName="Some other action" action={cut}/>
+      </div>
     </div>
   );
 };
@@ -80,8 +65,14 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
   const dispatch = useDispatch();
 
   const cuttingActionButtonStyle = {
-    color: "snow",
-    borderRadius: '25px',
+    backgroundColor: 'snow',
+    borderRadius: '10px',
+    //flex: 1,
+    fontSize: 'large',
+    width: '125px',
+    height: '125px',
+    //padding: '20px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     cursor: "pointer",
     justifyContent: 'center',
     alignContent: 'center',
@@ -97,13 +88,13 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
     flexDirection: 'column' as const,
     alignItems: 'center',
     gap: '10px',
+    textAlign: 'center' as const,
   };
 
   return (
     <div css={cuttingActionButtonStyle} title={actionName} onClick={() => dispatch(action())}>
-      <FontAwesomeIcon icon={iconName} size="5x" 
-      />
-      {actionName}
+      <FontAwesomeIcon icon={iconName} size="3x" />
+      <div>{actionName}</div>
     </div>
   );
 };

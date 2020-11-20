@@ -22,16 +22,12 @@ const MainContent: React.FC<{}> = () => {
   const mainMenuState = useSelector(selectMainMenuState)
 
   const mainContentStyle = {
-    // backgroundColor: 'rgba(245, 245, 220, 1)',
-    // borderRadius: '25px',
     flex: '1',
     display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    // padding: '20px',
     gap: '20px',
-    // boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
   };
 
 

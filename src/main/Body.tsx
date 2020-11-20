@@ -9,8 +9,8 @@ const Body: React.FC<{}> = () => {
     display: 'flex',
     flex: '1',
     flexDirection: 'row' as const,
-    padding: '10px',
-    gap: '50px',
+    padding: '20px',
+    gap: '75px',
   };
 
   return (

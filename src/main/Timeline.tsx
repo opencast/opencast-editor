@@ -31,7 +31,7 @@ const Timeline: React.FC<{}> = () => {
   const timelineStyle = css({
     position: 'relative' as 'relative',     // Need to set position for Draggable bounds to work
     borderRadius: '10px',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: 'snow',
     height: '250px',
     width: '100%',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
@@ -40,9 +40,11 @@ const Timeline: React.FC<{}> = () => {
   
   return (
   <div ref={ref} css={timelineStyle} title="Timeline">
-    <img alt='waveform2' src={myImg} style={{position: "absolute" as "absolute", height: '250px', width: '100%'}}></img>
     <Scrubber timelineWidth={width}/>
-    <SegmentsList timelineWidth={width}/>
+    <div css={{height: '230px'}}>
+      <img alt='waveform2' src={myImg} style={{position: "absolute" as "absolute", height: '230px', width: '100%', top: '10px'}}></img>
+      <SegmentsList timelineWidth={width}/>
+    </div>
   </div>
   );
 };
@@ -170,7 +172,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
           backgroundColor: segment.state === "alive" ? 'blue' : 'pink',
           borderRadius: '25px',
           width: ((segment.endTime - segment.startTime) / duration) * 100 + '%',
-          height: '250px',
+          height: '230px',
           opacity: '0.4',
         }}>
         </div>
@@ -182,6 +184,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const segmentsStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
+    paddingTop: '10px'
   })
 
   return (
