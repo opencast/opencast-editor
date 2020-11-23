@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faListUl, faPhotoVideo, faQuestion, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -15,14 +15,13 @@ const MainMenu: React.FC<{}> = () => {
 
   const mainMenuStyle = {
     backgroundColor: 'snow',
-    borderRadius: '10px',
-    width: '150px',
+    borderRight: '1px solid #BBB',
+    width: '100px',
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    //padding: '20px',
-    gap: '20px',
-    //boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
+    padding: '20px',
+    gap: '30px',
   };
 
   return (
@@ -30,7 +29,7 @@ const MainMenu: React.FC<{}> = () => {
       <MainMenuButton iconName={faFilm} stateName="Cutting"/>
       <MainMenuButton iconName={faListUl} stateName="Metadata"/>
       <MainMenuButton iconName={faPhotoVideo} stateName="Thumbnail"/>
-      <MainMenuButton iconName={faCut} stateName="Start Workflow"/>
+      <MainMenuButton iconName={faQuestion} stateName="Start Workflow"/>
     </div>
   );
 };
@@ -48,10 +47,9 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
   const mainMenuButtonStyle = {
     backgroundColor: 'snow',
     borderRadius: '10px',
-    fontSize: 'large',
+    fontSize: 'medium',
     width: '100%',
-    height: '150px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    height: '100px',
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
@@ -69,6 +67,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center' as const,
     gap: '10px',
   };
 
@@ -77,7 +76,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
       onClick={() => { 
         dispatch(setState(stateName)); 
       }}>
-      <FontAwesomeIcon  icon={iconName} size="3x"/>
+      <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>
     </div>
   );

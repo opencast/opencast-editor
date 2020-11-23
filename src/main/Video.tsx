@@ -1,15 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faToggleOn, faToggleOff, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
+import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, setIsPlaying, setCurrentlyAt, setDuration
+  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds
 } from '../redux/videoSlice'
-import { fetchVideoURL, selectVideoURL, selectVideoCount, selectDuration, } from '../redux/videoURLSlice'
+import { 
+  fetchVideoURL, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
+} from '../redux/videoURLSlice'
 
 import ReactPlayer from 'react-player'
+
+import { roundToDecimalPlace } from '../util/utilityFunctions'
 
 /**
  * Container for the videos and their controls
@@ -52,7 +58,6 @@ const Video: React.FC<{}> = () => {
   // Style
   const videoAreaStyle = {
     backgroundColor: 'snow',
-    borderRadius: '15px',
     display: 'flex',
     width: 'auto',
     flex: '7',
@@ -60,7 +65,7 @@ const Video: React.FC<{}> = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '10px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
+    borderBottom: '1px solid #BBB',
   };
 
   const videoPlayerAreaStyle = {
@@ -75,6 +80,7 @@ const Video: React.FC<{}> = () => {
   return (
     <div css={videoAreaStyle} title="Video Area">
       {content}
+      <VideoHeader />
       <div css={videoPlayerAreaStyle} title="Video Player Area">
         {videoPlayers}
       </div>
@@ -92,8 +98,8 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
-  let currentlyAt = useSelector(selectCurrentlyAt)
-  const duration  = useSelector(selectDuration)
+  const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
+  const duration  = useSelector(selectDurationInSeconds)
   const [ready, setReady] = useState(false);
 
   // Init state variables
@@ -101,12 +107,10 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
-    dispatch(setCurrentlyAt(state.playedSeconds))
-  }
-
-  // Callback to get video duration
-  const onDurationCallback = ( duration: number ) => {
-    dispatch(setDuration(duration))
+    // Only update redux if there was a substantial change
+    if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3)) {
+      dispatch(setCurrentlyAtInSeconds(state.playedSeconds))
+    }    
   }
 
   // Callback for checking whether the video element is ready
@@ -116,15 +120,19 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
 
   const onEndedCallback = () => {
     dispatch(setIsPlaying(false));
-    dispatch(setCurrentlyAt(duration)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+    dispatch(setCurrentlyAtInSeconds(duration)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
   }
 
   useEffect(() => {
     // Seek if the position in the video got changed externally
     if(!isPlaying && ref.current && ready) {
-      console.log("useEffect seekTO CurrentlyAt: "+currentlyAt)
       ref.current.seekTo(currentlyAt, "seconds")
     }
+  })
+
+  const playerStyle = css({
+    minWidth: '320px',
+    minHeight: '240px',
   })
 
   return (
@@ -134,9 +142,9 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
       height='auto'
       playing={isPlaying}
       muted={isMuted}
+      css={playerStyle}
       onProgress={onProgressCallback}
       progressInterval={100}
-      onDuration={onDurationCallback}
       onReady={onReadyCallback}
       onEnded={onEndedCallback}
     />
@@ -164,6 +172,8 @@ const VideoControls: React.FC<{}> = () => {
   const isPlaying = useSelector(selectIsPlaying)
   const currentlyAt = useSelector(selectCurrentlyAt)
 
+  const [isSkipping, setIsSkipping] = useState(false)
+
   // Style
   const videoControlStyle = {
     display: 'flex',
@@ -181,6 +191,7 @@ const VideoControls: React.FC<{}> = () => {
     alignItems: 'center',
     width: '100%',
     padding: '10px',
+    gap: '20px',
   };
 
   const playButtonStyle = {
@@ -195,18 +206,53 @@ const VideoControls: React.FC<{}> = () => {
     },
   }
 
+  const skipToggleStyle = {
+    cursor: "pointer",
+    transitionDuration: "0.3s",
+    transitionProperty: "transform",
+    "&:hover": {
+      transform: 'scale(1.05)',
+    },
+  }
+
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
+        <div>
+          <FontAwesomeIcon icon={faEyeSlash} size="2x" />
+          <FontAwesomeIcon css={skipToggleStyle} icon={isSkipping ? faToggleOn : faToggleOff} size="2x" 
+            onClick={() => setIsSkipping(isSkipping ? false : true)} 
+          />
+        </div> 
         <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="5x" 
           onClick={() => dispatch(setIsPlaying(isPlaying ? false : true))} 
         />
+        {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
       </div>
-      <div css={videoControlsRowStyle} title="Video Controls Bottom Row">
-        <div>
-          {new Date((currentlyAt ? currentlyAt : 0) * 1000).toISOString().substr(11, 12)}
-        </div>        
-      </div>
+      {/* <div css={videoControlsRowStyle} title="Video Controls Bottom Row">
+
+
+       
+      </div> */}
+    </div>
+  );
+}
+
+/**
+ * Displays elements above the video, e.g. title
+ */
+const VideoHeader: React.FC<{}> = () => {
+  const title = useSelector(selectTitle)
+  const presenters = useSelector(selectPresenters)
+
+  const titleStyle = {
+    fontSize: 'large'
+  }
+
+  return (
+    <div title="Video Area Header">
+      <div css={titleStyle} title="Video Title">{title}</div>
+      <div title="Video Presenters">by {presenters.join(", ")}</div>
     </div>
   );
 }
