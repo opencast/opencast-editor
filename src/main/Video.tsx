@@ -58,7 +58,6 @@ const Video: React.FC<{}> = () => {
   // Style
   const videoAreaStyle = {
     backgroundColor: 'snow',
-    borderRadius: '10px',
     display: 'flex',
     width: 'auto',
     flex: '7',
@@ -66,7 +65,7 @@ const Video: React.FC<{}> = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '10px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
+    borderBottom: '1px solid #BBB',
   };
 
   const videoPlayerAreaStyle = {
@@ -99,7 +98,6 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
-  const currentlyAtInMs = useSelector(selectCurrentlyAt)
   const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
   const duration  = useSelector(selectDurationInSeconds)
   const [ready, setReady] = useState(false);

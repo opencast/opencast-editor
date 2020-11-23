@@ -34,7 +34,6 @@ const Timeline: React.FC<{}> = () => {
     backgroundColor: 'snow',
     height: '250px',
     width: '100%',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     //backgroundImage: `url({myImg})`,
   });
   
@@ -76,7 +75,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     }
   })
 
-  // Reposition scrubber when the timeline width changes
+  // // Reposition scrubber when the timeline width changes
   // useEffect(() => {
   //   setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
   // }, [timelineWidth])
@@ -104,7 +103,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     height: '250px',
     width: '1px',
     position: 'absolute' as 'absolute',
-    zIndex: 1,
+    zIndex: 2,
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     display: 'flex',
     justifyContent: 'center',
@@ -156,7 +155,6 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 /**
  * Container responsible for rendering the segments that are created when cuting
  * TODO: Complete styling
- * TODO: Fix segment width not changing correctly when changing window size
  */
 const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
@@ -169,11 +167,15 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     return (
       segments.map( (segment: Segment) => (
         <div key={segment.id} title="Segment" css={{
-          backgroundColor: segment.state === "alive" ? 'blue' : 'pink',
+          backgroundColor: segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
           borderRadius: '25px',
+          borderStyle: 'solid',
+          borderBlockColor: 'black',
+          borderWidth: '1px',
+          boxSizing: 'border-box',
           width: ((segment.endTime - segment.startTime) / duration) * 100 + '%',
           height: '230px',
-          opacity: '0.4',
+          zIndex: 1,
         }}>
         </div>
         
@@ -184,7 +186,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const segmentsStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
-    paddingTop: '10px'
+    paddingTop: '10px',
   })
 
   return (

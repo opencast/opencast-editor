@@ -18,39 +18,33 @@ const CuttingActions: React.FC<{}> = () => {
 
   const cuttingStyle =  css({
     backgroundColor: 'snow',
-    borderRadius: '10px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     flex: '3',
     display: 'flex',
-    // flexDirection: 'column' as const,
     flexDirection: 'row' as const,
     justifyContent: 'space-between',
-    padding: '20px',
+    padding: '00px',
+    gap: '30px',
   })
 
-  const cuttingActionsStyle = css({
-    backgroundColor: 'snow',
-    flex: '3',
-    display: 'flex',
-    flexDirection: 'row' as const,
-    flexWrap: 'wrap' as const,
-    justifyContent: 'space-around',
-    alignContent: 'top',
-    gap: '30px',
-  });
+  // const cuttingActionsStyle = css({
+  //   backgroundColor: 'snow',
+  //   flex: '3',
+  //   display: 'flex',
+  //   flexDirection: 'row' as const,
+  //   flexWrap: 'wrap' as const,
+  //   justifyContent: 'space-around',
+  //   alignContent: 'top',
+  //   gap: '30px',
+  // });
 
-  const textStyle = {
-    textAlign: 'left' as const,
-  }
-
-  const styleA = css({
+  const leftStyle = css({
     backgroundColor: 'snow',
     display: 'flex',
     flexDirection: 'row' as const,
     gap: '30px',
   })
 
-  const styleB = css({
+  const rightStyle = css({
     backgroundColor: 'snow',
     display: 'flex',
     flexDirection: 'row' as const,
@@ -59,15 +53,14 @@ const CuttingActions: React.FC<{}> = () => {
 
   return (
     <div css={cuttingStyle}>
-      {/* <h1 css={textStyle}>Cutting Tools</h1> */}
       {/* <div css={cuttingActionsStyle} title="CuttingActions"> */}
-        <div css={styleA}>
+        <div css={leftStyle}>
           <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
           <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={cut}/>
           <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Left" action={cut}/>
           <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Right" action={cut}/>
         </div>
-        <div css={styleB}>
+        <div css={rightStyle}>
           <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={cut}/>
           <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={cut}/>
         </div>
@@ -90,9 +83,9 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
     backgroundColor: 'snow',
     borderRadius: '10px',
     //flex: 1,
-    fontSize: 'large',
-    width: '125px',
-    height: '125px',
+    fontSize: 'medium',
+    width: '100px',
+    height: '100px',
     //padding: '20px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     cursor: "pointer",
@@ -115,7 +108,7 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
 
   return (
     <div css={cuttingActionButtonStyle} title={actionName} onClick={() => dispatch(action())}>
-      <FontAwesomeIcon icon={iconName} size="3x" />
+      <FontAwesomeIcon icon={iconName} size="2x" />
       <div>{actionName}</div>
     </div>
   );
