@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
 /**
+ * EDIT: CURRENTLY NOT IN USE, DUE TO MOVING ITS LOGIC TO VIDEOSLICE
  * EXPERIMENTAL: Slice for fetching stuff from Opencast
  */
 export interface videoURL {
@@ -11,17 +12,19 @@ export interface videoURL {
   title: string,
   presenters: string[],
   status: string,
-  error: any
+  error: any,
+  segments: string[],
 }
 
 const initialState : videoURL = {
   videoURLs: [],
   videoCount: 0,
-  duration: 0,
+  duration: 1,
   title: '',
   presenters: [],
   status: 'idle',
-  error: null
+  error: null,
+  segments: []
 }
 
 export const fetchVideoURL = createAsyncThunk('videoURL/fetchVideoURL', async () => {
@@ -48,6 +51,7 @@ const videoURLSlice = createSlice({
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.presenters = action.payload.presenters
+        state.segments = action.payload.segments
     })
     builder.addCase(
       fetchVideoURL.rejected, (state, action) => {

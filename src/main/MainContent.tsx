@@ -17,7 +17,7 @@ import {
 /**
  * A container for the main functionality
  * Holds different components depending on the state off the app
- * TODO: Add component switching
+ * TODO: Add proper component switching
  */
 const MainContent: React.FC<{}> = () => {
 
