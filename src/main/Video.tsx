@@ -64,7 +64,7 @@ const Video: React.FC<{}> = () => {
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '10px',
+    padding: '0px',
     borderBottom: '1px solid #BBB',
   });
 
@@ -243,13 +243,28 @@ const VideoHeader: React.FC<{}> = () => {
   const presenters = useSelector(selectPresenters)
 
   const titleStyle = css({
-    fontSize: 'large'
+    display: 'inline-block',
+    padding: '15px',
+    overflow: 'hidden',
+    whiteSpace: "nowrap",
+    textOverflow: 'ellipsis',
+    maxWidth: '500px',
   })
 
+  const titleStyleBold = css({
+    fontWeight: 'bold',
+    fontSize: '24px',
+    verticalAlign: '-2.5px',
+  })
+
+  let presenter_header;
+  if (presenters && presenters.length) {
+      presenter_header = <div css={titleStyle} title="Video Presenters">by {presenters.join(", ")}</div>
+  }
   return (
-    <div title="Video Area Header">
-      <div css={titleStyle} title="Video Title">{title}</div>
-      <div title="Video Presenters">by {presenters.join(", ")}</div>
+    <div title="Video Area Header" css={{fontSize: '16px'}}>
+      <div css={[titleStyle, titleStyleBold]} title="Video Title">{title}</div>
+      {presenter_header}
     </div>
   );
 }
