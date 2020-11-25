@@ -192,7 +192,7 @@ const VideoControls: React.FC<{}> = () => {
     alignItems: 'center',
     width: '100%',
     padding: '10px',
-    gap: '20px',
+    gap: '50px',
   };
 
   const playButtonStyle = {
@@ -219,21 +219,20 @@ const VideoControls: React.FC<{}> = () => {
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div>
-          <FontAwesomeIcon icon={faEyeSlash} size="2x" />
-          <FontAwesomeIcon css={skipToggleStyle} icon={isSkipping ? faToggleOn : faToggleOff} size="2x" 
-            onClick={() => setIsSkipping(isSkipping ? false : true)} 
+        <div style={{display: 'flex', gap: '10px'}}>
+          <FontAwesomeIcon icon={faEyeSlash} size="1x" />
+          <FontAwesomeIcon css={skipToggleStyle} icon={isSkipping ? faToggleOn : faToggleOff} size="1x"
+            onClick={() => setIsSkipping(!isSkipping)}
           />
-        </div> 
-        <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="5x" 
-          onClick={() => dispatch(setIsPlaying(isPlaying ? false : true))} 
+        </div>
+        <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
+          onClick={() => dispatch(setIsPlaying(!isPlaying))}
         />
         {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
       </div>
       {/* <div css={videoControlsRowStyle} title="Video Controls Bottom Row">
 
 
-       
       </div> */}
     </div>
   );
