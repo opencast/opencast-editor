@@ -31,7 +31,6 @@ const Timeline: React.FC<{}> = () => {
 
   const timelineStyle = css({
     position: 'relative' as 'relative',     // Need to set position for Draggable bounds to work
-    borderRadius: '10px',
     backgroundColor: 'snow',
     height: '250px',
     width: '100%',
@@ -195,7 +194,6 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       segments.map( (segment: Segment, index: number) => (
         <div key={segment.id} title="Segment" css={{
           backgroundColor: bgColor(segment.isAlive, activeSegmentIndex === index),//segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
-          borderRadius: '15px',
           borderStyle: 'solid',
           borderColor: segment.isAlive ? 'blue' : 'red',
           borderWidth: '1px',
