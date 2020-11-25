@@ -1,0 +1,86 @@
+name: Test &  Deploy
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  main:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: generate build path
+      run: echo "::set-output name=build::${{github.event.number}}/$(date +'%Y-%m-%d_%H-%m-%d')/" | sed 's_build::/*_build::_'
+      id: build-path
+
+    - uses: actions/checkout@v2
+
+    - name: use node.js 14.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+
+    - run: npm ci
+
+    - run: npm run build
+      env:
+        PUBLIC_URL: /${{ steps.build-path.outputs.build }}
+
+    - name: prepare git
+      run: |
+        git config --global user.name "Editor Deployment Bot"
+        git config --global user.email "opencast-support@elan-ev.de"
+
+    - name: prepare github ssh key
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY_TEST }}
+      run: |
+        install -dm 700 ~/.ssh/
+        echo "${DEPLOY_KEY}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: clone repository
+      run: |
+        git clone "git@github.com:elan-ev/opencast-editor-test.git" ~/editor-test
+        cd ~/editor-test
+        git checkout gh-pages
+
+    - name: store build
+      env:
+        DEPLOY_PATH: editor-test/${{ steps.build-path.outputs.build }}
+      run: |
+        mkdir -p "${HOME}/${DEPLOY_PATH}"
+        cp -rv build/* "${HOME}/${DEPLOY_PATH}"
+
+    - name: generate index.html
+      run: |
+        cd ~/editor-test
+        echo '<html><body><ul>' > index.html
+        find . -maxdepth 2 -name '*_*' -type d \
+          | sort -r \
+          | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
+        echo '</ul></body></html>' >> index.html
+
+    - name: commit new version
+      run: |
+        cd ~/editor-test
+        git add .
+        git commit -m "Build ${{ steps.build-path.outputs.build }}"
+
+    - name: push updates
+      run: |
+        cd ~/editor-test
+        git push origin gh-pages
+
+    - name: add comment with deployment location
+      uses: thollander/actions-comment-pull-request@master
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        message: >
+          This pull request is deployed at
+          [test.editor.opencast.org/${{ steps.build-path.outputs.build }}
+          ](https://test.editor.opencast.org/${{ steps.build-path.outputs.build }}).
+
+          It might take a few minutes for it to become available.
