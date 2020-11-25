@@ -7,10 +7,10 @@ import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds, 
+  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
   fetchVideoURL, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
 } from '../redux/videoSlice'
-// import { 
+// import {
 //   fetchVideoURL, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
 // } from '../redux/videoURLSlice'
 
@@ -48,12 +48,12 @@ const Video: React.FC<{}> = () => {
   } else if (videoURLStatus === 'failed') {
     content = <div>{error}</div>
   }
-  
+
   // Initialize video players
   const videoPlayers: JSX.Element[] = [];
-  for (let i = 0; i < videoCount; i++) {  
+  for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i === 0 ? true : false}/>);
+    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i === 0}/>);
   }
 
   // Style
@@ -92,7 +92,7 @@ const Video: React.FC<{}> = () => {
 
 /**
  * A single video player
- * @param param0 
+ * @param param0
  */
 const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) => {
 
@@ -111,7 +111,7 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     // Only update redux if there was a substantial change
     if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3)) {
       dispatch(setCurrentlyAtInSeconds(state.playedSeconds))
-    }    
+    }
   }
 
   // Callback for checking whether the video element is ready
@@ -131,11 +131,6 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     }
   })
 
-  const playerStyle = css({
-    minWidth: '320px',
-    minHeight: '240px',
-  })
-
   return (
     <ReactPlayer url={url}
       ref={ref}
@@ -143,7 +138,6 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
       height='auto'
       playing={isPlaying}
       muted={isMuted}
-      css={playerStyle}
       onProgress={onProgressCallback}
       progressInterval={100}
       onReady={onReadyCallback}
@@ -156,7 +150,7 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   //     <video width="320" height="240" controls ref={vidRef}>
   //     <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4" type="video/mp4" />
   //     Your browser does not support the video tag.
-  //     </video> 
+  //     </video>
   //   </div>
   // );
 };
