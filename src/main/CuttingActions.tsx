@@ -36,14 +36,7 @@ const CuttingActions: React.FC<{}> = () => {
   //   gap: '30px',
   // });
 
-  const leftStyle = css({
-    backgroundColor: 'snow',
-    display: 'flex',
-    flexDirection: 'row' as const,
-    gap: '30px',
-  })
-
-  const rightStyle = css({
+  const blockStyle = css({
     backgroundColor: 'snow',
     display: 'flex',
     flexDirection: 'row' as const,
@@ -53,14 +46,14 @@ const CuttingActions: React.FC<{}> = () => {
   return (
     <div css={cuttingStyle}>
       {/* <div css={cuttingActionsStyle} title="CuttingActions"> */}
-        <div css={leftStyle}>
+        <div css={blockStyle}>
           <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
           {/* <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={markAsDeletedOrAlive}/> */}
           <MarkAsDeletedButton />
-          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Left" action={null}/>
-          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Right" action={null}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Merge Left" action={null}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Merge Right" action={null}/>
         </div>
-        <div css={rightStyle}>
+        <div css={blockStyle}>
           <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}/>
           <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={null}/>
         </div>
@@ -84,9 +77,7 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
     borderRadius: '10px',
     //flex: 1,
     fontSize: 'medium',
-    width: '100px',
-    height: '100px',
-    //padding: '20px',
+    padding: '16px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     cursor: "pointer",
     justifyContent: 'center',
@@ -100,7 +91,6 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
       transform: 'scale(0.9)',
     },
     display: 'flex',
-    flexDirection: 'column' as const,
     alignItems: 'center',
     gap: '10px',
     textAlign: 'center' as const,
@@ -108,8 +98,8 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
 
   return (
     <div css={cuttingActionButtonStyle} title={actionName} onClick={() => action ? dispatch(action()) : ""}>
-      <FontAwesomeIcon icon={iconName} size="2x" />
-      <div>{actionName}</div>
+      <FontAwesomeIcon icon={iconName} size="1x" />
+      <span>{actionName}</span>
     </div>
   );
 };
@@ -128,9 +118,7 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
     borderRadius: '10px',
     //flex: 1,
     fontSize: 'medium',
-    width: '100px',
-    height: '100px',
-    //padding: '20px',
+    padding: '16px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     cursor: "pointer",
     justifyContent: 'center',
@@ -144,7 +132,6 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
       transform: 'scale(0.9)',
     },
     display: 'flex',
-    flexDirection: 'column' as const,
     alignItems: 'center',
     gap: '10px',
     textAlign: 'center' as const,
@@ -153,7 +140,7 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
   return (
     <div css={cuttingActionButtonStyle} title={isCurrentSegmentActive ? "Delete" : "Restore"} 
       onClick={() => dispatch(markAsDeletedOrAlive())}>
-      <FontAwesomeIcon icon={isCurrentSegmentActive ? faTrash : faTrashRestore} size="2x" />
+      <FontAwesomeIcon icon={isCurrentSegmentActive ? faTrash : faTrashRestore} size="1x" />
       <div>{isCurrentSegmentActive ? "Delete" : "Restore"}</div>
     </div>
   );
