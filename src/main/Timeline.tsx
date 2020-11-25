@@ -7,10 +7,11 @@ import { css } from '@emotion/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment } from '../types'
 import {
-  selectIsPlaying, selectCurrentlyAt, selectSegments, setCurrentlyAt
+  selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
+  setCurrentlyAt
 } from '../redux/videoSlice'
 
-import { selectDuration, } from '../redux/videoURLSlice'
+// import { selectDuration, } from '../redux/videoURLSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -64,7 +65,8 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const duration = useSelector(selectDuration)
 
   // Init state variables
-  const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,}); 
+  const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
+  const [isGrabbed, setIsGrabbed] = useState(false) 
   const wasCurrentlyAtRef = useRef(0)
 
   // Reposition scrubber when the current x position was changed externally
@@ -78,6 +80,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // // Reposition scrubber when the timeline width changes
   // useEffect(() => {
   //   setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
@@ -92,10 +95,16 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y});
   };
 
+  const onStartDrag = () => {
+    setIsGrabbed(true)
+  }
+
   const onStopDrag = (e: any, position: any) => {
     const {x, y} = position;
     setControlledPosition({x, y});
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
+
+    setIsGrabbed(false)
   }
 
   const scrubberStyle = css({
@@ -118,7 +127,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     justifyContent: 'center',
     alignItems: 'center',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    cursor: "pointer",
+    cursor: isGrabbed ? "grabbing" : "grab",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
     "&:hover": {
@@ -137,6 +146,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   return (
     <Draggable 
       //onDrag={onControlledDrag}
+      onStart={onStartDrag}
       onStop={onStopDrag}
       axis="x"
       bounds="parent"
@@ -160,17 +170,34 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   // Init redux variables
   const segments = useSelector(selectSegments)
-  const duration = useSelector(selectDuration)  
+  const duration = useSelector(selectDuration)
+  const activeSegmentIndex = useSelector(selectActiveSegmentIndex)
+
+  /**
+   * Returns a background color based on whether the segment is to be deleted
+   * and whether the segment is currently active
+   */ 
+  const bgColor = (state: boolean, index: boolean) => {
+    if (state && !index) {
+      return 'rgba(0, 0, 255, 0.4)' 
+    } else if (!state && !index) {
+      return 'rgba(255, 0, 0, 0.4)' 
+    } else if (state && index) {
+      return 'rgba(0, 0, 200, 0.4)' 
+    } else if (!state && index) {
+      return 'rgba(200, 0, 0, 0.4)'
+    }
+  }
 
   // Render the individual segments
   const renderedSegments = () => {
     return (
-      segments.map( (segment: Segment) => (
+      segments.map( (segment: Segment, index: number) => (
         <div key={segment.id} title="Segment" css={{
-          backgroundColor: segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
-          borderRadius: '25px',
+          backgroundColor: bgColor(segment.isAlive, activeSegmentIndex === index),//segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
+          borderRadius: '15px',
           borderStyle: 'solid',
-          borderBlockColor: 'black',
+          borderColor: segment.isAlive ? 'blue' : 'red',
           borderWidth: '1px',
           boxSizing: 'border-box',
           width: ((segment.endTime - segment.startTime) / duration) * 100 + '%',

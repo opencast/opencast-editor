@@ -7,11 +7,12 @@ import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds
-} from '../redux/videoSlice'
-import { 
+  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds, 
   fetchVideoURL, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
-} from '../redux/videoURLSlice'
+} from '../redux/videoSlice'
+// import { 
+//   fetchVideoURL, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
+// } from '../redux/videoURLSlice'
 
 import ReactPlayer from 'react-player'
 
@@ -28,8 +29,8 @@ const Video: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
-  const videoURLStatus = useSelector((state: { videoURL: { status: string } }) => state.videoURL.status);
-  const error = useSelector((state: { videoURL: { error: any } }) => state.videoURL.error)
+  const videoURLStatus = useSelector((state: { videoState: { status: string } }) => state.videoState.status);
+  const error = useSelector((state: { videoState: { error: any } }) => state.videoState.error)
 
   // Try to fetch URL from external API
   useEffect(() => {

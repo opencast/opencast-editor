@@ -2,7 +2,7 @@ export interface Segment {
   id: string,
   startTime: number,
   endTime: number,
-  state: string,
+  isAlive: boolean,
 }
 
 export interface TimelineState {

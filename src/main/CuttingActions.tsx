@@ -1,18 +1,17 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faQuestion, faTrash, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faQuestion, faTrash, faTrashRestore, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { css } from '@emotion/core'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  cut
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive
 } from '../redux/videoSlice'
 
 /**
  * Defines the different actions a user can perform while in cutting mode
- * TODO: Shape this like a proper grid
  */
 const CuttingActions: React.FC<{}> = () => {
 
@@ -56,13 +55,14 @@ const CuttingActions: React.FC<{}> = () => {
       {/* <div css={cuttingActionsStyle} title="CuttingActions"> */}
         <div css={leftStyle}>
           <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
-          <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={cut}/>
-          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Left" action={cut}/>
-          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Right" action={cut}/>
+          {/* <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={markAsDeletedOrAlive}/> */}
+          <MarkAsDeletedButton />
+          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Left" action={null}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Concatenate Right" action={null}/>
         </div>
         <div css={rightStyle}>
-          <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={cut}/>
-          <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={cut}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}/>
+          <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={null}/>
         </div>
       {/* </div> */}
     </div>
@@ -107,11 +107,56 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
   };
 
   return (
-    <div css={cuttingActionButtonStyle} title={actionName} onClick={() => dispatch(action())}>
+    <div css={cuttingActionButtonStyle} title={actionName} onClick={() => action ? dispatch(action()) : ""}>
       <FontAwesomeIcon icon={iconName} size="2x" />
       <div>{actionName}</div>
     </div>
   );
 };
+
+const MarkAsDeletedButton : React.FC<{}> = () => {
+
+  const dispatch = useDispatch();
+  // const isCurrentSegmentActive = useSelector(
+  //   (state: { videoState: { segments: { [x: number]: { isAlive: boolean; }; }; activeSegmentIndex: number; }; }) => 
+  //   state.videoState.segments[state.videoState.activeSegmentIndex].isAlive
+  // );
+  const isCurrentSegmentActive = useSelector(selectIsCurrentSegmentAlive)
+
+  const cuttingActionButtonStyle = {
+    backgroundColor: 'snow',
+    borderRadius: '10px',
+    //flex: 1,
+    fontSize: 'medium',
+    width: '100px',
+    height: '100px',
+    //padding: '20px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    cursor: "pointer",
+    justifyContent: 'center',
+    alignContent: 'center',
+    transitionDuration: "0.3s",
+    transitionProperty: "transform",
+    "&:hover": {
+      transform: 'scale(1.1)',
+    },
+    "&:active": {
+      transform: 'scale(0.9)',
+    },
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    gap: '10px',
+    textAlign: 'center' as const,
+  };
+
+  return (
+    <div css={cuttingActionButtonStyle} title={isCurrentSegmentActive ? "Delete" : "Restore"} 
+      onClick={() => dispatch(markAsDeletedOrAlive())}>
+      <FontAwesomeIcon icon={isCurrentSegmentActive ? faTrash : faTrashRestore} size="2x" />
+      <div>{isCurrentSegmentActive ? "Delete" : "Restore"}</div>
+    </div>
+  );
+}
 
 export default CuttingActions;
