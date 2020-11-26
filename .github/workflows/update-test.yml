@@ -15,6 +15,9 @@ jobs:
       id: build-path
 
     - uses: actions/checkout@v2
+      with:
+        ref: ${{github.event.pull_request.head.ref}}
+        repository: ${{github.event.pull_request.head.repo.full_name}}
 
     - name: use node.js 14.x
       uses: actions/setup-node@v1
