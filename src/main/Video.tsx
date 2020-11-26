@@ -228,7 +228,9 @@ const VideoControls: React.FC<{}> = () => {
         <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
           onClick={() => dispatch(setIsPlaying(!isPlaying))}
         />
-        {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
+        <div css={{display: 'inline-block', width: '110px'}}>
+          {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
+        </div>
       </div>
       {/* <div css={videoControlsRowStyle} title="Video Controls Bottom Row">
 
