@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: generate build path
-      run: echo "::set-output name=build::${{github.event.number}}/$(date +'%Y-%m-%d_%H-%m-%d')/" | sed 's_build::/*_build::_'
+      run: echo "::set-output name=build::${{github.event.number}}/$(date +%Y-%m-%d_%H-%M-%S)/" | sed 's_build::/*_build::_'
       id: build-path
 
     - uses: actions/checkout@v2
