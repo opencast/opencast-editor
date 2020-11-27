@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import {
   selectMainMenuState,
 } from '../redux/mainMenuSlice'
+import Workflow from "./Workflow";
 
 /**
  * A container for the main functionality
@@ -45,6 +46,13 @@ const MainContent: React.FC<{}> = () => {
             </div>
             <Timeline />
           </>);
+      case "Start Workflow":
+        return (
+          <>
+          {/* // <div css={{display: 'flex', flexDirection: 'row' as const, justifyContent: 'left', alignItems: 'left',}} title="Workflow Container"> */}
+            <Workflow />
+          </>
+        );
       default:
         return (
           <>

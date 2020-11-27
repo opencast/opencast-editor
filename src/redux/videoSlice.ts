@@ -16,6 +16,7 @@ export interface video {
   duration: number,   // Video duration in milliseconds
   title: string,
   presenters: string[],
+  workflows: string[],
 
   status: string,
   error: any,
@@ -32,6 +33,7 @@ const initialState: video = {
   duration: 0,
   title: '',
   presenters: [],
+  workflows: [],
 
   status: 'idle',
   error: null,
@@ -107,6 +109,7 @@ export const videoSlice = createSlice({
         state.title = action.payload.title
         state.presenters = action.payload.presenters
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
+        state.workflows = action.payload.workflows
     })
     builder.addCase(
       fetchVideoURL.rejected, (state, action) => {
@@ -158,6 +161,7 @@ export const selectDuration = (state: { videoState: { duration: number } }) => s
 export const selectDurationInSeconds = (state: { videoState: { duration: number } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: string } }) => state.videoState.title
 export const selectPresenters = (state: { videoState: { presenters: string[] } }) => state.videoState.presenters
+export const selectWorkflows = (state: { videoState: { workflows: string[] } }) => state.videoState.workflows
 
 export default videoSlice.reducer
 
