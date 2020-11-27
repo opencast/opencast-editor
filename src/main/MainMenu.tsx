@@ -37,7 +37,7 @@ const MainMenu: React.FC<{}> = () => {
 /**
  * A button to set the state of the app
  * TODO: Complete Styling
- * @param param0 
+ * @param param0
  */
 const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {
 
@@ -72,9 +72,9 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
   };
 
   return (
-    <div css={mainMenuButtonStyle} title={stateName}         
-      onClick={() => { 
-        dispatch(setState(stateName)); 
+    <div css={mainMenuButtonStyle} title={stateName}
+      onClick={() => {
+        dispatch(setState(stateName));
       }}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>
