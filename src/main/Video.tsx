@@ -76,6 +76,7 @@ const Video: React.FC<{}> = () => {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    maxHeight: '600px',
   };
 
   return (
@@ -140,7 +141,7 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     <ReactPlayer url={url}
       ref={ref}
       width='100%'
-      height='auto'
+      height='100%'
       playing={isPlaying}
       muted={isMuted}
       css={playerStyle}
