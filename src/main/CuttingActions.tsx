@@ -1,7 +1,15 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faQuestion, faTrash, faTrashRestore, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import {
+  IconDefinition,
+  faCut,
+  faQuestion,
+  faStepBackward,
+  faStepForward,
+  faTrash,
+  faTrashRestore,
+  } from "@fortawesome/free-solid-svg-icons";
 
 import { css } from '@emotion/core'
 
@@ -50,8 +58,8 @@ const CuttingActions: React.FC<{}> = () => {
           <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
           {/* <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={markAsDeletedOrAlive}/> */}
           <MarkAsDeletedButton />
-          <CuttingActionsButton iconName={faQuestion} actionName="Merge Left" action={null}/>
-          <CuttingActionsButton iconName={faQuestion} actionName="Merge Right" action={null}/>
+          <CuttingActionsButton iconName={faStepBackward} actionName="Merge Left" action={null}/>
+          <CuttingActionsButton iconName={faStepForward} actionName="Merge Right" action={null}/>
         </div>
         <div css={blockStyle}>
           <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}/>
