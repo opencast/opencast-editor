@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
+import { css } from '@emotion/core'
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
