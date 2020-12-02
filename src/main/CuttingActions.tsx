@@ -74,7 +74,7 @@ const CuttingActions: React.FC<{}> = () => {
  * A button representing a single action a user can take while cutting
  * TODO: Add functionality
  * TODO: Complete styling
- * @param param0 
+ * @param param0
  */
 const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: string, action: any}> = ({iconName, actionName, action}) => {
 

@@ -87,9 +87,9 @@ export const videoSlice = createSlice({
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
         deleted: true}
-      
+
       // Add the new segments and remove the old one
-      state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);     
+      state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
     },
     markAsDeletedOrAlive: (state) => {
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
@@ -175,4 +175,3 @@ export const selectPresenters = (state: { videoState: { presenters: string[] } }
 export const selectWorkflows = (state: { videoState: { workflows: string[] } }) => state.videoState.workflows
 
 export default videoSlice.reducer
-
