@@ -19,6 +19,7 @@ const MainMenu: React.FC<{}> = () => {
     width: '100px',
     display: 'flex',
     flexDirection: 'column' as const,
+    flexShrink: 0,
     alignItems: 'center',
     padding: '20px',
     gap: '30px',

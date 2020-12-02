@@ -119,7 +119,7 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
   //   (state: { videoState: { segments: { [x: number]: { isAlive: boolean; }; }; activeSegmentIndex: number; }; }) => 
   //   state.videoState.segments[state.videoState.activeSegmentIndex].isAlive
   // );
-  const isCurrentSegmentActive = useSelector(selectIsCurrentSegmentAlive)
+  const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
 
   const cuttingActionButtonStyle = {
     backgroundColor: 'snow',
@@ -146,10 +146,10 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
   };
 
   return (
-    <div css={cuttingActionButtonStyle} title={isCurrentSegmentActive ? "Delete" : "Restore"} 
+    <div css={cuttingActionButtonStyle} title={isCurrentSegmentAlive ? "Delete" : "Restore"} 
       onClick={() => dispatch(markAsDeletedOrAlive())}>
-      <FontAwesomeIcon icon={isCurrentSegmentActive ? faTrash : faTrashRestore} size="1x" />
-      <div>{isCurrentSegmentActive ? "Delete" : "Restore"}</div>
+      <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
+      <div>{isCurrentSegmentAlive ? "Delete" : "Restore"}</div>
     </div>
   );
 }

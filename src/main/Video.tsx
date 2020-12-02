@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 
+import { css } from '@emotion/core'
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
-  fetchVideoURL, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
+  fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
 } from '../redux/videoSlice'
-// import {
-//   fetchVideoURL, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
-// } from '../redux/videoURLSlice'
 
 import ReactPlayer from 'react-player'
 
@@ -33,7 +32,7 @@ const Video: React.FC<{}> = () => {
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
-      dispatch(fetchVideoURL())
+      dispatch(fetchVideoInformation())
     }
   }, [videoURLStatus, dispatch])
 
@@ -55,7 +54,7 @@ const Video: React.FC<{}> = () => {
   }
 
   // Style
-  const videoAreaStyle = {
+  const videoAreaStyle = css({
     backgroundColor: 'snow',
     display: 'flex',
     width: 'auto',
@@ -65,16 +64,16 @@ const Video: React.FC<{}> = () => {
     alignItems: 'center',
     padding: '10px',
     borderBottom: '1px solid #BBB',
-  };
+  });
 
-  const videoPlayerAreaStyle = {
+  const videoPlayerAreaStyle = css({
     backgroundColor: 'black',
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-  };
+  });
 
   return (
     <div css={videoAreaStyle} title="Video Area">
@@ -168,16 +167,16 @@ const VideoControls: React.FC<{}> = () => {
   const [isSkipping, setIsSkipping] = useState(false)
 
   // Style
-  const videoControlStyle = {
+  const videoControlStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     padding: '10px',
-  }
+  })
 
-  const videoControlsRowStyle = {
+  const videoControlsRowStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'center',
@@ -185,9 +184,9 @@ const VideoControls: React.FC<{}> = () => {
     width: '100%',
     padding: '10px',
     gap: '50px',
-  };
+  })
 
-  const playButtonStyle = {
+  const playButtonStyle = css({
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
@@ -197,16 +196,16 @@ const VideoControls: React.FC<{}> = () => {
     "&:active": {
       transform: 'scale(0.9)',
     },
-  }
+  })
 
-  const skipToggleStyle = {
+  const skipToggleStyle = css({
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
     "&:hover": {
       transform: 'scale(1.05)',
     },
-  }
+  })
 
   return (
     <div css={videoControlStyle} title="Video Controls">
@@ -239,9 +238,9 @@ const VideoHeader: React.FC<{}> = () => {
   const title = useSelector(selectTitle)
   const presenters = useSelector(selectPresenters)
 
-  const titleStyle = {
+  const titleStyle = css({
     fontSize: 'large'
-  }
+  })
 
   return (
     <div title="Video Area Header">
