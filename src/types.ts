@@ -1,11 +1,20 @@
 export interface Segment {
   id: string,
-  startTime: number,
-  endTime: number,
-  isAlive: boolean,
+  start: number,
+  end: number,
+  deleted: boolean,
 }
 
 export interface TimelineState {
   segments: Segment[]
   scrubberPos: number
+}
+
+export interface PostEditArgument {
+  segments: Segment[]
+  mediaPackageId: string
+}
+
+export interface PostAndProcessEditArgument extends PostEditArgument{
+  workflowID: string
 }

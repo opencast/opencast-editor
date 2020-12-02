@@ -3,6 +3,8 @@ import React from "react";
 import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
+import WorkflowSelection from "./WorkflowSelection";
+import WorkflowConfiguration from "./WorkflowConfiguration";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -13,59 +15,57 @@ import { useSelector } from 'react-redux'
 import {
   selectMainMenuState,
 } from '../redux/mainMenuSlice'
-import Workflow from "./Workflow";
 
 /**
  * A container for the main functionality
- * Holds different components depending on the state off the app
+ * Shows different components depending on the state off the app
  * TODO: Add proper component switching
  */
 const MainContent: React.FC<{}> = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)
 
-  const mainContentStyle = css({
-    flex: '1',
-    display: 'flex',
+  const cuttingStyle = css({
+    width: '100%',
+    display: mainMenuState !== "Cutting" ? 'none' :'flex',
     flexDirection: 'column' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-around',
+    gap: "20px",
     paddingRight: '20px',
+  })
+
+  const startWorkflowStyle = css({
+    height: '100%',
+    display: mainMenuState !== "Start Workflow" ? 'none' : 'flex',
+    flexDirection: 'row' as const,
+    justifyContent: 'left',
+    alignItems: 'left'
+  })
+
+  const defaultStyle = css({
+    display: (mainMenuState === "Start Workflow" || mainMenuState === "Cutting") ? 'none' : 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    padding: '20px',
     gap: '20px',
-  });
-
-
-  const renderSwitch = (state : string) => {
-    switch(state) {
-      case "Cutting":
-        return (
-          <>
-            <div css={{width: '100%', display: 'flex', flexDirection: 'column' as const, justifyContent: 'space-around', gap: "20px"}}>
-              <Video />
-              <CuttingActions />
-            </div>
-            <Timeline />
-          </>);
-      case "Start Workflow":
-        return (
-          <>
-          {/* // <div css={{display: 'flex', flexDirection: 'row' as const, justifyContent: 'left', alignItems: 'left',}} title="Workflow Container"> */}
-            <Workflow />
-          </>
-        );
-      default:
-        return (
-          <>
-            <FontAwesomeIcon icon={faTools} size="10x" />
-            Under Construction
-          </>);
-    }
-  }
+  })
 
   return (
-    <div css={mainContentStyle} title="MainMenuContext">
-        {renderSwitch(mainMenuState)}
-    </div>
+     <div title="MainMenuContext">
+        <div css={cuttingStyle} title="Cutting Container">
+            <Video />
+            <CuttingActions />
+            <Timeline />
+        </div>
+        <div css={startWorkflowStyle} title="Workflow Container">
+            <WorkflowSelection />
+            <WorkflowConfiguration />
+          </div>
+          <div css={defaultStyle}>
+            <FontAwesomeIcon icon={faTools} size="10x" />
+            Under Construction
+          </div>
+     </div>
   );
 };
 

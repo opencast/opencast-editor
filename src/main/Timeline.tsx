@@ -37,7 +37,7 @@ const Timeline: React.FC<{}> = () => {
     width: '100%',
     //backgroundImage: `url({myImg})`,
   });
-  
+
   return (
   <div ref={ref} css={timelineStyle} title="Timeline">
     <Scrubber timelineWidth={width}/>
@@ -54,7 +54,7 @@ const Timeline: React.FC<{}> = () => {
  * TODO: Fix position fail when starting and then quickly stopping the video
  *       Possibly because state.playedSceonds in Video is faulty for small values
  * TODO: Fix timeline width changes
- * @param param0 
+ * @param param0
  */
 const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
@@ -66,7 +66,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
-  const [isGrabbed, setIsGrabbed] = useState(false) 
+  const [isGrabbed, setIsGrabbed] = useState(false)
   const wasCurrentlyAtRef = useRef(0)
 
   // Reposition scrubber when the current x position was changed externally
@@ -117,7 +117,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  }); 
+  });
 
   const scrubberDragHandleStyle = css({
     backgroundColor: 'rgba(255, 255, 255, 1)',
@@ -144,7 +144,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   })
 
   return (
-    <Draggable 
+    <Draggable
       //onDrag={onControlledDrag}
       onStart={onStartDrag}
       onStop={onStopDrag}
@@ -176,15 +176,15 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   /**
    * Returns a background color based on whether the segment is to be deleted
    * and whether the segment is currently active
-   */ 
-  const bgColor = (state: boolean, index: boolean) => {
-    if (state && !index) {
-      return 'rgba(0, 0, 255, 0.4)' 
-    } else if (!state && !index) {
-      return 'rgba(255, 0, 0, 0.4)' 
-    } else if (state && index) {
-      return 'rgba(0, 0, 200, 0.4)' 
-    } else if (!state && index) {
+   */
+  const bgColor = (deleted: boolean, index: boolean) => {
+    if (!deleted && !index) {
+      return 'rgba(0, 0, 255, 0.4)'
+    } else if (deleted && !index) {
+      return 'rgba(255, 0, 0, 0.4)'
+    } else if (!deleted && index) {
+      return 'rgba(0, 0, 200, 0.4)'
+    } else if (deleted && index) {
       return 'rgba(200, 0, 0, 0.4)'
     }
   }
@@ -194,18 +194,17 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     return (
       segments.map( (segment: Segment, index: number) => (
         <div key={segment.id} title="Segment" css={{
-          backgroundColor: bgColor(segment.isAlive, activeSegmentIndex === index),//segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
+          backgroundColor: bgColor(segment.deleted, activeSegmentIndex === index),//segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
           borderRadius: '15px',
           borderStyle: 'solid',
-          borderColor: segment.isAlive ? 'blue' : 'red',
+          borderColor: segment.deleted ? 'red' : 'blue',
           borderWidth: '1px',
           boxSizing: 'border-box',
-          width: ((segment.endTime - segment.startTime) / duration) * 100 + '%',
+          width: ((segment.end - segment.start) / duration) * 100 + '%',
           height: '230px',
           zIndex: 1,
         }}>
         </div>
-        
       ))
     );
   }
