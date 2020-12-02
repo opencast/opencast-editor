@@ -34,7 +34,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   const workflowButtons = () => {
     return (
       workflows.map( (workflow: any, index: number) => (
-        <WorkflowButton stateName={workflow.name} workflowIndex={index}/>
+        <WorkflowButton key={index} stateName={workflow.name} workflowIndex={index}/>
       ))
     );
   }
