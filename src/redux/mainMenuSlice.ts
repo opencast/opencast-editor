@@ -23,4 +23,3 @@ export const { setState, } = mainMenuSlice.actions
 export const selectMainMenuState = (state: { mainMenuState: { value: any; }; }) => state.mainMenuState.value
 
 export default mainMenuSlice.reducer
-

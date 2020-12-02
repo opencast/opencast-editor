@@ -9,8 +9,8 @@ export interface video {
   isPlaying: boolean,
   currentlyAt: number,   // Position in the video in milliseconds
   segments: Segment[],
-  activeSegmentIndex: number, 
-  
+  activeSegmentIndex: number,
+
   videoURLs: string[],
   videoCount: number,
   duration: number,   // Video duration in milliseconds
@@ -25,8 +25,8 @@ const initialState: video = {
   isPlaying: false,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), startTime: 0, endTime: 1, isAlive: true}],
-  activeSegmentIndex: 0, 
-  
+  activeSegmentIndex: 0,
+
   videoURLs: [],
   videoCount: 0,
   duration: 0,
@@ -83,9 +83,9 @@ export const videoSlice = createSlice({
         startTime: state.currentlyAt,
         endTime: state.segments[state.activeSegmentIndex].endTime,
         isAlive: false}
-      
+
       // Add the new segments and remove the old one
-      state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);     
+      state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
     },
     markAsDeletedOrAlive: (state) => {
       state.segments[state.activeSegmentIndex].isAlive = !state.segments[state.activeSegmentIndex].isAlive
@@ -117,7 +117,7 @@ export const videoSlice = createSlice({
 })
 
 const updateActiveSegment = (state: WritableDraft<video>) => {
-  state.activeSegmentIndex = state.segments.findIndex(element => 
+  state.activeSegmentIndex = state.segments.findIndex(element =>
     element.startTime <= state.currentlyAt && element.endTime >= state.currentlyAt)
   // TODO: Proper error handling. Rewrite function?
   if(state.activeSegmentIndex < 0) {
@@ -160,4 +160,3 @@ export const selectTitle = (state: { videoState: { title: string } }) => state.v
 export const selectPresenters = (state: { videoState: { presenters: string[] } }) => state.videoState.presenters
 
 export default videoSlice.reducer
-
