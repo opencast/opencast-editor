@@ -15,7 +15,7 @@ import { css } from '@emotion/core'
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
 } from '../redux/videoSlice'
 
 /**
@@ -58,8 +58,8 @@ const CuttingActions: React.FC<{}> = () => {
           <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
           {/* <CuttingActionsButton iconName={faTrash} actionName="Mark as Deleted" action={markAsDeletedOrAlive}/> */}
           <MarkAsDeletedButton />
-          <CuttingActionsButton iconName={faStepBackward} actionName="Merge Left" action={null}/>
-          <CuttingActionsButton iconName={faStepForward} actionName="Merge Right" action={null}/>
+          <CuttingActionsButton iconName={faStepBackward} actionName="Merge Left" action={mergeLeft}/>
+          <CuttingActionsButton iconName={faStepForward} actionName="Merge Right" action={mergeRight}/>
         </div>
         <div css={blockStyle}>
           <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}/>

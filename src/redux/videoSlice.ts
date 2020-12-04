@@ -93,7 +93,13 @@ export const videoSlice = createSlice({
     },
     setSelectedWorkflowIndex: (state, action) => {
       state.selectedWorkflowIndex = action.payload
-    }
+    },
+    mergeLeft: (state) => {
+      mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex - 1)
+    },
+    mergeRight: (state) => {
+      mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
+    },
   },
   // For Async Requests
   extraReducers: builder => {
@@ -125,6 +131,10 @@ export const videoSlice = createSlice({
   }
 })
 
+/**
+ * Helper function to update the activeSegmentIndex
+ * @param state
+ */
 const updateActiveSegment = (state: WritableDraft<video>) => {
   state.activeSegmentIndex = state.segments.findIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt)
@@ -134,7 +144,9 @@ const updateActiveSegment = (state: WritableDraft<video>) => {
   }
 }
 
-// Helper Function for testing with current/old editor API
+/**
+ * Helper Function for testing with current/old editor API
+ */
 const parseSegments = (segments: any, duration: number) => {
   let newSegments : Segment[] = []
 
@@ -148,8 +160,30 @@ const parseSegments = (segments: any, duration: number) => {
   return newSegments
 }
 
+/**
+ * Helper function for merging two segments
+ */
+const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, mergeSegmentIndex: number) => {
+  // Check if mergeSegmentIndex is valid
+  if (mergeSegmentIndex < 0 || mergeSegmentIndex > state.segments.length - 1) {
+    return
+  }
+
+  // Increase activeSegment length
+  state.segments[activeSegmentIndex].start = Math.min(
+    state.segments[activeSegmentIndex].start, state.segments[mergeSegmentIndex].start)
+  state.segments[activeSegmentIndex].end = Math.max(
+    state.segments[activeSegmentIndex].end, state.segments[mergeSegmentIndex].end)
+
+  // Remove the other segment
+  state.segments.splice(mergeSegmentIndex, 1);
+
+  // Update active segment
+  updateActiveSegment(state)
+}
+
 export const { setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
-  setSelectedWorkflowIndex } = videoSlice.actions
+  setSelectedWorkflowIndex, mergeLeft, mergeRight } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
