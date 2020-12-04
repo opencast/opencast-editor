@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment }  from '../types'
+import { Segment, httpRequestState }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 
@@ -18,12 +18,9 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: string[],
-
-  status: string,
-  error: any,
 }
 
-const initialState: video = {
+const initialState: video & httpRequestState = {
   isPlaying: false,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
@@ -38,7 +35,7 @@ const initialState: video = {
   workflows: [],
 
   status: 'idle',
-  error: null,
+  error: undefined,
 }
 
 export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
@@ -154,24 +151,32 @@ const parseSegments = (segments: any, duration: number) => {
 export const { setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
   setSelectedWorkflowIndex } = videoSlice.actions
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectIsPlaying = (state: { videoState: { isPlaying: any; }; }) => state.videoState.isPlaying
-export const selectCurrentlyAt = (state: { videoState: { currentlyAt: any; }; }) => state.videoState.currentlyAt
-export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: any; }; }) => state.videoState.currentlyAt / 1000
-export const selectSegments = (state: { videoState: { segments: any } }) => state.videoState.segments
-export const selectActiveSegmentIndex = (state: { videoState: { activeSegmentIndex: any; }; }) => state.videoState.activeSegmentIndex
-export const selectIsCurrentSegmentAlive = (state: { videoState: { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: number; }; }) => 
-!state.videoState.segments[state.videoState.activeSegmentIndex].deleted
-export const selectSelectedWorkflowIndex = (state: { videoState: { selectedWorkflowIndex: any; }; }) => state.videoState.selectedWorkflowIndex
+// Export selectors
+// Selectors mainly pertaining to the video state
+export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"] }; }) =>
+  state.videoState.isPlaying
+export const selectCurrentlyAt = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
+  state.videoState.currentlyAt
+export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
+  state.videoState.currentlyAt / 1000
+export const selectSegments = (state: { videoState: { segments: video["segments"] } }) =>
+  state.videoState.segments
+export const selectActiveSegmentIndex = (state: { videoState: { activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
+  state.videoState.activeSegmentIndex
+export const selectIsCurrentSegmentAlive = (state: { videoState:
+  { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
+  !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
+export const selectSelectedWorkflowIndex = (state: { videoState:
+  { selectedWorkflowIndex: video["selectedWorkflowIndex"]; }; }) =>
+  state.videoState.selectedWorkflowIndex
 
-export const selectVideoURL = (state: { videoState: { videoURLs: string[] } }) => state.videoState.videoURLs
-export const selectVideoCount = (state: { videoState: { videoCount: number } }) => state.videoState.videoCount
-export const selectDuration = (state: { videoState: { duration: number } }) => state.videoState.duration
-export const selectDurationInSeconds = (state: { videoState: { duration: number } }) => state.videoState.duration / 1000
-export const selectTitle = (state: { videoState: { title: string } }) => state.videoState.title
-export const selectPresenters = (state: { videoState: { presenters: string[] } }) => state.videoState.presenters
-export const selectWorkflows = (state: { videoState: { workflows: string[] } }) => state.videoState.workflows
+// Selectors mainly pertaining to the information fetched from Opencast
+export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
+export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"] } }) => state.videoState.videoCount
+export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
+export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
+export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
+export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
+export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 
 export default videoSlice.reducer

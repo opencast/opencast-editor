@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { css } from '@emotion/core'
 
+import { httpRequestState } from '../types'
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,8 +28,8 @@ const Video: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
-  const videoURLStatus = useSelector((state: { videoState: { status: string } }) => state.videoState.status);
-  const error = useSelector((state: { videoState: { error: any } }) => state.videoState.error)
+  const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+  const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
 
   // Try to fetch URL from external API
   useEffect(() => {
