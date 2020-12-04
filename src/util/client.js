@@ -27,9 +27,12 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   }
 
   let data
+  let text
   try {
     const response = await window.fetch(endpoint, config)
-    data = await response.json()
+    text = await response.text()
+    text.length ? data = JSON.parse(text) : data = ''
+    // data = await response.json()
     if (response.ok) {
       return data
     }

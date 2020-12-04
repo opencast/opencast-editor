@@ -1,12 +1,12 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faListUl, faPhotoVideo, faQuestion, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faListUl, faPhotoVideo, faSignOutAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  setState, selectMainMenuState
-} from '../redux/mainMenuSlice'
+import { setState, selectMainMenuState } from '../redux/mainMenuSlice'
+
+import { MainMenuStateNames } from '../types'
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -27,17 +27,16 @@ const MainMenu: React.FC<{}> = () => {
 
   return (
     <div style={mainMenuStyle} title="MainMenu">
-      <MainMenuButton iconName={faFilm} stateName="Cutting"/>
-      <MainMenuButton iconName={faListUl} stateName="Metadata"/>
-      <MainMenuButton iconName={faPhotoVideo} stateName="Thumbnail"/>
-      <MainMenuButton iconName={faQuestion} stateName="Start Workflow"/>
+      <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
+      <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>
+      <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>
+      <MainMenuButton iconName={faSignOutAlt} stateName={MainMenuStateNames.finish}/>
     </div>
   );
 };
 
 /**
  * A button to set the state of the app
- * TODO: Complete Styling
  * @param param0
  */
 const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {

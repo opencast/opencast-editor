@@ -1,19 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../util/client'
-import { Segment, PostEditArgument } from '../types'
+import { Segment, PostEditArgument, httpRequestState } from '../types'
 
-export interface request {
-  status: string,
-  error: any,
-}
-
-const initialState: request = {
+const initialState: httpRequestState = {
   status: 'idle',
-  error: null,
+  error: undefined,
 }
 
 export const postVideoInformation = createAsyncThunk('video/postVideoInformation', async (argument: PostEditArgument) => {
-  const response = await client.post(`http://localhost:8080/editor/${argument.mediaPackageId}/edit.json`,
+  const response = await client.post(`http://localhost:8081/editor/${argument.mediaPackageId}/edit.json`,
     { segments: convertSegments(argument.segments) }
   )
   return response
@@ -69,7 +64,9 @@ const convertSegments = (segments: Segment[]) => {
   return newSegments
 }
 
+export const selectStatus = (state: { workflowPostState: { status: httpRequestState["status"] } }) =>
+  state.workflowPostState.status
+export const selectError = (state: { workflowPostAndProcessState: { error: httpRequestState["error"] } }) =>
+  state.workflowPostAndProcessState.error
+
 export default workflowPostSlice.reducer
-
-
-

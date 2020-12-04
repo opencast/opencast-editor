@@ -1,19 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../util/client'
-import { Segment, PostAndProcessEditArgument } from '../types'
+import { Segment, PostAndProcessEditArgument, httpRequestState } from '../types'
 
-export interface request {
-  status: string,
-  error: any,
-}
-
-const initialState: request = {
+const initialState: httpRequestState = {
   status: 'idle',
-  error: null,
+  error: undefined,
 }
 
 export const postVideoInformationWithWorkflow = createAsyncThunk('video/postVideoInformationWithWorkflow', async (argument: PostAndProcessEditArgument) => {
-  const response = await client.post(`http://localhost:8080/editor/${argument.mediaPackageId}/edit.json`,
+  const response = await client.post(`http://localhost:8081/editor/${argument.mediaPackageId}/edit.json`,
     { segments: convertSegments(argument.segments), worklows: argument.workflowID }
   )
   return response
@@ -23,7 +18,7 @@ export const postVideoInformationWithWorkflow = createAsyncThunk('video/postVide
  * Slice for managing a post request for saving current changes and starting a workflow
  * TODO: Create a wrapper for this and workflowPostAndProcessSlice
  */
-const workflowPostSlice = createSlice({
+const workflowPostAndProcessSlice = createSlice({
   name: 'workflowPostAndProcessState',
   initialState,
   reducers: {
@@ -69,7 +64,10 @@ const convertSegments = (segments: Segment[]) => {
   return newSegments
 }
 
-export default workflowPostSlice.reducer
+export const selectStatus = (state: { workflowPostAndProcessState: { status: httpRequestState["status"] } }) =>
+  state.workflowPostAndProcessState.status
+export const selectError = (state: { workflowPostAndProcessState: { error: httpRequestState["error"] } }) =>
+  state.workflowPostAndProcessState.error
 
 
-
+export default workflowPostAndProcessSlice.reducer
