@@ -57,10 +57,8 @@ const Video: React.FC<{}> = () => {
 
   // Style
   const videoAreaStyle = css({
-    backgroundColor: 'snow',
     display: 'flex',
     width: 'auto',
-    flex: '7',
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',

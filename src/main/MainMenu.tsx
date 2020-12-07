@@ -1,5 +1,7 @@
 import React from "react";
 
+import { css } from '@emotion/core'
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faListUl, faPhotoVideo, faSignOutAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
@@ -7,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setState, selectMainMenuState } from '../redux/mainMenuSlice'
 
 import { MainMenuStateNames } from '../types'
+import { basicButtonStyle } from '../cssStyles'
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -14,7 +17,6 @@ import { MainMenuStateNames } from '../types'
 const MainMenu: React.FC<{}> = () => {
 
   const mainMenuStyle = {
-    backgroundColor: 'snow',
     borderRight: '1px solid #BBB',
     width: '100px',
     display: 'flex',
@@ -44,35 +46,17 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
 
-  const mainMenuButtonStyle = {
-    backgroundColor: 'snow',
-    borderRadius: '10px',
-    fontSize: 'medium',
+  const mainMenuButtonStyle = css({
     width: '100%',
     height: '100px',
-    cursor: "pointer",
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    //boxShadow: isActive ? 'inset 0 0 5px #000000' : '0',
     ...(activeState === stateName) && {
       backgroundColor: 'lightblue',
     },
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
-    display: 'flex',
     flexDirection: 'column' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center' as const,
-    gap: '10px',
-  };
+  });
 
   return (
-    <div css={mainMenuButtonStyle} title={stateName}
+    <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
       onClick={() => {
         dispatch(setState(stateName));
       }}>

@@ -31,7 +31,6 @@ const Timeline: React.FC<{}> = () => {
 
   const timelineStyle = css({
     position: 'relative' as 'relative',     // Need to set position for Draggable bounds to work
-    backgroundColor: 'snow',
     height: '250px',
     width: '100%',
     //backgroundImage: `url({myImg})`,
