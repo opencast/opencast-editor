@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
+import { PageButton } from './FinishContent'
+
 /**
  * Will eventually display settings based on the selected workflow index
  */
@@ -45,6 +47,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         <span>An error has occured. Please wait a bit and try again. Details: </span><br />
         {postAndProcessError}
       </div>
+      <PageButton pageNumber={0} label="Back" />
     </div>
   );
 

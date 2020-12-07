@@ -3,8 +3,7 @@ import React from "react";
 import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
-import FinishMenu from "./FinishMenu";
-import FinishContent from "./FinishContent"
+import Finish from "./Finish"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -44,7 +43,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const defaultStyle = css({
-    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish)
+    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish )
               ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
@@ -60,8 +59,7 @@ const MainContent: React.FC<{}> = () => {
           <Timeline />
       </div>
       <div css={saveProcessCancelStyle} title="Workflow Container">
-        <FinishMenu />
-        <FinishContent />
+        <Finish />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />

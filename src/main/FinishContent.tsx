@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectFinishState } from '../redux/finishSlice'
+import { selectFinishState, setPageNumber } from '../redux/finishSlice'
 import { selectSegments } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
 import { setState as setAbortState } from '../redux/abortSlice'
@@ -21,18 +21,12 @@ import { setState as setAbortState } from '../redux/abortSlice'
  * Display content based on the state select in the finish menu
  */
 const FinishContent : React.FC<{}> = () => {
-
-  const finishContentStyle = css({
-    width: '100%',
-    height: '100%',
-  })
-
   return (
-    <div css={finishContentStyle} title="Select Finish Option Area">
+    <>
       <Save />
       <Process />
       <Abort />
-    </div>
+    </>
   );
 }
 
@@ -75,6 +69,7 @@ const Save : React.FC<{}> = () => {
         <span>An error has occured. Please wait a bit and try again. Details: </span><br />
         {postError}<br />
       </div>
+      <PageButton pageNumber={0} label="Back" />
     </div>
   );
 }
@@ -124,6 +119,7 @@ const Abort : React.FC<{}> = () => {
         Doth thou truly wish tah abort?
       </span>
       <AbortButton />
+      <PageButton pageNumber={0} label="Back" />
     </div>
   );
 }
@@ -193,6 +189,31 @@ const AbortButton : React.FC<{}> = () => {
         dispatch(setAbortState(true))
       }>
       <span>{"Abort"}</span>
+    </div>
+  );
+}
+
+/**
+ * Takes you to a different page
+ */
+export const PageButton : React.FC<{pageNumber: number, label: string}> = ({pageNumber, label}) => {
+
+  // Initialize redux variables
+  const dispatch = useDispatch()
+
+  const pageButtonStyle = css({
+    width: '200px',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    padding: '16px',
+  })
+
+  return (
+    <div css={[basicButtonStyle, pageButtonStyle]} title={label}
+      onClick={() =>
+        dispatch(setPageNumber(pageNumber))
+      }>
+      <span>{label}</span>
     </div>
   );
 }
