@@ -1,6 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
+import { basicButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -74,32 +75,14 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   }
 
   const saveButtonStyle = css({
-    flex: 1,
-    backgroundColor: 'snow',
-    borderRadius: '10px',
     borderWidth: '1px',
     borderColor: workflowStatus === 'failed' ? 'red' : 'green',
     borderStyle: 'solid',
-    fontSize: 'medium',
     padding: '16px',
-    cursor: "pointer",
-    justifyContent: 'center',
-    alignContent: 'center',
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
   })
 
   return (
-    <div css={saveButtonStyle} title={"Process"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={"Process"}
       onClick={() =>
         dispatch(postVideoInformationWithWorkflow({
           segments: segments,

@@ -1,6 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
+import { basicButtonStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, setSelectedWorkflowIndex } from '../redux/videoSlice'
@@ -23,7 +24,6 @@ const WorkflowSelection : React.FC<{}> = () => {
   }
 
   const workflowStyle = css({
-    backgroundColor: 'snow',
     borderRight: '1px solid #BBB',
     width: '350px',
     display: 'flex',
@@ -53,26 +53,11 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
 
   const workflowButtonStyle = css({
     backgroundColor: workflowIndex !== selectedWorkflowIndex ? 'snow' : 'lightblue',
-    borderRadius: '10px',
-    borderWidth: '1px',
-    fontSize: 'medium',
     padding: '16px',
-    cursor: "pointer",
-    justifyContent: 'center',
-    alignContent: 'center',
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
-    gap: '10px',
   });
 
   return (
-    <div css={workflowButtonStyle} title={"Workflow Button for "+stateName}
+    <div css={[basicButtonStyle,workflowButtonStyle]} title={"Workflow Button for "+stateName}
       onClick={() =>
         dispatch(setSelectedWorkflowIndex(workflowIndex))
       }>

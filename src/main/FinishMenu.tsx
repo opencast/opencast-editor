@@ -1,6 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
+import { basicButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -43,33 +44,16 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> 
   const activeState = useSelector(selectFinishState)
 
   const mainMenuButtonStyle = {
-    backgroundColor: 'snow',
-    borderRadius: '10px',
-    fontSize: 'medium',
     width: '200px',
     height: '200px',
-    cursor: "pointer",
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
     ...(activeState === stateName) && {
       backgroundColor: 'lightblue',
     },
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
-    display: 'flex',
     flexDirection: 'column' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center' as const,
-    gap: '10px',
   };
 
   return (
-    <div css={mainMenuButtonStyle} title={stateName}
+    <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
       onClick={() => {
         dispatch(setState(stateName));
       }}>

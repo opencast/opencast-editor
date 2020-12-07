@@ -1,6 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
+import { basicButtonStyle } from '../cssStyles'
 
 import WorkflowSelection from "./WorkflowSelection";
 import WorkflowConfiguration from "./WorkflowConfiguration";
@@ -150,31 +151,14 @@ const SaveButton: React.FC<{}> = () => {
 
   const saveButtonStyle = css({
     width: '200px',
-    backgroundColor: 'snow',
-    borderRadius: '10px',
     borderWidth: '1px',
     borderColor: workflowStatus === 'failed' ? 'red' : 'green',
     borderStyle: 'solid',
-    fontSize: 'medium',
     padding: '16px',
-    cursor: "pointer",
-    justifyContent: 'center',
-    alignContent: 'center',
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
   })
 
   return (
-    <div css={saveButtonStyle} title={"Save"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={"Save"}
       onClick={() =>
         dispatch(postVideoInformation({
           segments: segments,
@@ -197,31 +181,14 @@ const AbortButton : React.FC<{}> = () => {
 
   const saveButtonStyle = css({
     width: '200px',
-    backgroundColor: 'snow',
-    borderRadius: '10px',
     borderWidth: '1px',
     borderColor: 'red',
     borderStyle: 'solid',
-    fontSize: 'medium',
     padding: '16px',
-    cursor: "pointer",
-    justifyContent: 'center',
-    alignContent: 'center',
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
   })
 
   return (
-    <div css={saveButtonStyle} title={"Abort Button"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={"Abort Button"}
       onClick={() =>
         dispatch(setAbortState(true))
       }>
