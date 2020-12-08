@@ -75,11 +75,13 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     }
   })
 
-  // // Reposition scrubber when the timeline width changes
-  // useEffect(() => {
-  //   setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [timelineWidth])
+  // Reposition scrubber when the timeline width changes
+  useEffect(() => {
+    if(currentlyAt && duration) {
+      setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
   // const onControlledDrag = (e: any, position: any) => {
