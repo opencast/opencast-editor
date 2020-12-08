@@ -40,6 +40,7 @@ const MainContent: React.FC<{}> = () => {
     justifyContent: 'space-around',
     gap: "20px",
     paddingRight: '20px',
+    height: '100%',
   })
 
   const defaultStyle = css({
@@ -58,7 +59,7 @@ const MainContent: React.FC<{}> = () => {
           <CuttingActions />
           <Timeline />
       </div>
-      <div css={saveProcessCancelStyle} title="Workflow Container">
+      <div css={saveProcessCancelStyle} title="Finish Container">
         <Finish />
       </div>
       <div css={defaultStyle}>

@@ -32,19 +32,21 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> 
 
   const dispatch = useDispatch();
 
-  const mainMenuButtonStyle = css({
+  const finishMenuButtonStyle = css({
     width: '200px',
     height: '200px',
     flexDirection: 'column' as const,
+    fontSize: "x-large",
+    gap: '30px',
   });
 
   return (
-    <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
+    <div css={[basicButtonStyle, finishMenuButtonStyle]} title={stateName}
       onClick={() => {
         dispatch(setState(stateName));
         dispatch(setPageNumber(1))
       }}>
-      <FontAwesomeIcon  icon={iconName} size="3x"/>
+      <FontAwesomeIcon  icon={iconName} size="5x"/>
       <div>{stateName}</div>
     </div>
   );
