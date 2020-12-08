@@ -25,7 +25,6 @@ const MainContent: React.FC<{}> = () => {
   const mainMenuState = useSelector(selectMainMenuState)
 
   const cuttingStyle = css({
-    width: '100%',
     display: mainMenuState !== MainMenuStateNames.cutting ? 'none' :'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
@@ -36,7 +35,6 @@ const MainContent: React.FC<{}> = () => {
 
   const saveProcessCancelStyle = css({
     display: mainMenuState !== MainMenuStateNames.finish ? 'none' : 'flex',
-    width: '100%',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     gap: "20px",
