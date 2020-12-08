@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
 import { Segment, httpRequestState }  from '../types'
@@ -52,20 +52,20 @@ export const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
-    setIsPlaying: (state, action) => {
+    setIsPlaying: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlaying = action.payload;
     },
-    setCurrentlyAt: (state, action) => {
+    setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload, 3);
 
       updateActiveSegment(state);
     },
-    setCurrentlyAtInSeconds: (state, action) => {
+    setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 3);
 
       updateActiveSegment(state);
     },
-    addSegment: (state, action) => {
+    addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
     },
     cut: (state) => {
@@ -91,7 +91,7 @@ export const videoSlice = createSlice({
     markAsDeletedOrAlive: (state) => {
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
     },
-    setSelectedWorkflowIndex: (state, action) => {
+    setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowIndex"]>) => {
       state.selectedWorkflowIndex = action.payload
     },
     mergeLeft: (state) => {

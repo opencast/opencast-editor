@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faListUl, faPhotoVideo, faSignOutAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setState, selectMainMenuState } from '../redux/mainMenuSlice'
+import { mainMenu, setState, selectMainMenuState } from '../redux/mainMenuSlice'
 
 import { MainMenuStateNames } from '../types'
 import { basicButtonStyle } from '../cssStyles'
@@ -41,7 +41,7 @@ const MainMenu: React.FC<{}> = () => {
  * A button to set the state of the app
  * @param param0
  */
-const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {
+const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["value"]}> = ({iconName, stateName}) => {
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
