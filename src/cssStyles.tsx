@@ -20,8 +20,10 @@ export const GlobalStyle: React.FC = () => {
 export const globalStyle = css({
   body: {
     backgroundColor: 'snow',
-    fontSize: 'medium'
-  }
+    fontSize: 'medium',
+    // Makes the body span to the bottom of the page
+    minHeight: "100vh",
+  },
 });
 
 /**
