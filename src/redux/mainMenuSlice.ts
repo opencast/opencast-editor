@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { MainMenuStateNames} from '../types'
 
-interface mainMenu {
+export interface mainMenu {
   value: MainMenuStateNames,
 }
 
@@ -17,7 +17,7 @@ export const mainMenuSlice = createSlice({
   name: 'mainMenuState',
   initialState,
   reducers: {
-    setState: (state, action) => {
+    setState: (state, action: PayloadAction<mainMenu["value"]>) => {
       state.value = action.payload;
     }
   }
