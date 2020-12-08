@@ -1,18 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
 import FinishMenu from "./FinishMenu";
 import FinishContent from "./FinishContent"
 
 import { css } from '@emotion/core'
-import { basicButtonStyle } from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSave, faFileExport, faTimesCircle, IconDefinition
-} from "@fortawesome/free-solid-svg-icons";
-
-import { useDispatch, useSelector } from 'react-redux';
-import { setState, selectFinishState, selectPageNumber } from '../redux/finishSlice'
+import { useSelector } from 'react-redux';
+import { selectPageNumber } from '../redux/finishSlice'
 
 /**
  * Displays a menu for selecting what should be done with the current changes

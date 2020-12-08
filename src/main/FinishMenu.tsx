@@ -8,8 +8,8 @@ import {
   faSave, faFileExport, faTimesCircle, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch, useSelector } from 'react-redux';
-import { setState, setPageNumber, selectFinishState } from '../redux/finishSlice'
+import { useDispatch } from 'react-redux';
+import { setState, setPageNumber } from '../redux/finishSlice'
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -32,11 +32,11 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> 
 
   const dispatch = useDispatch();
 
-  const mainMenuButtonStyle = {
+  const mainMenuButtonStyle = css({
     width: '200px',
     height: '200px',
     flexDirection: 'column' as const,
-  };
+  });
 
   return (
     <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
