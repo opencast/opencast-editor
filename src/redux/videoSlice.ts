@@ -56,7 +56,7 @@ export const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
-    setIsPlaying: (state, action) => {
+    setIsPlaying: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlaying = action.payload;
     },
     setIsPlayPreview: (state, action: PayloadAction<video["isPlaying"]>) => {
@@ -65,19 +65,19 @@ export const videoSlice = createSlice({
     setPreviewTriggered: (state, action) => {
       state.previewTriggered = action.payload
     },
-    setCurrentlyAt: (state, action) => {
+    setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload, 3);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
     },
-    setCurrentlyAtInSeconds: (state, action) => {
+    setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 3);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
     },
-    addSegment: (state, action) => {
+    addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
     },
     cut: (state) => {
@@ -103,7 +103,7 @@ export const videoSlice = createSlice({
     markAsDeletedOrAlive: (state) => {
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
     },
-    setSelectedWorkflowIndex: (state, action) => {
+    setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowIndex"]>) => {
       state.selectedWorkflowIndex = action.payload
     },
     mergeLeft: (state) => {

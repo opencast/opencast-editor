@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../util/client'
-import { Segment, PostAndProcessEditArgument, httpRequestState } from '../types'
+import { PostAndProcessEditArgument, httpRequestState } from '../types'
+
+import { convertSegments } from './workflowPostSlice'
 
 const initialState: httpRequestState = {
   status: 'idle',
@@ -39,30 +41,6 @@ const workflowPostAndProcessSlice = createSlice({
     })
   }
 })
-
-interface segmentAPI {
-  start: number,
-  end: number,
-  deleted: boolean,
-  selected: boolean,
-}
-
-// Convert a segment from how it is stored in redux into
-// a segment that can be send to Opencast
-const convertSegments = (segments: Segment[]) => {
-  let newSegments: segmentAPI[] = []
-
-  segments.forEach(segment => {
-    newSegments.push({
-      start: segment.start,
-      end: segment.end,
-      deleted: segment.deleted,
-      selected: false,
-    })
-  });
-
-  return newSegments
-}
 
 export const selectStatus = (state: { workflowPostAndProcessState: { status: httpRequestState["status"] } }) =>
   state.workflowPostAndProcessState.status
