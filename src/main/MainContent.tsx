@@ -33,7 +33,7 @@ const MainContent: React.FC<{}> = () => {
     paddingLeft: '20px',
   })
 
-  const saveProcessCancelStyle = css({
+  const finishStyle = css({
     display: mainMenuState !== MainMenuStateNames.finish ? 'none' : 'flex',
     width: '100%',
     flexDirection: 'column' as const,
@@ -59,12 +59,12 @@ const MainContent: React.FC<{}> = () => {
           <CuttingActions />
           <Timeline />
       </div>
-      <div css={saveProcessCancelStyle} title="Finish Container">
+      <div css={finishStyle} title="Finish Container">
         <Finish />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />
-        Under Construction
+        Placeholder
       </div>
      </div>
   );

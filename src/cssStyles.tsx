@@ -48,3 +48,12 @@ export const basicButtonStyle = css({
   gap: '10px',
   textAlign: 'center' as const,
 });
+
+/**
+ * CSS for a container that holds back/forward buttons
+ */
+export const backOrContinueStyle = css(({
+  display: 'flex',
+  flexDirection: 'row' as const,
+  gap: '20px',
+}))

@@ -1,12 +1,21 @@
 import React from "react";
 
 import FinishMenu from "./FinishMenu";
-import FinishContent from "./FinishContent"
+import Save from "./Save"
+import Discard from "./Discard"
+import WorkflowSelection from "./WorkflowSelection";
+import WorkflowConfiguration from "./WorkflowConfiguration";
 
 import { css } from '@emotion/core'
+import { basicButtonStyle } from '../cssStyles'
 
-import { useSelector } from 'react-redux';
-import { selectPageNumber } from '../redux/finishSlice'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  IconDefinition
+} from "@fortawesome/free-solid-svg-icons";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPageNumber, setPageNumber } from '../redux/finishSlice'
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -15,34 +24,57 @@ const Finish : React.FC<{}> = () => {
 
   const pageNumber = useSelector(selectPageNumber)
 
-  const FinishMenuStyle = css({
-    display: pageNumber !== 0 ? 'none' :'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'space-around',
-    alignItems: 'space-around',
-    padding: '20px',
-    gap: '30px',
+  const pageZeroStyle = css({
+    display: pageNumber !== 0 ? 'none' :'block',
   })
 
-  const FinishContentStyle = css({
-    display: pageNumber !== 1 ? 'none' :'flex',
-    width: '100%',
-    height: '100%',
-    flexDirection: 'column' as const,
-    justifyContent: 'space-around',
-    alignItems: 'space-around',
-    padding: '20px',
-    gap: '30px',
+  const pageOneStyle = css({
+    display: pageNumber !== 1 ? 'none' :'block',
+  })
+
+  const pageTwoStyle = css({
+    display: pageNumber !== 2 ? 'none' :'block',
   })
 
   return (
     <div  title="Finish">
-      <div css={FinishMenuStyle} >
+      <div css={pageZeroStyle} >
         <FinishMenu />
       </div>
-      <div css={FinishContentStyle} >
-        <FinishContent />
+      <div css={pageOneStyle} >
+        <Save />
+        <WorkflowSelection />
+        <Discard />
       </div>
+      <div css={pageTwoStyle} >
+        <WorkflowConfiguration />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Takes you to a different page
+ */
+export const PageButton : React.FC<{pageNumber: number, label: string, iconName: IconDefinition}> = ({pageNumber, label, iconName}) => {
+
+  // Initialize redux variables
+  const dispatch = useDispatch()
+
+  const pageButtonStyle = css({
+    width: '200px',
+    padding: '16px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    justifyContent: 'space-around'
+  })
+
+  return (
+    <div css={[basicButtonStyle, pageButtonStyle]} title={label}
+      onClick={() =>
+        dispatch(setPageNumber(pageNumber))
+      }>
+      <FontAwesomeIcon icon={iconName} size="1x" />
+      <span>{label}</span>
     </div>
   );
 }

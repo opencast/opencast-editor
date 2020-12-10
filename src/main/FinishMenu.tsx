@@ -16,12 +16,19 @@ import { setState, setPageNumber } from '../redux/finishSlice'
  */
 const FinishMenu : React.FC<{}> = () => {
 
+  const finishMenuStyle = css({
+    display: 'flex',
+    flexDirection: 'row' as const,
+    justifyContent: 'space-around',
+    gap: '30px',
+  })
+
   return (
-    <>
+    <div css={finishMenuStyle} title="Finish Menu">
         <FinishMenuButton iconName={faSave} stateName="Save changes"/>
         <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
         <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
-    </>
+    </div>
   );
 }
 
