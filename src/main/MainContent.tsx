@@ -5,6 +5,7 @@ import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 import FinishMenu from "./FinishMenu";
 import FinishContent from "./FinishContent"
+import WaveformDisplayTest from "./WaveformDisplayTest"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -55,6 +56,7 @@ const MainContent: React.FC<{}> = () => {
   return (
      <div title="MainMenuContext" css={{width: '100%'}}>
       <div css={cuttingStyle} title="Cutting Container">
+          <WaveformDisplayTest />
           <Video />
           <CuttingActions />
           <Timeline />
