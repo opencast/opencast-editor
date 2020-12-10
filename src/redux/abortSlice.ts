@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface abort {
   value: boolean,
@@ -15,7 +15,7 @@ export const abortSlice = createSlice({
   name: 'abortState',
   initialState,
   reducers: {
-    setState: (state, action) => {
+    setState: (state, action: PayloadAction<abort["value"]>) => {
       state.value = action.payload;
     }
   }

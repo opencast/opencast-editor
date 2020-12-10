@@ -5,12 +5,13 @@ import { css } from '@emotion/core'
 import { httpRequestState } from '../types'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faToggleOn, faToggleOff, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faToggleOn, faToggleOff, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
-  fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters
+  fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview
 } from '../redux/videoSlice'
 
 import ReactPlayer from 'react-player'
@@ -98,10 +99,11 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   const isPlaying = useSelector(selectIsPlaying)
   const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
   const duration  = useSelector(selectDurationInSeconds)
-  const [ready, setReady] = useState(false);
+  const testTmp = useSelector(selectPreviewTriggered)
 
   // Init state variables
   const ref = useRef<ReactPlayer>(null);
+  const [ready, setReady] = useState(false);
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
@@ -125,6 +127,10 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     // Seek if the position in the video got changed externally
     if(!isPlaying && ref.current && ready) {
       ref.current.seekTo(currentlyAt, "seconds")
+    }
+    if(testTmp && ref.current && ready) {
+      ref.current.seekTo(currentlyAt, "seconds")
+      dispatch(setPreviewTriggered(false))
     }
   })
 
@@ -162,9 +168,8 @@ const VideoControls: React.FC<{}> = () => {
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
+  const isPlayPreview = useSelector(selectIsPlayPreview)
   const currentlyAt = useSelector(selectCurrentlyAt)
-
-  const [isSkipping, setIsSkipping] = useState(false)
 
   // Style
   const videoControlStyle = css({
@@ -198,7 +203,7 @@ const VideoControls: React.FC<{}> = () => {
     },
   })
 
-  const skipToggleStyle = css({
+  const playPreviewStyle = css({
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
@@ -210,23 +215,21 @@ const VideoControls: React.FC<{}> = () => {
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div style={{display: 'flex', gap: '10px'}}>
-          <FontAwesomeIcon icon={faEyeSlash} size="1x" />
-          <FontAwesomeIcon css={skipToggleStyle} icon={isSkipping ? faToggleOn : faToggleOff} size="1x"
-            onClick={() => setIsSkipping(!isSkipping)}
+        <div style={{display: 'flex', gap: '10px', width: '50px', justifyContent: 'center'}}>
+          <FontAwesomeIcon icon={isPlayPreview ? faEyeSlash : faEye} size="1x" title="Play Preview Icon"/>
+          <FontAwesomeIcon css={playPreviewStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
+            title={"Play Preview Switch: " + isPlayPreview}
+            onClick={() => dispatch(setIsPlayPreview(!isPlayPreview))}
           />
         </div>
         <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
+          title="Play Button"
           onClick={() => dispatch(setIsPlaying(!isPlaying))}
         />
         <div css={{display: 'inline-block', width: '110px'}}>
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
         </div>
       </div>
-      {/* <div css={videoControlsRowStyle} title="Video Controls Bottom Row">
-
-
-      </div> */}
     </div>
   );
 }

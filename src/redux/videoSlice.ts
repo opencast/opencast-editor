@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
 import { Segment, httpRequestState }  from '../types'
@@ -6,15 +6,17 @@ import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 
 export interface video {
-  isPlaying: boolean,
-  currentlyAt: number,   // Position in the video in milliseconds
+  isPlaying: boolean,             // Are videos currently playing?
+  isPlayPreview: boolean,         // Should deleted segments be skipped?
+  previewTriggered: boolean,      // Basically acts as a callback for the video players. TODO: Figure out how to do callbacks
+  currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
-  activeSegmentIndex: number,
-  selectedWorkflowIndex: number,
+  activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
+  selectedWorkflowIndex: number,  // Index of the currently selected workflow
 
-  videoURLs: string[],
-  videoCount: number,
-  duration: number,   // Video duration in milliseconds
+  videoURLs: string[],  // Links to each video
+  videoCount: number,   // Total number of videos
+  duration: number,     // Video duration in milliseconds
   title: string,
   presenters: string[],
   workflows: string[],
@@ -22,10 +24,12 @@ export interface video {
 
 const initialState: video & httpRequestState = {
   isPlaying: false,
+  isPlayPreview: false,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   activeSegmentIndex: 0,
   selectedWorkflowIndex: 0,
+  previewTriggered: false,
 
   videoURLs: [],
   videoCount: 0,
@@ -53,20 +57,28 @@ export const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
-    setIsPlaying: (state, action) => {
+    setIsPlaying: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlaying = action.payload;
     },
-    setCurrentlyAt: (state, action) => {
+    setIsPlayPreview: (state, action: PayloadAction<video["isPlaying"]>) => {
+      state.isPlayPreview = action.payload;
+    },
+    setPreviewTriggered: (state, action) => {
+      state.previewTriggered = action.payload
+    },
+    setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload, 3);
 
       updateActiveSegment(state);
+      skipDeletedSegments(state);
     },
-    setCurrentlyAtInSeconds: (state, action) => {
+    setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 3);
 
       updateActiveSegment(state);
+      skipDeletedSegments(state);
     },
-    addSegment: (state, action) => {
+    addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
     },
     cut: (state) => {
@@ -92,7 +104,7 @@ export const videoSlice = createSlice({
     markAsDeletedOrAlive: (state) => {
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
     },
-    setSelectedWorkflowIndex: (state, action) => {
+    setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowIndex"]>) => {
       state.selectedWorkflowIndex = action.payload
     },
     mergeLeft: (state) => {
@@ -199,13 +211,30 @@ const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, 
   updateActiveSegment(state)
 }
 
-export const { setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
-  setSelectedWorkflowIndex, mergeLeft, mergeRight } = videoSlice.actions
+const skipDeletedSegments = (state: WritableDraft<video>) => {
+  if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
+      let endTime = state.segments[state.activeSegmentIndex].end
+      let index = state.activeSegmentIndex
+      while (index < state.segments.length && state.segments[index].deleted) {
+        endTime = state.segments[index].end
+        index++
+      }
+      state.currentlyAt = endTime
+      state.previewTriggered = true
+    }
+}
+
+export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
+  setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
 export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"] }; }) =>
   state.videoState.isPlaying
+export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>
+  state.videoState.isPlayPreview
+export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"] } }) =>
+  state.videoState.previewTriggered
 export const selectCurrentlyAt = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
   state.videoState.currentlyAt
 export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>

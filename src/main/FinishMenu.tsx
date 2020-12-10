@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch } from 'react-redux';
-import { setState, setPageNumber } from '../redux/finishSlice'
+import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -35,7 +35,7 @@ const FinishMenu : React.FC<{}> = () => {
 /**
  * Buttons for the finish menu
  */
-const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> = ({iconName, stateName}) => {
+const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["value"]}> = ({iconName, stateName}) => {
 
   const dispatch = useDispatch();
 

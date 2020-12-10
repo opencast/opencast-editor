@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface finish {
+export interface finish {
   value: "Save changes" | "Start processing" | "Discard changes" | undefined,
   pageNumber: number,
 }
@@ -17,7 +17,7 @@ export const finishSlice = createSlice({
   name: 'finishState',
   initialState,
   reducers: {
-    setState: (state, action) => {
+    setState: (state, action: PayloadAction<finish["value"]>) => {
       state.value = action.payload;
     },
     setPageNumber: (state, action) => {
