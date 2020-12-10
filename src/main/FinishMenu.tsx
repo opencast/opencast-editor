@@ -18,9 +18,9 @@ const FinishMenu : React.FC<{}> = () => {
 
   return (
     <>
-        <FinishMenuButton iconName={faSave} stateName="Save"/>
-        <FinishMenuButton iconName={faFileExport} stateName="Process"/>
-        <FinishMenuButton iconName={faTimesCircle} stateName="Abort"/>
+        <FinishMenuButton iconName={faSave} stateName="Save changes"/>
+        <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
+        <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
     </>
   );
 }
@@ -33,11 +33,12 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> 
   const dispatch = useDispatch();
 
   const finishMenuButtonStyle = css({
-    width: '200px',
-    height: '200px',
+    width: '250px',
+    height: '220px',
     flexDirection: 'column' as const,
     fontSize: "x-large",
     gap: '30px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   });
 
   return (
@@ -46,7 +47,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: string}> 
         dispatch(setState(stateName));
         dispatch(setPageNumber(1))
       }}>
-      <FontAwesomeIcon  icon={iconName} size="5x"/>
+      <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>
     </div>
   );

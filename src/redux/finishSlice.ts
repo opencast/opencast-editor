@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 interface finish {
-  value: "Save" | "Process" | "Abort" | undefined,
+  value: "Save changes" | "Start processing" | "Discard changes" | undefined,
   pageNumber: number,
 }
 
 const initialState: finish = {
-  value: "Process",
+  value: "Start processing",
   pageNumber: 0,
 }
 

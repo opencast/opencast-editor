@@ -8,7 +8,7 @@ import WorkflowConfiguration from "./WorkflowConfiguration";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faSpinner, faDotCircle, faCheck, faExclamationCircle
+  faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave, IconDefinition, faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,7 +43,7 @@ const Save : React.FC<{}> = () => {
 
   const saveStyle = css({
     height: '100%',
-    display: finishState !== "Save" ? 'none' : 'flex',
+    display: finishState !== "Save changes" ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
     gap: '20px',
@@ -69,7 +69,7 @@ const Save : React.FC<{}> = () => {
         <span>An error has occured. Please wait a bit and try again. Details: </span><br />
         {postError}<br />
       </div>
-      <PageButton pageNumber={0} label="Back" />
+      <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
     </div>
   );
 }
@@ -85,7 +85,7 @@ const Process : React.FC<{}> = () => {
 
   const startWorkflowStyle = css({
     height: '100%',
-    display: finishState !== "Process" ? 'none' : 'flex',
+    display: finishState !== "Start processing" ? 'none' : 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'center',
   })
@@ -106,7 +106,7 @@ const Abort : React.FC<{}> = () => {
   const finishState = useSelector(selectFinishState)
 
   const cancelStyle = css({
-    display: finishState !== "Abort" ? 'none' : 'flex',
+    display: finishState !== "Discard changes" ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
     gap: '20px',
@@ -119,7 +119,7 @@ const Abort : React.FC<{}> = () => {
         Doth thou truly wish tah abort?
       </span>
       <AbortButton />
-      <PageButton pageNumber={0} label="Back" />
+      <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft} />
     </div>
   );
 }
@@ -136,7 +136,7 @@ const SaveButton: React.FC<{}> = () => {
   const workflowStatus = useSelector(selectStatus);
 
   // Update based on current fetching status
-  let icon = faDotCircle
+  let icon = faSave
   if (workflowStatus === 'loading') {
     icon = faSpinner
   } else if (workflowStatus === 'success') {
@@ -147,14 +147,13 @@ const SaveButton: React.FC<{}> = () => {
 
   const saveButtonStyle = css({
     width: '200px',
-    borderWidth: '1px',
-    borderColor: workflowStatus === 'failed' ? 'red' : 'green',
-    borderStyle: 'solid',
     padding: '16px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    justifyContent: 'space-around'
   })
 
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Save"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={"Save Button"}
       onClick={() =>
         dispatch(postVideoInformation({
           segments: segments,
@@ -162,7 +161,7 @@ const SaveButton: React.FC<{}> = () => {
         }))
       }>
       <FontAwesomeIcon  icon={icon} size="1x"/>
-      <span>{"Save"}</span>
+      <span>{"Yes, Save changes"}</span>
     </div>
   );
 }
@@ -177,18 +176,18 @@ const AbortButton : React.FC<{}> = () => {
 
   const saveButtonStyle = css({
     width: '200px',
-    borderWidth: '1px',
-    borderColor: 'red',
-    borderStyle: 'solid',
     padding: '16px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    justifyContent: 'space-around'
   })
 
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Abort Button"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={"Discard changes button"}
       onClick={() =>
         dispatch(setAbortState(true))
       }>
-      <span>{"Abort"}</span>
+      <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
+      <span>{"Yes, discard changes"}</span>
     </div>
   );
 }
@@ -196,16 +195,16 @@ const AbortButton : React.FC<{}> = () => {
 /**
  * Takes you to a different page
  */
-export const PageButton : React.FC<{pageNumber: number, label: string}> = ({pageNumber, label}) => {
+export const PageButton : React.FC<{pageNumber: number, label: string, iconName: IconDefinition}> = ({pageNumber, label, iconName}) => {
 
   // Initialize redux variables
   const dispatch = useDispatch()
 
   const pageButtonStyle = css({
     width: '200px',
-    borderWidth: '1px',
-    borderStyle: 'solid',
     padding: '16px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    justifyContent: 'space-around'
   })
 
   return (
@@ -213,6 +212,7 @@ export const PageButton : React.FC<{pageNumber: number, label: string}> = ({page
       onClick={() =>
         dispatch(setPageNumber(pageNumber))
       }>
+      <FontAwesomeIcon icon={iconName} size="1x" />
       <span>{label}</span>
     </div>
   );

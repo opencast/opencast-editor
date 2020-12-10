@@ -5,7 +5,7 @@ import { basicButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
-import { faSpinner, faDotCircle, faCheck, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faDotCircle, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, } from '../redux/videoSlice'
@@ -47,7 +47,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         <span>An error has occured. Please wait a bit and try again. Details: </span><br />
         {postAndProcessError}
       </div>
-      <PageButton pageNumber={0} label="Back" />
+      <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
     </div>
   );
 
@@ -68,7 +68,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   const workflowStatus = useSelector(selectStatus);
 
   // Update based on current fetching status
-  let icon = faDotCircle
+  let icon = faFileExport
   if (workflowStatus === 'loading') {
     icon = faSpinner
   } else if (workflowStatus === 'success') {
@@ -78,14 +78,12 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   }
 
   const saveButtonStyle = css({
-    borderWidth: '1px',
-    borderColor: workflowStatus === 'failed' ? 'red' : 'green',
-    borderStyle: 'solid',
     padding: '16px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   })
 
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Process"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={"Start processing button"}
       onClick={() =>
         dispatch(postVideoInformationWithWorkflow({
           segments: segments,
@@ -94,7 +92,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
         }))
       }>
       <FontAwesomeIcon  icon={icon} size="1x"/>
-      <span>{"Start Processing"}</span>
+      <span>{"Yes, start processing"}</span>
     </div>
   );
 }
