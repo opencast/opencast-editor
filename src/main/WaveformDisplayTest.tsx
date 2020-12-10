@@ -45,6 +45,8 @@ const WaveformDisplayTest: React.FC<{}> = () => {
       // Use a web worker to process the data
       const processed = await instance.processData(data);
 
+      console.log("Processsed: " + processed)
+
       resolve(processed);
     });
   };
@@ -65,7 +67,7 @@ const WaveformDisplayTest: React.FC<{}> = () => {
         blob = xhr.response
         var file = new File([blob], blob)
         let waveforms = []
-        waveforms.push(new Waveform({type: 'svg', samples: 100000, media: file }));
+        waveforms.push(new Waveform({type: 'img', width: '300', height: '300', samples: 100000, media: file }));
     }
     xhr.send()
 
