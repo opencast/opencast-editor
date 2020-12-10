@@ -1,15 +1,17 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
-import { faSpinner, faDotCircle, faCheck, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
+
+import { PageButton } from './Finish'
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -24,7 +26,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
-    gap: '20px',
+    gap: '30px',
   })
 
   const errorBoxStyle = css({
@@ -39,8 +41,12 @@ const WorkflowConfiguration : React.FC<{}> = () => {
     <div css={workflowConfigurationStyle} title="Workflow Configuration Area">
       <h2>Workflow Configuration</h2>
       <FontAwesomeIcon icon={faTools} size="10x" />
-      Under Construction
-      <SaveAndProcessButton />
+      Placeholder
+      <div>Satisfied with your configuration?</div>
+      <div css={backOrContinueStyle}>
+        <PageButton pageNumber={1} label="No, take me back" iconName={faChevronLeft}/>
+        <SaveAndProcessButton />
+      </div>
       <div css={errorBoxStyle} title="Error Box">
         <span>An error has occured. Please wait a bit and try again. Details: </span><br />
         {postAndProcessError}
@@ -65,24 +71,26 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   const workflowStatus = useSelector(selectStatus);
 
   // Update based on current fetching status
-  let icon = faDotCircle
+  let icon = faFileExport
+  let spin = false
   if (workflowStatus === 'loading') {
     icon = faSpinner
+    spin = true
   } else if (workflowStatus === 'success') {
     icon = faCheck
+    spin = false
   } else if (workflowStatus === 'failed') {
     icon = faExclamationCircle
+    spin = false
   }
 
   const saveButtonStyle = css({
-    borderWidth: '1px',
-    borderColor: workflowStatus === 'failed' ? 'red' : 'green',
-    borderStyle: 'solid',
     padding: '16px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   })
 
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Process"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={"Start processing button"}
       onClick={() =>
         dispatch(postVideoInformationWithWorkflow({
           segments: segments,
@@ -90,8 +98,8 @@ const SaveAndProcessButton: React.FC<{}> = () => {
           workflowID: workflows[selectedWorkflowIndex],
         }))
       }>
-      <FontAwesomeIcon  icon={icon} size="1x"/>
-      <span>{"Start Processing"}</span>
+      <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
+      <span>{"Yes, start processing"}</span>
     </div>
   );
 }

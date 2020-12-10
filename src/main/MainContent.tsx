@@ -3,8 +3,7 @@ import React from "react";
 import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
-import FinishMenu from "./FinishMenu";
-import FinishContent from "./FinishContent"
+import Finish from "./Finish"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -33,16 +32,17 @@ const MainContent: React.FC<{}> = () => {
     paddingLeft: '20px',
   })
 
-  const saveProcessCancelStyle = css({
+  const finishStyle = css({
     display: mainMenuState !== MainMenuStateNames.finish ? 'none' : 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     gap: "20px",
     paddingRight: '20px',
+    height: '100%',
   })
 
   const defaultStyle = css({
-    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish)
+    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish )
               ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
@@ -57,13 +57,12 @@ const MainContent: React.FC<{}> = () => {
           <CuttingActions />
           <Timeline />
       </div>
-      <div css={saveProcessCancelStyle} title="Workflow Container">
-        <FinishMenu />
-        <FinishContent />
+      <div css={finishStyle} title="Finish Container">
+        <Finish />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />
-        Under Construction
+        Placeholder
       </div>
      </div>
   );

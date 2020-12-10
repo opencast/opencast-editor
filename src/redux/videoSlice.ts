@@ -44,6 +44,7 @@ const initialState: video & httpRequestState = {
 
 export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
   const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
+  // const response = await client.get('https://pyca.opencast.org/editor/9bf8aec2-10f5-4c64-bfde-2752fa3a394d/edit.json')
   return response
 })
 
@@ -122,6 +123,8 @@ export const videoSlice = createSlice({
     builder.addCase(
       fetchVideoInformation.fulfilled, (state, action) => {
         state.status = 'success'
+
+        // Old API
         // eslint-disable-next-line no-sequences
         state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = action.payload.previews.length
@@ -134,6 +137,20 @@ export const videoSlice = createSlice({
           if (n1.displayOrder < n2.displayOrder) { return -1; }
           return 0;
         });
+
+        // // New API
+        // // eslint-disable-next-line no-sequences
+        // state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        // state.videoCount = action.payload.tracks.length
+        // state.duration = action.payload.duration
+        // state.title = action.payload.title
+        // state.presenters = []
+        // state.segments = action.payload.segments
+        // state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
+        //   if (n1.displayOrder > n2.displayOrder) { return 1; }
+        //   if (n1.displayOrder < n2.displayOrder) { return -1; }
+        //   return 0;
+        // });
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {

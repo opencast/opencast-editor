@@ -20,8 +20,10 @@ export const GlobalStyle: React.FC = () => {
 export const globalStyle = css({
   body: {
     backgroundColor: 'snow',
-    fontSize: 'medium'
-  }
+    fontSize: 'medium',
+    // Makes the body span to the bottom of the page
+    minHeight: "100vh",
+  },
 });
 
 /**
@@ -46,3 +48,12 @@ export const basicButtonStyle = css({
   gap: '10px',
   textAlign: 'center' as const,
 });
+
+/**
+ * CSS for a container that holds back/forward buttons
+ */
+export const backOrContinueStyle = css(({
+  display: 'flex',
+  flexDirection: 'row' as const,
+  gap: '20px',
+}))
