@@ -1,3 +1,9 @@
+/**
+ * Big thanks to Duncan "slampunk" Smith for writing this code and allowing it
+ * to be used for this application.
+ * duncan83@gmail.com
+ */
+
 export function Waveform(opts) {
   this.audioContext = new AudioContext();
   this.oCanvas = document.createElement('canvas');
@@ -31,7 +37,7 @@ export function Waveform(opts) {
       .then(() => {
         this.getAudioData();
         this.drawWaveform();
-        if (this.waveformType != 'svg') {
+        if (this.waveformType !== 'svg') {
           _completeFuncs.forEach(fn => {
             fn(this.waveformImage || this.svgPath, this.waveformType);
           });
@@ -102,10 +108,10 @@ Waveform.prototype = {
   },
   drawCanvasWaveform: function(amp) {
     amp = amp || 1;
-    this.ocCtx.fillStyle = '#b7d8f9';
+    this.ocCtx.fillStyle = '#FFFFFF00'; //'#b7d8f9';
     this.ocCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
     this.ocCtx.lineWidth = 1;
-    this.ocCtx.strokeStyle = '#38597a';
+    this.ocCtx.strokeStyle = 'black'; //'#38597a';
     let sliceWidth = this.WIDTH * 1.0 / this.channelData.length;
     let x = 0;
 
@@ -147,6 +153,9 @@ Waveform.prototype = {
         this.worker.removeEventListener('message', this.workerCommunication.bind(this), false);
         this.worker.terminate();
         this.worker = null;
+        break;
+      default:
+        break;
     }
   },
   setSVGpath: function(path, len) {

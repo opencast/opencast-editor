@@ -24,66 +24,63 @@ import Worker from '../worker'
  */
 const WaveformDisplayTest: React.FC<{}> = () => {
 
+  const [updateNumber, setUpdateNumber] = useState(1234)
+  const [once, setOnce] = useState(true)
+
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
 
   const waveformDisplayTestStyle = css({
     position: 'relative' as 'relative',     // Need to set position for Draggable bounds to work
-    height: '250px',
     width: '100%',
     //backgroundImage: `url({myImg})`,
   });
 
-    // Create new instance
-  const instance = new Worker();
-
-  const onClickk = () => {
-    const data = 'Some data';
-
-    return new Promise(async resolve => {
-
-      // Use a web worker to process the data
-      const processed = await instance.processData(data);
-
-      console.log("Processsed: " + processed)
-
-      resolve(processed);
-    });
-  };
-
   // Update based on current fetching status
-   if (videoURLStatus === 'success') {
-    console.log("HI")
-    onClickk()
+  const [images, setImages] = useState<string[]>([])
 
-    console.log("HI HI")
+  // When the URLs to the videos are fetched, generate waveforms
+  useEffect( () => {
+    if (videoURLStatus === 'success') {
+      const images: any[] = []    // Store local paths to image files
+      let waveformsProcessed = 0  // Counter for checking if all workers are done
 
-    var blob = null
-    var xhr = new XMLHttpRequest()
-    xhr.open("GET", videoURLs[0])
-    xhr.responseType = "blob"
-    xhr.onload = function()
-    {
-        blob = xhr.response
-        var file = new File([blob], blob)
-        let waveforms = []
-        waveforms.push(new Waveform({type: 'img', width: '300', height: '300', samples: 100000, media: file }));
+      videoURLs.forEach((item, index, array) => {
+        // Set up blob request
+        var blob = null
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET", videoURLs[0])
+        xhr.responseType = "blob"
+        xhr.onload = function()
+        {
+            blob = xhr.response
+            var file = new File([blob], blob)
+
+            // Start waveform worker with blob
+            const tmpWaveforms: any = []
+            tmpWaveforms.push(new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file }));
+            // When done, save path to generated waveform img
+            tmpWaveforms[0].oncomplete = function(image: any, numSamples: any) {
+              images.push(image)
+              waveformsProcessed++
+              // If all images are generated, rerender
+              if (waveformsProcessed === array.length) {
+                setImages(images)
+              }
+            }
+        }
+        xhr.send()
+      })
     }
-    xhr.send()
-
-
-
-  }
-
-  // let waveforms = []
-  // waveforms.push(new Waveform({type: 'svg', samples: 100000, media: videoURLs[0] }));
-        // waveforms[0].oncomplete = function(image, numSamples) {
-
-        // };
+  }, [videoURLStatus, videoURLs]);
 
   return (
   <div css={waveformDisplayTestStyle} title="WaveformDisplayTest">
-
+    {images.map(image =>
+      <img alt='Wewform' src={image ? image : ""} style={{position: "absolute" as "absolute", height: '230px', width: '100%', top: '10px'}}></img>
+    )}
+    {/* <img alt='Wewform' src={leWaveform ? leWaveform.waveformImage : ""} style={{position: "absolute" as "absolute", height: '230px', width: '100%', top: '10px'}}></img> */}
+    <button onClick={() => setUpdateNumber(2)}>{updateNumber}</button>
   </div>
   );
 };

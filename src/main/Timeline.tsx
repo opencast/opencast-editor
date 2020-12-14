@@ -5,20 +5,18 @@ import Draggable from 'react-draggable';
 import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Segment } from '../types'
+import { Segment, httpRequestState } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setCurrentlyAt
+  selectVideoURL, setCurrentlyAt
 } from '../redux/videoSlice'
 
-// import { selectDuration, } from '../redux/videoURLSlice'
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import useResizeObserver from "use-resize-observer";
 
-import myImg from '../img/placeholder_waveform.png'
+import { Waveform } from '../util/waveform'
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -40,7 +38,7 @@ const Timeline: React.FC<{}> = () => {
   <div ref={ref} css={timelineStyle} title="Timeline">
     <Scrubber timelineWidth={width}/>
     <div css={{height: '230px'}}>
-      <img alt='waveform2' src={myImg} style={{position: "absolute" as "absolute", height: '230px', width: '100%', top: '10px'}}></img>
+      <Waveforms />
       <SegmentsList timelineWidth={width}/>
     </div>
   </div>
@@ -219,5 +217,83 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     </div>
   );
 };
+
+/**
+ * Generates waveform images and displays them
+ */
+const Waveforms: React.FC<{}> = () => {
+
+  const videoURLs = useSelector(selectVideoURL)
+  const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+
+  const waveformDisplayTestStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    position: "absolute" as "absolute",
+    justifyContent: 'center',
+    width: '100%',
+    height: '230px',
+    paddingTop: '10px',
+  });
+
+  // Update based on current fetching status
+  const [images, setImages] = useState<string[]>([])
+
+  // When the URLs to the videos are fetched, generate waveforms
+  useEffect( () => {
+    if (videoURLStatus === 'success') {
+      const images: any[] = []    // Store local paths to image files
+      let waveformsProcessed = 0  // Counter for checking if all workers are done
+
+      videoURLs.forEach((item, index, array) => {
+        // Set up blob request
+        var blob = null
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET", videoURLs[0])
+        xhr.responseType = "blob"
+        xhr.onload = function()
+        {
+            blob = xhr.response
+            var file = new File([blob], blob)
+
+            // Start waveform worker with blob
+            const tmpWaveforms: any = []
+            tmpWaveforms.push(new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file }));
+            // When done, save path to generated waveform img
+            tmpWaveforms[0].oncomplete = function(image: any, numSamples: any) {
+              images.push(image)
+              waveformsProcessed++
+              // If all images are generated, rerender
+              if (waveformsProcessed === array.length) {
+                setImages(images)
+              }
+            }
+        }
+        xhr.send()
+      })
+    }
+  }, [videoURLStatus, videoURLs]);
+
+
+  const renderImages = () => {
+    if (images) {
+      return (
+        images.map(image =>
+          <img alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
+        )
+      );
+    } else {
+      return (
+        <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
+      );
+    }
+  }
+
+  return (
+  <div css={waveformDisplayTestStyle} title="WaveformDisplayTest">
+    {renderImages()}
+  </div>
+  );
+}
 
 export default Timeline;
