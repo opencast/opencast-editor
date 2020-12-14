@@ -66,6 +66,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
   const [isGrabbed, setIsGrabbed] = useState(false)
   const wasCurrentlyAtRef = useRef(0)
+  const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
@@ -152,6 +153,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       bounds="parent"
       position={controlledPosition}
       disabled={isPlaying}
+      nodeRef={nodeRef}
       >
       <div css={scrubberStyle} title="Scrubber">
         <div css= {scrubberDragHandleStyle} title="dragHandle">
