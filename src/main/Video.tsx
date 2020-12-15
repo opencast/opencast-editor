@@ -134,18 +134,26 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     }
   })
 
+  const playerWrapper = css({
+    backgroundColor: 'rgba(255,255,255,1)',
+    width: '100%',
+    height: '50vh'
+  });
+
   return (
-    <ReactPlayer url={url}
-      ref={ref}
-      width='100%'
-      height='auto'
-      playing={isPlaying}
-      muted={isMuted}
-      onProgress={onProgressCallback}
-      progressInterval={100}
-      onReady={onReadyCallback}
-      onEnded={onEndedCallback}
-    />
+    <div css={playerWrapper} title="playerWrapper">
+      <ReactPlayer url={url}
+        ref={ref}
+        width='100%'
+        height='100%'
+        playing={isPlaying}
+        muted={isMuted}
+        onProgress={onProgressCallback}
+        progressInterval={100}
+        onReady={onReadyCallback}
+        onEnded={onEndedCallback}
+      />
+    </div>
   );
 
   // return (
