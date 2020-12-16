@@ -2,6 +2,7 @@ import React from "react";
 
 import { css } from '@emotion/core'
 import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
+import { mediaPackageId } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +11,7 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
-import { selectSegments } from '../redux/videoSlice'
+import { selectSegments, selectTracks } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
 
 import { PageButton } from './Finish'
@@ -70,6 +71,7 @@ const SaveButton: React.FC<{}> = () => {
   const dispatch = useDispatch()
 
   const segments = useSelector(selectSegments)
+  const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
 
   // Update based on current fetching status
@@ -98,7 +100,8 @@ const SaveButton: React.FC<{}> = () => {
       onClick={() =>
         dispatch(postVideoInformation({
           segments: segments,
-          mediaPackageId: "9bf8aec2-10f5-4c64-bfde-2752fa3a394d",
+          tracks: tracks,
+          mediaPackageId: mediaPackageId,
         }))
       }>
       <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>

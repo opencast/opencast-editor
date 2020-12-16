@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState }  from '../types'
+import { Segment, httpRequestState, Track, RequestArgument }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 
@@ -11,6 +11,7 @@ export interface video {
   previewTriggered: boolean,      // Basically acts as a callback for the video players. TODO: Figure out how to do callbacks
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
+  tracks: Track[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowIndex: number,  // Index of the currently selected workflow
 
@@ -27,6 +28,7 @@ const initialState: video & httpRequestState = {
   isPlayPreview: false,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
+  tracks: [],
   activeSegmentIndex: 0,
   selectedWorkflowIndex: 0,
   previewTriggered: false,
@@ -42,9 +44,9 @@ const initialState: video & httpRequestState = {
   error: undefined,
 }
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
-  const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  // const response = await client.get('https://pyca.opencast.org/editor/9bf8aec2-10f5-4c64-bfde-2752fa3a394d/edit.json')
+export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async (argument: RequestArgument) => {
+  // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
+  const response = await client.get(`https://pyca.opencast.org/editor/${argument.mediaPackageId}/edit.json`)
   return response
 })
 
@@ -124,33 +126,34 @@ export const videoSlice = createSlice({
       fetchVideoInformation.fulfilled, (state, action) => {
         state.status = 'success'
 
-        // Old API
-        // eslint-disable-next-line no-sequences
-        state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        state.videoCount = action.payload.previews.length
-        state.duration = action.payload.duration
-        state.title = action.payload.title
-        state.presenters = action.payload.presenters
-        state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
-          if (n1.displayOrder > n2.displayOrder) { return 1; }
-          if (n1.displayOrder < n2.displayOrder) { return -1; }
-          return 0;
-        });
-
-        // // New API
+        // // Old API
         // // eslint-disable-next-line no-sequences
-        // state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        // state.videoCount = action.payload.tracks.length
+        // state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        // state.videoCount = action.payload.previews.length
         // state.duration = action.payload.duration
         // state.title = action.payload.title
-        // state.presenters = []
-        // state.segments = action.payload.segments
+        // state.presenters = action.payload.presenters
+        // state.segments = parseSegments(action.payload.segments, action.payload.duration)
         // state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
         //   if (n1.displayOrder > n2.displayOrder) { return 1; }
         //   if (n1.displayOrder < n2.displayOrder) { return -1; }
         //   return 0;
         // });
+
+        // New API
+        // eslint-disable-next-line no-sequences
+        state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videoCount = action.payload.tracks.length
+        state.duration = action.payload.duration
+        state.title = action.payload.title
+        state.presenters = []
+        state.segments = parseSegments(action.payload.segments, action.payload.duration)
+        state.tracks = action.payload.tracks
+        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
+          if (n1.displayOrder > n2.displayOrder) { return 1; }
+          if (n1.displayOrder < n2.displayOrder) { return -1; }
+          return 0;
+        });
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -257,6 +260,8 @@ export const selectDuration = (state: { videoState: { duration: video["duration"
 export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
+export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) =>
+  state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 
 export default videoSlice.reducer
