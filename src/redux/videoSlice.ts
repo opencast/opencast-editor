@@ -24,7 +24,7 @@ export interface video {
 
 const initialState: video & httpRequestState = {
   isPlaying: false,
-  isPlayPreview: false,
+  isPlayPreview: true,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   activeSegmentIndex: 0,
@@ -92,11 +92,11 @@ export const videoSlice = createSlice({
       let segmentA : Segment =  {id: nanoid(),
         start: state.segments[state.activeSegmentIndex].start,
         end: state.currentlyAt,
-        deleted: true}
+        deleted: state.segments[state.activeSegmentIndex].deleted}
       let segmentB : Segment =  {id: nanoid(),
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
-        deleted: true}
+        deleted: state.segments[state.activeSegmentIndex].deleted}
 
       // Add the new segments and remove the old one
       state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
