@@ -98,7 +98,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
           segments: segments,
           tracks: tracks,
           mediaPackageId: mediaPackageId,
-          workflowID: workflows[selectedWorkflowIndex],
+          workflowID: [workflows[selectedWorkflowIndex]],
         }))
       }>
       <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
