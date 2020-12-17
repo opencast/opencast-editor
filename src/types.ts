@@ -5,18 +5,30 @@ export interface Segment {
   deleted: boolean,
 }
 
+export interface Track {
+  id: string,
+  uri: string,
+  flavor: any,
+  audioStream: any,
+  videoStream: any,
+}
+
 export interface TimelineState {
   segments: Segment[]
   scrubberPos: number
 }
 
-export interface PostEditArgument {
-  segments: Segment[]
+export interface RequestArgument {
   mediaPackageId: string
 }
 
+export interface PostEditArgument extends RequestArgument {
+  segments: Segment[]
+  tracks: Track[]
+}
+
 export interface PostAndProcessEditArgument extends PostEditArgument{
-  workflowID: string
+  workflowID: string[]
 }
 
 export enum MainMenuStateNames {

@@ -2,13 +2,14 @@ import React from "react";
 
 import { css } from '@emotion/core'
 import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
+import { mediaPackageId } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
 import { faSpinner, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, } from '../redux/videoSlice'
+import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTracks, } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
@@ -68,6 +69,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   const workflows = useSelector(selectWorkflows)
   const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
   const segments = useSelector(selectSegments)
+  const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
 
   // Update based on current fetching status
@@ -94,8 +96,9 @@ const SaveAndProcessButton: React.FC<{}> = () => {
       onClick={() =>
         dispatch(postVideoInformationWithWorkflow({
           segments: segments,
-          mediaPackageId: "9bf8aec2-10f5-4c64-bfde-2752fa3a394d",
-          workflowID: workflows[selectedWorkflowIndex],
+          tracks: tracks,
+          mediaPackageId: mediaPackageId,
+          workflowID: [workflows[selectedWorkflowIndex]],
         }))
       }>
       <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
