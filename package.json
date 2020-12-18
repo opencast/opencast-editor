@@ -58,9 +58,7 @@
     ]
   },
   "devDependencies": {
-    "comlink-loader": "^2.0.0",
     "redux-devtools": "^3.7.0",
-    "use-resize-observer": "^7.0.0",
-    "worker-loader": "^2.0.0"
+    "use-resize-observer": "^7.0.0"
   }
 }

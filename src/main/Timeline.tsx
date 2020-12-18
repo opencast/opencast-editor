@@ -246,32 +246,31 @@ const Waveforms: React.FC<{}> = () => {
   // When the URLs to the videos are fetched, generate waveforms
   useEffect( () => {
     if (videoURLStatus === 'success') {
-      const images: any[] = []    // Store local paths to image files
-      let waveformsProcessed = 0  // Counter for checking if all workers are done
+      const images: string[] = []    // Store local paths to image files
+      let waveformsProcessed : number = 0  // Counter for checking if all workers are done
 
-      videoURLs.forEach((item, index, array) => {
+      videoURLs.forEach((videoURL, _index, array) => {
         // Set up blob request
         var blob = null
         var xhr = new XMLHttpRequest()
-        xhr.open("GET", videoURLs[0])
+        xhr.open("GET", videoURL)
         xhr.responseType = "blob"
         xhr.onload = function()
         {
-            blob = xhr.response
-            var file = new File([blob], blob)
+          blob = xhr.response
+          var file = new File([blob], blob)
 
-            // Start waveform worker with blob
-            const tmpWaveforms: any = []
-            tmpWaveforms.push(new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file }));
-            // When done, save path to generated waveform img
-            tmpWaveforms[0].oncomplete = function(image: any, numSamples: any) {
-              images.push(image)
-              waveformsProcessed++
-              // If all images are generated, rerender
-              if (waveformsProcessed === array.length) {
-                setImages(images)
-              }
+          // Start waveform worker with blob
+          const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file});
+          // When done, save path to generated waveform img
+          waveformWorker.oncomplete = function(image: any, numSamples: any) {
+            images.push(image)
+            waveformsProcessed++
+            // If all images are generated, rerender
+            if (waveformsProcessed === array.length) {
+              setImages(images)
             }
+          }
         }
         xhr.send()
       })
@@ -282,8 +281,8 @@ const Waveforms: React.FC<{}> = () => {
   const renderImages = () => {
     if (images) {
       return (
-        images.map(image =>
-          <img alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
+        images.map((image, index) =>
+          <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
         )
       );
     } else {
