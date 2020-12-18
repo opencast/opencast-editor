@@ -8,8 +8,8 @@ const initialState: httpRequestState = {
 }
 
 export const postVideoInformation = createAsyncThunk('video/postVideoInformation', async (argument: PostEditArgument) => {
-  const response = await client.post(`http://localhost:8081/editor/${argument.mediaPackageId}/edit.json`,
-    { segments: convertSegments(argument.segments) }
+  const response = await client.post(`https://pyca.opencast.org/editor/${argument.mediaPackageId}/edit.json`,
+    { segments: convertSegments(argument.segments), tracks: argument.tracks }
   )
   return response
 })

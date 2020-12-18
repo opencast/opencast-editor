@@ -1,10 +1,14 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, setSelectedWorkflowIndex } from '../redux/videoSlice'
+import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
+
+import { PageButton } from './Finish'
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Allows the user to select a workflow
@@ -13,6 +17,8 @@ const WorkflowSelection : React.FC<{}> = () => {
 
   // Initialite redux states
   const workflows = useSelector(selectWorkflows)
+  const finishState = useSelector(selectFinishState)
+  const pageNumber = useSelector(selectPageNumber)
 
   // Create workflow selection
   const workflowButtons = () => {
@@ -23,21 +29,32 @@ const WorkflowSelection : React.FC<{}> = () => {
     );
   }
 
-  const workflowStyle = css({
-    borderRight: '1px solid #BBB',
-    width: '350px',
+  const workflowSelectionStyle = css({
+    display: (finishState === "Start processing" && pageNumber === 1) ? 'flex' : 'none',
+    flexDirection: 'column' as const,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '50px',
+  })
+
+  const workflowSelectionSelectionStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'left',
-    padding: '20px',
-    paddingRight: '40px',
-    gap: '30px',
+    gap: '20px',
   })
 
   return (
-    <div css={workflowStyle} title="Workflow Selection Area">
-      <h2>Workflow Selection</h2>
-      {workflowButtons()}
+    <div css={workflowSelectionStyle}>
+      <h2>Select a workflow</h2>
+      <div css={workflowSelectionSelectionStyle} title="Workflow Selection Area">
+        {workflowButtons()}
+      </div>
+      <div>And this is where I would put a workflow description.... if I had one!</div>
+      <div css={backOrContinueStyle}>
+        <PageButton pageNumber={0} label="Take me back" iconName={faChevronLeft}/>
+        <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/>
+      </div>
     </div>
   );
 }
@@ -52,7 +69,7 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
   const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
 
   const workflowButtonStyle = css({
-    backgroundColor: workflowIndex !== selectedWorkflowIndex ? 'snow' : 'lightblue',
+    backgroundColor: workflowIndex !== selectedWorkflowIndex ? 'snow' : '#DDD',
     padding: '16px',
   });
 

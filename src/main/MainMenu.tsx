@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faListUl, faPhotoVideo, faSignOutAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
-import { mainMenu, setState, selectMainMenuState } from '../redux/mainMenuSlice'
+import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
+import { setPageNumber } from '../redux/finishSlice'
 
 import { MainMenuStateNames } from '../types'
 import { basicButtonStyle } from '../cssStyles'
@@ -50,7 +51,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     width: '100%',
     height: '100px',
     ...(activeState === stateName) && {
-      backgroundColor: 'lightblue',
+      backgroundColor: '#DDD',
     },
     flexDirection: 'column' as const,
   });
@@ -59,6 +60,9 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
       onClick={() => {
         dispatch(setState(stateName));
+        if (stateName === MainMenuStateNames.finish) {
+          dispatch(setPageNumber(0))
+        }
       }}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>

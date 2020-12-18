@@ -33,6 +33,7 @@ const Body: React.FC<{}> = () => {
   const bodyStyle = {
     display: 'flex',
     flexDirection: 'row' as const,
+    height: '100%',
   };
 
   return (

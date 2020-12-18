@@ -8,29 +8,26 @@ import {
   faSave, faFileExport, faTimesCircle, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch, useSelector } from 'react-redux';
-import { setState, selectFinishState, finish } from '../redux/finishSlice'
+import { useDispatch } from 'react-redux';
+import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
 const FinishMenu : React.FC<{}> = () => {
 
-  const saveProcessCancelStyle = css({
-    borderBottom: '1px solid #BBB',
+  const finishMenuStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'space-around',
-    alignItems: 'space-around',
-    padding: '20px',
     gap: '30px',
   })
 
   return (
-    <div css={saveProcessCancelStyle} title="Select Finish Option Area">
-        <FinishMenuButton iconName={faSave} stateName="Save"/>
-        <FinishMenuButton iconName={faFileExport} stateName="Process"/>
-        <FinishMenuButton iconName={faTimesCircle} stateName="Abort"/>
+    <div css={finishMenuStyle} title="Finish Menu">
+        <FinishMenuButton iconName={faSave} stateName="Save changes"/>
+        <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
+        <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
     </div>
   );
 }
@@ -41,23 +38,23 @@ const FinishMenu : React.FC<{}> = () => {
 const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["value"]}> = ({iconName, stateName}) => {
 
   const dispatch = useDispatch();
-  const activeState = useSelector(selectFinishState)
 
-  const mainMenuButtonStyle = {
-    width: '200px',
-    height: '200px',
-    ...(activeState === stateName) && {
-      backgroundColor: 'lightblue',
-    },
+  const finishMenuButtonStyle = css({
+    width: '250px',
+    height: '220px',
     flexDirection: 'column' as const,
-  };
+    fontSize: "x-large",
+    gap: '30px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  });
 
   return (
-    <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
+    <div css={[basicButtonStyle, finishMenuButtonStyle]} title={stateName}
       onClick={() => {
         dispatch(setState(stateName));
+        dispatch(setPageNumber(1))
       }}>
-      <FontAwesomeIcon  icon={iconName} size="3x"/>
+      <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>
     </div>
   );

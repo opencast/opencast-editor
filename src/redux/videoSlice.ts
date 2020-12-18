@@ -1,20 +1,23 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState }  from '../types'
+import { Segment, httpRequestState, Track, RequestArgument }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 
 export interface video {
-  isPlaying: boolean,
-  currentlyAt: number,   // Position in the video in milliseconds
+  isPlaying: boolean,             // Are videos currently playing?
+  isPlayPreview: boolean,         // Should deleted segments be skipped?
+  previewTriggered: boolean,      // Basically acts as a callback for the video players. TODO: Figure out how to do callbacks
+  currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
-  activeSegmentIndex: number,
-  selectedWorkflowIndex: number,
+  tracks: Track[],
+  activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
+  selectedWorkflowIndex: number,  // Index of the currently selected workflow
 
-  videoURLs: string[],
-  videoCount: number,
-  duration: number,   // Video duration in milliseconds
+  videoURLs: string[],  // Links to each video
+  videoCount: number,   // Total number of videos
+  duration: number,     // Video duration in milliseconds
   title: string,
   presenters: string[],
   workflows: string[],
@@ -22,10 +25,13 @@ export interface video {
 
 const initialState: video & httpRequestState = {
   isPlaying: false,
+  isPlayPreview: true,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
+  tracks: [],
   activeSegmentIndex: 0,
   selectedWorkflowIndex: 0,
+  previewTriggered: false,
 
   videoURLs: [],
   videoCount: 0,
@@ -38,8 +44,9 @@ const initialState: video & httpRequestState = {
   error: undefined,
 }
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
-  const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
+export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async (argument: RequestArgument) => {
+  // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
+  const response = await client.get(`https://pyca.opencast.org/editor/${argument.mediaPackageId}/edit.json`)
   return response
 })
 
@@ -55,15 +62,23 @@ export const videoSlice = createSlice({
     setIsPlaying: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlaying = action.payload;
     },
+    setIsPlayPreview: (state, action: PayloadAction<video["isPlaying"]>) => {
+      state.isPlayPreview = action.payload;
+    },
+    setPreviewTriggered: (state, action) => {
+      state.previewTriggered = action.payload
+    },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload, 3);
 
       updateActiveSegment(state);
+      skipDeletedSegments(state);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 3);
 
       updateActiveSegment(state);
+      skipDeletedSegments(state);
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
@@ -79,11 +94,11 @@ export const videoSlice = createSlice({
       let segmentA : Segment =  {id: nanoid(),
         start: state.segments[state.activeSegmentIndex].start,
         end: state.currentlyAt,
-        deleted: true}
+        deleted: state.segments[state.activeSegmentIndex].deleted}
       let segmentB : Segment =  {id: nanoid(),
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
-        deleted: true}
+        deleted: state.segments[state.activeSegmentIndex].deleted}
 
       // Add the new segments and remove the old one
       state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
@@ -110,13 +125,30 @@ export const videoSlice = createSlice({
     builder.addCase(
       fetchVideoInformation.fulfilled, (state, action) => {
         state.status = 'success'
+
+        // // Old API
+        // // eslint-disable-next-line no-sequences
+        // state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        // state.videoCount = action.payload.previews.length
+        // state.duration = action.payload.duration
+        // state.title = action.payload.title
+        // state.presenters = action.payload.presenters
+        // state.segments = parseSegments(action.payload.segments, action.payload.duration)
+        // state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
+        //   if (n1.displayOrder > n2.displayOrder) { return 1; }
+        //   if (n1.displayOrder < n2.displayOrder) { return -1; }
+        //   return 0;
+        // });
+
+        // New API
         // eslint-disable-next-line no-sequences
-        state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        state.videoCount = action.payload.previews.length
+        state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videoCount = action.payload.tracks.length
         state.duration = action.payload.duration
         state.title = action.payload.title
-        state.presenters = action.payload.presenters
+        state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
+        state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           if (n1.displayOrder > n2.displayOrder) { return 1; }
           if (n1.displayOrder < n2.displayOrder) { return -1; }
@@ -182,13 +214,30 @@ const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, 
   updateActiveSegment(state)
 }
 
-export const { setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
-  setSelectedWorkflowIndex, mergeLeft, mergeRight } = videoSlice.actions
+const skipDeletedSegments = (state: WritableDraft<video>) => {
+  if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
+      let endTime = state.segments[state.activeSegmentIndex].end
+      let index = state.activeSegmentIndex
+      while (index < state.segments.length && state.segments[index].deleted) {
+        endTime = state.segments[index].end
+        index++
+      }
+      state.currentlyAt = endTime
+      state.previewTriggered = true
+    }
+}
+
+export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
+  setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
 export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"] }; }) =>
   state.videoState.isPlaying
+export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>
+  state.videoState.isPlayPreview
+export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"] } }) =>
+  state.videoState.previewTriggered
 export const selectCurrentlyAt = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
   state.videoState.currentlyAt
 export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
@@ -211,6 +260,8 @@ export const selectDuration = (state: { videoState: { duration: video["duration"
 export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
+export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) =>
+  state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 
 export default videoSlice.reducer

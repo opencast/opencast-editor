@@ -64,6 +64,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
   const [isGrabbed, setIsGrabbed] = useState(false)
   const wasCurrentlyAtRef = useRef(0)
+  const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
@@ -73,11 +74,13 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     }
   })
 
-  // // Reposition scrubber when the timeline width changes
-  // useEffect(() => {
-  //   setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [timelineWidth])
+  // Reposition scrubber when the timeline width changes
+  useEffect(() => {
+    if(currentlyAt && duration) {
+      setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
   // const onControlledDrag = (e: any, position: any) => {
@@ -148,8 +151,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       bounds="parent"
       position={controlledPosition}
       disabled={isPlaying}
+      nodeRef={nodeRef}
       >
-      <div css={scrubberStyle} title="Scrubber">
+      <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
         <div css= {scrubberDragHandleStyle} title="dragHandle">
           <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
         </div>
