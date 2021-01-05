@@ -72,9 +72,20 @@ const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: stri
 
   const dispatch = useDispatch();
 
+  const dispatchAction = () => {
+    if (action) {
+      dispatch(action())
+    }
+  }
+
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle]} title={actionName}
-      onClick={() => action ? dispatch(action()) : ""}>
+    <div css={[basicButtonStyle, cuttingActionButtonStyle]}
+      role="button" tabIndex={0}
+      onClick={ dispatchAction }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        dispatchAction()
+      }}}
+      >
       <FontAwesomeIcon icon={iconName} size="1x" />
       <span>{actionName}</span>
     </div>
@@ -90,7 +101,8 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
 
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle]} title={isCurrentSegmentAlive ? "Delete" : "Restore"}
+    <div css={[basicButtonStyle, cuttingActionButtonStyle]}
+      role="button" tabIndex={0}
       onClick={() => dispatch(markAsDeletedOrAlive())}>
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
       <div>{isCurrentSegmentAlive ? "Delete" : "Restore"}</div>

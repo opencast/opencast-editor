@@ -18,7 +18,7 @@ import { setIsPlaying } from "../redux/videoSlice";
  */
 const MainMenu: React.FC<{}> = () => {
 
-  const mainMenuStyle = {
+  const mainMenuStyle = css({
     borderRight: '1px solid #BBB',
     width: '100px',
     display: 'flex',
@@ -27,15 +27,15 @@ const MainMenu: React.FC<{}> = () => {
     alignItems: 'center',
     padding: '20px',
     gap: '30px',
-  };
+  });
 
   return (
-    <div style={mainMenuStyle} title="MainMenu">
+    <nav css={mainMenuStyle} title="Main Menu" role="navigation" aria-label="Main Navigation">
       <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
       <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>
       <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>
       <MainMenuButton iconName={faSignOutAlt} stateName={MainMenuStateNames.finish}/>
-    </div>
+    </nav>
   );
 };
 
@@ -48,6 +48,16 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
 
+  const onMenuItemClicked = () => {
+    dispatch(setState(stateName));
+    // Reset multi-page content to their first page
+    if (stateName === MainMenuStateNames.finish) {
+      dispatch(setPageNumber(0))
+    }
+    // Halt ongoing events
+    dispatch(setIsPlaying(false))
+  }
+
   const mainMenuButtonStyle = css({
     width: '100%',
     height: '100px',
@@ -58,19 +68,16 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
   });
 
   return (
-    <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
-      onClick={() => {
-        dispatch(setState(stateName));
-        // Reset multi-page content to their first page
-        if (stateName === MainMenuStateNames.finish) {
-          dispatch(setPageNumber(0))
-        }
-        // Halt ongoing events
-        dispatch(setIsPlaying(false))
-      }}>
+    <li css={[basicButtonStyle, mainMenuButtonStyle]}
+      role="menuitem" tabIndex={0}
+      onClick={ onMenuItemClicked }
+      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
+        onMenuItemClicked()
+      }}}
+      >
       <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>
-    </div>
+    </li>
   );
 };
 

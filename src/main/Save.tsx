@@ -88,6 +88,14 @@ const SaveButton: React.FC<{}> = () => {
     spin = false
   }
 
+  const save = () => {
+    dispatch(postVideoInformation({
+      segments: segments,
+      tracks: tracks,
+      mediaPackageId: mediaPackageId,
+    }))
+  }
+
   const saveButtonStyle = css({
     width: '200px',
     padding: '16px',
@@ -97,13 +105,11 @@ const SaveButton: React.FC<{}> = () => {
 
   return (
     <div css={[basicButtonStyle, saveButtonStyle]} title={"Save Button"}
-      onClick={() =>
-        dispatch(postVideoInformation({
-          segments: segments,
-          tracks: tracks,
-          mediaPackageId: mediaPackageId,
-        }))
-      }>
+      role="button" tabIndex={0}
+      onClick={ save }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        save()
+      }}}>
       <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
       <span>{"Yes, Save changes"}</span>
     </div>
