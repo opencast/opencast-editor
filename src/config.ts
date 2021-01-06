@@ -20,14 +20,19 @@ if (urlParams.has("mediaPackageId")) {
   }
 }
 
- var test = parse("./editor-settings.toml")
 
+var test = parse("./editor-settings.toml")
+var lol = 1
+
+// Does not work, fs in react
+// Look at notes on how to do instead
 function parse(configPath: string) {
   if (!fs.existsSync(configPath)) {
    throw new Error(`config file not found: ${configPath}`);
   }
   try {
-   return TOML.parse(fs.readFileSync(configPath));
+    const data = fs.readFileSync(configPath);
+   return TOML.parse(data.toString());
   } catch (err) {
    throw new Error(`config file parse failed: ${configPath}`);
   }
