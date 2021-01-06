@@ -179,15 +179,25 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
    * Returns a background color based on whether the segment is to be deleted
    * and whether the segment is currently active
    */
-  const bgColor = (deleted: boolean, index: boolean) => {
-    if (!deleted && !index) {
+  const bgColor = (deleted: boolean, active: boolean) => {
+    if (!deleted && !active) {
       return 'rgba(0, 0, 255, 0.4)'
-    } else if (deleted && !index) {
-      return 'rgba(255, 0, 0, 0.4)'
-    } else if (!deleted && index) {
+    } else if (deleted && !active) {
+      return `repeating-linear-gradient(
+                -45deg,
+                rgba(255, 45, 45, 0.4),
+                rgba(255, 45, 45, 0.4) 10px,
+                rgba(255, 0, 0, 0.4) 10px,
+                rgba(255, 0, 0, 0.4) 20px);`
+    } else if (!deleted && active) {
       return 'rgba(0, 0, 200, 0.4)'
-    } else if (deleted && index) {
-      return 'rgba(200, 0, 0, 0.4)'
+    } else if (deleted && active) {
+      return `repeating-linear-gradient(
+                -45deg,
+                rgba(200, 45, 45, 0.4),
+                rgba(200, 45, 45, 0.4) 10px,
+                rgba(200, 0, 0, 0.4) 10px,
+                rgba(200, 0, 0, 0.4) 20px);`
     }
   }
 
@@ -196,7 +206,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     return (
       segments.map( (segment: Segment, index: number) => (
         <div key={segment.id} title="Segment" css={{
-          backgroundColor: bgColor(segment.deleted, activeSegmentIndex === index),//segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
+          background: bgColor(segment.deleted, activeSegmentIndex === index),
           borderRadius: '5px',
           borderStyle: 'solid',
           borderColor: 'white',
