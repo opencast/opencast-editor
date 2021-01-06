@@ -249,7 +249,10 @@ const Waveforms: React.FC<{}> = () => {
       const images: string[] = []    // Store local paths to image files
       let waveformsProcessed : number = 0  // Counter for checking if all workers are done
 
-      videoURLs.forEach((videoURL, _index, array) => {
+      // Only display the waveform of the first video we get
+      const onlyOneURL = [videoURLs[0]]
+
+      onlyOneURL.forEach((videoURL, _index, array) => {
         // Set up blob request
         var blob = null
         var xhr = new XMLHttpRequest()
