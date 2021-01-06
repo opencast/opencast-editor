@@ -208,7 +208,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
         <div key={segment.id} title="Segment" css={{
           background: bgColor(segment.deleted, activeSegmentIndex === index),
           borderRadius: '5px',
-          borderStyle: 'solid',
+          borderStyle: activeSegmentIndex === index ? 'dashed' : 'solid',
           borderColor: 'white',
           borderWidth: '1px',
           boxSizing: 'border-box',
