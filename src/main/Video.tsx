@@ -146,6 +146,8 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
       progressInterval={100}
       onReady={onReadyCallback}
       onEnded={onEndedCallback}
+      pip={false}
+      tabIndex={-1}
     />
   );
 
@@ -171,6 +173,16 @@ const VideoControls: React.FC<{}> = () => {
   const isPlaying = useSelector(selectIsPlaying)
   const isPlayPreview = useSelector(selectIsPlayPreview)
   const currentlyAt = useSelector(selectCurrentlyAt)
+
+  // Change preview mode from "on" to "off" and vice versa
+  const switchPlayPreview = () => {
+    dispatch(setIsPlayPreview(!isPlayPreview))
+  }
+
+  // Change play mode from "on" to "off" and vice versa
+  const switchIsPlaying = () => {
+    dispatch(setIsPlaying(!isPlaying))
+  }
 
   // Style
   const videoControlStyle = css({
@@ -216,16 +228,24 @@ const VideoControls: React.FC<{}> = () => {
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div style={{display: 'flex', gap: '10px', width: '50px', justifyContent: 'center'}}>
+        <div css={{display: 'flex', gap: '10px', width: '50px', justifyContent: 'center'}}>
           <FontAwesomeIcon icon={isPlayPreview ? faEyeSlash : faEye} size="1x" title="Play Preview Icon"/>
           <FontAwesomeIcon css={playPreviewStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
             title={"Play Preview Switch: " + isPlayPreview}
-            onClick={() => dispatch(setIsPlayPreview(!isPlayPreview))}
+            role="switch" aria-checked={isPlayPreview} tabIndex={0}
+            onClick={ switchPlayPreview }
+            onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " ") {
+              switchPlayPreview()
+            }}}
           />
         </div>
         <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
+          role="button" aria-pressed={isPlaying} tabIndex={0}
           title="Play Button"
-          onClick={() => dispatch(setIsPlaying(!isPlaying))}
+          onClick={ switchIsPlaying }
+          onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
+            switchIsPlaying()
+          }}}
         />
         <div css={{display: 'inline-block', width: '110px'}}>
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}

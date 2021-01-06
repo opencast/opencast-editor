@@ -51,6 +51,10 @@ const DiscardButton : React.FC<{}> = () => {
   // Initialize redux variables
   const dispatch = useDispatch()
 
+  const abort = () => {
+    dispatch(setAbortState(true))
+  }
+
   const saveButtonStyle = css({
     width: '200px',
     padding: '16px',
@@ -60,9 +64,11 @@ const DiscardButton : React.FC<{}> = () => {
 
   return (
     <div css={[basicButtonStyle, saveButtonStyle]} title={"Discard changes button"}
-      onClick={() =>
-        dispatch(setAbortState(true))
-      }>
+      role="button" tabIndex={0}
+      onClick={ abort }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        abort()
+      }}}>
       <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
       <span>{"Yes, discard changes"}</span>
     </div>

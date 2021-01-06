@@ -156,7 +156,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       nodeRef={nodeRef}
       >
       <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
-        <div css= {scrubberDragHandleStyle} title="dragHandle">
+        <div css= {scrubberDragHandleStyle} title="dragHandle" aria-grabbed={isGrabbed}>
           <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
         </div>
       </div>

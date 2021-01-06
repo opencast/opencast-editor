@@ -68,6 +68,10 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
   const dispatch = useDispatch();
   const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
 
+  const selectWorkflowIndex = () => {
+    dispatch(setSelectedWorkflowIndex(workflowIndex))
+  }
+
   const workflowButtonStyle = css({
     backgroundColor: workflowIndex !== selectedWorkflowIndex ? 'snow' : '#DDD',
     padding: '16px',
@@ -75,9 +79,11 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
 
   return (
     <div css={[basicButtonStyle,workflowButtonStyle]} title={"Workflow Button for "+stateName}
-      onClick={() =>
-        dispatch(setSelectedWorkflowIndex(workflowIndex))
-      }>
+      role="button" tabIndex={0}
+      onClick={ selectWorkflowIndex }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        selectWorkflowIndex()
+      }}}>
       <span>{stateName}</span>
     </div>
   );
