@@ -54,7 +54,7 @@ const Video: React.FC<{}> = () => {
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i === 0}/>);
+    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i !== 0}/>);
   }
 
   // Style
