@@ -11,6 +11,7 @@ import { setPageNumber } from '../redux/finishSlice'
 
 import { MainMenuStateNames } from '../types'
 import { basicButtonStyle } from '../cssStyles'
+import { setIsPlaying } from "../redux/videoSlice";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -60,9 +61,12 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     <div css={[basicButtonStyle, mainMenuButtonStyle]} title={stateName}
       onClick={() => {
         dispatch(setState(stateName));
+        // Reset multi-page content to their first page
         if (stateName === MainMenuStateNames.finish) {
           dispatch(setPageNumber(0))
         }
+        // Halt ongoing events
+        dispatch(setIsPlaying(false))
       }}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>
