@@ -228,8 +228,10 @@ const VideoControls: React.FC<{}> = () => {
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div css={{display: 'flex', gap: '10px', width: '50px', justifyContent: 'center'}}>
-          <FontAwesomeIcon icon={isPlayPreview ? faEyeSlash : faEye} size="1x" title="Play Preview Icon"/>
+        <div css={{display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center'}}>
+          <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
+            Preview Mode
+          </div>
           <FontAwesomeIcon css={playPreviewStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
             title={"Play Preview Switch: " + isPlayPreview}
             role="switch" aria-checked={isPlayPreview} tabIndex={0}
