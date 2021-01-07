@@ -6,7 +6,7 @@ import { httpRequestState } from '../types'
 import { mediaPackageId } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faToggleOn, faToggleOff, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
