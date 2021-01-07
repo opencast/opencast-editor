@@ -107,14 +107,15 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   }
 
   const scrubberStyle = css({
-    backgroundColor: 'rgba(255, 0, 0, 1)',
+    backgroundColor: 'black',
     height: '250px',
     width: '1px',
     position: 'absolute' as 'absolute',
     zIndex: 2,
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
   });
 
@@ -142,6 +143,22 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     padding: '5px',
   })
 
+  const arrowUpStyle = css({
+    width: 0,
+    height: 0,
+    borderLeft: '7px solid transparent',
+    borderRight: '7px solid transparent',
+    borderBottom: '7px solid black',
+  })
+
+  const arrowDownStyle = css({
+    width: 0,
+    height: 0,
+    borderLeft: '7px solid transparent',
+    borderRight: '7px solid transparent',
+    borderTop: '7px solid black',
+  })
+
   return (
     <Draggable
       //onDrag={onControlledDrag}
@@ -154,9 +171,11 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       nodeRef={nodeRef}
       >
       <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
+        <div css={arrowDownStyle}></div>
         <div css= {scrubberDragHandleStyle} title="dragHandle" aria-grabbed={isGrabbed}>
           <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
         </div>
+        <div css={arrowUpStyle}></div>
       </div>
     </Draggable>
   );
