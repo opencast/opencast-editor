@@ -69,13 +69,13 @@ export const videoSlice = createSlice({
       state.previewTriggered = action.payload
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload, 3);
+      state.currentlyAt = roundToDecimalPlace(action.payload, 0);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 3);
+      state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 0);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
