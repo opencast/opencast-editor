@@ -12,6 +12,8 @@ import parseToml from '@iarna/toml/parse-string';
  */
 export var mediaPackageId : string
 export var ocUrl: string = window.location.origin
+export var showMetadata: boolean = true
+export var showThumbnail: boolean = true
 
 /**
  * Local constants
@@ -68,11 +70,17 @@ export const init = async () => {
  */
 const assignResults = (result: Record<string, any> | null) => {
   for (const key in result) {
-    if (result["mediaPackageId"]) {
+    if (result["mediaPackageId"] != null) {
         mediaPackageId = result["mediaPackageId"]
     }
-    if (key === "debugging" && result[key]["ocUrl"]) {
+    if (key === "debugging" && (result[key]["ocUrl"] != null)) {
       ocUrl = result[key]["ocUrl"]
+    }
+    if (key === "metadata" && (result[key]["show"] != null)) {
+      showMetadata = result[key]["show"]
+    }
+    if (key === "thumbnail" && (result[key]["show"] != null)) {
+      showThumbnail = result[key]["show"]
     }
   }
 }
@@ -198,6 +206,23 @@ const types = {
       throw new Error("is not a string, but should be");
     }
   },
+  'boolean': (v: string, allowParse: any) => {
+    if (typeof v === 'boolean') {
+      return;
+    }
+
+    if (allowParse) {
+      if (v === 'true') {
+        return true;
+      }
+      if (v === 'false') {
+        return false;
+      }
+      throw new Error("can't be parsed as boolean");
+    } else {
+      throw new Error("is not a boolean");
+    }
+  },
 };
 
 // Defines all potential settings and their types.
@@ -214,5 +239,11 @@ const SCHEMA = {
   mediaPackageId: types.string,
   debugging: {
     ocUrl: types.string,
+  },
+  metadata: {
+    show : types.boolean,
+  },
+  thumbnail: {
+    show : types.boolean,
   }
 }

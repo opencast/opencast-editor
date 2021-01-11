@@ -10,6 +10,7 @@ import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
 import { setPageNumber } from '../redux/finishSlice'
 
 import { MainMenuStateNames } from '../types'
+import { showMetadata, showThumbnail } from '../config'
 import { basicButtonStyle } from '../cssStyles'
 import { setIsPlaying } from "../redux/videoSlice";
 
@@ -32,8 +33,8 @@ const MainMenu: React.FC<{}> = () => {
   return (
     <nav css={mainMenuStyle} title="Main Menu" role="navigation" aria-label="Main Navigation">
       <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
-      <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>
-      <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>
+      {showMetadata && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
+      {showThumbnail && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}
       <MainMenuButton iconName={faSignOutAlt} stateName={MainMenuStateNames.finish}/>
     </nav>
   );
