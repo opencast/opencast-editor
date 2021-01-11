@@ -46,7 +46,7 @@ const initialState: video & httpRequestState = {
 
 export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async (argument: RequestArgument) => {
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  const response = await client.get(`https://pyca.opencast.org/editor/${argument.mediaPackageId}/edit.json`)
+  const response = await client.get(`${argument.ocUrl}/editor/${argument.mediaPackageId}/edit.json`)
   return response
 })
 

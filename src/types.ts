@@ -20,6 +20,7 @@ export interface TimelineState {
 
 export interface RequestArgument {
   mediaPackageId: string
+  ocUrl: string
 }
 
 export interface PostEditArgument extends RequestArgument {

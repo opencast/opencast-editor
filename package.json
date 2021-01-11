@@ -14,6 +14,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.2.0",
+    "@types/iarna__toml": "^2.0.1",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.12.53",
     "@types/react": "^16.9.55",
