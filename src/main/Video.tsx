@@ -54,7 +54,7 @@ const Video: React.FC<{}> = () => {
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i === 0}/>);
+    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i !== 0}/>);
   }
 
   // Style
@@ -64,7 +64,7 @@ const Video: React.FC<{}> = () => {
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '10px',
+    padding: '0px',
     borderBottom: '1px solid #BBB',
   });
 
@@ -146,6 +146,8 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
       progressInterval={100}
       onReady={onReadyCallback}
       onEnded={onEndedCallback}
+      pip={false}
+      tabIndex={-1}
     />
   );
 
@@ -171,6 +173,16 @@ const VideoControls: React.FC<{}> = () => {
   const isPlaying = useSelector(selectIsPlaying)
   const isPlayPreview = useSelector(selectIsPlayPreview)
   const currentlyAt = useSelector(selectCurrentlyAt)
+
+  // Change preview mode from "on" to "off" and vice versa
+  const switchPlayPreview = () => {
+    dispatch(setIsPlayPreview(!isPlayPreview))
+  }
+
+  // Change play mode from "on" to "off" and vice versa
+  const switchIsPlaying = () => {
+    dispatch(setIsPlaying(!isPlaying))
+  }
 
   // Style
   const videoControlStyle = css({
@@ -216,16 +228,24 @@ const VideoControls: React.FC<{}> = () => {
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div style={{display: 'flex', gap: '10px', width: '50px', justifyContent: 'center'}}>
+        <div css={{display: 'flex', gap: '10px', width: '50px', justifyContent: 'center'}}>
           <FontAwesomeIcon icon={isPlayPreview ? faEyeSlash : faEye} size="1x" title="Play Preview Icon"/>
           <FontAwesomeIcon css={playPreviewStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
             title={"Play Preview Switch: " + isPlayPreview}
-            onClick={() => dispatch(setIsPlayPreview(!isPlayPreview))}
+            role="switch" aria-checked={isPlayPreview} tabIndex={0}
+            onClick={ switchPlayPreview }
+            onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " ") {
+              switchPlayPreview()
+            }}}
           />
         </div>
         <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
+          role="button" aria-pressed={isPlaying} tabIndex={0}
           title="Play Button"
-          onClick={() => dispatch(setIsPlaying(!isPlaying))}
+          onClick={ switchIsPlaying }
+          onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
+            switchIsPlaying()
+          }}}
         />
         <div css={{display: 'inline-block', width: '110px'}}>
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
@@ -243,13 +263,28 @@ const VideoHeader: React.FC<{}> = () => {
   const presenters = useSelector(selectPresenters)
 
   const titleStyle = css({
-    fontSize: 'large'
+    display: 'inline-block',
+    padding: '15px',
+    overflow: 'hidden',
+    whiteSpace: "nowrap",
+    textOverflow: 'ellipsis',
+    maxWidth: '500px',
   })
 
+  const titleStyleBold = css({
+    fontWeight: 'bold',
+    fontSize: '24px',
+    verticalAlign: '-2.5px',
+  })
+
+  let presenter_header;
+  if (presenters && presenters.length) {
+      presenter_header = <div css={titleStyle} title="Video Presenters">by {presenters.join(", ")}</div>
+  }
   return (
-    <div title="Video Area Header">
-      <div css={titleStyle} title="Video Title">{title}</div>
-      <div title="Video Presenters">by {presenters.join(", ")}</div>
+    <div title="Video Area Header" css={{fontSize: '16px'}}>
+      <div css={[titleStyle, titleStyleBold]} title="Video Title">{title}</div>
+      {presenter_header}
     </div>
   );
 }

@@ -51,7 +51,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   return (
-     <div title="MainMenuContext" css={{width: '100%'}}>
+     <main title="MainMenuContext" css={{width: '100%'}} role="main">
       <div css={cuttingStyle} title="Cutting Container">
           <Video />
           <CuttingActions />
@@ -64,7 +64,7 @@ const MainContent: React.FC<{}> = () => {
         <FontAwesomeIcon icon={faTools} size="10x" />
         Placeholder
       </div>
-     </div>
+     </main>
   );
 };
 

@@ -5,20 +5,18 @@ import Draggable from 'react-draggable';
 import { css } from '@emotion/core'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Segment } from '../types'
+import { Segment, httpRequestState } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setCurrentlyAt
+  selectVideoURL, setCurrentlyAt
 } from '../redux/videoSlice'
 
-// import { selectDuration, } from '../redux/videoURLSlice'
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import useResizeObserver from "use-resize-observer";
 
-import myImg from '../img/placeholder_waveform.png'
+import { Waveform } from '../util/waveform'
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -40,7 +38,7 @@ const Timeline: React.FC<{}> = () => {
   <div ref={ref} css={timelineStyle} title="Timeline">
     <Scrubber timelineWidth={width}/>
     <div css={{height: '230px'}}>
-      <img alt='waveform2' src={myImg} style={{position: "absolute" as "absolute", height: '230px', width: '100%', top: '10px'}}></img>
+      <Waveforms />
       <SegmentsList timelineWidth={width}/>
     </div>
   </div>
@@ -109,14 +107,15 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   }
 
   const scrubberStyle = css({
-    backgroundColor: 'rgba(255, 0, 0, 1)',
+    backgroundColor: 'black',
     height: '250px',
     width: '1px',
     position: 'absolute' as 'absolute',
     zIndex: 2,
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
   });
 
@@ -144,6 +143,22 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     padding: '5px',
   })
 
+  const arrowUpStyle = css({
+    width: 0,
+    height: 0,
+    borderLeft: '7px solid transparent',
+    borderRight: '7px solid transparent',
+    borderBottom: '7px solid black',
+  })
+
+  const arrowDownStyle = css({
+    width: 0,
+    height: 0,
+    borderLeft: '7px solid transparent',
+    borderRight: '7px solid transparent',
+    borderTop: '7px solid black',
+  })
+
   return (
     <Draggable
       //onDrag={onControlledDrag}
@@ -156,9 +171,11 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       nodeRef={nodeRef}
       >
       <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
-        <div css= {scrubberDragHandleStyle} title="dragHandle">
+        <div css={arrowDownStyle}></div>
+        <div css= {scrubberDragHandleStyle} title="dragHandle" aria-grabbed={isGrabbed}>
           <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
         </div>
+        <div css={arrowUpStyle}></div>
       </div>
     </Draggable>
   );
@@ -179,15 +196,25 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
    * Returns a background color based on whether the segment is to be deleted
    * and whether the segment is currently active
    */
-  const bgColor = (deleted: boolean, index: boolean) => {
-    if (!deleted && !index) {
+  const bgColor = (deleted: boolean, active: boolean) => {
+    if (!deleted && !active) {
       return 'rgba(0, 0, 255, 0.4)'
-    } else if (deleted && !index) {
-      return 'rgba(255, 0, 0, 0.4)'
-    } else if (!deleted && index) {
+    } else if (deleted && !active) {
+      return `repeating-linear-gradient(
+                -45deg,
+                rgba(255, 45, 45, 0.4),
+                rgba(255, 45, 45, 0.4) 10px,
+                rgba(255, 0, 0, 0.4) 10px,
+                rgba(255, 0, 0, 0.4) 20px);`
+    } else if (!deleted && active) {
       return 'rgba(0, 0, 200, 0.4)'
-    } else if (deleted && index) {
-      return 'rgba(200, 0, 0, 0.4)'
+    } else if (deleted && active) {
+      return `repeating-linear-gradient(
+                -45deg,
+                rgba(200, 45, 45, 0.4),
+                rgba(200, 45, 45, 0.4) 10px,
+                rgba(200, 0, 0, 0.4) 10px,
+                rgba(200, 0, 0, 0.4) 20px);`
     }
   }
 
@@ -196,9 +223,9 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     return (
       segments.map( (segment: Segment, index: number) => (
         <div key={segment.id} title="Segment" css={{
-          backgroundColor: bgColor(segment.deleted, activeSegmentIndex === index),//segment.state === "alive" ? 'rgba(0, 0, 255, 0.4)' : 'rgba(255, 0, 0, 0.4)',
+          background: bgColor(segment.deleted, activeSegmentIndex === index),
           borderRadius: '5px',
-          borderStyle: 'solid',
+          borderStyle: activeSegmentIndex === index ? 'dashed' : 'solid',
           borderColor: 'white',
           borderWidth: '1px',
           boxSizing: 'border-box',
@@ -223,5 +250,85 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     </div>
   );
 };
+
+/**
+ * Generates waveform images and displays them
+ */
+const Waveforms: React.FC<{}> = () => {
+
+  const videoURLs = useSelector(selectVideoURL)
+  const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+
+  const waveformDisplayTestStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    position: "absolute" as "absolute",
+    justifyContent: 'center',
+    width: '100%',
+    height: '230px',
+    paddingTop: '10px',
+  });
+
+  // Update based on current fetching status
+  const [images, setImages] = useState<string[]>([])
+
+  // When the URLs to the videos are fetched, generate waveforms
+  useEffect( () => {
+    if (videoURLStatus === 'success') {
+      const images: string[] = []    // Store local paths to image files
+      let waveformsProcessed : number = 0  // Counter for checking if all workers are done
+
+      // Only display the waveform of the first video we get
+      const onlyOneURL = [videoURLs[0]]
+
+      onlyOneURL.forEach((videoURL, _index, array) => {
+        // Set up blob request
+        var blob = null
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET", videoURL)
+        xhr.responseType = "blob"
+        xhr.onload = function()
+        {
+          blob = xhr.response
+          var file = new File([blob], blob)
+
+          // Start waveform worker with blob
+          const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file});
+          // When done, save path to generated waveform img
+          waveformWorker.oncomplete = function(image: any, numSamples: any) {
+            images.push(image)
+            waveformsProcessed++
+            // If all images are generated, rerender
+            if (waveformsProcessed === array.length) {
+              setImages(images)
+            }
+          }
+        }
+        xhr.send()
+      })
+    }
+  }, [videoURLStatus, videoURLs]);
+
+
+  const renderImages = () => {
+    if (images) {
+      return (
+        images.map((image, index) =>
+          <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
+        )
+      );
+    } else {
+      return (
+        <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
+      );
+    }
+  }
+
+  return (
+  <div css={waveformDisplayTestStyle} title="WaveformDisplayTest">
+    {renderImages()}
+  </div>
+  );
+}
 
 export default Timeline;

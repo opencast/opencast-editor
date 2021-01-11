@@ -72,6 +72,16 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
 
+  const saveAndProcess = () => {
+    dispatch(postVideoInformationWithWorkflow({
+      segments: segments,
+      tracks: tracks,
+      mediaPackageId: mediaPackageId,
+      ocUrl: ocUrl,
+      workflowID: [workflows[selectedWorkflowIndex]],
+    }))
+  }
+
   // Update based on current fetching status
   let icon = faFileExport
   let spin = false
@@ -93,15 +103,11 @@ const SaveAndProcessButton: React.FC<{}> = () => {
 
   return (
     <div css={[basicButtonStyle, saveButtonStyle]} title={"Start processing button"}
-      onClick={() =>
-        dispatch(postVideoInformationWithWorkflow({
-          segments: segments,
-          tracks: tracks,
-          mediaPackageId: mediaPackageId,
-          ocUrl: ocUrl,
-          workflowID: [workflows[selectedWorkflowIndex]],
-        }))
-      }>
+      role="button" tabIndex={0}
+      onClick={ saveAndProcess }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        saveAndProcess()
+      }}}>
       <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
       <span>{"Yes, start processing"}</span>
     </div>
