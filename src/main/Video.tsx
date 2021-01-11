@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { css } from '@emotion/core'
 
 import { httpRequestState } from '../types'
-import { mediaPackageId } from '../config'
+import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -36,7 +36,7 @@ const Video: React.FC<{}> = () => {
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
-      dispatch(fetchVideoInformation({mediaPackageId: mediaPackageId}))
+      dispatch(fetchVideoInformation({mediaPackageId: mediaPackageId, ocUrl: ocUrl}))
     }
   }, [videoURLStatus, dispatch])
 

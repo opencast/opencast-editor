@@ -2,7 +2,7 @@ import React from "react";
 
 import { css } from '@emotion/core'
 import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
-import { mediaPackageId } from '../config'
+import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -93,6 +93,7 @@ const SaveButton: React.FC<{}> = () => {
       segments: segments,
       tracks: tracks,
       mediaPackageId: mediaPackageId,
+      ocUrl: ocUrl,
     }))
   }
 
