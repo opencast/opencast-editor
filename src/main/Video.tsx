@@ -228,13 +228,14 @@ const VideoControls: React.FC<{}> = () => {
   return (
     <div css={videoControlStyle} title="Video Controls">
       <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div css={{display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center'}}>
+        <div css={{display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center'}}
+          title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}>
           <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
             Preview Mode
           </div>
           <FontAwesomeIcon css={playPreviewStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
-            title={"Play Preview Switch: " + isPlayPreview}
-            role="switch" aria-checked={isPlayPreview} tabIndex={0}
+            role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
+            aria-label="Enable or disable preview mode."
             onClick={ switchPlayPreview }
             onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " ") {
               switchPlayPreview()
@@ -242,16 +243,18 @@ const VideoControls: React.FC<{}> = () => {
           />
         </div>
         <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
-          role="button" aria-pressed={isPlaying} tabIndex={0}
           title="Play Button"
+          role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
+          aria-label="Play Button"
           onClick={ switchIsPlaying }
           onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
             switchIsPlaying()
           }}}
         />
-        <div css={{display: 'inline-block', width: '110px'}}>
+        <time css={{display: 'inline-block', width: '110px'}}
+          tabIndex={0} role="timer">
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
-        </div>
+        </time>
       </div>
     </div>
   );

@@ -60,3 +60,14 @@ export const backOrContinueStyle = css(({
   flexDirection: 'row' as const,
   gap: '20px',
 }))
+
+/**
+ * CSS for ariaLive regions that should not be visible
+ */
+export const ariaLive = css({
+  position: 'absolute',
+  left: '-99999px',
+  height: '1px',
+  width: '1px',
+  overflow: 'hidden',
+})

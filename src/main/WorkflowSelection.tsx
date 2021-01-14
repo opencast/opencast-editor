@@ -78,8 +78,9 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
   });
 
   return (
-    <div css={[basicButtonStyle,workflowButtonStyle]} title={"Workflow Button for "+stateName}
+    <div css={[basicButtonStyle,workflowButtonStyle]} title={"Click to select this workflow"}
       role="button" tabIndex={0}
+      aria-label={"Press to select the workflow: " + stateName}
       onClick={ selectWorkflowIndex }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         selectWorkflowIndex()

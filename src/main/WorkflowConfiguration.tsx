@@ -48,7 +48,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         <PageButton pageNumber={1} label="No, take me back" iconName={faChevronLeft}/>
         <SaveAndProcessButton />
       </div>
-      <div css={errorBoxStyle} title="Error Box">
+      <div css={errorBoxStyle} title="Error Box" role="alert">
         <span>An error has occured. Please wait a bit and try again. Details: </span><br />
         {postAndProcessError}
       </div>
