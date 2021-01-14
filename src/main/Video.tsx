@@ -69,7 +69,6 @@ const Video: React.FC<{}> = () => {
   });
 
   const videoPlayerAreaStyle = css({
-    backgroundColor: 'black',
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'center',
@@ -105,6 +104,7 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   // Init state variables
   const ref = useRef<ReactPlayer>(null);
   const [ready, setReady] = useState(false);
+  const [errorState, setError] = useState(false);
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
@@ -135,20 +135,49 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     }
   })
 
+  const onErrorCallback = (e: any) => {
+    setError(true)
+  }
+
+  const errorBoxStyle = css({
+    ...(!errorState) && {display: "none"},
+    borderColor: 'red',
+    borderStyle: 'dashed',
+    fontWeight: 'bold',
+    padding: '10px',
+  })
+
+  const render = () => {
+    if (!errorState) {
+      return(
+        <ReactPlayer url={url}
+          ref={ref}
+          width='100%'
+          height='auto'
+          playing={isPlaying}
+          muted={isMuted}
+          onProgress={onProgressCallback}
+          progressInterval={100}
+          onReady={onReadyCallback}
+          onEnded={onEndedCallback}
+          onError={onErrorCallback}
+          tabIndex={-1}
+          disablePictureInPicture
+        />
+      );
+    } else {
+      return (
+        <div css={errorBoxStyle} title="Error Box" role="alert">
+          <span>An error has occured loading this video. </span>
+        </div>
+      );
+    }
+  }
+
   return (
-    <ReactPlayer url={url}
-      ref={ref}
-      width='100%'
-      height='auto'
-      playing={isPlaying}
-      muted={isMuted}
-      onProgress={onProgressCallback}
-      progressInterval={100}
-      onReady={onReadyCallback}
-      onEnded={onEndedCallback}
-      tabIndex={-1}
-      disablePictureInPicture
-    />
+    <>
+      {render()}
+    </>
   );
 
   // return (
