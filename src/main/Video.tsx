@@ -146,8 +146,8 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
       progressInterval={100}
       onReady={onReadyCallback}
       onEnded={onEndedCallback}
-      pip={false}
       tabIndex={-1}
+      disablePictureInPicture
     />
   );
 
