@@ -1,6 +1,6 @@
 # Ungrouped values, used to make GET-Parameters easier to write
 # Values are assigned here only for debugging purposes
-mediaPackageId = 'a2ca9b55-5d79-40c7-bfb2-55b2215f4973'
+mediaPackageId = '27cd7156-fda6-4b31-aab5-d56833012caf'
 
 # Debugging values
 # Should be deleted in production

@@ -19,14 +19,34 @@ const WorkflowSelection : React.FC<{}> = () => {
   const workflows = useSelector(selectWorkflows)
   const finishState = useSelector(selectFinishState)
   const pageNumber = useSelector(selectPageNumber)
+  const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
 
   // Create workflow selection
   const workflowButtons = () => {
-    return (
-      workflows.map( (workflow: any, index: number) => (
-        <WorkflowButton key={index} stateName={workflow.name} workflowIndex={index}/>
-      ))
-    );
+    if (workflows.length > 0) {
+      return (
+        workflows.map( (workflow: any, index: number) => (
+          <WorkflowButton key={index} stateName={workflow.name} workflowIndex={index}/>
+        ))
+      );
+    } else {
+      return (
+        "There are no workflows to select. Save your changes and contact an Opencast Administrator."
+      );
+    }
+  }
+
+  // Gets the description from the currently selected workflow
+  const workflowDescription = () => {
+    if (workflows.length > selectedWorkflowIndex && workflows[selectedWorkflowIndex].description) {
+      return (
+        workflows[selectedWorkflowIndex].description
+      );
+    } else {
+      return (
+        "And this is where I would put a workflow description.... if I had one!"
+      );
+    }
   }
 
   const workflowSelectionStyle = css({
@@ -42,6 +62,8 @@ const WorkflowSelection : React.FC<{}> = () => {
     flexDirection: 'column' as const,
     alignItems: 'left',
     gap: '20px',
+    flexWrap: 'wrap',
+    maxHeight: '50vh',
   })
 
   return (
@@ -50,7 +72,7 @@ const WorkflowSelection : React.FC<{}> = () => {
       <div css={workflowSelectionSelectionStyle} title="Workflow Selection Area">
         {workflowButtons()}
       </div>
-      <div>And this is where I would put a workflow description.... if I had one!</div>
+      <div>{workflowDescription()}</div>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="Take me back" iconName={faChevronLeft}/>
         <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/>

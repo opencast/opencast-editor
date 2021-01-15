@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, RequestArgument }  from '../types'
+import { Segment, httpRequestState, Track, RequestArgument, Workflow }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 
@@ -20,7 +20,7 @@ export interface video {
   duration: number,     // Video duration in milliseconds
   title: string,
   presenters: string[],
-  workflows: string[],
+  workflows: Workflow[],
 }
 
 const initialState: video & httpRequestState = {
