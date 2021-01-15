@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, ariaLive } from '../cssStyles'
 import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -54,7 +54,7 @@ const Save : React.FC<{}> = () => {
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
         <SaveButton />
       </div>
-      <div css={errorBoxStyle} title="Error Box">
+      <div css={errorBoxStyle} title="Error Box" role="alert">
         <span>An error has occured. Please wait a bit and try again. Details: </span><br />
         {postError}<br />
       </div>
@@ -77,15 +77,25 @@ const SaveButton: React.FC<{}> = () => {
   // Update based on current fetching status
   let icon = faSave
   let spin = false
+  let tooltip = "Save Button"
   if (workflowStatus === 'loading') {
     icon = faSpinner
     spin = true
+    tooltip = "Attempting to save"
   } else if (workflowStatus === 'success') {
     icon = faCheck
     spin = false
+    tooltip = "Saved successfully"
   } else if (workflowStatus === 'failed') {
     icon = faExclamationCircle
     spin = false
+    tooltip = "Save failed"
+  }
+
+  const ariaSaveUpdate = () => {
+    if(workflowStatus === 'success') {
+      return "Saved successfully"
+    }
   }
 
   const save = () => {
@@ -105,7 +115,7 @@ const SaveButton: React.FC<{}> = () => {
   })
 
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Save Button"}
+    <div css={[basicButtonStyle, saveButtonStyle]} title={tooltip}
       role="button" tabIndex={0}
       onClick={ save }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
@@ -113,6 +123,7 @@ const SaveButton: React.FC<{}> = () => {
       }}}>
       <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
       <span>{"Yes, Save changes"}</span>
+      <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
     </div>
   );
 }

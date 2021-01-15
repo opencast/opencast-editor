@@ -60,7 +60,7 @@ const TheEnd : React.FC<{}> = () => {
   return (
     <div css={theEndStyle} title="The last area">
       <FontAwesomeIcon icon={icon()} size="10x" />
-      {text()}
+      <text>{text()}</text>
     </div>
   );
 }
