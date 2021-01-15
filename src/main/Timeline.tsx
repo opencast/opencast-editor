@@ -308,18 +308,19 @@ const Waveforms: React.FC<{}> = () => {
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
 
+  // Update based on current fetching status
+  const [images, setImages] = useState<string[]>([])
+
   const waveformDisplayTestStyle = css({
     display: 'flex',
     flexDirection: 'column',
     position: "absolute" as "absolute",
     justifyContent: 'center',
+    ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
     height: '230px',
     paddingTop: '10px',
   });
-
-  // Update based on current fetching status
-  const [images, setImages] = useState<string[]>([])
 
   // When the URLs to the videos are fetched, generate waveforms
   useEffect( () => {
@@ -360,7 +361,7 @@ const Waveforms: React.FC<{}> = () => {
 
 
   const renderImages = () => {
-    if (images) {
+    if (images.length > 0) {
       return (
         images.map((image, index) =>
           <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
@@ -368,7 +369,10 @@ const Waveforms: React.FC<{}> = () => {
       );
     } else {
       return (
-        <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
+        <>
+          <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
+          <div>Generating Waveform</div>
+        </>
       );
     }
   }
