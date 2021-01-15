@@ -78,7 +78,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
       tracks: tracks,
       mediaPackageId: mediaPackageId,
       ocUrl: ocUrl,
-      workflowID: [workflows[selectedWorkflowIndex]],
+      workflow: {id: workflows[selectedWorkflowIndex].id},
     }))
   }
 

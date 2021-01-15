@@ -11,7 +11,7 @@ const initialState: httpRequestState = {
 
 export const postVideoInformationWithWorkflow = createAsyncThunk('video/postVideoInformationWithWorkflow', async (argument: PostAndProcessEditArgument) => {
   const response = await client.post(`${argument.ocUrl}/editor/${argument.mediaPackageId}/edit.json`,
-    { segments: convertSegments(argument.segments), tracks: argument.tracks, workflows: argument.workflowID }
+    { segments: convertSegments(argument.segments), tracks: argument.tracks, workflows: argument.workflow }
   )
   return response
 })
