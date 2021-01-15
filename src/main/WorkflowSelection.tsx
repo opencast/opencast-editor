@@ -8,7 +8,7 @@ import { selectWorkflows, selectSelectedWorkflowIndex, setSelectedWorkflowIndex 
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
 import { PageButton } from './Finish'
-import { faChevronLeft, faChevronRight, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Allows the user to select a workflow
