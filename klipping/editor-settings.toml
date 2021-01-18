@@ -1,6 +1,0 @@
-# Defaults for debugging
-[debugging]
-mediaPackageId = '838b9eb3-d44e-47a1-b69e-b10e65b4ec92'
-
-[metadata]
-use = false
