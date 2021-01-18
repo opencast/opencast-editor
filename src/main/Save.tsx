@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle, ariaLive } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle } from '../cssStyles'
 import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,14 +35,6 @@ const Save : React.FC<{}> = () => {
     gap: '30px',
   })
 
-  const errorBoxStyle = css({
-    ...(postWorkflowStatus !== 'failed') && {display: "none"},
-    borderColor: 'red',
-    borderStyle: 'dashed',
-    fontWeight: 'bold',
-    padding: '10px',
-  })
-
   return (
     <div css={saveStyle} title="Save Area">
       <span>
@@ -54,9 +46,9 @@ const Save : React.FC<{}> = () => {
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
         <SaveButton />
       </div>
-      <div css={errorBoxStyle} title="Error Box" role="alert">
-        <span>An error has occured. Please wait a bit and try again. Details: </span><br />
-        {postError}<br />
+      <div css={errorBoxStyle(postWorkflowStatus)} title="Error Box" role="alert">
+        <span>An error has occured. Please wait a bit and try again.</span><br />
+        {postError ? "Details: " + postError : "No error details are available."}<br />
       </div>
     </div>
   );
