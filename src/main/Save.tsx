@@ -38,9 +38,9 @@ const Save : React.FC<{}> = () => {
   return (
     <div css={saveStyle} title="Save Area">
       <span>
-        Save the changes you made, but the video will not be cut yet. <br />
-        To make Opencast cut the video, please select "Process". <br />
-        Doth thou truly wish tah save?
+        Here you can save the changes you made, but the video will not be cut yet. <br />
+        To make Opencast cut the video, please go back and select "Start processing". <br />
+        Do you truly wish to save?
       </span>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
@@ -114,7 +114,7 @@ const SaveButton: React.FC<{}> = () => {
         save()
       }}}>
       <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
-      <span>{"Yes, Save changes"}</span>
+      <span>{"Yes, save changes"}</span>
       <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
     </div>
   );
