@@ -11,6 +11,7 @@ import { PageButton } from './Finish'
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { SaveAndProcessButton } from "./WorkflowConfiguration";
 import { selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
+import { Workflow } from "../types";
 
 /**
  * Allows the user to select a workflow
@@ -30,7 +31,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   const workflowButtons = () => {
     if (workflows.length > 0) {
       return (
-        workflows.map( (workflow: any, index: number) => (
+        workflows.map( (workflow: Workflow, index: number) => (
           <WorkflowButton key={index} stateName={workflow.name} workflowIndex={index}/>
         ))
       );

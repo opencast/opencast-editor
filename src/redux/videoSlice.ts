@@ -179,15 +179,15 @@ const updateActiveSegment = (state: WritableDraft<video>) => {
 /**
  * Helper Function for testing with current/old editor API
  */
-const parseSegments = (segments: any, duration: number) => {
+const parseSegments = (segments: Segment[], duration: number) => {
   let newSegments : Segment[] = []
 
   if (segments.length === 0) {
     newSegments.push({id: nanoid(), start: 0, end: duration, deleted: false})
   }
 
-  segments.forEach((element: { start: any; end: any; deleted: any; }) => {
-    newSegments.push({id: nanoid(), start: element.start, end: element.end, deleted: element.deleted})
+  segments.forEach((segment: Segment) => {
+    newSegments.push({id: nanoid(), start: segment.start, end: segment.end, deleted: segment.deleted})
   });
   return newSegments
 }
