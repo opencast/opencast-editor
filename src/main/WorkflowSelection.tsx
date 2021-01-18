@@ -1,14 +1,16 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, setSelectedWorkflowIndex } from '../redux/videoSlice'
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
 import { PageButton } from './Finish'
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { SaveAndProcessButton } from "./WorkflowConfiguration";
+import { selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
 
 /**
  * Allows the user to select a workflow
@@ -20,6 +22,9 @@ const WorkflowSelection : React.FC<{}> = () => {
   const finishState = useSelector(selectFinishState)
   const pageNumber = useSelector(selectPageNumber)
   const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
+
+  const postAndProcessWorkflowStatus = useSelector(selectStatus);
+  const postAndProcessError = useSelector(selectError)
 
   // Create workflow selection
   const workflowButtons = () => {
@@ -75,7 +80,12 @@ const WorkflowSelection : React.FC<{}> = () => {
       <div>{workflowDescription()}</div>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="Take me back" iconName={faChevronLeft}/>
-        <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/>
+        {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
+        <SaveAndProcessButton text="Start processing with workflow"/>
+      </div>
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus)} title="Error Box" role="alert">
+        <span>An error has occured. Please wait a bit and try again.</span><br />
+        {postAndProcessError ? "Details: " + postAndProcessError : "No error details are available."}<br />
       </div>
     </div>
   );

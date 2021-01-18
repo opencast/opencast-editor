@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   IconDefinition,
   faCut,
-  faQuestion,
   faStepBackward,
   faStepForward,
   faTrash,
@@ -56,14 +55,14 @@ const CuttingActions: React.FC<{}> = () => {
           />
         </div>
         <div css={blockStyle}>
-          <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}
+          {/* <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}
             tooltip="Not implemented"
             ariaLabelText="Reset changes. Not implemented"
           />
           <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={null}
             tooltip="Not implemented"
             ariaLabelText="Undo. Not implemented"
-          />
+          /> */}
         </div>
     </div>
   );

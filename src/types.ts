@@ -36,7 +36,7 @@ export interface PostEditArgument extends RequestArgument {
 }
 
 export interface PostAndProcessEditArgument extends PostEditArgument{
-  workflow: {id: string}
+  workflow: [{id: string}]
 }
 
 export enum MainMenuStateNames {

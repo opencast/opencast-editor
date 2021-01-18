@@ -38,7 +38,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
       <div>Satisfied with your configuration?</div>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={1} label="No, take me back" iconName={faChevronLeft}/>
-        <SaveAndProcessButton />
+        <SaveAndProcessButton text="Yes, start processing"/>
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus)} title="Error Box" role="alert">
         <span>An error has occured. Please wait a bit and try again.</span><br />
@@ -53,7 +53,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
  * Button that sends a post request to save current changes
  * and starts the selected workflow
  */
-const SaveAndProcessButton: React.FC<{}> = () => {
+export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   // Initialize redux variables
   const dispatch = useDispatch()
@@ -70,7 +70,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
       tracks: tracks,
       mediaPackageId: mediaPackageId,
       ocUrl: ocUrl,
-      workflow: {id: workflows[selectedWorkflowIndex].id},
+      workflow: [{id: workflows[selectedWorkflowIndex].id}],
     }))
   }
 
@@ -101,7 +101,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
         saveAndProcess()
       }}}>
       <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
-      <span>{"Yes, start processing"}</span>
+      <span>{text}</span>
     </div>
   );
 }
