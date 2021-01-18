@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
 import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,14 +30,6 @@ const WorkflowConfiguration : React.FC<{}> = () => {
     gap: '30px',
   })
 
-  const errorBoxStyle = css({
-    ...(postAndProcessWorkflowStatus !== 'failed') && {display: "none"},
-    borderColor: 'red',
-    borderStyle: 'dashed',
-    fontWeight: 'bold',
-    padding: '10px',
-  })
-
   return (
     <div css={workflowConfigurationStyle} title="Workflow Configuration Area">
       <h2>Workflow Configuration</h2>
@@ -48,9 +40,9 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         <PageButton pageNumber={1} label="No, take me back" iconName={faChevronLeft}/>
         <SaveAndProcessButton />
       </div>
-      <div css={errorBoxStyle} title="Error Box" role="alert">
-        <span>An error has occured. Please wait a bit and try again. Details: </span><br />
-        {postAndProcessError}
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus)} title="Error Box" role="alert">
+        <span>An error has occured. Please wait a bit and try again.</span><br />
+        {postAndProcessError ? "Details: " + postAndProcessError : "No error details are available."}<br />
       </div>
     </div>
   );

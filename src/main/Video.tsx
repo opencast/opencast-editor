@@ -18,6 +18,7 @@ import {
 import ReactPlayer from 'react-player'
 
 import { roundToDecimalPlace } from '../util/utilityFunctions'
+import { errorBoxStyle } from "../cssStyles";
 
 /**
  * Container for the videos and their controls
@@ -41,20 +42,30 @@ const Video: React.FC<{}> = () => {
   }, [videoURLStatus, dispatch])
 
   // Update based on current fetching status
-  let content
-  if (videoURLStatus === 'loading') {
-    content = <div className="loader">Loading...</div>
-  } else if (videoURLStatus === 'success') {
-    content = ""//<div className="loader">Success...</div>
-  } else if (videoURLStatus === 'failed') {
-    content = <div>{error}</div>
-  }
+  // let content
+  // if (videoURLStatus === 'loading') {
+  //   content = <div className="loader">Loading...</div>
+  // } else if (videoURLStatus === 'success') {
+  //   content = ""//<div className="loader">Success...</div>
+  // } else if (videoURLStatus === 'failed') {
+  //   content = <div>{error}</div>
+  // }
 
   // Initialize video players
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
     videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i !== 0}/>);
+  }
+
+  const errorBox = () => {
+    return (
+    <div css={errorBoxStyle(videoURLStatus)} title="Error Box" role="alert">
+      <span>A problem occured during communication with Opencast.</span><br />
+      {error ? "Details: " + error : "No error details are available."}<br />
+      {mediaPackageId ? "" : "Make sure the URL is of the form `your-opencast-address?mediaPackageId=id-of-the-event`"}
+    </div>
+    );
   }
 
   // Style
@@ -78,7 +89,7 @@ const Video: React.FC<{}> = () => {
 
   return (
     <div css={videoAreaStyle} title="Video Area">
-      {content}
+      {errorBox()}
       <VideoHeader />
       <div css={videoPlayerAreaStyle} title="Video Player Area">
         {videoPlayers}
