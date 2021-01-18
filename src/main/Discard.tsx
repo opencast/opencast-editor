@@ -32,8 +32,8 @@ const Discard : React.FC<{}> = () => {
   return (
     <div css={cancelStyle} title="Abort Area">
       <span>
-        Discard all the changes you made? They will be lost forever! <br />
-        Doth thou truly wish tah abort?
+        Discard all the changes you made? This cannot be undone! <br />
+        Do you truly want all your changes to be lost forever?
       </span>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft} />

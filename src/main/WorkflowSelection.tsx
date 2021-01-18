@@ -74,10 +74,14 @@ const WorkflowSelection : React.FC<{}> = () => {
   return (
     <div css={workflowSelectionStyle}>
       <h2>Select a workflow</h2>
+      <text>
+        Please select which workflow Opencast should use to cut and process the video. <br />
+        If you are unsure on which workflow to choose, the already selected workflow or the "Publish" workflow are usually good choices.
+      </text>
       <div css={workflowSelectionSelectionStyle} title="Workflow Selection Area">
         {workflowButtons()}
       </div>
-      <div>{workflowDescription()}</div>
+      <div><i>{workflowDescription()}</i></div>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="Take me back" iconName={faChevronLeft}/>
         {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
