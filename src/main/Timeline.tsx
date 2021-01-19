@@ -23,22 +23,34 @@ import { convertMsToReadableString } from '../util/utilityFunctions';
  * A container for visualizing the cutting of the video, as well as for controlling
  * the current position in the video
  * Its width corresponds to the duration of the video
+ * TODO: Figure out why ResizeObserver does not update anymore if we stop passing the width to the SegmentsList
  */
 const Timeline: React.FC<{}> = () => {
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const duration = useSelector(selectDuration)
 
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
 
   const timelineStyle = css({
-    position: 'relative' as 'relative',     // Need to set position for Draggable bounds to work
+    position: 'relative',     // Need to set position for Draggable bounds to work
     height: '250px',
     width: '100%',
-    //backgroundImage: `url({myImg})`,
   });
 
+  // Update the current time based on the position clicked on the timeline
+  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    let rect = e.currentTarget.getBoundingClientRect()
+    let offsetX = e.clientX - rect.left
+    console.log("HI I'm: " + (e.clientX - rect.left) + "; " + width )
+    dispatch(setCurrentlyAt((offsetX / width) * (duration)))
+  }
+
   return (
-  <div ref={ref} css={timelineStyle} title="Timeline">
+  <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
     <Scrubber timelineWidth={width}/>
-    <div css={{height: '230px'}}>
+    <div css={{height: '230px'}} >
       <Waveforms />
       <SegmentsList timelineWidth={width}/>
     </div>
@@ -185,14 +197,6 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     borderRight: '7px solid transparent',
     borderTop: '7px solid black',
   })
-
-  // const ariaLive = css({
-  //   position: 'absolute',
-  //   left: '-99999px',
-  //   height: '1px',
-  //   width: '1px',
-  //   overflow: 'hidden',
-  // })
 
   // // Possible TODO: Find a way to use ariaLive in a way that only the latest change is announced
   // const keyboardUpdateMessage = () => {
