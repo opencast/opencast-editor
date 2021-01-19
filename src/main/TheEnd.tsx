@@ -36,7 +36,7 @@ const TheEnd : React.FC<{}> = () => {
 
   const text = () => {
     if (abortState) {
-      return "You really did it. All your changes are now lost forever. You can now continue doing whatever you want."
+      return "All your changes are now lost forever. You can now close the editor."
     } else if (postAndProcessState === "success") {
       return `Changes successfully saved to Opencast. Processing your changes may take up to
               ${new Date((duration * 2)).toISOString().substr(11, 8)} hours.

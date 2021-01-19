@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
 } from '../redux/videoSlice'
+import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 /**
  * Defines the different actions a user can perform while in cutting mode
@@ -79,15 +80,13 @@ const cuttingActionButtonStyle = {
 interface cuttingActionsButtonInterface {
   iconName: IconDefinition,
   actionName: string,
-  action: any,
+  action: ActionCreatorWithoutPayload<string>,  // Redux reducer action
   tooltip: string,
   ariaLabelText: string,
 }
 
 /**
  * A button representing a single action a user can take while cutting
- * TODO: Add functionality
- * TODO: Complete styling
  * @param param0
  */
 const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName, actionName, action, tooltip, ariaLabelText}) => {
