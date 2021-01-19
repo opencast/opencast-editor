@@ -39,6 +39,11 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
 
   const dispatch = useDispatch();
 
+  const finish = () => {
+    dispatch(setState(stateName));
+    dispatch(setPageNumber(1))
+  }
+
   const finishMenuButtonStyle = css({
     width: '250px',
     height: '220px',
@@ -49,11 +54,12 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
   });
 
   return (
-    <div css={[basicButtonStyle, finishMenuButtonStyle]} title={stateName}
-      onClick={() => {
-        dispatch(setState(stateName));
-        dispatch(setPageNumber(1))
-      }}>
+    <div css={[basicButtonStyle, finishMenuButtonStyle]}
+    role="button" tabIndex={0}
+      onClick={ finish }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        finish()
+      }}}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
       <div>{stateName}</div>
     </div>

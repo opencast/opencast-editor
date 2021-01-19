@@ -3,6 +3,7 @@
  */
 import { css, Global } from '@emotion/core'
 import React from "react";
+import { httpRequestState }  from './types'
 
 /**
  * An emotion component that inserts styles globally
@@ -38,6 +39,9 @@ export const basicButtonStyle = css({
   "&:hover": {
     transform: 'scale(1.1)',
   },
+  "&:focus": {
+    transform: 'scale(1.1)',
+  },
   "&:active": {
     transform: 'scale(0.9)',
   },
@@ -57,3 +61,29 @@ export const backOrContinueStyle = css(({
   flexDirection: 'row' as const,
   gap: '20px',
 }))
+
+/**
+ * CSS for ariaLive regions that should not be visible
+ */
+export const ariaLive = css({
+  position: 'absolute',
+  left: '-99999px',
+  height: '1px',
+  width: '1px',
+  overflow: 'hidden',
+})
+
+/**
+ * CSS for displaying of errors
+ */
+export const errorBoxStyle = (errorStatus: httpRequestState["status"]) => {
+  return (
+    css({
+      ...(errorStatus !== 'failed') && {display: "none"},
+      borderColor: 'red',
+      borderStyle: 'dashed',
+      fontWeight: 'bold',
+      padding: '10px',
+    })
+  );
+}

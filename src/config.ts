@@ -1,0 +1,249 @@
+/**
+ * Loads config values from
+ * - a settings file
+ * - GET parameters
+ * and exports them.
+ * Code was largely adapted from https://github.com/elan-ev/opencast-studio/blob/master/src/settings.js (January 11th, 2021)
+ */
+import parseToml from '@iarna/toml/parse-string';
+
+/**
+ * Parsed settings are exported through these variables
+ */
+export var mediaPackageId : string
+export var ocUrl: string = window.location.origin
+export var showMetadata: boolean = true
+export var showThumbnail: boolean = true
+
+/**
+ * Local constants
+ */
+const CONTEXT_SETTINGS_FILE = 'editor-settings.toml';
+
+// Sources that values can come from.
+const SRC_SERVER = 'src-server';
+const SRC_URL = 'src-url';
+
+/**
+ * Entry point. Loads values from settings into the exported variables
+ * Priorities are:
+ * 1. GET Parameters
+ * 2. Settings file
+ * 3. Default values
+ */
+export const init = async () => {
+  // Get settings from config file
+  await loadContextSettings().then((result) => {
+
+    result = validate(result, false, SRC_SERVER, "from server settings file")
+
+    assignResults(result)
+  })
+
+  // Get settings from URL query.
+  var urlParams = new URLSearchParams(window.location.search);
+
+  let rawUrlSettings = {};
+  urlParams.forEach(function(value, key) {
+    // Create empty objects for full path (if the key contains '.') and set
+    // the value at the end.
+    let obj : {[k: string]: any} = rawUrlSettings;
+    const segments = key.split('.');
+    segments.slice(0, -1).forEach((segment) => {
+      if (!(segment in obj)) {
+        obj[segment] = {};
+      }
+      obj = obj[segment];
+    });
+    obj[segments[segments.length - 1]] = value;
+  });
+
+  const result = validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
+
+  assignResults(result)
+
+};
+
+/**
+ * Assigns parsed and validated results to their respective variables
+ * @param result
+ */
+const assignResults = (result: Record<string, any> | null) => {
+  for (const key in result) {
+    if (result["mediaPackageId"] != null) {
+        mediaPackageId = result["mediaPackageId"]
+    }
+    if (key === "debugging" && (result[key]["ocUrl"] != null)) {
+      ocUrl = result[key]["ocUrl"]
+    }
+    if (key === "metadata" && (result[key]["show"] != null)) {
+      showMetadata = result[key]["show"]
+    }
+    if (key === "thumbnail" && (result[key]["show"] != null)) {
+      showThumbnail = result[key]["show"]
+    }
+  }
+}
+
+/**
+ * Attempts to load toml settings file
+ */
+const loadContextSettings = async () => {
+
+  // Try to retrieve the context settings.
+  let basepath = process.env.PUBLIC_URL || '/';
+  if (!basepath.endsWith('/')) {
+    basepath += '/';
+  }
+
+  // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
+  // given and starts with '/', it is interpreted as absolute path from the
+  // server root.
+  const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
+  const base = settingsPath.startsWith('/') ? '' : basepath;
+  const url = `${window.location.origin}${base}${settingsPath}`;
+  let response;
+  try {
+    response = await fetch(url);
+  } catch (e) {
+    console.warn(`Could not access '${settingsPath}' due to network error!`, e || "");
+    return null;
+  }
+
+  if (response.status === 404) {
+    // If the settings file was not found, we silently ignore the error. We
+    // expect many installation to provide this file.
+    console.debug(`'${settingsPath}' returned 404: ignoring`);
+    return null;
+  } else if (!response.ok) {
+    console.error(
+      `Fetching '${settingsPath}' failed: ${response.status} ${response.statusText}`
+    );
+    return null;
+  }
+
+  if (response.headers.get('Content-Type')?.startsWith('text/html')) {
+    console.warn(`'${settingsPath}' request has 'Content-Type: text/html' -> ignoring...`);
+    return null;
+  }
+
+  try {
+    return parseToml(await response.text());
+  } catch (e) {
+    console.error(`Could not parse '${settingsPath}' as TOML: `, e);
+    throw new SyntaxError(`Could not parse '${settingsPath}' as TOML: ${e}`);
+  }
+
+};
+
+/**
+ * Validate the given `obj` with the global settings `SCHEMA`. If `allowParse`
+ * is true, string values are attempted to parse into the expected type. `src`
+ * must be one of `SRC_SERVER`, `SRC_URL` or `SRC_LOCAL_STORAGE`.
+ * `srcDescription` is just a string for error messages specifying where `obj`
+ * comes from.
+ * */
+const validate = (obj: Record<string, any> | null, allowParse: boolean, src: string, sourceDescription: string) => {
+  // Validates `obj` with `schema`. `path` is the current path used for error
+  // messages.
+  const validate = (schema: any, obj: Record<string, any> | null, path: string) => {
+    if (typeof schema === 'function') {
+      return validateValue(schema, obj, path);
+    } else {
+      return validateObj(schema, obj, path);
+    }
+  };
+
+  // Validate a settings value with a validation function. Returns the final
+  // value of the setting or `null` if it should be ignored.
+  const validateValue = (validation: (arg0: any, arg1: boolean, arg2: string) => any, value: Record<string, any> | null, path: string) => {
+    try {
+      const newValue = validation(value, allowParse, src);
+      return newValue === undefined ? value : newValue;
+    } catch (e) {
+      console.warn(
+        `Validation of setting '${path}' (${sourceDescription}) with value '${value}' failed: `
+          + `${e}. Ignoring.`
+      );
+      return null;
+    }
+  };
+
+  // Validate a settings object/namespace. `schema` and `obj` need to be
+  // objects.
+  const validateObj = (schema: any, obj: Record<string, any> | null, path: string) => {
+    // We iterate through all keys of the given settings object, checking if
+    // each key is valid and recursively validating the value of that key.
+    let out : {[k: string]: any} = {};
+    for (const key in obj) {
+      const newPath = path ? `${path}.${key}` : key;
+      if (key in schema) {
+        const value = validate(schema[key], obj[key], newPath);
+
+        // If `null` is returned, the validation failed and we ignore this
+        // value.
+        if (value !== null) {
+          out[key] = value;
+        }
+      } else {
+        console.warn(
+          `'${newPath}' (${sourceDescription}) is not a valid settings key. Ignoring.`
+        );
+      }
+    }
+
+    return out;
+  };
+
+  return validate(SCHEMA, obj, "");
+}
+
+
+// Validation functions for different types.
+const types = {
+  'string': (v: any, allowParse: any) => {
+    if (typeof v !== 'string') {
+      throw new Error("is not a string, but should be");
+    }
+  },
+  'boolean': (v: string, allowParse: any) => {
+    if (typeof v === 'boolean') {
+      return;
+    }
+
+    if (allowParse) {
+      if (v === 'true') {
+        return true;
+      }
+      if (v === 'false') {
+        return false;
+      }
+      throw new Error("can't be parsed as boolean");
+    } else {
+      throw new Error("is not a boolean");
+    }
+  },
+};
+
+// Defines all potential settings and their types.
+//
+// Each setting value has to be a validation function. Such a function takes two
+// arguments: the input value `v` and the boolean `allowParse` which specifies
+// whether the input might be parsed into the correct type (this is only `true`
+// for GET parameters). The validation should throw an error if the input value
+// is not valid for the setting. If the function returns `undefined`, the input
+// value is valid and used. If the validator returns a different value, the
+// input is valid, but is replaced by that new value. See the `types` object
+// above for some examples.
+const SCHEMA = {
+  mediaPackageId: types.string,
+  debugging: {
+    ocUrl: types.string,
+  },
+  metadata: {
+    show : types.boolean,
+  },
+  thumbnail: {
+    show : types.boolean,
+  }
+}

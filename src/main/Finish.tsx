@@ -61,6 +61,10 @@ export const PageButton : React.FC<{pageNumber: number, label: string, iconName:
   // Initialize redux variables
   const dispatch = useDispatch()
 
+  const onPageChange = () => {
+    dispatch(setPageNumber(pageNumber))
+  }
+
   const pageButtonStyle = css({
     width: '200px',
     padding: '16px',
@@ -69,10 +73,12 @@ export const PageButton : React.FC<{pageNumber: number, label: string, iconName:
   })
 
   return (
-    <div css={[basicButtonStyle, pageButtonStyle]} title={label}
-      onClick={() =>
-        dispatch(setPageNumber(pageNumber))
-      }>
+    <div css={[basicButtonStyle, pageButtonStyle]}
+      role="button" tabIndex={0}
+      onClick={ onPageChange }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        onPageChange()
+      }}}>
       <FontAwesomeIcon icon={iconName} size="1x" />
       <span>{label}</span>
     </div>

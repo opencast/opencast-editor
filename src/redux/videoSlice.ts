@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState }  from '../types'
+import { Segment, httpRequestState, Track, RequestArgument, Workflow }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 
@@ -11,25 +11,29 @@ export interface video {
   previewTriggered: boolean,      // Basically acts as a callback for the video players. TODO: Figure out how to do callbacks
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
+  tracks: Track[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowIndex: number,  // Index of the currently selected workflow
+  aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
   duration: number,     // Video duration in milliseconds
   title: string,
   presenters: string[],
-  workflows: string[],
+  workflows: Workflow[],
 }
 
 const initialState: video & httpRequestState = {
   isPlaying: false,
-  isPlayPreview: false,
+  isPlayPreview: true,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
+  tracks: [],
   activeSegmentIndex: 0,
   selectedWorkflowIndex: 0,
   previewTriggered: false,
+  aspectRatios: [],
 
   videoURLs: [],
   videoCount: 0,
@@ -42,16 +46,15 @@ const initialState: video & httpRequestState = {
   error: undefined,
 }
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
-  const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  // const response = await client.get('https://pyca.opencast.org/editor/9bf8aec2-10f5-4c64-bfde-2752fa3a394d/edit.json')
+export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async (argument: RequestArgument) => {
+  // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
+  const response = await client.get(`${argument.ocUrl}/editor/${argument.mediaPackageId}/edit.json`)
   return response
 })
 
 /**
  * Slice for the state of the "video"
  * Treats the multitude of videos that may exist as one video
- * TODO: Find a way to init the segments array with a starting segment
  */
 export const videoSlice = createSlice({
   name: 'videoState',
@@ -67,19 +70,22 @@ export const videoSlice = createSlice({
       state.previewTriggered = action.payload
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload, 3);
+      state.currentlyAt = roundToDecimalPlace(action.payload, 0);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 3);
+      state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 0);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
+    },
+    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
+      state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
@@ -92,11 +98,11 @@ export const videoSlice = createSlice({
       let segmentA : Segment =  {id: nanoid(),
         start: state.segments[state.activeSegmentIndex].start,
         end: state.currentlyAt,
-        deleted: true}
+        deleted: state.segments[state.activeSegmentIndex].deleted}
       let segmentB : Segment =  {id: nanoid(),
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
-        deleted: true}
+        deleted: state.segments[state.activeSegmentIndex].deleted}
 
       // Add the new segments and remove the old one
       state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
@@ -124,33 +130,36 @@ export const videoSlice = createSlice({
       fetchVideoInformation.fulfilled, (state, action) => {
         state.status = 'success'
 
-        // Old API
+        // // Old API
+        // // eslint-disable-next-line no-sequences
+        // state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        // state.videoCount = action.payload.previews.length
+        // state.duration = action.payload.duration
+        // state.title = action.payload.title
+        // state.presenters = action.payload.presenters
+        // state.segments = parseSegments(action.payload.segments, action.payload.duration)
+        // state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
+        //   if (n1.displayOrder > n2.displayOrder) { return 1; }
+        //   if (n1.displayOrder < n2.displayOrder) { return -1; }
+        //   return 0;
+        // });
+
+        // New API
         // eslint-disable-next-line no-sequences
-        state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        state.videoCount = action.payload.previews.length
+        state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
-        state.presenters = action.payload.presenters
+        state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
+        state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           if (n1.displayOrder > n2.displayOrder) { return 1; }
           if (n1.displayOrder < n2.displayOrder) { return -1; }
           return 0;
         });
 
-        // // New API
-        // // eslint-disable-next-line no-sequences
-        // state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        // state.videoCount = action.payload.tracks.length
-        // state.duration = action.payload.duration
-        // state.title = action.payload.title
-        // state.presenters = []
-        // state.segments = action.payload.segments
-        // state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
-        //   if (n1.displayOrder > n2.displayOrder) { return 1; }
-        //   if (n1.displayOrder < n2.displayOrder) { return -1; }
-        //   return 0;
-        // });
+        state.aspectRatios = new Array(state.videoCount)
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -224,8 +233,23 @@ const skipDeletedSegments = (state: WritableDraft<video>) => {
     }
 }
 
-export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
-  setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered } = videoSlice.actions
+/**
+ * Calculates a total aspect ratio for the video player wrappers,
+ * based on the aspect ratio of all videos.
+ * Returns the total aspect ratio in percent,
+ * or returns a default aspect ratio to limit the height of the video player area
+ * TODO: Error checking
+ * TODO: Improve calculation to handle multiple rows of videos
+ */
+const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
+  let minHeight = Math.min.apply(Math, aspectRatios.map(function(o) { return o.height; }))
+  let minWidth = Math.min.apply(Math, aspectRatios.map(function(o) { return o.width; }))
+  minWidth *= aspectRatios.length
+  return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
+}
+
+export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio, cut,
+  markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -257,6 +281,10 @@ export const selectDuration = (state: { videoState: { duration: video["duration"
 export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
+export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) =>
+  state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
+export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
+  calculateTotalAspectRatio(state.videoState.aspectRatios)
 
 export default videoSlice.reducer
