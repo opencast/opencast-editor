@@ -15,7 +15,7 @@ import {
   setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview
 } from '../redux/videoSlice'
 
-import ReactPlayer from 'react-player'
+import ReactPlayer, { Config } from 'react-player'
 
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { errorBoxStyle } from "../cssStyles";
@@ -150,6 +150,11 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     setError(true)
   }
 
+  // Skip player when navigating page with keyboard
+  const playerConfig: Config = {
+    file: { attributes: { tabIndex: '-1' }}
+  }
+
   const errorBoxStyle = css({
     ...(!errorState) && {display: "none"},
     borderColor: 'red',
@@ -172,7 +177,7 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
           onReady={onReadyCallback}
           onEnded={onEndedCallback}
           onError={onErrorCallback}
-          tabIndex={-1}
+          config={playerConfig}
           disablePictureInPicture
         />
       );
