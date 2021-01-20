@@ -12,13 +12,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, selectDuration
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
 
-import { roundToDecimalPlace } from '../util/utilityFunctions'
-import { errorBoxStyle } from "../cssStyles";
+import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
+import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
 /**
  * Container for the videos and their controls
@@ -208,60 +208,68 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
 
 /**
  * Contains controls for manipulating multiple video players at once
+ * Flexbox magic keeps the play button at the center
  * TODO: Add missing controls
- * TODO: Turn time display into a control
  */
 const VideoControls: React.FC<{}> = () => {
 
+  const videoControlsRowStyle = css({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    padding: '20px',
+    gap: '50px',
+  })
+
+  const leftSideBoxStyle = css({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'right'
+  })
+
+  const rightSideBoxStyle = css({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'left'
+  })
+
+  return (
+    <div css={videoControlsRowStyle} title="Video Controls">
+      <div css={leftSideBoxStyle}>
+        <PreviewMode />
+      </div>
+      <PlayButton />
+      <div css={rightSideBoxStyle}>
+        <TimeDisplay />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Enable/Disable Preview Mode
+ */
+const PreviewMode: React.FC<{}> = () => {
+
   // Init redux variables
   const dispatch = useDispatch();
-  const isPlaying = useSelector(selectIsPlaying)
   const isPlayPreview = useSelector(selectIsPlayPreview)
-  const currentlyAt = useSelector(selectCurrentlyAt)
 
   // Change preview mode from "on" to "off" and vice versa
   const switchPlayPreview = () => {
     dispatch(setIsPlayPreview(!isPlayPreview))
   }
 
-  // Change play mode from "on" to "off" and vice versa
-  const switchIsPlaying = () => {
-    dispatch(setIsPlaying(!isPlaying))
-  }
-
-  // Style
-  const videoControlStyle = css({
+  const previewModeStyle = css({
     display: 'flex',
-    flexDirection: 'column' as const,
+    gap: '10px',
     justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    padding: '10px',
-  })
+    alignItems: 'center'}
+  )
 
-  const videoControlsRowStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    padding: '10px',
-    gap: '50px',
-  })
-
-  const playButtonStyle = css({
-    cursor: "pointer",
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
-  })
-
-  const playPreviewStyle = css({
+  const switchIconStyle = css({
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
@@ -271,35 +279,69 @@ const VideoControls: React.FC<{}> = () => {
   })
 
   return (
-    <div css={videoControlStyle} title="Video Controls">
-      <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div css={{display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center'}}
-          title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}>
-          <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
-            Preview Mode
-          </div>
-          <FontAwesomeIcon css={playPreviewStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
-            role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-            aria-label="Enable or disable preview mode."
-            onClick={ switchPlayPreview }
-            onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " ") {
-              switchPlayPreview()
-            }}}
-          />
-        </div>
-        <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
-          title="Play Button"
-          role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-          aria-label="Play Button"
-          onClick={ switchIsPlaying }
-          onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
-            switchIsPlaying()
-          }}}
-        />
-        <time css={{display: 'inline-block', width: '110px'}}
-          tabIndex={0} role="timer">
-          {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
-        </time>
+    <div css={previewModeStyle}
+      title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}>
+      <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
+        Preview Mode
+      </div>
+      <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
+        role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
+        aria-label="Enable or disable preview mode."
+        onClick={ switchPlayPreview }
+        onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " ") {
+          switchPlayPreview()
+        }}}
+      />
+    </div>
+  );
+}
+
+/**
+ * Start/Pause playing the videos
+ */
+const PlayButton: React.FC<{}> = () => {
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const isPlaying = useSelector(selectIsPlaying)
+
+  // Change play mode from "on" to "off" and vice versa
+  const switchIsPlaying = () => {
+    dispatch(setIsPlaying(!isPlaying))
+  }
+
+  return (
+    <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
+      title="Play Button"
+      role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
+      aria-label="Play Button"
+      onClick={ switchIsPlaying }
+      onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
+        switchIsPlaying()
+      }}}
+    />
+  );
+}
+
+/**
+ * Live update for the current time
+ * TODO: Turn time display into a control
+ */
+const TimeDisplay: React.FC<{}> = () => {
+
+  // Init redux variables
+  const currentlyAt = useSelector(selectCurrentlyAt)
+  const duration = useSelector(selectDuration)
+
+  return (
+    <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
+      <time css={{display: 'inline-block', width: '100px'}}
+        tabIndex={0} role="timer" aria-label={"Current time: " + convertMsToReadableString(currentlyAt)}>
+        {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
+      </time>
+      {" / "}
+      <div tabIndex={0} aria-label={"Duration: " + convertMsToReadableString(duration)}>
+        {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
       </div>
     </div>
   );
