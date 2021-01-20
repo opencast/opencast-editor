@@ -1,14 +1,21 @@
-# Ungrouped values, used to make GET-Parameters easier to write
-# Values are assigned here only for debugging purposes
+### Ungrouped values, used to make GET-Parameters easier to write
+### Values are assigned here only for debugging purposes
+# Id of the event that the editor should open
 mediaPackageId = '27cd7156-fda6-4b31-aab5-d56833012caf'
 
-# Debugging values
-# Should be deleted in production
+### Debugging values
+### Should be deleted in production
 [debugging]
+# Base path to the Opencast backend where the editor should get its information
+# from
 ocUrl = 'https://pyca.opencast.org'
 
+### Settings of the metadata tab
 [metadata]
+# If false, the metadata button is not displayed in the main menu
 show = false
 
+### Settings of the thumbnail tab
 [thumbnail]
+# If false, the thumbnail tab is not displayed in the main menu
 show = false
