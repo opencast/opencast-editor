@@ -1,16 +1,21 @@
 // A tiny wrapper around fetch(), borrowed from
 // https://kentcdodds.com/blog/replace-axios-with-a-simple-custom-fetch-wrapper
 
+import { settings } from '../config';
+
 /**
  * Client I stole this form a react tutorial
  */
 export async function client(endpoint, { body, ...customConfig } = {}) {
   const headers = { 'Content-Type': 'application/json' }
 
-  const encoded = btoa(unescape(encodeURIComponent(
-    "admin:opencast"
-  )));
-  const authHeaders = { 'Authorization': `Basic ${encoded}` };
+  let authHeaders = {}
+  if (settings.opencast.name && settings.opencast.password) {
+    const encoded = btoa(unescape(encodeURIComponent(
+      settings.opencast.name + ":" + settings.opencast.password
+    )));
+    authHeaders = { 'Authorization': `Basic ${encoded}` };
+  }
 
   const config = {
     method: body ? 'POST' : 'GET',

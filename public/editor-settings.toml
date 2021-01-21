@@ -2,13 +2,20 @@
 # Values are assigned here only for debugging purposes
 mediaPackageId = '27cd7156-fda6-4b31-aab5-d56833012caf'
 
-# Debugging values
-# Should be deleted in production
-[debugging]
-ocUrl = 'https://pyca.opencast.org'
+# Values pertaining to accessing opencast
+[opencast]
+# URL of the opencast server on which we are editing events.
+# Should be deleted when deployed in Opencast, as the editor can then
+# figure out the correct URL by itself.
+url = 'https://pyca.opencast.org'
+# Opencast username. Used for Http basic authentication.
+name = "admin"
+# Password belonging to the above username
+# WARNING: When run in Opencast, this file is publicly accessibly
+password = "opencast"
 
-[metadata]
-show = false
+# [metadata]
+# show = false
 
 [thumbnail]
 show = false

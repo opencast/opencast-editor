@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 import { Segment, PostEditArgument, httpRequestState } from '../types'
+import { settings } from '../config'
 
 const initialState: httpRequestState = {
   status: 'idle',
@@ -8,7 +9,11 @@ const initialState: httpRequestState = {
 }
 
 export const postVideoInformation = createAsyncThunk('video/postVideoInformation', async (argument: PostEditArgument) => {
-  const response = await client.post(`${argument.ocUrl}/editor/${argument.mediaPackageId}/edit.json`,
+  if (!settings.mediaPackageId) {
+    throw new Error("Missing mediaPackageId")
+  }
+
+  const response = await client.post(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`,
     { segments: convertSegments(argument.segments), tracks: argument.tracks }
   )
   return response

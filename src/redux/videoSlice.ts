@@ -1,9 +1,10 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, RequestArgument, Workflow }  from '../types'
+import { Segment, httpRequestState, Track, Workflow }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
+import { settings } from '../config';
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
@@ -44,9 +45,13 @@ const initialState: video & httpRequestState = {
   error: undefined,
 }
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async (argument: RequestArgument) => {
+export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
+  if (!settings.mediaPackageId) {
+    throw new Error("Missing mediaPackageId")
+  }
+
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  const response = await client.get(`${argument.ocUrl}/editor/${argument.mediaPackageId}/edit.json`)
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`)
   return response
 })
 

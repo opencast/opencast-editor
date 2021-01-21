@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { css } from '@emotion/core'
 
 import { httpRequestState } from '../types'
-import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
@@ -37,7 +36,7 @@ const Video: React.FC<{}> = () => {
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
-      dispatch(fetchVideoInformation({mediaPackageId: mediaPackageId, ocUrl: ocUrl}))
+        dispatch(fetchVideoInformation())
     }
   }, [videoURLStatus, dispatch])
 
@@ -60,11 +59,10 @@ const Video: React.FC<{}> = () => {
 
   const errorBox = () => {
     return (
-    <div css={errorBoxStyle(videoURLStatus)} title="Error Box" role="alert">
-      <span>A problem occured during communication with Opencast.</span><br />
-      {error ? "Details: " + error : "No error details are available."}<br />
-      {mediaPackageId ? "" : "Make sure the URL is of the form `your-opencast-address?mediaPackageId=id-of-the-event`"}
-    </div>
+      <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
+        <span>A problem occured during communication with Opencast.</span><br />
+        {error ? "Details: " + error : "No error details are available."}<br />
+      </div>
     );
   }
 

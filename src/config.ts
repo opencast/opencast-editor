@@ -6,14 +6,7 @@
  * Code was largely adapted from https://github.com/elan-ev/opencast-studio/blob/master/src/settings.js (January 11th, 2021)
  */
 import parseToml from '@iarna/toml/parse-string';
-
-/**
- * Parsed settings are exported through these variables
- */
-export var mediaPackageId : string
-export var ocUrl: string = window.location.origin
-export var showMetadata: boolean = true
-export var showThumbnail: boolean = true
+import deepmerge from 'deepmerge';
 
 /**
  * Local constants
@@ -25,6 +18,49 @@ const SRC_SERVER = 'src-server';
 const SRC_URL = 'src-url';
 
 /**
+ * Settings interface
+ */
+interface iSettings {
+  mediaPackageId: string | undefined,
+  opencast: {
+    url: string,
+    name: string | undefined,
+    password: string | undefined,
+  },
+  metadata: {
+    show: boolean,
+  },
+  thumbnail: {
+    show: boolean,
+  }
+}
+
+/**
+ * Settings objects
+ * defaultSettings: Sets default values
+ * configFileSettings: contains values from the config file
+ * urlParameterSettings: contains values from GET parameters
+ * settings: contains the combined values from all other setting objects
+ */
+var defaultSettings: iSettings = {
+  mediaPackageId: undefined,
+  opencast: {
+    url: window.location.origin,
+    name: undefined,
+    password: undefined,
+  },
+  metadata: {
+    show: true,
+  },
+  thumbnail: {
+    show: true,
+  }
+}
+var configFileSettings: iSettings
+var urlParameterSettings: iSettings
+export var settings: iSettings
+
+/**
  * Entry point. Loads values from settings into the exported variables
  * Priorities are:
  * 1. GET Parameters
@@ -34,10 +70,7 @@ const SRC_URL = 'src-url';
 export const init = async () => {
   // Get settings from config file
   await loadContextSettings().then((result) => {
-
-    result = validate(result, false, SRC_SERVER, "from server settings file")
-
-    assignResults(result)
+    configFileSettings = validate(result, false, SRC_SERVER, "from server settings file")
   })
 
   // Get settings from URL query.
@@ -58,32 +91,11 @@ export const init = async () => {
     obj[segments[segments.length - 1]] = value;
   });
 
-  const result = validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
+  urlParameterSettings = validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
 
-  assignResults(result)
-
+  // Combine results
+  settings = merge.all([defaultSettings, configFileSettings, urlParameterSettings]) as iSettings;
 };
-
-/**
- * Assigns parsed and validated results to their respective variables
- * @param result
- */
-const assignResults = (result: Record<string, any> | null) => {
-  for (const key in result) {
-    if (result["mediaPackageId"] != null) {
-        mediaPackageId = result["mediaPackageId"]
-    }
-    if (key === "debugging" && (result[key]["ocUrl"] != null)) {
-      ocUrl = result[key]["ocUrl"]
-    }
-    if (key === "metadata" && (result[key]["show"] != null)) {
-      showMetadata = result[key]["show"]
-    }
-    if (key === "thumbnail" && (result[key]["show"] != null)) {
-      showThumbnail = result[key]["show"]
-    }
-  }
-}
 
 /**
  * Attempts to load toml settings file
@@ -237,8 +249,10 @@ const types = {
 // above for some examples.
 const SCHEMA = {
   mediaPackageId: types.string,
-  debugging: {
-    ocUrl: types.string,
+  opencast: {
+    url: types.string,
+    name: types.string,
+    password: types.string,
   },
   metadata: {
     show : types.boolean,
@@ -247,3 +261,9 @@ const SCHEMA = {
     show : types.boolean,
   }
 }
+
+const merge = (a: iSettings, b: iSettings) => {
+  return deepmerge(a, b, { arrayMerge });
+};
+merge.all = (array: object[]) => deepmerge.all(array, { arrayMerge })
+const arrayMerge = (destinationArray: any, sourceArray: any, options: any) => sourceArray;

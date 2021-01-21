@@ -2,7 +2,6 @@ import React from "react";
 
 import { css } from '@emotion/core'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle } from '../cssStyles'
-import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -46,7 +45,7 @@ const Save : React.FC<{}> = () => {
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
         <SaveButton />
       </div>
-      <div css={errorBoxStyle(postWorkflowStatus)} title="Error Box" role="alert">
+      <div css={errorBoxStyle(postWorkflowStatus === "failed")} title="Error Box" role="alert">
         <span>An error has occured. Please wait a bit and try again.</span><br />
         {postError ? "Details: " + postError : "No error details are available."}<br />
       </div>
@@ -94,8 +93,6 @@ const SaveButton: React.FC<{}> = () => {
     dispatch(postVideoInformation({
       segments: segments,
       tracks: tracks,
-      mediaPackageId: mediaPackageId,
-      ocUrl: ocUrl,
     }))
   }
 

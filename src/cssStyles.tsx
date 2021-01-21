@@ -76,10 +76,10 @@ export const ariaLive = css({
 /**
  * CSS for displaying of errors
  */
-export const errorBoxStyle = (errorStatus: httpRequestState["status"]) => {
+export const errorBoxStyle = (errorStatus: boolean) => {
   return (
     css({
-      ...(errorStatus !== 'failed') && {display: "none"},
+      ...(!errorStatus) && {display: "none"},
       borderColor: 'red',
       borderStyle: 'dashed',
       fontWeight: 'bold',
