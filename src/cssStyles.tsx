@@ -3,7 +3,6 @@
  */
 import { css, Global } from '@emotion/core'
 import React from "react";
-import { httpRequestState }  from './types'
 
 /**
  * An emotion component that inserts styles globally
@@ -76,10 +75,10 @@ export const ariaLive = css({
 /**
  * CSS for displaying of errors
  */
-export const errorBoxStyle = (errorStatus: httpRequestState["status"]) => {
+export const errorBoxStyle = (errorStatus: boolean) => {
   return (
     css({
-      ...(errorStatus !== 'failed') && {display: "none"},
+      ...(!errorStatus) && {display: "none"},
       borderColor: 'red',
       borderStyle: 'dashed',
       fontWeight: 'bold',

@@ -1,16 +1,22 @@
 // A tiny wrapper around fetch(), borrowed from
 // https://kentcdodds.com/blog/replace-axios-with-a-simple-custom-fetch-wrapper
 
+import { settings } from '../config';
+
 /**
  * Client I stole this form a react tutorial
  */
 export async function client(endpoint, { body, ...customConfig } = {}) {
   const headers = { 'Content-Type': 'application/json' }
 
-  const encoded = btoa(unescape(encodeURIComponent(
-    "admin:opencast"
-  )));
-  const authHeaders = { 'Authorization': `Basic ${encoded}` };
+  // Attempt Http basic auth if we got credentials
+  let authHeaders = {}
+  if (settings.opencast.name && settings.opencast.password) {
+    const encoded = btoa(unescape(encodeURIComponent(
+      settings.opencast.name + ":" + settings.opencast.password
+    )));
+    authHeaders = { 'Authorization': `Basic ${encoded}` };
+  }
 
   const config = {
     method: body ? 'POST' : 'GET',
@@ -31,9 +37,13 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   try {
     const response = await window.fetch(endpoint, config)
     text = await response.text()
-    text.length ? data = JSON.parse(text) : data = ''
-    // data = await response.json()
+
+    if (response.url.includes("login.html")) {
+      throw new Error("Got redirected to login page, authentification failed.")
+    }
+
     if (response.ok) {
+      text.length ? data = JSON.parse(text) : data = ''
       return data
     }
     throw new Error(response.statusText)

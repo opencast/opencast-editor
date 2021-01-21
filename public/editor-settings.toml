@@ -3,12 +3,17 @@
 # Id of the event that the editor should open
 mediaPackageId = '27cd7156-fda6-4b31-aab5-d56833012caf'
 
-### Debugging values
-### Should be deleted in production
-[debugging]
-# Base path to the Opencast backend where the editor should get its information
-# from
-ocUrl = 'https://pyca.opencast.org'
+#### Values pertaining to accessing opencast
+[opencast]
+# URL of the opencast server on which we are editing events.
+# Should be deleted when deployed in Opencast, as the editor can then
+# figure out the correct URL by itself.
+url = 'https://pyca.opencast.org'
+# Opencast username. Used for Http basic authentication.
+name = "admin"
+# Password belonging to the above username
+# WARNING: When run in Opencast, this file is publicly accessibly
+password = "opencast"
 
 ### Settings of the metadata tab
 [metadata]

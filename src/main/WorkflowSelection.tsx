@@ -88,7 +88,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
         <SaveAndProcessButton text="Start processing with workflow"/>
       </div>
-      <div css={errorBoxStyle(postAndProcessWorkflowStatus)} title="Error Box" role="alert">
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
         <span>An error has occured. Please wait a bit and try again.</span><br />
         {postAndProcessError ? "Details: " + postAndProcessError : "No error details are available."}<br />
       </div>
