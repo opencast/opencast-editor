@@ -3,7 +3,6 @@
  */
 import { css, Global } from '@emotion/core'
 import React from "react";
-import { httpRequestState }  from './types'
 
 /**
  * An emotion component that inserts styles globally
