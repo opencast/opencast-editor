@@ -21,7 +21,6 @@ import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
 /**
  * Container for the videos and their controls
- * TODO: Complete fetching
  * TODO: Move fetching to a more central part of the app
  */
 const Video: React.FC<{}> = () => {
@@ -207,7 +206,6 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
 /**
  * Contains controls for manipulating multiple video players at once
  * Flexbox magic keeps the play button at the center
- * TODO: Add missing controls
  */
 const VideoControls: React.FC<{}> = () => {
 
@@ -323,7 +321,6 @@ const PlayButton: React.FC<{}> = () => {
 
 /**
  * Live update for the current time
- * TODO: Turn time display into a control
  */
 const TimeDisplay: React.FC<{}> = () => {
 

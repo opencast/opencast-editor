@@ -9,7 +9,7 @@ import { settings } from '../config';
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
-  previewTriggered: boolean,      // Basically acts as a callback for the video players. TODO: Figure out how to do callbacks
+  previewTriggered: boolean,      // Basically acts as a callback for the video players.
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
@@ -58,7 +58,6 @@ export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformati
 /**
  * Slice for the state of the "video"
  * Treats the multitude of videos that may exist as one video
- * TODO: Find a way to init the segments array with a starting segment
  */
 export const videoSlice = createSlice({
   name: 'videoState',
@@ -175,7 +174,7 @@ export const videoSlice = createSlice({
 const updateActiveSegment = (state: WritableDraft<video>) => {
   state.activeSegmentIndex = state.segments.findIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt)
-  // TODO: Proper error handling. Rewrite function?
+  // If there is an error, assume the first (the starting) segment
   if(state.activeSegmentIndex < 0) {
     state.activeSegmentIndex = 0
   }
