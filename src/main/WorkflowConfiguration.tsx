@@ -12,6 +12,7 @@ import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTra
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
+import { setEnd } from "../redux/endSlice";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -80,6 +81,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   } else if (workflowStatus === 'success') {
     icon = faCheck
     spin = false
+    dispatch(setEnd({hasEnded: true, value: 'success'}))
   } else if (workflowStatus === 'failed') {
     icon = faExclamationCircle
     spin = false

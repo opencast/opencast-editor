@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle, nagivationButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -96,15 +96,8 @@ const SaveButton: React.FC<{}> = () => {
     }))
   }
 
-  const saveButtonStyle = css({
-    width: '200px',
-    padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    justifyContent: 'space-around'
-  })
-
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={tooltip}
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={tooltip}
       role="button" tabIndex={0}
       onClick={ save }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

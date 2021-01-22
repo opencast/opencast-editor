@@ -5,18 +5,16 @@ import MainContent from './MainContent';
 import TheEnd from './TheEnd';
 
 import { useSelector } from 'react-redux';
-import { selectStatus as postAndProcessSelectStatus } from '../redux/workflowPostAndProcessSlice'
-import { selectAbortState } from '../redux/abortSlice'
+import { selectIsEnd } from '../redux/endSlice'
 
 const Body: React.FC<{}> = () => {
 
-  const abortState = useSelector(selectAbortState)
-  const postAndProcessState = useSelector(postAndProcessSelectStatus)
+  const isEnd = useSelector(selectIsEnd)
 
   // If we're in a special state, display a special page
   // Otherwise display the normal page
   const main = () => {
-    if(abortState || postAndProcessState === "success") {
+    if(isEnd) {
       return (
         <TheEnd />
       );
