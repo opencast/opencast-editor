@@ -24,6 +24,7 @@
     "customize-cra": "^1.0.0",
     "deepmerge": "^4.2.2",
     "emotion": "^11.0.0",
+    "lodash.clonedeep": "^4.5.0",
     "react": "^17.0.1",
     "react-app-rewired": "^2.1.8",
     "react-dom": "^17.0.1",
@@ -40,7 +41,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
   },
   "eslintConfig": {
     "extends": [
@@ -61,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.168",
     "redux-devtools": "^3.7.0",
     "use-resize-observer": "^7.0.0"
   }

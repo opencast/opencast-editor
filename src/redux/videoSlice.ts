@@ -25,7 +25,7 @@ export interface video {
   workflows: Workflow[],
 }
 
-const initialState: video & httpRequestState = {
+export const initialState: video & httpRequestState = {
   isPlaying: false,
   isPlayPreview: true,
   currentlyAt: 0,   // Position in the video in milliseconds
@@ -77,14 +77,19 @@ export const videoSlice = createSlice({
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       state.currentlyAt = roundToDecimalPlace(action.payload, 0);
 
+      if (state.currentlyAt < 0) {
+        state.currentlyAt = 0;
+      }
+
+      if (state.duration !== 0 && state.duration < state.currentlyAt) {
+        state.currentlyAt = state.duration
+      }
+
       updateActiveSegment(state);
       skipDeletedSegments(state);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 0);
-
-      updateActiveSegment(state);
-      skipDeletedSegments(state);
+      setCurrentlyAt(roundToDecimalPlace(action.payload * 1000, 0))
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
@@ -190,7 +195,7 @@ const updateActiveSegment = (state: WritableDraft<video>) => {
 /**
  * Helper Function for testing with current/old editor API
  */
-const parseSegments = (segments: Segment[], duration: number) => {
+export const parseSegments = (segments: Segment[], duration: number) => {
   let newSegments : Segment[] = []
 
   if (segments.length === 0) {
