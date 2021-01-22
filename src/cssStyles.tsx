@@ -53,6 +53,16 @@ export const basicButtonStyle = css({
 });
 
 /**
+ * CSS for nagivation styled buttons
+ */
+export const nagivationButtonStyle = css({
+  width: '200px',
+  padding: '16px',
+  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  justifyContent: 'space-around'
+ })
+
+/**
  * CSS for a container that holds back/forward buttons
  */
 export const backOrContinueStyle = css(({
