@@ -36,10 +36,10 @@ const Save : React.FC<{}> = () => {
 
   return (
     <div css={saveStyle} title="Save Area">
-      <span>
-        Here you can save the changes you made, but the video will not be cut yet. <br />
-        To make Opencast cut the video, please go back and select "Start processing". <br />
-        Do you truly wish to save?
+      <h1>Save current project</h1>
+      <span css={{maxWidth: '500px'}}>
+        The video will not be processed but all cutting information are stored
+        in Opencast. You can continue your eddi later.
       </span>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
