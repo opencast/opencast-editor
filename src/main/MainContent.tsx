@@ -52,12 +52,12 @@ const MainContent: React.FC<{}> = () => {
 
   return (
      <main title="MainMenuContext" css={{width: '100%'}} role="main">
-      <div css={cuttingStyle} title="Cutting Container">
+      <div css={cuttingStyle}>
           <Video />
           <CuttingActions />
           <Timeline />
       </div>
-      <div css={finishStyle} title="Finish Container">
+      <div css={finishStyle}>
         <Finish />
       </div>
       <div css={defaultStyle}>
