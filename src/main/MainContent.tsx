@@ -8,7 +8,7 @@ import Finish from "./Finish"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { useSelector } from 'react-redux'
 import { selectMainMenuState } from '../redux/mainMenuSlice'
