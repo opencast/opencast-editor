@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   IconDefinition,
   faCut,
-  faQuestion,
   faStepBackward,
   faStepForward,
   faTrash,
@@ -19,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
 } from '../redux/videoSlice'
+import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 /**
  * Defines the different actions a user can perform while in cutting mode
@@ -41,14 +41,29 @@ const CuttingActions: React.FC<{}> = () => {
   return (
     <div css={cuttingStyle}>
         <div css={blockStyle}>
-          <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}/>
+          <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}
+            tooltip="Splits the segment at the current scrubber position"
+            ariaLabelText="Cut. Splits the segment at the current scrubber position"
+          />
           <MarkAsDeletedButton />
-          <CuttingActionsButton iconName={faStepBackward} actionName="Merge Left" action={mergeLeft}/>
-          <CuttingActionsButton iconName={faStepForward} actionName="Merge Right" action={mergeRight}/>
+          <CuttingActionsButton iconName={faStepBackward} actionName="Merge Left" action={mergeLeft}
+            tooltip="Combines the currently active segment with the segment to its left"
+            ariaLabelText="Merge Left. Combines the currently active segment with the segment to its left"
+          />
+          <CuttingActionsButton iconName={faStepForward} actionName="Merge Right" action={mergeRight}
+            tooltip="Combines the currently active segment with the segment to its right"
+            ariaLabelText="Merge Right. Combines the currently active segment with the segment to its right"
+          />
         </div>
         <div css={blockStyle}>
-          <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}/>
-          <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={null}/>
+          {/* <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}
+            tooltip="Not implemented"
+            ariaLabelText="Reset changes. Not implemented"
+          />
+          <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={null}
+            tooltip="Not implemented"
+            ariaLabelText="Undo. Not implemented"
+          /> */}
         </div>
     </div>
   );
@@ -62,19 +77,37 @@ const cuttingActionButtonStyle = {
   boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
 };
 
+interface cuttingActionsButtonInterface {
+  iconName: IconDefinition,
+  actionName: string,
+  action: ActionCreatorWithoutPayload<string>,  // Redux reducer action
+  tooltip: string,
+  ariaLabelText: string,
+}
+
 /**
  * A button representing a single action a user can take while cutting
- * TODO: Add functionality
- * TODO: Complete styling
  * @param param0
  */
-const CuttingActionsButton: React.FC<{iconName: IconDefinition, actionName: string, action: any}> = ({iconName, actionName, action}) => {
+const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName, actionName, action, tooltip, ariaLabelText}) => {
 
   const dispatch = useDispatch();
 
+  const dispatchAction = () => {
+    if (action) {
+      dispatch(action())
+    }
+  }
+
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle]} title={actionName}
-      onClick={() => action ? dispatch(action()) : ""}>
+    <div css={[basicButtonStyle, cuttingActionButtonStyle]}
+      title={tooltip}
+      role="button" tabIndex={0} aria-label={ariaLabelText}
+      onClick={ dispatchAction }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        dispatchAction()
+      }}}
+      >
       <FontAwesomeIcon icon={iconName} size="1x" />
       <span>{actionName}</span>
     </div>
@@ -90,7 +123,10 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
 
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle]} title={isCurrentSegmentAlive ? "Delete" : "Restore"}
+    <div css={[basicButtonStyle, cuttingActionButtonStyle]}
+      title="Marks the segment at the current scrubber position as deleted or alive"
+      role="button" tabIndex={0}
+      aria-label={"Delete and Restore. Marks the segment at the current scrubber position as deleted or alive"}
       onClick={() => dispatch(markAsDeletedOrAlive())}>
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
       <div>{isCurrentSegmentAlive ? "Delete" : "Restore"}</div>

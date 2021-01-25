@@ -38,6 +38,9 @@ export const basicButtonStyle = css({
   "&:hover": {
     transform: 'scale(1.1)',
   },
+  "&:focus": {
+    transform: 'scale(1.1)',
+  },
   "&:active": {
     transform: 'scale(0.9)',
   },
@@ -50,6 +53,16 @@ export const basicButtonStyle = css({
 });
 
 /**
+ * CSS for nagivation styled buttons
+ */
+export const nagivationButtonStyle = css({
+  width: '200px',
+  padding: '16px',
+  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  justifyContent: 'space-around'
+ })
+
+/**
  * CSS for a container that holds back/forward buttons
  */
 export const backOrContinueStyle = css(({
@@ -57,3 +70,29 @@ export const backOrContinueStyle = css(({
   flexDirection: 'row' as const,
   gap: '20px',
 }))
+
+/**
+ * CSS for ariaLive regions that should not be visible
+ */
+export const ariaLive = css({
+  position: 'absolute',
+  left: '-99999px',
+  height: '1px',
+  width: '1px',
+  overflow: 'hidden',
+})
+
+/**
+ * CSS for displaying of errors
+ */
+export const errorBoxStyle = (errorStatus: boolean) => {
+  return (
+    css({
+      ...(!errorStatus) && {display: "none"},
+      borderColor: 'red',
+      borderStyle: 'dashed',
+      fontWeight: 'bold',
+      padding: '10px',
+    })
+  );
+}

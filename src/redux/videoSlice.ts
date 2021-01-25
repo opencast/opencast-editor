@@ -1,14 +1,15 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, RequestArgument }  from '../types'
+import { Segment, httpRequestState, Track, Workflow }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
+import { settings } from '../config';
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
-  previewTriggered: boolean,      // Basically acts as a callback for the video players. TODO: Figure out how to do callbacks
+  previewTriggered: boolean,      // Basically acts as a callback for the video players.
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
@@ -20,7 +21,7 @@ export interface video {
   duration: number,     // Video duration in milliseconds
   title: string,
   presenters: string[],
-  workflows: string[],
+  workflows: Workflow[],
 }
 
 const initialState: video & httpRequestState = {
@@ -44,16 +45,19 @@ const initialState: video & httpRequestState = {
   error: undefined,
 }
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async (argument: RequestArgument) => {
+export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
+  if (!settings.mediaPackageId) {
+    throw new Error("Missing mediaPackageId")
+  }
+
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  const response = await client.get(`https://pyca.opencast.org/editor/${argument.mediaPackageId}/edit.json`)
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`)
   return response
 })
 
 /**
  * Slice for the state of the "video"
  * Treats the multitude of videos that may exist as one video
- * TODO: Find a way to init the segments array with a starting segment
  */
 export const videoSlice = createSlice({
   name: 'videoState',
@@ -69,13 +73,13 @@ export const videoSlice = createSlice({
       state.previewTriggered = action.payload
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload, 3);
+      state.currentlyAt = roundToDecimalPlace(action.payload, 0);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 3);
+      state.currentlyAt = roundToDecimalPlace(action.payload * 1000, 0);
 
       updateActiveSegment(state);
       skipDeletedSegments(state);
@@ -170,7 +174,7 @@ export const videoSlice = createSlice({
 const updateActiveSegment = (state: WritableDraft<video>) => {
   state.activeSegmentIndex = state.segments.findIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt)
-  // TODO: Proper error handling. Rewrite function?
+  // If there is an error, assume the first (the starting) segment
   if(state.activeSegmentIndex < 0) {
     state.activeSegmentIndex = 0
   }
@@ -179,15 +183,15 @@ const updateActiveSegment = (state: WritableDraft<video>) => {
 /**
  * Helper Function for testing with current/old editor API
  */
-const parseSegments = (segments: any, duration: number) => {
+const parseSegments = (segments: Segment[], duration: number) => {
   let newSegments : Segment[] = []
 
   if (segments.length === 0) {
     newSegments.push({id: nanoid(), start: 0, end: duration, deleted: false})
   }
 
-  segments.forEach((element: { start: any; end: any; deleted: any; }) => {
-    newSegments.push({id: nanoid(), start: element.start, end: element.end, deleted: element.deleted})
+  segments.forEach((segment: Segment) => {
+    newSegments.push({id: nanoid(), start: segment.start, end: segment.end, deleted: segment.deleted})
   });
   return newSegments
 }

@@ -1,8 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle } from '../cssStyles'
-import { mediaPackageId } from '../config'
+import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +12,7 @@ import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTra
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
+import { setEnd } from "../redux/endSlice";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -30,14 +30,6 @@ const WorkflowConfiguration : React.FC<{}> = () => {
     gap: '30px',
   })
 
-  const errorBoxStyle = css({
-    ...(postAndProcessWorkflowStatus !== 'failed') && {display: "none"},
-    borderColor: 'red',
-    borderStyle: 'dashed',
-    fontWeight: 'bold',
-    padding: '10px',
-  })
-
   return (
     <div css={workflowConfigurationStyle} title="Workflow Configuration Area">
       <h2>Workflow Configuration</h2>
@@ -46,11 +38,11 @@ const WorkflowConfiguration : React.FC<{}> = () => {
       <div>Satisfied with your configuration?</div>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={1} label="No, take me back" iconName={faChevronLeft}/>
-        <SaveAndProcessButton />
+        <SaveAndProcessButton text="Yes, start processing"/>
       </div>
-      <div css={errorBoxStyle} title="Error Box">
-        <span>An error has occured. Please wait a bit and try again. Details: </span><br />
-        {postAndProcessError}
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
+        <span>An error has occured. Please wait a bit and try again.</span><br />
+        {postAndProcessError ? "Details: " + postAndProcessError : "No error details are available."}<br />
       </div>
     </div>
   );
@@ -61,7 +53,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
  * Button that sends a post request to save current changes
  * and starts the selected workflow
  */
-const SaveAndProcessButton: React.FC<{}> = () => {
+export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   // Initialize redux variables
   const dispatch = useDispatch()
@@ -72,6 +64,14 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
 
+  const saveAndProcess = () => {
+    dispatch(postVideoInformationWithWorkflow({
+      segments: segments,
+      tracks: tracks,
+      workflow: [{id: workflows[selectedWorkflowIndex].id}],
+    }))
+  }
+
   // Update based on current fetching status
   let icon = faFileExport
   let spin = false
@@ -81,6 +81,7 @@ const SaveAndProcessButton: React.FC<{}> = () => {
   } else if (workflowStatus === 'success') {
     icon = faCheck
     spin = false
+    dispatch(setEnd({hasEnded: true, value: 'success'}))
   } else if (workflowStatus === 'failed') {
     icon = faExclamationCircle
     spin = false
@@ -93,16 +94,13 @@ const SaveAndProcessButton: React.FC<{}> = () => {
 
   return (
     <div css={[basicButtonStyle, saveButtonStyle]} title={"Start processing button"}
-      onClick={() =>
-        dispatch(postVideoInformationWithWorkflow({
-          segments: segments,
-          tracks: tracks,
-          mediaPackageId: mediaPackageId,
-          workflowID: [workflows[selectedWorkflowIndex]],
-        }))
-      }>
+      role="button" tabIndex={0}
+      onClick={ saveAndProcess }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        saveAndProcess()
+      }}}>
       <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
-      <span>{"Yes, start processing"}</span>
+      <span>{text}</span>
     </div>
   );
 }

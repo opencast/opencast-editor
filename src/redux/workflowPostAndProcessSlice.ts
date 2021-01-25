@@ -3,6 +3,7 @@ import { client } from '../util/client'
 import { PostAndProcessEditArgument, httpRequestState } from '../types'
 
 import { convertSegments } from './workflowPostSlice'
+import { settings } from '../config'
 
 const initialState: httpRequestState = {
   status: 'idle',
@@ -10,8 +11,12 @@ const initialState: httpRequestState = {
 }
 
 export const postVideoInformationWithWorkflow = createAsyncThunk('video/postVideoInformationWithWorkflow', async (argument: PostAndProcessEditArgument) => {
-  const response = await client.post(`https://pyca.opencast.org/editor/${argument.mediaPackageId}/edit.json`,
-    { segments: convertSegments(argument.segments), tracks: argument.tracks, workflows: argument.workflowID }
+  if (!settings.mediaPackageId) {
+    throw new Error("Missing mediaPackageId")
+  }
+
+  const response = await client.post(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`,
+    { segments: convertSegments(argument.segments), tracks: argument.tracks, workflows: argument.workflow }
   )
   return response
 })

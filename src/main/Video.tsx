@@ -3,25 +3,24 @@ import React, { useState, useRef, useEffect } from "react";
 import { css } from '@emotion/core'
 
 import { httpRequestState } from '../types'
-import { mediaPackageId } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faToggleOn, faToggleOff, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, selectDuration
 } from '../redux/videoSlice'
 
-import ReactPlayer from 'react-player'
+import ReactPlayer, { Config } from 'react-player'
 
-import { roundToDecimalPlace } from '../util/utilityFunctions'
+import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
+import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
 /**
  * Container for the videos and their controls
- * TODO: Complete fetching
  * TODO: Move fetching to a more central part of the app
  */
 const Video: React.FC<{}> = () => {
@@ -36,25 +35,34 @@ const Video: React.FC<{}> = () => {
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
-      dispatch(fetchVideoInformation({mediaPackageId: mediaPackageId}))
+        dispatch(fetchVideoInformation())
     }
   }, [videoURLStatus, dispatch])
 
   // Update based on current fetching status
-  let content
-  if (videoURLStatus === 'loading') {
-    content = <div className="loader">Loading...</div>
-  } else if (videoURLStatus === 'success') {
-    content = ""//<div className="loader">Success...</div>
-  } else if (videoURLStatus === 'failed') {
-    content = <div>{error}</div>
-  }
+  // let content
+  // if (videoURLStatus === 'loading') {
+  //   content = <div className="loader">Loading...</div>
+  // } else if (videoURLStatus === 'success') {
+  //   content = ""//<div className="loader">Success...</div>
+  // } else if (videoURLStatus === 'failed') {
+  //   content = <div>{error}</div>
+  // }
 
   // Initialize video players
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
     videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isPrimary={i === 0}/>);
+  }
+
+  const errorBox = () => {
+    return (
+      <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
+        <span>A problem occured during communication with Opencast.</span><br />
+        {error ? "Details: " + error : "No error details are available."}<br />
+      </div>
+    );
   }
 
   // Style
@@ -69,7 +77,6 @@ const Video: React.FC<{}> = () => {
   });
 
   const videoPlayerAreaStyle = css({
-    backgroundColor: 'black',
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'center',
@@ -79,7 +86,7 @@ const Video: React.FC<{}> = () => {
 
   return (
     <div css={videoAreaStyle} title="Video Area">
-      {content}
+      {errorBox()}
       <VideoHeader />
       <div css={videoPlayerAreaStyle} title="Video Player Area">
         {videoPlayers}
@@ -106,6 +113,7 @@ const VideoPlayer: React.FC<{url: string, isPrimary: boolean}> = ({url, isPrimar
   // Init state variables
   const ref = useRef<ReactPlayer>(null);
   const [ready, setReady] = useState(false);
+  const [errorState, setError] = useState(false);
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
@@ -140,18 +148,54 @@ const VideoPlayer: React.FC<{url: string, isPrimary: boolean}> = ({url, isPrimar
     }
   })
 
+  const onErrorCallback = (e: any) => {
+    setError(true)
+  }
+
+  // Skip player when navigating page with keyboard
+  const playerConfig: Config = {
+    file: { attributes: { tabIndex: '-1' }}
+  }
+
+  const errorBoxStyle = css({
+    ...(!errorState) && {display: "none"},
+    borderColor: 'red',
+    borderStyle: 'dashed',
+    fontWeight: 'bold',
+    padding: '10px',
+  })
+
+  const render = () => {
+    if (!errorState) {
+      return(
+        <ReactPlayer url={url}
+          ref={ref}
+          width='100%'
+          height='auto'
+          playing={isPlaying}
+          muted={!isPrimary}
+          onProgress={onProgressCallback}
+          progressInterval={100}
+          onReady={onReadyCallback}
+          onEnded={onEndedCallback}
+          onError={onErrorCallback}
+          config={playerConfig}
+          disablePictureInPicture
+        />
+      );
+    } else {
+      return (
+        <div css={errorBoxStyle} title="Error Box" role="alert">
+          <span>An error has occured loading this video. </span>
+        </div>
+      );
+    }
+  }
+
   return (
-    <ReactPlayer url={url}
-      ref={ref}
-      width='100%'
-      height='auto'
-      playing={isPlaying}
-      muted={!isPrimary}
-      onProgress={onProgressCallback}
-      progressInterval={100}
-      onReady={onReadyCallback}
-      onEnded={onEndedCallback}
-    />
+    <>
+      {render()}
+    </>
   );
 
   // return (
@@ -166,50 +210,67 @@ const VideoPlayer: React.FC<{url: string, isPrimary: boolean}> = ({url, isPrimar
 
 /**
  * Contains controls for manipulating multiple video players at once
- * TODO: Add missing controls
- * TODO: Turn time display into a control
+ * Flexbox magic keeps the play button at the center
  */
 const VideoControls: React.FC<{}> = () => {
 
-  // Init redux variables
-  const dispatch = useDispatch();
-  const isPlaying = useSelector(selectIsPlaying)
-  const isPlayPreview = useSelector(selectIsPlayPreview)
-  const currentlyAt = useSelector(selectCurrentlyAt)
-
-  // Style
-  const videoControlStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    padding: '10px',
-  })
-
   const videoControlsRowStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    padding: '10px',
+    padding: '20px',
     gap: '50px',
   })
 
-  const playButtonStyle = css({
-    cursor: "pointer",
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
+  const leftSideBoxStyle = css({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'right'
   })
 
-  const playPreviewStyle = css({
+  const rightSideBoxStyle = css({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'left'
+  })
+
+  return (
+    <div css={videoControlsRowStyle} title="Video Controls">
+      <div css={leftSideBoxStyle}>
+        <PreviewMode />
+      </div>
+      <PlayButton />
+      <div css={rightSideBoxStyle}>
+        <TimeDisplay />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Enable/Disable Preview Mode
+ */
+const PreviewMode: React.FC<{}> = () => {
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const isPlayPreview = useSelector(selectIsPlayPreview)
+
+  // Change preview mode from "on" to "off" and vice versa
+  const switchPlayPreview = () => {
+    dispatch(setIsPlayPreview(!isPlayPreview))
+  }
+
+  const previewModeStyle = css({
+    display: 'flex',
+    gap: '10px',
+    justifyContent: 'center',
+    alignItems: 'center'}
+  )
+
+  const switchIconStyle = css({
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
@@ -219,22 +280,69 @@ const VideoControls: React.FC<{}> = () => {
   })
 
   return (
-    <div css={videoControlStyle} title="Video Controls">
-      <div css={videoControlsRowStyle} title="Video Controls Top Row">
-        <div style={{display: 'flex', gap: '10px', width: '50px', justifyContent: 'center'}}>
-          <FontAwesomeIcon icon={isPlayPreview ? faEyeSlash : faEye} size="1x" title="Play Preview Icon"/>
-          <FontAwesomeIcon css={playPreviewStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
-            title={"Play Preview Switch: " + isPlayPreview}
-            onClick={() => dispatch(setIsPlayPreview(!isPlayPreview))}
-          />
-        </div>
-        <FontAwesomeIcon css={playButtonStyle} icon={isPlaying ? faPause : faPlay} size="2x"
-          title="Play Button"
-          onClick={() => dispatch(setIsPlaying(!isPlaying))}
-        />
-        <div css={{display: 'inline-block', width: '110px'}}>
-          {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
-        </div>
+    <div css={previewModeStyle}
+      title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}>
+      <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
+        Preview Mode
+      </div>
+      <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
+        role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
+        aria-label="Enable or disable preview mode."
+        onClick={ switchPlayPreview }
+        onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " ") {
+          switchPlayPreview()
+        }}}
+      />
+    </div>
+  );
+}
+
+/**
+ * Start/Pause playing the videos
+ */
+const PlayButton: React.FC<{}> = () => {
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const isPlaying = useSelector(selectIsPlaying)
+
+  // Change play mode from "on" to "off" and vice versa
+  const switchIsPlaying = () => {
+    dispatch(setIsPlaying(!isPlaying))
+  }
+
+  return (
+    <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
+      title="Play Button"
+      role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
+      aria-label="Play Button"
+      onClick={ switchIsPlaying }
+      onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
+        switchIsPlaying()
+      }}}
+    />
+  );
+}
+
+/**
+ * Live update for the current time
+ */
+const TimeDisplay: React.FC<{}> = () => {
+
+  // Init redux variables
+  const currentlyAt = useSelector(selectCurrentlyAt)
+  const duration = useSelector(selectDuration)
+
+  return (
+    <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
+      <time css={{display: 'inline-block', width: '100px'}}
+        title={"Playback time and duration"}
+        tabIndex={0} role="timer" aria-label={"Current time: " + convertMsToReadableString(currentlyAt)}>
+        {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
+      </time>
+      {" / "}
+      <div tabIndex={0} aria-label={"Duration: " + convertMsToReadableString(duration)}>
+        {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
       </div>
     </div>
   );

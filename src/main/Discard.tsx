@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle} from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, nagivationButtonStyle} from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +10,7 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
-import { setState as setAbortState } from '../redux/abortSlice'
+import { setEnd } from '../redux/endSlice'
 
 import { PageButton } from './Finish'
 
@@ -32,8 +32,8 @@ const Discard : React.FC<{}> = () => {
   return (
     <div css={cancelStyle} title="Abort Area">
       <span>
-        Discard all the changes you made? They will be lost forever! <br />
-        Doth thou truly wish tah abort?
+        Discard all the changes you made? This cannot be undone! <br />
+        Do you truly want all your changes to be lost forever?
       </span>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft} />
@@ -51,18 +51,17 @@ const DiscardButton : React.FC<{}> = () => {
   // Initialize redux variables
   const dispatch = useDispatch()
 
-  const saveButtonStyle = css({
-    width: '200px',
-    padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    justifyContent: 'space-around'
-  })
+  const discard = () => {
+    dispatch(setEnd({hasEnded: true, value: 'discarded'}))
+  }
 
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Discard changes button"}
-      onClick={() =>
-        dispatch(setAbortState(true))
-      }>
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={"Discard changes button"}
+      role="button" tabIndex={0}
+      onClick={ discard }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        discard()
+      }}}>
       <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
       <span>{"Yes, discard changes"}</span>
     </div>

@@ -13,22 +13,25 @@ export interface Track {
   videoStream: any,
 }
 
+export interface Workflow {
+  id: string,
+  name: string,
+  description: string,
+  displayOrder: number,
+}
+
 export interface TimelineState {
   segments: Segment[]
   scrubberPos: number
 }
 
-export interface RequestArgument {
-  mediaPackageId: string
-}
-
-export interface PostEditArgument extends RequestArgument {
+export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
 }
 
 export interface PostAndProcessEditArgument extends PostEditArgument{
-  workflowID: string[]
+  workflow: [{id: string}]
 }
 
 export enum MainMenuStateNames {
