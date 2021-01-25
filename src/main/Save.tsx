@@ -38,8 +38,8 @@ const Save : React.FC<{}> = () => {
     <div css={saveStyle} title="Save Area">
       <h1>Save current project</h1>
       <span css={{maxWidth: '500px'}}>
-        The video will not be processed but all cutting information are stored
-        in Opencast. You can continue your eddi later.
+        The video will not be processed but all cutting information will be stored
+        in Opencast. You can continue your edit later.
       </span>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
