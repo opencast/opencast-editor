@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { httpRequestState } from '../types'
 
