@@ -12,7 +12,7 @@ import {
   faTrashRestore,
   } from "@fortawesome/free-solid-svg-icons";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
