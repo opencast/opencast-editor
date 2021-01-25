@@ -331,6 +331,7 @@ const TimeDisplay: React.FC<{}> = () => {
   return (
     <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
       <time css={{display: 'inline-block', width: '100px'}}
+        title={"Playback time and duration"}
         tabIndex={0} role="timer" aria-label={"Current time: " + convertMsToReadableString(currentlyAt)}>
         {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
       </time>
