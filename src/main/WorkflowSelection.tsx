@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/react'
+import { css } from '@emotion/core'
 import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';

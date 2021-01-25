@@ -6,7 +6,7 @@ import Discard from "./Discard"
 import WorkflowSelection from "./WorkflowSelection";
 import WorkflowConfiguration from "./WorkflowConfiguration";
 
-import { css } from '@emotion/react'
+import { css } from '@emotion/core'
 import { basicButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
