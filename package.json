@@ -30,7 +30,7 @@
     "react-draggable": "^4.4.3",
     "react-player": "^2.8.1",
     "react-redux": "^7.2.2",
-    "react-scripts": "4.0.0",
+    "react-scripts": "4.0.1",
     "react-use": "^15.3.8",
     "redux": "^4.0.5",
     "typescript": "^4.1.3",
