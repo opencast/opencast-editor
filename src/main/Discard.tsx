@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle} from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, nagivationButtonStyle} from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +10,7 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
-import { setState as setAbortState } from '../redux/abortSlice'
+import { setEnd } from '../redux/endSlice'
 
 import { PageButton } from './Finish'
 
@@ -51,23 +51,16 @@ const DiscardButton : React.FC<{}> = () => {
   // Initialize redux variables
   const dispatch = useDispatch()
 
-  const abort = () => {
-    dispatch(setAbortState(true))
+  const discard = () => {
+    dispatch(setEnd({hasEnded: true, value: 'discarded'}))
   }
 
-  const saveButtonStyle = css({
-    width: '200px',
-    padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    justifyContent: 'space-around'
-  })
-
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Discard changes button"}
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={"Discard changes button"}
       role="button" tabIndex={0}
-      onClick={ abort }
+      onClick={ discard }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        abort()
+        discard()
       }}}>
       <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
       <span>{"Yes, discard changes"}</span>

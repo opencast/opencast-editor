@@ -25,12 +25,7 @@ export interface TimelineState {
   scrubberPos: number
 }
 
-export interface RequestArgument {
-  mediaPackageId: string
-  ocUrl: string
-}
-
-export interface PostEditArgument extends RequestArgument {
+export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
 }

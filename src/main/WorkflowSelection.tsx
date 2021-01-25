@@ -75,10 +75,10 @@ const WorkflowSelection : React.FC<{}> = () => {
   return (
     <div css={workflowSelectionStyle}>
       <h2>Select a workflow</h2>
-      <text>
+      <div>
         Please select which workflow Opencast should use to cut and process the video. <br />
         If you are unsure on which workflow to choose, the already selected workflow or the "Publish" workflow are usually good choices.
-      </text>
+      </div>
       <div css={workflowSelectionSelectionStyle} title="Workflow Selection Area">
         {workflowButtons()}
       </div>
@@ -88,7 +88,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
         <SaveAndProcessButton text="Start processing with workflow"/>
       </div>
-      <div css={errorBoxStyle(postAndProcessWorkflowStatus)} title="Error Box" role="alert">
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
         <span>An error has occured. Please wait a bit and try again.</span><br />
         {postAndProcessError ? "Details: " + postAndProcessError : "No error details are available."}<br />
       </div>

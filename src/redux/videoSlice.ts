@@ -1,14 +1,15 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, RequestArgument, Workflow }  from '../types'
+import { Segment, httpRequestState, Track, Workflow }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
+import { settings } from '../config';
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
-  previewTriggered: boolean,      // Basically acts as a callback for the video players. TODO: Figure out how to do callbacks
+  previewTriggered: boolean,      // Basically acts as a callback for the video players.
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
@@ -46,9 +47,13 @@ const initialState: video & httpRequestState = {
   error: undefined,
 }
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async (argument: RequestArgument) => {
+export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
+  if (!settings.mediaPackageId) {
+    throw new Error("Missing mediaPackageId")
+  }
+
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  const response = await client.get(`${argument.ocUrl}/editor/${argument.mediaPackageId}/edit.json`)
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`)
   return response
 })
 
@@ -176,7 +181,7 @@ export const videoSlice = createSlice({
 const updateActiveSegment = (state: WritableDraft<video>) => {
   state.activeSegmentIndex = state.segments.findIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt)
-  // TODO: Proper error handling. Rewrite function?
+  // If there is an error, assume the first (the starting) segment
   if(state.activeSegmentIndex < 0) {
     state.activeSegmentIndex = 0
   }

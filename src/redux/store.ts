@@ -4,7 +4,7 @@ import finishStateReducer from './finishSlice'
 import videoReducer from './videoSlice'
 import workflowPostReducer from './workflowPostSlice'
 import workflowPostAndProcessReducer from './workflowPostAndProcessSlice'
-import abortReducer from './abortSlice'
+import endReducer from './endSlice'
 
 export default configureStore({
   reducer: {
@@ -13,6 +13,6 @@ export default configureStore({
     videoState: videoReducer,
     workflowPostState: workflowPostReducer,
     workflowPostAndProcessState: workflowPostAndProcessReducer,
-    abortState: abortReducer,
+    endState: endReducer,
   }
 })
