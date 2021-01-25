@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faListUl, faPhotoVideo, faSignOutAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";

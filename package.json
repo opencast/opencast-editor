@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/babel-preset-css-prop": "^10.2.1",
-    "@emotion/core": "^10.1.1",
+    "@emotion/babel-preset-css-prop": "^11.0.0",
+    "@emotion/react": "^11.1.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",

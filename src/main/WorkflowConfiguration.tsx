@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
