@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, selectDuration
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
@@ -53,7 +53,7 @@ const Video: React.FC<{}> = () => {
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} url={videoURLs[i]} isMuted={i !== 0}/>);
+    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isMuted={i !== 0}/>);
   }
 
   const errorBox = () => {
@@ -100,7 +100,7 @@ const Video: React.FC<{}> = () => {
  * A single video player
  * @param param0
  */
-const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) => {
+const VideoPlayer: React.FC<{dataKey: number, url: string, isMuted: boolean}> = ({dataKey, url, isMuted}) => {
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -108,6 +108,7 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
   const duration  = useSelector(selectDurationInSeconds)
   const testTmp = useSelector(selectPreviewTriggered)
+  const aspectRatio = useSelector(selectAspectRatio)
 
   // Init state variables
   const ref = useRef<ReactPlayer>(null);
@@ -125,6 +126,12 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
   // Callback for checking whether the video element is ready
   const onReadyCallback = () => {
     setReady(true);
+
+    if (ref.current && ref.current.getInternalPlayer()) {
+      let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
+      let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+      dispatch(setAspectRatio({dataKey, width: w, height: h}))
+    }
   }
 
   const onEndedCallback = () => {
@@ -160,23 +167,39 @@ const VideoPlayer: React.FC<{url: string, isMuted: boolean}> = ({url, isMuted}) 
     padding: '10px',
   })
 
+  const playerWrapper = css({
+    position: 'relative',
+    width: '100%',
+    paddingTop: aspectRatio + '%',
+  });
+
+  const reactPlayerStyle = css({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  })
+
   const render = () => {
     if (!errorState) {
       return(
-        <ReactPlayer url={url}
-          ref={ref}
-          width='100%'
-          height='auto'
-          playing={isPlaying}
-          muted={isMuted}
-          onProgress={onProgressCallback}
-          progressInterval={100}
-          onReady={onReadyCallback}
-          onEnded={onEndedCallback}
-          onError={onErrorCallback}
-          config={playerConfig}
-          disablePictureInPicture
-        />
+        <div css={playerWrapper} title="playerWrapper">
+          <ReactPlayer url={url}
+            css={reactPlayerStyle}
+            ref={ref}
+            width='100%'
+            height='100%'
+            playing={isPlaying}
+            muted={isMuted}
+            onProgress={onProgressCallback}
+            progressInterval={100}
+            onReady={onReadyCallback}
+            onEnded={onEndedCallback}
+            onError={onErrorCallback}
+            tabIndex={-1}
+            config={playerConfig}
+            disablePictureInPicture
+          />
+        </div>
       );
     } else {
       return (
