@@ -259,11 +259,12 @@ const PreviewMode: React.FC<{}> = () => {
   }
 
   const previewModeStyle = css({
+    cursor: "pointer",
     display: 'flex',
     gap: '10px',
     justifyContent: 'center',
-    alignItems: 'center'}
-  )
+    alignItems: 'center'
+  })
 
   const switchIconStyle = css({
     cursor: "pointer",
@@ -276,18 +277,17 @@ const PreviewMode: React.FC<{}> = () => {
 
   return (
     <div css={previewModeStyle}
-      title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}>
+      title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}
+      role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
+      aria-label="Enable or disable preview mode."
+      onClick={ switchPlayPreview }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
+        switchPlayPreview()
+      }}}>
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
         Preview Mode
       </div>
-      <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"
-        role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-        aria-label="Enable or disable preview mode."
-        onClick={ switchPlayPreview }
-        onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " ") {
-          switchPlayPreview()
-        }}}
-      />
+      <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
     </div>
   );
 }
