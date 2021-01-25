@@ -1,7 +1,7 @@
 /**
  * This file contains general css stylings
  */
-import { css, Global } from '@emotion/react'
+import { css, Global } from '@emotion/core'
 import React from "react";
 
 /**
