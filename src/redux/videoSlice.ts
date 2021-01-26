@@ -15,6 +15,7 @@ export interface video {
   tracks: Track[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowIndex: number,  // Index of the currently selected workflow
+  aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
@@ -33,6 +34,7 @@ const initialState: video & httpRequestState = {
   activeSegmentIndex: 0,
   selectedWorkflowIndex: 0,
   previewTriggered: false,
+  aspectRatios: [],
 
   videoURLs: [],
   videoCount: 0,
@@ -86,6 +88,9 @@ export const videoSlice = createSlice({
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
+    },
+    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
+      state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
@@ -147,7 +152,7 @@ export const videoSlice = createSlice({
         // New API
         // eslint-disable-next-line no-sequences
         state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        state.videoCount = action.payload.tracks.length
+        state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.presenters = []
@@ -158,6 +163,8 @@ export const videoSlice = createSlice({
           if (n1.displayOrder < n2.displayOrder) { return -1; }
           return 0;
         });
+
+        state.aspectRatios = new Array(state.videoCount)
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -231,8 +238,23 @@ const skipDeletedSegments = (state: WritableDraft<video>) => {
     }
 }
 
-export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, cut, markAsDeletedOrAlive,
-  setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered } = videoSlice.actions
+/**
+ * Calculates a total aspect ratio for the video player wrappers,
+ * based on the aspect ratio of all videos.
+ * Returns the total aspect ratio in percent,
+ * or returns a default aspect ratio to limit the height of the video player area
+ * TODO: Error checking
+ * TODO: Improve calculation to handle multiple rows of videos
+ */
+const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
+  let minHeight = Math.min.apply(Math, aspectRatios.map(function(o) { return o.height; }))
+  let minWidth = Math.min.apply(Math, aspectRatios.map(function(o) { return o.width; }))
+  minWidth *= aspectRatios.length
+  return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
+}
+
+export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio, cut,
+  markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -267,5 +289,7 @@ export const selectPresenters = (state: { videoState: { presenters: video["prese
 export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) =>
   state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
+export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
+  calculateTotalAspectRatio(state.videoState.aspectRatios)
 
 export default videoSlice.reducer

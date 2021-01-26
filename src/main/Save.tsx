@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle, nagivationButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,10 +36,10 @@ const Save : React.FC<{}> = () => {
 
   return (
     <div css={saveStyle} title="Save Area">
-      <span>
-        Here you can save the changes you made, but the video will not be cut yet. <br />
-        To make Opencast cut the video, please go back and select "Start processing". <br />
-        Do you truly wish to save?
+      <h1>Save current project</h1>
+      <span css={{maxWidth: '500px'}}>
+        The video will not be processed but all cutting information will be stored
+        in Opencast. You can continue your edit later.
       </span>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>

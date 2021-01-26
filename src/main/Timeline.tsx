@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import Draggable from 'react-draggable';
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
