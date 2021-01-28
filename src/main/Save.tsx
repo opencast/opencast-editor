@@ -56,7 +56,7 @@ const Save : React.FC<{}> = () => {
 /**
  * Button that sends a post request to save current changes
  */
-const SaveButton: React.FC<{}> = () => {
+export const SaveButton: React.FC<{}> = () => {
 
   // Initialize redux variables
   const dispatch = useDispatch()
