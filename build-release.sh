@@ -2,7 +2,7 @@
 
 # Build integrated version
 rm -rf build/
-export PUBLIC_URL=/editor
+export PUBLIC_URL=/editor-ui
 export REACT_APP_SETTINGS_PATH="/ui/config/editor/editor-settings.toml"
 npm run build
 
