@@ -49,13 +49,12 @@ const WorkflowSelection : React.FC<{}> = () => {
         workflows[selectedWorkflowIndex].description
       );
     } else {
-      return (
-        "And this is where I would put a workflow description.... if I had one!"
-      );
+      return (' ');
     }
   }
 
   const workflowSelectionStyle = css({
+    padding: '20px',
     display: (finishState === "Start processing" && pageNumber === 1) ? 'flex' : 'none',
     flexDirection: 'column' as const,
     justifyContent: 'center',
@@ -76,8 +75,7 @@ const WorkflowSelection : React.FC<{}> = () => {
     <div css={workflowSelectionStyle}>
       <h2>Select a workflow</h2>
       <div>
-        Please select which workflow Opencast should use to cut and process the video. <br />
-        If you are unsure on which workflow to choose, the already selected workflow or the "Publish" workflow are usually good choices.
+        Select which workflow Opencast should use for processing.
       </div>
       <div css={workflowSelectionSelectionStyle} title="Workflow Selection Area">
         {workflowButtons()}
