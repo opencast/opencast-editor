@@ -42,17 +42,17 @@ const CuttingActions: React.FC<{}> = () => {
     <div css={cuttingStyle}>
         <div css={blockStyle}>
           <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}
-            tooltip="Splits the segment at the current scrubber position"
-            ariaLabelText="Cut. Splits the segment at the current scrubber position"
+            tooltip="Split the segment at the current scrubber position"
+            ariaLabelText="Cut. Split the segment at the current scrubber position"
           />
           <MarkAsDeletedButton />
           <CuttingActionsButton iconName={faStepBackward} actionName="Merge Left" action={mergeLeft}
-            tooltip="Combines the currently active segment with the segment to its left"
-            ariaLabelText="Merge Left. Combines the currently active segment with the segment to its left"
+            tooltip="Combine the currently active segment with the segment to its left"
+            ariaLabelText="Merge Left. Combine the currently active segment with the segment to its left"
           />
           <CuttingActionsButton iconName={faStepForward} actionName="Merge Right" action={mergeRight}
-            tooltip="Combines the currently active segment with the segment to its right"
-            ariaLabelText="Merge Right. Combines the currently active segment with the segment to its right"
+            tooltip="Combine the currently active segment with the segment to its right"
+            ariaLabelText="Merge Right. Combine the currently active segment with the segment to its right"
           />
         </div>
         <div css={blockStyle}>
@@ -124,9 +124,9 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
 
   return (
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}
-      title="Marks the segment at the current scrubber position as deleted or alive"
+      title="Mark or unmark the segment at the current position as to be deleted."
       role="button" tabIndex={0}
-      aria-label={"Delete and Restore. Marks the segment at the current scrubber position as deleted or alive"}
+      aria-label={"Delete and Restore. Mark or unmark the segment at the current position as to be deleted."}
       onClick={() => dispatch(markAsDeletedOrAlive())}>
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
       <div>{isCurrentSegmentAlive ? "Delete" : "Restore"}</div>
