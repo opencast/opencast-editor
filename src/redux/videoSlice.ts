@@ -57,6 +57,21 @@ export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformati
   return response
 })
 
+const updateCurrentlyAt = (state: video, milliseconds: number) => {
+  state.currentlyAt = roundToDecimalPlace(milliseconds, 0);
+
+  if (state.currentlyAt < 0) {
+    state.currentlyAt = 0;
+  }
+
+  if (state.duration !== 0 && state.duration < state.currentlyAt) {
+    state.currentlyAt = state.duration
+  }
+
+  updateActiveSegment(state);
+  skipDeletedSegments(state);
+};
+
 /**
  * Slice for the state of the "video"
  * Treats the multitude of videos that may exist as one video
@@ -75,21 +90,10 @@ export const videoSlice = createSlice({
       state.previewTriggered = action.payload
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      state.currentlyAt = roundToDecimalPlace(action.payload, 0);
-
-      if (state.currentlyAt < 0) {
-        state.currentlyAt = 0;
-      }
-
-      if (state.duration !== 0 && state.duration < state.currentlyAt) {
-        state.currentlyAt = state.duration
-      }
-
-      updateActiveSegment(state);
-      skipDeletedSegments(state);
+      updateCurrentlyAt(state, action.payload);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      setCurrentlyAt(roundToDecimalPlace(action.payload * 1000, 0))
+      updateCurrentlyAt(state, roundToDecimalPlace(action.payload * 1000, 0))
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
