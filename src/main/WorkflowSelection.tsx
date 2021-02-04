@@ -84,7 +84,7 @@ const WorkflowSelection : React.FC<{}> = () => {
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={0} label="Take me back" iconName={faChevronLeft}/>
         {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
-        <SaveAndProcessButton text="Start processing with workflow"/>
+        <SaveAndProcessButton text="Start processing"/>
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
         <span>An error has occured. Please wait a bit and try again.</span><br />
