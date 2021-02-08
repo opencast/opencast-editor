@@ -124,7 +124,7 @@ const WorkflowSelection : React.FC<{}> = () => {
           </div>,
           false,
           "",
-          <SaveAndProcessButton text="Start processing with workflow"/>,
+          <SaveAndProcessButton text="Start processing"/>,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )
@@ -138,7 +138,7 @@ const WorkflowSelection : React.FC<{}> = () => {
           </div>,
           true,
           <div><i>{workflowDescription()}</i></div>,
-          <SaveAndProcessButton text="Start processing with workflow"/>,
+          <SaveAndProcessButton text="Start processing"/>,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )
