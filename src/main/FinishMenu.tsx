@@ -20,6 +20,7 @@ const FinishMenu : React.FC<{}> = () => {
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'space-around',
+    flexWrap: 'wrap',
     gap: '30px',
   })
 
