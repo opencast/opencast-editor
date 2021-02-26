@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  selectVideoURL, setCurrentlyAt
+  setIsPlaying, selectVideoURL, setCurrentlyAt
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,6 +63,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
   const [isGrabbed, setIsGrabbed] = useState(false)
+  const [wasPlayingWhenGrabbed, setWasPlayingWhenGrabbed] = useState(false)
   const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000)  // In milliseconds. For keyboard navigation
   const wasCurrentlyAtRef = useRef(0)
   const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
@@ -97,14 +98,27 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const onStartDrag = () => {
     setIsGrabbed(true)
+
+    // Halt video playback
+    if (isPlaying) {
+      setWasPlayingWhenGrabbed(true)
+      dispatch(setIsPlaying(false))
+    } else {
+      setWasPlayingWhenGrabbed(false)
+    }
   }
 
   const onStopDrag = (e: any, position: any) => {
+    // Update position
     const {x, y} = position;
     setControlledPosition({x, y});
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
 
     setIsGrabbed(false)
+    // Resume video playback
+    if (wasPlayingWhenGrabbed) {
+      dispatch(setIsPlaying(true))
+    }
   }
 
   // TODO: Better/more intuitive controls
@@ -207,7 +221,6 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       axis="x"
       bounds="parent"
       position={controlledPosition}
-      disabled={isPlaying}
       nodeRef={nodeRef}
       >
       <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
