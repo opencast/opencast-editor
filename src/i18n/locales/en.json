@@ -1,0 +1,17 @@
+{
+    "nav-cutting-button": "Cutting",
+
+    "cuttingActions-cut-button": "Cut",
+    "cuttingActions-cut-tooltip": "Split the segment at the current scrubber position",
+    "cuttingActions-delete-button": "Delete",
+    "cuttingActions-delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted.",
+    "cuttingActions-restore-button": "Restore",
+    "cuttingActions-mergeLeft-button": "Merge Left",
+    "cuttingActions-mergeLeft-tooltip": "Combine the currently active segment with the segment to its left",
+    "cuttingActions-mergeRight-button": "Merge Right",
+    "cuttingActions-mergeRight-tooltip": "Combine the currently active segment with the segment to its right",
+
+    "finishMenu-save-button": "Save changes",
+    "finishMenu-start-button": "Start processing",
+    "finishMenu-discard-button": "Discard changes"
+}

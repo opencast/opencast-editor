@@ -11,10 +11,15 @@ import {
 import { useDispatch } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
 const FinishMenu : React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const finishMenuStyle = css({
     display: 'flex',
@@ -26,9 +31,9 @@ const FinishMenu : React.FC<{}> = () => {
 
   return (
     <div css={finishMenuStyle} title="Finish Menu">
-        <FinishMenuButton iconName={faSave} stateName="Save changes"/>
-        <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
-        <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
+        <FinishMenuButton iconName={faSave} stateName={t("finishMenu-save-button")}/>
+        <FinishMenuButton iconName={faFileExport} stateName={t("finishMenu-start-button")}/>
+        <FinishMenuButton iconName={faTimesCircle} stateName={t("finishMenu-discard-button")}/>
     </div>
   );
 }
