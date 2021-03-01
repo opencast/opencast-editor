@@ -16,10 +16,16 @@ import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+import { Trans } from "react-i18next";
+
 /**
  * Allows the user to select a workflow
  */
 const WorkflowSelection : React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   // Initialite redux states
   const workflows = useSelector(selectWorkflows)
@@ -85,7 +91,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         }
         {bottomText}
         <div css={backOrContinueStyle}>
-          <PageButton pageNumber={0} label="Take me back" iconName={faChevronLeft}/>
+          <PageButton pageNumber={0} label={t("workflowSelection-back-button")} iconName={faChevronLeft}/>
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
@@ -102,11 +108,11 @@ const WorkflowSelection : React.FC<{}> = () => {
     if (workflows.length <= 0) {
       return(
         render(
-          'Save and Process',
-          <div>
+          t("workflowSelection-saveAndProcess-text"),
+          <Trans i18nKey="workflowSelection-noWorkflow-text">
             A problem occured, there are no workflows to process your changes with.<br />
             Please save your changes and contact an Opencast Administrator.
-          </div>,
+          </Trans>,
           false,
           "",
           <SaveButton />,
@@ -117,14 +123,14 @@ const WorkflowSelection : React.FC<{}> = () => {
     } else if (workflows.length === 1) {
       return (
         render(
-          'Save and Process',
-          <div>
-            The video will be cut and processed with the workflow "{workflows[0].name}".<br />
+          t("workflowSelection-saveAndProcess-text"),
+          <Trans i18nKey="workflowSelection-oneWorkflow-text">
+            The video will be cut and processed with the workflow "{{workflow: workflows[0].name}}".<br/>
             This will take some time.
-          </div>,
+          </Trans>,
           false,
           "",
-          <SaveAndProcessButton text="Start processing"/>,
+          <SaveAndProcessButton text={t("workflowSelection-startProcessing-button")}/>,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )
@@ -132,13 +138,13 @@ const WorkflowSelection : React.FC<{}> = () => {
     } else {
       return (
         render(
-          'Select a workflow',
+          t("workflowSelection-selectWF-text"),
           <div>
-            Select which workflow Opencast should use for processing.
+            {t("workflowSelection-manyWorkflows-text")}
           </div>,
           true,
           <div><i>{workflowDescription()}</i></div>,
-          <SaveAndProcessButton text="Start processing"/>,
+          <SaveAndProcessButton text= {t("workflowSelection-startProcessing-button")}/>,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )
