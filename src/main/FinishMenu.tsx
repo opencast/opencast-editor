@@ -19,8 +19,6 @@ import { useTranslation } from 'react-i18next';
  */
 const FinishMenu : React.FC<{}> = () => {
 
-  const { t } = useTranslation();
-
   const finishMenuStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
@@ -31,9 +29,9 @@ const FinishMenu : React.FC<{}> = () => {
 
   return (
     <div css={finishMenuStyle} title="Finish Menu">
-        <FinishMenuButton iconName={faSave} stateName={t("finishMenu-save-button")}/>
-        <FinishMenuButton iconName={faFileExport} stateName={t("finishMenu-start-button")}/>
-        <FinishMenuButton iconName={faTimesCircle} stateName={t("finishMenu-discard-button")}/>
+        <FinishMenuButton iconName={faSave} stateName="Save changes"/>
+        <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
+        <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
     </div>
   );
 }
@@ -42,6 +40,8 @@ const FinishMenu : React.FC<{}> = () => {
  * Buttons for the finish menu
  */
 const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["value"]}> = ({iconName, stateName}) => {
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -59,6 +59,22 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   });
 
+  var buttonString;
+  switch(stateName) {
+    case "Save changes":
+      buttonString = t("finishMenu-save-button");
+      break;
+    case "Start processing":
+      buttonString = t("finishMenu-start-button");
+      break;
+    case "Discard changes":
+      buttonString = t("finishMenu-discard-button");
+      break;
+    default: 
+      buttonString = "Could not load String value";
+      break;
+  }
+
   return (
     <div css={[basicButtonStyle, finishMenuButtonStyle]}
     role="button" tabIndex={0}
@@ -67,10 +83,12 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
         finish()
       }}}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
-      <div>{stateName}</div>
+      <div>{buttonString}</div>
     </div>
   );
 };
+
+
 
 
 

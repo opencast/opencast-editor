@@ -47,17 +47,17 @@ const CuttingActions: React.FC<{}> = () => {
     <div css={cuttingStyle}>
         <div css={blockStyle}>
           <CuttingActionsButton iconName={faCut} actionName= {t("cuttingActions-cut-button")} action={cut}
-            tooltip= {t('cuttingActions-cut-tooltip')}
-            ariaLabelText="Cut. Split the segment at the current scrubber position"
+            tooltip={t('cuttingActions-cut-tooltip')}
+            ariaLabelText={t('cuttingActions-cut-tooltip-aria')}
           />
           <MarkAsDeletedButton />
           <CuttingActionsButton iconName={faStepBackward} actionName={t("cuttingActions-mergeLeft-button")} action={mergeLeft}
-            tooltip= {t('cuttingActions-mergeLeft-tooltip')}
-            ariaLabelText="Merge Left. Combine the currently active segment with the segment to its left"
+            tooltip={t('cuttingActions-mergeLeft-tooltip')}
+            ariaLabelText={t('cuttingActions-mergeLeft-tooltip-aria')}
           />
           <CuttingActionsButton iconName={faStepForward} actionName={t("cuttingActions-mergeRight-button")} action={mergeRight}
             tooltip={t('cuttingActions-mergeRight-tooltip')}
-            ariaLabelText="Merge Right. Combine the currently active segment with the segment to its right"
+            ariaLabelText={t('cuttingActions-mergeRight-tooltip-aria')}
           />
         </div>
         <div css={blockStyle}>
@@ -132,7 +132,7 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}
       title= {t('cuttingActions-delete-restore-tooltip')}
       role="button" tabIndex={0}
-      aria-label={"Delete and Restore. Mark or unmark the segment at the current position as to be deleted."}
+      aria-label={t('cuttingActions-delete-restore-tooltip-aria')}
       onClick={() => dispatch(markAsDeletedOrAlive())}>
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
       <div>{isCurrentSegmentAlive ? t('cuttingActions-delete-button') : t("cuttingActions-restore-button")}</div>

@@ -14,6 +14,9 @@ import { settings } from '../config'
 import { basicButtonStyle } from '../cssStyles'
 import { setIsPlaying } from "../redux/videoSlice";
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * A container for selecting the functionality shown in the main part of the app
  */
@@ -46,6 +49,8 @@ const MainMenu: React.FC<{}> = () => {
  */
 const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["value"]}> = ({iconName, stateName}) => {
 
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
 
@@ -68,6 +73,25 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     flexDirection: 'column' as const,
   });
 
+  var buttonString;
+  switch(stateName) {
+    case "Cutting":
+      buttonString = t("mainMenu-cutting-button");
+      break;
+    case "Metadata":
+      buttonString = t("mainMenu-metadata-button");
+      break;
+    case "Thumbnail":
+      buttonString = t("mainMenu-thumbnail-button");
+      break;
+    case "Finish":
+      buttonString = t("mainMenu-finish-button");
+      break;
+    default: 
+      buttonString = "Could not load String value";
+      break;
+  }
+
   return (
     <li css={[basicButtonStyle, mainMenuButtonStyle]}
       role="menuitem" tabIndex={0}
@@ -77,7 +101,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
       }}}
       >
       <FontAwesomeIcon  icon={iconName} size="2x"/>
-      <div>{stateName}</div>
+      <div>{buttonString}</div>
     </li>
   );
 };

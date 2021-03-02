@@ -17,3 +17,4 @@ i18n
         resources,
         fallbackLng: 'en',
   });
+  

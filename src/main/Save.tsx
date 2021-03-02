@@ -46,7 +46,7 @@ const Save : React.FC<{}> = () => {
         {t("save-info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label={t("save-goBack-button")} iconName={faChevronLeft}/>
+        <PageButton pageNumber={0} label={t("goBack-button")} iconName={faChevronLeft}/>
         <SaveButton />
       </div>
       <div css={errorBoxStyle(postWorkflowStatus === "failed")} title="Error Box" role="alert">
@@ -91,7 +91,7 @@ export const SaveButton: React.FC<{}> = () => {
 
   const ariaSaveUpdate = () => {
     if(workflowStatus === 'success') {
-      return "Saved successfully"
+      return t("save-success-tooltip-aria")
     }
   }
 

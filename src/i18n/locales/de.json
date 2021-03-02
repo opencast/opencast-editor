@@ -1,9 +1,14 @@
 {
-    "nav-cutting-button": "Schneiden",
+    "mainMenu-cutting-button": "Schneiden",
+    "mainMenu-finish-button": "Fertigstellen",
 
     "cuttingActions-cut-button": "Schnitt",
     "cuttingActions-delete-button": "Löschen",
     "cuttingActions-restore-button": "Wiederherstellen",
     "cuttingActions-mergeLeft-button": "Links Zusammenführen",
-    "cuttingActions-mergeRight-button": "Rechts Zusammenführen"
+    "cuttingActions-mergeRight-button": "Rechts Zusammenführen",
+
+    "finishMenu-save-button": "Änderungen speichern",
+    "finishMenu-start-button": "Verarbeitung starten",
+    "finishMenu-discard-button": "Änderungen verwerfen"
 }

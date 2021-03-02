@@ -19,11 +19,16 @@ import ReactPlayer, { Config } from 'react-player'
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
 import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Container for the videos and their controls
  * TODO: Move fetching to a more central part of the app
  */
 const Video: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch()
@@ -59,7 +64,7 @@ const Video: React.FC<{}> = () => {
   const errorBox = () => {
     return (
       <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
-        <span>A problem occured during communication with Opencast.</span><br />
+        <span>{t("video-error-text")}</span><br />
         {error ? "Details: " + error : "No error details are available."}<br />
       </div>
     );
@@ -277,6 +282,8 @@ const VideoControls: React.FC<{}> = () => {
  */
 const PreviewMode: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   // Init redux variables
   const dispatch = useDispatch();
   const isPlayPreview = useSelector(selectIsPlayPreview)
@@ -303,17 +310,19 @@ const PreviewMode: React.FC<{}> = () => {
     },
   })
 
+  var title = (isPlayPreview ? t("video-previewButton-on-tooltip") : t("video-previewButton-off-tooltip"));
+
   return (
     <div css={previewModeStyle}
-      title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}
+      title={title}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-      aria-label="Enable or disable preview mode."
+      aria-label={t("video-preview-button-aria")}
       onClick={ switchPlayPreview }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
         switchPlayPreview()
       }}}>
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
-        Preview Mode
+        {t("video-preview-button")}
       </div>
       <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
     </div>
@@ -324,6 +333,8 @@ const PreviewMode: React.FC<{}> = () => {
  * Start/Pause playing the videos
  */
 const PlayButton: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -336,9 +347,9 @@ const PlayButton: React.FC<{}> = () => {
 
   return (
     <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
-      title="Play Button"
+      title={t("video-playButton-tooltip")}
       role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-      aria-label="Play Button"
+      aria-label={t("video-playButton-tooltip")}
       onClick={ switchIsPlaying }
       onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
         switchIsPlaying()
@@ -352,6 +363,8 @@ const PlayButton: React.FC<{}> = () => {
  */
 const TimeDisplay: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   // Init redux variables
   const currentlyAt = useSelector(selectCurrentlyAt)
   const duration = useSelector(selectDuration)
@@ -359,12 +372,12 @@ const TimeDisplay: React.FC<{}> = () => {
   return (
     <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
       <time css={{display: 'inline-block', width: '100px'}}
-        title={"Playback time and duration"}
-        tabIndex={0} role="timer" aria-label={"Current time: " + convertMsToReadableString(currentlyAt)}>
+        title={t("video-time-duration-tooltip")}
+        tabIndex={0} role="timer" aria-label={t("video-time-aria")+": " + convertMsToReadableString(currentlyAt)}>
         {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
       </time>
       {" / "}
-      <div tabIndex={0} aria-label={"Duration: " + convertMsToReadableString(duration)}>
+      <div tabIndex={0} aria-label={t("video-duration-aria")+": " + convertMsToReadableString(duration)}>
         {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
       </div>
     </div>
