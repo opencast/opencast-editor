@@ -124,9 +124,10 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
  */
 const MarkAsDeletedButton : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive);
-  const { t } = useTranslation();
 
   return (
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}

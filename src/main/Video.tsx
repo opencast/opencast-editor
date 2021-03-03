@@ -21,6 +21,7 @@ import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { Trans } from "react-i18next";
 
 /**
  * Container for the videos and their controls
@@ -64,8 +65,8 @@ const Video: React.FC<{}> = () => {
   const errorBox = () => {
     return (
       <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("video-error-text")}</span><br />
-        {error ? "Details: " + error : "No error details are available."}<br />
+        <span>{t("video-comError-text")}</span><br />
+        {error ? <Trans i18nKey="save-error-details-text">"Details: " {{posterror: error}}</Trans> : t("error-noDetails-text")}<br />
       </div>
     );
   }
@@ -90,10 +91,10 @@ const Video: React.FC<{}> = () => {
   });
 
   return (
-    <div css={videoAreaStyle} title="Video Area">
+    <div css={videoAreaStyle} title={t("video-area-tooltip")}>
       {errorBox()}
       <VideoHeader />
-      <div css={videoPlayerAreaStyle} title="Video Player Area">
+      <div css={videoPlayerAreaStyle} title={t("video-area-player-tooltip")}>
         {videoPlayers}
       </div>
       <VideoControls />
@@ -107,6 +108,8 @@ const Video: React.FC<{}> = () => {
  * @param {boolean} isPrimary - If the player is the main control
  */
 const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -214,7 +217,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
     } else {
       return (
         <div css={errorBoxStyle} title="Error Box" role="alert">
-          <span>An error has occured loading this video. </span>
+          <span>{t("video-loadError-text")} </span>
         </div>
       );
     }
@@ -242,6 +245,8 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
  */
 const VideoControls: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   const videoControlsRowStyle = css({
     display: 'flex',
     flexDirection: 'row',
@@ -265,7 +270,7 @@ const VideoControls: React.FC<{}> = () => {
   })
 
   return (
-    <div css={videoControlsRowStyle} title="Video Controls">
+    <div css={videoControlsRowStyle} title={t("video-controls-tooltip")}>
       <div css={leftSideBoxStyle}>
         <PreviewMode />
       </div>
@@ -388,6 +393,9 @@ const TimeDisplay: React.FC<{}> = () => {
  * Displays elements above the video, e.g. title
  */
 const VideoHeader: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
+
   const title = useSelector(selectTitle)
   const presenters = useSelector(selectPresenters)
 
@@ -408,11 +416,11 @@ const VideoHeader: React.FC<{}> = () => {
 
   let presenter_header;
   if (presenters && presenters.length) {
-      presenter_header = <div css={titleStyle} title="Video Presenters">by {presenters.join(", ")}</div>
+      presenter_header = <div css={titleStyle} title={t("video-presenter-tooltip")}>by {presenters.join(", ")}</div>
   }
   return (
-    <div title="Video Area Header" css={{fontSize: '16px'}}>
-      <div css={[titleStyle, titleStyleBold]} title="Video Title">{title}</div>
+    <div title={t("video-area-tooltip")} css={{fontSize: '16px'}}>
+      <div css={[titleStyle, titleStyleBold]} title={t("video-title-tooltip")}>{title}</div>
       {presenter_header}
     </div>
   );

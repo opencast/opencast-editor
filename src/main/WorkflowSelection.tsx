@@ -96,8 +96,8 @@ const WorkflowSelection : React.FC<{}> = () => {
           {nextButton}
         </div>
         <div css={errorBoxStyle(errorStatus === "failed")} title="Error Box" role="alert">
-          <span>An error has occured. Please wait a bit and try again.</span><br />
-          {errorMessage ? "Details: " + errorMessage : "No error details are available."}<br />
+          <span>{t("error-text")}</span><br />
+          {errorMessage ? <Trans i18nKey="save-error-details-text">Details: {{errorMessage: postAndProcessError}}</Trans> : t("error-noDetails-text")}<br/>
         </div>
       </div>
     );
@@ -163,6 +163,8 @@ const WorkflowSelection : React.FC<{}> = () => {
  */
 const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({stateName, workflowIndex}) => {
 
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
 
@@ -176,9 +178,9 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
   });
 
   return (
-    <div css={[basicButtonStyle,workflowButtonStyle]} title={"Click to select this workflow"}
+    <div css={[basicButtonStyle,workflowButtonStyle]} title={t("workflowSelection-selectWF-button")}
       role="button" tabIndex={0}
-      aria-label={"Press to select the workflow: " + stateName}
+      aria-label={t("workflowSelection-selectWF-button", {stateName})}
       onClick={ selectWorkflowIndex }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         selectWorkflowIndex()

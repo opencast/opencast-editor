@@ -17,6 +17,7 @@ import { PageButton } from './Finish'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { Trans } from "react-i18next";
 
 /**
  * Shown if the user wishes to save.
@@ -40,7 +41,7 @@ const Save : React.FC<{}> = () => {
   })
 
   return (
-    <div css={saveStyle} title="Save Area">
+    <div css={saveStyle} title={t("save-saveArea-tooltip")}>
       <h1>{t("save-headline-text")}</h1>
       <span css={{maxWidth: '500px'}}>
         {t("save-info-text")}
@@ -51,7 +52,7 @@ const Save : React.FC<{}> = () => {
       </div>
       <div css={errorBoxStyle(postWorkflowStatus === "failed")} title="Error Box" role="alert">
         <span>{t("save-error-text")}</span><br />
-        {postError ? "Details: " + postError : "No error details are available."}<br />
+        {postError ? <Trans i18nKey="save-error-details-text">"Details: " {{posterror: postError}}</Trans> : t("save-error-noDetails-text")}<br />
       </div>
     </div>
   );

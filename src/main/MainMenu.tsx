@@ -22,6 +22,8 @@ import { useTranslation } from 'react-i18next';
  */
 const MainMenu: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   const mainMenuStyle = css({
     borderRight: '1px solid #BBB',
     width: '100px',
@@ -34,7 +36,7 @@ const MainMenu: React.FC<{}> = () => {
   });
 
   return (
-    <nav css={mainMenuStyle} title="Main Menu" role="navigation" aria-label="Main Navigation">
+    <nav css={mainMenuStyle} title={t("mainMenu-mainMenu-tooltip")} role="navigation" aria-label={t("mainMenu-tooltip-aria")}>
       <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
       {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
       {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}

@@ -3,6 +3,8 @@
     "mainMenu-finish-button": "Fertigstellen",
     "mainMenu-thumbnail-button": "Thumbnail",
     "mainMenu-metadata-button": "Metadata",
+    "mainMenu-mainMenu-tooltip": "Main Menu",
+    "mainMenu-tooltip-aria": "Main Navigation",
     
     "cuttingActions-cut-button": "Cut",
     "cuttingActions-cut-tooltip": "Split the segment at the current scrubber position",
@@ -26,7 +28,14 @@
     "video-time-duration-tooltip": "Playback time and duration",
     "video-duration-aria": "Duration",
     "video-time-aria": "Current time",
-    "video-error-text": "A problem occured during communication with Opencast.",
+    "video-comError-text": "A problem occured during communication with Opencast.",
+    "video-loadError-text": "An error has occured loading this video.",
+    "video-title-tooltip": "Video Title",
+    "video-presenter-tooltip": "Video Presenters",
+    "video-area-tooltip": "Video Area",
+    "video-area-player-tooltip": "Video Player Area",
+    "video-area-header-tooltip": "Video Area Header",
+    "video-controls-tooltip": "Video Controls",
 
     "finishMenu-save-button": "Save changes",
     "finishMenu-start-button": "Start processing",
@@ -39,10 +48,8 @@
     "save-confirmButton-success-tooltip": "Saved successfully",
     "save-confirmButton-failed-tooltip": "Save failed",
     "save-info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
-    "save-error-text": "An error has occured. Please wait a bit and try again.",
     "save-success-tooltip-aria": "Saved successfully",
-
-    "goBack-button": "No, take me back",
+    "save-saveArea-tooltip": "Save Area",
 
     "discard-headline-text": "Discard changes",
     "discard-confirm-button": "Yes, discard changes",
@@ -52,6 +59,7 @@
     "theEnd-discarded-text": "All your changes are now lost forever. You can now close the editor.",
     "theEnd-startOver-button": "Let me start over!",
     "theEnd-startOver-tooltip": "Reload the page to start over",
+    "theEnd-info-text": "Changes successfully saved to Opencast. Processing your changes may take up to {{duration}} hours. You can now close the editor.",
 
     "workflowSelection-saveAndProcess-text": "Save and Process",
     "workflowSelection-selectWF-text": "Select a workflow",
@@ -59,5 +67,26 @@
     "workflowSelection-oneWorkflow-text": "The video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.",
     "workflowSelection-manyWorkflows-text": "Select which workflow Opencast should use for processing.",
     "workflowSelection-startProcessing-button": "Start processing",
-    "workflowSelection-back-button": "Take me back"
+    "workflowSelection-back-button": "Take me back",
+    "workflowSelection-selectWF-button": "Click to select this workflow",
+    "workflowSelection-selectWF-button-aria": "Press to select the workflow: {{stateName}}",
+
+    "timeline-generateWaveform-text": "Generating Waveform",
+    "timeline-segment-tooltip": "Segment {{segment}}",
+    "timeline-scrubber-tooltip": "Scrubber",
+    "timeline-dragHandle-tooltip": "dragHandle",
+    "timeline-scrubber-deleted-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Deleted. Controls: Alt+j and Alt+k to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.",
+    "timeline-scrubber-alive-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Alive. Controls: Alt+j and Alt+k to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.",
+    "timeline-segmentsDeleted-text-aria": "Segment {{index}}. Deleted. Start: {{start}}. End: {{end}}.",
+    "timeline-segmentsAlive-text-aria": "Segment {{index}}. Alive. Start: {{start}}. End: {{end}}.",
+
+    "workflowConfig-headline-text": "Workflow Configuration",
+    "workflowConfig-area-tooltip": "Workflow Configuration Area",
+    "workflowConfig-satisfied-text": "Satisfied with your configuration?",
+    "workflowConfig-confirm-button": "Yes, start processing",
+
+    "error-details-text": "Details: {{posterror}}",
+    "error-noDetails-text": "No error details are available.",
+    "error-text": "An error has occured. Please wait a bit and try again.",
+    "goBack-button": "No, take me back"
 }
