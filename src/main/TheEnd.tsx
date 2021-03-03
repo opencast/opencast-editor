@@ -12,7 +12,6 @@ import { basicButtonStyle, nagivationButtonStyle } from "../cssStyles";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { Trans } from "react-i18next";
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -38,9 +37,7 @@ const TheEnd : React.FC<{}> = () => {
     if (endState === 'discarded') {
       return t("theEnd-discarded-text")
     } else if (endState === 'success') {
-      return (<Trans i18nKey="save-error-details-text">
-      "Changes successfully saved to Opencast. Processing your changes may take up to "
-      {{duration: `${new Date((duration * 2)).toISOString().substr(11, 8)}`}} " hours. You can now close the editor." </Trans>
+      return t("theEnd-info-text", {duration: `${new Date((duration * 2)).toISOString().substr(11, 8)}`}
       )
     }
   }

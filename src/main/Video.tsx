@@ -21,7 +21,6 @@ import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { Trans } from "react-i18next";
 
 /**
  * Container for the videos and their controls
@@ -66,7 +65,7 @@ const Video: React.FC<{}> = () => {
     return (
       <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
         <span>{t("video-comError-text")}</span><br />
-        {error ? <Trans i18nKey="save-error-details-text">"Details: " {{posterror: error}}</Trans> : t("error-noDetails-text")}<br />
+        {error ? t("error-details-text", {errorMessage: error}) : t("error-noDetails-text")}<br />
       </div>
     );
   }

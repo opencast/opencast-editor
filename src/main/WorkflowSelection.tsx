@@ -97,7 +97,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         </div>
         <div css={errorBoxStyle(errorStatus === "failed")} title="Error Box" role="alert">
           <span>{t("error-text")}</span><br />
-          {errorMessage ? <Trans i18nKey="save-error-details-text">Details: {{errorMessage: postAndProcessError}}</Trans> : t("error-noDetails-text")}<br/>
+          {errorMessage ? t("error-details-text", {errorMessage: postAndProcessError}) : t("error-noDetails-text")}<br/>
         </div>
       </div>
     );

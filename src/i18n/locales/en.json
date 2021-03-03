@@ -85,7 +85,7 @@
     "workflowConfig-satisfied-text": "Satisfied with your configuration?",
     "workflowConfig-confirm-button": "Yes, start processing",
 
-    "error-details-text": "Details: {{posterror}}",
+    "error-details-text": "Details: {{errorMessage}}",
     "error-noDetails-text": "No error details are available.",
     "error-text": "An error has occured. Please wait a bit and try again.",
     "goBack-button": "No, take me back"
