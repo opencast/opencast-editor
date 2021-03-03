@@ -231,10 +231,10 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       <div ref={nodeRef} css={scrubberStyle} title={t("timeline-scrubber-tooltip")}>
         <div css={arrowDownStyle}></div>
         <div css= {scrubberDragHandleStyle} title={t("timeline-dragHandle-tooltip")} aria-grabbed={isGrabbed}
-          aria-label={segments[activeSegmentIndex].deleted ? t("timeline-scrubber-deleted-text-aria", 
-                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex}) 
-                     : t("timeline-scrubber-deleted-text-aria", 
-                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})}    
+          aria-label={segments[activeSegmentIndex].deleted ? t("timeline-scrubber-deleted-text-aria",
+                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})
+                     : t("timeline-scrubber-alive-text-aria",
+                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})}
           tabIndex={0} onKeyDown={keyboardControls}>
           <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
           {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
