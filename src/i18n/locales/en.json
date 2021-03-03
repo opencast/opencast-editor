@@ -75,8 +75,8 @@
     "timeline-segment-tooltip": "Segment {{segment}}",
     "timeline-scrubber-tooltip": "Scrubber",
     "timeline-dragHandle-tooltip": "dragHandle",
-    "timeline-scrubber-deleted-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Deleted. Controls: Alt+j and Alt+k to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.",
-    "timeline-scrubber-alive-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Alive. Controls: Alt+j and Alt+k to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.",
+    "timeline-scrubber-deleted-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Deleted. Controls: Alt+j and Alt+l to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.",
+    "timeline-scrubber-alive-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Alive. Controls: Alt+j and Alt+l to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.",
     "timeline-segmentsDeleted-text-aria": "Segment {{index}}. Deleted. Start: {{start}}. End: {{end}}.",
     "timeline-segmentsAlive-text-aria": "Segment {{index}}. Alive. Start: {{start}}. End: {{end}}.",
 
