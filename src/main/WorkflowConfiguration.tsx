@@ -47,7 +47,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
         <span>{t("error-text")}</span><br />
-        {postAndProcessError ? t("error-details-text", {errorMessage: postAndProcessError}) : t("error-noDetails-text")} : t("error-noDetails-text")}<br/>
+        {postAndProcessError ? t("error-details-text", {errorMessage: postAndProcessError}) : t("error-noDetails-text")}<br/>
       </div>
     </div>
   );
