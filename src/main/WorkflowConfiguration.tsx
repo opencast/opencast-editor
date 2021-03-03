@@ -16,7 +16,6 @@ import { setEnd } from "../redux/endSlice";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { Trans } from "react-i18next";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -48,7 +47,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
         <span>{t("error-text")}</span><br />
-        {postAndProcessError ? <Trans i18nKey="save-error-details-text">Details: {{posterror: postAndProcessError}}</Trans> : t("error-noDetails-text")}<br/>
+        {postAndProcessError ? t("error-details-text", {errorMessage: postAndProcessError}) : t("error-noDetails-text")} : t("error-noDetails-text")}<br/>
       </div>
     </div>
   );
