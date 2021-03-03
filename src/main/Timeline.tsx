@@ -288,9 +288,9 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     return (
       segments.map( (segment: Segment, index: number) => (
         <div key={segment.id} title={t("timeline-segment-tooltip", {segment: index})}
-          aria-label={segment.deleted ? t("timeline-segmentsDeleted-text-aria", 
-                     {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)}) 
-                     : t("timeline-segmentsAlive-text-aria", 
+          aria-label={segment.deleted ? t("timeline-segmentsDeleted-text-aria",
+                     {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})
+                     : t("timeline-segmentsAlive-text-aria",
                      {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})}
           tabIndex={0}
         css={{
