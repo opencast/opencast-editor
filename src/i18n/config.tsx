@@ -3,11 +3,9 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import enTranslations from './locales/en.json';
-import deTranslations from './locales/de.json';
 
 const resources = {
-    en: { translation: enTranslations },
-    de: { translation: deTranslations }
+    en: { translation: enTranslations }
   };
 
 i18n
