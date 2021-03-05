@@ -3,6 +3,7 @@ import React from "react";
 import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
+import Metadata from './Metadata';
 import Finish from "./Finish"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,6 +33,15 @@ const MainContent: React.FC<{}> = () => {
     paddingLeft: '20px',
   })
 
+  const metadataStyle = css({
+    display: mainMenuState !== MainMenuStateNames.metadata ? 'none' :'flex',
+    // flexDirection: 'column' as const,
+    // justifyContent: 'space-around',
+    gap: "20px",
+    paddingRight: '20px',
+    paddingLeft: '20px',
+  })
+
   const finishStyle = css({
     display: mainMenuState !== MainMenuStateNames.finish ? 'none' : 'flex',
     flexDirection: 'column' as const,
@@ -42,7 +52,8 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const defaultStyle = css({
-    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish )
+    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish
+              || mainMenuState === MainMenuStateNames.metadata)
               ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
@@ -56,6 +67,9 @@ const MainContent: React.FC<{}> = () => {
           <Video />
           <CuttingActions />
           <Timeline />
+      </div>
+      <div css={metadataStyle}>
+          <Metadata />
       </div>
       <div css={finishStyle}>
         <Finish />
