@@ -53,7 +53,7 @@ const Video: React.FC<{}> = () => {
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i !== 0}/>);
+    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i === 0}/>);
   }
 
   const errorBox = () => {
@@ -194,7 +194,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
             width='100%'
             height='100%'
             playing={isPlaying}
-            muted={isPrimary}
+            muted={!isPrimary}
             onProgress={onProgressCallback}
             progressInterval={100}
             onReady={onReadyCallback}
