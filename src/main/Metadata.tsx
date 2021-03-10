@@ -396,8 +396,13 @@ const Metadata: React.FC<{}> = () => {
 
         // Parse Label
         let descLabel = null
-        if((translation as any)[field.id]) {
+        if ((translation as any)[field.id]) {
           descLabel = (translation as any)[field.id][key]
+        }
+
+        // Change label for series
+        if (field.id === "isPartOf") {
+          descLabel = key
         }
 
         // Add to library
