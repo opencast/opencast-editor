@@ -46,18 +46,18 @@ const CuttingActions: React.FC<{}> = () => {
   return (
     <div css={cuttingStyle}>
         <div css={blockStyle}>
-          <CuttingActionsButton iconName={faCut} actionName= {t("cuttingActions-cut-button")} action={cut}
-            tooltip={t('cuttingActions-cut-tooltip')}
-            ariaLabelText={t('cuttingActions-cut-tooltip-aria')}
+          <CuttingActionsButton iconName={faCut} actionName= {t("cuttingActions.cut-button")} action={cut}
+            tooltip={t('cuttingActions.cut-tooltip')}
+            ariaLabelText={t('cuttingActions.cut-tooltip-aria')}
           />
           <MarkAsDeletedButton />
-          <CuttingActionsButton iconName={faStepBackward} actionName={t("cuttingActions-mergeLeft-button")} action={mergeLeft}
-            tooltip={t('cuttingActions-mergeLeft-tooltip')}
-            ariaLabelText={t('cuttingActions-mergeLeft-tooltip-aria')}
+          <CuttingActionsButton iconName={faStepBackward} actionName={t("cuttingActions.mergeLeft-button")} action={mergeLeft}
+            tooltip={t('cuttingActions.mergeLeft-tooltip')}
+            ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria')}
           />
-          <CuttingActionsButton iconName={faStepForward} actionName={t("cuttingActions-mergeRight-button")} action={mergeRight}
-            tooltip={t('cuttingActions-mergeRight-tooltip')}
-            ariaLabelText={t('cuttingActions-mergeRight-tooltip-aria')}
+          <CuttingActionsButton iconName={faStepForward} actionName={t("cuttingActions.mergeRight-button")} action={mergeRight}
+            tooltip={t('cuttingActions.mergeRight-tooltip')}
+            ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria')}
           />
         </div>
         <div css={blockStyle}>
@@ -131,12 +131,12 @@ const MarkAsDeletedButton : React.FC<{}> = () => {
 
   return (
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}
-      title= {t('cuttingActions-delete-restore-tooltip')}
+      title= {t('cuttingActions.delete-restore-tooltip')}
       role="button" tabIndex={0}
-      aria-label={t('cuttingActions-delete-restore-tooltip-aria')}
+      aria-label={t('cuttingActions.delete-restore-tooltip-aria')}
       onClick={() => dispatch(markAsDeletedOrAlive())}>
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
-      <div>{isCurrentSegmentAlive ? t('cuttingActions-delete-button') : t("cuttingActions-restore-button")}</div>
+      <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
     </div>
   );
 }

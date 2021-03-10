@@ -36,7 +36,7 @@ const MainMenu: React.FC<{}> = () => {
   });
 
   return (
-    <nav css={mainMenuStyle} title={t("mainMenu-mainMenu-tooltip")} role="navigation" aria-label={t("mainMenu-tooltip-aria")}>
+    <nav css={mainMenuStyle} title={t("mainMenu.mainMenu-tooltip")} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
       {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
       {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}
@@ -78,16 +78,16 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
   var buttonString;
   switch(stateName) {
     case "Cutting":
-      buttonString = t("mainMenu-cutting-button");
+      buttonString = t("mainMenu.cutting-button");
       break;
     case "Metadata":
-      buttonString = t("mainMenu-metadata-button");
+      buttonString = t("mainMenu.metadata-button");
       break;
     case "Thumbnail":
-      buttonString = t("mainMenu-thumbnail-button");
+      buttonString = t("mainMenu.thumbnail-button");
       break;
     case "Finish":
-      buttonString = t("mainMenu-finish-button");
+      buttonString = t("mainMenu.finish-button");
       break;
     default: 
       buttonString = "Could not load String value";

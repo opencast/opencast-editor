@@ -62,13 +62,13 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
   var buttonString;
   switch(stateName) {
     case "Save changes":
-      buttonString = t("finishMenu-save-button");
+      buttonString = t("finishMenu.save-button");
       break;
     case "Start processing":
-      buttonString = t("finishMenu-start-button");
+      buttonString = t("finishMenu.start-button");
       break;
     case "Discard changes":
-      buttonString = t("finishMenu-discard-button");
+      buttonString = t("finishMenu.discard-button");
       break;
     default: 
       buttonString = "Could not load String value";

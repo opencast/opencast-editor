@@ -35,9 +35,9 @@ const TheEnd : React.FC<{}> = () => {
 
   const text = () => {
     if (endState === 'discarded') {
-      return t("theEnd-discarded-text")
+      return t("theEnd.discarded-text")
     } else if (endState === 'success') {
-      return t("theEnd-info-text", {duration: `${new Date((duration * 2)).toISOString().substr(11, 8)}`}
+      return t("theEnd.info-text", {duration: `${new Date((duration * 2)).toISOString().substr(11, 8)}`}
       )
     }
   }
@@ -72,14 +72,14 @@ const StartOverButton: React.FC<{}> = () => {
   };
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("theEnd-startOver-tooltip")}
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("theEnd.startOver-tooltip")}
       role="button" tabIndex={0}
       onClick={ reloadPage }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         reloadPage()
       }}}>
       {/* <FontAwesomeIcon icon={icon} spin={spin} size="1x"/> */}
-      <span>{t("theEnd-startOver-button")}</span>
+      <span>{t("theEnd.startOver-button")}</span>
     </div>
   );
 }

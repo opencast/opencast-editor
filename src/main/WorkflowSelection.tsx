@@ -91,13 +91,13 @@ const WorkflowSelection : React.FC<{}> = () => {
         }
         {bottomText}
         <div css={backOrContinueStyle}>
-          <PageButton pageNumber={0} label={t("workflowSelection-back-button")} iconName={faChevronLeft}/>
+          <PageButton pageNumber={0} label={t("workflowSelection.back-button")} iconName={faChevronLeft}/>
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
         <div css={errorBoxStyle(errorStatus === "failed")} title="Error Box" role="alert">
           <span>{t("error-text")}</span><br />
-          {errorMessage ? t("error-details-text", {errorMessage: postAndProcessError}) : t("error-noDetails-text")}<br/>
+          {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
         </div>
       </div>
     );
@@ -108,8 +108,8 @@ const WorkflowSelection : React.FC<{}> = () => {
     if (workflows.length <= 0) {
       return(
         render(
-          t("workflowSelection-saveAndProcess-text"),
-          <Trans i18nKey="workflowSelection-noWorkflow-text">
+          t("workflowSelection.saveAndProcess-text"),
+          <Trans i18nKey="workflowSelection.noWorkflow-text">
             A problem occured, there are no workflows to process your changes with.<br />
             Please save your changes and contact an Opencast Administrator.
           </Trans>,
@@ -123,14 +123,14 @@ const WorkflowSelection : React.FC<{}> = () => {
     } else if (workflows.length === 1) {
       return (
         render(
-          t("workflowSelection-saveAndProcess-text"),
-          <Trans i18nKey="workflowSelection-oneWorkflow-text">
+          t("workflowSelection.saveAndProcess-text"),
+          <Trans i18nKey="workflowSelection.oneWorkflow-text">
             The video will be cut and processed with the workflow "{{workflow: workflows[0].name}}".<br/>
             This will take some time.
           </Trans>,
           false,
           "",
-          <SaveAndProcessButton text={t("workflowSelection-startProcessing-button")}/>,
+          <SaveAndProcessButton text={t("workflowSelection.startProcessing-button")}/>,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )
@@ -138,13 +138,13 @@ const WorkflowSelection : React.FC<{}> = () => {
     } else {
       return (
         render(
-          t("workflowSelection-selectWF-text"),
+          t("workflowSelection.selectWF-text"),
           <div>
-            {t("workflowSelection-manyWorkflows-text")}
+            {t("workflowSelection.manyWorkflows-text")}
           </div>,
           true,
           <div><i>{workflowDescription()}</i></div>,
-          <SaveAndProcessButton text= {t("workflowSelection-startProcessing-button")}/>,
+          <SaveAndProcessButton text= {t("workflowSelection.startProcessing-button")}/>,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )
@@ -178,9 +178,9 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
   });
 
   return (
-    <div css={[basicButtonStyle,workflowButtonStyle]} title={t("workflowSelection-selectWF-button")}
+    <div css={[basicButtonStyle,workflowButtonStyle]} title={t("workflowSelection.selectWF-button")}
       role="button" tabIndex={0}
-      aria-label={t("workflowSelection-selectWF-button", {stateName})}
+      aria-label={t("workflowSelection.selectWF-button", {stateName})}
       onClick={ selectWorkflowIndex }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         selectWorkflowIndex()

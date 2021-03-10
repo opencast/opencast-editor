@@ -64,8 +64,8 @@ const Video: React.FC<{}> = () => {
   const errorBox = () => {
     return (
       <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("video-comError-text")}</span><br />
-        {error ? t("error-details-text", {errorMessage: error}) : t("error-noDetails-text")}<br />
+        <span>{t("video.comError-text")}</span><br />
+        {error ? t("various.error-details-text", {errorMessage: error}) : t("various.error-noDetails-text")}<br />
       </div>
     );
   }
@@ -90,10 +90,10 @@ const Video: React.FC<{}> = () => {
   });
 
   return (
-    <div css={videoAreaStyle} title={t("video-area-tooltip")}>
+    <div css={videoAreaStyle} title={t("video.area-tooltip")}>
       {errorBox()}
       <VideoHeader />
-      <div css={videoPlayerAreaStyle} title={t("video-area-player-tooltip")}>
+      <div css={videoPlayerAreaStyle} title={t("video.area-player-tooltip")}>
         {videoPlayers}
       </div>
       <VideoControls />
@@ -216,7 +216,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
     } else {
       return (
         <div css={errorBoxStyle} title="Error Box" role="alert">
-          <span>{t("video-loadError-text")} </span>
+          <span>{t("video.loadError-text")} </span>
         </div>
       );
     }
@@ -269,7 +269,7 @@ const VideoControls: React.FC<{}> = () => {
   })
 
   return (
-    <div css={videoControlsRowStyle} title={t("video-controls-tooltip")}>
+    <div css={videoControlsRowStyle} title={t("video.controls-tooltip")}>
       <div css={leftSideBoxStyle}>
         <PreviewMode />
       </div>
@@ -314,19 +314,19 @@ const PreviewMode: React.FC<{}> = () => {
     },
   })
 
-  var title = (isPlayPreview ? t("video-previewButton-on-tooltip") : t("video-previewButton-off-tooltip"));
+  var title = (isPlayPreview ? t("video.previewButton-on-tooltip") : t("video.previewButton-off-tooltip"));
 
   return (
     <div css={previewModeStyle}
       title={title}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-      aria-label={t("video-preview-button-aria")}
+      aria-label={t("video.previewButton-aria")}
       onClick={ switchPlayPreview }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
         switchPlayPreview()
       }}}>
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
-        {t("video-preview-button")}
+        {t("video.previewButton")}
       </div>
       <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
     </div>
@@ -351,9 +351,9 @@ const PlayButton: React.FC<{}> = () => {
 
   return (
     <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
-      title={t("video-playButton-tooltip")}
+      title={t("video.playButton-tooltip")}
       role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-      aria-label={t("video-playButton-tooltip")}
+      aria-label={t("video.playButton-tooltip")}
       onClick={ switchIsPlaying }
       onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
         switchIsPlaying()
@@ -376,12 +376,12 @@ const TimeDisplay: React.FC<{}> = () => {
   return (
     <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
       <time css={{display: 'inline-block', width: '100px'}}
-        title={t("video-time-duration-tooltip")}
-        tabIndex={0} role="timer" aria-label={t("video-time-aria")+": " + convertMsToReadableString(currentlyAt)}>
+        title={t("video.time-duration-tooltip")}
+        tabIndex={0} role="timer" aria-label={t("video.time-aria")+": " + convertMsToReadableString(currentlyAt)}>
         {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
       </time>
       {" / "}
-      <div tabIndex={0} aria-label={t("video-duration-aria")+": " + convertMsToReadableString(duration)}>
+      <div tabIndex={0} aria-label={t("video.duration-aria")+": " + convertMsToReadableString(duration)}>
         {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
       </div>
     </div>
@@ -415,11 +415,11 @@ const VideoHeader: React.FC<{}> = () => {
 
   let presenter_header;
   if (presenters && presenters.length) {
-      presenter_header = <div css={titleStyle} title={t("video-presenter-tooltip")}>by {presenters.join(", ")}</div>
+      presenter_header = <div css={titleStyle} title={t("video.presenter-tooltip")}>by {presenters.join(", ")}</div>
   }
   return (
-    <div title={t("video-area-tooltip")} css={{fontSize: '16px'}}>
-      <div css={[titleStyle, titleStyleBold]} title={t("video-title-tooltip")}>{title}</div>
+    <div title={t("video.area-tooltip")} css={{fontSize: '16px'}}>
+      <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>{title}</div>
       {presenter_header}
     </div>
   );

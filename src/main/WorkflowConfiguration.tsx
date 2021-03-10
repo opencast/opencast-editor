@@ -36,18 +36,18 @@ const WorkflowConfiguration : React.FC<{}> = () => {
   })
 
   return (
-    <div css={workflowConfigurationStyle} title={t("workflowConfig-area-tooltip")}>
-      <h2>{t("workflowConfig-headline-text")}</h2>
+    <div css={workflowConfigurationStyle} title={t("workflowConfig.area-tooltip")}>
+      <h2>{t("workflowConfig.headline-text")}</h2>
       <FontAwesomeIcon icon={faTools} size="10x" />
       Placeholder
-      <div>{t("workflowConfig-satisfied-text")}</div>
+      <div>{t("workflowConfig.satisfied-text")}</div>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={1} label={t("goBack-button")} iconName={faChevronLeft}/>
-        <SaveAndProcessButton text={t("workflowConfig-confirm-button")}/>
+        <PageButton pageNumber={1} label={t("various.goBack-button")} iconName={faChevronLeft}/>
+        <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("error-text")}</span><br />
-        {postAndProcessError ? t("error-details-text", {errorMessage: postAndProcessError}) : t("error-noDetails-text")}<br/>
+        <span>{t("various.error-text")}</span><br />
+        {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
       </div>
     </div>
   );

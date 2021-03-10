@@ -228,12 +228,12 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       position={controlledPosition}
       nodeRef={nodeRef}
       >
-      <div ref={nodeRef} css={scrubberStyle} title={t("timeline-scrubber-tooltip")}>
+      <div ref={nodeRef} css={scrubberStyle} title={t("timeline.scrubber-tooltip")}>
         <div css={arrowDownStyle}></div>
-        <div css= {scrubberDragHandleStyle} title={t("timeline-dragHandle-tooltip")} aria-grabbed={isGrabbed}
-          aria-label={segments[activeSegmentIndex].deleted ? t("timeline-scrubber-deleted-text-aria",
+        <div css= {scrubberDragHandleStyle} title={t("timeline.dragHandle-tooltip")} aria-grabbed={isGrabbed}
+          aria-label={segments[activeSegmentIndex].deleted ? t("timeline.scrubber-deleted-text-aria",
                      {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})
-                     : t("timeline-scrubber-alive-text-aria",
+                     : t("timeline.scrubber-alive-text-aria",
                      {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})}
           tabIndex={0} onKeyDown={keyboardControls}>
           <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
@@ -287,10 +287,10 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id} title={t("timeline-segment-tooltip", {segment: index})}
-          aria-label={segment.deleted ? t("timeline-segmentsDeleted-text-aria",
+        <div key={segment.id} title={t("timeline.segment-tooltip", {segment: index})}
+          aria-label={segment.deleted ? t("timeline.segmentsDeleted-text-aria",
                      {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})
-                     : t("timeline-segmentsAlive-text-aria",
+                     : t("timeline.segmentsAlive-text-aria",
                      {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})}
           tabIndex={0}
         css={{
@@ -395,7 +395,7 @@ const Waveforms: React.FC<{}> = () => {
       return (
         <>
           <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
-          <div>{t("timeline-generateWaveform-text")}</div>
+          <div>{t("timeline.generateWaveform-text")}</div>
         </>
       );
     }

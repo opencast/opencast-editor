@@ -36,12 +36,12 @@ const Discard : React.FC<{}> = () => {
 
   return (
     <div css={cancelStyle} title="Abort Area">
-      <h1>{t("discard-headline-text")}</h1>
+      <h1>{t("discard.headline-text")}</h1>
       <span>
-        {t("discard-info-text")}
+        {t("discard.info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label={t("goBack-button")} iconName={faChevronLeft} />
+        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft} />
         <DiscardButton />
       </div>
     </div>
@@ -63,14 +63,14 @@ const DiscardButton : React.FC<{}> = () => {
   }
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("discard-confirm-tooltip")}
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("discard.confirm-tooltip")}
       role="button" tabIndex={0}
       onClick={ discard }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         discard()
       }}}>
       <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
-      <span>{t("discard-confirm-button")}</span>
+      <span>{t("discard.confirm-button")}</span>
     </div>
   );
 }

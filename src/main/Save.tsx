@@ -40,18 +40,18 @@ const Save : React.FC<{}> = () => {
   })
 
   return (
-    <div css={saveStyle} title={t("save-saveArea-tooltip")}>
-      <h1>{t("save-headline-text")}</h1>
+    <div css={saveStyle} title={t("save.saveArea-tooltip")}>
+      <h1>{t("save.headline-text")}</h1>
       <span css={{maxWidth: '500px'}}>
-        {t("save-info-text")}
+        {t("save.info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label={t("goBack-button")} iconName={faChevronLeft}/>
+        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
         <SaveButton />
       </div>
       <div css={errorBoxStyle(postWorkflowStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("save-error-text")}</span><br />
-        {postError ? t("error-details-text", {errorMessage: postError}) : t("save-error-noDetails-text")}<br />
+        <span>{t("save.error-text")}</span><br />
+        {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
       </div>
     </div>
   );
@@ -74,24 +74,24 @@ export const SaveButton: React.FC<{}> = () => {
   // Update based on current fetching status
   let icon = faSave
   let spin = false
-  let tooltip = t("save-confirmButton-default-tooltip")
+  let tooltip = t("save.confirmButton-default-tooltip")
   if (workflowStatus === 'loading') {
     icon = faSpinner
     spin = true
-    tooltip = t("save-confirmButton-attempting-tooltip")
+    tooltip = t("save.confirmButton-attempting-tooltip")
   } else if (workflowStatus === 'success') {
     icon = faCheck
     spin = false
-    tooltip = t("save-confirmButton-success-tooltip")
+    tooltip = t("save.confirmButton-success-tooltip")
   } else if (workflowStatus === 'failed') {
     icon = faExclamationCircle
     spin = false
-    tooltip = t("save-confirmButton-failed-tooltip")
+    tooltip = t("save.confirmButton-failed-tooltip")
   }
 
   const ariaSaveUpdate = () => {
     if(workflowStatus === 'success') {
-      return t("save-success-tooltip-aria")
+      return t("save.success-tooltip-aria")
     }
   }
 
@@ -110,7 +110,7 @@ export const SaveButton: React.FC<{}> = () => {
         save()
       }}}>
       <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
-      <span>{t("save-confirm-button")}</span>
+      <span>{t("save.confirm-button")}</span>
       <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
     </div>
   );
