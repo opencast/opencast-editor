@@ -550,7 +550,11 @@ const Metadata: React.FC<{}> = () => {
           onSubmit={onSubmit}
           initialValues={getInitialValues(catalogs)}
           render={({ handleSubmit, form, submitting, pristine, values}) => (
-            <form onSubmit={handleSubmit} css={metadataStyle}>
+            <form onSubmit={event => {
+              handleSubmit(event)
+              // Ugly fix for form not getting updated after submit. TODO: Find a better fix
+              form.reset()
+            }} css={metadataStyle}>
 
               <div css={errorBoxStyle(getStatus === "failed")} title="Error Box" role="alert">
                 <span>A problem occured during communication with Opencast.</span><br />
