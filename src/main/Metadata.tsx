@@ -11,6 +11,7 @@ import {
 
 import { Form, Field } from 'react-final-form'
 import Select from 'react-select'
+import CreatableSelect from 'react-select/creatable';
 
 import {
   KeyboardDateTimePicker,
@@ -217,6 +218,19 @@ const Metadata: React.FC<{}> = () => {
     }
   }
 
+  const handleArrays = (library: any[] | null, input: any, output: any[]) => {
+    // let result = []
+    // If the value is hid inside an array, we need to extract it
+    if (Array.isArray(input)) {
+      input.forEach((subArray: any) => {
+        output.push(handleArrays(library, subArray, output))
+      })
+    }
+
+    // Find react-select equivalent for inital value
+    return library?.find(el => el.submitValue === input)
+  }
+
   /**
    * Returns a data structure to initialize the form fields with
    * @param catalogs
@@ -235,18 +249,30 @@ const Metadata: React.FC<{}> = () => {
           const library = generateReactSelectLibrary(field)
           let searchValue : any = field.value
 
-          // If the value is hid inside an array, we need to extract it
-          if (Array.isArray(searchValue)) {
-            if (searchValue.length > 0) {
-              searchValue = searchValue[0]
-            } else {
-              searchValue = ""
-            }
-          }
-          // Find react-select equivalent for inital value
-          let value : any = library?.find(el => el.submitValue === searchValue)
+          // // If the value is hid inside an array, we need to extract it
+          // if (Array.isArray(searchValue)) {
+          //   if (searchValue.length > 0) {
+          //     searchValue = searchValue[0]
+          //   } else {
+          //     searchValue = ""
+          //   }
+          // }
+          // // Find react-select equivalent for inital value
+          // let value : any = library?.find(el => el.submitValue === searchValue)
 
-          initValues["catalog" + catalogIndex][field.id] = value
+          // initValues["catalog" + catalogIndex][field.id] = value
+
+          if (Array.isArray(searchValue)) {
+            let result: any[] = [];
+            handleArrays(library, field.value, result)
+            searchValue = result
+          } else {
+            searchValue = library?.find(el => el.submitValue === searchValue)
+          }
+
+
+
+          initValues["catalog" + catalogIndex][field.id] = searchValue
         }
       })
     })
@@ -302,23 +328,31 @@ const Metadata: React.FC<{}> = () => {
    * @param field
    * @param value
    */
-  const parseValue = (field: MetadataField, value: any) => {
-    let returnValue : any = ""
+  const parseValue = (field: MetadataField | null, value: any) => {
+    let returnValue : any = value
+
+    // Parse values out react-multi-select and put them in an array
+    if(Array.isArray(value)) {
+      returnValue = []
+      value.forEach((subValue : any) => {
+        returnValue.push(parseValue(null, subValue))  // Pass field as null to avoid each value into an array later on
+      })
+    }
 
     // If the value is hidden an object due to react-select, extract it
-    if (typeof value === 'object' && value !== null && value.submitValue !== null) {
+    if (typeof value === 'object' && value !== null && value.hasOwnProperty("submitValue")) {
       returnValue = value.submitValue
-    } else {
-      returnValue = value
+    } else if (typeof value === 'object' && value !== null && value.__isNew__) {
+      returnValue = value.value
     }
 
     // For these fields, the value needs to be inside an array
-    if (field.id === "creator" || field.id === "contributor") {
+    if (field && !Array.isArray(value) &&(field.id === "creator" || field.id === "contributor")) {
       returnValue = [returnValue]
     }
 
     // For these fields, the value needs to be inside an array
-    if (Object.prototype.toString.call(returnValue) === '[object Date]' && field.type === "date") {
+    if (field && field.type === "date" && Object.prototype.toString.call(returnValue) === '[object Date]') {
       returnValue = returnValue.toJSON()
     }
 
@@ -425,17 +459,28 @@ const Metadata: React.FC<{}> = () => {
    */
   const generateComponent = (field: MetadataField, input: any) => {
     if (field.collection) {
-      return (
-      <Select {...input}
-        readOnly={field.readOnly}
-        options={generateReactSelectLibrary(field)}
-        styles={selectFieldTypeStyle}
-        css={fieldTypeStyle(field.readOnly)}>
-      </Select>
-      // <select {...input} css={fieldTypeStyle}>
-      //   {generateDropdown(field)}
-      // </select>
-      );
+      if (Array.isArray(field.value)) {
+        return (
+          <CreatableSelect {...input}
+            isMulti
+            isClearable
+            readOnly={field.readOnly}
+            options={generateReactSelectLibrary(field)}
+            styles={selectFieldTypeStyle}
+            css={fieldTypeStyle(field.readOnly)}>
+          </CreatableSelect>
+          );
+      } else {
+        return (
+          <Select {...input}
+            readOnly={field.readOnly}
+            options={generateReactSelectLibrary(field)}
+            styles={selectFieldTypeStyle}
+            css={fieldTypeStyle(field.readOnly)}>
+          </Select>
+          );
+      }
+
     } else if (field.type === "date") {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
