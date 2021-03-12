@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { css } from '@emotion/react'
 
-import { httpRequestState } from '../types'
+import { httpRequestState, MainMenuStateNames } from '../types'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +18,11 @@ import ReactPlayer, { Config } from 'react-player'
 
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
 import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
+
+import { GlobalHotKeys } from 'react-hotkeys';
+import { selectMainMenuState } from "../redux/mainMenuSlice";
+import { cuttingKeyMap } from "../globalKeys";
+import { SyntheticEvent } from "react";
 
 /**
  * Container for the videos and their controls
@@ -280,10 +285,19 @@ const PreviewMode: React.FC<{}> = () => {
   // Init redux variables
   const dispatch = useDispatch();
   const isPlayPreview = useSelector(selectIsPlayPreview)
+  const mainMenuState = useSelector(selectMainMenuState)
 
   // Change preview mode from "on" to "off" and vice versa
-  const switchPlayPreview = () => {
+  const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent) => {
+    event.preventDefault()                      // Prevent page scrolling due to Space bar press
+    event.stopPropagation()                     // Prevent video playback due to Space bar press
     dispatch(setIsPlayPreview(!isPlayPreview))
+  }
+
+  // Maps functions to hotkeys
+  const handlers = {
+    // preview: switchPlayPreview,
+    preview: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchPlayPreview(keyEvent) } }
   }
 
   const previewModeStyle = css({
@@ -305,13 +319,14 @@ const PreviewMode: React.FC<{}> = () => {
 
   return (
     <div css={previewModeStyle}
-      title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}
+      title={`Skips deleted segments when playing the video. Currently ${isPlayPreview ? "on" : "off"}. Hotkey: ${cuttingKeyMap[handlers.preview.name]} `}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-      aria-label="Enable or disable preview mode."
+      aria-label={`Enable or disable preview mode. Hotkey: ${cuttingKeyMap[handlers.preview.name]}.`}
       onClick={ switchPlayPreview }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
-        switchPlayPreview()
+        switchPlayPreview(event)
       }}}>
+      <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
         Preview Mode
       </div>
@@ -328,22 +343,32 @@ const PlayButton: React.FC<{}> = () => {
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
+  const mainMenuState = useSelector(selectMainMenuState)
 
   // Change play mode from "on" to "off" and vice versa
-  const switchIsPlaying = () => {
+  const switchIsPlaying = (event: KeyboardEvent | SyntheticEvent) => {
+    event.preventDefault()                      // Prevent page scrolling due to Space bar press
     dispatch(setIsPlaying(!isPlaying))
   }
 
+  // Maps functions to hotkeys
+  const handlers = {
+    play: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchIsPlaying(keyEvent) } }
+  }
+
   return (
+    <>
+    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
     <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
       title="Play Button"
       role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
       aria-label="Play Button"
-      onClick={ switchIsPlaying }
-      onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
-        switchIsPlaying()
+      onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+        switchIsPlaying(event)
       }}}
     />
+    </>
   );
 }
 

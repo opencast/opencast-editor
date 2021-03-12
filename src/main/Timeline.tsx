@@ -18,6 +18,8 @@ import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
+import { HotKeys } from 'react-hotkeys';
+import { scrubberKeyMap } from '../globalKeys';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -121,30 +123,14 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     }
   }
 
-  // TODO: Better/more intuitive controls
+  // Callbacks for keyboard controls
   // TODO: Better increases and decreases than ten intervals
   // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
-  const keyboardControls = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if(event.altKey) {
-      switch (event.key) {
-        case "j":
-          // Left pressed
-          dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0)))
-          break;
-        case "l":
-          // Right pressed
-          dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration)))
-          break;
-        case "i":
-          // Up pressed
-          setKeyboardJumpDelta(Math.min(keyboardJumpDelta * 10, 1000000))
-          break;
-        case "k":
-          // Up pressed
-          setKeyboardJumpDelta(Math.max(keyboardJumpDelta / 10, 1))
-          break;
-      }
-    }
+  const handlers = {
+    left: () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
+    right: () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
+    increase: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
+    decrease: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1))
   }
 
   const scrubberStyle = css({
@@ -214,28 +200,31 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // }
 
   return (
-    <Draggable
-      //onDrag={onControlledDrag}
-      onStart={onStartDrag}
-      onStop={onStopDrag}
-      axis="x"
-      bounds="parent"
-      position={controlledPosition}
-      nodeRef={nodeRef}
-      >
-      <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
-        <div css={arrowDownStyle}></div>
-        <div css= {scrubberDragHandleStyle} title="dragHandle" aria-grabbed={isGrabbed}
-          aria-label={"Scrubber. " + convertMsToReadableString(currentlyAt) + ". Active segment: " + activeSegmentIndex + ". "
-                      + (segments[activeSegmentIndex].deleted ? "Deleted." : "Alive.")
-                      + ". Controls: Alt+j and Alt+k to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta."}
-          tabIndex={0} onKeyDown={keyboardControls}>
-          <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
-          {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
-        </div>
-        <div css={arrowUpStyle}></div>
-      </div>
-    </Draggable>
+    <HotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
+      <Draggable
+        //onDrag={onControlledDrag}
+        onStart={onStartDrag}
+        onStop={onStopDrag}
+        axis="x"
+        bounds="parent"
+        position={controlledPosition}
+        nodeRef={nodeRef}
+        >
+          <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
+
+            <div css={arrowDownStyle}></div>
+            <div css= {scrubberDragHandleStyle} title="dragHandle" aria-grabbed={isGrabbed}
+              aria-label={"Scrubber. " + convertMsToReadableString(currentlyAt) + ". Active segment: " + activeSegmentIndex + ". "
+                          + (segments[activeSegmentIndex].deleted ? "Deleted." : "Alive.")
+                          + ". Controls: j and l to move the scrubber. i and k to increase and decrease the move delta."}
+              tabIndex={0}>
+              <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
+              {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
+            </div>
+            <div css={arrowUpStyle}></div>
+          </div>
+      </Draggable>
+    </HotKeys>
   );
 };
 
