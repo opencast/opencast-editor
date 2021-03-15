@@ -24,11 +24,17 @@ import { MainMenuStateNames } from "../types";
 import { cuttingKeyMap } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Defines the different actions a user can perform while in cutting mode
  */
 const CuttingActions: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
+  // Init redux variables
   const dispatch = useDispatch();
   const mainMenuState = useSelector(selectMainMenuState)
 
@@ -70,19 +76,19 @@ const CuttingActions: React.FC<{}> = () => {
           <div css={blockStyle}>
             <CuttingActionsButton iconName={faCut}
               actionName="Cut" actionHandler={dispatchAction} action={cut}
-              tooltip={`Split the segment at the current scrubber position. Hotkey: ${cuttingKeyMap[handlers.cut.name]}`}
-              ariaLabelText={`Cut. Split the segment at the current scrubber position. Hotkey: ${cuttingKeyMap[handlers.cut.name]}.`}
+              tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: cuttingKeyMap[handlers.cut.name] })}
+              ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: cuttingKeyMap[handlers.cut.name] })}
             />
             <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive} hotKeyName={cuttingKeyMap[handlers.delete.name]}/>
             <CuttingActionsButton iconName={faStepBackward}
               actionName="Merge Left" actionHandler={dispatchAction} action={mergeLeft}
-              tooltip={`Combine the currently active segment with the segment to its left. Hotkey: ${cuttingKeyMap[handlers.mergeLeft.name]}`}
-              ariaLabelText={`Merge Left. Combine the currently active segment with the segment to its left. Hotkey: ${cuttingKeyMap[handlers.mergeLeft.name]}.`}
+              tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeLeft.name] })}
+              ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: cuttingKeyMap[handlers.mergeLeft.name] })}
             />
             <CuttingActionsButton iconName={faStepForward}
               actionName="Merge Right" actionHandler={dispatchAction} action={mergeRight}
-              tooltip={`Combine the currently active segment with the segment to its right. Hotkey: ${cuttingKeyMap[handlers.mergeRight.name]}`}
-              ariaLabelText={`Merge Right. Combine the currently active segment with the segment to its right. Hotkey: ${cuttingKeyMap[handlers.mergeRight.name]}.`}
+              tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
+              ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
             />
           </div>
           <div css={blockStyle}>
@@ -147,21 +153,21 @@ interface markAsDeleteButtonInterface {
  * Button that changes its function based on context
  */
 const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHandler, action, hotKeyName}) => {
-
+  const { t } = useTranslation();
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
 
   return (
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}
-      title={`Mark or unmark the segment at the current position as to be deleted. Hotkey: ${hotKeyName}`}
+      title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}
       role="button" tabIndex={0}
-      aria-label={`Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: ${hotKeyName}`}
+      aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}
       onClick={(event: SyntheticEvent) => actionHandler(event, action)}
       onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
         actionHandler(event, action)
       }}}
       >
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
-      <div>{isCurrentSegmentAlive ? "Delete" : "Restore"}</div>
+      <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
     </div>
   );
 }

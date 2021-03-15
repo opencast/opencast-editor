@@ -15,11 +15,16 @@ import { postVideoInformation, selectStatus, selectError } from '../redux/workfl
 
 import { PageButton } from './Finish'
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Shown if the user wishes to save.
  * Informs the user about saving and displays a save button
  */
 const Save : React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const finishState = useSelector(selectFinishState)
 
@@ -35,19 +40,18 @@ const Save : React.FC<{}> = () => {
   })
 
   return (
-    <div css={saveStyle} title="Save Area">
-      <h1>Save current project</h1>
+    <div css={saveStyle} title={t("save.saveArea-tooltip")}>
+      <h1>{t("save.headline-text")}</h1>
       <span css={{maxWidth: '500px'}}>
-        The video will not be processed but all cutting information will be stored
-        in Opencast. You can continue your edit later.
+        {t("save.info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft}/>
+        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
         <SaveButton />
       </div>
       <div css={errorBoxStyle(postWorkflowStatus === "failed")} title="Error Box" role="alert">
-        <span>An error has occured. Please wait a bit and try again.</span><br />
-        {postError ? "Details: " + postError : "No error details are available."}<br />
+        <span>{t("save.error-text")}</span><br />
+        {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
       </div>
     </div>
   );
@@ -57,6 +61,8 @@ const Save : React.FC<{}> = () => {
  * Button that sends a post request to save current changes
  */
 export const SaveButton: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   // Initialize redux variables
   const dispatch = useDispatch()
@@ -68,24 +74,24 @@ export const SaveButton: React.FC<{}> = () => {
   // Update based on current fetching status
   let icon = faSave
   let spin = false
-  let tooltip = "Save Button"
+  let tooltip = t("save.confirmButton-default-tooltip")
   if (workflowStatus === 'loading') {
     icon = faSpinner
     spin = true
-    tooltip = "Attempting to save"
+    tooltip = t("save.confirmButton-attempting-tooltip")
   } else if (workflowStatus === 'success') {
     icon = faCheck
     spin = false
-    tooltip = "Saved successfully"
+    tooltip = t("save.confirmButton-success-tooltip")
   } else if (workflowStatus === 'failed') {
     icon = faExclamationCircle
     spin = false
-    tooltip = "Save failed"
+    tooltip = t("save.confirmButton-failed-tooltip")
   }
 
   const ariaSaveUpdate = () => {
     if(workflowStatus === 'success') {
-      return "Saved successfully"
+      return t("save.success-tooltip-aria")
     }
   }
 
@@ -104,7 +110,7 @@ export const SaveButton: React.FC<{}> = () => {
         save()
       }}}>
       <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
-      <span>{"Yes, save changes"}</span>
+      <span>{t("save.confirm-button")}</span>
       <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
     </div>
   );

@@ -21,6 +21,9 @@ import { convertMsToReadableString } from '../util/utilityFunctions';
 import { HotKeys } from 'react-hotkeys';
 import { scrubberKeyMap } from '../globalKeys';
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
  * the current position in the video
@@ -53,6 +56,8 @@ const Timeline: React.FC<{}> = () => {
  * @param param0
  */
 const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -210,13 +215,17 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
         position={controlledPosition}
         nodeRef={nodeRef}
         >
-          <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
+          <div ref={nodeRef} css={scrubberStyle} title={t("timeline.scrubber-tooltip")}>
 
             <div css={arrowDownStyle}></div>
-            <div css= {scrubberDragHandleStyle} title="dragHandle" aria-grabbed={isGrabbed}
-              aria-label={"Scrubber. " + convertMsToReadableString(currentlyAt) + ". Active segment: " + activeSegmentIndex + ". "
-                          + (segments[activeSegmentIndex].deleted ? "Deleted." : "Alive.")
-                          + ". Controls: j and l to move the scrubber. i and k to increase and decrease the move delta."}
+            <div css= {scrubberDragHandleStyle} title={t("timeline.dragHandle-tooltip")} aria-grabbed={isGrabbed}
+              aria-label={t("timeline.scrubber-text-aria",
+                         {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
+                          segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
+                          moveLeft: scrubberKeyMap[handlers.left.name],
+                          moveRight: scrubberKeyMap[handlers.right.name],
+                          increase: scrubberKeyMap[handlers.increase.name],
+                          decrease: scrubberKeyMap[handlers.decrease.name] })}
               tabIndex={0}>
               <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
               {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
@@ -232,6 +241,8 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
  * Container responsible for rendering the segments that are created when cutting
  */
 const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const segments = useSelector(selectSegments)
@@ -268,10 +279,12 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id} title={"Segment " + index}
-          aria-label={"Segment " + index + ". " + (segment.deleted ? "Deleted." : "Alive.")
-                      +  " Start: " + convertMsToReadableString(segment.start)
-                      + ". End: " + convertMsToReadableString(segment.end) + "."}
+        <div key={segment.id} title={t("timeline.segment-tooltip", {segment: index})}
+          aria-label={t("timeline.segments-text-aria",
+                     {segment: index,
+                      segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                      start: convertMsToReadableString(segment.start),
+                      end: convertMsToReadableString(segment.end) })}
           tabIndex={0}
         css={{
           background: bgColor(segment.deleted, activeSegmentIndex === index),
@@ -306,6 +319,8 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
  * Generates waveform images and displays them
  */
 const Waveforms: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
@@ -373,7 +388,7 @@ const Waveforms: React.FC<{}> = () => {
       return (
         <>
           <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
-          <div>Generating Waveform</div>
+          <div>{t("timeline.generateWaveform-text")}</div>
         </>
       );
     }
