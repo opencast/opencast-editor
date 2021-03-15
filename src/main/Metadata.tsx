@@ -486,17 +486,25 @@ const Metadata: React.FC<{}> = () => {
                 return renderCatalog(catalog, i)
               })}
 
+
+                <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>{t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}</div>
+
+
               <div title="buttons" css={buttonContainerStyle}>
                 <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
                   type="submit"
+                  title={t("metadata.submit-button-tooltip")}
+                  aria-label={t("metadata.submit-button-tooltip")}
                   disabled={submitting || pristine}>
                     {t("metadata.submit-button")}
                 </button>
                 <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
                   type="button"
+                  title={t("metadata.reset-button-tooltip")}
+                  aria-label={t("metadata.reset-button-tooltip")}
                   onClick={() => {form.reset()}}
                   disabled={submitting || pristine}>
-                    Reset
+                    {t("metadata.reset-button")}
                 </button>
               </div>
 
