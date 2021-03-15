@@ -20,10 +20,15 @@ import {
 } from '../redux/videoSlice'
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Defines the different actions a user can perform while in cutting mode
  */
 const CuttingActions: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const cuttingStyle =  css({
     display: 'flex',
@@ -41,18 +46,18 @@ const CuttingActions: React.FC<{}> = () => {
   return (
     <div css={cuttingStyle}>
         <div css={blockStyle}>
-          <CuttingActionsButton iconName={faCut} actionName="Cut" action={cut}
-            tooltip="Split the segment at the current scrubber position"
-            ariaLabelText="Cut. Split the segment at the current scrubber position"
+          <CuttingActionsButton iconName={faCut} actionName= {t("cuttingActions.cut-button")} action={cut}
+            tooltip={t('cuttingActions.cut-tooltip')}
+            ariaLabelText={t('cuttingActions.cut-tooltip-aria')}
           />
           <MarkAsDeletedButton />
-          <CuttingActionsButton iconName={faStepBackward} actionName="Merge Left" action={mergeLeft}
-            tooltip="Combine the currently active segment with the segment to its left"
-            ariaLabelText="Merge Left. Combine the currently active segment with the segment to its left"
+          <CuttingActionsButton iconName={faStepBackward} actionName={t("cuttingActions.mergeLeft-button")} action={mergeLeft}
+            tooltip={t('cuttingActions.mergeLeft-tooltip')}
+            ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria')}
           />
-          <CuttingActionsButton iconName={faStepForward} actionName="Merge Right" action={mergeRight}
-            tooltip="Combine the currently active segment with the segment to its right"
-            ariaLabelText="Merge Right. Combine the currently active segment with the segment to its right"
+          <CuttingActionsButton iconName={faStepForward} actionName={t("cuttingActions.mergeRight-button")} action={mergeRight}
+            tooltip={t('cuttingActions.mergeRight-tooltip')}
+            ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria')}
           />
         </div>
         <div css={blockStyle}>
@@ -119,17 +124,19 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
  */
 const MarkAsDeletedButton : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
-  const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
+  const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive);
 
   return (
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}
-      title="Mark or unmark the segment at the current position as to be deleted."
+      title= {t('cuttingActions.delete-restore-tooltip')}
       role="button" tabIndex={0}
-      aria-label={"Delete and Restore. Mark or unmark the segment at the current position as to be deleted."}
+      aria-label={t('cuttingActions.delete-restore-tooltip-aria')}
       onClick={() => dispatch(markAsDeletedOrAlive())}>
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
-      <div>{isCurrentSegmentAlive ? "Delete" : "Restore"}</div>
+      <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
     </div>
   );
 }

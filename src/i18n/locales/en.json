@@ -1,0 +1,114 @@
+{
+    "mainMenu": {
+      "cutting-button": "Cutting",
+      "finish-button": "Finish",
+      "thumbnail-button": "Thumbnail",
+      "metadata-button": "Metadata",
+      "mainMenu-tooltip": "Main Menu",
+      "tooltip-aria": "Main Navigation"
+    },
+
+    "cuttingActions": {
+      "cut-button": "Cut",
+      "cut-tooltip": "Split the segment at the current scrubber position",
+      "cut-tooltip-aria": "Cut. Split the segment at the current scrubber position",
+      "delete-button": "Delete",
+      "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted.",
+      "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted.",
+      "restore-button": "Restore",
+      "mergeLeft-button": "Merge Left",
+      "mergeLeft-tooltip": "Combine the currently active segment with the segment to its left",
+      "mergeLeft-tooltip-aria": "Merge Left. Combine the currently active segment with the segment to its left",
+      "mergeRight-button": "Merge Right",
+      "mergeRight-tooltip": "Combine the currently active segment with the segment to its right",
+      "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right"
+    },
+
+    "video": {
+      "previewButton": "Preview Mode",
+      "previewButton-on-tooltip": "Skips deleted segments when playing the video. Currently on",
+      "previewButton-off-tooltip": "Skips deleted segments when playing the video. Currently off",
+      "previewButton-aria": "Enable or disable preview mode.",
+      "playButton-tooltip": "Play Button",
+      "time-duration-tooltip": "Playback time and duration",
+      "duration-aria": "Duration",
+      "time-aria": "Current time",
+      "comError-text": "A problem occured during communication with Opencast.",
+      "loadError-text": "An error has occured loading this video.",
+      "title-tooltip": "Video Title",
+      "presenter-tooltip": "Video Presenters",
+      "area-tooltip": "Video Area",
+      "area-player-tooltip": "Video Player Area",
+      "area-header-tooltip": "Video Area Header",
+      "controls-tooltip": "Video Controls"
+    },
+
+    "finishMenu": {
+      "save-button": "Save changes",
+      "start-button": "Start processing",
+      "discard-button": "Discard changes"
+    },
+
+    "save": {
+      "headline-text": "Save current project",
+      "confirm-button": "Yes, save changes",
+      "confirmButton-default-tooltip": "Save Button",
+      "confirmButton-attempting-tooltip": "Attempting to save",
+      "confirmButton-success-tooltip": "Saved successfully",
+      "confirmButton-failed-tooltip": "Save failed",
+      "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
+      "success-tooltip-aria": "Saved successfully",
+      "saveArea-tooltip": "Save Area"
+    },
+
+    "discard": {
+      "headline-text": "Discard changes",
+      "confirm-button": "Yes, discard changes",
+      "confirm-tooltip": "Discard changes button",
+      "info-text": "Discard all the changes you made? This cannot be undone!"
+    },
+
+    "theEnd": {
+      "discarded-text": "All your changes are now lost forever. You can now close the editor.",
+      "startOver-button": "Let me start over!",
+      "startOver-tooltip": "Reload the page to start over",
+      "info-text": "Changes successfully saved to Opencast. Processing your changes may take up to {{duration}} hours. You can now close the editor.\n"
+    },
+
+    "workflowSelection": {
+      "saveAndProcess-text": "Save and Process",
+      "selectWF-text": "Select a workflow",
+      "noWorkflows-text": "A problem occured, there are no workflows to process your changes with.<3/> Please save your changes and contact an Opencast Administrator.\n",
+      "oneWorkflow-text": "The video will be cut and processed with the workflow \\\"{{workflow}}\\\". <3/> This will take some time.\n",
+      "manyWorkflows-text": "Select which workflow Opencast should use for processing.",
+      "startProcessing-button": "Start processing",
+      "back-button": "Take me back",
+      "selectWF-button": "Click to select this workflow",
+      "selectWF-button-aria": "Press to select the workflow: {{stateName}}\n"
+    },
+    
+    "timeline": {
+      "generateWaveform-text": "Generating Waveform",
+      "segment-tooltip": "Segment {{segment}}",
+      "scrubber-tooltip": "Scrubber",
+      "dragHandle-tooltip": "dragHandle",
+      "scrubber-deleted-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Deleted. Controls: Alt+j and Alt+l to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.\n",
+      "scrubber-alive-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Alive. Controls: Alt+j and Alt+l to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.\n",
+      "segmentsDeleted-text-aria": "Segment {{index}}. Deleted. Start: {{start}}. End: {{end}}.\n",
+      "segmentsAlive-text-aria": "Segment {{index}}. Alive. Start: {{start}}. End: {{end}}.\n"
+    },
+
+    "workflowConfig": {
+      "headline-text": "Workflow Configuration",
+      "area-tooltip": "Workflow Configuration Area",
+      "satisfied-text": "Satisfied with your configuration?",
+      "confirm-button": "Yes, start processing"
+    },
+
+    "various": {
+      "error-details-text": "Details: {{errorMessage}}\n",
+      "error-noDetails-text": "No error details are available.",
+      "error-text": "An error has occured. Please wait a bit and try again.",
+      "goBack-button": "No, take me back"
+    }
+  }

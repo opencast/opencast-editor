@@ -19,11 +19,16 @@ import ReactPlayer, { Config } from 'react-player'
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
 import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Container for the videos and their controls
  * TODO: Move fetching to a more central part of the app
  */
 const Video: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch()
@@ -59,8 +64,8 @@ const Video: React.FC<{}> = () => {
   const errorBox = () => {
     return (
       <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
-        <span>A problem occured during communication with Opencast.</span><br />
-        {error ? "Details: " + error : "No error details are available."}<br />
+        <span>{t("video.comError-text")}</span><br />
+        {error ? t("various.error-details-text", {errorMessage: error}) : t("various.error-noDetails-text")}<br />
       </div>
     );
   }
@@ -85,10 +90,10 @@ const Video: React.FC<{}> = () => {
   });
 
   return (
-    <div css={videoAreaStyle} title="Video Area">
+    <div css={videoAreaStyle} title={t("video.area-tooltip")}>
       {errorBox()}
       <VideoHeader />
-      <div css={videoPlayerAreaStyle} title="Video Player Area">
+      <div css={videoPlayerAreaStyle} title={t("video.area-player-tooltip")}>
         {videoPlayers}
       </div>
       <VideoControls />
@@ -102,6 +107,8 @@ const Video: React.FC<{}> = () => {
  * @param {boolean} isPrimary - If the player is the main control
  */
 const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -209,7 +216,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
     } else {
       return (
         <div css={errorBoxStyle} title="Error Box" role="alert">
-          <span>An error has occured loading this video. </span>
+          <span>{t("video.loadError-text")} </span>
         </div>
       );
     }
@@ -237,6 +244,8 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
  */
 const VideoControls: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   const videoControlsRowStyle = css({
     display: 'flex',
     flexDirection: 'row',
@@ -260,7 +269,7 @@ const VideoControls: React.FC<{}> = () => {
   })
 
   return (
-    <div css={videoControlsRowStyle} title="Video Controls">
+    <div css={videoControlsRowStyle} title={t("video.controls-tooltip")}>
       <div css={leftSideBoxStyle}>
         <PreviewMode />
       </div>
@@ -276,6 +285,8 @@ const VideoControls: React.FC<{}> = () => {
  * Enable/Disable Preview Mode
  */
 const PreviewMode: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -303,17 +314,19 @@ const PreviewMode: React.FC<{}> = () => {
     },
   })
 
+  var title = (isPlayPreview ? t("video.previewButton-on-tooltip") : t("video.previewButton-off-tooltip"));
+
   return (
     <div css={previewModeStyle}
-      title={"Skips deleted segments when playing the video. Currently " + (isPlayPreview ? "on" : "off")}
+      title={title}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-      aria-label="Enable or disable preview mode."
+      aria-label={t("video.previewButton-aria")}
       onClick={ switchPlayPreview }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
         switchPlayPreview()
       }}}>
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
-        Preview Mode
+        {t("video.previewButton")}
       </div>
       <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
     </div>
@@ -324,6 +337,8 @@ const PreviewMode: React.FC<{}> = () => {
  * Start/Pause playing the videos
  */
 const PlayButton: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -336,9 +351,9 @@ const PlayButton: React.FC<{}> = () => {
 
   return (
     <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
-      title="Play Button"
+      title={t("video.playButton-tooltip")}
       role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-      aria-label="Play Button"
+      aria-label={t("video.playButton-tooltip")}
       onClick={ switchIsPlaying }
       onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
         switchIsPlaying()
@@ -352,6 +367,8 @@ const PlayButton: React.FC<{}> = () => {
  */
 const TimeDisplay: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   // Init redux variables
   const currentlyAt = useSelector(selectCurrentlyAt)
   const duration = useSelector(selectDuration)
@@ -359,12 +376,12 @@ const TimeDisplay: React.FC<{}> = () => {
   return (
     <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
       <time css={{display: 'inline-block', width: '100px'}}
-        title={"Playback time and duration"}
-        tabIndex={0} role="timer" aria-label={"Current time: " + convertMsToReadableString(currentlyAt)}>
+        title={t("video.time-duration-tooltip")}
+        tabIndex={0} role="timer" aria-label={t("video.time-aria")+": " + convertMsToReadableString(currentlyAt)}>
         {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
       </time>
       {" / "}
-      <div tabIndex={0} aria-label={"Duration: " + convertMsToReadableString(duration)}>
+      <div tabIndex={0} aria-label={t("video.duration-aria")+": " + convertMsToReadableString(duration)}>
         {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
       </div>
     </div>
@@ -375,6 +392,9 @@ const TimeDisplay: React.FC<{}> = () => {
  * Displays elements above the video, e.g. title
  */
 const VideoHeader: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
+
   const title = useSelector(selectTitle)
   const presenters = useSelector(selectPresenters)
 
@@ -395,11 +415,11 @@ const VideoHeader: React.FC<{}> = () => {
 
   let presenter_header;
   if (presenters && presenters.length) {
-      presenter_header = <div css={titleStyle} title="Video Presenters">by {presenters.join(", ")}</div>
+      presenter_header = <div css={titleStyle} title={t("video.presenter-tooltip")}>by {presenters.join(", ")}</div>
   }
   return (
-    <div title="Video Area Header" css={{fontSize: '16px'}}>
-      <div css={[titleStyle, titleStyleBold]} title="Video Title">{title}</div>
+    <div title={t("video.area-tooltip")} css={{fontSize: '16px'}}>
+      <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>{title}</div>
       {presenter_header}
     </div>
   );

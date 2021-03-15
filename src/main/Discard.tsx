@@ -14,11 +14,16 @@ import { setEnd } from '../redux/endSlice'
 
 import { PageButton } from './Finish'
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Shown if the user wishes to abort.
  * Informs the user about aborting and displays abort button.
  */
 const Discard : React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const finishState = useSelector(selectFinishState)
 
@@ -31,12 +36,12 @@ const Discard : React.FC<{}> = () => {
 
   return (
     <div css={cancelStyle} title="Abort Area">
-      <h1>Discard changes</h1>
+      <h1>{t("discard.headline-text")}</h1>
       <span>
-        Discard all the changes you made? This cannot be undone!
+        {t("discard.info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft} />
+        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft} />
         <DiscardButton />
       </div>
     </div>
@@ -48,6 +53,8 @@ const Discard : React.FC<{}> = () => {
  */
 const DiscardButton : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   // Initialize redux variables
   const dispatch = useDispatch()
 
@@ -56,14 +63,14 @@ const DiscardButton : React.FC<{}> = () => {
   }
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={"Discard changes button"}
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("discard.confirm-tooltip")}
       role="button" tabIndex={0}
       onClick={ discard }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         discard()
       }}}>
       <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
-      <span>{"Yes, discard changes"}</span>
+      <span>{t("discard.confirm-button")}</span>
     </div>
   );
 }
