@@ -19,10 +19,15 @@ import {
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Creates a Metadata form
  */
 const Metadata: React.FC<{}> = () => {
+
+  const { t, i18n } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch()
@@ -160,70 +165,17 @@ const Metadata: React.FC<{}> = () => {
    * Form Callbacks - Other
    */
 
-  // TODO: Replace with real translation keys once i18n is merge
-  const translation = {
-    "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE": "Episode Metadata",
-    "test": "test",
-    "labels": {
-      "title": "Title",
-      "subject": "Subject",
-      "description": "Description",
-      "language": "Language",
-      "rightsHolder": "Rights",
-      "license": "License",
-      "isPartOf": "Series",
-      "creator": "Presenter(s)",
-      "contributor": "Contributor(s)",
-      "startDate": "Start date",
-      "duration": "Duration",
-      "location": "Location",
-      "source": "Source",
-      "created": "Created",
-      "publisher": "Publisher",
-      "identifier": "UID",
-    },
-    "language": {
-      "LANGUAGES.SLOVENIAN": "Slovenian",
-      "LANGUAGES.PORTUGESE": "Portugese",
-      "LANGUAGES.ROMANSH": "Romansh",
-      "LANGUAGES.ARABIC": "Arabic",
-      "LANGUAGES.POLISH": "Polish",
-      "LANGUAGES.ITALIAN": "Italian",
-      "LANGUAGES.CHINESE": "Chinese",
-      "LANGUAGES.FINNISH": "Finnish",
-      "LANGUAGES.DANISH": "Danish",
-      "LANGUAGES.UKRAINIAN": "Ukrainian",
-      "LANGUAGES.FRENCH": "French",
-      "LANGUAGES.SPANISH": "Spanish",
-      "LANGUAGES.GERMAN_CH": "Swiss German",
-      "LANGUAGES.NORWEGIAN": "Norwegian",
-      "LANGUAGES.RUSSIAN": "Russian",
-      "LANGUAGES.JAPANESE": "Japanese",
-      "LANGUAGES.DUTCH": "Dutch",
-      "LANGUAGES.TURKISH": "Turkish",
-      "LANGUAGES.HINDI": "Hindi",
-      "LANGUAGES.SWEDISH": "Swedish",
-      "LANGUAGES.ENGLISH": "English",
-      "LANGUAGES.GERMAN": "German"
-    },
-    "license": {
-      "EVENTS.LICENSE.CC0": "CC0",
-      "EVENTS.LICENSE.CCBYND": "CC-BY-ND",
-      "EVENTS.LICENSE.CCBYNCND": "CC-BY-NC-ND",
-      "EVENTS.LICENSE.CCBYNCSA": "CC-BY-NC-SA",
-      "EVENTS.LICENSE.ALLRIGHTS": "All rights reserved",
-      "EVENTS.LICENSE.CCBYSA": "CC-BY-SA",
-      "EVENTS.LICENSE.CCBYNC": "CC-BY-NC",
-      "EVENTS.LICENSE.CCBY": "CC-BY"
-    }
-  }
-
-  const handleArrays = (library: any[] | null, input: any, output: any[]) => {
-    // let result = []
+   /**
+    * Recursively recreates nested array structures for form initalValues
+    * @param library
+    * @param input
+    * @param output
+    */
+  const helperHandleArrays = (library: any[] | null, input: any, output: any[]) => {
     // If the value is hid inside an array, we need to extract it
     if (Array.isArray(input)) {
       input.forEach((subArray: any) => {
-        output.push(handleArrays(library, subArray, output))
+        output.push(helperHandleArrays(library, subArray, output))
       })
     }
 
@@ -249,28 +201,13 @@ const Metadata: React.FC<{}> = () => {
           const library = generateReactSelectLibrary(field)
           let searchValue : any = field.value
 
-          // // If the value is hid inside an array, we need to extract it
-          // if (Array.isArray(searchValue)) {
-          //   if (searchValue.length > 0) {
-          //     searchValue = searchValue[0]
-          //   } else {
-          //     searchValue = ""
-          //   }
-          // }
-          // // Find react-select equivalent for inital value
-          // let value : any = library?.find(el => el.submitValue === searchValue)
-
-          // initValues["catalog" + catalogIndex][field.id] = value
-
           if (Array.isArray(searchValue)) {
             let result: any[] = [];
-            handleArrays(library, field.value, result)
+            helperHandleArrays(library, field.value, result)
             searchValue = result
           } else {
             searchValue = library?.find(el => el.submitValue === searchValue)
           }
-
-
 
           initValues["catalog" + catalogIndex][field.id] = searchValue
         }
@@ -288,7 +225,7 @@ const Metadata: React.FC<{}> = () => {
    * Validator for required fields
    * @param value
    */
-  const required = (value: any) => (value ? undefined : 'Required')
+  const required = (value: any) => (value ? undefined : t("metadata.validation.required"))
 
   /**
    * Validator for the duration field
@@ -296,7 +233,7 @@ const Metadata: React.FC<{}> = () => {
    */
   const duration = (value: any) => {
     let re: RegExp = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
-    return re.test(value) ? undefined: 'Format must be HH:MM:SS'
+    return re.test(value) ? undefined : t("metadata.validation.duration.format")
   }
 
   // // Function that combines multiple validation functions. Needs to be made typescript conform
@@ -391,27 +328,6 @@ const Metadata: React.FC<{}> = () => {
    * Form - Rendering
    */
 
-  // const generateDropdownField = (value: any, description: any) => {
-  //   return (
-  //     <option key={value} value={value} >{description}</option>
-  //   );
-  // }
-
-  // const generateDropdown = (field: MetadataField) => {
-  //   if (field.collection) {
-  //     return (
-  //       <>
-  //       {Object.entries(field.collection).map(([key, value]) => {
-  //         return generateDropdownField(value, key)
-  //       })}
-  //       {generateDropdownField("", "No value")}
-  //       </>
-  //     );
-  //   } else {
-  //     return null
-  //   }
-  // }
-
   /**
    * Transforms field values and labels into an array of objects
    * that can be parsed by react-select
@@ -430,8 +346,12 @@ const Metadata: React.FC<{}> = () => {
 
         // Parse Label
         let descLabel = null
-        if ((translation as any)[field.id]) {
-          descLabel = (translation as any)[field.id][key]
+        if (i18n.exists(`metadata.${field.id}`)) {
+          descLabel = t(`metadata.${field.id}.${key.replaceAll(".", "-")}`)
+
+          if (field.id === "license") {
+            descLabel = t(`metadata.${field.id}.${JSON.parse(key).label.replaceAll(".", "-")}`)
+          }
         }
 
         // Change label for series
@@ -514,7 +434,8 @@ const Metadata: React.FC<{}> = () => {
                 >
                 {({ input, meta }) => (
                   <div css={fieldStyle}>
-                    <label css={fieldLabelStyle}>{(translation as any)["labels"][field.id]}</label>
+                    <label css={fieldLabelStyle}>{t(`metadata.labels.${field.id}`)}</label>
+
                     {generateComponent(field, input)}
                     {meta.error && meta.touched && <span css={validateErrorStyle}>{meta.error}</span>}
                   </div>
@@ -531,7 +452,7 @@ const Metadata: React.FC<{}> = () => {
   const renderCatalog = (catalog: Catalog, catalogIndex: number) => {
     return (
       <div key={catalogIndex}>
-        <h2>{(translation as any)[catalog.title]}</h2>
+        <h2>{t(`metadata.${catalog.title.replaceAll(".", "-")}`)}</h2>
 
         {catalog.fields.map((field, i) => {
           return renderField(field, catalogIndex, i)
@@ -569,7 +490,7 @@ const Metadata: React.FC<{}> = () => {
                 <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
                   type="submit"
                   disabled={submitting || pristine}>
-                    Save
+                    {t("metadata.submit-button")}
                 </button>
                 {/* <button css={[basicButtonStyle, nagivationButtonStyle, submitButtonStyle]}
                   type="button"
