@@ -123,7 +123,7 @@ const Metadata: React.FC<{}> = () => {
   const buttonContainerStyle = css({
     display: 'flex',
     flexFlow: 'row nowrap',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     marginTop: '25px',
   })
 
@@ -492,12 +492,12 @@ const Metadata: React.FC<{}> = () => {
                   disabled={submitting || pristine}>
                     {t("metadata.submit-button")}
                 </button>
-                {/* <button css={[basicButtonStyle, nagivationButtonStyle, submitButtonStyle]}
+                <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
                   type="button"
-                  onClick={form.reset}
+                  onClick={() => {form.reset()}}
                   disabled={submitting || pristine}>
                     Reset
-                </button> */}
+                </button>
               </div>
 
               <div css={errorBoxStyle(postStatus === "failed")} title="Error Box" role="alert">
