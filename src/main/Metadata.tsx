@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
-import { errorBoxStyle, nagivationButtonStyle } from '../cssStyles'
+import { errorBoxStyle } from '../cssStyles'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -22,9 +22,17 @@ import DateFnsUtils from "@date-io/date-fns";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Creates a Metadata form
+ *
+ * Takes data from a redux slice and throws it into a react-final-form.
+ * When submitting, the state in the redux slice gets updated
+ *
+ * If something doesn't work, main places of interest are the submit function
+ * and the initialValues function
  */
 const Metadata: React.FC<{}> = () => {
 
@@ -114,53 +122,57 @@ const Metadata: React.FC<{}> = () => {
     );
   }
 
-  const validateErrorStyle = css({
-    lineHeight: '32px',
-    marginLeft: '10px',
-    color: '#800',
-    fontWeight: 'bold',
-  })
+  const validateStyle = (isError: boolean) => {
+    return (
+      css({
+        lineHeight: '32px',
+        marginLeft: '10px',
+        ...(isError) && {color: '#800'},
+        fontWeight: 'bold',
+      })
+    )
+  }
 
-  const buttonContainerStyle = css({
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    justifyContent: 'space-around',
-    marginTop: '25px',
-  })
+  // const buttonContainerStyle = css({
+  //   display: 'flex',
+  //   flexFlow: 'row nowrap',
+  //   justifyContent: 'space-around',
+  //   marginTop: '25px',
+  // })
 
-  // TODO: Rework all div buttons so the ':enabled' pseudo-class does not screw them over
-  const basicButtonStyleCOPY = css({
-    borderRadius: '10px',
-    cursor: "pointer",
-    // Animation
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover:enabled": {
-      transform: 'scale(1.1)',
-    },
-    "&:focus:enabled": {
-      transform: 'scale(1.1)',
-    },
-    "&:active:enabled": {
-      transform: 'scale(0.9)',
-    },
-    // Flex position child elements
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '10px',
-    textAlign: 'center' as const,
-  });
+  // // TODO: Rework all div buttons so the ':enabled' pseudo-class does not screw them over
+  // const basicButtonStyleCOPY = css({
+  //   borderRadius: '10px',
+  //   cursor: "pointer",
+  //   // Animation
+  //   transitionDuration: "0.3s",
+  //   transitionProperty: "transform",
+  //   "&:hover:enabled": {
+  //     transform: 'scale(1.1)',
+  //   },
+  //   "&:focus:enabled": {
+  //     transform: 'scale(1.1)',
+  //   },
+  //   "&:active:enabled": {
+  //     transform: 'scale(0.9)',
+  //   },
+  //   // Flex position child elements
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   gap: '10px',
+  //   textAlign: 'center' as const,
+  // });
 
-  const submitButtonStyle = css({
-    background: 'snow',
-    border: '1px solid #ccc',
+  // const submitButtonStyle = css({
+  //   background: 'snow',
+  //   border: '1px solid #ccc',
 
-    "&[disabled]": {
-      opacity: '0.6',
-      cursor: 'not-allowed',
-    },
-  })
+  //   "&[disabled]": {
+  //     opacity: '0.6',
+  //     cursor: 'not-allowed',
+  //   },
+  // })
 
   /**
    * Form Callbacks - Other
@@ -259,6 +271,45 @@ const Metadata: React.FC<{}> = () => {
   /**
    * Form Callbacks - Submitting
    */
+
+   /**
+    * Sends a single value to the corresponding field in redux.
+    * This kinda breaks the form workflow, since we do not use the submit callback
+    * of the form class anymore.
+    * @param value value for the field
+    * @param fieldId String of the form "catalog{catalogIndex}.name"
+    */
+  const submitSingleField = (value: any, fieldId: string) => {
+    const catalogIndexString = fieldId.substring(
+      fieldId.indexOf("g") + 1,
+      fieldId.indexOf(".")
+    );
+    const fieldName = fieldId.substring(
+      fieldId.indexOf(".") + 1,
+      fieldId.length
+    );
+    const catalogIndex = parseInt(catalogIndexString)
+
+    // Find the corresponding field index in the redux catalog
+    for (let fieldIndex = 0; fieldIndex < catalogs[catalogIndex].fields.length; fieldIndex++) {
+      if (catalogs[catalogIndex].fields[fieldIndex].id === fieldName) {
+        // Update the field in the redux catalog
+        dispatch(setFieldValue({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
+          value: parseValue(catalogs[catalogIndex].fields[fieldIndex], value)}))
+        break
+      }
+    }
+  }
+
+  /**
+   * Executes given blur callback while also sending the value of the current field to redux
+   * @param e
+   * @param input
+   */
+  const blurWithSubmit = (e: any, input: any) => {
+      input.onBlur(e);
+      submitSingleField(input.value, input.name)
+  }
 
   /**
    * Helper function for onSubmit
@@ -385,6 +436,7 @@ const Metadata: React.FC<{}> = () => {
       if (Array.isArray(field.value)) {
         return (
           <CreatableSelect {...input}
+            onBlur={e => {blurWithSubmit(e, input)}}
             isMulti
             isClearable
             readOnly={field.readOnly}
@@ -396,6 +448,7 @@ const Metadata: React.FC<{}> = () => {
       } else {
         return (
           <Select {...input}
+            onBlur={e => {blurWithSubmit(e, input)}}
             readOnly={field.readOnly}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
@@ -408,6 +461,7 @@ const Metadata: React.FC<{}> = () => {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
           <KeyboardDateTimePicker {...input}
+            onBlur={e => {blurWithSubmit(e, input)}}
             name={field.id}
             format="yyyy/MM/dd HH:mm"
             disabled={field.readOnly}
@@ -420,6 +474,7 @@ const Metadata: React.FC<{}> = () => {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
           <KeyboardTimePicker {...input}
+            onBlur={e => {blurWithSubmit(e, input)}}
             name={field.id}
             format="HH:mm"
             disabled={field.readOnly}
@@ -431,6 +486,7 @@ const Metadata: React.FC<{}> = () => {
     } else if (field.type === "text_long") {
       return (
         <textarea {...input}
+          onBlur={e => {blurWithSubmit(e, input)}}
           readOnly={field.readOnly}
           css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
         />
@@ -438,6 +494,7 @@ const Metadata: React.FC<{}> = () => {
     } else {
       return(
         <input {...input}
+          onBlur={e => {blurWithSubmit(e, input)}}
           readOnly={field.readOnly}
           css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
         />
@@ -466,7 +523,8 @@ const Metadata: React.FC<{}> = () => {
                     }</label>
 
                     {generateComponent(field, input)}
-                    {meta.error && meta.touched && <span css={validateErrorStyle}>{meta.error}</span>}
+                    {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
+                    {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
                 )}
         </Field>
@@ -502,6 +560,7 @@ const Metadata: React.FC<{}> = () => {
     return (
         <Form
           onSubmit={onSubmit}
+          subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
           initialValues={getInitialValues(catalogs)}
           render={({ handleSubmit, form, submitting, pristine, values}) => (
             <form onSubmit={event => {
@@ -519,7 +578,7 @@ const Metadata: React.FC<{}> = () => {
                 return renderCatalog(catalog, i)
               })}
 
-
+{/* 
                 <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>{t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}</div>
 
 
@@ -539,7 +598,7 @@ const Metadata: React.FC<{}> = () => {
                   disabled={submitting || pristine}>
                     {t("metadata.reset-button")}
                 </button>
-              </div>
+              </div> */}
 
               <div css={errorBoxStyle(postStatus === "failed")} title="Error Box" role="alert">
                 <span>A problem occured during communication with Opencast. <br />
@@ -548,7 +607,7 @@ const Metadata: React.FC<{}> = () => {
               </div>
 
               {/* For debugging the forms current values*/}
-              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+              <pre>{JSON.stringify(values, null, 2)}</pre>
             </form>
           )}
         />
