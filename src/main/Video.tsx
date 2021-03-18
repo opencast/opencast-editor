@@ -291,6 +291,7 @@ const VideoControls: React.FC<{}> = () => {
 const PreviewMode: React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const ref = React.useRef<HTMLDivElement>(null)
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -298,16 +299,21 @@ const PreviewMode: React.FC<{}> = () => {
   const mainMenuState = useSelector(selectMainMenuState)
 
   // Change preview mode from "on" to "off" and vice versa
-  const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent) => {
+  const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent, ref: React.RefObject<HTMLDivElement> | undefined) => {
     event.preventDefault()                      // Prevent page scrolling due to Space bar press
     event.stopPropagation()                     // Prevent video playback due to Space bar press
     dispatch(setIsPlayPreview(!isPlayPreview))
+
+    // Lose focus if clicked by mouse
+    if (ref) {
+      ref.current?.blur()
+    }
   }
 
   // Maps functions to hotkeys
   const handlers = {
     // preview: switchPlayPreview,
-    preview: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchPlayPreview(keyEvent) } }
+    preview: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchPlayPreview(keyEvent, undefined) } }
   }
 
   const previewModeStyle = css({
@@ -329,12 +335,13 @@ const PreviewMode: React.FC<{}> = () => {
 
   return (
     <div css={previewModeStyle}
+      ref={ref}
       title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: cuttingKeyMap[handlers.preview.name] })}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
       aria-label={t("video.previewButton-aria", { hotkeyName: cuttingKeyMap[handlers.preview.name] })}
-      onClick={ switchPlayPreview }
+      onClick={ (event: SyntheticEvent) => switchPlayPreview(event, ref) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
-        switchPlayPreview(event)
+        switchPlayPreview(event, undefined)
       }}}>
       <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
@@ -376,7 +383,7 @@ const PlayButton: React.FC<{}> = () => {
       role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
       aria-label={t("video.playButton-tooltip")}
       onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
-      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
         switchIsPlaying(event)
       }}}
     />

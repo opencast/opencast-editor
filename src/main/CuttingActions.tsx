@@ -42,19 +42,25 @@ const CuttingActions: React.FC<{}> = () => {
    * General action callback for cutting actions
    * @param event event triggered by click or button press
    * @param action redux event to dispatch
+   * @param ref Pass a reference if the clicked element should lose focus
    */
-  const dispatchAction = (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>) => {
+  const dispatchAction = (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>, ref: React.RefObject<HTMLDivElement> | undefined) => {
     event.preventDefault()                      // Prevent page scrolling due to Space bar press
     event.stopPropagation()                     // Prevent video playback due to Space bar press
     dispatch(action())
+
+    // Lose focus if clicked by mouse
+    if (ref) {
+      ref.current?.blur()
+    }
   }
 
   // Maps functions to hotkeys
   const handlers = {
-    cut: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, cut) } },
-    delete: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, markAsDeletedOrAlive) } },
-    mergeLeft: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, mergeLeft) } },
-    mergeRight: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, mergeRight) } },
+    cut: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, cut, undefined) } },
+    delete: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, markAsDeletedOrAlive, undefined) } },
+    mergeLeft: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, mergeLeft, undefined) } },
+    mergeRight: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, mergeRight, undefined) } },
   }
 
   const cuttingStyle =  css({
@@ -117,7 +123,7 @@ const cuttingActionButtonStyle = {
 interface cuttingActionsButtonInterface {
   iconName: IconDefinition,
   actionName: string,
-  actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>) => void,
+  actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>, ref: React.RefObject<HTMLDivElement> | undefined) => void,
   action: ActionCreatorWithoutPayload<string>,
   tooltip: string,
   ariaLabelText: string,
@@ -128,13 +134,15 @@ interface cuttingActionsButtonInterface {
  * @param param0
  */
 const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName, actionName, actionHandler, action, tooltip, ariaLabelText}) => {
+  const ref = React.useRef<HTMLDivElement>(null)
   return (
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}
       title={tooltip}
+      ref={ref}
       role="button" tabIndex={0} aria-label={ariaLabelText}
-      onClick={ (event: SyntheticEvent) => actionHandler(event, action) }
+      onClick={ (event: SyntheticEvent) => actionHandler(event, action, ref) }
       onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-        actionHandler(event, action)
+        actionHandler(event, action, undefined)
       }}}
       >
       <FontAwesomeIcon icon={iconName} size="1x" />
@@ -144,7 +152,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
 };
 
 interface markAsDeleteButtonInterface {
-  actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>) => void,
+  actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>, ref: React.RefObject<HTMLDivElement> | undefined) => void,
   action: ActionCreatorWithoutPayload<string>,
   hotKeyName: KeySequence,
 }
@@ -155,15 +163,17 @@ interface markAsDeleteButtonInterface {
 const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHandler, action, hotKeyName}) => {
   const { t } = useTranslation();
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
+  const ref = React.useRef<HTMLDivElement>(null)
 
   return (
     <div css={[basicButtonStyle, cuttingActionButtonStyle]}
       title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}
+      ref={ref}
       role="button" tabIndex={0}
       aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}
-      onClick={(event: SyntheticEvent) => actionHandler(event, action)}
+      onClick={(event: SyntheticEvent) => actionHandler(event, action, ref)}
       onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-        actionHandler(event, action)
+        actionHandler(event, action, undefined)
       }}}
       >
       <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
