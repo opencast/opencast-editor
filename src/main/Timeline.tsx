@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt
+  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,7 +46,7 @@ const Timeline: React.FC<{}> = () => {
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     let rect = e.currentTarget.getBoundingClientRect()
     let offsetX = e.clientX - rect.left
-    console.log("HI I'm: " + (e.clientX - rect.left) + "; " + width )
+    dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / width) * (duration)))
   }
 
