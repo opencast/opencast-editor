@@ -8,11 +8,11 @@ import { KeyMap } from "react-hotkeys";
  * (Semi-) global map for the buttons in the cutting view
  */
 export const cuttingKeyMap: KeyMap = {
-  cut: "c",
-  delete: "d",
-  mergeLeft: "n",
-  mergeRight: "m",
-  preview: "p",
+  cut: "Control+Alt+c",
+  delete: "Control+Alt+d",
+  mergeLeft: "Control+Alt+n",
+  mergeRight: "Control+Alt+m",
+  preview: "Control+Alt+p",
   play: "Space",
 }
 
@@ -20,8 +20,8 @@ export const cuttingKeyMap: KeyMap = {
  * Local map for moving the scrubber
  */
 export const scrubberKeyMap: KeyMap = {
-  left: "j",
-  right: "l",
-  increase: "i",
-  decrease: "k",
+  left: "Control+Alt+j",
+  right: "Control+Alt+l",
+  increase: "Control+Alt+i",
+  decrease: "Control+Alt+k",
 }
