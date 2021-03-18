@@ -62,7 +62,7 @@ jobs:
         cp ~/CNAME .
         cp -r ~/editor-build/* .
         git add ./*
-        git commit -m "Build $(date)"
+        git diff --staged --quiet || git commit -m "Build $(date)"
 
     - name: push updates
       run: |

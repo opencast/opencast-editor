@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 import { basicButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +11,9 @@ import {
 import { useDispatch } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
+
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
@@ -20,6 +23,7 @@ const FinishMenu : React.FC<{}> = () => {
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'space-around',
+    flexWrap: 'wrap',
     gap: '30px',
   })
 
@@ -37,6 +41,8 @@ const FinishMenu : React.FC<{}> = () => {
  */
 const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["value"]}> = ({iconName, stateName}) => {
 
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
 
   const finish = () => {
@@ -53,6 +59,22 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   });
 
+  var buttonString;
+  switch(stateName) {
+    case "Save changes":
+      buttonString = t("finishMenu.save-button");
+      break;
+    case "Start processing":
+      buttonString = t("finishMenu.start-button");
+      break;
+    case "Discard changes":
+      buttonString = t("finishMenu.discard-button");
+      break;
+    default: 
+      buttonString = "Could not load String value";
+      break;
+  }
+
   return (
     <div css={[basicButtonStyle, finishMenuButtonStyle]}
     role="button" tabIndex={0}
@@ -61,10 +83,12 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
         finish()
       }}}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
-      <div>{stateName}</div>
+      <div>{buttonString}</div>
     </div>
   );
 };
+
+
 
 
 

@@ -1,8 +1,7 @@
 import React from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
-import { mediaPackageId, ocUrl } from '../config'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -13,11 +12,17 @@ import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTra
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
+import { setEnd } from "../redux/endSlice";
+
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Will eventually display settings based on the selected workflow index
  */
 const WorkflowConfiguration : React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const postAndProcessWorkflowStatus = useSelector(selectStatus);
   const postAndProcessError = useSelector(selectError)
@@ -31,22 +36,21 @@ const WorkflowConfiguration : React.FC<{}> = () => {
   })
 
   return (
-    <div css={workflowConfigurationStyle} title="Workflow Configuration Area">
-      <h2>Workflow Configuration</h2>
+    <div css={workflowConfigurationStyle} title={t("workflowConfig.area-tooltip")}>
+      <h2>{t("workflowConfig.headline-text")}</h2>
       <FontAwesomeIcon icon={faTools} size="10x" />
       Placeholder
-      <div>Satisfied with your configuration?</div>
+      <div>{t("workflowConfig.satisfied-text")}</div>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={1} label="No, take me back" iconName={faChevronLeft}/>
-        <SaveAndProcessButton text="Yes, start processing"/>
+        <PageButton pageNumber={1} label={t("various.goBack-button")} iconName={faChevronLeft}/>
+        <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
       </div>
-      <div css={errorBoxStyle(postAndProcessWorkflowStatus)} title="Error Box" role="alert">
-        <span>An error has occured. Please wait a bit and try again.</span><br />
-        {postAndProcessError ? "Details: " + postAndProcessError : "No error details are available."}<br />
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} title="Error Box" role="alert">
+        <span>{t("various.error-text")}</span><br />
+        {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
       </div>
     </div>
   );
-
 }
 
 /**
@@ -68,8 +72,6 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
     dispatch(postVideoInformationWithWorkflow({
       segments: segments,
       tracks: tracks,
-      mediaPackageId: mediaPackageId,
-      ocUrl: ocUrl,
       workflow: [{id: workflows[selectedWorkflowIndex].id}],
     }))
   }
@@ -83,6 +85,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   } else if (workflowStatus === 'success') {
     icon = faCheck
     spin = false
+    dispatch(setEnd({hasEnded: true, value: 'success'}))
   } else if (workflowStatus === 'failed') {
     icon = faExclamationCircle
     spin = false

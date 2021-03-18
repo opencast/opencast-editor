@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faListUl, faPhotoVideo, faSignOutAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
@@ -10,14 +10,19 @@ import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
 import { setPageNumber } from '../redux/finishSlice'
 
 import { MainMenuStateNames } from '../types'
-import { showMetadata, showThumbnail } from '../config'
+import { settings } from '../config'
 import { basicButtonStyle } from '../cssStyles'
 import { setIsPlaying } from "../redux/videoSlice";
+
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
 
 /**
  * A container for selecting the functionality shown in the main part of the app
  */
 const MainMenu: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const mainMenuStyle = css({
     borderRight: '1px solid #BBB',
@@ -31,10 +36,10 @@ const MainMenu: React.FC<{}> = () => {
   });
 
   return (
-    <nav css={mainMenuStyle} title="Main Menu" role="navigation" aria-label="Main Navigation">
+    <nav css={mainMenuStyle} title={t("mainMenu.mainMenu-tooltip")} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
-      {showMetadata && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
-      {showThumbnail && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}
+      {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
+      {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}
       <MainMenuButton iconName={faSignOutAlt} stateName={MainMenuStateNames.finish}/>
     </nav>
   );
@@ -45,6 +50,8 @@ const MainMenu: React.FC<{}> = () => {
  * @param param0
  */
 const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["value"]}> = ({iconName, stateName}) => {
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
@@ -68,6 +75,25 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     flexDirection: 'column' as const,
   });
 
+  var buttonString;
+  switch(stateName) {
+    case "Cutting":
+      buttonString = t("mainMenu.cutting-button");
+      break;
+    case "Metadata":
+      buttonString = t("mainMenu.metadata-button");
+      break;
+    case "Thumbnail":
+      buttonString = t("mainMenu.thumbnail-button");
+      break;
+    case "Finish":
+      buttonString = t("mainMenu.finish-button");
+      break;
+    default: 
+      buttonString = "Could not load String value";
+      break;
+  }
+
   return (
     <li css={[basicButtonStyle, mainMenuButtonStyle]}
       role="menuitem" tabIndex={0}
@@ -77,7 +103,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
       }}}
       >
       <FontAwesomeIcon  icon={iconName} size="2x"/>
-      <div>{stateName}</div>
+      <div>{buttonString}</div>
     </li>
   );
 };

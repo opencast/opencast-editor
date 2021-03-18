@@ -1,48 +1,44 @@
 import React from "react";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faTimesCircle, faQuestion, } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector } from 'react-redux';
 import { selectDuration } from '../redux/videoSlice'
-import { selectStatus } from '../redux/workflowPostAndProcessSlice'
-import { selectAbortState } from '../redux/abortSlice'
+import { selectEndState } from '../redux/endSlice'
+import { basicButtonStyle, nagivationButtonStyle } from "../cssStyles";
+
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
 
 /**
  * This page is to be displayed when the user is "done" with the editor
  * and should not be able to perfom any actions anymore
- * TODO: Improve state management somehow to avoid the possibility of an error case
- * TODO: Improve text
- * TODO: Add a button that closes the editor window/frame?
  */
 const TheEnd : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   // Init redux variables
-  const abortState = useSelector(selectAbortState)
-  const postAndProcessState = useSelector(selectStatus)
+  const endState = useSelector(selectEndState)
   const duration = useSelector(selectDuration)
 
   const icon = () => {
-    if (abortState) {
+    if (endState === 'discarded') {
       return faTimesCircle
-    } else if (postAndProcessState === "success") {
-      return faCheckCircle
     } else {
-      return faQuestion
+      return faCheckCircle
     }
   }
 
   const text = () => {
-    if (abortState) {
-      return "All your changes are now lost forever. You can now close the editor."
-    } else if (postAndProcessState === "success") {
-      return `Changes successfully saved to Opencast. Processing your changes may take up to
-              ${new Date((duration * 2)).toISOString().substr(11, 8)} hours.
-              You can now close the editor.`
-    } else {
-      return "Now this is awkward. Something has gone very wrong."
+    if (endState === 'discarded') {
+      return t("theEnd.discarded-text")
+    } else if (endState === 'success') {
+      return t("theEnd.info-text", {duration: `${new Date((duration * 2)).toISOString().substr(11, 8)}`}
+      )
     }
   }
 
@@ -58,9 +54,32 @@ const TheEnd : React.FC<{}> = () => {
   })
 
   return (
-    <div css={theEndStyle} title="The last area">
+    <div css={theEndStyle} title="The End">
       <FontAwesomeIcon icon={icon()} size="10x" />
-      <text>{text()}</text>
+      <div>{text()}</div>
+      {(endState === 'discarded') && <StartOverButton />}
+    </div>
+  );
+}
+
+
+const StartOverButton: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
+
+  const reloadPage = () => {
+    window.location.reload(true);
+  };
+
+  return (
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("theEnd.startOver-tooltip")}
+      role="button" tabIndex={0}
+      onClick={ reloadPage }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        reloadPage()
+      }}}>
+      {/* <FontAwesomeIcon icon={icon} spin={spin} size="1x"/> */}
+      <span>{t("theEnd.startOver-button")}</span>
     </div>
   );
 }

@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import Draggable from 'react-draggable';
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  selectVideoURL, setCurrentlyAt
+  setIsPlaying, selectVideoURL, setCurrentlyAt
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +18,9 @@ import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
+
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -64,6 +67,8 @@ const Timeline: React.FC<{}> = () => {
  */
 const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
+  const { t } = useTranslation();
+
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
@@ -75,6 +80,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
   const [isGrabbed, setIsGrabbed] = useState(false)
+  const [wasPlayingWhenGrabbed, setWasPlayingWhenGrabbed] = useState(false)
   const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000)  // In milliseconds. For keyboard navigation
   const wasCurrentlyAtRef = useRef(0)
   const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
@@ -109,14 +115,27 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const onStartDrag = () => {
     setIsGrabbed(true)
+
+    // Halt video playback
+    if (isPlaying) {
+      setWasPlayingWhenGrabbed(true)
+      dispatch(setIsPlaying(false))
+    } else {
+      setWasPlayingWhenGrabbed(false)
+    }
   }
 
   const onStopDrag = (e: any, position: any) => {
+    // Update position
     const {x, y} = position;
     setControlledPosition({x, y});
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
 
     setIsGrabbed(false)
+    // Resume video playback
+    if (wasPlayingWhenGrabbed) {
+      dispatch(setIsPlaying(true))
+    }
   }
 
   // TODO: Better/more intuitive controls
@@ -211,15 +230,15 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
       axis="x"
       bounds="parent"
       position={controlledPosition}
-      disabled={isPlaying}
       nodeRef={nodeRef}
       >
-      <div ref={nodeRef} css={scrubberStyle} title="Scrubber">
+      <div ref={nodeRef} css={scrubberStyle} title={t("timeline.scrubber-tooltip")}>
         <div css={arrowDownStyle}></div>
-        <div css= {scrubberDragHandleStyle} title="dragHandle" aria-grabbed={isGrabbed}
-          aria-label={"Scrubber. " + convertMsToReadableString(currentlyAt) + ". Active segment: " + activeSegmentIndex + ". "
-                      + (segments[activeSegmentIndex].deleted ? "Deleted." : "Alive.")
-                      + ". Controls: Alt+j and Alt+k to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta."}
+        <div css= {scrubberDragHandleStyle} title={t("timeline.dragHandle-tooltip")} aria-grabbed={isGrabbed}
+          aria-label={segments[activeSegmentIndex].deleted ? t("timeline.scrubber-deleted-text-aria",
+                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})
+                     : t("timeline.scrubber-alive-text-aria",
+                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})}
           tabIndex={0} onKeyDown={keyboardControls}>
           <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
           {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
@@ -234,6 +253,8 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
  * Container responsible for rendering the segments that are created when cutting
  */
 const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+
+  const { t } = useTranslation();
 
   // Init redux variables
   const segments = useSelector(selectSegments)
@@ -270,10 +291,11 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id} title={"Segment " + index}
-          aria-label={"Segment " + index + ". " + (segment.deleted ? "Deleted." : "Alive.")
-                      +  " Start: " + convertMsToReadableString(segment.start)
-                      + ". End: " + convertMsToReadableString(segment.end) + "."}
+        <div key={segment.id} title={t("timeline.segment-tooltip", {segment: index})}
+          aria-label={segment.deleted ? t("timeline.segmentsDeleted-text-aria",
+                     {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})
+                     : t("timeline.segmentsAlive-text-aria",
+                     {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})}
           tabIndex={0}
         css={{
           background: bgColor(segment.deleted, activeSegmentIndex === index),
@@ -308,6 +330,8 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
  * Generates waveform images and displays them
  */
 const Waveforms: React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
@@ -375,7 +399,7 @@ const Waveforms: React.FC<{}> = () => {
       return (
         <>
           <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
-          <div>Generating Waveform</div>
+          <div>{t("timeline.generateWaveform-text")}</div>
         </>
       );
     }

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { css } from '@emotion/core'
-import { basicButtonStyle, backOrContinueStyle} from '../cssStyles'
+import { css } from '@emotion/react'
+import { basicButtonStyle, backOrContinueStyle, nagivationButtonStyle} from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,15 +10,20 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
-import { setState as setAbortState } from '../redux/abortSlice'
+import { setEnd } from '../redux/endSlice'
 
 import { PageButton } from './Finish'
+
+import './../i18n/config';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Shown if the user wishes to abort.
  * Informs the user about aborting and displays abort button.
  */
 const Discard : React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const finishState = useSelector(selectFinishState)
 
@@ -31,12 +36,12 @@ const Discard : React.FC<{}> = () => {
 
   return (
     <div css={cancelStyle} title="Abort Area">
+      <h1>{t("discard.headline-text")}</h1>
       <span>
-        Discard all the changes you made? This cannot be undone! <br />
-        Do you truly want all your changes to be lost forever?
+        {t("discard.info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label="No, take me back" iconName={faChevronLeft} />
+        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft} />
         <DiscardButton />
       </div>
     </div>
@@ -48,29 +53,24 @@ const Discard : React.FC<{}> = () => {
  */
 const DiscardButton : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
+
   // Initialize redux variables
   const dispatch = useDispatch()
 
-  const abort = () => {
-    dispatch(setAbortState(true))
+  const discard = () => {
+    dispatch(setEnd({hasEnded: true, value: 'discarded'}))
   }
 
-  const saveButtonStyle = css({
-    width: '200px',
-    padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    justifyContent: 'space-around'
-  })
-
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Discard changes button"}
+    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("discard.confirm-tooltip")}
       role="button" tabIndex={0}
-      onClick={ abort }
+      onClick={ discard }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        abort()
+        discard()
       }}}>
       <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
-      <span>{"Yes, discard changes"}</span>
+      <span>{t("discard.confirm-button")}</span>
     </div>
   );
 }

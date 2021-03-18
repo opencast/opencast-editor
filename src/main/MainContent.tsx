@@ -8,7 +8,7 @@ import Finish from "./Finish"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
 
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 import { useSelector } from 'react-redux'
 import { selectMainMenuState } from '../redux/mainMenuSlice'
@@ -52,12 +52,12 @@ const MainContent: React.FC<{}> = () => {
 
   return (
      <main title="MainMenuContext" css={{width: '100%'}} role="main">
-      <div css={cuttingStyle} title="Cutting Container">
+      <div css={cuttingStyle}>
           <Video />
           <CuttingActions />
           <Timeline />
       </div>
-      <div css={finishStyle} title="Finish Container">
+      <div css={finishStyle}>
         <Finish />
       </div>
       <div css={defaultStyle}>
