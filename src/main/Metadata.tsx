@@ -15,6 +15,7 @@ import CreatableSelect from 'react-select/creatable';
 
 import {
   KeyboardDateTimePicker,
+  KeyboardTimePicker,
   showErrorOnBlur,
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
@@ -233,7 +234,7 @@ const Metadata: React.FC<{}> = () => {
    */
   const duration = (value: any) => {
     let re: RegExp = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
-    return re.test(value) ? undefined : t("metadata.validation.duration.format")
+    return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
   // // Function that combines multiple validation functions. Needs to be made typescript conform
@@ -289,8 +290,10 @@ const Metadata: React.FC<{}> = () => {
     }
 
     // For these fields, the value needs to be inside an array
-    if (field && field.type === "date" && Object.prototype.toString.call(returnValue) === '[object Date]') {
+    if (field && (field.type === "date" || field.type === "time") && Object.prototype.toString.call(returnValue) === '[object Date]') {
       returnValue = returnValue.toJSON()
+    } else if (field && (field.type === "date" || field.type === "time") && typeof returnValue === "string") {
+      returnValue = new Date(returnValue).toJSON()
     }
 
     return returnValue
@@ -413,10 +416,32 @@ const Metadata: React.FC<{}> = () => {
           />
         </div>
       );
+    } else if (field.type === "time") {
+      return (
+        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
+          <KeyboardTimePicker {...input}
+            name={field.id}
+            format="HH:mm"
+            disabled={field.readOnly}
+            dateFunsUtils={DateFnsUtils}
+            showError={showErrorOnBlur}
+          />
+        </div>
+      );
+    } else if (field.type === "text_long") {
+      return (
+        <textarea {...input}
+          readOnly={field.readOnly}
+          css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
+        />
+      );
     } else {
-      return<input {...input}
-        readOnly={field.readOnly}
-        css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}/>
+      return(
+        <input {...input}
+          readOnly={field.readOnly}
+          css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
+        />
+      );
     }
   }
 
@@ -431,10 +456,14 @@ const Metadata: React.FC<{}> = () => {
         <Field key={fieldIndex}
                 name={"catalog" + catalogIndex + "." + field.id}
                 validate={getValidators(field)}
+                type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
                 >
                 {({ input, meta }) => (
                   <div css={fieldStyle}>
-                    <label css={fieldLabelStyle}>{t(`metadata.labels.${field.id}`)}</label>
+                    <label css={fieldLabelStyle}>{
+                      i18n.exists(`metadata.labels.${field.id}`) ?
+                      t(`metadata.labels.${field.id}`) : field.id
+                    }</label>
 
                     {generateComponent(field, input)}
                     {meta.error && meta.touched && <span css={validateErrorStyle}>{meta.error}</span>}
@@ -452,7 +481,11 @@ const Metadata: React.FC<{}> = () => {
   const renderCatalog = (catalog: Catalog, catalogIndex: number) => {
     return (
       <div key={catalogIndex}>
-        <h2>{t(`metadata.${catalog.title.replaceAll(".", "-")}`)}</h2>
+        <h2>
+          {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
+            t(`metadata.${catalog.title.replaceAll(".", "-")}`) : catalog.title
+          }
+        </h2>
 
         {catalog.fields.map((field, i) => {
           return renderField(field, catalogIndex, i)
