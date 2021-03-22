@@ -607,7 +607,11 @@ const Metadata: React.FC<{}> = () => {
               </div>
 
               {/* For debugging the forms current values*/}
-              <pre>{JSON.stringify(values, null, 2)}</pre>
+              {/* <FormSpy subscription={{ values: true }}>
+                {({ values }) => (
+                  <pre>{JSON.stringify(values, null, 2)}</pre>
+                )}
+              </FormSpy> */}
             </form>
           )}
         />
