@@ -10,6 +10,7 @@ export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
+  clickTriggered: boolean,        // Another video player callback
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
@@ -34,6 +35,7 @@ export const initialState: video & httpRequestState = {
   activeSegmentIndex: 0,
   selectedWorkflowIndex: 0,
   previewTriggered: false,
+  clickTriggered: false,
   aspectRatios: [],
 
   videoURLs: [],
@@ -88,6 +90,9 @@ export const videoSlice = createSlice({
     },
     setPreviewTriggered: (state, action) => {
       state.previewTriggered = action.payload
+    },
+    setClickTriggered: (state, action) => {
+      state.clickTriggered = action.payload
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       updateCurrentlyAt(state, action.payload);
@@ -263,7 +268,8 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 }
 
 export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio, cut,
-  markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered } = videoSlice.actions
+  markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -273,6 +279,8 @@ export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video[
   state.videoState.isPlayPreview
 export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"] } }) =>
   state.videoState.previewTriggered
+export const selectClickTriggered = (state: { videoState: { clickTriggered: video["clickTriggered"] } }) =>
+  state.videoState.clickTriggered
 export const selectCurrentlyAt = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
   state.videoState.currentlyAt
 export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>

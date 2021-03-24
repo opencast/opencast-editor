@@ -3,6 +3,7 @@
  */
 import { css, Global } from '@emotion/react'
 import React from "react";
+import emotionNormalize from 'emotion-normalize';
 
 /**
  * An emotion component that inserts styles globally
@@ -18,6 +19,7 @@ export const GlobalStyle: React.FC = () => {
  * CSS for the global style component
  */
 export const globalStyle = css({
+  emotionNormalize,
   body: {
     backgroundColor: 'snow',
     fontSize: 'medium',

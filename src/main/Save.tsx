@@ -17,6 +17,7 @@ import { PageButton } from './Finish'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { postMetadata, selectPostError, selectPostStatus } from "../redux/metadataSlice";
 
 /**
  * Shown if the user wishes to save.
@@ -30,6 +31,8 @@ const Save : React.FC<{}> = () => {
 
   const postWorkflowStatus = useSelector(selectStatus);
   const postError = useSelector(selectError)
+  const postMetadataStatus = useSelector(selectPostStatus);
+  const postMetadataError = useSelector(selectPostError);
 
   const saveStyle = css({
     height: '100%',
@@ -53,6 +56,10 @@ const Save : React.FC<{}> = () => {
         <span>{t("save.error-text")}</span><br />
         {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
       </div>
+      <div css={errorBoxStyle(postMetadataStatus === "failed")} title="Error Box" role="alert">
+        <span>{t("save.error-text")}</span><br />
+        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
+      </div>
     </div>
   );
 }
@@ -70,23 +77,24 @@ export const SaveButton: React.FC<{}> = () => {
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
+  const metadataStatus = useSelector(selectPostStatus);
 
   // Update based on current fetching status
   let icon = faSave
   let spin = false
   let tooltip = t("save.confirmButton-default-tooltip")
-  if (workflowStatus === 'loading') {
-    icon = faSpinner
-    spin = true
-    tooltip = t("save.confirmButton-attempting-tooltip")
-  } else if (workflowStatus === 'success') {
-    icon = faCheck
-    spin = false
-    tooltip = t("save.confirmButton-success-tooltip")
-  } else if (workflowStatus === 'failed') {
+  if (workflowStatus === 'failed' || metadataStatus === 'failed'){
     icon = faExclamationCircle
     spin = false
     tooltip = t("save.confirmButton-failed-tooltip")
+  } else if (workflowStatus === 'success' && metadataStatus === 'success') {
+    icon = faCheck
+    spin = false
+    tooltip = t("save.confirmButton-success-tooltip")
+  } else if (workflowStatus === 'loading' || metadataStatus === 'loading')  {
+    icon = faSpinner
+    spin = true
+    tooltip = t("save.confirmButton-attempting-tooltip")
   }
 
   const ariaSaveUpdate = () => {
@@ -96,6 +104,7 @@ export const SaveButton: React.FC<{}> = () => {
   }
 
   const save = () => {
+    dispatch(postMetadata())
     dispatch(postVideoInformation({
       segments: segments,
       tracks: tracks,
