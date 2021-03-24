@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
@@ -116,6 +116,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
   const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
   const duration  = useSelector(selectDurationInSeconds)
   const previewTriggered = useSelector(selectPreviewTriggered)
+  const clickTriggered = useSelector(selectClickTriggered)
   const aspectRatio = useSelector(selectAspectRatio)
 
   // Init state variables
@@ -159,6 +160,10 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
     if (previewTriggered && ref.current && ready) {
       ref.current.seekTo(currentlyAt, "seconds")
       dispatch(setPreviewTriggered(false))
+    }
+    if (clickTriggered && ref.current && ready) {
+      ref.current.seekTo(currentlyAt, "seconds")
+      dispatch(setClickTriggered(false))
     }
   })
 
