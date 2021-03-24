@@ -10,25 +10,24 @@
 
     "cuttingActions": {
       "cut-button": "Cut",
-      "cut-tooltip": "Split the segment at the current scrubber position",
-      "cut-tooltip-aria": "Cut. Split the segment at the current scrubber position",
+      "cut-tooltip": "Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}",
+      "cut-tooltip-aria": "Cut. Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}.",
       "delete-button": "Delete",
-      "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted.",
-      "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted.",
+      "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}",
+      "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotKeyName}}.",
       "restore-button": "Restore",
       "mergeLeft-button": "Merge Left",
-      "mergeLeft-tooltip": "Combine the currently active segment with the segment to its left",
-      "mergeLeft-tooltip-aria": "Merge Left. Combine the currently active segment with the segment to its left",
+      "mergeLeft-tooltip": "Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}",
+      "mergeLeft-tooltip-aria": "Merge Left. Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}.",
       "mergeRight-button": "Merge Right",
-      "mergeRight-tooltip": "Combine the currently active segment with the segment to its right",
-      "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right"
+      "mergeRight-tooltip": "Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}",
+      "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}."
     },
 
     "video": {
       "previewButton": "Preview Mode",
-      "previewButton-on-tooltip": "Skips deleted segments when playing the video. Currently on",
-      "previewButton-off-tooltip": "Skips deleted segments when playing the video. Currently off",
-      "previewButton-aria": "Enable or disable preview mode.",
+      "previewButton-tooltip": "Skips deleted segments when playing the video. Currently {{status}}. Hotkey: {{hotkeyName}}",
+      "previewButton-aria": "Enable or disable preview mode. Hotkey: {{hotkeyName}}.",
       "playButton-tooltip": "Play Button",
       "time-duration-tooltip": "Playback time and duration",
       "duration-aria": "Duration",
@@ -92,10 +91,8 @@
       "segment-tooltip": "Segment {{segment}}",
       "scrubber-tooltip": "Scrubber",
       "dragHandle-tooltip": "dragHandle",
-      "scrubber-deleted-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Deleted. Controls: Alt+j and Alt+l to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.\n",
-      "scrubber-alive-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. Alive. Controls: Alt+j and Alt+l to move the scrubber. Alt+i and Alt+k to increase/decrase the move delta.\n",
-      "segmentsDeleted-text-aria": "Segment {{index}}. Deleted. Start: {{start}}. End: {{end}}.\n",
-      "segmentsAlive-text-aria": "Segment {{index}}. Alive. Start: {{start}}. End: {{end}}.\n"
+      "scrubber-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the scrubber. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
+      "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. End: {{end}}.\n"
     },
 
     "workflowConfig": {

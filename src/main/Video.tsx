@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { css } from '@emotion/react'
 
-import { httpRequestState } from '../types'
+import { httpRequestState, MainMenuStateNames } from '../types'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
@@ -19,6 +19,10 @@ import ReactPlayer, { Config } from 'react-player'
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
 import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
 
+import { GlobalHotKeys } from 'react-hotkeys';
+import { selectMainMenuState } from "../redux/mainMenuSlice";
+import { cuttingKeyMap } from "../globalKeys";
+import { SyntheticEvent } from "react";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 
@@ -292,14 +296,29 @@ const VideoControls: React.FC<{}> = () => {
 const PreviewMode: React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const ref = React.useRef<HTMLDivElement>(null)
 
   // Init redux variables
   const dispatch = useDispatch();
   const isPlayPreview = useSelector(selectIsPlayPreview)
+  const mainMenuState = useSelector(selectMainMenuState)
 
   // Change preview mode from "on" to "off" and vice versa
-  const switchPlayPreview = () => {
+  const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent, ref: React.RefObject<HTMLDivElement> | undefined) => {
+    event.preventDefault()                      // Prevent page scrolling due to Space bar press
+    event.stopPropagation()                     // Prevent video playback due to Space bar press
     dispatch(setIsPlayPreview(!isPlayPreview))
+
+    // Lose focus if clicked by mouse
+    if (ref) {
+      ref.current?.blur()
+    }
+  }
+
+  // Maps functions to hotkeys
+  const handlers = {
+    // preview: switchPlayPreview,
+    preview: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchPlayPreview(keyEvent, undefined) } }
   }
 
   const previewModeStyle = css({
@@ -319,17 +338,17 @@ const PreviewMode: React.FC<{}> = () => {
     },
   })
 
-  var title = (isPlayPreview ? t("video.previewButton-on-tooltip") : t("video.previewButton-off-tooltip"));
-
   return (
     <div css={previewModeStyle}
-      title={title}
+      ref={ref}
+      title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: cuttingKeyMap[handlers.preview.name] })}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-      aria-label={t("video.previewButton-aria")}
-      onClick={ switchPlayPreview }
+      aria-label={t("video.previewButton-aria", { hotkeyName: cuttingKeyMap[handlers.preview.name] })}
+      onClick={ (event: SyntheticEvent) => switchPlayPreview(event, ref) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
-        switchPlayPreview()
+        switchPlayPreview(event, undefined)
       }}}>
+      <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
         {t("video.previewButton")}
       </div>
@@ -348,22 +367,32 @@ const PlayButton: React.FC<{}> = () => {
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
+  const mainMenuState = useSelector(selectMainMenuState)
 
   // Change play mode from "on" to "off" and vice versa
-  const switchIsPlaying = () => {
+  const switchIsPlaying = (event: KeyboardEvent | SyntheticEvent) => {
+    event.preventDefault()                      // Prevent page scrolling due to Space bar press
     dispatch(setIsPlaying(!isPlaying))
   }
 
+  // Maps functions to hotkeys
+  const handlers = {
+    play: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchIsPlaying(keyEvent) } }
+  }
+
   return (
+    <>
+    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
     <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
       title={t("video.playButton-tooltip")}
       role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
       aria-label={t("video.playButton-tooltip")}
-      onClick={ switchIsPlaying }
-      onKeyDown={(event: React.KeyboardEvent<SVGSVGElement>) => { if (event.key === " " || event.key === "Enter") {
-        switchIsPlaying()
+      onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
+        switchIsPlaying(event)
       }}}
     />
+    </>
   );
 }
 

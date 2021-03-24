@@ -18,6 +18,8 @@ import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
+import { HotKeys } from 'react-hotkeys';
+import { scrubberKeyMap } from '../globalKeys';
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
@@ -138,30 +140,14 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     }
   }
 
-  // TODO: Better/more intuitive controls
+  // Callbacks for keyboard controls
   // TODO: Better increases and decreases than ten intervals
   // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
-  const keyboardControls = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if(event.altKey) {
-      switch (event.key) {
-        case "j":
-          // Left pressed
-          dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0)))
-          break;
-        case "l":
-          // Right pressed
-          dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration)))
-          break;
-        case "i":
-          // Up pressed
-          setKeyboardJumpDelta(Math.min(keyboardJumpDelta * 10, 1000000))
-          break;
-        case "k":
-          // Up pressed
-          setKeyboardJumpDelta(Math.max(keyboardJumpDelta / 10, 1))
-          break;
-      }
-    }
+  const handlers = {
+    left: () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
+    right: () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
+    increase: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
+    decrease: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1))
   }
 
   const scrubberStyle = css({
@@ -223,29 +209,35 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // }
 
   return (
-    <Draggable
-      //onDrag={onControlledDrag}
-      onStart={onStartDrag}
-      onStop={onStopDrag}
-      axis="x"
-      bounds="parent"
-      position={controlledPosition}
-      nodeRef={nodeRef}
-      >
-      <div ref={nodeRef} css={scrubberStyle} title={t("timeline.scrubber-tooltip")}>
-        <div css={arrowDownStyle}></div>
-        <div css= {scrubberDragHandleStyle} title={t("timeline.dragHandle-tooltip")} aria-grabbed={isGrabbed}
-          aria-label={segments[activeSegmentIndex].deleted ? t("timeline.scrubber-deleted-text-aria",
-                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})
-                     : t("timeline.scrubber-alive-text-aria",
-                     {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex})}
-          tabIndex={0} onKeyDown={keyboardControls}>
-          <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
-          {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
-        </div>
-        <div css={arrowUpStyle}></div>
-      </div>
-    </Draggable>
+    <HotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
+      <Draggable
+        //onDrag={onControlledDrag}
+        onStart={onStartDrag}
+        onStop={onStopDrag}
+        axis="x"
+        bounds="parent"
+        position={controlledPosition}
+        nodeRef={nodeRef}
+        >
+          <div ref={nodeRef} css={scrubberStyle} title={t("timeline.scrubber-tooltip")}>
+
+            <div css={arrowDownStyle}></div>
+            <div css= {scrubberDragHandleStyle} title={t("timeline.dragHandle-tooltip")} aria-grabbed={isGrabbed}
+              aria-label={t("timeline.scrubber-text-aria",
+                         {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
+                          segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
+                          moveLeft: scrubberKeyMap[handlers.left.name],
+                          moveRight: scrubberKeyMap[handlers.right.name],
+                          increase: scrubberKeyMap[handlers.increase.name],
+                          decrease: scrubberKeyMap[handlers.decrease.name] })}
+              tabIndex={0}>
+              <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
+              {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
+            </div>
+            <div css={arrowUpStyle}></div>
+          </div>
+      </Draggable>
+    </HotKeys>
   );
 };
 
@@ -292,10 +284,11 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     return (
       segments.map( (segment: Segment, index: number) => (
         <div key={segment.id} title={t("timeline.segment-tooltip", {segment: index})}
-          aria-label={segment.deleted ? t("timeline.segmentsDeleted-text-aria",
-                     {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})
-                     : t("timeline.segmentsAlive-text-aria",
-                     {segment: index, start: convertMsToReadableString(segment.start), end: convertMsToReadableString(segment.end)})}
+          aria-label={t("timeline.segments-text-aria",
+                     {segment: index,
+                      segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                      start: convertMsToReadableString(segment.start),
+                      end: convertMsToReadableString(segment.end) })}
           tabIndex={0}
         css={{
           background: bgColor(segment.deleted, activeSegmentIndex === index),
