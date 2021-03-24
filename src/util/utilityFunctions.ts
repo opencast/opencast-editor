@@ -21,3 +21,15 @@ export const convertMsToReadableString = (ms: number): string => {
 
   return result.join("")
 }
+
+/**
+ * Parses JSON. Returns [err, result]
+ * @param str string that should be parsed
+ */
+export function safeJsonParse(str : string) {
+  try {
+      return [null, JSON.parse(str)];
+  } catch (err) {
+      return [err];
+  }
+}

@@ -16,6 +16,7 @@ import { setEnd } from "../redux/endSlice";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { postMetadata, selectPostError, selectPostStatus } from "../redux/metadataSlice";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -26,6 +27,8 @@ const WorkflowConfiguration : React.FC<{}> = () => {
 
   const postAndProcessWorkflowStatus = useSelector(selectStatus);
   const postAndProcessError = useSelector(selectError)
+  const postMetadataStatus = useSelector(selectPostStatus);
+  const postMetadataError = useSelector(selectPostError);
 
   const workflowConfigurationStyle = css({
     display: 'flex',
@@ -49,6 +52,10 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         <span>{t("various.error-text")}</span><br />
         {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
       </div>
+      <div css={errorBoxStyle(postMetadataStatus === "failed")} title="Error Box" role="alert">
+        <span>{t("save.error-text")}</span><br />
+        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
+      </div>
     </div>
   );
 }
@@ -67,8 +74,10 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
+  const metadataStatus = useSelector(selectPostStatus);
 
   const saveAndProcess = () => {
+    dispatch(postMetadata())
     dispatch(postVideoInformationWithWorkflow({
       segments: segments,
       tracks: tracks,
@@ -79,16 +88,17 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   // Update based on current fetching status
   let icon = faFileExport
   let spin = false
-  if (workflowStatus === 'loading') {
-    icon = faSpinner
-    spin = true
-  } else if (workflowStatus === 'success') {
+  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
+    icon = faExclamationCircle
+    spin = false
+  } else if (workflowStatus === 'success' && metadataStatus === 'success') {
     icon = faCheck
     spin = false
     dispatch(setEnd({hasEnded: true, value: 'success'}))
-  } else if (workflowStatus === 'failed') {
-    icon = faExclamationCircle
-    spin = false
+  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
+    icon = faSpinner
+    spin = true
+
   }
 
   const saveButtonStyle = css({

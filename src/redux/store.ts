@@ -5,6 +5,7 @@ import videoReducer from './videoSlice'
 import workflowPostReducer from './workflowPostSlice'
 import workflowPostAndProcessReducer from './workflowPostAndProcessSlice'
 import endReducer from './endSlice'
+import metadataReducer from './metadataSlice'
 
 export default configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
     workflowPostState: workflowPostReducer,
     workflowPostAndProcessState: workflowPostAndProcessReducer,
     endState: endReducer,
+    metadataState: metadataReducer,
   }
 })

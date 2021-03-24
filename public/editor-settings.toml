@@ -9,6 +9,7 @@ mediaPackageId = '61813d6d-85c9-45fb-b982-f0fecdcca004'
 # Should be deleted when deployed in Opencast, as the editor can then
 # figure out the correct URL by itself.
 url = 'https://pyca.opencast.org'
+# url = "http://localhost:8080"
 # Opencast username. Used for Http basic authentication.
 name = "admin"
 # Password belonging to the above username
@@ -18,7 +19,7 @@ password = "opencast"
 ### Settings of the metadata tab
 [metadata]
 # If false, the metadata button is not displayed in the main menu
-show = false
+show = true
 
 ### Settings of the thumbnail tab
 [thumbnail]

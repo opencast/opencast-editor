@@ -9,6 +9,9 @@ import store from './redux/store'
 import { init } from './config'
 import { sleep } from './util/utilityFunctions'
 
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the
@@ -28,7 +31,9 @@ initialize.then(
     ReactDOM.render(
       <React.StrictMode>
           <Provider store={store}>
-            <App />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <App />
+            </MuiPickersUtilsProvider>
           </Provider>
       </React.StrictMode>,
       document.getElementById('root')
