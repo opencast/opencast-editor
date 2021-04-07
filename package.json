@@ -16,7 +16,7 @@
     "@material-ui/pickers": "^3.3.10",
     "@reduxjs/toolkit": "^1.5.0",
     "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
+    "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.1",
     "@types/iarna__toml": "^2.0.1",
     "@types/jest": "^26.0.20",
