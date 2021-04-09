@@ -11,7 +11,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio,
+  selectDuration, setClickTriggered, selectClickTriggered, setDuration, initializeSegmentsWithDuration
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
@@ -146,6 +147,16 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
       let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
       let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
       dispatch(setAspectRatio({dataKey, width: w, height: h}))
+    }
+
+    // Fallback: If the backend did not tell us the video duration, we try to figure it out ourself
+    if (isPrimary && ref.current && ref.current.getInternalPlayer() && !duration) {
+      let dur = ref.current.getDuration()
+      if (dur) {
+        let durInMs = Math.round(dur * 1000)
+        dispatch(setDuration(durInMs))
+        dispatch(initializeSegmentsWithDuration(durInMs)) // Attempt to init segments
+      }
     }
   }
 

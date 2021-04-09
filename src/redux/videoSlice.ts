@@ -106,6 +106,9 @@ export const videoSlice = createSlice({
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
+    setDuration: (state, action: PayloadAction<video["duration"]>) => {
+      state.duration = action.payload
+    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -137,6 +140,9 @@ export const videoSlice = createSlice({
     },
     mergeRight: (state) => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
+    },
+    initializeSegmentsWithDuration: (state, action: PayloadAction<video["duration"]>) => {
+      state.segments = parseSegments(state, action.payload)
     },
   },
   // For Async Requests
@@ -170,7 +176,7 @@ export const videoSlice = createSlice({
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.presenters = []
-        state.segments = parseSegments(action.payload.segments, action.payload.duration)
+        state.segments = parseSegments(state, action.payload.duration, action.payload.segments)
         state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           if (n1.displayOrder > n2.displayOrder) { return 1; }
@@ -202,18 +208,31 @@ const updateActiveSegment = (state: WritableDraft<video>) => {
 }
 
 /**
- * Helper Function for testing with current/old editor API
+ * Helper Function for creating an inital segments array
+ * If called with segments, they will be parsed into an array
+ * If called without segments, returns an array containing a single segment based on duration
+ * If there are no segments and no duration, return an empty array
  */
-export const parseSegments = (segments: Segment[], duration: number) => {
+function parseSegments (state: WritableDraft<video>, duration: number) : Segment[]
+function parseSegments (state: WritableDraft<video>,  duration: number, segments: Segment[]) : Segment[]
+function parseSegments (state: WritableDraft<video>,  duration?: number, segments?: Segment[]) {
   let newSegments : Segment[] = []
 
-  if (segments.length === 0) {
+  // If no segments are given, assume empty array
+  if (!segments) {
+    segments = []
+  }
+
+  // Initialize with duration
+  if (segments.length === 0 && duration) {
     newSegments.push({id: nanoid(), start: 0, end: duration, deleted: false})
   }
 
+  // Initialie with segments
   segments.forEach((segment: Segment) => {
     newSegments.push({id: nanoid(), start: segment.start, end: segment.end, deleted: segment.deleted})
   });
+
   return newSegments
 }
 
@@ -267,9 +286,9 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
-export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio, cut,
-  markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio,
+  setDuration, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  setClickTriggered, initializeSegmentsWithDuration } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -289,9 +308,13 @@ export const selectSegments = (state: { videoState: { segments: video["segments"
   state.videoState.segments
 export const selectActiveSegmentIndex = (state: { videoState: { activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
   state.videoState.activeSegmentIndex
-export const selectIsCurrentSegmentAlive = (state: { videoState:
-  { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
-  !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
+export const selectIsCurrentSegmentAlive = (state: { videoState: {  segments: video["segments"]; activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
+  {
+    if (state.videoState.segments && state.videoState.segments.length > state.videoState.activeSegmentIndex) {
+      return !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
+    }
+    return null
+  }
 export const selectSelectedWorkflowIndex = (state: { videoState:
   { selectedWorkflowIndex: video["selectedWorkflowIndex"]; }; }) =>
   state.videoState.selectedWorkflowIndex
