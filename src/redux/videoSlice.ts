@@ -210,21 +210,22 @@ const updateActiveSegment = (state: WritableDraft<video>) => {
 /**
  * Helper Function for creating an inital segments array
  * If called with segments, they will be parsed into an array
- * If called without segments, returns an array containing a single segment based on duration
- * If there are no segments and no duration, return an empty array
+ * If called without segments, the segments of state are used
+ * If segments is empty, returns an array containing a single segment based on duration
+ * If segments is empty and duration is null, returns an empty array
  */
 function parseSegments (state: WritableDraft<video>, duration: number) : Segment[]
 function parseSegments (state: WritableDraft<video>,  duration: number, segments: Segment[]) : Segment[]
-function parseSegments (state: WritableDraft<video>,  duration?: number, segments?: Segment[]) {
+function parseSegments (state: WritableDraft<video>,  duration: number, segments?: Segment[]) {
   let newSegments : Segment[] = []
 
-  // If no segments are given, assume empty array
+  // If no segments are given, assume existing states
   if (!segments) {
-    segments = []
+    segments = state.segments
   }
 
   // Initialize with duration
-  if (segments.length === 0 && duration) {
+  if (duration && segments.length === 0) {
     newSegments.push({id: nanoid(), start: 0, end: duration, deleted: false})
   }
 
