@@ -4,6 +4,8 @@
  * duncan83@gmail.com
  */
 
+import { AudioContext } from 'standardized-audio-context';
+
 export function Waveform(opts) {
   this.audioContext = new AudioContext();
   this.oCanvas = document.createElement('canvas');
