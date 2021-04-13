@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, setSelectedWorkflowIndex } from '../redux/videoSlice'
@@ -64,14 +64,14 @@ const WorkflowSelection : React.FC<{}> = () => {
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: '50px',
+    ...(flexGapReplacementStyle(50, false)),
   })
 
   const workflowSelectionSelectionStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'left',
-    gap: '20px',
+    ...(flexGapReplacementStyle(20, false)),
     flexWrap: 'wrap',
     maxHeight: '50vh',
   })

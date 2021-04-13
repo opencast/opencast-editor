@@ -11,7 +11,7 @@ import { setPageNumber } from '../redux/finishSlice'
 
 import { MainMenuStateNames } from '../types'
 import { settings } from '../config'
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 import { setIsPlaying } from "../redux/videoSlice";
 
 import './../i18n/config';
@@ -32,7 +32,7 @@ const MainMenu: React.FC<{}> = () => {
     flexShrink: 0,
     alignItems: 'center',
     padding: '20px',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
   });
 
   return (
@@ -89,7 +89,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     case "Finish":
       buttonString = t("mainMenu.finish-button");
       break;
-    default: 
+    default:
       buttonString = "Could not load String value";
       break;
   }

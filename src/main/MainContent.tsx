@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux'
 import { selectMainMenuState } from '../redux/mainMenuSlice'
 
 import { MainMenuStateNames } from '../types'
+import { flexGapReplacementStyle } from "../cssStyles";
 
 /**
  * A container for the main functionality
@@ -28,7 +29,7 @@ const MainContent: React.FC<{}> = () => {
     display: mainMenuState !== MainMenuStateNames.cutting ? 'none' :'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
-    gap: "20px",
+    ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '20px',
   })
@@ -37,7 +38,7 @@ const MainContent: React.FC<{}> = () => {
     display: mainMenuState !== MainMenuStateNames.metadata ? 'none' :'flex',
     // flexDirection: 'column' as const,
     // justifyContent: 'space-around',
-    gap: "20px",
+    ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '20px',
   })
@@ -46,7 +47,7 @@ const MainContent: React.FC<{}> = () => {
     display: mainMenuState !== MainMenuStateNames.finish ? 'none' : 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
-    gap: "20px",
+    ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     height: '100%',
   })
@@ -58,7 +59,7 @@ const MainContent: React.FC<{}> = () => {
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
-    gap: '20px',
+    ...(flexGapReplacementStyle(20, false)),
   })
 
   return (

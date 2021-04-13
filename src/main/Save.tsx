@@ -1,7 +1,8 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle, nagivationButtonStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
+  nagivationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -39,7 +40,7 @@ const Save : React.FC<{}> = () => {
     display: finishState !== "Save changes" ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   return (
