@@ -25,6 +25,7 @@ import { cuttingKeyMap } from "../globalKeys";
 import { SyntheticEvent } from "react";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 
 /**
  * Container for the videos and their controls
@@ -430,6 +431,7 @@ const VideoHeader: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   const title = useSelector(selectTitle)
+  const metadataTitle = useSelector(selectTitleFromEpisodeDc)
   const presenters = useSelector(selectPresenters)
 
   const titleStyle = css({
@@ -453,7 +455,9 @@ const VideoHeader: React.FC<{}> = () => {
   }
   return (
     <div title={t("video.area-tooltip")} css={{fontSize: '16px'}}>
-      <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>{title}</div>
+      <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>
+        {metadataTitle ? metadataTitle : title}
+      </div>
       {presenter_header}
     </div>
   );
