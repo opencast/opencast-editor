@@ -20,7 +20,7 @@ const Body: React.FC<{}> = () => {
       );
     } else {
       return (
-        <div css={bodyStyle} title="Body">
+        <div css={bodyStyle}>
           <MainMenu />
           <MainContent />
         </div>

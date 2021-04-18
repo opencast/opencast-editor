@@ -203,7 +203,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
   const render = () => {
     if (!errorState) {
       return(
-        <div css={playerWrapper} title="playerWrapper">
+        <div css={playerWrapper}>
           <ReactPlayer url={url}
             css={reactPlayerStyle}
             ref={ref}
