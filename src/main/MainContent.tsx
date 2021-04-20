@@ -62,7 +62,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   return (
-     <main title="MainMenuContext" css={{width: '100%'}} role="main">
+     <main css={{width: '100%'}} role="main">
       <div css={cuttingStyle}>
           <Video />
           <CuttingActions />
