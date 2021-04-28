@@ -331,6 +331,7 @@ const Waveforms: React.FC<{}> = () => {
 
   // Update based on current fetching status
   const [images, setImages] = useState<string[]>([])
+  const [waveformWorkerError, setWaveformWorkerError] = useState<boolean>(false)
 
   const waveformDisplayTestStyle = css({
     display: 'flex',
@@ -364,7 +365,13 @@ const Waveforms: React.FC<{}> = () => {
           var file = new File([blob], blob)
 
           // Start waveform worker with blob
-          const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file});
+          const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})
+
+          waveformWorker.onarne = function(error: string) {
+            setWaveformWorkerError(true)
+            console.log("Waveform could not be generated:" + error)
+          }
+
           // When done, save path to generated waveform img
           waveformWorker.oncomplete = function(image: any, numSamples: any) {
             images.push(image)
@@ -375,6 +382,7 @@ const Waveforms: React.FC<{}> = () => {
             }
           }
         }
+
         xhr.send()
       })
     }
@@ -388,7 +396,12 @@ const Waveforms: React.FC<{}> = () => {
           <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
         )
       );
-    } else {
+    } else if (waveformWorkerError) {
+      return (
+        <div>{"Waveform could not be generated"}</div>
+      );
+    }
+    else {
       return (
         <>
           <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
