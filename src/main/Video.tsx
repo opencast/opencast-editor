@@ -17,7 +17,7 @@ import {
 import ReactPlayer, { Config } from 'react-player'
 
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
-import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
+import { errorBoxStyle, basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { selectMainMenuState } from "../redux/mainMenuSlice";
@@ -262,19 +262,19 @@ const VideoControls: React.FC<{}> = () => {
     alignItems: 'center',
     width: '100%',
     padding: '20px',
-    gap: '50px',
+    ...(flexGapReplacementStyle(50, false)),
   })
 
   const leftSideBoxStyle = css({
     width: '100%',
     display: 'flex',
-    justifyContent: 'right'
+    justifyContent: 'flex-end'
   })
 
   const rightSideBoxStyle = css({
     width: '100%',
     display: 'flex',
-    justifyContent: 'left'
+    justifyContent: 'flex-start'
   })
 
   return (
@@ -324,7 +324,7 @@ const PreviewMode: React.FC<{}> = () => {
   const previewModeStyle = css({
     cursor: "pointer",
     display: 'flex',
-    gap: '10px',
+    ...(flexGapReplacementStyle(10, false)),
     justifyContent: 'center',
     alignItems: 'center'
   })

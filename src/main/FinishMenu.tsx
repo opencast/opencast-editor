@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -24,7 +24,7 @@ const FinishMenu : React.FC<{}> = () => {
     flexDirection: 'row' as const,
     justifyContent: 'space-around',
     flexWrap: 'wrap',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   return (
@@ -55,7 +55,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     height: '220px',
     flexDirection: 'column' as const,
     fontSize: "x-large",
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   });
 

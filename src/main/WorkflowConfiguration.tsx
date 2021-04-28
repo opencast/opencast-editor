@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -35,7 +35,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   return (

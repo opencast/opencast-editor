@@ -8,7 +8,7 @@ import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons"
 import { useSelector } from 'react-redux';
 import { selectDuration } from '../redux/videoSlice'
 import { selectEndState } from '../redux/endSlice'
-import { basicButtonStyle, nagivationButtonStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, nagivationButtonStyle } from "../cssStyles";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +50,7 @@ const TheEnd : React.FC<{}> = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '20px',
-    gap: '20px',
+    ...(flexGapReplacementStyle(20, false)),
   })
 
   return (
