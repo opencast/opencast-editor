@@ -41,7 +41,7 @@
     "react-draggable": "^4.4.3",
     "react-final-form": "^6.5.3",
     "react-hotkeys": "^2.0.0",
-    "react-i18next": "^11.8.12",
+    "react-i18next": "^11.8.15",
     "react-player": "^2.9.0",
     "react-redux": "^7.2.4",
     "react-scripts": "4.0.3",
