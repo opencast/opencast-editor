@@ -50,7 +50,7 @@ How to cut a release for Opencast
 -------------
 - Run `build-release.sh` in the root folder
 - Remove the editor-settings.toml in the created .tar archive
-- Upload the archive as a new release to Github
+- Upload the archive as a new release to GitHub
   - Release tag is the current date (year-month-day)
   - Check the commit history for notable changes and list them as a release comment
 - Create an pull request against Opencast
@@ -68,7 +68,6 @@ The editor accesses the following endpoints in Opencast:
 * `/editor/<mediaPackageId>/metadata.json`  (introduced in OC 9.4)
 
 If you want to use current editor frontend with an earlier Opencast version, you will have to cherry pick the relevant commits from the Opencast repository yourself.
-
 
 
 
