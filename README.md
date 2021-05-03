@@ -40,29 +40,34 @@ To make the editor work in a sub-path, use:
 
     PUBLIC_URL=/path npm run build
 
-Usage
-------------------
-
-To install the editor as an Opencast module from a github release, use the branch at
-
-    https://github.com/Arnei/opencast/tree/deploy-editor-as-module.
-
-:warning: There is no official release yet!
 
 Configuration
 -------------
 
 The editor can be configured through the `editor-settings.toml` settings file. It can either be provided in the public folder when running locally or can be found under `etc/opencast/ui-config/mh_default_org/editor` when deployed in Opencast. More information can be found in the example configuration file.
 
+How to cut a release for Opencast
+-------------
+- Run `build-release.sh` in the root folder
+- Remove the editor-settings.toml in the created .tar archive
+- Upload the archive as a new release to GitHub
+  - Release tag is the current date (year-month-day)
+  - Check the commit history for notable changes and list them as a release comment
+- Create an pull request against Opencast
+  - In your Opencast, replace the url the `editor.url` in `modules/editor/pom.xml` with a url that points to the archive file in your new release
+  - Build the editor module with `mvn install`. Observe the error message and replace the old sha256 value in `editor.sha256` with the new value in the error message. Build again to see if it worked.
+  - Check if you need to add any new config values to `etc/ui-config/mh_default_org/editor/editor-settings.toml`. Do not add the debug values.
+  - Verify that the new release runs in Opencast, then create the pull request.
+
 Opencast API used by the Editor
 -------------
 
 The editor accesses the following endpoints in Opencast:
 
-* `/editor/<mediaPackageId>/edit.json`
+* `/editor/<mediaPackageId>/edit.json`      (introduced in OC 9.3)
+* `/editor/<mediaPackageId>/metadata.json`  (introduced in OC 9.4)
 
-These endpoints are not part of Opencast 9, but instead currently only available at https://github.com/lwillmann/opencast/tree/editor-backend. If you want to use the editor with Opencast, your Opencast installation must have this branch.
-
+If you want to use current editor frontend with an earlier Opencast version, you will have to cherry pick the relevant commits from the Opencast repository yourself.
 
 
 
