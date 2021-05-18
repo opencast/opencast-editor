@@ -570,7 +570,7 @@ const Metadata: React.FC<{}> = () => {
               form.reset()
             }} css={metadataStyle}>
 
-              <div css={errorBoxStyle(getStatus === "failed")} title="Error Box" role="alert">
+              <div css={errorBoxStyle(getStatus === "failed")} role="alert">
                 <span>A problem occurred during communication with Opencast.</span><br />
                 {getError ? "Details: " + getError : "No error details are available."}<br />
               </div>
@@ -601,7 +601,7 @@ const Metadata: React.FC<{}> = () => {
                 </button>
               </div> */}
 
-              <div css={errorBoxStyle(postStatus === "failed")} title="Error Box" role="alert">
+              <div css={errorBoxStyle(postStatus === "failed")} role="alert">
                 <span>A problem occurred during communication with Opencast. <br />
                       Changes could not be saved to Opencast.</span><br />
                 {postError ? "Details: " + postError : "No error details are available."}<br />

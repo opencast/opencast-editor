@@ -53,11 +53,11 @@ const Save : React.FC<{}> = () => {
         <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
         <SaveButton />
       </div>
-      <div css={errorBoxStyle(postWorkflowStatus === "failed")} title="Error Box" role="alert">
+      <div css={errorBoxStyle(postWorkflowStatus === "failed")} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
       </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed")} title="Error Box" role="alert">
+      <div css={errorBoxStyle(postMetadataStatus === "failed")} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
       </div>

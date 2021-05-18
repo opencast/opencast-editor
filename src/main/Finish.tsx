@@ -37,7 +37,7 @@ const Finish : React.FC<{}> = () => {
   })
 
   return (
-    <div  title="Finish">
+    <div>
       <div css={pageZeroStyle} >
         <FinishMenu />
       </div>

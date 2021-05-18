@@ -219,10 +219,10 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
         position={controlledPosition}
         nodeRef={nodeRef}
         >
-          <div ref={nodeRef} css={scrubberStyle} title={t("timeline.scrubber-tooltip")}>
+          <div ref={nodeRef} css={scrubberStyle}>
 
             <div css={arrowDownStyle}></div>
-            <div css= {scrubberDragHandleStyle} title={t("timeline.dragHandle-tooltip")} aria-grabbed={isGrabbed}
+            <div css= {scrubberDragHandleStyle} aria-grabbed={isGrabbed}
               aria-label={t("timeline.scrubber-text-aria",
                          {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
                           segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),

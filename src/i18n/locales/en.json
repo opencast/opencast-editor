@@ -4,7 +4,6 @@
       "finish-button": "Finish",
       "thumbnail-button": "Thumbnail",
       "metadata-button": "Metadata",
-      "mainMenu-tooltip": "Main Menu",
       "tooltip-aria": "Main Navigation"
     },
 
@@ -36,9 +35,6 @@
       "loadError-text": "An error has occurred loading this video.",
       "title-tooltip": "Video Title",
       "presenter-tooltip": "Video Presenters",
-      "area-tooltip": "Video Area",
-      "area-player-tooltip": "Video Player Area",
-      "area-header-tooltip": "Video Area Header",
       "controls-tooltip": "Video Controls"
     },
 
@@ -89,8 +85,6 @@
     "timeline": {
       "generateWaveform-text": "Generating Waveform",
       "segment-tooltip": "Segment {{segment}}",
-      "scrubber-tooltip": "Scrubber",
-      "dragHandle-tooltip": "dragHandle",
       "scrubber-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the scrubber. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
       "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. End: {{end}}.\n"
     },

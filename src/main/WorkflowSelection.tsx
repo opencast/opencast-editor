@@ -95,7 +95,7 @@ const WorkflowSelection : React.FC<{}> = () => {
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
-        <div css={errorBoxStyle(errorStatus === "failed")} title="Error Box" role="alert">
+        <div css={errorBoxStyle(errorStatus === "failed")} role="alert">
           <span>{t("various.error-text")}</span><br />
           {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
         </div>
