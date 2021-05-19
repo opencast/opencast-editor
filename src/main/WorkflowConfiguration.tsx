@@ -53,7 +53,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("save.error-text")}</span><br />
+        <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
       </div>
     </div>
