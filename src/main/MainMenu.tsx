@@ -36,7 +36,7 @@ const MainMenu: React.FC<{}> = () => {
   });
 
   return (
-    <nav css={mainMenuStyle} title={t("mainMenu.mainMenu-tooltip")} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
+    <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
       {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
       {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}

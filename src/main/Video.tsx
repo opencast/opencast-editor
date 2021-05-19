@@ -67,7 +67,7 @@ const Video: React.FC<{}> = () => {
 
   const errorBox = () => {
     return (
-      <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
+      <div css={errorBoxStyle(videoURLStatus === "failed")} role="alert">
         <span>{t("video.comError-text")}</span><br />
         {error ? t("various.error-details-text", {errorMessage: error}) : t("various.error-noDetails-text")}<br />
       </div>
@@ -94,10 +94,10 @@ const Video: React.FC<{}> = () => {
   });
 
   return (
-    <div css={videoAreaStyle} title={t("video.area-tooltip")}>
+    <div css={videoAreaStyle}>
       {errorBox()}
       <VideoHeader />
-      <div css={videoPlayerAreaStyle} title={t("video.area-player-tooltip")}>
+      <div css={videoPlayerAreaStyle}>
         {videoPlayers}
       </div>
       <VideoControls />
@@ -224,7 +224,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
       );
     } else {
       return (
-        <div css={errorBoxStyle} title="Error Box" role="alert">
+        <div css={errorBoxStyle} role="alert">
           <span>{t("video.loadError-text")} </span>
         </div>
       );
