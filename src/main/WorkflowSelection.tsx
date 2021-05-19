@@ -96,7 +96,7 @@ const WorkflowSelection : React.FC<{}> = () => {
           {nextButton}
         </div>
         <div css={errorBoxStyle(errorStatus === "failed")} title="Error Box" role="alert">
-          <span>{t("error-text")}</span><br />
+          <span>{t("various.error-text")}</span><br />
           {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
         </div>
       </div>
@@ -110,7 +110,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.noWorkflow-text">
-            A problem occured, there are no workflows to process your changes with.<br />
+            A problem occurred, there are no workflows to process your changes with.<br />
             Please save your changes and contact an Opencast Administrator.
           </Trans>,
           false,
