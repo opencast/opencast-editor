@@ -89,7 +89,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
-    if(currentlyAt !== wasCurrentlyAtRef.current) {
+    if(currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
       updateXPos();
       wasCurrentlyAtRef.current = currentlyAt;
     }
@@ -104,10 +104,11 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
-  // const onControlledDrag = (e: any, position: any) => {
-  //   const {x, y} = position;
-  //   dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
-  // };
+  const onControlledDrag = (e: any, position: any) => {
+    // Update position
+    const {x} = position
+    dispatch(setCurrentlyAt((x / timelineWidth) * (duration)))
+  };
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {
@@ -211,7 +212,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   return (
     <HotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
       <Draggable
-        //onDrag={onControlledDrag}
+        onDrag={onControlledDrag}
         onStart={onStartDrag}
         onStop={onStopDrag}
         axis="x"
