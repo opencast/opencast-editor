@@ -5,7 +5,7 @@ import Draggable from 'react-draggable';
 import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Segment, httpRequestState } from '../types'
+import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
   setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered
@@ -18,11 +18,12 @@ import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
-import { HotKeys } from 'react-hotkeys';
+import { GlobalHotKeys } from 'react-hotkeys';
 import { scrubberKeyMap } from '../globalKeys';
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectMainMenuState } from '../redux/mainMenuSlice';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -78,6 +79,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const duration = useSelector(selectDuration)
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
   const segments = useSelector(selectSegments)                      // For ARIA information display
+  const mainMenuState = useSelector(selectMainMenuState)            // For hotkey enabling/disabling
 
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
@@ -210,7 +212,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // }
 
   return (
-    <HotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true}>
       <Draggable
         onDrag={onControlledDrag}
         onStart={onStartDrag}
@@ -238,7 +240,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
             <div css={arrowUpStyle}></div>
           </div>
       </Draggable>
-    </HotKeys>
+    </GlobalHotKeys>
   );
 };
 
