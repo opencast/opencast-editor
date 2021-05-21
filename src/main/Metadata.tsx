@@ -24,6 +24,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { DateTime as LuxonDateTime} from "luxon";
 
 /**
  * Creates a Metadata form
@@ -249,6 +250,25 @@ const Metadata: React.FC<{}> = () => {
     return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
+  /**
+   * Validator for the date time fields
+   * @param date
+   */
+  const dateTimeValidator = (date: any) => {
+    let dt = undefined
+    if (Object.prototype.toString.call(date) === '[object Date]') {
+      dt = LuxonDateTime.fromJSDate(date);
+    }
+    if (typeof(date) === 'string') {
+      dt = LuxonDateTime.fromISO(date);
+    }
+
+    if (dt) {
+      return dt.isValid ? "" : "Invalid"
+    }
+    return "Invalid"
+  }
+
   // // Function that combines multiple validation functions. Needs to be made typescript conform
   // const composeValidators = (...validators) => value =>
   // validators.reduce((error, validator) => error || validator(value), undefined)
@@ -263,6 +283,8 @@ const Metadata: React.FC<{}> = () => {
       return required
     } else if (field.id === "duration") {
       return duration
+    } else if (field.type === "date" || field.type === "time") {
+      return dateTimeValidator
     } else {
       return undefined
     }
