@@ -24,16 +24,19 @@ import { useTranslation } from 'react-i18next';
   const errorMessage = useSelector(selectErrorMessage)
   const errorDetails = useSelector(selectErrorDetails)
 
+  const detailsStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  })
+
   const theEndStyle = css({
-    width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '20px',
-    lineHeight: '0.2',
-    ...(flexGapReplacementStyle(20, false)),
+    ...(flexGapReplacementStyle(10, false)),
   })
 
   return (
@@ -41,8 +44,10 @@ import { useTranslation } from 'react-i18next';
       <div>{t("error.generic-message")}</div>
       <FontAwesomeIcon icon={faFrown} size="10x" />
       <span>{errorMessage}</span><br />
-      <span>{t("error.details")}</span><br />
-      {errorDetails ? errorDetails : t("various.error-noDetails-text") }
+      <div css={detailsStyle}>
+        <span>{t("error.details")}</span><br />
+        <span>{errorDetails ? errorDetails : t("various.error-noDetails-text") }</span>
+      </div>
     </div>
   );
 }
