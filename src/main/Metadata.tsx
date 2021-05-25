@@ -269,9 +269,9 @@ const Metadata: React.FC<{}> = () => {
     }
 
     if (dt) {
-      return dt.isValid ? undefined : "Invalid"
+      return dt.isValid ? undefined : t("metadata.validation.datetime")
     }
-    return "Invalid"
+    return t("metadata.validation.datetime")
   }
 
   // // Function that combines multiple validation functions. Needs to be made typescript conform
