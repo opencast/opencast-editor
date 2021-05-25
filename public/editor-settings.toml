@@ -20,6 +20,23 @@ password = "opencast"
 [metadata]
 # If false, the metadata button is not displayed in the main menu
 show = true
+## Configure metadata display
+## Here you can set which metadata fields should be displayed in the editor
+## for each catalog.
+## If the catalog is not specified, all fields of that catalog will be
+## displayed.
+## If the catalog is specified but empty, it will not be displayed at all.
+## If the catalog is specified with at least one field, only the fields
+## specified for the catalog will be displayed.
+[metadata.showFields]
+## Example definition
+# # This is the default catalog
+# "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE" = [
+#   "title",
+#   "language",
+#   "duration"
+# ]
+# "NameOfAnExtendedMetadataCatalog" = []
 
 ### Settings of the thumbnail tab
 [thumbnail]

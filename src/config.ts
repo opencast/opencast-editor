@@ -29,6 +29,7 @@ interface iSettings {
   },
   metadata: {
     show: boolean,
+    showFields: { [key: string]: string[]; } | undefined,
   },
   thumbnail: {
     show: boolean,
@@ -51,6 +52,7 @@ var defaultSettings: iSettings = {
   },
   metadata: {
     show: true,
+    showFields: undefined,
   },
   thumbnail: {
     show: true,
@@ -235,6 +237,21 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
+  'objectWithStringArrays': (v: any, allowParse: any) => {
+    for (let key in v) {
+      if (typeof key !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+      if (!Array.isArray(v[key])) {
+        throw new Error("is not an array, but should be");
+      }
+      for (let item in v[key]) {
+        if (typeof item !== 'string') {
+          throw new Error("is not a string, but should be");
+        }
+      }
+    }
+  }
 };
 
 // Defines all potential settings and their types.
@@ -256,6 +273,7 @@ const SCHEMA = {
   },
   metadata: {
     show : types.boolean,
+    showFields: types.objectWithStringArrays,
   },
   thumbnail: {
     show : types.boolean,
