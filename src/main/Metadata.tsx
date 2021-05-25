@@ -255,6 +255,11 @@ const Metadata: React.FC<{}> = () => {
    * @param date
    */
   const dateTimeValidator = (date: any) => {
+    // Empty field is valid value in Opencast
+    if (!date) {
+      return undefined
+    }
+
     let dt = undefined
     if (Object.prototype.toString.call(date) === '[object Date]') {
       dt = LuxonDateTime.fromJSDate(date);
@@ -264,7 +269,7 @@ const Metadata: React.FC<{}> = () => {
     }
 
     if (dt) {
-      return dt.isValid ? "" : "Invalid"
+      return dt.isValid ? undefined : "Invalid"
     }
     return "Invalid"
   }
