@@ -114,8 +114,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {
-    const y = controlledPosition.y;
-    setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y});
+    setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
   };
 
   const onStartDrag = () => {
@@ -132,8 +131,8 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const onStopDrag = (e: any, position: any) => {
     // Update position
-    const {x, y} = position;
-    setControlledPosition({x, y});
+    const {x} = position;
+    setControlledPosition({x, y: 0});
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
 
     setIsGrabbed(false)
