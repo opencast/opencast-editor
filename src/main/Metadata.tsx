@@ -256,7 +256,7 @@ const Metadata: React.FC<{}> = () => {
    */
   const dateTimeValidator = (date: any) => {
     // Empty field is valid value in Opencast
-    if (!date) {
+    if (date === "") {
       return undefined
     }
 
@@ -371,7 +371,9 @@ const Metadata: React.FC<{}> = () => {
     if (field && (field.type === "date" || field.type === "time") && Object.prototype.toString.call(returnValue) === '[object Date]') {
       returnValue = returnValue.toJSON()
     } else if (field && (field.type === "date" || field.type === "time") && typeof returnValue === "string") {
-      returnValue = new Date(returnValue).toJSON()
+      if (returnValue !== "") { // Empty string is allowed
+        returnValue = new Date(returnValue).toJSON()
+      }
     }
 
     return returnValue
