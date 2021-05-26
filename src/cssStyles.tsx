@@ -4,6 +4,7 @@
 import { css, Global } from '@emotion/react'
 import React from "react";
 import emotionNormalize from 'emotion-normalize';
+import { checkFlexGapSupport } from './util/utilityFunctions';
 
 /**
  * An emotion component that inserts styles globally
@@ -28,6 +29,43 @@ export const globalStyle = css({
   },
 });
 
+
+/**
+ * CSS for replacing flexbox gap in browers that do not support it
+ * Does not return a css prop, but is meant as a direct replacement for "gap"
+ * Example: ...(flexGapReplacementStyle(30, false))
+ */
+export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow: boolean) => {
+
+  let half = flexGapValue / 2
+  let quarter = flexGapValue / 4
+
+  return (
+    {
+    // Use gap if supported
+    ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
+    // Else use margins
+    ...(!checkFlexGapSupport()) &&
+      {
+        ">*": { // For each child
+          marginTop: `${quarter}px`,
+          marginBottom: `${quarter}px`,
+          marginRight: `${half}px`,
+          marginLeft: `${half}px`,
+        },
+        ...(flexDirectionIsRow) && {
+          ">*:first-of-type": {
+            marginLeft: '0px',
+          },
+          ">*:last-child": {
+            marginRight: '0px',
+          },
+        },
+      }
+    }
+  );
+}
+
 /**
  * CSS for buttons
  */
@@ -50,7 +88,7 @@ export const basicButtonStyle = css({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '10px',
+  ...(flexGapReplacementStyle(10, false)),
   textAlign: 'center' as const,
 });
 
@@ -70,7 +108,7 @@ export const nagivationButtonStyle = css({
 export const backOrContinueStyle = css(({
   display: 'flex',
   flexDirection: 'row' as const,
-  gap: '20px',
+  ...(flexGapReplacementStyle(20, false)),
 }))
 
 /**

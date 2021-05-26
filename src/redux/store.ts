@@ -6,6 +6,7 @@ import workflowPostReducer from './workflowPostSlice'
 import workflowPostAndProcessReducer from './workflowPostAndProcessSlice'
 import endReducer from './endSlice'
 import metadataReducer from './metadataSlice'
+import errorReducer from './errorSlice'
 
 export default configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export default configureStore({
     workflowPostAndProcessState: workflowPostAndProcessReducer,
     endState: endReducer,
     metadataState: metadataReducer,
+    errorState: errorReducer,
   }
 })

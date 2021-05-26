@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
 
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -67,13 +67,13 @@ const CuttingActions: React.FC<{}> = () => {
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'space-between',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, true)),
   })
 
   const blockStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, true)),
   })
 
   return (

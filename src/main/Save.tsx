@@ -1,7 +1,8 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle, nagivationButtonStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
+  nagivationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -39,7 +40,7 @@ const Save : React.FC<{}> = () => {
     display: finishState !== "Save changes" ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   return (
@@ -52,12 +53,12 @@ const Save : React.FC<{}> = () => {
         <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
         <SaveButton />
       </div>
-      <div css={errorBoxStyle(postWorkflowStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("save.error-text")}</span><br />
+      <div css={errorBoxStyle(postWorkflowStatus === "failed")} role="alert">
+        <span>{t("various.error-text")}</span><br />
         {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
       </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("save.error-text")}</span><br />
+      <div css={errorBoxStyle(postMetadataStatus === "failed")} role="alert">
+        <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
       </div>
     </div>

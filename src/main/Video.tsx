@@ -17,7 +17,7 @@ import {
 import ReactPlayer, { Config } from 'react-player'
 
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
-import { errorBoxStyle, basicButtonStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { selectMainMenuState } from "../redux/mainMenuSlice";
@@ -26,6 +26,7 @@ import { SyntheticEvent } from "react";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
+import { setError } from "../redux/errorSlice";
 
 /**
  * Container for the videos and their controls
@@ -45,9 +46,11 @@ const Video: React.FC<{}> = () => {
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
-        dispatch(fetchVideoInformation())
+      dispatch(fetchVideoInformation())
+    } else if (videoURLStatus === 'failed') {
+      dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
     }
-  }, [videoURLStatus, dispatch])
+  }, [videoURLStatus, dispatch, error, t])
 
   // Update based on current fetching status
   // let content
@@ -64,15 +67,6 @@ const Video: React.FC<{}> = () => {
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
     videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i === 0}/>);
-  }
-
-  const errorBox = () => {
-    return (
-      <div css={errorBoxStyle(videoURLStatus === "failed")} title="Error Box" role="alert">
-        <span>{t("video.comError-text")}</span><br />
-        {error ? t("various.error-details-text", {errorMessage: error}) : t("various.error-noDetails-text")}<br />
-      </div>
-    );
   }
 
   // Style
@@ -95,10 +89,9 @@ const Video: React.FC<{}> = () => {
   });
 
   return (
-    <div css={videoAreaStyle} title={t("video.area-tooltip")}>
-      {errorBox()}
+    <div css={videoAreaStyle}>
       <VideoHeader />
-      <div css={videoPlayerAreaStyle} title={t("video.area-player-tooltip")}>
+      <div css={videoPlayerAreaStyle}>
         {videoPlayers}
       </div>
       <VideoControls />
@@ -204,7 +197,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
   const render = () => {
     if (!errorState) {
       return(
-        <div css={playerWrapper} title="playerWrapper">
+        <div css={playerWrapper}>
           <ReactPlayer url={url}
             css={reactPlayerStyle}
             ref={ref}
@@ -225,7 +218,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
       );
     } else {
       return (
-        <div css={errorBoxStyle} title="Error Box" role="alert">
+        <div css={errorBoxStyle} role="alert">
           <span>{t("video.loadError-text")} </span>
         </div>
       );
@@ -263,19 +256,19 @@ const VideoControls: React.FC<{}> = () => {
     alignItems: 'center',
     width: '100%',
     padding: '20px',
-    gap: '50px',
+    ...(flexGapReplacementStyle(50, false)),
   })
 
   const leftSideBoxStyle = css({
     width: '100%',
     display: 'flex',
-    justifyContent: 'right'
+    justifyContent: 'flex-end'
   })
 
   const rightSideBoxStyle = css({
     width: '100%',
     display: 'flex',
-    justifyContent: 'left'
+    justifyContent: 'flex-start'
   })
 
   return (
@@ -325,7 +318,7 @@ const PreviewMode: React.FC<{}> = () => {
   const previewModeStyle = css({
     cursor: "pointer",
     display: 'flex',
-    gap: '10px',
+    ...(flexGapReplacementStyle(10, false)),
     justifyContent: 'center',
     alignItems: 'center'
   })

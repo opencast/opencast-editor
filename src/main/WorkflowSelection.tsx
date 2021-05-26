@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, errorBoxStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, selectSelectedWorkflowIndex, setSelectedWorkflowIndex } from '../redux/videoSlice'
@@ -64,14 +64,14 @@ const WorkflowSelection : React.FC<{}> = () => {
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: '50px',
+    ...(flexGapReplacementStyle(50, false)),
   })
 
   const workflowSelectionSelectionStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'left',
-    gap: '20px',
+    ...(flexGapReplacementStyle(20, false)),
     flexWrap: 'wrap',
     maxHeight: '50vh',
   })
@@ -95,8 +95,8 @@ const WorkflowSelection : React.FC<{}> = () => {
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
-        <div css={errorBoxStyle(errorStatus === "failed")} title="Error Box" role="alert">
-          <span>{t("error-text")}</span><br />
+        <div css={errorBoxStyle(errorStatus === "failed")} role="alert">
+          <span>{t("various.error-text")}</span><br />
           {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
         </div>
       </div>
@@ -110,7 +110,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.noWorkflow-text">
-            A problem occured, there are no workflows to process your changes with.<br />
+            A problem occurred, there are no workflows to process your changes with.<br />
             Please save your changes and contact an Opencast Administrator.
           </Trans>,
           false,

@@ -432,6 +432,7 @@ const Metadata: React.FC<{}> = () => {
    * @param input
    */
   const generateComponent = (field: MetadataField, input: any) => {
+    input.id = input.name
     if (field.collection) {
       if (Array.isArray(field.value)) {
         return (
@@ -517,7 +518,7 @@ const Metadata: React.FC<{}> = () => {
                 >
                 {({ input, meta }) => (
                   <div css={fieldStyle}>
-                    <label css={fieldLabelStyle}>{
+                    <label css={fieldLabelStyle} htmlFor={input.name}>{
                       i18n.exists(`metadata.labels.${field.id}`) ?
                       t(`metadata.labels.${field.id}`) : field.id
                     }</label>
@@ -569,8 +570,8 @@ const Metadata: React.FC<{}> = () => {
               form.reset()
             }} css={metadataStyle}>
 
-              <div css={errorBoxStyle(getStatus === "failed")} title="Error Box" role="alert">
-                <span>A problem occured during communication with Opencast.</span><br />
+              <div css={errorBoxStyle(getStatus === "failed")} role="alert">
+                <span>A problem occurred during communication with Opencast.</span><br />
                 {getError ? "Details: " + getError : "No error details are available."}<br />
               </div>
 
@@ -600,8 +601,8 @@ const Metadata: React.FC<{}> = () => {
                 </button>
               </div> */}
 
-              <div css={errorBoxStyle(postStatus === "failed")} title="Error Box" role="alert">
-                <span>A problem occured during communication with Opencast. <br />
+              <div css={errorBoxStyle(postStatus === "failed")} role="alert">
+                <span>A problem occurred during communication with Opencast. <br />
                       Changes could not be saved to Opencast.</span><br />
                 {postError ? "Details: " + postError : "No error details are available."}<br />
               </div>

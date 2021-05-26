@@ -5,7 +5,7 @@ import Draggable from 'react-draggable';
 import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Segment, httpRequestState } from '../types'
+import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
   setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered
@@ -18,11 +18,12 @@ import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
-import { HotKeys } from 'react-hotkeys';
+import { GlobalHotKeys } from 'react-hotkeys';
 import { scrubberKeyMap } from '../globalKeys';
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectMainMenuState } from '../redux/mainMenuSlice';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -78,6 +79,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const duration = useSelector(selectDuration)
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
   const segments = useSelector(selectSegments)                      // For ARIA information display
+  const mainMenuState = useSelector(selectMainMenuState)            // For hotkey enabling/disabling
 
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
@@ -89,7 +91,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
-    if(currentlyAt !== wasCurrentlyAtRef.current) {
+    if(currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
       updateXPos();
       wasCurrentlyAtRef.current = currentlyAt;
     }
@@ -104,10 +106,11 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
-  // const onControlledDrag = (e: any, position: any) => {
-  //   const {x, y} = position;
-  //   dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
-  // };
+  const onControlledDrag = (e: any, position: any) => {
+    // Update position
+    const {x} = position
+    dispatch(setCurrentlyAt((x / timelineWidth) * (duration)))
+  };
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {
@@ -209,9 +212,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   // }
 
   return (
-    <HotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true}>
       <Draggable
-        //onDrag={onControlledDrag}
+        onDrag={onControlledDrag}
         onStart={onStartDrag}
         onStop={onStopDrag}
         axis="x"
@@ -219,10 +222,10 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
         position={controlledPosition}
         nodeRef={nodeRef}
         >
-          <div ref={nodeRef} css={scrubberStyle} title={t("timeline.scrubber-tooltip")}>
+          <div ref={nodeRef} css={scrubberStyle}>
 
             <div css={arrowDownStyle}></div>
-            <div css= {scrubberDragHandleStyle} title={t("timeline.dragHandle-tooltip")} aria-grabbed={isGrabbed}
+            <div css= {scrubberDragHandleStyle} aria-grabbed={isGrabbed}
               aria-label={t("timeline.scrubber-text-aria",
                          {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
                           segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
@@ -237,7 +240,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
             <div css={arrowUpStyle}></div>
           </div>
       </Draggable>
-    </HotKeys>
+    </GlobalHotKeys>
   );
 };
 
@@ -331,6 +334,7 @@ const Waveforms: React.FC<{}> = () => {
 
   // Update based on current fetching status
   const [images, setImages] = useState<string[]>([])
+  const [waveformWorkerError, setWaveformWorkerError] = useState<boolean>(false)
 
   const waveformDisplayTestStyle = css({
     display: 'flex',
@@ -364,7 +368,13 @@ const Waveforms: React.FC<{}> = () => {
           var file = new File([blob], blob)
 
           // Start waveform worker with blob
-          const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file});
+          const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})
+
+          waveformWorker.onarne = function(error: string) {
+            setWaveformWorkerError(true)
+            console.log("Waveform could not be generated:" + error)
+          }
+
           // When done, save path to generated waveform img
           waveformWorker.oncomplete = function(image: any, numSamples: any) {
             images.push(image)
@@ -375,6 +385,7 @@ const Waveforms: React.FC<{}> = () => {
             }
           }
         }
+
         xhr.send()
       })
     }
@@ -388,7 +399,12 @@ const Waveforms: React.FC<{}> = () => {
           <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
         )
       );
-    } else {
+    } else if (waveformWorkerError) {
+      return (
+        <div>{"Waveform could not be generated"}</div>
+      );
+    }
+    else {
       return (
         <>
           <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
