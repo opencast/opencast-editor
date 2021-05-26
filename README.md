@@ -70,4 +70,6 @@ The editor accesses the following endpoints in Opencast:
 If you want to use current editor frontend with an earlier Opencast version, you will have to cherry pick the relevant commits from the Opencast repository yourself.
 
 
-
+Translating the Editor
+-------------
+You can help translating the editor to your language on crowdin.com/project/opencast-editor. Simply request to join the project on Crowdin and start translating. If you are interested in translating a language which is not a target language right now, please create a Gitub issue and we will add the language.
