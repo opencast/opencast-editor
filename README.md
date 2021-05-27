@@ -72,4 +72,4 @@ If you want to use current editor frontend with an earlier Opencast version, you
 
 Translating the Editor
 -------------
-You can help translating the editor to your language on crowdin.com/project/opencast-editor. Simply request to join the project on Crowdin and start translating. If you are interested in translating a language which is not a target language right now, please create a GitHub issue and we will add the language.
+You can help translating the editor to your language on [crowdin.com/project/opencast-editor](https://crowdin.com/project/opencast-editor). Simply request to join the project on Crowdin and start translating. If you are interested in translating a language which is not a target language right now, please create [a GitHub issue](https://github.com/elan-ev/opencast-editor/issues) and we will add the language.
