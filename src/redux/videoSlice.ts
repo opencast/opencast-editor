@@ -107,6 +107,8 @@ export const videoSlice = createSlice({
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
     cut: (state) => {
+      updateActiveSegment(state)
+
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
           state.segments[state.activeSegmentIndex].end === state.currentlyAt ) {
@@ -138,6 +140,30 @@ export const videoSlice = createSlice({
     mergeRight: (state) => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
     },
+    dragSegmentBorder: (state, action: PayloadAction<any>) => {
+      const segmentIndex = action.payload.index
+      const newEndPos = action.payload.time
+
+      // If new endPos smaller than startPos, delete yourself
+      // Maybe disallow moving further than startPos?
+      if (state.segments[segmentIndex].start >= newEndPos) {
+        mergeSegments(state, segmentIndex, segmentIndex - 1)
+      }
+
+      // If new endPos bigger than endPos of next segment, delete yourself
+      // Maybe disallow moving further than endPos?
+      else if (state.segments[segmentIndex + 1].end <= newEndPos) {
+        mergeSegments(state, segmentIndex, segmentIndex + 1)
+      }
+
+      else {
+      // Update segment.end
+      state.segments[segmentIndex].end = newEndPos
+
+      // Update next segment.start
+      state.segments[segmentIndex + 1].start = newEndPos
+      }
+    }
   },
   // For Async Requests
   extraReducers: builder => {
@@ -269,7 +295,7 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 
 export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio, cut,
   markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+  setClickTriggered, dragSegmentBorder } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state

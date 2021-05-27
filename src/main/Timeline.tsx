@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered
+  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered, dragSegmentBorder
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +24,7 @@ import { scrubberKeyMap } from '../globalKeys';
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectMainMenuState } from '../redux/mainMenuSlice';
+import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -58,6 +59,7 @@ const Timeline: React.FC<{}> = () => {
     <Scrubber timelineWidth={width}/>
     <div css={{height: '230px'}} >
       <Waveforms />
+      <SegmentsGaps timelineWidth={width}/>
       <SegmentsList timelineWidth={width}/>
     </div>
   </div>
@@ -321,6 +323,90 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     </div>
   );
 };
+
+/**
+ * Creates draggable elements at the end of each segment
+ */
+const SegmentsGaps: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+
+  // Init redux variables
+  const segments = useSelector(selectSegments)
+
+  const renderedSegments = () => {
+    const gaps: EmotionJSX.Element[] = []
+    for (var index = 0; index < segments.length - 1; index++) {
+        gaps.push(<SegmentsGap key={segments[index].id} timelineWidth={timelineWidth} segment={segments[index]} nextSegment={segments[index + 1]} index={index} />)
+    }
+    return gaps
+  }
+
+  const segmentsStyle = css({
+    width: '100%',
+    position: "absolute" as "absolute",
+    height: '230px',
+    paddingTop: '10px',
+  })
+
+  return (
+    <div css={segmentsStyle}>
+      {renderedSegments()}
+    </div>
+  );
+}
+
+/**
+ * Draggable element at the end of a segment
+ * Dragging this should look like the segment border is being moved
+ */
+const SegmentsGap: React.FC<{timelineWidth: number, segment: Segment, nextSegment: Segment, index: number}> = ({timelineWidth, segment, nextSegment, index}) => {
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const duration = useSelector(selectDuration)
+
+  // const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
+
+  const [showLine, setShowLine] = useState(false)
+  const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
+
+  const onStartDrag = () => {
+    setShowLine(true)
+  }
+
+  const onStopDrag = (e: any, position: any) => {
+    setShowLine(false)
+    const time = ((position.node.offsetLeft + position.x) / timelineWidth) * (duration)
+    dispatch(dragSegmentBorder({index, time}))
+
+    setControlledPosition({x:0, y:0})
+  }
+
+  const gapStyle = css({
+    position: 'absolute',
+    left: (1 - ((duration - segment.end) / duration)) * 100 + '%',
+    marginLeft: '-3px',
+    // background: showLine ? "yellow" : "green",
+    width: '6px',
+    height: '230px',
+    zIndex: 2,
+  })
+
+  return (
+      <Draggable
+      onStart={onStartDrag}
+      onStop={onStopDrag}
+      axis="x"
+      bounds="parent"
+      position={controlledPosition}
+
+      // nodeRef={nodeRef}
+      >
+        <div css={gapStyle}>
+          {showLine ? <div css={{background: 'black', width: '1px', height: '100%'}}></div> : false}
+        </div>
+      </Draggable>
+  );
+}
 
 /**
  * Generates waveform images and displays them
