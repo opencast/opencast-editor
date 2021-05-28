@@ -242,13 +242,20 @@ const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, 
 const skipDeletedSegments = (state: WritableDraft<video>) => {
   if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
       let endTime = state.segments[state.activeSegmentIndex].end
-      let index = state.activeSegmentIndex
-      while (index < state.segments.length && state.segments[index].deleted) {
+
+      for (let index = state.activeSegmentIndex; index < state.segments.length; index++) {
         endTime = state.segments[index].end
-        index++
+
+        if (!state.segments[index].deleted) {
+          // Need to at +1 as start and end of neighbouring segments are identical
+          endTime = state.segments[index].start + 1
+          break
+        }
       }
+
       state.currentlyAt = endTime
       state.previewTriggered = true
+      updateActiveSegment(state);
     }
 }
 
