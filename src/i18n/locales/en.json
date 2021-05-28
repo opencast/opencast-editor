@@ -171,7 +171,8 @@
     },
 
     "various": {
-      "error-details-text": "Details: {{errorMessage}}\n",
+      "error-header-text": "Error: ",
+      "error-details-text": "Details: {{errorMessage}}",
       "error-noDetails-text": "No error details are available.",
       "error-text": "An error has occurred. Please wait a bit and try again.",
       "goBack-button": "No, take me back"
