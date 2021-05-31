@@ -168,6 +168,14 @@
       "details": "Details: "
     },
 
+    "landing": {
+      "main-heading": "Welcome to the Video Editor",
+      "contact-admin": "If you were trying to edit a specific video but are seeing this page, please contact your administrator.",
+      "start-editing-1": "To start editing, specify the parameter ",
+      "start-editing-2": " with the media package id of the video you wish to edit.",
+      "link-to-documentation": "More information about configuring the video editor is available in the administration guide at "
+    },
+
     "various": {
       "error-details-text": "Details: {{errorMessage}}\n",
       "error-noDetails-text": "No error details are available.",
