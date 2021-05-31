@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
 import { httpRequestState }  from '../types'
@@ -45,6 +45,7 @@ export interface MetadataField {
 
 interface metadata {
   catalogs: Catalog[]
+  hasChanges: boolean         // Did user make changes to metadata view since last save
 }
 
 interface postRequestState {
@@ -55,6 +56,7 @@ interface postRequestState {
 // TODO: Create an 'httpRequestState' array or something
 const initialState: metadata & httpRequestState & postRequestState = {
   catalogs: [],
+  hasChanges: false,
 
   status: 'idle',
   error: undefined,
@@ -96,6 +98,10 @@ const metadataSlice = createSlice({
   reducers: {
     setFieldValue: (state, action: any) => {
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value
+      state.hasChanges = true
+    },
+    setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
+      state.hasChanges = action.payload
     }
   },
   extraReducers: builder => {
@@ -130,10 +136,12 @@ const metadataSlice = createSlice({
   }
 })
 
-export const { setFieldValue } = metadataSlice.actions
+export const { setFieldValue, setHasChanges } = metadataSlice.actions
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs
+export const hasChanges = (state: { metadataState: { hasChanges: metadata["hasChanges"] } }) =>
+  state.metadataState.hasChanges
 export const selectGetStatus = (state: { metadataState: { status: httpRequestState["status"] } }) =>
   state.metadataState.status
 export const selectGetError = (state: { metadataState: { error: httpRequestState["error"] } }) =>
