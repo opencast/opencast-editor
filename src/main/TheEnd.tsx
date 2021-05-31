@@ -49,7 +49,6 @@ const TheEnd : React.FC<{}> = () => {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '20px',
     ...(flexGapReplacementStyle(20, false)),
   })
 
