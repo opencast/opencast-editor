@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
@@ -11,14 +11,14 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
-import { selectSegments, selectTracks } from '../redux/videoSlice'
+import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
 
 import { PageButton } from './Finish'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { postMetadata, selectPostError, selectPostStatus } from "../redux/metadataSlice";
+import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
 
 /**
  * Shown if the user wishes to save.
@@ -111,6 +111,14 @@ export const SaveButton: React.FC<{}> = () => {
       tracks: tracks,
     }))
   }
+
+  // Let users leave the page without warning after a successful save
+  useEffect(() => {
+    if (workflowStatus === 'success' && metadataStatus === 'success') {
+      dispatch(videoSetHasChanges(false))
+      dispatch(metadataSetHasChanges(false))
+    }
+  }, [dispatch, metadataStatus, workflowStatus])
 
   return (
     <div css={[basicButtonStyle, nagivationButtonStyle]} title={tooltip}

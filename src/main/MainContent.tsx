@@ -17,6 +17,10 @@ import { selectMainMenuState } from '../redux/mainMenuSlice'
 import { MainMenuStateNames } from '../types'
 import { flexGapReplacementStyle } from "../cssStyles";
 
+import { useBeforeunload } from 'react-beforeunload';
+import { hasChanges as videoHasChanges } from "../redux/videoSlice";
+import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
+
 /**
  * A container for the main functionality
  * Shows different components depending on the state off the app
@@ -24,6 +28,15 @@ import { flexGapReplacementStyle } from "../cssStyles";
 const MainContent: React.FC<{}> = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)
+  const videoChanged = useSelector(videoHasChanges)
+  const metadataChanged = useSelector(metadataHasChanges)
+
+  // Display warning when leaving the page if there are unsaved changes
+  useBeforeunload((event: { preventDefault: () => void; }) => {
+    if (videoChanged || metadataChanged) {
+      event.preventDefault();
+    }
+  });
 
   const cuttingStyle = css({
     display: mainMenuState !== MainMenuStateNames.cutting ? 'none' :'flex',
