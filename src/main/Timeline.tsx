@@ -116,8 +116,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {
-    const y = controlledPosition.y;
-    setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y});
+    setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
   };
 
   const onStartDrag = () => {
@@ -134,8 +133,8 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const onStopDrag = (e: any, position: any) => {
     // Update position
-    const {x, y} = position;
-    setControlledPosition({x, y});
+    const {x} = position;
+    setControlledPosition({x, y: 0});
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
 
     setIsGrabbed(false)
@@ -157,7 +156,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const scrubberStyle = css({
     backgroundColor: 'black',
-    height: '250px',
+    height: '240px',
     width: '1px',
     position: 'absolute' as 'absolute',
     zIndex: 2,
@@ -169,13 +168,24 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   });
 
   const scrubberDragHandleStyle = css({
-    backgroundColor: 'rgba(255, 255, 255, 1)',
-    borderRadius: '10px',
-    height: '50px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    // Base style
+    background: "black",
+    display: "inline-block",
+    height: "10px",
+    position: "relative",
+    width: "20px",
+    "&:after": {
+      borderTop: '10px solid black',
+      borderLeft: '10px solid transparent',
+      borderRight: '10px solid transparent',
+      content: '""',
+      height: 0,
+      left: 0,
+      position: "absolute",
+      top: "10px",
+      width: 0,
+    },
+    // Animation
     cursor: isGrabbed ? "grabbing" : "grab",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
@@ -188,24 +198,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   })
 
   const scrubberDragHandleIconStyle = css({
-    transform: 'scaleY(1.5) rotate(90deg)',
-    padding: '5px',
-  })
-
-  const arrowUpStyle = css({
-    width: 0,
-    height: 0,
-    borderLeft: '7px solid transparent',
-    borderRight: '7px solid transparent',
-    borderBottom: '7px solid black',
-  })
-
-  const arrowDownStyle = css({
-    width: 0,
-    height: 0,
-    borderLeft: '7px solid transparent',
-    borderRight: '7px solid transparent',
-    borderTop: '7px solid black',
+    transform: 'scaleY(0.7) rotate(90deg)',
+    paddingRight: '5px',
+    color: "white"
   })
 
   // // Possible TODO: Find a way to use ariaLive in a way that only the latest change is announced
@@ -226,8 +221,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
         >
           <div ref={nodeRef} css={scrubberStyle}>
 
-            <div css={arrowDownStyle}></div>
-            <div css= {scrubberDragHandleStyle} aria-grabbed={isGrabbed}
+            <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
               aria-label={t("timeline.scrubber-text-aria",
                          {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
                           segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
@@ -237,9 +231,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
                           decrease: scrubberKeyMap[handlers.decrease.name] })}
               tabIndex={0}>
               <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
-              {/* <div css={ariaLive} aria-live="polite" aria-atomic="true">{keyboardUpdateMessage()}</div> */}
             </div>
-            <div css={arrowUpStyle}></div>
           </div>
       </Draggable>
     </GlobalHotKeys>
@@ -501,7 +493,7 @@ const Waveforms: React.FC<{}> = () => {
   }
 
   return (
-  <div css={waveformDisplayTestStyle} title="WaveformDisplayTest">
+  <div css={waveformDisplayTestStyle}>
     {renderImages()}
   </div>
   );
