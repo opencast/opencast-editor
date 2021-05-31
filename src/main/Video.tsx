@@ -27,7 +27,7 @@ import { SyntheticEvent } from "react";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
-import { setError } from "../redux/errorSlice";
+import { setError as setCriticalError } from "../redux/errorSlice";
 
 /**
  * Container for the videos and their controls
@@ -49,7 +49,7 @@ const Video: React.FC<{}> = () => {
     if (videoURLStatus === 'idle') {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
-      dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+      dispatch(setCriticalError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
     }
   }, [videoURLStatus, dispatch, error, t])
 
@@ -150,6 +150,9 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
         let durInMs = Math.round(dur * 1000)
         dispatch(setDuration(durInMs))
         dispatch(initializeSegmentsWithDuration(durInMs)) // Attempt to init segments
+      // If we fail to figure it out, display a critical error
+      } else {
+        dispatch(setCriticalError({error: true, errorMessage: t("video.durationError-text"), errorDetails: t("video.durationError-details", { duration: dur.toString() })}))
       }
     }
   }
