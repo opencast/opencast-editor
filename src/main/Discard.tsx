@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, nagivationButtonStyle} from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, nagivationButtonStyle, flexGapReplacementStyle} from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -31,11 +31,11 @@ const Discard : React.FC<{}> = () => {
     display: finishState !== "Discard changes" ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   return (
-    <div css={cancelStyle} title="Abort Area">
+    <div css={cancelStyle}>
       <h1>{t("discard.headline-text")}</h1>
       <span>
         {t("discard.info-text")}

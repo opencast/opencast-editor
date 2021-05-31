@@ -143,4 +143,18 @@ export const selectPostStatus = (state: { metadataState: { postStatus: postReque
 export const selectPostError = (state: { metadataState: { postError: postRequestState["postError"] } }) =>
   state.metadataState.postError
 
+export const selectTitleFromEpisodeDc = (state: { metadataState: { catalogs: metadata["catalogs"] } }) => {
+  for (const catalog of state.metadataState.catalogs) {
+    if (catalog.flavor === "dublincore/episode") {
+      for (const field of catalog.fields) {
+        if (field.id === "title") {
+          return field.value
+        }
+      }
+    }
+  }
+
+  return undefined
+}
+
 export default metadataSlice.reducer

@@ -4,6 +4,8 @@
  * duncan83@gmail.com
  */
 
+import { AudioContext } from 'standardized-audio-context';
+
 export function Waveform(opts) {
   this.audioContext = new AudioContext();
   this.oCanvas = document.createElement('canvas');
@@ -43,7 +45,10 @@ export function Waveform(opts) {
           });
         }
       })
-      .catch(e => console.log(e));
+      .catch((e) => {
+        console.log("Waveform Worker: " + e);
+        this.onarne = e.toString();
+      });
   }
 
   var _completeFuncs = [];
@@ -60,6 +65,21 @@ export function Waveform(opts) {
 
         _completeFuncs.push(fn);
       }
+    }
+  });
+
+  var _error = "";
+  Object.defineProperty(this, 'onarne', {
+    get: function() {
+      return _error;
+    },
+    set: function(fn, opt) {
+      if (typeof fn == 'function') {
+        fn(_error);
+      } else {
+        _error = fn
+      }
+      return;
     }
   });
 }

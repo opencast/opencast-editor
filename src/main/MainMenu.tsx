@@ -11,7 +11,7 @@ import { setPageNumber } from '../redux/finishSlice'
 
 import { MainMenuStateNames } from '../types'
 import { settings } from '../config'
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 import { setIsPlaying } from "../redux/videoSlice";
 
 import './../i18n/config';
@@ -32,11 +32,11 @@ const MainMenu: React.FC<{}> = () => {
     flexShrink: 0,
     alignItems: 'center',
     padding: '20px',
-    gap: '30px',
+    ...(flexGapReplacementStyle(30, false)),
   });
 
   return (
-    <nav css={mainMenuStyle} title={t("mainMenu.mainMenu-tooltip")} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
+    <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.cutting}/>
       {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
       {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}
@@ -89,7 +89,7 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     case "Finish":
       buttonString = t("mainMenu.finish-button");
       break;
-    default: 
+    default:
       buttonString = "Could not load String value";
       break;
   }
