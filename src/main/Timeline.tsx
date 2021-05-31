@@ -407,7 +407,7 @@ const Waveforms: React.FC<{}> = () => {
   }
 
   return (
-  <div css={waveformDisplayTestStyle} title="WaveformDisplayTest">
+  <div css={waveformDisplayTestStyle}>
     {renderImages()}
   </div>
   );
