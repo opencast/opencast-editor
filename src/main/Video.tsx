@@ -152,7 +152,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
     // Fallback: If the backend did not tell us the video duration, we try to figure it out ourself
     if (isPrimary && ref.current && ref.current.getInternalPlayer() && !duration) {
       let dur = ref.current.getDuration()
-      if (dur) {
+      if (dur && dur !== Infinity) {
         let durInMs = Math.round(dur * 1000)
         dispatch(setDuration(durInMs))
         dispatch(initializeSegmentsWithDuration(durInMs)) // Attempt to init segments
