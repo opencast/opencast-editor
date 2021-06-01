@@ -304,8 +304,8 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 }
 
 export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio,
-  setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+  setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, dragSegmentBorder,
+  setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
