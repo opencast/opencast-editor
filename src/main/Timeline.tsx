@@ -362,7 +362,7 @@ const Waveforms: React.FC<{}> = () => {
           // Start waveform worker with blob
           const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})
 
-          waveformWorker.onarne = function(error: string) {
+          waveformWorker.onerror = function(error: string) {
             setWaveformWorkerError(true)
             console.log("Waveform could not be generated:" + error)
           }
