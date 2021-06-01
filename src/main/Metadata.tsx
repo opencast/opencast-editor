@@ -9,7 +9,7 @@ import {
   Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus
 } from '../redux/metadataSlice'
 
-import { Form, Field } from 'react-final-form'
+import { Form, Field, FieldInputProps } from 'react-final-form'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
@@ -256,7 +256,7 @@ const Metadata: React.FC<{}> = () => {
    */
   const dateTimeValidator = (date: any) => {
     // Empty field is valid value in Opencast
-    if (date === "") {
+    if (!date) {
       return undefined
     }
 
@@ -369,7 +369,12 @@ const Metadata: React.FC<{}> = () => {
 
     // For these fields, the value needs to be inside an array
     if (field && (field.type === "date" || field.type === "time") && Object.prototype.toString.call(returnValue) === '[object Date]') {
-      returnValue = returnValue.toJSON()
+      // If invalid date
+      if ((isNaN(returnValue.getTime()))) {
+        // Do nothing
+      } else {
+        returnValue = returnValue.toJSON()
+      }
     } else if (field && (field.type === "date" || field.type === "time") && typeof returnValue === "string") {
       if (returnValue !== "") { // Empty string is allowed
         returnValue = new Date(returnValue).toJSON()
@@ -539,6 +544,22 @@ const Metadata: React.FC<{}> = () => {
    * @param fieldIndex
    */
   const renderField = (field: MetadataField, catalogIndex: number, fieldIndex: number) => {
+
+    /**
+     * Wrapper function for component generation.
+     * Handles the special case of KeyboardDateTimePicker/KeyboardTimePicker, which
+     * can't handle empty string as a value (which is what Opencast uses to
+     * represent no date/time)
+     */
+    const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
+      if ((field.type === "date" || field.type === "time") && input.value === "") {
+        var {value, ...other} = input
+        return generateComponent(field, other)
+      } else {
+        return generateComponent(field, input)
+      }
+    }
+
     return (
         <Field key={fieldIndex}
                 name={"catalog" + catalogIndex + "." + field.id}
@@ -552,7 +573,7 @@ const Metadata: React.FC<{}> = () => {
                       t(`metadata.labels.${field.id}`) : field.id
                     }</label>
 
-                    {generateComponent(field, input)}
+                    {generateComponentWithModifiedInput(field, input)}
                     {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
                     {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
