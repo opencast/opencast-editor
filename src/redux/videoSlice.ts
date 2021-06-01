@@ -151,13 +151,19 @@ export const videoSlice = createSlice({
       state.hasChanges = true
     },
     dragSegmentBorder: (state, action: PayloadAction<any>) => {
+      // Index of the segment left from the border
       const segmentIndex = action.payload.index
+      // New position
       const newEndPos = action.payload.time
 
       // If new endPos smaller than startPos, delete yourself
       // Maybe disallow moving further than startPos?
       if (state.segments[segmentIndex].start >= newEndPos) {
         mergeSegments(state, segmentIndex, segmentIndex - 1)
+        // Edge case: If segment 0, merge right (instead of left)
+        if (segmentIndex === 0) {
+          mergeSegments(state, segmentIndex, segmentIndex + 1)
+        }
       }
 
       // If new endPos bigger than endPos of next segment, delete yourself
