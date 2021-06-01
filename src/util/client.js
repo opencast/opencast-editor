@@ -34,8 +34,9 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
 
   let data
   let text
+  let response
   try {
-    const response = await window.fetch(endpoint, config)
+    response = await window.fetch(endpoint, config)
     text = await response.text()
 
     if (response.url.includes("login.html")) {
@@ -48,7 +49,10 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
     }
     throw new Error(response.statusText)
   } catch (err) {
-    return Promise.reject(err.message ? err.message : data)
+    return Promise.reject(response.status ?
+        "Status " + response.status + ": " + text :
+        err.message
+      )
   }
 }
 

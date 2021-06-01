@@ -17,11 +17,11 @@ export const cuttingKeyMap: KeyMap = {
 }
 
 /**
- * Local map for moving the scrubber
+ * (Semi-) global map for moving the scrubber
  */
 export const scrubberKeyMap: KeyMap = {
-  left: "Control+Alt+j",
-  right: "Control+Alt+l",
-  increase: "Control+Alt+i",
-  decrease: "Control+Alt+k",
+  left: ["Control+Alt+j", "ArrowLeft"],
+  right: ["Control+Alt+l", "ArrowRight"],
+  increase: ["Control+Alt+i", "ArrowUp"],
+  decrease: ["Control+Alt+k", "ArrowDown"],
 }
