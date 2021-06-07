@@ -105,7 +105,8 @@
       "submit-helpertext": "Make changes as you like, then hit the {{buttonName}} button.\nNote that you will still have to start processing for your changes to take effect.",
       "validation": {
         "required": "Required",
-        "duration-format": "Format must be HH:MM:SS"
+        "duration-format": "Format must be HH:MM:SS",
+        "datetime": "Invalid"
       },
       "labels": {
         "title": "Title",
@@ -164,6 +165,14 @@
     "error": {
       "generic-message": "A critical error has occurred!",
       "details": "Details: "
+    },
+
+    "landing": {
+      "main-heading": "Welcome to the Video Editor",
+      "contact-admin": "If you were trying to edit a specific video but are seeing this page, please contact your administrator.",
+      "start-editing-1": "To start editing, specify the parameter ",
+      "start-editing-2": " with the media package id of the video you wish to edit.",
+      "link-to-documentation": "More information about configuring the video editor is available in the administration guide at "
     },
 
     "various": {

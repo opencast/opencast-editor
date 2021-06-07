@@ -9,7 +9,7 @@ import {
   Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus
 } from '../redux/metadataSlice'
 
-import { Form, Field } from 'react-final-form'
+import { Form, Field, FieldInputProps } from 'react-final-form'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
@@ -24,6 +24,10 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { DateTime as LuxonDateTime} from "luxon";
+
+import { settings } from '../config'
+
 
 /**
  * Creates a Metadata form
@@ -249,6 +253,30 @@ const Metadata: React.FC<{}> = () => {
     return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
+  /**
+   * Validator for the date time fields
+   * @param date
+   */
+  const dateTimeValidator = (date: any) => {
+    // Empty field is valid value in Opencast
+    if (!date) {
+      return undefined
+    }
+
+    let dt = undefined
+    if (Object.prototype.toString.call(date) === '[object Date]') {
+      dt = LuxonDateTime.fromJSDate(date);
+    }
+    if (typeof(date) === 'string') {
+      dt = LuxonDateTime.fromISO(date);
+    }
+
+    if (dt) {
+      return dt.isValid ? undefined : t("metadata.validation.datetime")
+    }
+    return t("metadata.validation.datetime")
+  }
+
   // // Function that combines multiple validation functions. Needs to be made typescript conform
   // const composeValidators = (...validators) => value =>
   // validators.reduce((error, validator) => error || validator(value), undefined)
@@ -263,6 +291,8 @@ const Metadata: React.FC<{}> = () => {
       return required
     } else if (field.id === "duration") {
       return duration
+    } else if (field.type === "date" || field.type === "time") {
+      return dateTimeValidator
     } else {
       return undefined
     }
@@ -342,9 +372,16 @@ const Metadata: React.FC<{}> = () => {
 
     // For these fields, the value needs to be inside an array
     if (field && (field.type === "date" || field.type === "time") && Object.prototype.toString.call(returnValue) === '[object Date]') {
-      returnValue = returnValue.toJSON()
+      // If invalid date
+      if ((isNaN(returnValue.getTime()))) {
+        // Do nothing
+      } else {
+        returnValue = returnValue.toJSON()
+      }
     } else if (field && (field.type === "date" || field.type === "time") && typeof returnValue === "string") {
-      returnValue = new Date(returnValue).toJSON()
+      if (returnValue !== "") { // Empty string is allowed
+        returnValue = new Date(returnValue).toJSON()
+      }
     }
 
     return returnValue
@@ -510,6 +547,22 @@ const Metadata: React.FC<{}> = () => {
    * @param fieldIndex
    */
   const renderField = (field: MetadataField, catalogIndex: number, fieldIndex: number) => {
+
+    /**
+     * Wrapper function for component generation.
+     * Handles the special case of KeyboardDateTimePicker/KeyboardTimePicker, which
+     * can't handle empty string as a value (which is what Opencast uses to
+     * represent no date/time)
+     */
+    const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
+      if ((field.type === "date" || field.type === "time") && input.value === "") {
+        var {value, ...other} = input
+        return generateComponent(field, other)
+      } else {
+        return generateComponent(field, input)
+      }
+    }
+
     return (
         <Field key={fieldIndex}
                 name={"catalog" + catalogIndex + "." + field.id}
@@ -523,7 +576,7 @@ const Metadata: React.FC<{}> = () => {
                       t(`metadata.labels.${field.id}`) : field.id
                     }</label>
 
-                    {generateComponent(field, input)}
+                    {generateComponentWithModifiedInput(field, input)}
                     {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
                     {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
@@ -536,8 +589,9 @@ const Metadata: React.FC<{}> = () => {
    * Renders a single catalog (e.g. dublincore/episode) in the form
    * @param catalog
    * @param catalogIndex
+   * @param showFields array of which fields should be displayed. If empty, display all
    */
-  const renderCatalog = (catalog: Catalog, catalogIndex: number) => {
+  const renderCatalog = (catalog: Catalog, catalogIndex: number, showFields: string[]) => {
     return (
       <div key={catalogIndex}>
         <h2>
@@ -547,6 +601,15 @@ const Metadata: React.FC<{}> = () => {
         </h2>
 
         {catalog.fields.map((field, i) => {
+          // Render fields based on given array (usually parsed from config settings)
+          if (showFields.length !== 0) {
+            // Lowercase include
+            if (showFields.filter((str) => str.toLowerCase().includes(field.id.toLowerCase())).length > 0) {
+              return renderField(field, catalogIndex, i)
+            } else {
+              return undefined
+            }
+          }
           return renderField(field, catalogIndex, i)
         })}
 
@@ -576,7 +639,19 @@ const Metadata: React.FC<{}> = () => {
               </div>
 
               {catalogs.map((catalog, i) => {
-                return renderCatalog(catalog, i)
+                // Render catalog and its fields based on config settings
+                if (settings.metadata.showFields) {
+                  if (catalog.title in settings.metadata.showFields) {
+                    // If there are no fields for a given catalog, do not render it
+                    if (settings.metadata.showFields[catalog.title].length > 0) {
+                      return renderCatalog(catalog, i, settings.metadata.showFields[catalog.title])
+                    } else {
+                      return undefined
+                    }
+                  }
+                }
+                // If there are no settings for a given catalog, just render it completely
+                return renderCatalog(catalog, i, [])
               })}
 
 {/* 
