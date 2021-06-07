@@ -109,7 +109,8 @@
       "save-error": "Your changes to metadata could not be saved to Opencast.",
       "validation": {
         "required": "Required",
-        "duration-format": "Format must be HH:MM:SS"
+        "duration-format": "Format must be HH:MM:SS",
+        "datetime": "Invalid"
       },
       "labels": {
         "title": "Title",

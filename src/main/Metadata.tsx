@@ -8,7 +8,7 @@ import {
   Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus
 } from '../redux/metadataSlice'
 
-import { Form, Field } from 'react-final-form'
+import { Form, Field, FieldInputProps } from 'react-final-form'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import ErrorBox from "./ErrorBox";
+import { DateTime as LuxonDateTime} from "luxon";
 
 /**
  * Creates a Metadata form
@@ -249,6 +250,30 @@ const Metadata: React.FC<{}> = () => {
     return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
+  /**
+   * Validator for the date time fields
+   * @param date
+   */
+  const dateTimeValidator = (date: any) => {
+    // Empty field is valid value in Opencast
+    if (!date) {
+      return undefined
+    }
+
+    let dt = undefined
+    if (Object.prototype.toString.call(date) === '[object Date]') {
+      dt = LuxonDateTime.fromJSDate(date);
+    }
+    if (typeof(date) === 'string') {
+      dt = LuxonDateTime.fromISO(date);
+    }
+
+    if (dt) {
+      return dt.isValid ? undefined : t("metadata.validation.datetime")
+    }
+    return t("metadata.validation.datetime")
+  }
+
   // // Function that combines multiple validation functions. Needs to be made typescript conform
   // const composeValidators = (...validators) => value =>
   // validators.reduce((error, validator) => error || validator(value), undefined)
@@ -263,6 +288,8 @@ const Metadata: React.FC<{}> = () => {
       return required
     } else if (field.id === "duration") {
       return duration
+    } else if (field.type === "date" || field.type === "time") {
+      return dateTimeValidator
     } else {
       return undefined
     }
@@ -342,9 +369,16 @@ const Metadata: React.FC<{}> = () => {
 
     // For these fields, the value needs to be inside an array
     if (field && (field.type === "date" || field.type === "time") && Object.prototype.toString.call(returnValue) === '[object Date]') {
-      returnValue = returnValue.toJSON()
+      // If invalid date
+      if ((isNaN(returnValue.getTime()))) {
+        // Do nothing
+      } else {
+        returnValue = returnValue.toJSON()
+      }
     } else if (field && (field.type === "date" || field.type === "time") && typeof returnValue === "string") {
-      returnValue = new Date(returnValue).toJSON()
+      if (returnValue !== "") { // Empty string is allowed
+        returnValue = new Date(returnValue).toJSON()
+      }
     }
 
     return returnValue
@@ -510,6 +544,22 @@ const Metadata: React.FC<{}> = () => {
    * @param fieldIndex
    */
   const renderField = (field: MetadataField, catalogIndex: number, fieldIndex: number) => {
+
+    /**
+     * Wrapper function for component generation.
+     * Handles the special case of KeyboardDateTimePicker/KeyboardTimePicker, which
+     * can't handle empty string as a value (which is what Opencast uses to
+     * represent no date/time)
+     */
+    const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
+      if ((field.type === "date" || field.type === "time") && input.value === "") {
+        var {value, ...other} = input
+        return generateComponent(field, other)
+      } else {
+        return generateComponent(field, input)
+      }
+    }
+
     return (
         <Field key={fieldIndex}
                 name={"catalog" + catalogIndex + "." + field.id}
@@ -523,7 +573,7 @@ const Metadata: React.FC<{}> = () => {
                       t(`metadata.labels.${field.id}`) : field.id
                     }</label>
 
-                    {generateComponent(field, input)}
+                    {generateComponentWithModifiedInput(field, input)}
                     {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
                     {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
