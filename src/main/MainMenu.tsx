@@ -75,24 +75,9 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     flexDirection: 'column' as const,
   });
 
-  var buttonString;
-  switch(stateName) {
-    case "Cutting":
-      buttonString = t("mainMenu.cutting-button");
-      break;
-    case "Metadata":
-      buttonString = t("mainMenu.metadata-button");
-      break;
-    case "Thumbnail":
-      buttonString = t("mainMenu.thumbnail-button");
-      break;
-    case "Finish":
-      buttonString = t("mainMenu.finish-button");
-      break;
-    default:
-      buttonString = "Could not load String value";
-      break;
-  }
+  var buttonString = t(
+        "mainMenu." + stateName.toLowerCase().replace(/ +/, "-") + "-button",
+        "Could not load String value");
 
   return (
     <li css={[basicButtonStyle, mainMenuButtonStyle]}
