@@ -38,8 +38,19 @@ const MainContent: React.FC<{}> = () => {
     }
   });
 
+  // Return display 'flex' if state is currently active
+  // also keep track if any state was activated
+  var stateActive = false;
+  let displayState = (state: MainMenuStateNames): object => {
+    if (mainMenuState === state) {
+      stateActive = true;
+      return { display: "flex" };
+    }
+    return { display: 'none' };
+  }
+
   const cuttingStyle = css({
-    display: mainMenuState !== MainMenuStateNames.cutting ? 'none' :'flex',
+    ...displayState(MainMenuStateNames.cutting),
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -48,7 +59,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const metadataStyle = css({
-    display: mainMenuState !== MainMenuStateNames.metadata ? 'none' :'flex',
+    ...displayState(MainMenuStateNames.metadata),
     // flexDirection: 'column' as const,
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -57,7 +68,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const finishStyle = css({
-    display: mainMenuState !== MainMenuStateNames.finish ? 'none' : 'flex',
+    ...displayState(MainMenuStateNames.finish),
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -66,9 +77,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const defaultStyle = css({
-    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish
-              || mainMenuState === MainMenuStateNames.metadata)
-              ? 'none' : 'flex',
+    display: stateActive ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
