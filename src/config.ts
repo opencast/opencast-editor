@@ -18,6 +18,14 @@ const SRC_SERVER = 'src-server';
 const SRC_URL = 'src-url';
 
 /**
+ * Possible configuration values for a metadata catalog field
+ */
+export interface configureFieldsAttributes {
+  show: boolean,
+  readonly: boolean,
+}
+
+/**
  * Settings interface
  */
 interface iSettings {
@@ -29,7 +37,7 @@ interface iSettings {
   },
   metadata: {
     show: boolean,
-    showFields: { [key: string]: string[]; } | undefined,
+    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } }  | undefined,
   },
   thumbnail: {
     show: boolean,
@@ -52,7 +60,7 @@ var defaultSettings: iSettings = {
   },
   metadata: {
     show: true,
-    showFields: undefined,
+    configureFields: undefined,
   },
   thumbnail: {
     show: true,
@@ -237,17 +245,25 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
-  'objectWithStringArrays': (v: any, allowParse: any) => {
-    for (let key in v) {
-      if (typeof key !== 'string') {
+  'objectsWithinObjects': (v: any, allowParse: any) => {
+    for (let catalogName in v) {
+      if (typeof catalogName !== 'string') {
         throw new Error("is not a string, but should be");
       }
-      if (!Array.isArray(v[key])) {
-        throw new Error("is not an array, but should be");
-      }
-      for (let item in v[key]) {
-        if (typeof item !== 'string') {
+      for (let fieldName in v[catalogName]) {
+        if (typeof fieldName !== 'string') {
           throw new Error("is not a string, but should be");
+        }
+        for (let attributeName in v[catalogName][fieldName]) {
+          if (typeof attributeName !== 'string') {
+            throw new Error("is not a string, but should be");
+          }
+          if (attributeName === 'show' && typeof v[catalogName][fieldName][attributeName] !== 'boolean') {
+            throw new Error("is not a boolean");
+          }
+          if (attributeName === 'readonly' && typeof v[catalogName][fieldName][attributeName] !== 'boolean') {
+            throw new Error("is not a boolean");
+          }
         }
       }
     }
@@ -273,7 +289,7 @@ const SCHEMA = {
   },
   metadata: {
     show : types.boolean,
-    showFields: types.objectWithStringArrays,
+    configureFields: types.objectsWithinObjects,
   },
   thumbnail: {
     show : types.boolean,

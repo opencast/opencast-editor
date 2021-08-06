@@ -100,6 +100,9 @@ const metadataSlice = createSlice({
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value
       state.hasChanges = true
     },
+    setFieldReadonly: (state, action: any) => {
+      state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].readOnly = action.payload.value
+    },
     setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
       state.hasChanges = action.payload
     }
@@ -136,7 +139,7 @@ const metadataSlice = createSlice({
   }
 })
 
-export const { setFieldValue, setHasChanges } = metadataSlice.actions
+export const { setFieldValue, setHasChanges, setFieldReadonly } = metadataSlice.actions
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs
