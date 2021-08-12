@@ -84,6 +84,18 @@ export const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
+    setStreamEnabled: (state, action) => {
+      for (let track of state.tracks) {
+        if (track.id === action.payload.id) {
+          if (action.payload.type === 'a') {
+            track.audio_stream.enabled = action.payload.enabled;
+          } else if (action.payload.type === 'v') {
+            track.video_stream.enabled = action.payload.enabled;
+          }
+          state.hasChanges = true;
+        }
+      }
+    },
     setIsPlaying: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlaying = action.payload;
     },
@@ -284,7 +296,7 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
-export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio,
+export const { setStreamEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio,
   setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
@@ -322,8 +334,7 @@ export const selectDuration = (state: { videoState: { duration: video["duration"
 export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
-export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) =>
-  state.videoState.tracks
+export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)

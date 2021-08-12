@@ -4,6 +4,7 @@ import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
+import TrackSelection from './TrackSelection';
 import Finish from "./Finish"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -67,6 +68,15 @@ const MainContent: React.FC<{}> = () => {
     paddingLeft: '20px',
   })
 
+  const trackSelectStyle = css({
+    ...displayState(MainMenuStateNames.trackSelection),
+    flexDirection: 'column' as const,
+    alignContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    height: '100%',
+  })
+
   const finishStyle = css({
     ...displayState(MainMenuStateNames.finish),
     flexDirection: 'column' as const,
@@ -93,6 +103,9 @@ const MainContent: React.FC<{}> = () => {
       </div>
       <div css={metadataStyle}>
           <Metadata />
+      </div>
+      <div css={trackSelectStyle}>
+          <TrackSelection />
       </div>
       <div css={finishStyle}>
         <Finish />
