@@ -39,7 +39,7 @@ const MainMenu: React.FC<{}> = () => {
     <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton iconName={faCut} stateName={MainMenuStateNames.cutting}/>
       {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
-      <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.trackSelection}/>
+      {settings.trackSelection.show && <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.trackSelection}/>}
       {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}
       <MainMenuButton iconName={faSignOutAlt} stateName={MainMenuStateNames.finish}/>
     </nav>

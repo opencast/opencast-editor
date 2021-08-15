@@ -43,3 +43,11 @@ show = true
 [thumbnail]
 # If false, the thumbnail tab is not displayed in the main menu
 show = false
+
+### Settings of the track selection tab
+[trackSelection]
+
+# If the track selection appears in the main menu
+# Type: boolean
+# Default: true
+#show = true
