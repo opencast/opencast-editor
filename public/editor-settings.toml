@@ -1,14 +1,15 @@
 ### Ungrouped values, used to make GET-Parameters easier to write
 ### Values are assigned here only for debugging purposes
 # Id of the event that the editor should open
-mediaPackageId = '27cd7156-fda6-4b31-aab5-d56833012caf'
+mediaPackageId = 'ID-dual-stream-demo'
 
 #### Values pertaining to accessing opencast
 [opencast]
 # URL of the opencast server on which we are editing events.
 # Should be deleted when deployed in Opencast, as the editor can then
 # figure out the correct URL by itself.
-url = 'https://pyca.opencast.org'
+#url = 'https://pyca.opencast.org'
+url = 'https://develop.opencast.org'
 # url = "http://localhost:8080"
 # Opencast username. Used for Http basic authentication.
 name = "admin"

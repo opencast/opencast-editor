@@ -93,6 +93,21 @@ export const basicButtonStyle = css({
 });
 
 /**
+ * CSS for deactivated buttons
+ */
+export const deactivatedButtonStyle = css({
+  borderRadius: '10px',
+  cursor: "pointer",
+  opacity: "0.4",
+  // Flex position child elements
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  ...(flexGapReplacementStyle(10, false)),
+  textAlign: 'center' as const,
+});
+
+/**
  * CSS for nagivation styled buttons
  */
 export const nagivationButtonStyle = css({

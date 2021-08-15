@@ -1,11 +1,20 @@
 import React from "react";
 import { css } from '@emotion/react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import {
+  faInfoCircle,
+  faTrash,
+  faTrashRestore,
+  faVolumeUp,
+  faVolumeDown,
+  faVolumeMute,
+} from "@fortawesome/free-solid-svg-icons";
+import ReactPlayer from 'react-player'
 
 import { Track }  from '../types'
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTracks, setStreamEnabled } from '../redux/videoSlice'
+import { selectTracks, selectMasterAudio, setTrackEnabled, setMasterAudio } from '../redux/videoSlice'
+import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 
@@ -17,8 +26,9 @@ const TrackSelection: React.FC<{}> = () => {
 
   // Generate list of tracks
   const tracks: Track[] = useSelector(selectTracks);
+  const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
-    <TrackItem key={ track.id } track={ track } />
+    <TrackItem key={ track.id } track={ track } enabledCount={ enabledCount } />
   );
 
   return (
@@ -36,6 +46,7 @@ const Description: React.FC<{}> = () => {
 
   const description: string = t('trackSelection.description',
     'Select or deselect which audio and video streams are used for processing.');
+
   const descriptionStyle = css({
     display: 'flex',
     alignItems: 'center',
@@ -52,13 +63,13 @@ const Description: React.FC<{}> = () => {
 }
 
 
-const TrackItem: React.FC<{track: Track}> = ({track}) => {
+const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const type = track.flavor.type,
-        labelAudio = t('trackSelection.useAudio', 'Use audio stream'),
-        labelVideo = t('trackSelection.useVideo', 'Use video stream');
+  const masterAudio: string | null = useSelector(selectMasterAudio);
+  const header = track.flavor.type + ' '
+    + (track.video_stream.enabled ? '' :  `(${t('lalala', 'inactive')})`);
 
   const trackItemStyle = css({
     display: 'flex',
@@ -75,13 +86,6 @@ const TrackItem: React.FC<{track: Track}> = ({track}) => {
     display: 'inline-block',
     width: '80%',
     maxHeight: '200px',
-    margin: '10px'
-  });
-
-  const blockStyle = css({
-    display: 'inline-block',
-    width: '20%',
-    minWidth: '150px',
     margin: '10px',
   });
 
@@ -95,32 +99,66 @@ const TrackItem: React.FC<{track: Track}> = ({track}) => {
     fintSize: 'larger',
   });
 
-  const streamChange = (event: React.FormEvent<HTMLInputElement>) => {
-    dispatch(setStreamEnabled({
+  const deleteText = track.video_stream.enabled ? 'Delete Track' : 'Restore Track';
+  const deleteIcon = track.video_stream.enabled ? faTrash : faTrashRestore
+  const deleteEnabled = enabledCount > 1 || !track.video_stream.enabled;
+  const trackEnabledChange = (event: React.MouseEvent<HTMLInputElement>) => {
+    dispatch(setTrackEnabled({
       id: track.id,
-      enabled: event.currentTarget.checked,
-      type: event.currentTarget.id.charAt(0)
+      enabled: !track.video_stream.enabled,
+    }))
+  }
+
+  // What audio state is this track in:
+  // 2 -> this track is master audio track
+  // 1 -> another track is a master audio track
+  // 0 -> there is no master audio track
+  const audioState = masterAudio ? (masterAudio === track.id ? 2 : 1) : 0;
+  const audioText = ['Use as main audio', 'Deactivated', 'Use other tracks'][audioState];
+  const audioIcon = [faVolumeUp,faVolumeMute, faVolumeDown][audioState];
+  const audioActive = audioState !== 1 && track.video_stream.enabled;
+  const audioStreamChange = (event: React.MouseEvent<HTMLInputElement>) => {
+    dispatch(setMasterAudio({
+      id: track.id,
     }))
   }
 
   return (
     <div css={ trackItemStyle }>
-      <div css={ headerStyle }>{ type }</div>
-      <video css={ playerStyle } src={ track.uri } controls />
-      <div css={ blockStyle }>
-        <input id={ `a-${track.id}` }
-               type="checkbox"
-               onChange={ streamChange }
-               checked={ track.audio_stream.enabled } />
-        <label htmlFor={ `a-${track.id}` }>{ labelAudio }</label>
+      <div css={ headerStyle }>{ header }</div>
+      <div css={{ opacity: track.video_stream.enabled ? '1' : '0.5' }}>
+      <ReactPlayer css={ playerStyle } url={ track.uri } width="90%" />
       </div>
-      <div css={ blockStyle }>
-        <input id={ `v-${track.id}` }
-               type="checkbox"
-               onChange={ streamChange }
-               checked={ track.video_stream.enabled } />
-        <label htmlFor={ `v-${track.id}` }>{ labelVideo }</label>
-      </div>
+      <SelectButton
+        text={ deleteText }
+        handler={ trackEnabledChange }
+        icon={ deleteIcon }
+        active={ deleteEnabled }/>
+      <SelectButton
+        text={ audioText }
+        handler={ audioStreamChange }
+        icon={ audioIcon }
+        active={ audioActive } />
+    </div>
+  );
+}
+
+const SelectButton : React.FC<{handler: any, text: string, icon: any, active: boolean}> = ({handler, text, icon, active}) => {
+  const buttonStyle = [
+    active ? basicButtonStyle : deactivatedButtonStyle,
+    {
+      margin: '10px',
+      padding: '16px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+      width: '25%'
+    }];
+  const activeHandler = (event: React.MouseEvent<HTMLInputElement>) => {
+    active && handler(event);
+  }
+  return (
+    <div css={ buttonStyle } role="button" onClick={ activeHandler } >
+      <FontAwesomeIcon icon={ icon } size="1x" />
+      <div>{ text }</div>
     </div>
   );
 }
