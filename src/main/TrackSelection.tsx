@@ -45,7 +45,8 @@ const Description: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   const description: string = t('trackSelection.description',
-    'Select or deselect which audio and video streams are used for processing.');
+    'Select or deselect which tracks and audio streams are used for processing '
+    + 'and publication.');
 
   const descriptionStyle = css({
     display: 'flex',
@@ -69,7 +70,8 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   const dispatch = useDispatch();
   const masterAudio: string | null = useSelector(selectMasterAudio);
   const header = track.flavor.type + ' '
-    + (track.video_stream.enabled ? '' :  `(${t('lalala', 'inactive')})`);
+    + (track.video_stream.enabled ? ''
+       :  `(${t('trackSelection.trackInactive', 'inactive')})`);
 
   const trackItemStyle = css({
     display: 'flex',
@@ -99,10 +101,18 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     fintSize: 'larger',
   });
 
-  const deleteText = track.video_stream.enabled ? 'Delete Track' : 'Restore Track';
-  const deleteIcon = track.video_stream.enabled ? faTrash : faTrashRestore
+  // Configure if tracks can be deactivated.
+  // We do not permit deactivating the last remaining track
   const deleteEnabled = enabledCount > 1 || !track.video_stream.enabled;
-  const trackEnabledChange = (event: React.MouseEvent<HTMLInputElement>) => {
+  const deleteText = track.video_stream.enabled
+    ? t('trackSelection.deleteTrackText', 'Delete Track')
+    : t('trackSelection.restoreTrackText', 'Restore Track');
+  const deleteTooltip = deleteEnabled ? (track.video_stream.enabled
+    ? t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.')
+    : t('trackSelection.deleteTrackTooltip', 'Encode and publish this track.'))
+    : t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.');
+  const deleteIcon = track.video_stream.enabled ? faTrash : faTrashRestore
+  const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
       id: track.id,
       enabled: !track.video_stream.enabled,
@@ -114,10 +124,17 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   // 1 -> another track is a master audio track
   // 0 -> there is no master audio track
   const audioState = masterAudio ? (masterAudio === track.id ? 2 : 1) : 0;
-  const audioText = ['Use as main audio', 'Deactivated', 'Use other tracks'][audioState];
+  const audioText = [
+    t('trackSelection.masterAudioText', 'Main Audio'),
+    t('trackSelection.inactiveAudioText', 'Deactivated'),
+    t('trackSelection.individualAudioText', 'Individual Audio')][audioState];
+  const audioTooltip = [
+    t('trackSelection.masterAudioTooltip', 'Use this audio stream for all published tracks, overwriting existing ones if necessary'),
+    t('trackSelection.inactiveAudioTooltip', 'This audio stream is deactivated and will be overwritten.'),
+    t('trackSelection.individualAudioTooltip', 'Use individual audio streams on all tracks')][audioState];
   const audioIcon = [faVolumeUp,faVolumeMute, faVolumeDown][audioState];
   const audioActive = audioState !== 1 && track.video_stream.enabled;
-  const audioStreamChange = (event: React.MouseEvent<HTMLInputElement>) => {
+  const audioStreamChange = () => {
     dispatch(setMasterAudio({
       id: track.id,
     }))
@@ -126,16 +143,18 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   return (
     <div css={ trackItemStyle }>
       <div css={ headerStyle }>{ header }</div>
-      <div css={{ opacity: track.video_stream.enabled ? '1' : '0.5' }}>
-      <ReactPlayer css={ playerStyle } url={ track.uri } width="90%" />
+      <div css={{ width: '95%', opacity: track.video_stream.enabled ? '1' : '0.5' }}>
+        <ReactPlayer css={ playerStyle } url={ track.uri } width="90%" />
       </div>
       <SelectButton
         text={ deleteText }
+        tooltip={ deleteTooltip }
         handler={ trackEnabledChange }
         icon={ deleteIcon }
         active={ deleteEnabled }/>
       <SelectButton
         text={ audioText }
+        tooltip={ audioTooltip }
         handler={ audioStreamChange }
         icon={ audioIcon }
         active={ audioActive } />
@@ -143,7 +162,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   );
 }
 
-const SelectButton : React.FC<{handler: any, text: string, icon: any, active: boolean}> = ({handler, text, icon, active}) => {
+const SelectButton : React.FC<{handler: any, text: string, icon: any, tooltip: string, active: boolean}> = ({handler, text, icon, tooltip, active}) => {
   const buttonStyle = [
     active ? basicButtonStyle : deactivatedButtonStyle,
     {
@@ -152,11 +171,22 @@ const SelectButton : React.FC<{handler: any, text: string, icon: any, active: bo
       boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
       width: '25%'
     }];
-  const activeHandler = (event: React.MouseEvent<HTMLInputElement>) => {
-    active && handler(event);
-  }
+  const clickHandler = () => {
+    active && handler();
+  };
+  const keyHandler = (event: React.KeyboardEvent) => {
+    if (active && (event.key === " " || event.key === "Enter")) {
+      handler();
+    }
+  };
   return (
-    <div css={ buttonStyle } role="button" onClick={ activeHandler } >
+    <div css={ buttonStyle }
+         tabIndex={ 0 }
+         role="button"
+         title={ tooltip }
+         aria-label={ tooltip }
+         onClick={ clickHandler }
+         onKeyDown={ keyHandler } >
       <FontAwesomeIcon icon={ icon } size="1x" />
       <div>{ text }</div>
     </div>
