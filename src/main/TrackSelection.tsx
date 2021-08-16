@@ -115,17 +115,25 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     fintSize: 'larger',
   });
 
-  // Configure if tracks can be deactivated.
+  // What state is the track in and can it be deactivated?
   // We do not permit deactivating the last remaining track
-  const deleteEnabled = enabledCount > 1 || !track.video_stream.enabled;
-  const deleteText = track.video_stream.enabled
-    ? t('trackSelection.deleteTrackText', 'Delete Track')
-    : t('trackSelection.restoreTrackText', 'Restore Track');
-  const deleteTooltip = deleteEnabled ? (track.video_stream.enabled
-    ? t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.')
-    : t('trackSelection.deleteTrackTooltip', 'Encode and publish this track.'))
-    : t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.');
-  const deleteIcon = track.video_stream.enabled ? faTrash : faTrashRestore
+  // 2 -> Track is enabled and can be deactivated
+  // 1 -> Track is enabled but is the last and cannot be deactivated
+  // 0 -> Track is disabled and can be restored
+  const deleteStatus = track.video_stream.enabled ? (enabledCount > 1 ? 0 : 1) : 2;
+  const deleteEnabled = deleteStatus !== 1;
+  const deleteText = [
+    t('trackSelection.deleteTrackText', 'Delete Track'),
+    t('trackSelection.cannotDeleteTrackText', 'Cannot Delete Track'),
+    t('trackSelection.restoreTrackText', 'Restore Track')
+    ][deleteStatus];
+  const deleteTooltip = [
+    t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.'),
+    t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
+    t('trackSelection.restorerackTooltip', 'Encode and publish this track.')
+    ][deleteStatus];
+  const deleteIcon = [faTrash, faTrash, faTrashRestore][deleteStatus];
+  const deleteColor = ['red', 'black', 'black'][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
       id: track.id,
@@ -147,6 +155,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     t('trackSelection.inactiveAudioTooltip', 'This audio stream is deactivated and will be overwritten.'),
     t('trackSelection.individualAudioTooltip', 'Use individual audio streams on all tracks')][audioState];
   const audioIcon = [faVolumeUp,faVolumeMute, faVolumeDown][audioState];
+  const audioColor = ['green', 'black', 'black'][audioState];
   const audioActive = audioState !== 1 && track.video_stream.enabled;
   const audioStreamChange = () => {
     dispatch(setMasterAudio({
@@ -165,18 +174,29 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
         tooltip={ deleteTooltip }
         handler={ trackEnabledChange }
         icon={ deleteIcon }
-        active={ deleteEnabled }/>
+        color={ deleteColor }
+        active={ deleteEnabled } />
       <SelectButton
         text={ audioText }
         tooltip={ audioTooltip }
         handler={ audioStreamChange }
         icon={ audioIcon }
+        color={ audioColor }
         active={ audioActive } />
     </div>
   );
 }
 
-const SelectButton : React.FC<{handler: any, text: string, icon: any, tooltip: string, active: boolean}> = ({handler, text, icon, tooltip, active}) => {
+interface selectButtonInterface {
+  handler: any,
+  text: string,
+  icon: any,
+  tooltip: string,
+  active: boolean,
+  color?: string,
+}
+
+const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, tooltip, active, color = 'black'}) => {
   const buttonStyle = [
     active ? basicButtonStyle : deactivatedButtonStyle,
     {
@@ -204,7 +224,7 @@ const SelectButton : React.FC<{handler: any, text: string, icon: any, tooltip: s
          aria-label={ tooltip }
          onClick={ clickHandler }
          onKeyDown={ keyHandler } >
-      <FontAwesomeIcon icon={ icon } size="1x" />
+      <FontAwesomeIcon css={{ color: color }} icon={ icon } size="1x" />
       <div>{ text }</div>
     </div>
   );
