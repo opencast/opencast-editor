@@ -111,10 +111,7 @@ export const videoSlice = createSlice({
       state.masterAudio = state.masterAudio !== action.payload.id ? action.payload.id : null;
 
       for (let track of state.tracks) {
-        track.audio_stream.enabled = !state.masterAudio && track.video_stream.enabled;
-        if (track.id === action.payload.id) {
-          track.audio_stream.enabled = action.payload.enabled;
-        }
+        track.audio_stream.enabled = track.id === action.payload.id || (!state.masterAudio && track.video_stream.enabled);
       }
       state.hasChanges = true;
     },
@@ -221,6 +218,11 @@ export const videoSlice = createSlice({
           if (n1.displayOrder < n2.displayOrder) { return -1; }
           return 0;
         });
+
+        // Mark as audio master if we have multiple tracks but just a single audio track
+        const multiStream = state.tracks.filter(track => track.video_stream.enabled).length > 1;
+        const audioStreams = state.tracks.filter(track => track.audio_stream.enabled);
+        state.masterAudio = (multiStream && audioStreams.length === 1) ? audioStreams[0].id : null;
 
         state.aspectRatios = new Array(state.videoCount)
     })
