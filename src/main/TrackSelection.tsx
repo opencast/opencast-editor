@@ -180,22 +180,25 @@ const SelectButton : React.FC<{handler: any, text: string, icon: any, tooltip: s
   const buttonStyle = [
     active ? basicButtonStyle : deactivatedButtonStyle,
     {
-      margin: '10px',
+      margin: '10px 15px',
       padding: '16px',
       boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-      width: '25%'
+      width: '25%',
     }];
   const clickHandler = () => {
     active && handler();
+    ref.current?.blur();
   };
   const keyHandler = (event: React.KeyboardEvent) => {
     if (active && (event.key === " " || event.key === "Enter")) {
       handler();
     }
   };
+  const ref = React.useRef<HTMLDivElement>(null)
   return (
     <div css={ buttonStyle }
          tabIndex={ 0 }
+         ref={ref}
          role="button"
          title={ tooltip }
          aria-label={ tooltip }
