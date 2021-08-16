@@ -184,21 +184,13 @@
     },
 
     "trackSelection": {
-      "description": "Select or deselect which tracks and audio streams are used for processing and publication.",
+      "description": "Select or deselect which tracks are used for processing and publication.",
       "trackInactive": "inactive",
       "deleteTrackText": "Delete Track",
       "restoreTrackText": "Restore Track",
       "cannotDeleteTrackText": "Cannot Delete Track",
       "deleteTrackTooltip": "Do not encode and publish this track.",
       "restoreTrackTooltip": "Encode and publish this track.",
-      "cannotDeleteTrackTooltip": "Cannot remove this track from publication.",
-      "masterAudioText": "Main Audio",
-      "inactiveAudioText": "Deactivated",
-      "individualAudioText": "Individual Audio",
-      "masterAudioTooltip": "Use this audio stream for all published tracks, overwriting existing ones if necessary",
-      "inactiveAudioTooltip": "This audio stream is deactivated and will be overwritten.",
-      "individualAudioTooltip": "Use individual audio streams on all tracks",
-      "deleteDescription": "Deleting a track will result in this track not being processed and/or published when starting a workflow. They may still remain in the archive.",
-      "masterDescription": "Marking an audio stream as main audio will result in this audio stream being transferred to all other tracks during publication, overwriting existing audio streams from those tracks if they exist. Using individual audio streams means that each track will keep its original audio stream."
+      "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
     }
   }

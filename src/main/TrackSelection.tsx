@@ -5,15 +5,12 @@ import {
   faInfoCircle,
   faTrash,
   faTrashRestore,
-  faVolumeUp,
-  faVolumeDown,
-  faVolumeMute,
 } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from 'react-player'
 
 import { Track }  from '../types'
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTracks, selectMasterAudio, setTrackEnabled, setMasterAudio } from '../redux/videoSlice'
+import { selectTracks, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
@@ -45,15 +42,7 @@ const Description: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   const description: string = t('trackSelection.description',
-    'Select or deselect which tracks and audio streams are used for processing '
-    + 'and publication.');
-  const deleteDescription = t('trackSelection.deleteDescription',
-    'Deleting a track will result in this track not being processed and/or published when starting a workflow. '
-    + 'They may still remain in the archive.');
-  const masterDescription = t('trackSelection.masterDescription',
-    'Marking an audio stream as main audio will result in this audio stream being transferred to all other tracks '
-    + 'during publication, overwriting existing audio streams from those tracks if they exist. Using individual audio '
-    + 'streams means that each track will keep its original audio stream.');
+    'Select or deselect which tracks are used for processing and publication.');
 
   const descriptionStyle = css({
     display: 'flex',
@@ -66,13 +55,7 @@ const Description: React.FC<{}> = () => {
   return (
     <aside css={ descriptionStyle }>
       <FontAwesomeIcon css={{margin: '10px'}} icon={faInfoCircle} size="2x" />
-      <div>
       { description }
-      <ul>
-        <li>{ deleteDescription }</li>
-        <li>{ masterDescription }</li>
-      </ul>
-      </div>
     </aside>
   );
 }
@@ -82,7 +65,6 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const masterAudio: string | null = useSelector(selectMasterAudio);
   const header = track.flavor.type + ' '
     + (track.video_stream.enabled ? ''
        :  `(${t('trackSelection.trackInactive', 'inactive')})`);
@@ -133,7 +115,6 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     t('trackSelection.restorerackTooltip', 'Encode and publish this track.')
     ][deleteStatus];
   const deleteIcon = [faTrash, faTrash, faTrashRestore][deleteStatus];
-  const deleteColor = ['red', 'black', 'black'][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
       id: track.id,
@@ -141,32 +122,10 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     }))
   }
 
-  // What audio state is this track in:
-  // 2 -> this track is master audio track
-  // 1 -> another track is a master audio track
-  // 0 -> there is no master audio track
-  const audioState = masterAudio ? (masterAudio === track.id ? 2 : 1) : 0;
-  const audioText = [
-    t('trackSelection.masterAudioText', 'Main Audio'),
-    t('trackSelection.inactiveAudioText', 'Deactivated'),
-    t('trackSelection.individualAudioText', 'Individual Audio')][audioState];
-  const audioTooltip = [
-    t('trackSelection.masterAudioTooltip', 'Use this audio stream for all published tracks, overwriting existing ones if necessary'),
-    t('trackSelection.inactiveAudioTooltip', 'This audio stream is deactivated and will be overwritten.'),
-    t('trackSelection.individualAudioTooltip', 'Use individual audio streams on all tracks')][audioState];
-  const audioIcon = [faVolumeUp,faVolumeMute, faVolumeDown][audioState];
-  const audioColor = ['green', 'black', 'black'][audioState];
-  const audioActive = audioState !== 1 && track.video_stream.enabled;
-  const audioStreamChange = () => {
-    dispatch(setMasterAudio({
-      id: track.id,
-    }))
-  }
-
   return (
     <div css={ trackItemStyle }>
       <div css={ headerStyle }>{ header }</div>
-      <div css={{ width: '95%', opacity: track.video_stream.enabled ? '1' : '0.5' }}>
+      <div css={{ width: '95%', textAlign: 'center', opacity: track.video_stream.enabled ? '1' : '0.5' }}>
         <ReactPlayer css={ playerStyle } url={ track.uri } width="90%" />
       </div>
       <SelectButton
@@ -174,15 +133,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
         tooltip={ deleteTooltip }
         handler={ trackEnabledChange }
         icon={ deleteIcon }
-        color={ deleteColor }
         active={ deleteEnabled } />
-      <SelectButton
-        text={ audioText }
-        tooltip={ audioTooltip }
-        handler={ audioStreamChange }
-        icon={ audioIcon }
-        color={ audioColor }
-        active={ audioActive } />
     </div>
   );
 }

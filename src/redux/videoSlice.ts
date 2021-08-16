@@ -14,7 +14,6 @@ export interface video {
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
-  masterAudio: string | null,
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowIndex: number,  // Index of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
@@ -34,7 +33,6 @@ export const initialState: video & httpRequestState = {
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
-  masterAudio: null,
   activeSegmentIndex: 0,
   selectedWorkflowIndex: 0,
   previewTriggered: false,
@@ -87,31 +85,11 @@ export const videoSlice = createSlice({
   initialState,
   reducers: {
     setTrackEnabled: (state, action) => {
-      // Check if track to modify is set to be the master audio.
-      // We will reset the audio settings if it is
-      const disableMasterAudio = state.masterAudio === action.payload.id;
-      if (disableMasterAudio) {
-        state.masterAudio = null;
-      }
-
       for (let track of state.tracks) {
-        if (disableMasterAudio && track.video_stream.enabled) {
-          track.audio_stream.enabled = true;
-        }
         if (track.id === action.payload.id) {
           track.audio_stream.enabled = action.payload.enabled;
           track.video_stream.enabled = action.payload.enabled;
         }
-      }
-      state.hasChanges = true;
-    },
-    setMasterAudio: (state, action) => {
-      // Check if track to modify is set to be the master audio.
-      // We will reset the audio settings if it is
-      state.masterAudio = state.masterAudio !== action.payload.id ? action.payload.id : null;
-
-      for (let track of state.tracks) {
-        track.audio_stream.enabled = track.id === action.payload.id || (!state.masterAudio && track.video_stream.enabled);
       }
       state.hasChanges = true;
     },
@@ -219,11 +197,6 @@ export const videoSlice = createSlice({
           return 0;
         });
 
-        // Mark as audio master if we have multiple tracks but just a single audio track
-        const multiStream = state.tracks.filter(track => track.video_stream.enabled).length > 1;
-        const audioStreams = state.tracks.filter(track => track.audio_stream.enabled);
-        state.masterAudio = (multiStream && audioStreams.length === 1) ? audioStreams[0].id : null;
-
         state.aspectRatios = new Array(state.videoCount)
     })
     builder.addCase(
@@ -320,7 +293,7 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
-export const { setTrackEnabled, setMasterAudio, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
+export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
   setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
@@ -359,7 +332,6 @@ export const selectDurationInSeconds = (state: { videoState: { duration: video["
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
 export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
-export const selectMasterAudio = (state: { videoState: { masterAudio: video["masterAudio"] } }) => state.videoState.masterAudio
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
