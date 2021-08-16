@@ -47,19 +47,33 @@ const Description: React.FC<{}> = () => {
   const description: string = t('trackSelection.description',
     'Select or deselect which tracks and audio streams are used for processing '
     + 'and publication.');
+  const deleteDescription = t('trackSelection.deleteDescription',
+    'Deleting a track will result in this track not being processed and/or published when starting a workflow. '
+    + 'They may still remain in the archive.');
+  const masterDescription = t('trackSelection.masterDescription',
+    'Marking an audio stream as main audio will result in this audio stream being transferred to all other tracks '
+    + 'during publication, overwriting existing audio streams from those tracks if they exist. Using individual audio '
+    + 'streams means that each track will keep its original audio stream.');
 
   const descriptionStyle = css({
     display: 'flex',
     alignItems: 'center',
     margin: '20px',
+    padding: '10px',
     backgroundColor: '#eee',
   });
 
   return (
-    <div css={ descriptionStyle }>
-      <FontAwesomeIcon css={{margin: '20px'}} icon={faInfoCircle} size="2x" />
+    <aside css={ descriptionStyle }>
+      <FontAwesomeIcon css={{margin: '10px'}} icon={faInfoCircle} size="2x" />
+      <div>
       { description }
-    </div>
+      <ul>
+        <li>{ deleteDescription }</li>
+        <li>{ masterDescription }</li>
+      </ul>
+      </div>
+    </aside>
   );
 }
 
