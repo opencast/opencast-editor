@@ -63,7 +63,7 @@ var defaultSettings: iSettings = {
     configureFields: undefined,
   },
   thumbnail: {
-    show: true,
+    show: false,
   }
 }
 var configFileSettings: iSettings
