@@ -78,6 +78,18 @@ password = "opencast"
 
 
 ####
+# Track Selection
+##
+
+[trackSelection]
+
+# If the track selection appears in the main menu
+# Type: boolean
+# Default: true
+#show = true
+
+
+####
 # Thumbnail Selection
 ##
 
