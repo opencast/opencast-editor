@@ -8,5 +8,7 @@ npm run build
 
 FILENAME="oc-editor-$(date --utc +%F).tar.gz"
 cd build
+TMP="$(mktemp)"
+mv editor-settings.toml "$TMP"
 tar -czf ../$FILENAME *
-cd ..
+mv "$TMP" editor-settings.toml
