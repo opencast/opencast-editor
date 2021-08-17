@@ -12,7 +12,7 @@
 # This is very useful as demo, but has no purpose otherwise.
 # Type: string | undefined
 # Default: undefined
-mediaPackageId = '27cd7156-fda6-4b31-aab5-d56833012caf'
+mediaPackageId = 'ID-dual-stream-demo'
 
 
 ####
@@ -25,7 +25,7 @@ mediaPackageId = '27cd7156-fda6-4b31-aab5-d56833012caf'
 # The default will work just fine if integrated in Opencast.
 # Type: URL
 # Default: Current server
-url = 'https://pyca.opencast.org'
+url = 'https://develop.opencast.org'
 
 # Username, used for HTTP basic authentication against Opencast.
 # Not defining this will work just fine if integrated in Opencast.
