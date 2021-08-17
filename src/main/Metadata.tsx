@@ -6,7 +6,7 @@ import { errorBoxStyle } from '../cssStyles'
 import { useSelector, useDispatch } from 'react-redux';
 import {
   fetchMetadata, postMetadata, selectCatalogs,
-  Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus
+  Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus, setFieldReadonly
 } from '../redux/metadataSlice'
 
 import { Form, Field, FieldInputProps } from 'react-final-form'
@@ -26,7 +26,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { DateTime as LuxonDateTime} from "luxon";
 
-import { settings } from '../config'
+import { configureFieldsAttributes, settings } from '../config'
 
 
 /**
@@ -56,6 +56,36 @@ const Metadata: React.FC<{}> = () => {
       dispatch(fetchMetadata())
     }
   }, [getStatus, dispatch])
+
+  // Overwrite readonly property of fields based on config settings
+  useEffect(() => {
+    if (getStatus === 'success') {
+      for(let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
+        if (settings.metadata.configureFields) {
+          let configureFields = settings.metadata.configureFields
+          let catalog = catalogs[catalogIndex]
+
+          if (catalog.title in configureFields) {
+            if (Object.keys(configureFields[catalog.title]).length > 0) {
+              let configureFieldsCatalog = configureFields[catalog.title]
+
+              for (let fieldIndex = 0; fieldIndex < catalog.fields.length; fieldIndex++) {
+                if (catalog.fields[fieldIndex].id in configureFieldsCatalog) {
+                  if ("readonly" in configureFieldsCatalog[catalog.fields[fieldIndex].id]) {
+                    dispatch(setFieldReadonly({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
+                      value: configureFieldsCatalog[catalog.fields[fieldIndex].id].readonly
+                    }))
+                  }
+                }
+              }
+            } else {
+              return undefined
+            }
+          }
+        }
+      }
+    }
+  }, [getStatus, catalogs, dispatch])
 
   /**
    * CSS
@@ -585,13 +615,11 @@ const Metadata: React.FC<{}> = () => {
     );
   }
 
-  /**
-   * Renders a single catalog (e.g. dublincore/episode) in the form
-   * @param catalog
-   * @param catalogIndex
-   * @param showFields array of which fields should be displayed. If empty, display all
-   */
-  const renderCatalog = (catalog: Catalog, catalogIndex: number, showFields: string[]) => {
+  const renderCatalog = (
+    catalog: Catalog,
+    catalogIndex: number,
+    configureFields: { [key: string]: configureFieldsAttributes }
+  ) => {
     return (
       <div key={catalogIndex}>
         <h2>
@@ -602,9 +630,8 @@ const Metadata: React.FC<{}> = () => {
 
         {catalog.fields.map((field, i) => {
           // Render fields based on given array (usually parsed from config settings)
-          if (showFields.length !== 0) {
-            // Lowercase include
-            if (showFields.filter((str) => str.toLowerCase().includes(field.id.toLowerCase())).length > 0) {
+          if (field.id in configureFields && "show" in configureFields[field.id]) {
+            if (configureFields[field.id].show) {
               return renderField(field, catalogIndex, i)
             } else {
               return undefined
@@ -639,19 +666,18 @@ const Metadata: React.FC<{}> = () => {
               </div>
 
               {catalogs.map((catalog, i) => {
-                // Render catalog and its fields based on config settings
-                if (settings.metadata.showFields) {
-                  if (catalog.title in settings.metadata.showFields) {
-                    // If there are no fields for a given catalog, do not render it
-                    if (settings.metadata.showFields[catalog.title].length > 0) {
-                      return renderCatalog(catalog, i, settings.metadata.showFields[catalog.title])
+                if (settings.metadata.configureFields) {
+                  if (catalog.title in settings.metadata.configureFields) {
+                    // If there are no fields for a given catalog, do not render
+                    if (Object.keys(settings.metadata.configureFields[catalog.title]).length > 0) {
+                      return renderCatalog(catalog, i, settings.metadata.configureFields[catalog.title])
                     } else {
                       return undefined
                     }
                   }
                 }
                 // If there are no settings for a given catalog, just render it completely
-                return renderCatalog(catalog, i, [])
+                return renderCatalog(catalog, i, {})
               })}
 
 {/* 

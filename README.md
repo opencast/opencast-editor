@@ -49,7 +49,6 @@ The editor can be configured through the `editor-settings.toml` settings file. I
 How to cut a release for Opencast
 -------------
 - Run `build-release.sh` in the root folder
-- Remove the editor-settings.toml in the created .tar archive
 - Upload the archive as a new release to GitHub
   - Release tag is the current date (year-month-day)
   - Check the commit history for notable changes and list them as a release comment
