@@ -39,6 +39,9 @@ interface iSettings {
     show: boolean,
     configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } }  | undefined,
   },
+  trackSelection: {
+    show: boolean,
+  },
   thumbnail: {
     show: boolean,
   }
@@ -61,6 +64,9 @@ var defaultSettings: iSettings = {
   metadata: {
     show: true,
     configureFields: undefined,
+  },
+  trackSelection: {
+    show: true,
   },
   thumbnail: {
     show: false,
@@ -290,6 +296,9 @@ const SCHEMA = {
   metadata: {
     show : types.boolean,
     configureFields: types.objectsWithinObjects,
+  },
+  trackSelection: {
+    show : types.boolean,
   },
   thumbnail: {
     show : types.boolean,

@@ -2,6 +2,7 @@
     "mainMenu": {
       "cutting-button": "Cutting",
       "finish-button": "Finish",
+      "select-tracks-button": "Tracks",
       "thumbnail-button": "Thumbnail",
       "metadata-button": "Metadata",
       "tooltip-aria": "Main Navigation"
@@ -180,5 +181,16 @@
       "error-noDetails-text": "No error details are available.",
       "error-text": "An error has occurred. Please wait a bit and try again.",
       "goBack-button": "No, take me back"
+    },
+
+    "trackSelection": {
+      "description": "Select or deselect which tracks are used for processing and publication.",
+      "trackInactive": "inactive",
+      "deleteTrackText": "Delete Track",
+      "restoreTrackText": "Restore Track",
+      "cannotDeleteTrackText": "Cannot Delete Track",
+      "deleteTrackTooltip": "Do not encode and publish this track.",
+      "restoreTrackTooltip": "Encode and publish this track.",
+      "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
     }
   }
