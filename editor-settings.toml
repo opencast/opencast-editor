@@ -20,23 +20,31 @@ password = "opencast"
 [metadata]
 # If false, the metadata button is not displayed in the main menu
 show = true
-## Configure metadata display
-## Here you can set which metadata fields should be displayed in the editor
-## for each catalog.
-## If the catalog is not specified, all fields of that catalog will be
+## Here you can override various settings for how the metadata will be
+## displayed in the editor, for each catalog.
+## Setting #1: show (boolean)
+## Whether the field should be visible at all
+## Setting #2: readonly (boolean)
+## Whether the field should be editable by the user
+## If you don't configure a setting for a field, a default will be assumed.
+## The default settings are based on the metadata display in the admin ui
+## in Opencast, which can currently be configured in:
+## org.opencastproject.ui.metadata.CatalogUIAdapterFactory-episode-common.cfg
+## Furthermore:
+## If a catalog is not specified, all fields of that catalog will be
 ## displayed.
-## If the catalog is specified but empty, it will not be displayed at all.
-## If the catalog is specified with at least one field, only the fields
-## specified for the catalog will be displayed.
-[metadata.showFields]
+## If a catalog is specified but empty, it will not be displayed at all.
 ## Example definition
 # # This is the default catalog
-# "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE" = [
-#   "title",
-#   "language",
-#   "duration"
-# ]
-# "NameOfAnExtendedMetadataCatalog" = []
+# [metadata.configureFields."EVENTS.EVENTS.DETAILS.CATALOG.EPISODE"]
+# title = {show = true, readonly = false}
+# subject = {show = false}
+# description = {readonly = true}
+
+# # This catalog is specified but empty, and as such will not be displayed
+# [metadata.configureFields."NameOfAnExtendedMetadataCatalog"]
+
+
 
 ### Settings of the thumbnail tab
 [thumbnail]
