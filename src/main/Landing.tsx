@@ -47,7 +47,9 @@ import { useTranslation } from 'react-i18next';
         </li>
         <li>
           {t("landing.link-to-documentation")}
-          <a href="https://docs.opencast.org/stable/admin/">docs.opencast.org</a>
+          <a href="https://docs.opencast.org/stable/admin/modules/editor/">
+            docs.opencast.org
+          </a>
         </li>
       </div>
     </div>
