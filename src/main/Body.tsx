@@ -20,7 +20,7 @@ const Body: React.FC<{}> = () => {
   // If we're in a special state, display a special page
   // Otherwise display the normal page
   const main = () => {
-    if (!settings.mediaPackageId) {
+    if (!settings.id) {
       return (
         <Landing />
       )

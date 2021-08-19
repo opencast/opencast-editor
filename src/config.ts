@@ -29,7 +29,7 @@ export interface configureFieldsAttributes {
  * Settings interface
  */
 interface iSettings {
-  mediaPackageId: string | undefined,
+  id: string | undefined,
   opencast: {
     url: string,
     name: string | undefined,
@@ -55,7 +55,7 @@ interface iSettings {
  * settings: contains the combined values from all other setting objects
  */
 var defaultSettings: iSettings = {
-  mediaPackageId: undefined,
+  id: undefined,
   opencast: {
     url: window.location.origin,
     name: undefined,
@@ -100,6 +100,12 @@ export const init = async () => {
     if (key.startsWith('opencast.')) {
       return;
     }
+
+    // Fallback for old parameter
+    if (key === 'mediaPackageId') {
+      key = 'id';
+    }
+
     const segments = key.split('.');
     segments.slice(0, -1).forEach((segment) => {
       if (!(segment in obj)) {
@@ -290,7 +296,7 @@ const types = {
 // input is valid, but is replaced by that new value. See the `types` object
 // above for some examples.
 const SCHEMA = {
-  mediaPackageId: types.string,
+  id: types.string,
   opencast: {
     url: types.string,
     name: types.string,
