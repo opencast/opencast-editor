@@ -22,7 +22,7 @@ Open [http://localhost:3000](localhost:3000) to view it in the browser.
 The latest version connected to [develop.opencast.org](https://develop.opencast.org) is also publicly available
 at [editor.opencast.org](https://editor.opencast.org).
 
-To open a specific event with the editor, use the GET-Parameter `mediaPackageId` like so: `https://editor.opencast.org/?mediaPackageId=27cd7156-fda6-4b31-aab5-d56833012caf`.
+To open a specific event with the editor, use the GET-Parameter `id` like so: `https://editor.opencast.org/?id=27cd7156-fda6-4b31-aab5-d56833012caf`.
 
 
 Building the Editor

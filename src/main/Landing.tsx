@@ -42,7 +42,7 @@ import { useTranslation } from 'react-i18next';
         </li>
         <li>
           {t("landing.start-editing-1")}
-          <code> ?=mediaPackageId=[media-package-id]</code>
+          <code> ?=id=[media-package-id]</code>
           {t("landing.start-editing-2")}
         </li>
         <li>
