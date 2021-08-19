@@ -1,0 +1,24 @@
+name: Deploy Crowdin keys
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-translation-keys:
+    if: github.repository_owner == 'elan-ev'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: prepare crowdin client
+      run: |
+        wget --quiet https://artifacts.crowdin.com/repo/deb/crowdin3.deb -O crowdin.deb
+        sudo dpkg -i crowdin.deb
+
+    - name: upload translation source
+      env:
+        CROWDIN_TOKEN: ${{ secrets.CROWDIN_TOKEN }}
+      run: |
+        crowdin upload sources --config .crowdin.yaml -b main
