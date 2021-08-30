@@ -192,9 +192,7 @@ export const videoSlice = createSlice({
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
         state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
-          if (n1.displayOrder > n2.displayOrder) { return 1; }
-          if (n1.displayOrder < n2.displayOrder) { return -1; }
-          return 0;
+          return n1.displayOrder - n2.displayOrder;
         });
 
         state.aspectRatios = new Array(state.videoCount)
