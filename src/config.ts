@@ -93,10 +93,13 @@ export const init = async () => {
   var urlParams = new URLSearchParams(window.location.search);
 
   let rawUrlSettings = {};
-  urlParams.forEach(function(value, key) {
+  urlParams.forEach((value, key) => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
     let obj : {[k: string]: any} = rawUrlSettings;
+    if (key.startsWith('opencast.')) {
+      return;
+    }
     const segments = key.split('.');
     segments.slice(0, -1).forEach((segment) => {
       if (!(segment in obj)) {
