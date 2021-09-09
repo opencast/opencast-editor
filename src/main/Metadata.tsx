@@ -22,8 +22,6 @@ import DateFnsUtils from "@date-io/date-fns";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
@@ -608,7 +606,6 @@ const Metadata: React.FC<{}> = () => {
 
                     {generateComponentWithModifiedInput(field, input)}
                     {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
-                    {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
                 )}
         </Field>
