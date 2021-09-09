@@ -141,7 +141,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
       let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
       let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
       while (w === 0 || h === 0) {
-        await sleep(1000);
+        await sleep(100);
         w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
         h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
       }
