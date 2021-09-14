@@ -6,6 +6,7 @@ import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
 import TrackSelection from './TrackSelection';
 import Finish from "./Finish"
+import KeyboardControls from "./KeyboardControls";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -86,6 +87,15 @@ const MainContent: React.FC<{}> = () => {
     height: '100%',
   })
 
+  const keyboardControlsStyle = css({
+    ...displayState(MainMenuStateNames.keyboardControls),
+    flexDirection: 'column' as const,
+    justifyContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '20px',
+  })
+
   const defaultStyle = css({
     display: stateActive ? 'none' : 'flex',
     flexDirection: 'column' as const,
@@ -109,6 +119,9 @@ const MainContent: React.FC<{}> = () => {
       </div>
       <div css={finishStyle}>
         <Finish />
+      </div>
+      <div css={keyboardControlsStyle}>
+          <KeyboardControls />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />

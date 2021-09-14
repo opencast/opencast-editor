@@ -11,6 +11,7 @@ import { sleep } from './util/utilityFunctions'
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { GlobalHotKeys } from 'react-hotkeys';
 
 
 // Load config here
@@ -32,7 +33,10 @@ initialize.then(
       <React.StrictMode>
           <Provider store={store}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <App />
+              {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
+              <GlobalHotKeys>
+                <App />
+              </GlobalHotKeys>
             </MuiPickersUtilsProvider>
           </Provider>
       </React.StrictMode>,
