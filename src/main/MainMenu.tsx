@@ -37,14 +37,50 @@ const MainMenu: React.FC<{}> = () => {
 
   return (
     <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
-      <MainMenuButton iconName={faCut} stateName={MainMenuStateNames.cutting} bottomText={t(MainMenuStateNames.cutting)} miniButton={false}/>
-      {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata} bottomText={t(MainMenuStateNames.metadata)} miniButton={false}/>}
-      {settings.trackSelection.show && <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.trackSelection} bottomText={t(MainMenuStateNames.trackSelection)} miniButton={false}/>}
-      {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail} bottomText={t(MainMenuStateNames.thumbnail)} miniButton={false}/>}
-      <MainMenuButton iconName={faSignOutAlt} stateName={MainMenuStateNames.finish} bottomText={t(MainMenuStateNames.finish)} miniButton={false}/>
+      <MainMenuButton
+        iconName={faCut}
+        stateName={MainMenuStateNames.cutting}
+        bottomText={t(MainMenuStateNames.cutting)}
+        ariaLabelText={t(MainMenuStateNames.cutting)}
+        miniButton={false}
+      />
+      {settings.metadata.show && <MainMenuButton
+        iconName={faListUl}
+        stateName={MainMenuStateNames.metadata}
+        bottomText={t(MainMenuStateNames.metadata)}
+        ariaLabelText={t(MainMenuStateNames.metadata)}
+        miniButton={false}/
+      >}
+      {settings.trackSelection.show && <MainMenuButton
+      iconName={faFilm}
+      stateName={MainMenuStateNames.trackSelection}
+      bottomText={t(MainMenuStateNames.trackSelection)}
+      ariaLabelText={t(MainMenuStateNames.trackSelection)}
+      miniButton={false}
+      />}
+      {settings.thumbnail.show && <MainMenuButton
+      iconName={faPhotoVideo}
+      stateName={MainMenuStateNames.thumbnail}
+      bottomText={t(MainMenuStateNames.thumbnail)}
+      ariaLabelText={t(MainMenuStateNames.thumbnail)}
+      miniButton={false}
+      />}
+      <MainMenuButton
+        iconName={faSignOutAlt}
+        stateName={MainMenuStateNames.finish}
+        bottomText={t(MainMenuStateNames.finish)}
+        ariaLabelText={t(MainMenuStateNames.finish)}
+        miniButton={false}
+      />
       {/* A space for buttons that would normally go in a header or footer */}
       <div css={{flexGrow: 99, display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
-        <MainMenuButton iconName={faKeyboard} stateName={MainMenuStateNames.keyboardControls} bottomText={""} miniButton={true}/>
+        <MainMenuButton
+          iconName={faKeyboard}
+          stateName={MainMenuStateNames.keyboardControls}
+          bottomText={""}
+          ariaLabelText={t("keyboardControls.header")}
+          miniButton={true}
+        />
       </div>
     </nav>
   );
@@ -54,6 +90,7 @@ interface mainMenuButtonInterface {
   iconName: IconDefinition,
   stateName: mainMenu["value"],
   bottomText: string,
+  ariaLabelText: string;
   miniButton: boolean,
 }
 
@@ -61,7 +98,7 @@ interface mainMenuButtonInterface {
  * A button to set the state of the app
  * @param param0
  */
-const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName, bottomText, miniButton = false}) => {
+const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName, bottomText, ariaLabelText, miniButton = false}) => {
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
@@ -105,6 +142,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
   return (
     <li css={[basicButtonStyle, buttonStyle()]}
       role="menuitem" tabIndex={0}
+      aria-label={ariaLabelText}
       onClick={ onMenuItemClicked }
       onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
         onMenuItemClicked()
