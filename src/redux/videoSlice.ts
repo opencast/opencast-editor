@@ -18,6 +18,7 @@ export interface video {
   selectedWorkflowIndex: number,  // Index of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
+  timelineZoom: number,           // Zoom multiplicator for the timeline
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
@@ -39,6 +40,7 @@ export const initialState: video & httpRequestState = {
   clickTriggered: false,
   aspectRatios: [],
   hasChanges: false,
+  timelineZoom: 1,
 
   videoURLs: [],
   videoCount: 0,
@@ -157,6 +159,9 @@ export const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
       state.hasChanges = true
     },
+    setZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
+      state.timelineZoom = Math.max(1.0, Math.min(2.0, action.payload))
+    }
   },
   // For Async Requests
   extraReducers: builder => {
@@ -293,7 +298,7 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
-  setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  setZoom, setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -321,6 +326,8 @@ export const selectSelectedWorkflowIndex = (state: { videoState:
   state.videoState.selectedWorkflowIndex
 export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
+export const selectTimelineZoom = (state: { videoState: { timelineZoom: video["timelineZoom"]; }; }) =>
+  state.videoState.timelineZoom
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs

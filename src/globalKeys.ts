@@ -25,6 +25,8 @@ export const cuttingKeyMap: KeyMap = {
   delete: rewriteKeys("Control+Alt+d"),
   mergeLeft: rewriteKeys("Control+Alt+n"),
   mergeRight: rewriteKeys("Control+Alt+m"),
+  zoomIn: rewriteKeys("Control+Alt+o"),
+  zoomOut: rewriteKeys("Control+Alt+u"),
   preview: rewriteKeys("Control+Alt+p"),
   play: rewriteKeys("Space"),
 }

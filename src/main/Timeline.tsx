@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, createRef, SyntheticEvent } from 'react'
 
 import Draggable from 'react-draggable';
 
@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered
+  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered, selectTimelineZoom, setZoom
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,29 +36,44 @@ const Timeline: React.FC<{}> = () => {
   // Init redux variables
   const dispatch = useDispatch();
   const duration = useSelector(selectDuration)
+  const zoomMultiplicator = useSelector(selectTimelineZoom)
 
-  const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
-
-  const timelineStyle = css({
-    position: 'relative',     // Need to set position for Draggable bounds to work
-    height: '250px',
-    width: '100%',
-  });
+  const refScrubber = useRef<HTMLDivElement>(null);
+  let { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
 
   // Update the current time based on the position clicked on the timeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     let rect = e.currentTarget.getBoundingClientRect()
     let offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
-    dispatch(setCurrentlyAt((offsetX / width) * (duration)))
+    dispatch(setCurrentlyAt((offsetX / (width)) * (duration)))
   }
 
+  // Center on scrubber when zooming
+  useEffect(() => {
+    if (zoomMultiplicator && refScrubber.current) {
+      refScrubber.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    }
+  }, [zoomMultiplicator]);
+
+  const timelineStyle = css({
+    position: 'relative',     // Need to set position for Draggable bounds to work
+    height: '250px',
+    width: 100 * zoomMultiplicator + '%',
+  });
+
   return (
-  <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber timelineWidth={width}/>
-    <div css={{height: '230px'}} >
-      <Waveforms />
-      <SegmentsList timelineWidth={width}/>
+  <div css={{overflow: 'auto'}}>
+    <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
+      <Scrubber timelineWidth={width} parentRef={refScrubber}/>
+      <div css={{height: '230px'}} >
+        <Waveforms />
+        <SegmentsList timelineWidth={width}/>
+      </div>
     </div>
   </div>
   );
@@ -68,7 +83,7 @@ const Timeline: React.FC<{}> = () => {
  * Displays and defines the current position in the video
  * @param param0
  */
-const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+const Scrubber: React.FC<{timelineWidth: number, parentRef: React.RefObject<HTMLDivElement>}> = ({timelineWidth, parentRef}) => {
 
   const { t } = useTranslation();
 
@@ -87,7 +102,6 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const [wasPlayingWhenGrabbed, setWasPlayingWhenGrabbed] = useState(false)
   const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000)  // In milliseconds. For keyboard navigation
   const wasCurrentlyAtRef = useRef(0)
-  const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
@@ -215,9 +229,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
         axis="x"
         bounds="parent"
         position={controlledPosition}
-        nodeRef={nodeRef}
+        nodeRef={parentRef}
         >
-          <div ref={nodeRef} css={scrubberStyle}>
+          <div ref={parentRef} css={scrubberStyle}>
 
             <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
               aria-label={t("timeline.scrubber-text-aria",
