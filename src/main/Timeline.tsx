@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, createRef, SyntheticEvent } from 'react'
+import React, { useState, useRef, useEffect} from 'react'
 
 import Draggable from 'react-draggable';
 
@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered, selectTimelineZoom, setZoom
+  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered, selectTimelineZoom
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
