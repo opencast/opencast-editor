@@ -190,6 +190,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     "&:hover": {
       transform: 'scale(1.1)',
     },
+    "&:focus": {
+      transform: 'scale(1.1)',
+    },
     "&:active": {
       transform: 'scale(0.9)',
     },
