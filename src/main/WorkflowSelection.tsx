@@ -175,6 +175,7 @@ const WorkflowButton: React.FC<{stateName: string, workflowIndex: number}> = ({s
   const workflowButtonStyle = css({
     backgroundColor: workflowIndex !== selectedWorkflowIndex ? 'snow' : '#DDD',
     padding: '16px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   });
 
   return (
