@@ -80,7 +80,8 @@
       "startProcessing-button": "Start processing",
       "back-button": "Take me back",
       "selectWF-button": "Click to select this workflow",
-      "selectWF-button-aria": "Press to select the workflow: {{stateName}}\n"
+      "selectWF-button-aria": "Press to select the workflow: {{stateName}}\n",
+      "no-workflow-description": "No description available"
     },
 
     "timeline": {

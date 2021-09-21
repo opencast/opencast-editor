@@ -54,7 +54,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         workflows[selectedWorkflowIndex].description
       );
     } else {
-      return (' ');
+      return undefined
     }
   }
 
@@ -143,7 +143,7 @@ const WorkflowSelection : React.FC<{}> = () => {
             {t("workflowSelection.manyWorkflows-text")}
           </div>,
           true,
-          <div><i>{workflowDescription()}</i></div>,
+          <div><i>{workflowDescription() ? workflowDescription() : t("workflowSelection.no-workflow-description")}</i></div>,
           <SaveAndProcessButton text= {t("workflowSelection.startProcessing-button")}/>,
           postAndProcessWorkflowStatus,
           postAndProcessError
