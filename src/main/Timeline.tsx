@@ -288,13 +288,17 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
         css={{
           background: bgColor(segment.deleted, activeSegmentIndex === index),
           borderRadius: '5px',
-          borderStyle: activeSegmentIndex === index ? 'dashed' : 'solid',
-          borderColor: 'white',
+          borderStyle: 'solid',
+          borderColor: activeSegmentIndex === index ? 'black' : 'white',
           borderWidth: '1px',
           boxSizing: 'border-box',
           width: ((segment.end - segment.start) / duration) * 100 + '%',
           height: '230px',
           zIndex: 1,
+          "&:focus": {
+            borderWidth: '2px',
+            borderColor: 'black',
+          },
         }}>
         </div>
       ))
