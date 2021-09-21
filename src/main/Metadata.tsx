@@ -506,8 +506,10 @@ const Metadata: React.FC<{}> = () => {
           <CreatableSelect {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
             isMulti
-            isClearable
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
@@ -517,7 +519,10 @@ const Metadata: React.FC<{}> = () => {
         return (
           <Select {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
