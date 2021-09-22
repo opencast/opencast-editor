@@ -24,7 +24,6 @@ import { scrubberKeyMap } from '../globalKeys';
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectMainMenuState } from '../redux/mainMenuSlice';
-import { configOptions } from 'final-form';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
