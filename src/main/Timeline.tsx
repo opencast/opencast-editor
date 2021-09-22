@@ -24,6 +24,7 @@ import { scrubberKeyMap } from '../globalKeys';
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectMainMenuState } from '../redux/mainMenuSlice';
+import { configOptions } from 'final-form';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -39,6 +40,7 @@ const Timeline: React.FC<{}> = () => {
   const zoomMultiplicator = useSelector(selectTimelineZoom)
 
   const refScrubber = useRef<HTMLDivElement>(null);
+  const refTop = useRef<HTMLDivElement>(null);
   let { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
 
   // Update the current time based on the position clicked on the timeline
@@ -60,6 +62,21 @@ const Timeline: React.FC<{}> = () => {
     }
   }, [zoomMultiplicator]);
 
+  // Scroll horizontal with mousewheel
+  const onWheel = (e: any) => {
+    if (refTop && refTop.current) {
+      // Still scrolls the page. 'preventDefault' won't work in this passive listener
+      // e.preventDefault();
+      const container = refTop.current;
+      const containerScrollPosition = refTop.current.scrollLeft;
+
+      container.scrollTo({
+        top: 0,
+        left: containerScrollPosition + e.deltaY,
+      });
+    }
+  };
+
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
     height: '250px',
@@ -67,8 +84,8 @@ const Timeline: React.FC<{}> = () => {
   });
 
   return (
-  <div css={{overflow: 'auto'}}>
-    <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
+  <div css={{overflow: 'auto'}} ref={refTop}>
+    <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)} onWheel={onWheel}>
       <Scrubber timelineWidth={width} parentRef={refScrubber}/>
       <div css={{height: '230px'}} >
         <Waveforms />
