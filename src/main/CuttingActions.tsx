@@ -132,7 +132,7 @@ const CuttingActions: React.FC<{}> = () => {
             />
           </div>
           <div css={blockStyle}>
-            <div css={{zoomStyle}}>
+            <div css={zoomStyle}>
               <CuttingActionsButton iconName={faMinus}
                 actionName="" actionHandler={dispatchAction} action={undefined} actionWithPayload={setZoom} payload={timelineZoom - 0.1}
                 tooltip={t('Zoom Out', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
