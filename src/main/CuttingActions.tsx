@@ -135,14 +135,14 @@ const CuttingActions: React.FC<{}> = () => {
             <div css={zoomStyle}>
               <CuttingActionsButton iconName={faMinus}
                 actionName="" actionHandler={dispatchAction} action={undefined} actionWithPayload={setZoom} payload={timelineZoom - 0.1}
-                tooltip={t('Zoom Out', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
-                ariaLabelText={t('Zoom Out', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
+                tooltip={t('cuttingActions.zoomOut-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
+                ariaLabelText={t('cuttingActions.zoomOut-aria-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
               />
-              <div css={inbetweenWordStyle}>Zoom</div>
+              <div css={inbetweenWordStyle}>{t('cuttingActions.zoom')}</div>
               <CuttingActionsButton iconName={faPlus}
                 actionName="" actionHandler={dispatchAction} action={undefined} actionWithPayload={setZoom} payload={timelineZoom + 0.1}
-                tooltip={t('Zoom In', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
-                ariaLabelText={t('Zoom In', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
+                tooltip={t('cuttingActions.zoomIn-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
+                ariaLabelText={t('cuttingActions.zoomIn-aria-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
               />
           </div>
             {/* <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}
