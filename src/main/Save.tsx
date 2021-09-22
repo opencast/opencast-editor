@@ -6,7 +6,7 @@ import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave,
+  faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave, faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,16 +43,35 @@ const Save : React.FC<{}> = () => {
     ...(flexGapReplacementStyle(30, false)),
   })
 
+  const render = () => {
+    // Post (successful) save
+    if (postWorkflowStatus === 'success' && postMetadataStatus === 'success') {
+      return(
+        <>
+          <FontAwesomeIcon icon={faCheckCircle} size="10x" />
+          <div>{t("save.success-text")}</div>
+        </>
+      )
+    // Pre save
+    } else {
+      return (
+        <>
+          <span css={{maxWidth: '500px'}}>
+            {t("save.info-text")}
+          </span>
+          <div css={backOrContinueStyle}>
+            <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
+            <SaveButton />
+          </div>
+        </>
+      )
+    }
+  }
+
   return (
     <div css={saveStyle} title={t("save.saveArea-tooltip")}>
       <h1>{t("save.headline-text")}</h1>
-      <span css={{maxWidth: '500px'}}>
-        {t("save.info-text")}
-      </span>
-      <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
-        <SaveButton />
-      </div>
+      {render()}
       <div css={errorBoxStyle(postWorkflowStatus === "failed")} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
