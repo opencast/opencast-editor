@@ -125,6 +125,15 @@ const Scrubber: React.FC<{timelineWidth: number, parentRef: React.RefObject<HTML
       updateXPos();
       wasCurrentlyAtRef.current = currentlyAt;
     }
+
+    // Scroll timeline if zoomed in and the scrubber leaves the view
+    if (parentRef.current) {
+      parentRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest'
+      });
+    }
   })
 
   // Reposition scrubber when the timeline width changes
