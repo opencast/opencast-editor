@@ -27,6 +27,9 @@ const workflowPostSlice = createSlice({
   name: 'workflowPostState',
   initialState,
   reducers: {
+    resetPostRequestState: (state) => {
+      state.status = 'idle'
+    }
   },
   extraReducers: builder => {
     builder.addCase(
@@ -68,6 +71,8 @@ export const convertSegments = (segments: Segment[]) => {
 
   return newSegments
 }
+
+export const { resetPostRequestState } = workflowPostSlice.actions
 
 export const selectStatus = (state: { workflowPostState: { status: httpRequestState["status"] } }) =>
   state.workflowPostState.status

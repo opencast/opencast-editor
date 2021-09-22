@@ -105,6 +105,9 @@ const metadataSlice = createSlice({
     },
     setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
       state.hasChanges = action.payload
+    },
+    resetPostRequestState: (state) => {
+      state.postStatus = 'idle'
     }
   },
   extraReducers: builder => {
@@ -139,7 +142,7 @@ const metadataSlice = createSlice({
   }
 })
 
-export const { setFieldValue, setHasChanges, setFieldReadonly } = metadataSlice.actions
+export const { setFieldValue, setHasChanges, setFieldReadonly,resetPostRequestState } = metadataSlice.actions
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs
