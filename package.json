@@ -17,7 +17,7 @@
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.2.1",
+    "@testing-library/user-event": "^13.3.0",
     "@types/iarna__toml": "^2.0.2",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.2",
