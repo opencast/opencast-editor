@@ -48,7 +48,7 @@
     "react-player": "^2.9.0",
     "react-redux": "^7.2.5",
     "react-scripts": "4.0.3",
-    "react-select": "^4.3.1",
+    "react-select": "^5.1.0",
     "react-use": "^17.3.1",
     "redux": "^4.1.0",
     "standardized-audio-context": "^25.3.12",
@@ -84,7 +84,6 @@
     "@types/lodash": "^4.14.175",
     "@types/luxon": "^2.0.2",
     "@types/react-beforeunload": "^2.1.1",
-    "@types/react-select": "^4.0.17",
     "redux-devtools": "^3.7.0",
     "use-resize-observer": "^8.0.0"
   }
