@@ -44,35 +44,30 @@ const MainMenu: React.FC<{}> = () => {
         stateName={MainMenuStateNames.cutting}
         bottomText={t(MainMenuStateNames.cutting)}
         ariaLabelText={t(MainMenuStateNames.cutting)}
-        miniButton={false}
       />
       {settings.metadata.show && <MainMenuButton
         iconName={faListUl}
         stateName={MainMenuStateNames.metadata}
         bottomText={t(MainMenuStateNames.metadata)}
         ariaLabelText={t(MainMenuStateNames.metadata)}
-        miniButton={false}/
-      >}
+      />}
       {settings.trackSelection.show && <MainMenuButton
       iconName={faFilm}
       stateName={MainMenuStateNames.trackSelection}
       bottomText={t(MainMenuStateNames.trackSelection)}
       ariaLabelText={t(MainMenuStateNames.trackSelection)}
-      miniButton={false}
       />}
       {settings.thumbnail.show && <MainMenuButton
       iconName={faPhotoVideo}
       stateName={MainMenuStateNames.thumbnail}
       bottomText={t(MainMenuStateNames.thumbnail)}
       ariaLabelText={t(MainMenuStateNames.thumbnail)}
-      miniButton={false}
       />}
       <MainMenuButton
         iconName={faSignOutAlt}
         stateName={MainMenuStateNames.finish}
         bottomText={t(MainMenuStateNames.finish)}
         ariaLabelText={t(MainMenuStateNames.finish)}
-        miniButton={false}
       />
       {/* A space for buttons that would normally go in a header or footer */}
       <div css={{flexGrow: 99, display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
@@ -93,7 +88,7 @@ interface mainMenuButtonInterface {
   stateName: mainMenu["value"],
   bottomText: string,
   ariaLabelText: string;
-  miniButton: boolean,
+  miniButton?: boolean,
 }
 
 /**
