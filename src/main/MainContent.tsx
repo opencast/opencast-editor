@@ -89,9 +89,8 @@ const MainContent: React.FC<{}> = () => {
 
   const keyboardControlsStyle = css({
     ...displayState(MainMenuStateNames.keyboardControls),
-    flexDirection: 'column' as const,
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    // flexDirection: 'column' as const,
+    // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '20px',

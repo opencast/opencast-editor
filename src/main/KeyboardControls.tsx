@@ -143,14 +143,21 @@ const KeyboardControls: React.FC<{}> = () => {
     return <div>{t("keyboardControls.genericError")}</div>
   }
 
+  const keyboardControlsStyle = css({
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    width: '100%',
+  });
+
   return (
-    <>
+    <div css={keyboardControlsStyle}>
       <h2>
         {t("keyboardControls.header")}
       </h2>
 
       {render()}
-    </>
+    </div>
   );
 };
 
