@@ -22,8 +22,6 @@ import DateFnsUtils from "@date-io/date-fns";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
@@ -506,8 +504,10 @@ const Metadata: React.FC<{}> = () => {
           <CreatableSelect {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
             isMulti
-            isClearable
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
@@ -517,7 +517,10 @@ const Metadata: React.FC<{}> = () => {
         return (
           <Select {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
@@ -608,7 +611,6 @@ const Metadata: React.FC<{}> = () => {
 
                     {generateComponentWithModifiedInput(field, input)}
                     {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
-                    {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
                 )}
         </Field>
