@@ -102,6 +102,7 @@ const KeyboardControls: React.FC<{}> = () => {
     display: 'flex',
     flexDirection: 'row' as const,
     flexWrap: 'wrap',
+    justifyContent: 'center',
     ...(flexGapReplacementStyle(30, true)),
   })
 
@@ -143,14 +144,13 @@ const KeyboardControls: React.FC<{}> = () => {
   }
 
   return (
-    <div>
+    <>
       <h2>
-      {t("keyboardControls.header")}
+        {t("keyboardControls.header")}
       </h2>
 
       {render()}
-
-    </div>
+    </>
   );
 };
 
