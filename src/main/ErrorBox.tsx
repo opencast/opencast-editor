@@ -25,6 +25,15 @@ import { httpRequestState } from '../types'
     }
   }
 
+  const logErrorDetailsToConsole = (errorDetails: any) => {
+    if (errorDetails && typeof errorDetails === 'string') {
+      return t("various.error-details-text", errorDetails)
+    }
+    if (errorDetails && typeof errorDetails !== 'string' && "text" in errorDetails && errorDetails.text) {
+      return t("various.error-details-text", {errorMessage: errorDetails.text})
+    }
+  }
+
   const errorBoxStyle = (errorStatus: boolean) => {
     return (
       css({
@@ -38,16 +47,16 @@ import { httpRequestState } from '../types'
   }
 
   return (
+    <>
+    {errorDetails && console.log(logErrorDetailsToConsole(errorDetails))}
     <div css={errorBoxStyle(showBox)} role="alert">
       <span css={{fontWeight: 'bold'}}>{t("various.error-header-text")}</span>
       <span>{errorMessage.trim() + " "}</span>
-      <span>{errorDetails ? "" : t("various.error-noDetails-text")}</span>
-      <span>{(errorDetails && typeof errorDetails === 'string') ? errorDetails : ""}</span>
       <span>{(errorDetails && typeof errorDetails !== 'string' && "status" in errorDetails) ?
-        errorCodeMessages(errorDetails.status) : ""}</span>
-      <span>{(errorDetails && typeof errorDetails !== 'string' && "text" in errorDetails && errorDetails.text) ?
-        t("various.error-details-text", {errorMessage: errorDetails.text}) : ""}</span>
-  </div>
+        errorCodeMessages(errorDetails.status) : ""}
+      </span>
+    </div>
+    </>
   );
 }
 
