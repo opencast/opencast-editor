@@ -72,7 +72,7 @@ export const scrubberKeyMap: KeyMap = {
     name: i18next.t("keyboardControls.scrubberLeft"),
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+j"),
-    sequences: [rewriteKeys("Control+Alt+j"), "ArrowLeft"],
+    sequences: [rewriteKeys("Control+Alt+j"), "Left"],
     action: "keydown",
     group: groupCuttingViewScrubber,
   },
@@ -80,7 +80,7 @@ export const scrubberKeyMap: KeyMap = {
     name: i18next.t("keyboardControls.scrubberRight"),
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+l"),
-    sequences: [rewriteKeys("Control+Alt+l"), "ArrowRight"],
+    sequences: [rewriteKeys("Control+Alt+l"), "Right"],
     action: "keydown",
     group: groupCuttingViewScrubber,
   },
@@ -88,7 +88,7 @@ export const scrubberKeyMap: KeyMap = {
     name: i18next.t("keyboardControls.scubberIncrease"),
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+i"),
-    sequences: [rewriteKeys("Control+Alt+i"), "ArrowUp"],
+    sequences: [rewriteKeys("Control+Alt+i"), "Up"],
     action: "keydown",
     group: groupCuttingViewScrubber,
   },
@@ -96,7 +96,7 @@ export const scrubberKeyMap: KeyMap = {
     name: i18next.t("keyboardControls.scrubberDecrease"),
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+k"),
-    sequences: [rewriteKeys("Control+Alt+k"), "ArrowDown"],
+    sequences: [rewriteKeys("Control+Alt+k"), "Down"],
     action: "keydown",
     group: groupCuttingViewScrubber,
   },
