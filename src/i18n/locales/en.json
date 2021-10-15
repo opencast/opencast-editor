@@ -2,6 +2,7 @@
     "mainMenu": {
       "cutting-button": "Cutting",
       "finish-button": "Finish",
+      "select-tracks-button": "Tracks",
       "thumbnail-button": "Thumbnail",
       "metadata-button": "Metadata",
       "tooltip-aria": "Main Navigation"
@@ -52,6 +53,7 @@
       "confirmButton-success-tooltip": "Saved successfully",
       "confirmButton-failed-tooltip": "Save failed",
       "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
+      "success-text": "Changes saved successfully!",
       "success-tooltip-aria": "Saved successfully",
       "saveArea-tooltip": "Save Area",
       "save-error": "Your changes could not be saved."
@@ -185,5 +187,16 @@
       "error-noDetails-text": "No error details are available.",
       "error-text": "An error has occurred. Please wait a bit and try again.",
       "goBack-button": "No, take me back"
+    },
+
+    "trackSelection": {
+      "description": "Select or deselect which tracks are used for processing and publication.",
+      "trackInactive": "inactive",
+      "deleteTrackText": "Delete Track",
+      "restoreTrackText": "Restore Track",
+      "cannotDeleteTrackText": "Cannot Delete Track",
+      "deleteTrackTooltip": "Do not encode and publish this track.",
+      "restoreTrackTooltip": "Encode and publish this track.",
+      "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
     }
   }

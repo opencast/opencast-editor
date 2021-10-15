@@ -190,6 +190,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     "&:hover": {
       transform: 'scale(1.1)',
     },
+    "&:focus": {
+      transform: 'scale(1.1)',
+    },
     "&:active": {
       transform: 'scale(0.9)',
     },
@@ -362,7 +365,7 @@ const Waveforms: React.FC<{}> = () => {
           // Start waveform worker with blob
           const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})
 
-          waveformWorker.onarne = function(error: string) {
+          waveformWorker.onerror = function(error: string) {
             setWaveformWorkerError(true)
             console.log("Waveform could not be generated:" + error)
           }
@@ -393,7 +396,8 @@ const Waveforms: React.FC<{}> = () => {
       );
     } else if (waveformWorkerError) {
       return (
-        <div>{"Waveform could not be generated"}</div>
+        // Display a flatline
+        <div css={{width: '100%'}}><hr/></div>
       );
     }
     else {

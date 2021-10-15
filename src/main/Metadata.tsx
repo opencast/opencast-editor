@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import { useSelector, useDispatch } from 'react-redux';
 import {
   fetchMetadata, postMetadata, selectCatalogs,
-  Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus
+  Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus, setFieldReadonly
 } from '../redux/metadataSlice'
 
 import { Form, Field, FieldInputProps } from 'react-final-form'
@@ -21,10 +21,11 @@ import DateFnsUtils from "@date-io/date-fns";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import ErrorBox from "./ErrorBox";
 import { DateTime as LuxonDateTime} from "luxon";
+
+import { configureFieldsAttributes, settings } from '../config'
+
 
 /**
  * Creates a Metadata form
@@ -53,6 +54,36 @@ const Metadata: React.FC<{}> = () => {
       dispatch(fetchMetadata())
     }
   }, [getStatus, dispatch])
+
+  // Overwrite readonly property of fields based on config settings
+  useEffect(() => {
+    if (getStatus === 'success') {
+      for(let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
+        if (settings.metadata.configureFields) {
+          let configureFields = settings.metadata.configureFields
+          let catalog = catalogs[catalogIndex]
+
+          if (catalog.title in configureFields) {
+            if (Object.keys(configureFields[catalog.title]).length > 0) {
+              let configureFieldsCatalog = configureFields[catalog.title]
+
+              for (let fieldIndex = 0; fieldIndex < catalog.fields.length; fieldIndex++) {
+                if (catalog.fields[fieldIndex].id in configureFieldsCatalog) {
+                  if ("readonly" in configureFieldsCatalog[catalog.fields[fieldIndex].id]) {
+                    dispatch(setFieldReadonly({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
+                      value: configureFieldsCatalog[catalog.fields[fieldIndex].id].readonly
+                    }))
+                  }
+                }
+              }
+            } else {
+              return undefined
+            }
+          }
+        }
+      }
+    }
+  }, [getStatus, catalogs, dispatch])
 
   /**
    * CSS
@@ -473,8 +504,10 @@ const Metadata: React.FC<{}> = () => {
           <CreatableSelect {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
             isMulti
-            isClearable
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
@@ -484,7 +517,10 @@ const Metadata: React.FC<{}> = () => {
         return (
           <Select {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
@@ -575,19 +611,17 @@ const Metadata: React.FC<{}> = () => {
 
                     {generateComponentWithModifiedInput(field, input)}
                     {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
-                    {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
                 )}
         </Field>
     );
   }
 
-  /**
-   * Renders a single catalog (e.g. dublincore/episode) in the form
-   * @param catalog
-   * @param catalogIndex
-   */
-  const renderCatalog = (catalog: Catalog, catalogIndex: number) => {
+  const renderCatalog = (
+    catalog: Catalog,
+    catalogIndex: number,
+    configureFields: { [key: string]: configureFieldsAttributes }
+  ) => {
     return (
       <div key={catalogIndex}>
         <h2>
@@ -597,6 +631,14 @@ const Metadata: React.FC<{}> = () => {
         </h2>
 
         {catalog.fields.map((field, i) => {
+          // Render fields based on given array (usually parsed from config settings)
+          if (field.id in configureFields && "show" in configureFields[field.id]) {
+            if (configureFields[field.id].show) {
+              return renderField(field, catalogIndex, i)
+            } else {
+              return undefined
+            }
+          }
           return renderField(field, catalogIndex, i)
         })}
 
@@ -623,7 +665,18 @@ const Metadata: React.FC<{}> = () => {
               <ErrorBox showBox={getStatus === "failed"} errorMessage={t("metadata.get-error")} errorDetails={getError} />
 
               {catalogs.map((catalog, i) => {
-                return renderCatalog(catalog, i)
+                if (settings.metadata.configureFields) {
+                  if (catalog.title in settings.metadata.configureFields) {
+                    // If there are no fields for a given catalog, do not render
+                    if (Object.keys(settings.metadata.configureFields[catalog.title]).length > 0) {
+                      return renderCatalog(catalog, i, settings.metadata.configureFields[catalog.title])
+                    } else {
+                      return undefined
+                    }
+                  }
+                }
+                // If there are no settings for a given catalog, just render it completely
+                return renderCatalog(catalog, i, {})
               })}
 
 {/* 

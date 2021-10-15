@@ -11,11 +11,11 @@ const initialState: httpRequestState = {
 }
 
 export const postVideoInformationWithWorkflow = createAsyncThunk('video/postVideoInformationWithWorkflow', async (argument: PostAndProcessEditArgument) => {
-  if (!settings.mediaPackageId) {
-    throw new Error("Missing mediaPackageId")
+  if (!settings.id) {
+    throw new Error("Missing media package identifier")
   }
 
-  const response = await client.post(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`,
+  const response = await client.post(`${settings.opencast.url}/editor/${settings.id}/edit.json`,
     { segments: convertSegments(argument.segments), tracks: argument.tracks, workflows: argument.workflow }
   )
   return response

@@ -9,8 +9,8 @@ export interface Track {
   id: string,
   uri: string,
   flavor: any,
-  audioStream: any,
-  videoStream: any,
+  audio_stream: any,
+  video_stream: any,
 }
 
 export interface Workflow {
@@ -37,6 +37,7 @@ export interface PostAndProcessEditArgument extends PostEditArgument{
 export enum MainMenuStateNames {
   cutting = "Cutting",
   metadata = "Metadata",
+  trackSelection = "Select Tracks",
   thumbnail = "Thumbnail",
   finish = "Finish",
 }
