@@ -17,11 +17,11 @@ import { httpRequestState } from '../types'
   const errorCodeMessages = (status: number) => {
     switch (status) {
       case 423:
-        return "There is a workflow running in Opencast. You have to wait until it finishes before you can perform that action. "
+        return t("various.error-423")
       case 500:
-        return "Something went seriously wrong in Opencast. "
+        return t("various.error-500")
       default:
-        return "Unknown error code " + status + ". "
+        return t("various.error-unknow-code", { code: status } )
     }
   }
 

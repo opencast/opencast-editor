@@ -186,6 +186,9 @@
       "error-details-text": "Details: {{errorMessage}}",
       "error-noDetails-text": "No error details are available.",
       "error-text": "An error has occurred. Please wait a bit and try again.",
+      "error-423": "There is a workflow running in Opencast. You have to wait until it finishes before you can perform that action. ",
+      "error-500": "Something went seriously wrong in Opencast. ",
+      "error-unknown-code": "Unknown error code {{code}}. ",
       "goBack-button": "No, take me back"
     },
 
