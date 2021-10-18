@@ -16,6 +16,8 @@ import { setIsPlaying } from "../redux/videoSlice";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
+import { resetPostRequestState } from "../redux/workflowPostSlice";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -65,6 +67,9 @@ const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["v
     }
     // Halt ongoing events
     dispatch(setIsPlaying(false))
+    // Reset states
+    dispatch(resetPostRequestState())
+    dispatch(metadataResetPostRequestState())
   }
 
   const mainMenuButtonStyle = css({

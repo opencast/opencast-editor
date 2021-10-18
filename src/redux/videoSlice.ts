@@ -54,12 +54,12 @@ export const initialState: video & httpRequestState = {
 }
 
 export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
-  if (!settings.mediaPackageId) {
-    throw new Error("Missing mediaPackageId")
+  if (!settings.id) {
+    throw new Error("Missing media package identifier")
   }
 
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  const response = await client.get(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`)
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/edit.json`)
   return response
 })
 
