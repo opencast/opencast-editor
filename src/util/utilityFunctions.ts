@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
   let decimalFactor = Math.pow(10, decimalPlace)
   return Math.round((num + Number.EPSILON) * decimalFactor) / decimalFactor
@@ -69,4 +71,28 @@ export function checkFlexGapSupport() {
   }
 
 	return flexGapIsSupported
+}
+
+/**
+ * Provides a react hook that can be called in an "onWheel" event to act as
+ * a substitute for preventDefault().
+ * Context: https://github.com/facebook/react/issues/14856 (18.10.2021)
+ */
+export function useWheelHack(timeout = 300) {
+  const wheelTimeout = useRef<any>()
+
+  // block the body from scrolling while wheelTimeout is set
+  useEffect(() => {
+    const maybeCancelWheel = (e: any) => wheelTimeout.current && e.preventDefault()
+    document.body.addEventListener('wheel', maybeCancelWheel, { passive: false })
+    return () => document.body.removeEventListener('wheel', maybeCancelWheel)
+  }, [])
+
+  // return a function that can be used to prevent scrolling for timeout ms
+  return () => {
+    clearTimeout(wheelTimeout.current)
+    wheelTimeout.current = setTimeout(() => {
+      wheelTimeout.current = false
+    }, timeout)
+  }
 }

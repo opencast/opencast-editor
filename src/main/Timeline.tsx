@@ -17,7 +17,7 @@ import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
-import { convertMsToReadableString } from '../util/utilityFunctions';
+import { convertMsToReadableString, useWheelHack } from '../util/utilityFunctions';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { scrubberKeyMap } from '../globalKeys';
 
@@ -42,6 +42,8 @@ const Timeline: React.FC<{}> = () => {
   const refTop = useRef<HTMLDivElement>(null);
   let { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
 
+  const preventWheelDefault = useWheelHack();
+
   // Update the current time based on the position clicked on the timeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     let rect = e.currentTarget.getBoundingClientRect()
@@ -64,8 +66,8 @@ const Timeline: React.FC<{}> = () => {
   // Scroll horizontal with mousewheel
   const onWheel = (e: any) => {
     if (refTop && refTop.current) {
-      // Still scrolls the page. 'preventDefault' won't work in this passive listener
-      // e.preventDefault();
+      preventWheelDefault();
+
       const container = refTop.current;
       const containerScrollPosition = refTop.current.scrollLeft;
 
