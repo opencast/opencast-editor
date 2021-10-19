@@ -17,7 +17,7 @@ import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
-import { convertMsToReadableString, useWheelHack } from '../util/utilityFunctions';
+import { convertMsToReadableString } from '../util/utilityFunctions';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { scrubberKeyMap } from '../globalKeys';
 
@@ -42,8 +42,6 @@ const Timeline: React.FC<{}> = () => {
   const refScrubber = useRef<HTMLDivElement>(null);
   const refTop = useRef<HTMLDivElement>(null);
   let { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
-
-  const preventWheelDefault = useWheelHack();
 
   // Update the current time based on the position clicked on the timeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -71,21 +69,6 @@ const Timeline: React.FC<{}> = () => {
     }
   }, [timelineScrollPosition]);
 
-  // Scroll horizontal with mousewheel
-  const onWheel = (e: any) => {
-    if (refTop && refTop.current) {
-      preventWheelDefault();
-
-      const container = refTop.current;
-      const containerScrollPosition = refTop.current.scrollLeft;
-
-      container.scrollTo({
-        top: 0,
-        left: containerScrollPosition + e.deltaY,
-      });
-    }
-  };
-
   // Store current scrolling position when scrolling
   const onScroll = (e: any) => {
     if (refTop.current) {
@@ -101,7 +84,7 @@ const Timeline: React.FC<{}> = () => {
 
   return (
   <div css={{overflow: 'auto'}} ref={refTop} onScroll={onScroll}>
-    <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)} onWheel={onWheel} >
+    <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
       <Scrubber timelineWidth={width} parentRef={refScrubber}/>
       <div css={{height: '230px'}} >
         <Waveforms />
