@@ -21,6 +21,7 @@ import { flexGapReplacementStyle } from "../cssStyles";
 import { useBeforeunload } from 'react-beforeunload';
 import { hasChanges as videoHasChanges } from "../redux/videoSlice";
 import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
+import ZoomTimeline from "./ZoomTimeline";
 
 /**
  * A container for the main functionality
@@ -99,6 +100,7 @@ const MainContent: React.FC<{}> = () => {
       <div css={cuttingStyle}>
           <Video />
           <CuttingActions />
+          <ZoomTimeline />
           <Timeline />
       </div>
       <div css={metadataStyle}>

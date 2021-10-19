@@ -19,6 +19,8 @@ export interface video {
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
   timelineZoom: number,           // Zoom multiplicator for the timeline
+  timelineScrollPosition: number | undefined, // Scroll position for the timeline in percent from 0 to 1
+  waveformImages: string[],       // Generated waveform images
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
@@ -41,6 +43,8 @@ export const initialState: video & httpRequestState = {
   aspectRatios: [],
   hasChanges: false,
   timelineZoom: 1,
+  timelineScrollPosition: 0,
+  waveformImages: [],
 
   videoURLs: [],
   videoCount: 0,
@@ -161,6 +165,12 @@ export const videoSlice = createSlice({
     },
     setZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
       state.timelineZoom = Math.max(1.0, Math.min(2.0, action.payload))
+    },
+    setTimelineScrollPosition: (state, action: PayloadAction<video["timelineScrollPosition"]>) => {
+      state.timelineScrollPosition = action.payload
+    },
+    setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
+      state.waveformImages = action.payload
     }
   },
   // For Async Requests
@@ -298,7 +308,7 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
-  setZoom, setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  setZoom, setTimelineScrollPosition, setWaveformImages, setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -328,6 +338,10 @@ export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"
   state.videoState.hasChanges
 export const selectTimelineZoom = (state: { videoState: { timelineZoom: video["timelineZoom"]; }; }) =>
   state.videoState.timelineZoom
+export const selectTimelineScrollPosition = (state: { videoState: { timelineScrollPosition: video["timelineScrollPosition"]; }; }) =>
+  state.videoState.timelineScrollPosition
+  export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
+  state.videoState.waveformImages
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs

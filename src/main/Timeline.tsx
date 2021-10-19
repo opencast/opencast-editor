@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered, selectTimelineZoom
+  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered, selectTimelineZoom, setTimelineScrollPosition, selectTimelineScrollPosition, setWaveformImages
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,6 +37,7 @@ const Timeline: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const duration = useSelector(selectDuration)
   const zoomMultiplicator = useSelector(selectTimelineZoom)
+  const timelineScrollPosition = useSelector(selectTimelineScrollPosition)
 
   const refScrubber = useRef<HTMLDivElement>(null);
   const refTop = useRef<HTMLDivElement>(null);
@@ -63,6 +64,13 @@ const Timeline: React.FC<{}> = () => {
     }
   }, [zoomMultiplicator]);
 
+  // Apply horizonal scrolling when scrolled from somewhere else
+  useEffect(() => {
+    if (timelineScrollPosition !== undefined && refTop.current) {
+      refTop.current.scrollTo(timelineScrollPosition * refTop.current.scrollWidth, 0)
+    }
+  }, [timelineScrollPosition]);
+
   // Scroll horizontal with mousewheel
   const onWheel = (e: any) => {
     if (refTop && refTop.current) {
@@ -78,6 +86,13 @@ const Timeline: React.FC<{}> = () => {
     }
   };
 
+  // Store current scrolling position when scrolling
+  const onScroll = (e: any) => {
+    if (refTop.current) {
+      dispatch(setTimelineScrollPosition(refTop.current?.scrollLeft / refTop.current?.scrollWidth))
+    }
+  }
+
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
     height: '250px',
@@ -85,8 +100,8 @@ const Timeline: React.FC<{}> = () => {
   });
 
   return (
-  <div css={{overflow: 'auto'}} ref={refTop}>
-    <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)} onWheel={onWheel}>
+  <div css={{overflow: 'auto'}} ref={refTop} onScroll={onScroll}>
+    <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)} onWheel={onWheel} >
       <Scrubber timelineWidth={width} parentRef={refScrubber}/>
       <div css={{height: '230px'}} >
         <Waveforms />
@@ -365,6 +380,7 @@ const Waveforms: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
+  const dispatch = useDispatch();
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
 
@@ -418,6 +434,7 @@ const Waveforms: React.FC<{}> = () => {
             // If all images are generated, rerender
             if (waveformsProcessed === array.length) {
               setImages(images)
+              dispatch(setWaveformImages(images))
             }
           }
         }
@@ -425,7 +442,7 @@ const Waveforms: React.FC<{}> = () => {
         xhr.send()
       })
     }
-  }, [videoURLStatus, videoURLs]);
+  }, [dispatch, videoURLStatus, videoURLs]);
 
 
   const renderImages = () => {
