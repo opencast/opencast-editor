@@ -50,7 +50,7 @@ How to cut a release for Opencast
   - Release tag is the current date (year-month-day)
   - Check the commit history for notable changes and list them as a release comment
 - Create an pull request against Opencast
-  - In your Opencast, replace the url the `editor.url` in `modules/editor/pom.xml` with a url that points to the archive file in your new release
+  - In your Opencast, replace the URL the `editor.url` in `modules/editor/pom.xml` with a url that points to the archive file in your new release
   - Build the editor module with `mvn install`. Observe the error message and replace the old sha256 value in `editor.sha256` with the new value in the error message. Build again to see if it worked.
   - Check if you need to add any new config values to `etc/ui-config/mh_default_org/editor/editor-settings.toml`. Do not add the debug values.
   - Verify that the new release runs in Opencast, then create the pull request.
