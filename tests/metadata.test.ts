@@ -15,7 +15,7 @@ test.describe('Test Metadata-Page', () => {
     });
 
     // checks if fields contains their dummy-data
-    test('Check: Inputfields', async ({ page }) => {
+    test('Check Inputfields', async ({ page }) => {
 
         for(let i = 0; i < input.length; i++){
             const locator = page.locator('input[name="catalog0.'+ input[i] +'"]');
@@ -48,7 +48,7 @@ test.describe('Test Metadata-Page', () => {
 
     });
 
-    test('Check: Change Dropdown Value', async ({ page }) => {
+    test('Change Dropdown Value', async ({ page }) => {
         
         // Language
         await page.click('text=LanguageNo value >> :nth-match(svg, 2)');
