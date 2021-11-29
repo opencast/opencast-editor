@@ -1,0 +1,27 @@
+name: Playwright UI-Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v2
+    
+    - name: Install Node Dependency
+      uses: actions/setup-node@v2
+    
+    - name: npm install dependencies
+      run: npx playwright install-deps
+
+    - name: Install npm install -D @playwright/test
+      run: npm install -D @playwright/test
+
+    - name: npm test
+      run: npm test

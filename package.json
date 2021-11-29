@@ -60,7 +60,8 @@
     "build": "REACT_APP_GIT_SHA=`git rev-parse HEAD` REACT_APP_BUILD_DATE=\"`date`\" react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "playtest": "npx playwright test --config=playwright.config.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -81,6 +82,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.16.3",
     "@types/lodash": "^4.14.175",
     "@types/luxon": "^2.0.5",
     "@types/react-beforeunload": "^2.1.1",

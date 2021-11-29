@@ -1,0 +1,1692 @@
+{
+  "fileId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897",
+  "fileName": "tests/metadata.test.ts",
+  "tests": [
+    {
+      "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-287d8502bd262418900e498fe8b94f94c022a11b",
+      "title": "Open Metadata Page",
+      "projectName": "chromium",
+      "location": {
+        "file": "tests/metadata.test.ts",
+        "line": 12,
+        "column": 5
+      },
+      "duration": 1915,
+      "outcome": "expected",
+      "path": [
+        "tests/metadata.test.ts:12",
+        "Test Metadata-Page"
+      ],
+      "results": [
+        {
+          "duration": 1915,
+          "startTime": "2021-11-29T11:51:33.820Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:33.821Z",
+              "duration": 1231,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:33.995Z",
+                  "duration": 33,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:34.032Z",
+                  "duration": 717,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:34.751Z",
+                  "duration": 0,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                },
+                {
+                  "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
+                  "startTime": "2021-11-29T11:51:34.752Z",
+                  "duration": 300,
+                  "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 7,
+                    "column": 16
+                  }
+                }
+              ]
+            },
+            {
+              "title": "expect.toHaveText",
+              "startTime": "2021-11-29T11:51:35.053Z",
+              "duration": 676,
+              "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#root > div > div > main > div.css-gulxqy-metadataStyle > form > div:nth-child(2) > h2'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m         \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveText(\u001b[35m/Episode Metadata/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 14,
+                "column": 31
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:35.730Z",
+              "duration": 6,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:35.731Z",
+                  "duration": 5,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Open Metadata Page\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    },
+    {
+      "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-7144a46c1019b71c7aae63e742720a6e963541dd",
+      "title": "Check: Inputfields",
+      "projectName": "chromium",
+      "location": {
+        "file": "tests/metadata.test.ts",
+        "line": 18,
+        "column": 5
+      },
+      "duration": 4223,
+      "outcome": "expected",
+      "path": [
+        "tests/metadata.test.ts:18",
+        "Test Metadata-Page"
+      ],
+      "results": [
+        {
+          "duration": 4223,
+          "startTime": "2021-11-29T11:51:35.736Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:35.736Z",
+              "duration": 1004,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:35.745Z",
+                  "duration": 34,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:35.780Z",
+                  "duration": 658,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:36.439Z",
+                  "duration": 0,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                },
+                {
+                  "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
+                  "startTime": "2021-11-29T11:51:36.439Z",
+                  "duration": 300,
+                  "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 7,
+                    "column": 16
+                  }
+                }
+              ]
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:36.740Z",
+              "duration": 557,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.title\"])",
+              "startTime": "2021-11-29T11:51:37.298Z",
+              "duration": 40,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.title\"])",
+              "startTime": "2021-11-29T11:51:37.339Z",
+              "duration": 131,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:37.471Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.subject\"])",
+              "startTime": "2021-11-29T11:51:37.479Z",
+              "duration": 373,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.subject\"])",
+              "startTime": "2021-11-29T11:51:37.853Z",
+              "duration": 226,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:38.080Z",
+              "duration": 7,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.rightsHolder\"])",
+              "startTime": "2021-11-29T11:51:38.088Z",
+              "duration": 286,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.rightsHolder\"])",
+              "startTime": "2021-11-29T11:51:38.374Z",
+              "duration": 169,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:38.543Z",
+              "duration": 6,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.duration\"])",
+              "startTime": "2021-11-29T11:51:38.549Z",
+              "duration": 264,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.duration\"])",
+              "startTime": "2021-11-29T11:51:38.814Z",
+              "duration": 115,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:38.930Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.location\"])",
+              "startTime": "2021-11-29T11:51:38.938Z",
+              "duration": 209,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.location\"])",
+              "startTime": "2021-11-29T11:51:39.148Z",
+              "duration": 103,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.252Z",
+              "duration": 4,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.source\"])",
+              "startTime": "2021-11-29T11:51:39.257Z",
+              "duration": 197,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.source\"])",
+              "startTime": "2021-11-29T11:51:39.455Z",
+              "duration": 97,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.553Z",
+              "duration": 5,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.559Z",
+              "duration": 7,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.567Z",
+              "duration": 14,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.582Z",
+              "duration": 6,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.588Z",
+              "duration": 4,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.593Z",
+              "duration": 4,
+              "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m         \u001b[36mconst\u001b[39m description \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 33,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(textarea[name=\"catalog0.description\"])",
+              "startTime": "2021-11-29T11:51:39.598Z",
+              "duration": 222,
+              "snippet": "\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 34,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.fill(textarea[name=\"catalog0.description\"])",
+              "startTime": "2021-11-29T11:51:39.821Z",
+              "duration": 106,
+              "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 36 |\u001b[39m         \u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 35,
+                "column": 20
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.928Z",
+              "duration": 7,
+              "snippet": "\u001b[0m \u001b[90m 37 |\u001b[39m         \u001b[36mconst\u001b[39m startDate \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"startDate\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 38 |\u001b[39m         \u001b[36mawait\u001b[39m expect(startDate)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 39 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 38,
+                "column": 33
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.936Z",
+              "duration": 5,
+              "snippet": "\u001b[0m \u001b[90m 40 |\u001b[39m         \u001b[36mconst\u001b[39m created \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"created\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 41 |\u001b[39m         \u001b[36mawait\u001b[39m expect(created)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 42 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 41,
+                "column": 31
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.941Z",
+              "duration": 6,
+              "snippet": "\u001b[0m \u001b[90m 43 |\u001b[39m         \u001b[36mconst\u001b[39m publisher \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.publisher\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 44 |\u001b[39m         \u001b[36mawait\u001b[39m expect(publisher)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 45 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 44,
+                "column": 33
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:39.947Z",
+              "duration": 7,
+              "snippet": "\u001b[0m \u001b[90m 46 |\u001b[39m         \u001b[36mconst\u001b[39m identifier \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.identifier\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 47 |\u001b[39m         \u001b[36mawait\u001b[39m expect(identifier)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m'ID-dual-stream-demo'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                 ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 48 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 47,
+                "column": 34
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:39.954Z",
+              "duration": 5,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:39.955Z",
+                  "duration": 4,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Check: Inputfields\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    },
+    {
+      "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-f377b59e8ac8ab25471912dc427badf6dd0563ff",
+      "title": "Check: Change Dropdown Value",
+      "projectName": "chromium",
+      "location": {
+        "file": "tests/metadata.test.ts",
+        "line": 51,
+        "column": 5
+      },
+      "duration": 4457,
+      "outcome": "expected",
+      "path": [
+        "tests/metadata.test.ts:51",
+        "Test Metadata-Page"
+      ],
+      "results": [
+        {
+          "duration": 4457,
+          "startTime": "2021-11-29T11:51:39.959Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:39.960Z",
+              "duration": 1205,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:39.968Z",
+                  "duration": 35,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:40.004Z",
+                  "duration": 693,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:40.698Z",
+                  "duration": 0,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                },
+                {
+                  "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
+                  "startTime": "2021-11-29T11:51:40.698Z",
+                  "duration": 467,
+                  "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 7,
+                    "column": 16
+                  }
+                }
+              ]
+            },
+            {
+              "title": "page.click(text=LanguageNo value >> :nth-match(svg, 2))",
+              "startTime": "2021-11-29T11:51:41.166Z",
+              "duration": 575,
+              "snippet": "\u001b[0m \u001b[90m 53 |\u001b[39m         \u001b[90m// Language\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 54,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-3-option-22)",
+              "startTime": "2021-11-29T11:51:41.742Z",
+              "duration": 153,
+              "snippet": "\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 56 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 55,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=LicenseCC-BY-SA >> :nth-match(svg, 2))",
+              "startTime": "2021-11-29T11:51:41.895Z",
+              "duration": 248,
+              "snippet": "\u001b[0m \u001b[90m 57 |\u001b[39m         \u001b[90m// License\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 58,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-5-option-8)",
+              "startTime": "2021-11-29T11:51:42.143Z",
+              "duration": 137,
+              "snippet": "\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 60 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 59,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=SeriesNo value >> :nth-match(svg, 2))",
+              "startTime": "2021-11-29T11:51:42.280Z",
+              "duration": 245,
+              "snippet": "\u001b[0m \u001b[90m 61 |\u001b[39m         \u001b[90m// Series / isPartOf\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 62,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-7-option-4)",
+              "startTime": "2021-11-29T11:51:42.525Z",
+              "duration": 147,
+              "snippet": "\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 64 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 63,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3))",
+              "startTime": "2021-11-29T11:51:42.672Z",
+              "duration": 198,
+              "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m         \u001b[90m// Creator\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 66,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-9-option-15)",
+              "startTime": "2021-11-29T11:51:42.870Z",
+              "duration": 248,
+              "snippet": "\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 67,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click([aria-label=\"Remove Lars Kiesow\"])",
+              "startTime": "2021-11-29T11:51:43.119Z",
+              "duration": 41,
+              "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 69 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 68,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=Contributor(s)Select... >> svg)",
+              "startTime": "2021-11-29T11:51:43.161Z",
+              "duration": 192,
+              "snippet": "\u001b[0m \u001b[90m 70 |\u001b[39m         \u001b[90m// Contributor\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 71,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-11-option-15)",
+              "startTime": "2021-11-29T11:51:43.354Z",
+              "duration": 217,
+              "snippet": "\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 73 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 72,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(button)",
+              "startTime": "2021-11-29T11:51:43.572Z",
+              "duration": 386,
+              "snippet": "\u001b[0m \u001b[90m 74 |\u001b[39m         \u001b[90m// startDate\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 75,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(:nth-match(button[role=\"tab\"], 2))",
+              "startTime": "2021-11-29T11:51:43.959Z",
+              "duration": 122,
+              "snippet": "\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 76,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(button[role=\"tab\"])",
+              "startTime": "2021-11-29T11:51:44.081Z",
+              "duration": 165,
+              "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 77,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(button:has-text(\"OK\"))",
+              "startTime": "2021-11-29T11:51:44.246Z",
+              "duration": 167,
+              "snippet": "\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 79 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 78,
+                "column": 20
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:44.414Z",
+              "duration": 3,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:44.414Z",
+                  "duration": 3,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Check: Change Dropdown Value\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    },
+    {
+      "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-a90d62fd4c2cab9595941e40efa51b1d22505f05",
+      "title": "Open Metadata Page",
+      "projectName": "firefox",
+      "location": {
+        "file": "tests/metadata.test.ts",
+        "line": 12,
+        "column": 5
+      },
+      "duration": 4847,
+      "outcome": "expected",
+      "path": [
+        "tests/metadata.test.ts:12",
+        "Test Metadata-Page"
+      ],
+      "results": [
+        {
+          "duration": 4847,
+          "startTime": "2021-11-29T11:51:35.921Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:35.922Z",
+              "duration": 3911,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:37.770Z",
+                  "duration": 641,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:38.422Z",
+                  "duration": 954,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:39.379Z",
+                  "duration": 1,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                },
+                {
+                  "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
+                  "startTime": "2021-11-29T11:51:39.381Z",
+                  "duration": 452,
+                  "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 7,
+                    "column": 16
+                  }
+                }
+              ]
+            },
+            {
+              "title": "expect.toHaveText",
+              "startTime": "2021-11-29T11:51:39.834Z",
+              "duration": 916,
+              "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#root > div > div > main > div.css-gulxqy-metadataStyle > form > div:nth-child(2) > h2'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m         \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveText(\u001b[35m/Episode Metadata/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 14,
+                "column": 31
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:40.751Z",
+              "duration": 17,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:40.752Z",
+                  "duration": 16,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Open Metadata Page\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    },
+    {
+      "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-f6f50a9ed91b60c3cff0d70c3d4332e36e78f89b",
+      "title": "Check: Inputfields",
+      "projectName": "firefox",
+      "location": {
+        "file": "tests/metadata.test.ts",
+        "line": 18,
+        "column": 5
+      },
+      "duration": 4304,
+      "outcome": "expected",
+      "path": [
+        "tests/metadata.test.ts:18",
+        "Test Metadata-Page"
+      ],
+      "results": [
+        {
+          "duration": 4304,
+          "startTime": "2021-11-29T11:51:40.769Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:40.769Z",
+              "duration": 1469,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:40.797Z",
+                  "duration": 184,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:40.982Z",
+                  "duration": 837,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:41.820Z",
+                  "duration": 0,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                },
+                {
+                  "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
+                  "startTime": "2021-11-29T11:51:41.821Z",
+                  "duration": 417,
+                  "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 7,
+                    "column": 16
+                  }
+                }
+              ]
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:42.239Z",
+              "duration": 923,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.title\"])",
+              "startTime": "2021-11-29T11:51:43.163Z",
+              "duration": 78,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.title\"])",
+              "startTime": "2021-11-29T11:51:43.242Z",
+              "duration": 88,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:43.331Z",
+              "duration": 14,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.subject\"])",
+              "startTime": "2021-11-29T11:51:43.346Z",
+              "duration": 233,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.subject\"])",
+              "startTime": "2021-11-29T11:51:43.579Z",
+              "duration": 105,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:43.684Z",
+              "duration": 10,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.rightsHolder\"])",
+              "startTime": "2021-11-29T11:51:43.694Z",
+              "duration": 167,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.rightsHolder\"])",
+              "startTime": "2021-11-29T11:51:43.862Z",
+              "duration": 88,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:43.950Z",
+              "duration": 12,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.duration\"])",
+              "startTime": "2021-11-29T11:51:43.962Z",
+              "duration": 230,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.duration\"])",
+              "startTime": "2021-11-29T11:51:44.193Z",
+              "duration": 94,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.287Z",
+              "duration": 11,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.location\"])",
+              "startTime": "2021-11-29T11:51:44.298Z",
+              "duration": 190,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.location\"])",
+              "startTime": "2021-11-29T11:51:44.489Z",
+              "duration": 63,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.553Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(input[name=\"catalog0.source\"])",
+              "startTime": "2021-11-29T11:51:44.561Z",
+              "duration": 141,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.source\"])",
+              "startTime": "2021-11-29T11:51:44.703Z",
+              "duration": 61,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.765Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.774Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.782Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.790Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.798Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:44.806Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m         \u001b[36mconst\u001b[39m description \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 33,
+                "column": 35
+              }
+            },
+            {
+              "title": "page.click(textarea[name=\"catalog0.description\"])",
+              "startTime": "2021-11-29T11:51:44.814Z",
+              "duration": 134,
+              "snippet": "\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 34,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.fill(textarea[name=\"catalog0.description\"])",
+              "startTime": "2021-11-29T11:51:44.949Z",
+              "duration": 86,
+              "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 36 |\u001b[39m         \u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 35,
+                "column": 20
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:45.037Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 37 |\u001b[39m         \u001b[36mconst\u001b[39m startDate \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"startDate\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 38 |\u001b[39m         \u001b[36mawait\u001b[39m expect(startDate)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 39 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 38,
+                "column": 33
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:45.046Z",
+              "duration": 7,
+              "snippet": "\u001b[0m \u001b[90m 40 |\u001b[39m         \u001b[36mconst\u001b[39m created \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"created\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 41 |\u001b[39m         \u001b[36mawait\u001b[39m expect(created)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 42 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 41,
+                "column": 31
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:45.054Z",
+              "duration": 7,
+              "snippet": "\u001b[0m \u001b[90m 43 |\u001b[39m         \u001b[36mconst\u001b[39m publisher \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.publisher\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 44 |\u001b[39m         \u001b[36mawait\u001b[39m expect(publisher)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 45 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 44,
+                "column": 33
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T11:51:45.061Z",
+              "duration": 8,
+              "snippet": "\u001b[0m \u001b[90m 46 |\u001b[39m         \u001b[36mconst\u001b[39m identifier \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.identifier\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 47 |\u001b[39m         \u001b[36mawait\u001b[39m expect(identifier)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m'ID-dual-stream-demo'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                 ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 48 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 47,
+                "column": 34
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:45.069Z",
+              "duration": 4,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:45.070Z",
+                  "duration": 3,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Check: Inputfields\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    },
+    {
+      "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-57977d188f638a088a8659974e4676a82d52549a",
+      "title": "Check: Change Dropdown Value",
+      "projectName": "firefox",
+      "location": {
+        "file": "tests/metadata.test.ts",
+        "line": 51,
+        "column": 5
+      },
+      "duration": 4314,
+      "outcome": "expected",
+      "path": [
+        "tests/metadata.test.ts:51",
+        "Test Metadata-Page"
+      ],
+      "results": [
+        {
+          "duration": 4314,
+          "startTime": "2021-11-29T11:51:45.073Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:45.074Z",
+              "duration": 1186,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:45.084Z",
+                  "duration": 239,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:45.323Z",
+                  "duration": 562,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:45.885Z",
+                  "duration": 0,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                },
+                {
+                  "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
+                  "startTime": "2021-11-29T11:51:45.885Z",
+                  "duration": 375,
+                  "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/metadata.test.ts",
+                    "line": 7,
+                    "column": 16
+                  }
+                }
+              ]
+            },
+            {
+              "title": "page.click(text=LanguageNo value >> :nth-match(svg, 2))",
+              "startTime": "2021-11-29T11:51:46.261Z",
+              "duration": 838,
+              "snippet": "\u001b[0m \u001b[90m 53 |\u001b[39m         \u001b[90m// Language\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 54,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-3-option-22)",
+              "startTime": "2021-11-29T11:51:47.099Z",
+              "duration": 126,
+              "snippet": "\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 56 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 55,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=LicenseCC-BY-SA >> :nth-match(svg, 2))",
+              "startTime": "2021-11-29T11:51:47.225Z",
+              "duration": 309,
+              "snippet": "\u001b[0m \u001b[90m 57 |\u001b[39m         \u001b[90m// License\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 58,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-5-option-8)",
+              "startTime": "2021-11-29T11:51:47.534Z",
+              "duration": 124,
+              "snippet": "\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 60 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 59,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=SeriesNo value >> :nth-match(svg, 2))",
+              "startTime": "2021-11-29T11:51:47.658Z",
+              "duration": 172,
+              "snippet": "\u001b[0m \u001b[90m 61 |\u001b[39m         \u001b[90m// Series / isPartOf\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 62,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-7-option-4)",
+              "startTime": "2021-11-29T11:51:47.830Z",
+              "duration": 127,
+              "snippet": "\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 64 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 63,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3))",
+              "startTime": "2021-11-29T11:51:47.958Z",
+              "duration": 190,
+              "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m         \u001b[90m// Creator\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 66,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-9-option-15)",
+              "startTime": "2021-11-29T11:51:48.148Z",
+              "duration": 112,
+              "snippet": "\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 67,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click([aria-label=\"Remove Lars Kiesow\"])",
+              "startTime": "2021-11-29T11:51:48.260Z",
+              "duration": 58,
+              "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 69 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 68,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(text=Contributor(s)Select... >> svg)",
+              "startTime": "2021-11-29T11:51:48.319Z",
+              "duration": 207,
+              "snippet": "\u001b[0m \u001b[90m 70 |\u001b[39m         \u001b[90m// Contributor\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 71,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(#react-select-11-option-15)",
+              "startTime": "2021-11-29T11:51:48.526Z",
+              "duration": 110,
+              "snippet": "\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 73 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 72,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(button)",
+              "startTime": "2021-11-29T11:51:48.636Z",
+              "duration": 335,
+              "snippet": "\u001b[0m \u001b[90m 74 |\u001b[39m         \u001b[90m// startDate\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 75,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(:nth-match(button[role=\"tab\"], 2))",
+              "startTime": "2021-11-29T11:51:48.971Z",
+              "duration": 84,
+              "snippet": "\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 76,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(button[role=\"tab\"])",
+              "startTime": "2021-11-29T11:51:49.056Z",
+              "duration": 166,
+              "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 77,
+                "column": 20
+              }
+            },
+            {
+              "title": "page.click(button:has-text(\"OK\"))",
+              "startTime": "2021-11-29T11:51:49.223Z",
+              "duration": 158,
+              "snippet": "\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 79 |\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 78,
+                "column": 20
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:49.381Z",
+              "duration": 7,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:49.381Z",
+                  "duration": 7,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Check: Change Dropdown Value\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    }
+  ]
+}

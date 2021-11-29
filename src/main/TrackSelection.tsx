@@ -94,7 +94,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     padding: '5px 25px',
     borderBottom: '1px solid white',
     textTransform: 'capitalize',
-    fintSize: 'larger',
+    fontSize: 'larger',
   });
 
   // What state is the track in and can it be deactivated?

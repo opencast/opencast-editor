@@ -1,0 +1,224 @@
+{
+  "fileId": "a28576fe7feb3dbe854669623e30284fa3e53954",
+  "fileName": "tests/cutting.test.ts",
+  "tests": [
+    {
+      "testId": "a28576fe7feb3dbe854669623e30284fa3e53954-ab68025dcf088bac1c9f0143210246a1b428d3ba",
+      "title": "Open Cutting Page",
+      "projectName": "chromium",
+      "location": {
+        "file": "tests/cutting.test.ts",
+        "line": 11,
+        "column": 5
+      },
+      "duration": 1794,
+      "outcome": "expected",
+      "path": [
+        "tests/cutting.test.ts:11",
+        "Test Cutting-Page"
+      ],
+      "results": [
+        {
+          "duration": 1794,
+          "startTime": "2021-11-29T11:51:33.538Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:33.538Z",
+              "duration": 840,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:33.674Z",
+                  "duration": 40,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:33.717Z",
+                  "duration": 657,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/cutting.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:34.377Z",
+                  "duration": 0,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/cutting.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                }
+              ]
+            },
+            {
+              "title": "page.click(text=Cutting)",
+              "startTime": "2021-11-29T11:51:34.379Z",
+              "duration": 344,
+              "snippet": "\u001b[0m \u001b[90m 11 |\u001b[39m     test(\u001b[32m'Open Cutting Page'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page}) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 12 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Cutting'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m title \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.css-1nn6cpw-titleStyle-titleStyleBold-VideoHeader'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/cutting.test.ts",
+                "line": 12,
+                "column": 20
+              }
+            },
+            {
+              "title": "expect.toContainText",
+              "startTime": "2021-11-29T11:51:34.724Z",
+              "duration": 602,
+              "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m title \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.css-1nn6cpw-titleStyle-titleStyleBold-VideoHeader'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m         \u001b[36mawait\u001b[39m expect(title)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dual-Stream Demo'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                            ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/cutting.test.ts",
+                "line": 14,
+                "column": 29
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:35.326Z",
+              "duration": 6,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:35.328Z",
+                  "duration": 4,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Open Cutting Page\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    },
+    {
+      "testId": "a28576fe7feb3dbe854669623e30284fa3e53954-10cbc48c39c59116138446fecbe82dd1ab76dd68",
+      "title": "Open Cutting Page",
+      "projectName": "firefox",
+      "location": {
+        "file": "tests/cutting.test.ts",
+        "line": 11,
+        "column": 5
+      },
+      "duration": 3912,
+      "outcome": "expected",
+      "path": [
+        "tests/cutting.test.ts:11",
+        "Test Cutting-Page"
+      ],
+      "results": [
+        {
+          "duration": 3912,
+          "startTime": "2021-11-29T11:51:34.498Z",
+          "retry": 0,
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "startTime": "2021-11-29T11:51:34.499Z",
+              "duration": 3122,
+              "steps": [
+                {
+                  "title": "browserContext.newPage",
+                  "startTime": "2021-11-29T11:51:36.344Z",
+                  "duration": 429,
+                  "steps": []
+                },
+                {
+                  "title": "page.goto(http://localhost:3000/)",
+                  "startTime": "2021-11-29T11:51:36.776Z",
+                  "duration": 841,
+                  "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/cutting.test.ts",
+                    "line": 5,
+                    "column": 16
+                  }
+                },
+                {
+                  "title": "expect.toBe",
+                  "startTime": "2021-11-29T11:51:37.620Z",
+                  "duration": 0,
+                  "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
+                  "steps": [],
+                  "location": {
+                    "file": "tests/cutting.test.ts",
+                    "line": 6,
+                    "column": 24
+                  }
+                }
+              ]
+            },
+            {
+              "title": "page.click(text=Cutting)",
+              "startTime": "2021-11-29T11:51:37.621Z",
+              "duration": 528,
+              "snippet": "\u001b[0m \u001b[90m 11 |\u001b[39m     test(\u001b[32m'Open Cutting Page'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page}) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 12 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Cutting'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m title \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.css-1nn6cpw-titleStyle-titleStyleBold-VideoHeader'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/cutting.test.ts",
+                "line": 12,
+                "column": 20
+              }
+            },
+            {
+              "title": "expect.toContainText",
+              "startTime": "2021-11-29T11:51:38.150Z",
+              "duration": 242,
+              "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m title \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.css-1nn6cpw-titleStyle-titleStyleBold-VideoHeader'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m         \u001b[36mawait\u001b[39m expect(title)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dual-Stream Demo'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                            ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/cutting.test.ts",
+                "line": 14,
+                "column": 29
+              }
+            },
+            {
+              "title": "After Hooks",
+              "startTime": "2021-11-29T11:51:38.392Z",
+              "duration": 18,
+              "steps": [
+                {
+                  "title": "browserContext.close",
+                  "startTime": "2021-11-29T11:51:38.394Z",
+                  "duration": 15,
+                  "steps": []
+                }
+              ]
+            }
+          ],
+          "error": "",
+          "status": "passed",
+          "attachments": [
+            {
+              "name": "stdout",
+              "contentType": "text/plain",
+              "body": "Running Open Cutting Page\n"
+            }
+          ]
+        }
+      ],
+      "ok": true
+    }
+  ]
+}

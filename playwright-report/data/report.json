@@ -1,0 +1,230 @@
+{
+  "files": [
+    {
+      "fileId": "a28576fe7feb3dbe854669623e30284fa3e53954",
+      "fileName": "tests/cutting.test.ts",
+      "tests": [
+        {
+          "testId": "a28576fe7feb3dbe854669623e30284fa3e53954-ab68025dcf088bac1c9f0143210246a1b428d3ba",
+          "title": "Open Cutting Page",
+          "projectName": "chromium",
+          "location": {
+            "file": "tests/cutting.test.ts",
+            "line": 11,
+            "column": 5
+          },
+          "duration": 1794,
+          "outcome": "expected",
+          "path": [
+            "tests/cutting.test.ts:11",
+            "Test Cutting-Page"
+          ],
+          "ok": true
+        },
+        {
+          "testId": "a28576fe7feb3dbe854669623e30284fa3e53954-10cbc48c39c59116138446fecbe82dd1ab76dd68",
+          "title": "Open Cutting Page",
+          "projectName": "firefox",
+          "location": {
+            "file": "tests/cutting.test.ts",
+            "line": 11,
+            "column": 5
+          },
+          "duration": 3912,
+          "outcome": "expected",
+          "path": [
+            "tests/cutting.test.ts:11",
+            "Test Cutting-Page"
+          ],
+          "ok": true
+        }
+      ],
+      "stats": {
+        "total": 2,
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "ok": true,
+        "duration": 5706
+      }
+    },
+    {
+      "fileId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897",
+      "fileName": "tests/metadata.test.ts",
+      "tests": [
+        {
+          "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-287d8502bd262418900e498fe8b94f94c022a11b",
+          "title": "Open Metadata Page",
+          "projectName": "chromium",
+          "location": {
+            "file": "tests/metadata.test.ts",
+            "line": 12,
+            "column": 5
+          },
+          "duration": 1915,
+          "outcome": "expected",
+          "path": [
+            "tests/metadata.test.ts:12",
+            "Test Metadata-Page"
+          ],
+          "ok": true
+        },
+        {
+          "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-a90d62fd4c2cab9595941e40efa51b1d22505f05",
+          "title": "Open Metadata Page",
+          "projectName": "firefox",
+          "location": {
+            "file": "tests/metadata.test.ts",
+            "line": 12,
+            "column": 5
+          },
+          "duration": 4847,
+          "outcome": "expected",
+          "path": [
+            "tests/metadata.test.ts:12",
+            "Test Metadata-Page"
+          ],
+          "ok": true
+        },
+        {
+          "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-7144a46c1019b71c7aae63e742720a6e963541dd",
+          "title": "Check: Inputfields",
+          "projectName": "chromium",
+          "location": {
+            "file": "tests/metadata.test.ts",
+            "line": 18,
+            "column": 5
+          },
+          "duration": 4223,
+          "outcome": "expected",
+          "path": [
+            "tests/metadata.test.ts:18",
+            "Test Metadata-Page"
+          ],
+          "ok": true
+        },
+        {
+          "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-f6f50a9ed91b60c3cff0d70c3d4332e36e78f89b",
+          "title": "Check: Inputfields",
+          "projectName": "firefox",
+          "location": {
+            "file": "tests/metadata.test.ts",
+            "line": 18,
+            "column": 5
+          },
+          "duration": 4304,
+          "outcome": "expected",
+          "path": [
+            "tests/metadata.test.ts:18",
+            "Test Metadata-Page"
+          ],
+          "ok": true
+        },
+        {
+          "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-f377b59e8ac8ab25471912dc427badf6dd0563ff",
+          "title": "Check: Change Dropdown Value",
+          "projectName": "chromium",
+          "location": {
+            "file": "tests/metadata.test.ts",
+            "line": 51,
+            "column": 5
+          },
+          "duration": 4457,
+          "outcome": "expected",
+          "path": [
+            "tests/metadata.test.ts:51",
+            "Test Metadata-Page"
+          ],
+          "ok": true
+        },
+        {
+          "testId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897-57977d188f638a088a8659974e4676a82d52549a",
+          "title": "Check: Change Dropdown Value",
+          "projectName": "firefox",
+          "location": {
+            "file": "tests/metadata.test.ts",
+            "line": 51,
+            "column": 5
+          },
+          "duration": 4314,
+          "outcome": "expected",
+          "path": [
+            "tests/metadata.test.ts:51",
+            "Test Metadata-Page"
+          ],
+          "ok": true
+        }
+      ],
+      "stats": {
+        "total": 6,
+        "expected": 6,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "ok": true,
+        "duration": 24060
+      }
+    },
+    {
+      "fileId": "a31f60d74f1d4f723eed60b23a11dc52580845a8",
+      "fileName": "tests/navigation.test.ts",
+      "tests": [
+        {
+          "testId": "a31f60d74f1d4f723eed60b23a11dc52580845a8-eea7f571b718742a85a9f032c7003ab0804396ed",
+          "title": "Test: Navigation",
+          "projectName": "chromium",
+          "location": {
+            "file": "tests/navigation.test.ts",
+            "line": 8,
+            "column": 1
+          },
+          "duration": 1510,
+          "outcome": "expected",
+          "path": [
+            "tests/navigation.test.ts:8"
+          ],
+          "ok": true
+        },
+        {
+          "testId": "a31f60d74f1d4f723eed60b23a11dc52580845a8-5349ee38e6df31ad4745cc25c7f6505653b027ba",
+          "title": "Test: Navigation",
+          "projectName": "firefox",
+          "location": {
+            "file": "tests/navigation.test.ts",
+            "line": 8,
+            "column": 1
+          },
+          "duration": 5029,
+          "outcome": "expected",
+          "path": [
+            "tests/navigation.test.ts:8"
+          ],
+          "ok": true
+        }
+      ],
+      "stats": {
+        "total": 2,
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "ok": true,
+        "duration": 6539
+      }
+    }
+  ],
+  "projectNames": [
+    "chromium",
+    "firefox"
+  ],
+  "stats": {
+    "total": 10,
+    "expected": 10,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": true,
+    "duration": 36305
+  }
+}
