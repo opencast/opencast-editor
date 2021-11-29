@@ -24,4 +24,4 @@ jobs:
       run: npm install -D @playwright/test
 
     - name: npm test
-      run: npm test
+      run: npm run playtest
