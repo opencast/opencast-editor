@@ -23,5 +23,5 @@ jobs:
     - name: Install npm install -D @playwright/test
       run: npm install -D @playwright/test
 
-    - name: npm test
-      run: npm run playtest
+    - name: npm run playwright-test
+      run: npx playwright test --config=playwright.config.ts

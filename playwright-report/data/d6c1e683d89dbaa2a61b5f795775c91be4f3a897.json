@@ -11,7 +11,7 @@
         "line": 12,
         "column": 5
       },
-      "duration": 1915,
+      "duration": 13049,
       "outcome": "expected",
       "path": [
         "tests/metadata.test.ts:12",
@@ -19,25 +19,25 @@
       ],
       "results": [
         {
-          "duration": 1915,
-          "startTime": "2021-11-29T11:51:33.820Z",
+          "duration": 13049,
+          "startTime": "2021-11-29T12:52:56.078Z",
           "retry": 0,
           "steps": [
             {
               "title": "Before Hooks",
-              "startTime": "2021-11-29T11:51:33.821Z",
-              "duration": 1231,
+              "startTime": "2021-11-29T12:52:56.079Z",
+              "duration": 12260,
               "steps": [
                 {
                   "title": "browserContext.newPage",
-                  "startTime": "2021-11-29T11:51:33.995Z",
-                  "duration": 33,
+                  "startTime": "2021-11-29T12:52:56.255Z",
+                  "duration": 69,
                   "steps": []
                 },
                 {
                   "title": "page.goto(http://localhost:3000/)",
-                  "startTime": "2021-11-29T11:51:34.032Z",
-                  "duration": 717,
+                  "startTime": "2021-11-29T12:52:56.327Z",
+                  "duration": 11290,
                   "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -48,8 +48,8 @@
                 },
                 {
                   "title": "expect.toBe",
-                  "startTime": "2021-11-29T11:51:34.751Z",
-                  "duration": 0,
+                  "startTime": "2021-11-29T12:53:07.622Z",
+                  "duration": 1,
                   "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -60,8 +60,8 @@
                 },
                 {
                   "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
-                  "startTime": "2021-11-29T11:51:34.752Z",
-                  "duration": 300,
+                  "startTime": "2021-11-29T12:53:07.626Z",
+                  "duration": 713,
                   "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -74,8 +74,8 @@
             },
             {
               "title": "expect.toHaveText",
-              "startTime": "2021-11-29T11:51:35.053Z",
-              "duration": 676,
+              "startTime": "2021-11-29T12:53:08.340Z",
+              "duration": 776,
               "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#root > div > div > main > div.css-gulxqy-metadataStyle > form > div:nth-child(2) > h2'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m         \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveText(\u001b[35m/Episode Metadata/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -86,13 +86,13 @@
             },
             {
               "title": "After Hooks",
-              "startTime": "2021-11-29T11:51:35.730Z",
-              "duration": 6,
+              "startTime": "2021-11-29T12:53:09.117Z",
+              "duration": 11,
               "steps": [
                 {
                   "title": "browserContext.close",
-                  "startTime": "2021-11-29T11:51:35.731Z",
-                  "duration": 5,
+                  "startTime": "2021-11-29T12:53:09.119Z",
+                  "duration": 9,
                   "steps": []
                 }
               ]
@@ -120,7 +120,7 @@
         "line": 18,
         "column": 5
       },
-      "duration": 4223,
+      "duration": 4305,
       "outcome": "expected",
       "path": [
         "tests/metadata.test.ts:18",
@@ -128,25 +128,25 @@
       ],
       "results": [
         {
-          "duration": 4223,
-          "startTime": "2021-11-29T11:51:35.736Z",
+          "duration": 4305,
+          "startTime": "2021-11-29T12:53:09.128Z",
           "retry": 0,
           "steps": [
             {
               "title": "Before Hooks",
-              "startTime": "2021-11-29T11:51:35.736Z",
-              "duration": 1004,
+              "startTime": "2021-11-29T12:53:09.129Z",
+              "duration": 1522,
               "steps": [
                 {
                   "title": "browserContext.newPage",
-                  "startTime": "2021-11-29T11:51:35.745Z",
-                  "duration": 34,
+                  "startTime": "2021-11-29T12:53:09.138Z",
+                  "duration": 51,
                   "steps": []
                 },
                 {
                   "title": "page.goto(http://localhost:3000/)",
-                  "startTime": "2021-11-29T11:51:35.780Z",
-                  "duration": 658,
+                  "startTime": "2021-11-29T12:53:09.190Z",
+                  "duration": 1014,
                   "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -157,7 +157,7 @@
                 },
                 {
                   "title": "expect.toBe",
-                  "startTime": "2021-11-29T11:51:36.439Z",
+                  "startTime": "2021-11-29T12:53:10.205Z",
                   "duration": 0,
                   "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
@@ -169,8 +169,8 @@
                 },
                 {
                   "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
-                  "startTime": "2021-11-29T11:51:36.439Z",
-                  "duration": 300,
+                  "startTime": "2021-11-29T12:53:10.206Z",
+                  "duration": 445,
                   "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -183,8 +183,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:36.740Z",
-              "duration": 557,
+              "startTime": "2021-11-29T12:53:10.652Z",
+              "duration": 582,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -195,8 +195,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.title\"])",
-              "startTime": "2021-11-29T11:51:37.298Z",
-              "duration": 40,
+              "startTime": "2021-11-29T12:53:11.234Z",
+              "duration": 43,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -207,8 +207,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.title\"])",
-              "startTime": "2021-11-29T11:51:37.339Z",
-              "duration": 131,
+              "startTime": "2021-11-29T12:53:11.278Z",
+              "duration": 124,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -219,8 +219,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:37.471Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:11.402Z",
+              "duration": 13,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -231,8 +231,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.subject\"])",
-              "startTime": "2021-11-29T11:51:37.479Z",
-              "duration": 373,
+              "startTime": "2021-11-29T12:53:11.415Z",
+              "duration": 242,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -243,8 +243,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.subject\"])",
-              "startTime": "2021-11-29T11:51:37.853Z",
-              "duration": 226,
+              "startTime": "2021-11-29T12:53:11.658Z",
+              "duration": 96,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -255,8 +255,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:38.080Z",
-              "duration": 7,
+              "startTime": "2021-11-29T12:53:11.754Z",
+              "duration": 6,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -267,8 +267,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.rightsHolder\"])",
-              "startTime": "2021-11-29T11:51:38.088Z",
-              "duration": 286,
+              "startTime": "2021-11-29T12:53:11.760Z",
+              "duration": 198,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -279,8 +279,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.rightsHolder\"])",
-              "startTime": "2021-11-29T11:51:38.374Z",
-              "duration": 169,
+              "startTime": "2021-11-29T12:53:11.958Z",
+              "duration": 174,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -291,8 +291,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:38.543Z",
-              "duration": 6,
+              "startTime": "2021-11-29T12:53:12.132Z",
+              "duration": 5,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -303,8 +303,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.duration\"])",
-              "startTime": "2021-11-29T11:51:38.549Z",
-              "duration": 264,
+              "startTime": "2021-11-29T12:53:12.138Z",
+              "duration": 239,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -315,8 +315,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.duration\"])",
-              "startTime": "2021-11-29T11:51:38.814Z",
-              "duration": 115,
+              "startTime": "2021-11-29T12:53:12.377Z",
+              "duration": 108,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -327,8 +327,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:38.930Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:12.485Z",
+              "duration": 5,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -339,8 +339,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.location\"])",
-              "startTime": "2021-11-29T11:51:38.938Z",
-              "duration": 209,
+              "startTime": "2021-11-29T12:53:12.491Z",
+              "duration": 183,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -351,8 +351,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.location\"])",
-              "startTime": "2021-11-29T11:51:39.148Z",
-              "duration": 103,
+              "startTime": "2021-11-29T12:53:12.675Z",
+              "duration": 98,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -363,8 +363,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.252Z",
-              "duration": 4,
+              "startTime": "2021-11-29T12:53:12.774Z",
+              "duration": 5,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -375,8 +375,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.source\"])",
-              "startTime": "2021-11-29T11:51:39.257Z",
-              "duration": 197,
+              "startTime": "2021-11-29T12:53:12.780Z",
+              "duration": 188,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -387,8 +387,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.source\"])",
-              "startTime": "2021-11-29T11:51:39.455Z",
-              "duration": 97,
+              "startTime": "2021-11-29T12:53:12.969Z",
+              "duration": 102,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -399,7 +399,7 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.553Z",
+              "startTime": "2021-11-29T12:53:13.071Z",
               "duration": 5,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
@@ -411,8 +411,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.559Z",
-              "duration": 7,
+              "startTime": "2021-11-29T12:53:13.077Z",
+              "duration": 5,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -423,19 +423,7 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.567Z",
-              "duration": 14,
-              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
-              "steps": [],
-              "location": {
-                "file": "tests/metadata.test.ts",
-                "line": 28,
-                "column": 35
-              }
-            },
-            {
-              "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.582Z",
+              "startTime": "2021-11-29T12:53:13.083Z",
               "duration": 6,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
@@ -447,7 +435,7 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.588Z",
+              "startTime": "2021-11-29T12:53:13.089Z",
               "duration": 4,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
@@ -459,8 +447,20 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.593Z",
-              "duration": 4,
+              "startTime": "2021-11-29T12:53:13.094Z",
+              "duration": 5,
+              "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 28,
+                "column": 35
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T12:53:13.099Z",
+              "duration": 5,
               "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m         \u001b[36mconst\u001b[39m description \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -471,8 +471,8 @@
             },
             {
               "title": "page.click(textarea[name=\"catalog0.description\"])",
-              "startTime": "2021-11-29T11:51:39.598Z",
-              "duration": 222,
+              "startTime": "2021-11-29T12:53:13.104Z",
+              "duration": 194,
               "snippet": "\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -483,8 +483,8 @@
             },
             {
               "title": "page.fill(textarea[name=\"catalog0.description\"])",
-              "startTime": "2021-11-29T11:51:39.821Z",
-              "duration": 106,
+              "startTime": "2021-11-29T12:53:13.298Z",
+              "duration": 108,
               "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 36 |\u001b[39m         \u001b[0m",
               "steps": [],
               "location": {
@@ -495,8 +495,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.928Z",
-              "duration": 7,
+              "startTime": "2021-11-29T12:53:13.407Z",
+              "duration": 6,
               "snippet": "\u001b[0m \u001b[90m 37 |\u001b[39m         \u001b[36mconst\u001b[39m startDate \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"startDate\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 38 |\u001b[39m         \u001b[36mawait\u001b[39m expect(startDate)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 39 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -507,8 +507,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.936Z",
-              "duration": 5,
+              "startTime": "2021-11-29T12:53:13.413Z",
+              "duration": 4,
               "snippet": "\u001b[0m \u001b[90m 40 |\u001b[39m         \u001b[36mconst\u001b[39m created \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"created\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 41 |\u001b[39m         \u001b[36mawait\u001b[39m expect(created)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 42 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -519,8 +519,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.941Z",
-              "duration": 6,
+              "startTime": "2021-11-29T12:53:13.418Z",
+              "duration": 5,
               "snippet": "\u001b[0m \u001b[90m 43 |\u001b[39m         \u001b[36mconst\u001b[39m publisher \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.publisher\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 44 |\u001b[39m         \u001b[36mawait\u001b[39m expect(publisher)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 45 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -531,8 +531,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:39.947Z",
-              "duration": 7,
+              "startTime": "2021-11-29T12:53:13.423Z",
+              "duration": 6,
               "snippet": "\u001b[0m \u001b[90m 46 |\u001b[39m         \u001b[36mconst\u001b[39m identifier \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.identifier\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 47 |\u001b[39m         \u001b[36mawait\u001b[39m expect(identifier)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m'ID-dual-stream-demo'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                 ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 48 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -543,12 +543,12 @@
             },
             {
               "title": "After Hooks",
-              "startTime": "2021-11-29T11:51:39.954Z",
-              "duration": 5,
+              "startTime": "2021-11-29T12:53:13.429Z",
+              "duration": 4,
               "steps": [
                 {
                   "title": "browserContext.close",
-                  "startTime": "2021-11-29T11:51:39.955Z",
+                  "startTime": "2021-11-29T12:53:13.429Z",
                   "duration": 4,
                   "steps": []
                 }
@@ -577,7 +577,7 @@
         "line": 51,
         "column": 5
       },
-      "duration": 4457,
+      "duration": 4336,
       "outcome": "expected",
       "path": [
         "tests/metadata.test.ts:51",
@@ -585,25 +585,25 @@
       ],
       "results": [
         {
-          "duration": 4457,
-          "startTime": "2021-11-29T11:51:39.959Z",
+          "duration": 4336,
+          "startTime": "2021-11-29T12:53:13.433Z",
           "retry": 0,
           "steps": [
             {
               "title": "Before Hooks",
-              "startTime": "2021-11-29T11:51:39.960Z",
-              "duration": 1205,
+              "startTime": "2021-11-29T12:53:13.433Z",
+              "duration": 978,
               "steps": [
                 {
                   "title": "browserContext.newPage",
-                  "startTime": "2021-11-29T11:51:39.968Z",
-                  "duration": 35,
+                  "startTime": "2021-11-29T12:53:13.439Z",
+                  "duration": 32,
                   "steps": []
                 },
                 {
                   "title": "page.goto(http://localhost:3000/)",
-                  "startTime": "2021-11-29T11:51:40.004Z",
-                  "duration": 693,
+                  "startTime": "2021-11-29T12:53:13.472Z",
+                  "duration": 624,
                   "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -614,7 +614,7 @@
                 },
                 {
                   "title": "expect.toBe",
-                  "startTime": "2021-11-29T11:51:40.698Z",
+                  "startTime": "2021-11-29T12:53:14.096Z",
                   "duration": 0,
                   "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
@@ -626,8 +626,8 @@
                 },
                 {
                   "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
-                  "startTime": "2021-11-29T11:51:40.698Z",
-                  "duration": 467,
+                  "startTime": "2021-11-29T12:53:14.097Z",
+                  "duration": 314,
                   "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -640,8 +640,8 @@
             },
             {
               "title": "page.click(text=LanguageNo value >> :nth-match(svg, 2))",
-              "startTime": "2021-11-29T11:51:41.166Z",
-              "duration": 575,
+              "startTime": "2021-11-29T12:53:14.412Z",
+              "duration": 664,
               "snippet": "\u001b[0m \u001b[90m 53 |\u001b[39m         \u001b[90m// Language\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -652,8 +652,8 @@
             },
             {
               "title": "page.click(#react-select-3-option-22)",
-              "startTime": "2021-11-29T11:51:41.742Z",
-              "duration": 153,
+              "startTime": "2021-11-29T12:53:15.077Z",
+              "duration": 172,
               "snippet": "\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 56 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -664,8 +664,8 @@
             },
             {
               "title": "page.click(text=LicenseCC-BY-SA >> :nth-match(svg, 2))",
-              "startTime": "2021-11-29T11:51:41.895Z",
-              "duration": 248,
+              "startTime": "2021-11-29T12:53:15.250Z",
+              "duration": 276,
               "snippet": "\u001b[0m \u001b[90m 57 |\u001b[39m         \u001b[90m// License\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -676,8 +676,8 @@
             },
             {
               "title": "page.click(#react-select-5-option-8)",
-              "startTime": "2021-11-29T11:51:42.143Z",
-              "duration": 137,
+              "startTime": "2021-11-29T12:53:15.527Z",
+              "duration": 132,
               "snippet": "\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 60 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -688,8 +688,8 @@
             },
             {
               "title": "page.click(text=SeriesNo value >> :nth-match(svg, 2))",
-              "startTime": "2021-11-29T11:51:42.280Z",
-              "duration": 245,
+              "startTime": "2021-11-29T12:53:15.659Z",
+              "duration": 204,
               "snippet": "\u001b[0m \u001b[90m 61 |\u001b[39m         \u001b[90m// Series / isPartOf\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -700,8 +700,8 @@
             },
             {
               "title": "page.click(#react-select-7-option-4)",
-              "startTime": "2021-11-29T11:51:42.525Z",
-              "duration": 147,
+              "startTime": "2021-11-29T12:53:15.863Z",
+              "duration": 120,
               "snippet": "\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 64 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -712,8 +712,8 @@
             },
             {
               "title": "page.click(text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3))",
-              "startTime": "2021-11-29T11:51:42.672Z",
-              "duration": 198,
+              "startTime": "2021-11-29T12:53:15.983Z",
+              "duration": 200,
               "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m         \u001b[90m// Creator\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -724,8 +724,8 @@
             },
             {
               "title": "page.click(#react-select-9-option-15)",
-              "startTime": "2021-11-29T11:51:42.870Z",
-              "duration": 248,
+              "startTime": "2021-11-29T12:53:16.184Z",
+              "duration": 270,
               "snippet": "\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -736,8 +736,8 @@
             },
             {
               "title": "page.click([aria-label=\"Remove Lars Kiesow\"])",
-              "startTime": "2021-11-29T11:51:43.119Z",
-              "duration": 41,
+              "startTime": "2021-11-29T12:53:16.454Z",
+              "duration": 42,
               "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 69 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -748,8 +748,8 @@
             },
             {
               "title": "page.click(text=Contributor(s)Select... >> svg)",
-              "startTime": "2021-11-29T11:51:43.161Z",
-              "duration": 192,
+              "startTime": "2021-11-29T12:53:16.496Z",
+              "duration": 239,
               "snippet": "\u001b[0m \u001b[90m 70 |\u001b[39m         \u001b[90m// Contributor\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -760,8 +760,8 @@
             },
             {
               "title": "page.click(#react-select-11-option-15)",
-              "startTime": "2021-11-29T11:51:43.354Z",
-              "duration": 217,
+              "startTime": "2021-11-29T12:53:16.736Z",
+              "duration": 249,
               "snippet": "\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 73 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -772,8 +772,8 @@
             },
             {
               "title": "page.click(button)",
-              "startTime": "2021-11-29T11:51:43.572Z",
-              "duration": 386,
+              "startTime": "2021-11-29T12:53:16.985Z",
+              "duration": 362,
               "snippet": "\u001b[0m \u001b[90m 74 |\u001b[39m         \u001b[90m// startDate\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -784,8 +784,8 @@
             },
             {
               "title": "page.click(:nth-match(button[role=\"tab\"], 2))",
-              "startTime": "2021-11-29T11:51:43.959Z",
-              "duration": 122,
+              "startTime": "2021-11-29T12:53:17.347Z",
+              "duration": 97,
               "snippet": "\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -796,8 +796,8 @@
             },
             {
               "title": "page.click(button[role=\"tab\"])",
-              "startTime": "2021-11-29T11:51:44.081Z",
-              "duration": 165,
+              "startTime": "2021-11-29T12:53:17.444Z",
+              "duration": 135,
               "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -808,8 +808,8 @@
             },
             {
               "title": "page.click(button:has-text(\"OK\"))",
-              "startTime": "2021-11-29T11:51:44.246Z",
-              "duration": 167,
+              "startTime": "2021-11-29T12:53:17.580Z",
+              "duration": 184,
               "snippet": "\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 79 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -820,13 +820,13 @@
             },
             {
               "title": "After Hooks",
-              "startTime": "2021-11-29T11:51:44.414Z",
-              "duration": 3,
+              "startTime": "2021-11-29T12:53:17.764Z",
+              "duration": 5,
               "steps": [
                 {
                   "title": "browserContext.close",
-                  "startTime": "2021-11-29T11:51:44.414Z",
-                  "duration": 3,
+                  "startTime": "2021-11-29T12:53:17.765Z",
+                  "duration": 4,
                   "steps": []
                 }
               ]
@@ -854,7 +854,7 @@
         "line": 12,
         "column": 5
       },
-      "duration": 4847,
+      "duration": 12802,
       "outcome": "expected",
       "path": [
         "tests/metadata.test.ts:12",
@@ -862,25 +862,25 @@
       ],
       "results": [
         {
-          "duration": 4847,
-          "startTime": "2021-11-29T11:51:35.921Z",
+          "duration": 12802,
+          "startTime": "2021-11-29T12:52:56.860Z",
           "retry": 0,
           "steps": [
             {
               "title": "Before Hooks",
-              "startTime": "2021-11-29T11:51:35.922Z",
-              "duration": 3911,
+              "startTime": "2021-11-29T12:52:56.861Z",
+              "duration": 11834,
               "steps": [
                 {
                   "title": "browserContext.newPage",
-                  "startTime": "2021-11-29T11:51:37.770Z",
-                  "duration": 641,
+                  "startTime": "2021-11-29T12:52:58.732Z",
+                  "duration": 609,
                   "steps": []
                 },
                 {
                   "title": "page.goto(http://localhost:3000/)",
-                  "startTime": "2021-11-29T11:51:38.422Z",
-                  "duration": 954,
+                  "startTime": "2021-11-29T12:52:59.346Z",
+                  "duration": 8491,
                   "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -891,8 +891,8 @@
                 },
                 {
                   "title": "expect.toBe",
-                  "startTime": "2021-11-29T11:51:39.379Z",
-                  "duration": 1,
+                  "startTime": "2021-11-29T12:53:07.842Z",
+                  "duration": 0,
                   "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -903,8 +903,8 @@
                 },
                 {
                   "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
-                  "startTime": "2021-11-29T11:51:39.381Z",
-                  "duration": 452,
+                  "startTime": "2021-11-29T12:53:07.845Z",
+                  "duration": 850,
                   "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -917,8 +917,8 @@
             },
             {
               "title": "expect.toHaveText",
-              "startTime": "2021-11-29T11:51:39.834Z",
-              "duration": 916,
+              "startTime": "2021-11-29T12:53:08.697Z",
+              "duration": 938,
               "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m         \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#root > div > div > main > div.css-gulxqy-metadataStyle > form > div:nth-child(2) > h2'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m         \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveText(\u001b[35m/Episode Metadata/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -929,13 +929,13 @@
             },
             {
               "title": "After Hooks",
-              "startTime": "2021-11-29T11:51:40.751Z",
-              "duration": 17,
+              "startTime": "2021-11-29T12:53:09.636Z",
+              "duration": 26,
               "steps": [
                 {
                   "title": "browserContext.close",
-                  "startTime": "2021-11-29T11:51:40.752Z",
-                  "duration": 16,
+                  "startTime": "2021-11-29T12:53:09.639Z",
+                  "duration": 22,
                   "steps": []
                 }
               ]
@@ -963,7 +963,7 @@
         "line": 18,
         "column": 5
       },
-      "duration": 4304,
+      "duration": 4751,
       "outcome": "expected",
       "path": [
         "tests/metadata.test.ts:18",
@@ -971,25 +971,25 @@
       ],
       "results": [
         {
-          "duration": 4304,
-          "startTime": "2021-11-29T11:51:40.769Z",
+          "duration": 4751,
+          "startTime": "2021-11-29T12:53:09.662Z",
           "retry": 0,
           "steps": [
             {
               "title": "Before Hooks",
-              "startTime": "2021-11-29T11:51:40.769Z",
-              "duration": 1469,
+              "startTime": "2021-11-29T12:53:09.663Z",
+              "duration": 1713,
               "steps": [
                 {
                   "title": "browserContext.newPage",
-                  "startTime": "2021-11-29T11:51:40.797Z",
-                  "duration": 184,
+                  "startTime": "2021-11-29T12:53:09.747Z",
+                  "duration": 254,
                   "steps": []
                 },
                 {
                   "title": "page.goto(http://localhost:3000/)",
-                  "startTime": "2021-11-29T11:51:40.982Z",
-                  "duration": 837,
+                  "startTime": "2021-11-29T12:53:10.002Z",
+                  "duration": 935,
                   "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -1000,7 +1000,7 @@
                 },
                 {
                   "title": "expect.toBe",
-                  "startTime": "2021-11-29T11:51:41.820Z",
+                  "startTime": "2021-11-29T12:53:10.938Z",
                   "duration": 0,
                   "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
@@ -1012,8 +1012,8 @@
                 },
                 {
                   "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
-                  "startTime": "2021-11-29T11:51:41.821Z",
-                  "duration": 417,
+                  "startTime": "2021-11-29T12:53:10.938Z",
+                  "duration": 438,
                   "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -1026,8 +1026,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:42.239Z",
-              "duration": 923,
+              "startTime": "2021-11-29T12:53:11.377Z",
+              "duration": 912,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1038,8 +1038,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.title\"])",
-              "startTime": "2021-11-29T11:51:43.163Z",
-              "duration": 78,
+              "startTime": "2021-11-29T12:53:12.289Z",
+              "duration": 35,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1050,8 +1050,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.title\"])",
-              "startTime": "2021-11-29T11:51:43.242Z",
-              "duration": 88,
+              "startTime": "2021-11-29T12:53:12.325Z",
+              "duration": 101,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1062,7 +1062,7 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:43.331Z",
+              "startTime": "2021-11-29T12:53:12.427Z",
               "duration": 14,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
@@ -1074,8 +1074,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.subject\"])",
-              "startTime": "2021-11-29T11:51:43.346Z",
-              "duration": 233,
+              "startTime": "2021-11-29T12:53:12.441Z",
+              "duration": 292,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1086,8 +1086,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.subject\"])",
-              "startTime": "2021-11-29T11:51:43.579Z",
-              "duration": 105,
+              "startTime": "2021-11-29T12:53:12.733Z",
+              "duration": 110,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1098,8 +1098,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:43.684Z",
-              "duration": 10,
+              "startTime": "2021-11-29T12:53:12.844Z",
+              "duration": 9,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1110,8 +1110,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.rightsHolder\"])",
-              "startTime": "2021-11-29T11:51:43.694Z",
-              "duration": 167,
+              "startTime": "2021-11-29T12:53:12.853Z",
+              "duration": 191,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1122,8 +1122,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.rightsHolder\"])",
-              "startTime": "2021-11-29T11:51:43.862Z",
-              "duration": 88,
+              "startTime": "2021-11-29T12:53:13.044Z",
+              "duration": 97,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1134,43 +1134,7 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:43.950Z",
-              "duration": 12,
-              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
-              "steps": [],
-              "location": {
-                "file": "tests/metadata.test.ts",
-                "line": 22,
-                "column": 35
-              }
-            },
-            {
-              "title": "page.click(input[name=\"catalog0.duration\"])",
-              "startTime": "2021-11-29T11:51:43.962Z",
-              "duration": 230,
-              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
-              "steps": [],
-              "location": {
-                "file": "tests/metadata.test.ts",
-                "line": 23,
-                "column": 24
-              }
-            },
-            {
-              "title": "page.fill(input[name=\"catalog0.duration\"])",
-              "startTime": "2021-11-29T11:51:44.193Z",
-              "duration": 94,
-              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
-              "steps": [],
-              "location": {
-                "file": "tests/metadata.test.ts",
-                "line": 24,
-                "column": 24
-              }
-            },
-            {
-              "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.287Z",
+              "startTime": "2021-11-29T12:53:13.141Z",
               "duration": 11,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
@@ -1181,9 +1145,45 @@
               }
             },
             {
+              "title": "page.click(input[name=\"catalog0.duration\"])",
+              "startTime": "2021-11-29T12:53:13.152Z",
+              "duration": 176,
+              "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 23,
+                "column": 24
+              }
+            },
+            {
+              "title": "page.fill(input[name=\"catalog0.duration\"])",
+              "startTime": "2021-11-29T12:53:13.329Z",
+              "duration": 101,
+              "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 24,
+                "column": 24
+              }
+            },
+            {
+              "title": "expect.toHaveValue",
+              "startTime": "2021-11-29T12:53:13.431Z",
+              "duration": 21,
+              "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
+              "steps": [],
+              "location": {
+                "file": "tests/metadata.test.ts",
+                "line": 22,
+                "column": 35
+              }
+            },
+            {
               "title": "page.click(input[name=\"catalog0.location\"])",
-              "startTime": "2021-11-29T11:51:44.298Z",
-              "duration": 190,
+              "startTime": "2021-11-29T12:53:13.452Z",
+              "duration": 243,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1194,8 +1194,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.location\"])",
-              "startTime": "2021-11-29T11:51:44.489Z",
-              "duration": 63,
+              "startTime": "2021-11-29T12:53:13.695Z",
+              "duration": 86,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1206,8 +1206,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.553Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:13.782Z",
+              "duration": 10,
               "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1218,8 +1218,8 @@
             },
             {
               "title": "page.click(input[name=\"catalog0.source\"])",
-              "startTime": "2021-11-29T11:51:44.561Z",
-              "duration": 141,
+              "startTime": "2021-11-29T12:53:13.792Z",
+              "duration": 155,
               "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(iValue[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1230,8 +1230,8 @@
             },
             {
               "title": "page.fill(input[name=\"catalog0.source\"])",
-              "startTime": "2021-11-29T11:51:44.703Z",
-              "duration": 61,
+              "startTime": "2021-11-29T12:53:13.948Z",
+              "duration": 72,
               "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 24 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m input[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m\u001b[33m,\u001b[39m iFill[i])\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 25 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1242,8 +1242,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.765Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.020Z",
+              "duration": 9,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1254,8 +1254,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.774Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.030Z",
+              "duration": 9,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1266,8 +1266,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.782Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.040Z",
+              "duration": 9,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1278,8 +1278,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.790Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.050Z",
+              "duration": 9,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1290,8 +1290,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.798Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.059Z",
+              "duration": 10,
               "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m             \u001b[36mconst\u001b[39m locator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.'\u001b[39m\u001b[33m+\u001b[39m dropdown[i] \u001b[33m+\u001b[39m\u001b[32m'\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 28 |\u001b[39m             \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoHaveValue(dValue[i])\u001b[33m;\u001b[39m       \u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 29 |\u001b[39m         }\u001b[0m",
               "steps": [],
               "location": {
@@ -1302,8 +1302,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:44.806Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.070Z",
+              "duration": 10,
               "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m         \u001b[36mconst\u001b[39m description \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                  ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1314,8 +1314,8 @@
             },
             {
               "title": "page.click(textarea[name=\"catalog0.description\"])",
-              "startTime": "2021-11-29T11:51:44.814Z",
-              "duration": 134,
+              "startTime": "2021-11-29T12:53:14.081Z",
+              "duration": 170,
               "snippet": "\u001b[0m \u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m expect(description)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1326,8 +1326,8 @@
             },
             {
               "title": "page.fill(textarea[name=\"catalog0.description\"])",
-              "startTime": "2021-11-29T11:51:44.949Z",
-              "duration": 86,
+              "startTime": "2021-11-29T12:53:14.251Z",
+              "duration": 115,
               "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'textarea[name=\"catalog0.description\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Test-Description'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 36 |\u001b[39m         \u001b[0m",
               "steps": [],
               "location": {
@@ -1338,8 +1338,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:45.037Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.367Z",
+              "duration": 9,
               "snippet": "\u001b[0m \u001b[90m 37 |\u001b[39m         \u001b[36mconst\u001b[39m startDate \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"startDate\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 38 |\u001b[39m         \u001b[36mawait\u001b[39m expect(startDate)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 39 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1350,8 +1350,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:45.046Z",
-              "duration": 7,
+              "startTime": "2021-11-29T12:53:14.377Z",
+              "duration": 8,
               "snippet": "\u001b[0m \u001b[90m 40 |\u001b[39m         \u001b[36mconst\u001b[39m created \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"created\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 41 |\u001b[39m         \u001b[36mawait\u001b[39m expect(created)\u001b[33m.\u001b[39mtoHaveValue(\u001b[35m/[0-9]/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                              ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 42 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1362,8 +1362,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:45.054Z",
-              "duration": 7,
+              "startTime": "2021-11-29T12:53:14.386Z",
+              "duration": 9,
               "snippet": "\u001b[0m \u001b[90m 43 |\u001b[39m         \u001b[36mconst\u001b[39m publisher \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.publisher\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 44 |\u001b[39m         \u001b[36mawait\u001b[39m expect(publisher)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 45 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1374,8 +1374,8 @@
             },
             {
               "title": "expect.toHaveValue",
-              "startTime": "2021-11-29T11:51:45.061Z",
-              "duration": 8,
+              "startTime": "2021-11-29T12:53:14.395Z",
+              "duration": 10,
               "snippet": "\u001b[0m \u001b[90m 46 |\u001b[39m         \u001b[36mconst\u001b[39m identifier \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[name=\"catalog0.identifier\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 47 |\u001b[39m         \u001b[36mawait\u001b[39m expect(identifier)\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m'ID-dual-stream-demo'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                                 ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 48 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1386,13 +1386,13 @@
             },
             {
               "title": "After Hooks",
-              "startTime": "2021-11-29T11:51:45.069Z",
-              "duration": 4,
+              "startTime": "2021-11-29T12:53:14.405Z",
+              "duration": 8,
               "steps": [
                 {
                   "title": "browserContext.close",
-                  "startTime": "2021-11-29T11:51:45.070Z",
-                  "duration": 3,
+                  "startTime": "2021-11-29T12:53:14.406Z",
+                  "duration": 7,
                   "steps": []
                 }
               ]
@@ -1420,7 +1420,7 @@
         "line": 51,
         "column": 5
       },
-      "duration": 4314,
+      "duration": 4827,
       "outcome": "expected",
       "path": [
         "tests/metadata.test.ts:51",
@@ -1428,25 +1428,25 @@
       ],
       "results": [
         {
-          "duration": 4314,
-          "startTime": "2021-11-29T11:51:45.073Z",
+          "duration": 4827,
+          "startTime": "2021-11-29T12:53:14.413Z",
           "retry": 0,
           "steps": [
             {
               "title": "Before Hooks",
-              "startTime": "2021-11-29T11:51:45.074Z",
-              "duration": 1186,
+              "startTime": "2021-11-29T12:53:14.413Z",
+              "duration": 1389,
               "steps": [
                 {
                   "title": "browserContext.newPage",
-                  "startTime": "2021-11-29T11:51:45.084Z",
-                  "duration": 239,
+                  "startTime": "2021-11-29T12:53:14.427Z",
+                  "duration": 163,
                   "steps": []
                 },
                 {
                   "title": "page.goto(http://localhost:3000/)",
-                  "startTime": "2021-11-29T11:51:45.323Z",
-                  "duration": 562,
+                  "startTime": "2021-11-29T12:53:14.591Z",
+                  "duration": 786,
                   "snippet": "\u001b[0m \u001b[90m  4 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Running ${testInfo.title}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -1457,7 +1457,7 @@
                 },
                 {
                   "title": "expect.toBe",
-                  "startTime": "2021-11-29T11:51:45.885Z",
+                  "startTime": "2021-11-29T12:53:15.378Z",
                   "duration": 0,
                   "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                       ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
@@ -1469,8 +1469,8 @@
                 },
                 {
                   "title": "page.click(li[role=\"menuitem\"]:has-text(\"Metadata\"))",
-                  "startTime": "2021-11-29T11:51:45.885Z",
-                  "duration": 375,
+                  "startTime": "2021-11-29T12:53:15.379Z",
+                  "duration": 423,
                   "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(baseURL)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'li[role=\"menuitem\"]:has-text(\"Metadata\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m               ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m",
                   "steps": [],
                   "location": {
@@ -1483,8 +1483,8 @@
             },
             {
               "title": "page.click(text=LanguageNo value >> :nth-match(svg, 2))",
-              "startTime": "2021-11-29T11:51:46.261Z",
-              "duration": 838,
+              "startTime": "2021-11-29T12:53:15.802Z",
+              "duration": 983,
               "snippet": "\u001b[0m \u001b[90m 53 |\u001b[39m         \u001b[90m// Language\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1495,8 +1495,8 @@
             },
             {
               "title": "page.click(#react-select-3-option-22)",
-              "startTime": "2021-11-29T11:51:47.099Z",
-              "duration": 126,
+              "startTime": "2021-11-29T12:53:16.786Z",
+              "duration": 164,
               "snippet": "\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LanguageNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-3-option-22'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 56 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1507,8 +1507,8 @@
             },
             {
               "title": "page.click(text=LicenseCC-BY-SA >> :nth-match(svg, 2))",
-              "startTime": "2021-11-29T11:51:47.225Z",
-              "duration": 309,
+              "startTime": "2021-11-29T12:53:16.950Z",
+              "duration": 266,
               "snippet": "\u001b[0m \u001b[90m 57 |\u001b[39m         \u001b[90m// License\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1519,8 +1519,8 @@
             },
             {
               "title": "page.click(#react-select-5-option-8)",
-              "startTime": "2021-11-29T11:51:47.534Z",
-              "duration": 124,
+              "startTime": "2021-11-29T12:53:17.216Z",
+              "duration": 137,
               "snippet": "\u001b[0m \u001b[90m 58 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=LicenseCC-BY-SA >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 59 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-5-option-8'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 60 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1531,8 +1531,8 @@
             },
             {
               "title": "page.click(text=SeriesNo value >> :nth-match(svg, 2))",
-              "startTime": "2021-11-29T11:51:47.658Z",
-              "duration": 172,
+              "startTime": "2021-11-29T12:53:17.354Z",
+              "duration": 260,
               "snippet": "\u001b[0m \u001b[90m 61 |\u001b[39m         \u001b[90m// Series / isPartOf\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1543,8 +1543,8 @@
             },
             {
               "title": "page.click(#react-select-7-option-4)",
-              "startTime": "2021-11-29T11:51:47.830Z",
-              "duration": 127,
+              "startTime": "2021-11-29T12:53:17.615Z",
+              "duration": 140,
               "snippet": "\u001b[0m \u001b[90m 62 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=SeriesNo value >> :nth-match(svg, 2)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 63 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-7-option-4'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 64 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1555,8 +1555,8 @@
             },
             {
               "title": "page.click(text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3))",
-              "startTime": "2021-11-29T11:51:47.958Z",
-              "duration": 190,
+              "startTime": "2021-11-29T12:53:17.755Z",
+              "duration": 207,
               "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m         \u001b[90m// Creator\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1567,8 +1567,8 @@
             },
             {
               "title": "page.click(#react-select-9-option-15)",
-              "startTime": "2021-11-29T11:51:48.148Z",
-              "duration": 112,
+              "startTime": "2021-11-29T12:53:17.962Z",
+              "duration": 137,
               "snippet": "\u001b[0m \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1579,8 +1579,8 @@
             },
             {
               "title": "page.click([aria-label=\"Remove Lars Kiesow\"])",
-              "startTime": "2021-11-29T11:51:48.260Z",
-              "duration": 58,
+              "startTime": "2021-11-29T12:53:18.099Z",
+              "duration": 71,
               "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-9-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[aria-label=\"Remove Lars Kiesow\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 69 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1591,8 +1591,8 @@
             },
             {
               "title": "page.click(text=Contributor(s)Select... >> svg)",
-              "startTime": "2021-11-29T11:51:48.319Z",
-              "duration": 207,
+              "startTime": "2021-11-29T12:53:18.170Z",
+              "duration": 188,
               "snippet": "\u001b[0m \u001b[90m 70 |\u001b[39m         \u001b[90m// Contributor\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1603,8 +1603,8 @@
             },
             {
               "title": "page.click(#react-select-11-option-15)",
-              "startTime": "2021-11-29T11:51:48.526Z",
-              "duration": 110,
+              "startTime": "2021-11-29T12:53:18.358Z",
+              "duration": 101,
               "snippet": "\u001b[0m \u001b[90m 71 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'text=Contributor(s)Select... >> svg'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'#react-select-11-option-15'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 73 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1615,8 +1615,8 @@
             },
             {
               "title": "page.click(button)",
-              "startTime": "2021-11-29T11:51:48.636Z",
-              "duration": 335,
+              "startTime": "2021-11-29T12:53:18.459Z",
+              "duration": 343,
               "snippet": "\u001b[0m \u001b[90m 74 |\u001b[39m         \u001b[90m// startDate\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1627,8 +1627,8 @@
             },
             {
               "title": "page.click(:nth-match(button[role=\"tab\"], 2))",
-              "startTime": "2021-11-29T11:51:48.971Z",
-              "duration": 84,
+              "startTime": "2021-11-29T12:53:18.802Z",
+              "duration": 79,
               "snippet": "\u001b[0m \u001b[90m 75 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1639,8 +1639,8 @@
             },
             {
               "title": "page.click(button[role=\"tab\"])",
-              "startTime": "2021-11-29T11:51:49.056Z",
-              "duration": 166,
+              "startTime": "2021-11-29T12:53:18.881Z",
+              "duration": 165,
               "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m':nth-match(button[role=\"tab\"], 2)'\u001b[39m)\u001b[33m;\u001b[39m  \u001b[90m// Time\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1651,8 +1651,8 @@
             },
             {
               "title": "page.click(button:has-text(\"OK\"))",
-              "startTime": "2021-11-29T11:51:49.223Z",
-              "duration": 158,
+              "startTime": "2021-11-29T12:53:19.047Z",
+              "duration": 184,
               "snippet": "\u001b[0m \u001b[90m 77 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[role=\"tab\"]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Date\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"OK\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m                   ^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 79 |\u001b[39m\u001b[0m",
               "steps": [],
               "location": {
@@ -1663,13 +1663,13 @@
             },
             {
               "title": "After Hooks",
-              "startTime": "2021-11-29T11:51:49.381Z",
-              "duration": 7,
+              "startTime": "2021-11-29T12:53:19.231Z",
+              "duration": 9,
               "steps": [
                 {
                   "title": "browserContext.close",
-                  "startTime": "2021-11-29T11:51:49.381Z",
-                  "duration": 7,
+                  "startTime": "2021-11-29T12:53:19.232Z",
+                  "duration": 8,
                   "steps": []
                 }
               ]

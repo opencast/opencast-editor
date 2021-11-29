@@ -1,55 +1,6 @@
 {
   "files": [
     {
-      "fileId": "a28576fe7feb3dbe854669623e30284fa3e53954",
-      "fileName": "tests/cutting.test.ts",
-      "tests": [
-        {
-          "testId": "a28576fe7feb3dbe854669623e30284fa3e53954-ab68025dcf088bac1c9f0143210246a1b428d3ba",
-          "title": "Open Cutting Page",
-          "projectName": "chromium",
-          "location": {
-            "file": "tests/cutting.test.ts",
-            "line": 11,
-            "column": 5
-          },
-          "duration": 1794,
-          "outcome": "expected",
-          "path": [
-            "tests/cutting.test.ts:11",
-            "Test Cutting-Page"
-          ],
-          "ok": true
-        },
-        {
-          "testId": "a28576fe7feb3dbe854669623e30284fa3e53954-10cbc48c39c59116138446fecbe82dd1ab76dd68",
-          "title": "Open Cutting Page",
-          "projectName": "firefox",
-          "location": {
-            "file": "tests/cutting.test.ts",
-            "line": 11,
-            "column": 5
-          },
-          "duration": 3912,
-          "outcome": "expected",
-          "path": [
-            "tests/cutting.test.ts:11",
-            "Test Cutting-Page"
-          ],
-          "ok": true
-        }
-      ],
-      "stats": {
-        "total": 2,
-        "expected": 2,
-        "unexpected": 0,
-        "flaky": 0,
-        "skipped": 0,
-        "ok": true,
-        "duration": 5706
-      }
-    },
-    {
       "fileId": "d6c1e683d89dbaa2a61b5f795775c91be4f3a897",
       "fileName": "tests/metadata.test.ts",
       "tests": [
@@ -62,7 +13,7 @@
             "line": 12,
             "column": 5
           },
-          "duration": 1915,
+          "duration": 13049,
           "outcome": "expected",
           "path": [
             "tests/metadata.test.ts:12",
@@ -79,7 +30,7 @@
             "line": 12,
             "column": 5
           },
-          "duration": 4847,
+          "duration": 12802,
           "outcome": "expected",
           "path": [
             "tests/metadata.test.ts:12",
@@ -96,7 +47,7 @@
             "line": 18,
             "column": 5
           },
-          "duration": 4223,
+          "duration": 4305,
           "outcome": "expected",
           "path": [
             "tests/metadata.test.ts:18",
@@ -113,7 +64,7 @@
             "line": 18,
             "column": 5
           },
-          "duration": 4304,
+          "duration": 4751,
           "outcome": "expected",
           "path": [
             "tests/metadata.test.ts:18",
@@ -130,7 +81,7 @@
             "line": 51,
             "column": 5
           },
-          "duration": 4457,
+          "duration": 4336,
           "outcome": "expected",
           "path": [
             "tests/metadata.test.ts:51",
@@ -147,7 +98,7 @@
             "line": 51,
             "column": 5
           },
-          "duration": 4314,
+          "duration": 4827,
           "outcome": "expected",
           "path": [
             "tests/metadata.test.ts:51",
@@ -163,7 +114,7 @@
         "flaky": 0,
         "skipped": 0,
         "ok": true,
-        "duration": 24060
+        "duration": 44070
       }
     },
     {
@@ -179,7 +130,7 @@
             "line": 8,
             "column": 1
           },
-          "duration": 1510,
+          "duration": 13568,
           "outcome": "expected",
           "path": [
             "tests/navigation.test.ts:8"
@@ -195,7 +146,7 @@
             "line": 8,
             "column": 1
           },
-          "duration": 5029,
+          "duration": 13275,
           "outcome": "expected",
           "path": [
             "tests/navigation.test.ts:8"
@@ -210,7 +161,7 @@
         "flaky": 0,
         "skipped": 0,
         "ok": true,
-        "duration": 6539
+        "duration": 26843
       }
     }
   ],
@@ -219,12 +170,12 @@
     "firefox"
   ],
   "stats": {
-    "total": 10,
-    "expected": 10,
+    "total": 8,
+    "expected": 8,
     "unexpected": 0,
     "flaky": 0,
     "skipped": 0,
     "ok": true,
-    "duration": 36305
+    "duration": 70913
   }
 }
