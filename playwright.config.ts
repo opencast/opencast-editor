@@ -4,6 +4,7 @@ const config: PlaywrightTestConfig = {
 
   reporter: [ ['html', { outputFolder: 'playwright-report' }]],
   testIgnore: '**/redux/**',
+  retries: 3,
 
   use: {
     baseURL: 'http://localhost:3000/',
