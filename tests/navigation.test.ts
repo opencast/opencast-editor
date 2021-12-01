@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Test: Navigation', async ({ page, baseURL }) => {  
+test('Test: Navigation', async ({ page, baseURL }) => {
 
     await page.goto(baseURL);
     expect(page.url()).toBe(baseURL);
@@ -12,13 +12,13 @@ test('Test: Navigation', async ({ page, baseURL }) => {
 
     // Navigation to Metadata
     await page.click('li[role="menuitem"]:has-text("Metadata")');
-  
+
     // Navigation to Tracks
     await page.click('li[role="menuitem"]:has-text("Tracks")');
-  
+
     // Navigation to Finish
     await page.click('li[role="menuitem"]:has-text("Finish")');
-  
+
     // Navigation to Cutting
     await page.click('li[role="menuitem"]:has-text("Cutting")');
 
