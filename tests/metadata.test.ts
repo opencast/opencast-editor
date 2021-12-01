@@ -4,13 +4,19 @@ test.beforeEach(async ({ page, baseURL }, testInfo) => {
     console.log(`Running ${testInfo.title}`);
     await page.goto(baseURL);
     expect(page.url()).toBe(baseURL);
-    await page.click('li[role="menuitem"]:has-text("Metadata")');
 });
 
 test.describe('Test Metadata-Page', () => {
 
+    test('Open Metadata Page', async ({ page}) => {
+        await page.click('li[role="menuitem"]:has-text("Metadata")');
+        const locator = page.locator('#root > div > div > main > div.css-gulxqy-metadataStyle > form > div:nth-child(2) > h2');
+        await expect(locator).toHaveText(/Episode Metadata/);
+    });
+
     // checks if fields contains their dummy-data
     test('Check: Inputfields', async ({ page }) => {
+        await page.click('li[role="menuitem"]:has-text("Metadata")');
 
         for(let i = 0; i < input.length; i++){
             const locator = page.locator('input[name="catalog0.'+ input[i] +'"]');
@@ -44,7 +50,7 @@ test.describe('Test Metadata-Page', () => {
     });
 
     test('Check: Change Dropdown Value', async ({ page }) => {
-        
+        await page.click('li[role="menuitem"]:has-text("Metadata")');
         // Language
         await page.click('text=LanguageNo value >> :nth-match(svg, 2)');
         await page.click('#react-select-3-option-22');
