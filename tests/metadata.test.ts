@@ -8,12 +8,6 @@ test.beforeEach(async ({ page, baseURL }, testInfo) => {
 
 test.describe('Test Metadata-Page', () => {
 
-    test('Open Metadata Page', async ({ page}) => {
-        await page.click('li[role="menuitem"]:has-text("Metadata")');
-        const locator = page.locator('#root > div > div > main > div.css-gulxqy-metadataStyle > form > div:nth-child(2) > h2');
-        await expect(locator).toHaveText(/Episode Metadata/);
-    });
-
     // checks if fields contains their dummy-data
     test('Check: Inputfields', async ({ page }) => {
         await page.click('li[role="menuitem"]:has-text("Metadata")');
