@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  main:
+  test:
 
     runs-on: ubuntu-latest
 
@@ -20,11 +20,11 @@ jobs:
       with:
         node-version: 14.x
     
-    - name: npm install dependencies
-      run: npx playwright install-deps
+    - name: Install dependencies
+      run: npm ci
 
-    - name: Install npm install -D @playwright/test
-      run: npm install -D @playwright/test
+    - name: Install Playwright
+      run: npx playwright install --with-deps
 
-    - name: npm run playwright-test
+    - name: Run playwright-test
       run: npx playwright test --config=playwright.config.ts
