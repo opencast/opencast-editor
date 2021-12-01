@@ -6,7 +6,7 @@ test.beforeEach(async ({ page, baseURL }, testInfo) => {
     expect(page.url()).toBe(baseURL);
 });
 
-test.describe.parallel('Test Metadata-Page', () => {
+test.describe('Test Metadata-Page', () => {
 
     // checks if fields contains their dummy-data
     test('Check: Inputfields', async ({ page }) => {
@@ -22,13 +22,17 @@ test.describe.parallel('Test Metadata-Page', () => {
             const locator = page.locator('input[name="catalog0.'+ dropdown[i] +'"]');
             await expect(locator).toHaveValue(dValue[i]);       
         }
+    });
+
+    test('Check other fields', async ({ page }) => {
+        await page.click('li[role="menuitem"]:has-text("Metadata")');
 
         // different syntax and or not editable
         const description = page.locator('textarea[name="catalog0.description"]');
         await expect(description).toHaveValue('');
         await page.click('textarea[name="catalog0.description"]');
         await page.fill('textarea[name="catalog0.description"]', 'Test-Description');
-        
+
         const startDate = page.locator('input[name="startDate"]');
         await expect(startDate).toHaveValue(/[0-9]/);
 
