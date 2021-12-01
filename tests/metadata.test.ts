@@ -6,7 +6,7 @@ test.beforeEach(async ({ page, baseURL }, testInfo) => {
     expect(page.url()).toBe(baseURL);
 });
 
-test.describe('Test Metadata-Page', () => {
+test.describe.parallel('Test Metadata-Page', () => {
 
     // checks if fields contains their dummy-data
     test('Check: Inputfields', async ({ page }) => {
