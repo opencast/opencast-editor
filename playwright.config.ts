@@ -2,7 +2,9 @@ import { PlaywrightTestConfig, devices } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
 
-  reporter: [ ['html', { outputFolder: 'playwright-report' }] ],
+  reporter: [ ['html', { outputFolder: 'playwright-report' }],
+              ['json', {  outputFile: 'test-results.json' }]
+  ],
   testIgnore: '**/redux/**',
 
   use: {
