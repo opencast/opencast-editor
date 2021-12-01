@@ -63,7 +63,7 @@ test.describe('Test Metadata-Page', () => {
         await page.click('#react-select-7-option-4');
 
         // Creator
-        await page.click('text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)');
+        await page.click('[id="catalog0.creator"] div div >> :nth-match(div, 4)');
         await page.click('#react-select-9-option-15');
         await page.click('[aria-label="Remove Lars Kiesow"]');
 
