@@ -27,7 +27,7 @@ jobs:
       run: npm i -D @playwright/test
 
     - name: Install supported browsers
-      run: npx playwright install-deps
+      run: npx playwright install
 
     - name: Run playwright-test
       run: npx playwright test --config=playwright.config.ts
