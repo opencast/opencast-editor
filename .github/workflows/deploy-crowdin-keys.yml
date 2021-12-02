@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: crowdin
+  cancel-in-progress: true
+
 jobs:
   deploy-translation-keys:
     if: github.repository_owner == 'elan-ev'
