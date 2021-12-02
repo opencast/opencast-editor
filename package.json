@@ -34,7 +34,7 @@
     "i18next": "^21.3.0",
     "i18next-browser-languagedetector": "^6.1.2",
     "lodash.clonedeep": "^4.5.0",
-    "luxon": "^2.0.2",
+    "luxon": "^2.1.1",
     "mui-rff": "^3.0.16",
     "react": "^17.0.2",
     "react-app-rewired": "^2.1.8",
