@@ -1,39 +1,35 @@
 import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page, baseURL }, testInfo) => {
-    console.log(`Running ${testInfo.title}`);
+test.beforeEach(async ({ page, baseURL }) => {
     await page.goto(baseURL);
-    expect(page.url()).toBe(baseURL);
     await page.click('li[role="menuitem"]:has-text("Metadata")');
 });
 
 test.describe('Test Metadata-Page', () => {
 
-    test('Open Metadata Page', async ({ page}) => {
-        const locator = page.locator('#root > div > div > main > div.css-gulxqy-metadataStyle > form > div:nth-child(2) > h2');
-        await expect(locator).toHaveText(/Episode Metadata/);
-    });
-
     // checks if fields contains their dummy-data
     test('Check Inputfields', async ({ page }) => {
 
-        for(let i = 0; i < input.length; i++){
-            const locator = page.locator('input[name="catalog0.'+ input[i] +'"]');
+        for(let i = 0; i < input.length; i++) {
+            const locator = page.locator('input[name="catalog0.' + input[i] + '"]');
             await expect(locator).toHaveValue(iValue[i]);
-            await page.click('input[name="catalog0.'+ input[i] +'"]');
-            await page.fill('input[name="catalog0.'+ input[i] +'"]', iFill[i]);
+            await page.click('input[name="catalog0.' + input[i] + '"]');
+            await page.fill('input[name="catalog0.' + input[i] + '"]', iFill[i]);
         }
-        for(let i = 0; i < dropdown.length; i++){
-            const locator = page.locator('input[name="catalog0.'+ dropdown[i] +'"]');
-            await expect(locator).toHaveValue(dValue[i]);       
+        for(let i = 0; i < dropdown.length; i++) {
+            const locator = page.locator('input[name="catalog0.' + dropdown[i] + '"]');
+            await expect(locator).toHaveValue(dValue[i]);
         }
+    });
+
+    test('Check other fields', async ({ page }) => {
 
         // different syntax and or not editable
         const description = page.locator('textarea[name="catalog0.description"]');
         await expect(description).toHaveValue('');
         await page.click('textarea[name="catalog0.description"]');
         await page.fill('textarea[name="catalog0.description"]', 'Test-Description');
-        
+
         const startDate = page.locator('input[name="startDate"]');
         await expect(startDate).toHaveValue(/[0-9]/);
 
@@ -48,8 +44,8 @@ test.describe('Test Metadata-Page', () => {
 
     });
 
-    test('Change Dropdown Value', async ({ page }) => {
-        
+    test('Check: Change Dropdown Value', async ({ page }) => {
+    
         // Language
         await page.click('text=LanguageNo value >> :nth-match(svg, 2)');
         await page.click('#react-select-3-option-22');
@@ -63,7 +59,7 @@ test.describe('Test Metadata-Page', () => {
         await page.click('#react-select-7-option-4');
 
         // Creator
-        await page.click('text=Presenter(s)Lars Kiesow >> :nth-match(svg, 3)');
+        await page.click('[id="catalog0.creator"] div div >> :nth-match(div, 4)');
         await page.click('#react-select-9-option-15');
         await page.click('[aria-label="Remove Lars Kiesow"]');
 
@@ -81,10 +77,10 @@ test.describe('Test Metadata-Page', () => {
 
 });
 
-var input = ['title','subject', 'rightsHolder', 'duration', 'location', 'source'];
+var input = ['title', 'subject', 'rightsHolder', 'duration', 'location', 'source'];
 var iValue = ['Dual-Stream Demo', '', '', '00:00:00', '', ''];
 var iFill = ['Test-Title', 'Test-Subject', 'Test-Rights', '00:02:45', 'Test-Location', 'Test-Source'];
 
-var dropdown = ['language','license','isPartOf','creator','contributor'];
-var dValue = ['','{\"label\":\"EVENTS.LICENSE.CCBYSA\", \"order\":3, \"selectable\": true}','','Lars Kiesow', ''];
+var dropdown = ['language', 'license', 'isPartOf', 'creator', 'contributor'];
+var dValue = ['', '{\"label\":\"EVENTS.LICENSE.CCBYSA\", \"order\":3, \"selectable\": true}', '', 'Lars Kiesow', ''];
 
