@@ -12,13 +12,13 @@ const config: PlaywrightTestConfig = {
     headless: true,
   },
 
-  webServer: {    
-    command: 'npm run start',    
-    port: 3000,    
-    timeout: 120 * 1000,    
-    reuseExistingServer: !process.env.CI,  
+  webServer: {
+    command: 'npm run start',
+    port: 3000,
+    timeout: 120 * 1000,
+    reuseExistingServer: !process.env.CI,
   },
-  
+
   projects: [
     {
       name: 'chromium',
@@ -29,8 +29,8 @@ const config: PlaywrightTestConfig = {
       use: { ...devices['Desktop Firefox'] },
     },
   ],
-  
-  
+
+
 };
 
 export default config;
