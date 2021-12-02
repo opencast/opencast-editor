@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     if: ${{ github.event.pull_request.head.repo.full_name == 'elan-ev/opencast-editor'
       || github.event.pull_request.head.repo.full_name == 'Arnei/opencast-editor'
+      || github.event.pull_request.head.repo.full_name == 'naweidner/opencast-editor'
       || github.event.pull_request.head.repo.full_name == 'lkiesow/opencast-editor' }}
     steps:
     - name: generate build path
