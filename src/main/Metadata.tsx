@@ -542,6 +542,7 @@ const Metadata: React.FC<{}> = () => {
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
             showError={showErrorOnBlur}
+            autoOk={false}
           />
         </div>
       );
