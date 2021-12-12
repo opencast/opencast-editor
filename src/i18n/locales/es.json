@@ -1,0 +1,183 @@
+{
+    "mainMenu": {
+        "cutting-button": "Dividir",
+        "finish-button": "Finalizar",
+        "select-tracks-button": "Pistas",
+        "thumbnail-button": "Miniatura",
+        "metadata-button": "Metadatos",
+        "tooltip-aria": "Navegación principal"
+    },
+    "cuttingActions": {
+        "cut-button": "Cortar",
+        "cut-tooltip": "Dividir el segmento en la posición actual del marcador. Acceso Rápido:: {{hotkeyName}}",
+        "cut-tooltip-aria": "Dividir el segmento en la posición actual del marcador. Acceso Rápido:: {{hotkeyName}}.",
+        "delete-button": "Borrar",
+        "delete-restore-tooltip": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido: {{hotkeyName}}",
+        "delete-restore-tooltip-aria": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido:: {{hotKeyName}}.",
+        "restore-button": "Restaurar",
+        "mergeLeft-button": "Fusionar a la izquierda",
+        "mergeLeft-tooltip": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}",
+        "mergeLeft-tooltip-aria": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}.",
+        "mergeRight-button": "Fusionar a la derecha",
+        "mergeRight-tooltip": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}",
+        "mergeRight-tooltip-aria": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}."
+    },
+    "video": {
+        "previewButton": "Vista previa",
+        "previewButton-tooltip": "Salta los segmentos eliminados al reproducir el video. Actualmente {{status}}. Acceso rápido: {{hotkeyName}}",
+        "previewButton-aria": "Activa o desactiva el modo de vista previa. Tecla de acceso: {{hotkeyName}}.",
+        "playButton-tooltip": "Reproducir",
+        "time-duration-tooltip": "Duración y tiempo de reproducción",
+        "duration-aria": "Duración",
+        "time-aria": "Tiempo actual",
+        "comError-text": "Se ha producido un error al establecer comunicación con Opencast.",
+        "loadError-text": "Ocurrió un error al cargar el video.",
+        "title-tooltip": "Título del vídeo",
+        "presenter-tooltip": "Presentadores",
+        "controls-tooltip": "Controles"
+    },
+    "finishMenu": {
+        "save-button": "Guardar cambios",
+        "start-button": "Iniciar proceso",
+        "discard-button": "Descartar cambios"
+    },
+    "save": {
+        "headline-text": "Guardar el proyecto actual",
+        "confirm-button": "Sí, guardar cambios",
+        "confirmButton-default-tooltip": "Guardar",
+        "confirmButton-attempting-tooltip": "Intentando guardar",
+        "confirmButton-success-tooltip": "Guardado con éxito",
+        "confirmButton-failed-tooltip": "Falla al guardar",
+        "info-text": "El vídeo no será procesado, pero toda la información de corte será almacenada en Opencast. Puede continuar su edición más tarde.",
+        "success-text": "¡Cambios guardados con éxito!",
+        "success-tooltip-aria": "Guardado con éxito",
+        "saveArea-tooltip": "Guardar área"
+    },
+    "discard": {
+        "headline-text": "Descartar cambios",
+        "confirm-button": "Sí, descartar cambios",
+        "confirm-tooltip": "Descartar cambios",
+        "info-text": "¿Descartar todos los cambios realizados? ¡Esto no se puede deshacer!"
+    },
+    "theEnd": {
+        "discarded-text": "Todos sus cambios se han perdido para siempre. Ahora puede cerrar el editor.",
+        "startOver-button": "¡Déjame empezar de nuevo!",
+        "startOver-tooltip": "Recargar la página para empezar de nuevo",
+        "info-text": "Cambios guardados con éxito en Opencast. El procesamiento de los cambios puede tardar hasta {{duration}} horas. Ahora puede cerrar el editor.\n"
+    },
+    "workflowSelection": {
+        "saveAndProcess-text": "Guardar y procesar",
+        "selectWF-text": "Seleccione un flujo de trabajo",
+        "noWorkflows-text": "Ocurrió un problema, no hay flujos de trabajo con los que procesar sus cambios.<3/> Por favor, guarde sus cambios y póngase en contacto con su administrador de Opencast.\n",
+        "oneWorkflow-text": "El vídeo se cortará y procesará con el flujo de trabajo \"{{workflow}}\". <3/> Esto tomará algún tiempo.\n",
+        "manyWorkflows-text": "Seleccione qué flujo de trabajo debe usar Opencast para procesar.",
+        "startProcessing-button": "Iniciar proceso",
+        "back-button": "Llévame de vuelta",
+        "selectWF-button": "Haga clic para seleccionar este flujo de trabajo",
+        "selectWF-button-aria": "Pulsa para seleccionar el flujo de trabajo: {{stateName}}\n"
+    },
+    "timeline": {
+        "generateWaveform-text": "Generando forma de onda",
+        "segment-tooltip": "Segmento {{segment}}",
+        "scrubber-text-aria": "Marcador. {{currentTime}}. Segmento activo: {{segment}}. {{segmentStatus}}. Controles: {{moveLeft}} y {{moveRight}} para mover el marcador. {{increase}} y {{decrease}} para aumentar/disminuir el delta de movimiento.\n",
+        "segments-text-aria": "Segmento {{index}}. {{segmentStatus}}. Inicio: {{start}}. Final: {{end}}.\n"
+    },
+    "workflowConfig": {
+        "headline-text": "Configuración del flujo de trabajo",
+        "area-tooltip": "Configuración del flujo de trabajo",
+        "satisfied-text": "¿Satisfecho con su configuración?",
+        "confirm-button": "Iniciar proceso"
+    },
+    "metadata": {
+        "EVENTS-EVENTS-DETAILS-CATALOG-EPISODE": "Metadatos de episodio",
+        "submit-button": "Enviar",
+        "submit-button-tooltip": "Confirmar cambios",
+        "reset-button": "Reestablecer",
+        "reset-button-tooltip": "Deshacer todos los cambios",
+        "submit-helpertext": "Haz cambios a su gusto, luego pulse el botón {{buttonName}}.\nTenga en cuenta que todavía tendrá que empezar el procesamiento para que los cambios surtan efecto.",
+        "validation": {
+            "required": "Requerido",
+            "duration-format": "El formato debe ser HH:MM:SS",
+            "datetime": "Inválido"
+        },
+        "labels": {
+            "title": "Título",
+            "subject": "Tema",
+            "description": "Descripción",
+            "language": "Idioma",
+            "rightsHolder": "Derechos",
+            "license": "Licencia",
+            "isPartOf": "Series",
+            "creator": "Ponente(s)",
+            "contributor": "Colaborador(es)",
+            "startDate": "Fecha de inicio",
+            "duration": "Duración",
+            "location": "Ubicación",
+            "source": "Fuente",
+            "created": "Creado el",
+            "publisher": "Editor",
+            "identifier": "UID"
+        },
+        "language": {
+            "LANGUAGES-SLOVENIAN": "Esloveno",
+            "LANGUAGES-PORTUGESE": "Portugués",
+            "LANGUAGES-ROMANSH": "Rumano",
+            "LANGUAGES-ARABIC": "Árabe",
+            "LANGUAGES-POLISH": "Polaco",
+            "LANGUAGES-ITALIAN": "Italiano",
+            "LANGUAGES-CHINESE": "Chino",
+            "LANGUAGES-FINNISH": "Finlandés",
+            "LANGUAGES-DANISH": "Danés",
+            "LANGUAGES-UKRAINIAN": "Ucraniano",
+            "LANGUAGES-FRENCH": "Francés",
+            "LANGUAGES-SPANISH": "Español",
+            "LANGUAGES-GERMAN_CH": "Alemán suizo",
+            "LANGUAGES-NORWEGIAN": "Noruego",
+            "LANGUAGES-RUSSIAN": "Ruso",
+            "LANGUAGES-JAPANESE": "Japonés",
+            "LANGUAGES-DUTCH": "Neerlandés",
+            "LANGUAGES-TURKISH": "Turco",
+            "LANGUAGES-HINDI": "Hindi",
+            "LANGUAGES-SWEDISH": "Sueco",
+            "LANGUAGES-ENGLISH": "Inglés",
+            "LANGUAGES-GERMAN": "Alemán"
+        },
+        "license": {
+            "EVENTS-LICENSE-CC0": "CC0",
+            "EVENTS-LICENSE-CCBYND": "CC BY-ND",
+            "EVENTS-LICENSE-CCBYNCND": "CC BY-NC-ND",
+            "EVENTS-LICENSE-CCBYNCSA": "CC BY-NC-SA",
+            "EVENTS-LICENSE-ALLRIGHTS": "Todos los derechos reservados",
+            "EVENTS-LICENSE-CCBYSA": "CC BY-SA",
+            "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
+            "EVENTS-LICENSE-CCBY": "CC-BY"
+        }
+    },
+    "error": {
+        "generic-message": "¡Un error critico ha ocurrido!",
+        "details": "Detalles: "
+    },
+    "landing": {
+        "main-heading": "Bienvenido al editor de vídeos",
+        "contact-admin": "Si intentas editar un vídeo específico pero estás viendo esta página, por favor contacta a tu administrador.",
+        "start-editing-1": "Para empezar a editar, especifique el parámetro ",
+        "start-editing-2": " con el \"id\" del paquete multimedia del vídeo que desea editar.",
+        "link-to-documentation": "Más información sobre cómo configurar el editor de vídeo está disponible en la guía de administración en "
+    },
+    "various": {
+        "error-details-text": "Detalles: {{errorMessage}}\n",
+        "error-noDetails-text": "No hay detalles del error disponibles.",
+        "error-text": "Ha ocurrido un error. Por favor, espere un poco e inténtelo de nuevo.",
+        "goBack-button": "¡De ninguna manera! Volver atrás"
+    },
+    "trackSelection": {
+        "description": "Seleccione qué pistas serán usadas para el procesamiento y publicación.",
+        "trackInactive": "inactivo",
+        "deleteTrackText": "Eliminar pista",
+        "restoreTrackText": "Restaurar pista",
+        "cannotDeleteTrackText": "No se puede eliminar la pista",
+        "deleteTrackTooltip": "No procesar ni publicar esta pista.",
+        "restoreTrackTooltip": "Procesar y publicar esta pista.",
+        "cannotDeleteTrackTooltip": "No se puede eliminar esta pista de la publicación."
+    }
+}
