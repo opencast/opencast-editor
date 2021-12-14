@@ -34,6 +34,9 @@ const MainMenu: React.FC<{}> = () => {
     flexShrink: 0,
     alignItems: 'center',
     padding: '20px',
+    height: '95vh',
+    position: 'fixed',
+    overflow: 'auto',
     ...(flexGapReplacementStyle(30, false)),
   });
 

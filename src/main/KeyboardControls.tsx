@@ -10,7 +10,8 @@ const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name,
   const groupStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
-    width: '500px'
+    width: '420px',
+    maxWidth: '50vw',
   });
 
   const headingStyle = css({
@@ -41,8 +42,8 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   const labelStyle = css({
     alignSelf: 'center',
-    width: '110px',
-    height: '64px',
+    minWidth: '130px',
+    height: '5em',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     wordWrap: 'break-word',

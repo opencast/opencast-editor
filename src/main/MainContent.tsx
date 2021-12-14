@@ -57,7 +57,7 @@ const MainContent: React.FC<{}> = () => {
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
-    paddingLeft: '20px',
+    paddingLeft: '161px',
   })
 
   const metadataStyle = css({
@@ -66,7 +66,7 @@ const MainContent: React.FC<{}> = () => {
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
-    paddingLeft: '20px',
+    paddingLeft: '161px',
   })
 
   const trackSelectStyle = css({
@@ -75,6 +75,7 @@ const MainContent: React.FC<{}> = () => {
     alignContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
+    paddingLeft: '161px',
     height: '100%',
   })
 
@@ -84,6 +85,7 @@ const MainContent: React.FC<{}> = () => {
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
+    paddingLeft: '161px',
     height: '100%',
   })
 
@@ -93,7 +95,7 @@ const MainContent: React.FC<{}> = () => {
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
-    paddingLeft: '20px',
+    paddingLeft: '161px',
   })
 
   const defaultStyle = css({
