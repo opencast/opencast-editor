@@ -34,7 +34,7 @@ const MainMenu: React.FC<{}> = () => {
     flexShrink: 0,
     alignItems: 'center',
     padding: '20px',
-    height: '95vh',
+    height: '100%',
     position: 'fixed',
     overflow: 'auto',
     ...(flexGapReplacementStyle(30, false)),
@@ -77,7 +77,7 @@ const MainMenu: React.FC<{}> = () => {
         <MainMenuButton
           iconName={faKeyboard}
           stateName={MainMenuStateNames.keyboardControls}
-          bottomText={""}
+          bottomText={t(MainMenuStateNames.keyboardControls)}
           ariaLabelText={t("keyboardControls.header")}
           miniButton={true}
         />
@@ -134,8 +134,9 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
   });
 
   const miniMenuButtonStyle = css({
-    width: '40px',
-    height: '40px',
+    width: '100px',
+    height: '90px',
+    marginBottom: '35px',
     ...(activeState === stateName) && {
       backgroundColor: '#DDD',
     },
