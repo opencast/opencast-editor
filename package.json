@@ -85,7 +85,7 @@
     "@types/lodash": "^4.14.178",
     "@types/luxon": "^2.0.9",
     "@types/react-beforeunload": "^2.1.1",
-    "@redux-devtools/core": "^3.9.1",
+    "@redux-devtools/core": "^3.11.0",
     "use-resize-observer": "^8.0.0"
   }
 }
