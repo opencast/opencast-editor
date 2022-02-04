@@ -48,7 +48,7 @@
     "react-player": "^2.9.0",
     "react-redux": "^7.2.6",
     "react-scripts": "5.0.0",
-    "react-select": "^5.2.1",
+    "react-select": "^5.2.2",
     "react-use": "^17.3.2",
     "redux": "^4.1.2",
     "standardized-audio-context": "^25.3.19",
