@@ -14,8 +14,8 @@ import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
 import {
-  KeyboardDateTimePicker,
-  KeyboardTimePicker,
+  DateTimePicker,
+  TimePicker,
   showErrorOnBlur,
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
@@ -535,22 +535,21 @@ const Metadata: React.FC<{}> = () => {
     } else if (field.type === "date") {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardDateTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+          <DateTimePicker {...input}
+            onBlur={(e: FocusEvent) => {blurWithSubmit(e, input)}}
             name={field.id}
             format="yyyy/MM/dd HH:mm"
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
             showError={showErrorOnBlur}
-            autoOk={false}
           />
         </div>
       );
     } else if (field.type === "time") {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+          <TimePicker {...input}
+            onBlur={(e: FocusEvent) => {blurWithSubmit(e, input)}}
             name={field.id}
             format="HH:mm"
             disabled={field.readOnly}
@@ -588,7 +587,7 @@ const Metadata: React.FC<{}> = () => {
 
     /**
      * Wrapper function for component generation.
-     * Handles the special case of KeyboardDateTimePicker/KeyboardTimePicker, which
+     * Handles the special case of DateTimePicker/TimePicker, which
      * can't handle empty string as a value (which is what Opencast uses to
      * represent no date/time)
      */

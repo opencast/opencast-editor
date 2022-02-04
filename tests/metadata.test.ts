@@ -68,10 +68,13 @@ test.describe('Test Metadata-Page', () => {
         await page.click('#react-select-11-option-15');
 
         // startDate
-        await page.click('button');
-        await page.click(':nth-match(button[role="tab"], 2)');  // Time
-        await page.click('button[role="tab"]'); // Date
-        await page.click('button:has-text("OK")');
+        // expect date-time selector to pop up and hide again
+        const startDate = page.locator('input[name="startDate"] >> ..')
+        await page.click('input[name="startDate"] >> .. >> svg[data-testid="CalendarIcon"]');
+        await expect(page.locator('div.MuiPaper-root').first()).toBeVisible();
+        await page.click('svg[data-testid="TimeIcon"]');  // Time
+        await startDate.click('input');
+        await expect(page.locator('div.MuiPaper-root').first()).toBeHidden();
 
     });
 
