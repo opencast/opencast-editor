@@ -9,7 +9,7 @@ on:
 jobs:
   main:
     runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request.head.repo.full_name == 'elan-ev/opencast-editor'
+    if: ${{ github.event.pull_request.head.repo.full_name == 'opencast/opencast-editor'
       || github.event.pull_request.head.repo.full_name == 'Arnei/opencast-editor'
       || github.event.pull_request.head.repo.full_name == 'naweidner/opencast-editor'
       || github.event.pull_request.head.repo.full_name == 'lkiesow/opencast-editor' }}
@@ -57,7 +57,7 @@ jobs:
 
     - name: clone repository
       run: |
-        git clone "git@github.com:elan-ev/opencast-editor-test.git" ~/editor-test
+        git clone "git@github.com:opencast/opencast-editor-test.git" ~/editor-test
         cd ~/editor-test
         git checkout gh-pages
 

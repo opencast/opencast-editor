@@ -1,8 +1,8 @@
 Opencast Video Editor
 =====================
 
-[![Build & Deploy](https://github.com/elan-ev/opencast-editor/workflows/Build%20&%20Deploy/badge.svg)
-](https://github.com/elan-ev/opencast-editor/actions?query=workflow%3A%22Build+%26+Deploy%22)
+[![Build & Deploy](https://github.com/opencast/opencast-editor/workflows/Build%20&%20Deploy/badge.svg)
+](https://github.com/opencast/opencast-editor/actions?query=workflow%3A%22Build+%26+Deploy%22)
 [![Demo deployment](https://img.shields.io/badge/demo-editor.opencast.org-blue)
 ](https://editor.opencast.org)
 
@@ -52,9 +52,9 @@ How to cut a release for Opencast
    git tag -s 2021-11-27
    git push upstream 2021-11-27:2021-11-27
    ```
-3. Wait for the [Create release draft](https://github.com/elan-ev/opencast-editor/actions/workflows/create-release.yml)
+3. Wait for the [Create release draft](https://github.com/opencast/opencast-editor/actions/workflows/create-release.yml)
    workflow to finish
-    - It will create a new [GitHub release draft](https://github.com/elan-ev/opencast-editor/releases)
+    - It will create a new [GitHub release draft](https://github.com/opencast/opencast-editor/releases)
     - Review and publish the draft
 4. Submit a pull request against Opencast
     - [Update the release](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/modules/editor/pom.xml#L16-L17)
@@ -77,4 +77,4 @@ If you want to use current editor frontend with an earlier Opencast version, you
 
 Translating the Editor
 -------------
-You can help translating the editor to your language on [crowdin.com/project/opencast-editor](https://crowdin.com/project/opencast-editor). Simply request to join the project on Crowdin and start translating. If you are interested in translating a language which is not a target language right now, please create [a GitHub issue](https://github.com/elan-ev/opencast-editor/issues) and we will add the language.
+You can help translating the editor to your language on [crowdin.com/project/opencast-editor](https://crowdin.com/project/opencast-editor). Simply request to join the project on Crowdin and start translating. If you are interested in translating a language which is not a target language right now, please create [a GitHub issue](https://github.com/opencast/opencast-editor/issues) and we will add the language.

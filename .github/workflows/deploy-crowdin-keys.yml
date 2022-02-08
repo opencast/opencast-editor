@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   deploy-translation-keys:
-    if: github.repository_owner == 'elan-ev'
+    if: github.repository_owner == 'opencast'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
