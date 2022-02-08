@@ -44,16 +44,25 @@ The editor can be configured through the `editor-settings.toml` settings file. I
 
 
 How to cut a release for Opencast
--------------
-- Run `build-release.sh` in the root folder
-- Upload the archive as a new release to GitHub
-  - Release tag is the current date (year-month-day)
-  - Check the commit history for notable changes and list them as a release comment
-- Create an pull request against Opencast
-  - In your Opencast, replace the URL the `editor.url` in `modules/editor/pom.xml` with a url that points to the archive file in your new release
-  - Build the editor module with `mvn install`. Observe the error message and replace the old sha256 value in `editor.sha256` with the new value in the error message. Build again to see if it worked.
-  - Check if you need to add any new config values to `etc/ui-config/mh_default_org/editor/editor-settings.toml`. Do not add the debug values.
-  - Verify that the new release runs in Opencast, then create the pull request.
+---------------------------------
+
+1. Switch to the commit you want to turn into the release
+2. Create and push a new tag
+   ```
+   git tag -s 2021-11-27
+   git push upstream 2021-11-27:2021-11-27
+   ```
+3. Wait for the [Create release draft](https://github.com/elan-ev/opencast-editor/actions/workflows/create-release.yml)
+   workflow to finish
+    - It will create a new [GitHub release draft](https://github.com/elan-ev/opencast-editor/releases)
+    - Review and publish the draft
+4. Submit a pull request against Opencast
+    - [Update the release](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/modules/editor/pom.xml#L16-L17)
+    - [Adjust the documentation](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/docs/guides/admin/docs/modules/editor.md)
+      if necessary
+    - [Update the configuration](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/etc/ui-config/mh_default_org/editor/editor-settings.toml)
+      if necessary
+    - Verify that the new release runs in Opencast, then create the pull request.
 
 Opencast API used by the Editor
 -------------

@@ -1,0 +1,33 @@
+on:
+  push:
+    tags:
+    - '*-*-*'
+
+name: Create release draft
+
+jobs:
+  build:
+    name: Create release from tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+
+      - name: use node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: download dependencies
+        run: npm ci
+
+      - name: create release tarball
+        run: ./.github/build-release.sh
+
+      - name: create new release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: oc-editor-*.tar.gz
+          draft: true
+          fail_on_unmatched_files: true
+          generate_release_notes: true

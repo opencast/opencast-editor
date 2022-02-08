@@ -1,0 +1,33 @@
+changelog:
+
+  exclude:
+    authors:
+      - dependabot
+      - dependabot[bot]
+
+  categories:
+    - title: Security Fixes
+      labels:
+        - type:security
+
+    - title: New Features
+      labels:
+        - type:feature
+
+    - title: Usability and Accessibility
+      labels:
+        - type:usability
+        - type:accessibility
+        - type:visual-clarity
+
+    - title: Bug Fixes
+      labels:
+        - type:bug
+
+    - title: Documentation
+      labels:
+        - type:documentation
+
+    - title: Other Changes
+      labels:
+        - "type:*"
