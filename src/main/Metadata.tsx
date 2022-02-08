@@ -14,8 +14,8 @@ import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
 import {
-  KeyboardDateTimePicker,
-  KeyboardTimePicker,
+  DateTimePicker,
+  TimePicker,
   showErrorOnBlur,
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
@@ -114,17 +114,15 @@ const Metadata: React.FC<{}> = () => {
   })
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
-    return (
-      css({
-        flex: '1',
-        fontSize: '1em',
-        marginLeft: '15px',
-        borderRadius: '5px',
-        backgroundColor: 'snow',
-        boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-        ...isReadOnly && {color: 'grey'}
-      })
-    );
+    return css({
+      flex: '1',
+      fontSize: '1em',
+      marginLeft: '15px',
+      borderRadius: '5px',
+      backgroundColor: 'snow',
+      boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
+      ...(isReadOnly && {color: 'grey'})
+    });
   }
 
   const inputFieldTypeStyle = (isReadOnly: boolean) => {
@@ -159,14 +157,12 @@ const Metadata: React.FC<{}> = () => {
   }
 
   const validateStyle = (isError: boolean) => {
-    return (
-      css({
-        lineHeight: '32px',
-        marginLeft: '10px',
-        ...(isError) && {color: '#800'},
-        fontWeight: 'bold',
-      })
-    )
+    return css({
+      lineHeight: '32px',
+      marginLeft: '10px',
+      ...(isError && {color: '#800'}),
+      fontWeight: 'bold',
+    });
   }
 
   // const buttonContainerStyle = css({
@@ -535,27 +531,32 @@ const Metadata: React.FC<{}> = () => {
     } else if (field.type === "date") {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardDateTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+          <DateTimePicker {...input}
             name={field.id}
-            format="yyyy/MM/dd HH:mm"
+            inputFormat="yyyy/MM/dd HH:mm"
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
-            showError={showErrorOnBlur}
-            autoOk={false}
+            TextFieldProps={{
+              variant: 'standard', // Removes default outline
+              onBlur: (e: any) => {blurWithSubmit(e, input)},
+              showError: showErrorOnBlur
+            }}
           />
         </div>
       );
     } else if (field.type === "time") {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+          <TimePicker {...input}
             name={field.id}
-            format="HH:mm"
+            inputFormat="HH:mm"
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
-            showError={showErrorOnBlur}
+            TextFieldProps={{
+              variant: 'standard', // Removes default outline
+              onBlur: (e: any) => {blurWithSubmit(e, input)},
+              showError: showErrorOnBlur
+            }}
           />
         </div>
       );
