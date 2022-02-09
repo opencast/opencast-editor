@@ -530,7 +530,7 @@ const Metadata: React.FC<{}> = () => {
 
     } else if (field.type === "date") {
       return (
-        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
+        <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
           <DateTimePicker {...input}
             name={field.id}
             inputFormat="yyyy/MM/dd HH:mm"
@@ -589,7 +589,7 @@ const Metadata: React.FC<{}> = () => {
 
     /**
      * Wrapper function for component generation.
-     * Handles the special case of KeyboardDateTimePicker/KeyboardTimePicker, which
+     * Handles the special case of DateTimePicker/TimePicker, which
      * can't handle empty string as a value (which is what Opencast uses to
      * represent no date/time)
      */
@@ -609,7 +609,7 @@ const Metadata: React.FC<{}> = () => {
                 type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
                 >
                 {({ input, meta }) => (
-                  <div css={fieldStyle}>
+                  <div css={fieldStyle} data-testid={field.id}>
                     <label css={fieldLabelStyle} htmlFor={input.name}>{
                       i18n.exists(`metadata.labels.${field.id}`) ?
                       t(`metadata.labels.${field.id}`) : field.id
