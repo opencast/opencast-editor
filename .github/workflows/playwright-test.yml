@@ -31,7 +31,7 @@ jobs:
 
     - name: Prepare configuration
       run: >
-        sed
+        sed -i
         's_https://develop.opencast.org_http://localhost:3000_'
         public/editor-settings.toml
 
