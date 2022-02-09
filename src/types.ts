@@ -39,6 +39,7 @@ export enum MainMenuStateNames {
   metadata = "Metadata",
   trackSelection = "Select Tracks",
   thumbnail = "Thumbnail",
+  subtitles = "Subtitles",
   finish = "Finish",
 }
 

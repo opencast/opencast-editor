@@ -44,6 +44,9 @@ interface iSettings {
   },
   thumbnail: {
     show: boolean,
+  },
+  subtitles: {
+    show: boolean,
   }
 }
 
@@ -70,6 +73,9 @@ var defaultSettings: iSettings = {
   },
   thumbnail: {
     show: false,
+  },
+  subtitles: {
+    show: true,
   }
 }
 var configFileSettings: iSettings

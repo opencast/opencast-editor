@@ -5,6 +5,7 @@ import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
 import TrackSelection from './TrackSelection';
+import SubtitleSelect from "./SubtitleSelect";
 import Finish from "./Finish"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -77,6 +78,16 @@ const MainContent: React.FC<{}> = () => {
     height: '100%',
   })
 
+
+  const subtitleSelectStyle = css({
+    ...displayState(MainMenuStateNames.subtitles),
+    flexDirection: 'column' as const,
+    justifyContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingLeft: '20px',
+    height: '100%',
+  })
+
   const finishStyle = css({
     ...displayState(MainMenuStateNames.finish),
     flexDirection: 'column' as const,
@@ -106,6 +117,9 @@ const MainContent: React.FC<{}> = () => {
       </div>
       <div css={trackSelectStyle}>
           <TrackSelection />
+      </div>
+      <div css={subtitleSelectStyle}>
+          <SubtitleSelect />
       </div>
       <div css={finishStyle}>
         <Finish />

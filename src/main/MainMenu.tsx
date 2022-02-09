@@ -3,7 +3,8 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faClosedCaptioning } from "@fortawesome/free-regular-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
@@ -43,6 +44,7 @@ const MainMenu: React.FC<{}> = () => {
       {settings.metadata.show && <MainMenuButton iconName={faListUl} stateName={MainMenuStateNames.metadata}/>}
       {settings.trackSelection.show && <MainMenuButton iconName={faFilm} stateName={MainMenuStateNames.trackSelection}/>}
       {settings.thumbnail.show && <MainMenuButton iconName={faPhotoVideo} stateName={MainMenuStateNames.thumbnail}/>}
+      {settings.subtitles.show && <MainMenuButton iconName={faClosedCaptioning} stateName={MainMenuStateNames.subtitles}/>}
       <MainMenuButton iconName={faSignOutAlt} stateName={MainMenuStateNames.finish}/>
     </nav>
   );
@@ -52,7 +54,7 @@ const MainMenu: React.FC<{}> = () => {
  * A button to set the state of the app
  * @param param0
  */
-const MainMenuButton: React.FC<{iconName: IconDefinition, stateName: mainMenu["value"]}> = ({iconName, stateName}) => {
+const MainMenuButton: React.FC<{iconName: any, stateName: mainMenu["value"]}> = ({iconName, stateName}) => {
 
   const { t } = useTranslation();
 
