@@ -110,7 +110,11 @@ password = "opencast"
 "English (US)" = "en_US"
 "English (GB)" = "en_GB"
 "Donaudampfschifffahrtsgesellschaft" = "de_DE"
-
+"Deutsch 2" = "de_DE"
+"Deutsch 3" = "de_DE"
+"Deutsch 4" = "de_DE"
+"Deutsch 5" = "de_DE"
+"🦝" = "🦝"
 
 ####
 # Thumbnail Selection

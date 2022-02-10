@@ -9,8 +9,8 @@ import { settings } from '../config'
 
   const subtitleSelectStyle = css({
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(20em, 1fr))',
-    ...(flexGapReplacementStyle(30, false)),
+    gridTemplateColumns: 'repeat(auto-fit, minmax(20em, 1fr))',
+    gridRowGap: '30px',
   })
 
   const parseCountryCode = (parseString: string) => {
@@ -50,7 +50,8 @@ const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string | un
     fontSize: "x-large",
     ...(flexGapReplacementStyle(30, false)),
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    alignItems: 'unset',
+    alignItems: 'unset',  // overwrite from basicButtonStyle to allow for textOverflow to work
+    placeSelf: 'center',
   });
 
   const flagStyle = css({

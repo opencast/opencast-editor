@@ -83,8 +83,6 @@ const MainContent: React.FC<{}> = () => {
     ...displayState(MainMenuStateNames.subtitles),
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingLeft: '20px',
     height: '100%',
   })
 
