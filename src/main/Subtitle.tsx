@@ -1,5 +1,7 @@
+import React from "react";
 import { css } from "@emotion/react";
 import { useState } from "react";
+import SubtitleEditor from "./SubtitleEditor";
 import SubtitleSelect from "./SubtitleSelect";
 
 const Subtitle : React.FC<{}> = () => {
@@ -12,6 +14,7 @@ const Subtitle : React.FC<{}> = () => {
 
   const pageEditStyle = css({
     display: displayEditView ? 'block' :'none',
+    height: '100%',
   })
 
   const setEditViewCallback = (displayEditView: boolean) => {
@@ -20,14 +23,14 @@ const Subtitle : React.FC<{}> = () => {
   }
 
   return (
-    <div>
+    <>
       <div css={pageSelectStyle} >
         <SubtitleSelect displayEditView={setEditViewCallback}/>
       </div>
       <div css={pageEditStyle} >
-        {/* <SubtitleEdit /> */}
+        <SubtitleEditor displayEditView={setEditViewCallback}/>
       </div>
-    </div>
+    </>
   );
 }
 
