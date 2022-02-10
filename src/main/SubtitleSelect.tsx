@@ -1,24 +1,11 @@
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { settings } from '../config'
 
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
  const SubtitleSelect : React.FC<{}> = () => {
-
-  // Some dummy data for testing. TBD.
-  const fillerInfo: [string, string, number][] = [
-    ["Deutsch", "DE", 50],
-    ["Deutsch (Gehörlos)", "DE", 5],
-    ["English", "US", 0],
-    ["English", "GB", 5001],
-    ["Deutsch", "DE", 5],
-    ["Donaudampfschifffahrtsgesellschaft", "DE", 5],
-    ["Deutsch", "DE", 5],
-    ["Deutsch", "DE", 5],
-    ["Deutsch", "DE", 5],
-    ["🦝", "🦝", 0],
-  ]
 
   const subtitleSelectStyle = css({
     display: 'grid',
@@ -26,16 +13,32 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
     ...(flexGapReplacementStyle(30, false)),
   })
 
+  const parseCountryCode = (parseString: string) => {
+    return parseString.split("_").pop();
+  }
+
+  const renderButtons = () => {
+    let buttons : JSX.Element[] = []
+    if (settings.subtitles.languages === undefined) {
+      return buttons
+    }
+
+    for (let lan in settings.subtitles.languages) {
+      let key = lan // left side
+      let value = settings.subtitles.languages[lan] // right side
+      buttons.push(<SubtitleSelectButton title={key} iconIdentifier={parseCountryCode(value)} segmentNumber={0} key={key}/>)
+    }
+    return buttons
+  }
+
   return (
     <div css={subtitleSelectStyle}>
-      {fillerInfo.map(function(subtitle){
-        return <SubtitleSelectButton title={subtitle[0]} iconIdentifier={subtitle[1]} segmentNumber={subtitle[2]}/>
-      })}
+      {renderButtons()}
     </div>
   );
 }
 
-const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string, segmentNumber: number}> = ({title, iconIdentifier, segmentNumber}) => {
+const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string | undefined, segmentNumber: number}> = ({title, iconIdentifier, segmentNumber}) => {
 
   // const { t } = useTranslation();
 
@@ -84,7 +87,7 @@ const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string, seg
       // }}}
       >
       {/* <FontAwesomeIcon  icon={iconName} size="2x"/> */}
-      <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>
+      <div css={flagStyle}>{iconIdentifier && getFlagEmoji(iconIdentifier)}</div>
       <div css={titleStyle}>{title}</div>
       <div css={infoStyle}>{"Segments: " + segmentNumber}</div>
     </div>

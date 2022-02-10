@@ -47,6 +47,7 @@ interface iSettings {
   },
   subtitles: {
     show: boolean,
+    languages: { [key: string]: string } | undefined,
   }
 }
 
@@ -75,7 +76,8 @@ var defaultSettings: iSettings = {
     show: false,
   },
   subtitles: {
-    show: true,
+    show: true, // TODO: Set this false
+    languages: undefined,
   }
 }
 var configFileSettings: iSettings
@@ -266,6 +268,16 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
+  'map': (v: any, allowParse: any) => {
+    for (let key in v) {
+      if (typeof key !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+      if (typeof v[key] !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+    }
+  },
   'objectsWithinObjects': (v: any, allowParse: any) => {
     for (let catalogName in v) {
       if (typeof catalogName !== 'string') {
@@ -314,6 +326,10 @@ const SCHEMA = {
   },
   trackSelection: {
     show : types.boolean,
+  },
+  subtitles: {
+    show: types.boolean,
+    languages: types.map,
   },
   thumbnail: {
     show : types.boolean,

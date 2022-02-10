@@ -88,6 +88,28 @@ password = "opencast"
 # Default: true
 #show = true
 
+####
+# Subtitles
+##
+
+[subtitles]
+
+# If the subtitle editor appears in the main menu
+# Type: boolean
+# Default: true
+#show = true
+
+## A list of languages for which subtitles can be created
+#
+# TODO: Figure out a real world example based on actual Opencast information
+# TODO: Comment out example
+# Example:
+[subtitles.languages]
+"Deutsch" = "de_DE"
+"Deutsch (Gehörlos)" = "de_DE"
+"English (US)" = "en_US"
+"English (GB)" = "en_GB"
+
 
 ####
 # Thumbnail Selection
