@@ -5,7 +5,7 @@ import { settings } from '../config'
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
- const SubtitleSelect : React.FC<{}> = () => {
+ const SubtitleSelect : React.FC<{displayEditView: (e: boolean) => void}> = (displayEditView) => {
 
   const subtitleSelectStyle = css({
     display: 'grid',
@@ -26,7 +26,9 @@ import { settings } from '../config'
     for (let lan in settings.subtitles.languages) {
       let key = lan // left side
       let value = settings.subtitles.languages[lan] // right side
-      buttons.push(<SubtitleSelectButton title={key} iconIdentifier={parseCountryCode(value)} segmentNumber={0} key={key}/>)
+      buttons.push(
+        <SubtitleSelectButton title={key} iconIdentifier={parseCountryCode(value)} segmentNumber={0} key={key} displayEditView={displayEditView.displayEditView}/>
+      )
     }
     return buttons
   }
@@ -38,7 +40,11 @@ import { settings } from '../config'
   );
 }
 
-const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string | undefined, segmentNumber: number}> = ({title, iconIdentifier, segmentNumber}) => {
+const SubtitleSelectButton: React.FC<{
+  title: string, iconIdentifier: string | undefined, segmentNumber: number, displayEditView: (e: boolean) => void
+}> = ({
+  title, iconIdentifier, segmentNumber, displayEditView
+}) => {
 
   // const { t } = useTranslation();
 
@@ -85,12 +91,11 @@ const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string | un
   return (
     <div css={[basicButtonStyle, subtitleSelectButtonStyle]}
       role="button" tabIndex={0}
-      // onClick={ finish }
-      // onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-      //   finish()
-      // }}}
+      onClick={ () => displayEditView(true) }
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+        displayEditView(true)
+      }}}
       >
-      {/* <FontAwesomeIcon  icon={iconName} size="2x"/> */}
       <div css={flagStyle}>{iconIdentifier && getFlagEmoji(iconIdentifier)}</div>
       <div css={titleStyle}>{title}</div>
       <div css={infoStyle}>{"Segments: " + segmentNumber}</div>

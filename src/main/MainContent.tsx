@@ -5,7 +5,7 @@ import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
 import TrackSelection from './TrackSelection';
-import SubtitleSelect from "./SubtitleSelect";
+import Subtitle from "./Subtitle";
 import Finish from "./Finish"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -117,7 +117,7 @@ const MainContent: React.FC<{}> = () => {
           <TrackSelection />
       </div>
       <div css={subtitleSelectStyle}>
-          <SubtitleSelect />
+          <Subtitle />
       </div>
       <div css={finishStyle}>
         <Finish />
