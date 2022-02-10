@@ -45,12 +45,12 @@ const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string | un
   const subtitleSelectButtonStyle = css({
     width: '250px',
     height: '220px',
+    display: 'flex',
     flexDirection: 'column' as const,
     fontSize: "x-large",
     ...(flexGapReplacementStyle(30, false)),
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    wordWrap: 'break-word',
-    display: 'flex'
+    alignItems: 'unset',
   });
 
   const flagStyle = css({
@@ -58,7 +58,10 @@ const SubtitleSelectButton: React.FC<{title: string, iconIdentifier: string | un
   });
 
   const titleStyle = css({
-
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    minWidth: 0,
   })
 
   const infoStyle = css({
