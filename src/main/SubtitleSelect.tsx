@@ -95,7 +95,7 @@ const SubtitleSelectButton: React.FC<{
         displayEditView(true)
       }}}
       >
-      <div css={flagStyle}>{iconIdentifier && getFlagEmoji(iconIdentifier)}</div>
+      {iconIdentifier && getFlagEmoji && <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>}
       <div css={titleStyle}>{title}</div>
     </div>
   );
