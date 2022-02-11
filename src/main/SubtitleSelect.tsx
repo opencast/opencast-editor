@@ -71,10 +71,6 @@ const SubtitleSelectButton: React.FC<{
     minWidth: 0,
   })
 
-  const infoStyle = css({
-    fontSize: '0.75em',
-  });
-
   /**
    * Quick and dirty function to get a flag unicode character by country code
    * @param countryCode
@@ -101,7 +97,6 @@ const SubtitleSelectButton: React.FC<{
       >
       <div css={flagStyle}>{iconIdentifier && getFlagEmoji(iconIdentifier)}</div>
       <div css={titleStyle}>{title}</div>
-      <div css={infoStyle}>{"Segments: " + segmentNumber}</div>
     </div>
   );
 };
