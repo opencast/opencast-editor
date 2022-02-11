@@ -77,14 +77,17 @@ const SubtitleSelectButton: React.FC<{
 
   /**
    * Quick and dirty function to get a flag unicode character by country code
-   * Could use this package instead: https://www.npmjs.com/package/react-country-flag
    * @param countryCode
    * @returns
    */
   function getFlagEmoji(countryCode: string) {
-    return countryCode.toUpperCase().replace(/./g, char =>
-        String.fromCodePoint(127397 + char.charCodeAt(0))
+    var flag = countryCode.toUpperCase().replace(/./g, char =>
+      String.fromCodePoint(127397 + char.charCodeAt(0))
     );
+    const regexEscape = /[\u{1F1E6}-\u{1F1FF}]/u;
+    if (regexEscape.test(flag)) {
+      return flag
+    }
   }
 
 
