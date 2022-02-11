@@ -44,7 +44,7 @@ test.describe('Test Metadata-Page', () => {
 
     });
 
-    test('Check: Change Dropdown Value', async ({ page }) => {
+    test('Check: Change Dropdown Value', async ({ page, browserName }) => {
 
         // Language
         await page.click('text=LanguageNo value >> :nth-match(svg, 2)');
@@ -68,10 +68,16 @@ test.describe('Test Metadata-Page', () => {
         await page.click('#react-select-11-option-15');
 
         // startDate
-        await page.click('button');
-        await page.click(':nth-match(button[role="tab"], 2)');  // Time
-        await page.click('button[role="tab"]'); // Date
-        await page.click('button:has-text("OK")');
+        // Expect date-time selector to pop up and hide again
+        // Headless Firefox is picked up as mobile and this test will not work.
+        // That's why we exclude it:
+        //   https://github.com/microsoft/playwright/issues/7769
+        if (browserName != 'firefox') {
+          await page.click('div[data-testid="startDate"] >> button');
+          await expect(page.locator('div.MuiPaper-root').first()).toBeVisible();
+          await page.click('div[data-testid="startDate"] >> input');
+          await expect(page.locator('div.MuiPaper-root').first()).toBeHidden();
+        }
 
     });
 
