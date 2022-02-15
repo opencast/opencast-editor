@@ -23,8 +23,18 @@ export interface video {
   videoCount: number,   // Total number of videos
   duration: number,     // Video duration in milliseconds
   title: string,
+  lockingActive: boolean,
+  lockRefresh: number,
+  lock: lockData,
   presenters: string[],
   workflows: Workflow[],
+}
+
+export interface lockData {  
+  lockUser: string,
+  lockName: string,
+  lockEmail: string,
+  lockRefresh: boolean,
 }
 
 export const initialState: video & httpRequestState = {
@@ -46,6 +56,10 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
+
+  lockingActive: false,
+  lockRefresh: 0,
+  lock: {lockUser: '', lockName: '', lockEmail: '', lockRefresh: false},
 
   status: 'idle',
   error: undefined,
@@ -188,6 +202,14 @@ export const videoSlice = createSlice({
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
+        state.lockingActive = action.payload.locking_active
+        if (action.payload.lockingActive == true) {
+            state.lock.lockUser = action.payload.lock_user;
+            state.lock.lockName = action.payload.lock_name;
+            state.lock.lockEmail = action.payload.lock_email;
+            state.lock.lockRefresh = false;
+            client.startLock(`${settings.opencast.url}/editor/${settings.id}/editorLock`, state.lock, action.payload.lock_refresh);
+        }
         state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
         state.tracks = action.payload.tracks

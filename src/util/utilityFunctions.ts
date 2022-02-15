@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
   let decimalFactor = Math.pow(10, decimalPlace)
   return Math.round((num + Number.EPSILON) * decimalFactor) / decimalFactor
@@ -69,4 +71,23 @@ export function checkFlexGapSupport() {
   }
 
 	return flexGapIsSupported
+}
+
+export function useInterval(callback, delay:number) {
+  const savedCallback = useRef();
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+  
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => {
+        clearInterval(id);
+      };
+    }
+  }, [callback, delay]);
 }
