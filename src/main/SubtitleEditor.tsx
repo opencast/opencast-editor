@@ -5,6 +5,13 @@ import ReactPlayer from "react-player";
 import { basicButtonStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setClickTriggered,
+  setCurrentlyAt,
+  setIsPlaying,
+} from '../redux/subtitleSlice'
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -77,7 +84,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
           <SubtitleVideoPlayer />
         </div>
       </div>
-      <Timeline />
+      <Timeline
+        selectIsPlaying={selectIsPlaying}
+        selectCurrentlyAt={selectCurrentlyAt}
+        setIsPlaying={setIsPlaying}
+        setCurrentlyAt={setCurrentlyAt}
+        setClickTriggered={setClickTriggered}
+      />
     </div>
   );
 }

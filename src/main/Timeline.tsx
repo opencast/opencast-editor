@@ -7,8 +7,8 @@ import { css } from '@emotion/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
-  selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered
+  selectSegments, selectActiveSegmentIndex, selectDuration,
+  selectVideoURL,
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +24,8 @@ import { scrubberKeyMap } from '../globalKeys';
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectMainMenuState } from '../redux/mainMenuSlice';
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { RootState } from '../redux/store';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -31,7 +33,19 @@ import { selectMainMenuState } from '../redux/mainMenuSlice';
  * Its width corresponds to the duration of the video
  * TODO: Figure out why ResizeObserver does not update anymore if we stop passing the width to the SegmentsList
  */
-const Timeline: React.FC<{}> = () => {
+const Timeline: React.FC<{
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setClickTriggered: ActionCreatorWithPayload<any, string>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setClickTriggered,
+  setCurrentlyAt,
+  setIsPlaying
+}) => {
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -55,7 +69,13 @@ const Timeline: React.FC<{}> = () => {
 
   return (
   <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber timelineWidth={width}/>
+    <Scrubber
+      timelineWidth={width}
+      selectCurrentlyAt={selectCurrentlyAt}
+      selectIsPlaying={selectIsPlaying}
+      setCurrentlyAt={setCurrentlyAt}
+      setIsPlaying={setIsPlaying}
+    />
     <div css={{height: '230px'}} >
       <Waveforms />
       <SegmentsList timelineWidth={width}/>
@@ -68,7 +88,19 @@ const Timeline: React.FC<{}> = () => {
  * Displays and defines the current position in the video
  * @param param0
  */
-const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+const Scrubber: React.FC<{
+  timelineWidth: number,
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  timelineWidth,
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setCurrentlyAt,
+  setIsPlaying,
+}) => {
 
   const { t } = useTranslation();
 
