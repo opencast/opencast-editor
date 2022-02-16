@@ -1,6 +1,6 @@
 import React from "react";
 import { css } from "@emotion/react";
-import Timeline from "./Timeline";
+import { Scrubber, SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import ReactPlayer from "react-player";
 import { basicButtonStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,11 @@ import {
   setCurrentlyAt,
   setIsPlaying,
 } from '../redux/subtitleSlice'
+import { useDispatch, useSelector } from "react-redux";
+import useResizeObserver from "use-resize-observer";
+import { selectDuration } from "../redux/videoSlice";
+import { RootState } from "../redux/store";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -84,7 +89,7 @@ import {
           <SubtitleVideoPlayer />
         </div>
       </div>
-      <Timeline
+      <SubtitleTimeline
         selectIsPlaying={selectIsPlaying}
         selectCurrentlyAt={selectCurrentlyAt}
         setIsPlaying={setIsPlaying}
@@ -154,6 +159,139 @@ const SubtitleVideoPlayer : React.FC<{}> = () => {
     <>
       {render()}
     </>
+  );
+}
+
+/**
+ * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
+ * like adding in a list of subtitle segments
+ */
+const SubtitleTimeline: React.FC<{
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setClickTriggered: ActionCreatorWithPayload<any, string>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setClickTriggered,
+  setCurrentlyAt,
+  setIsPlaying
+}) => {
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const duration = useSelector(selectDuration)
+
+  const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
+
+  const timelineStyle = css({
+    position: 'relative',     // Need to set position for Draggable bounds to work
+    height: '220px',
+    width: '100%',
+  });
+
+  // Update the current time based on the position clicked on the timeline
+  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    let rect = e.currentTarget.getBoundingClientRect()
+    let offsetX = e.clientX - rect.left
+    dispatch(setClickTriggered(true))
+    dispatch(setCurrentlyAt((offsetX / width) * (duration)))
+  }
+
+  return (
+  <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
+    <Scrubber
+      timelineWidth={width}
+      selectCurrentlyAt={selectCurrentlyAt}
+      selectIsPlaying={selectIsPlaying}
+      setCurrentlyAt={setCurrentlyAt}
+      setIsPlaying={setIsPlaying}
+    />
+    <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
+    <TimelineSubtitleSegmentsList timelineWidth={width}/>
+    <div css={{position: 'relative', height: '100px'}} >
+      <Waveforms />
+      <CuttingSegmentsList timelineWidth={width}/>
+    </div>
+  </div>
+  );
+};
+
+/**
+ * Displays subtitle segments as a row of boxes
+ */
+const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+
+  const dummyData : [string, number, number][] = [
+    ["Bla", 0, 3000],
+    ["Fischers Frizt fischt frische Fische. Frische Fische fischt Fischers Fritz!", 5000, 7000],
+    ["Overlap 1", 10000, 20000],
+    ["Overlap 2", 15000, 25000],
+    ["", 50000, 50000],
+    ["", 500000, 600000],
+  ]
+
+  const segmentsListStyle = css({
+    position: 'relative',
+    width: '100%',
+    height: '100px',
+    overflow: 'hidden',
+  })
+
+  return (
+    <div css={segmentsListStyle}>
+      {dummyData.map((item, i) => {
+        return (
+          <TimelineSubtitleSegment timelineWidth={timelineWidth} textInit={item[0]} startInit={item[1]} endInit={item[2]} key={i}/>
+        )
+      })}
+    </div>
+  );
+
+}
+
+/**
+ * A single segments for the timeline subtitle segments list
+ */
+const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string, startInit: number, endInit: number}> = ({timelineWidth, textInit, startInit, endInit}) => {
+
+  const duration = useSelector(selectDuration)
+
+  const segmentStyle = css({
+    // Use absolute positioning to allow for overlap
+    position: 'absolute',
+    top: 0,
+    left: timelineWidth * (startInit / duration),
+    height: '100%',
+    width: ((endInit - startInit) / duration) * 100 + '%',
+
+    background: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: '5px',
+    borderStyle: 'solid',
+    borderColor: 'dark-grey',
+    borderWidth: '1px',
+    boxSizing: 'border-box',
+    zIndex: 1,
+
+    // Center text
+    display: 'flex',
+    alignItems: 'center',
+  })
+
+  const textStyle = css({
+    overflow: 'hidden',
+    whiteSpace: "nowrap",
+    textOverflow: 'ellipsis',
+    padding: '2px',
+    color: 'white',
+  })
+
+  return (
+    <div css={segmentStyle}>
+      <span css={textStyle}>{textInit}</span>
+    </div>
   );
 }
 
