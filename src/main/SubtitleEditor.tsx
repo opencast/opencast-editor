@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { css } from "@emotion/react";
 import Timeline from "./Timeline";
 import ReactPlayer from "react-player";
@@ -151,10 +151,6 @@ const SubtitleListEditor : React.FC<{}> = () => {
  */
 const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endInit: string}> = ({textInit, startInit, endInit}) => {
 
-  const [text, setText] = useState(textInit)
-  const [start, setStart] = useState(startInit)
-  const [end, setEnd] = useState(endInit)
-
   const segmentStyle = css({
     display: 'flex',
     flexDirection: 'row',
@@ -224,7 +220,7 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
 
   return (
     <div css={segmentStyle}>
-      <textarea css={[fieldStyle, textFieldStyle]} name={"test"} defaultValue={text}></textarea>
+      <textarea css={[fieldStyle, textFieldStyle]} name={"test"} defaultValue={textInit}></textarea>
       <div css={functionButtonAreaStyle}>
         {/* <div css={[basicButtonStyle, addSegmentButtonStyle]}>
           <FontAwesomeIcon icon={faArrowUp} size="1x" />
@@ -239,8 +235,8 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
         </div>
       </div>
       <div css={timeAreaStyle}>
-        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={start}></input>
-        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={end}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={startInit}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={endInit}></input>
       </div>
       {/* <input id={"end"} type={"text"} value={end} onInput={e => setEnd((e.target as HTMLInputElement).value)}></input> */}
     </div>
