@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { selectIsEnd } from '../redux/endSlice'
 import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
+import Lock from "./Lock";
 
 
 const Body: React.FC<{}> = () => {
@@ -37,6 +38,7 @@ const Body: React.FC<{}> = () => {
         <div css={bodyStyle}>
           <MainMenu />
           <MainContent />
+          <Lock />
         </div>
       );
     }

@@ -75,11 +75,3 @@ client.get = function (endpoint, customConfig = {}) {
 client.post = function (endpoint, body, customConfig = {}) {
   return client(endpoint, 'POST', {body, ...customConfig})
 }
-
-client.startLock = function (endpoint, body, delay, customConfig = {}) {
-  client.lock(endpoint, body, customConfig);
-  body.lockRefresh = true;
-  useInterval( async () => {
-    const refreshLock = await client.refresh(endpoint,body, customConfig)
-  }, delay);
-}
