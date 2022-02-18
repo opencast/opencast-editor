@@ -73,21 +73,27 @@ export function checkFlexGapSupport() {
 	return flexGapIsSupported
 }
 
-export function useInterval(callback, delay:number) {
-  const savedCallback = useRef();
+// Runs a callback every delay milliseconds (I think)
+// Pass delay = null to stop
+// Based off: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+type IntervalFunction = () => ( unknown | void )
+export function useInterval(callback: IntervalFunction, delay: number | null) {
+
+  const savedCallback = useRef<IntervalFunction | null>( null )
+
   useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-  
+    savedCallback.current = callback
+  })
+
   useEffect(() => {
     function tick() {
-      savedCallback.current();
+      if ( savedCallback.current !== null ) {
+        savedCallback.current()
+      }
     }
     if (delay !== null) {
-      const id = setInterval(tick, delay);
-      return () => {
-        clearInterval(id);
-      };
+      const id = setInterval(tick, delay)
+      return () => { clearInterval(id) }
     }
   }, [callback, delay]);
 }

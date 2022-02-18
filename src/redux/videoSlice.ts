@@ -23,14 +23,15 @@ export interface video {
   videoCount: number,   // Total number of videos
   duration: number,     // Video duration in milliseconds
   title: string,
-  lockingActive: boolean,
-  lockRefresh: number,
-  lock: lockData,
   presenters: string[],
   workflows: Workflow[],
+
+  lockingActive: boolean,
+  lockRefresh: number | null,
+  lock: lockData,
 }
 
-export interface lockData {  
+export interface lockData {
   lockUser: string,
   lockName: string,
   lockEmail: string,
@@ -58,7 +59,7 @@ export const initialState: video & httpRequestState = {
   workflows: [],
 
   lockingActive: false,
-  lockRefresh: 0,
+  lockRefresh: null,
   lock: {lockUser: '', lockName: '', lockEmail: '', lockRefresh: false},
 
   status: 'idle',
@@ -134,6 +135,9 @@ export const videoSlice = createSlice({
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
       state.hasChanges = action.payload
     },
+    setLock: (state, action: PayloadAction<video["lock"]>) => {
+      state.lock = action.payload
+    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -202,14 +206,6 @@ export const videoSlice = createSlice({
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
-        state.lockingActive = action.payload.locking_active
-        if (action.payload.lockingActive == true) {
-            state.lock.lockUser = action.payload.lock_user;
-            state.lock.lockName = action.payload.lock_name;
-            state.lock.lockEmail = action.payload.lock_email;
-            state.lock.lockRefresh = false;
-            client.startLock(`${settings.opencast.url}/editor/${settings.id}/editorLock`, state.lock, action.payload.lock_refresh);
-        }
         state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
         state.tracks = action.payload.tracks
@@ -218,6 +214,13 @@ export const videoSlice = createSlice({
         });
 
         state.aspectRatios = new Array(state.videoCount)
+        state.lockingActive = action.payload.locking_active
+        if (action.payload.lockingActive) {
+          state.lock.lockUser = action.payload.lock_user;
+          state.lock.lockName = action.payload.lock_name;
+          state.lock.lockEmail = action.payload.lock_email;
+          state.lock.lockRefresh = false;
+        }
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -314,8 +317,8 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
-  setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  addSegment, setAspectRatio, setHasChanges, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft,
+  mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
