@@ -8,9 +8,9 @@ export interface Segment {
 export interface Track {
   id: string,
   uri: string,
-  flavor: any,
-  audio_stream: any,
-  video_stream: any,
+  flavor: {type: string, subtype: string},
+  audio_stream: {available: boolean, enabled: boolean, thumbnail_uri: string},
+  video_stream: {available: boolean, enabled: boolean, thumbnail_uri: string},
 }
 
 export interface Workflow {

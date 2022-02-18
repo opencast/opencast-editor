@@ -1,15 +1,88 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import Timeline from "./Timeline";
 import ReactPlayer from "react-player";
 import { basicButtonStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  selectCaptions,
+} from '../redux/videoSlice'
+import { useDispatch, useSelector } from "react-redux";
+import { resolve } from "node:path/win32";
+import { readBuilderProgram } from "typescript";
+import { client } from "../util/client";
+import { fetchSubtitle, selectCaption, selectGetError, selectGetStatus } from "../redux/subtitleSlice";
+import { Track } from "../types";
+import { parseSync, stringifySync } from 'subtitle'
 
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
  const SubtitleEditor : React.FC<{displayEditView: (e: boolean) => void}> = (displayEditView) => {
+
+  const dispatch = useDispatch()
+  const getStatus = useSelector(selectGetStatus);
+  const getError = useSelector(selectGetError);
+  const leCaption = useSelector(selectCaption);
+
+  const selectedFlavorSubtype = "source+en"
+  const captions = useSelector(selectCaptions)
+  let caption: Track | undefined = undefined
+
+  for (const cap of captions) {
+    if (cap.flavor.subtype === selectedFlavorSubtype) {
+      caption = cap
+    }
+  }
+
+  if (!caption) {
+    // TODO: Create a new caption
+    //  How to save it?
+  }
+
+  useEffect(() => {
+    if (getStatus === 'idle' && caption !== undefined) {
+      dispatch(fetchSubtitle(caption.uri))
+    } else if (getStatus === 'failed') {
+      // dispatch(getError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+    }
+  }, [getStatus, dispatch, caption])
+
+  // const fileReader = new FileReader()
+  // fileReader.onload = (event) => console.log(event)
+
+  // const reader = (file: string) => {
+  //   return new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.onload = () => resolve(fileReader.result);
+  //     fileReader.readAsDataURL(file);
+  //   })
+  // }
+
+  // const readFile = (file: string) => {
+  //   reader(file).then(result => console.log(result));
+  // }
+
+  // if (caption !== undefined) {
+  //   readFile(caption.uri)
+  // }
+
+  useEffect(() => {
+    if (getStatus === 'success' && leCaption !== undefined) {
+      // TODO: Parse caption
+      const nodes = parseSync(leCaption)
+      console.log(nodes)
+
+      // // do something with your subtitles
+      // // ...
+
+      // const output = stringifySync(nodes, { format: 'WebVTT' })
+      // console.log(output)
+    }
+  }, [getStatus, dispatch, leCaption])
+
+
 
   const subtitleEditorStyle = css({
     display: 'flex',
@@ -64,6 +137,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
   return (
     <div css={subtitleEditorStyle}>
+      <div>{"HEE HOO" + leCaption}</div>
       <div css={headerRowStyle}>
         <BackButton displayEditView={displayEditView.displayEditView}/>
         <div css={[titleStyle, titleStyleBold]}>

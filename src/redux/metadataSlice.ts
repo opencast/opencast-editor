@@ -71,7 +71,7 @@ export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async ()
   }
 
   const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/metadata.json`)
-  return response
+  return JSON.parse(response)
 })
 
 export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, { getState }) => {
@@ -86,7 +86,7 @@ export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, 
     allStates.metadataState.catalogs
   )
 
-  return response
+  return JSON.parse(response)
 })
 
 /**

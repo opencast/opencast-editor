@@ -25,6 +25,7 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: Workflow[],
+  captions: Track[],
 }
 
 export const initialState: video & httpRequestState = {
@@ -46,6 +47,7 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
+  captions: [],
 
   status: 'idle',
   error: undefined,
@@ -58,7 +60,7 @@ export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformati
 
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
   const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/edit.json`)
-  return response
+  return JSON.parse(response)
 })
 
 const updateCurrentlyAt = (state: video, milliseconds: number) => {
@@ -184,7 +186,8 @@ export const videoSlice = createSlice({
 
         // New API
         // eslint-disable-next-line no-sequences
-        state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videoURLs = action.payload.tracks.filter((track: Track) => track.video_stream.available === true)
+          .reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
@@ -196,6 +199,7 @@ export const videoSlice = createSlice({
         });
 
         state.aspectRatios = new Array(state.videoCount)
+        state.captions = action.payload.tracks.filter((track: Track) => track.flavor.type === "captions") // TODO: Is this at all reliable? Should this be done in the backend?
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -333,5 +337,6 @@ export const selectTracks = (state: { videoState: { tracks: video["tracks"] } })
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
+export const selectCaptions = (state: { videoState: { captions: video["captions"] } }) => state.videoState.captions
 
 export default videoSlice.reducer
