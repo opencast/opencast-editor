@@ -194,5 +194,11 @@
       "deleteTrackTooltip": "Do not encode and publish this track.",
       "restoreTrackTooltip": "Encode and publish this track.",
       "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
+    },
+
+    "subtitles": {
+      "createSubtitleButton": "Create",
+      "createSubtitleButtonTooltip": "Start a new subtitle file with the chosen title.",
+      "createSubtitleDropdownLabel": "Pick a language"
     }
   }
