@@ -25,6 +25,11 @@ export interface TimelineState {
   scrubberPos: number
 }
 
+export interface Subtitle {
+  identifier: string
+  subtitle: any
+}
+
 export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]

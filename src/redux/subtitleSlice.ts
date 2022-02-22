@@ -2,13 +2,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
 import { client } from '../util/client';
-import { httpRequestState } from '../types';
+import { httpRequestState, Subtitle } from '../types';
 
 export interface subtitle {
   isPlaying: boolean,             // Are videos currently playing?
   currentlyAt: number,            // Position in the video in milliseconds
   clickTriggered: boolean,        // Another video player callback
   caption: string | undefined,
+  subtitles: Subtitle[],
+  selectedSubtitleFlavor: string,
 }
 
 const initialState: subtitle & httpRequestState = {
@@ -16,6 +18,8 @@ const initialState: subtitle & httpRequestState = {
   currentlyAt: 0,   // Position in the video in milliseconds
   clickTriggered: false,
   caption: undefined,
+  subtitles: [],
+  selectedSubtitleFlavor: "",
 
   status: 'idle',
   error: undefined,
@@ -53,6 +57,23 @@ export const subtitleSlice = createSlice({
     setClickTriggered: (state, action) => {
       state.clickTriggered = action.payload
     },
+    resetRequestState: (state) => {
+      state.status = 'idle'
+    },
+    setSubtitle: (state, action: PayloadAction<{identifier: string} & {subtitle: any}>) => {
+      let index = 0
+      for (const sub of state.subtitles) {
+        if (sub.identifier === action.payload.identifier) {
+          state.subtitles[index] = action.payload.subtitle
+          return
+        }
+        index++
+      }
+      state.subtitles.push({identifier: action.payload.identifier, subtitle: action.payload.subtitle})
+    },
+    setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
+      state.selectedSubtitleFlavor = action.payload
+    }
   },
   extraReducers: builder => {
     builder.addCase(
@@ -74,7 +95,7 @@ export const subtitleSlice = createSlice({
 })
 
 // Export Actions
-export const { setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered } = subtitleSlice.actions
+export const { setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsPlaying = (state: RootState) =>
@@ -84,11 +105,15 @@ export const selectCurrentlyAt = (state: RootState) =>
 export const selectCurrentlyAtInSeconds = (state: { subtitleState: { currentlyAt: subtitle["currentlyAt"]; }; }) =>
   state.subtitleState.currentlyAt / 1000
 
-  export const selectCaption = (state: { subtitleState: { caption: subtitle["caption"] } }) =>
+export const selectCaption = (state: { subtitleState: { caption: subtitle["caption"] } }) =>
   state.subtitleState.caption
 export const selectGetStatus = (state: { subtitleState: { status: httpRequestState["status"] } }) =>
   state.subtitleState.status
 export const selectGetError = (state: { subtitleState: { error: httpRequestState["error"] } }) =>
   state.subtitleState.error
+export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"] } }) =>
+  state.subtitleState.subtitles
+export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"] } }) =>
+  state.subtitleState.selectedSubtitleFlavor
 
 export default subtitleSlice.reducer

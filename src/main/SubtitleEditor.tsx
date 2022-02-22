@@ -9,12 +9,9 @@ import {
   selectCaptions,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { resolve } from "node:path/win32";
-import { readBuilderProgram } from "typescript";
-import { client } from "../util/client";
-import { fetchSubtitle, selectCaption, selectGetError, selectGetStatus } from "../redux/subtitleSlice";
-import { Track } from "../types";
-import { parseSync, stringifySync } from 'subtitle'
+import { fetchSubtitle, resetRequestState, selectCaption, selectGetStatus, selectSelectedSubtitleFlavor, selectSubtitles, setSubtitle } from "../redux/subtitleSlice";
+import { Subtitle, Track } from "../types";
+import { WebVTTParser } from 'webvtt-parser';
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -23,64 +20,97 @@ import { parseSync, stringifySync } from 'subtitle'
 
   const dispatch = useDispatch()
   const getStatus = useSelector(selectGetStatus);
-  const getError = useSelector(selectGetError);
-  const leCaption = useSelector(selectCaption);
+  const rawCaption = useSelector(selectCaption);    // VTT file fetched from Opencast
+  const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
+  const subtitles = useSelector(selectSubtitles)    // Parsed
 
-  const selectedFlavorSubtype = "source+en"
-  const captions = useSelector(selectCaptions)
-  let caption: Track | undefined = undefined
+  // let selectedFlavorSubtype = "source+en"
+  const selectedFlavorSubtype = useSelector(selectSelectedSubtitleFlavor)
 
-  for (const cap of captions) {
-    if (cap.flavor.subtype === selectedFlavorSubtype) {
-      caption = cap
+  let captionTrack: Track | undefined = undefined   // track object received from Opencast
+  let subtitle: Subtitle | undefined = undefined    // Parsed
+
+  // Grab subtitle from redux store
+  for (const sub of subtitles) {
+    if (sub.identifier === selectedFlavorSubtype) {
+      subtitle = sub
     }
   }
 
-  if (!caption) {
-    // TODO: Create a new caption
-    //  How to save it?
+  // If subtitle is not in our redux store, we gotta fetch it
+  // Get the correct captions url
+  // TODO: Turn this into a redux selector maybe?
+  if (subtitle === undefined) {
+    for (const cap of captionTracks) {
+      if (cap.flavor.subtype === selectedFlavorSubtype) {
+        captionTrack = cap
+      }
+    }
   }
 
+
   useEffect(() => {
-    if (getStatus === 'idle' && caption !== undefined) {
-      dispatch(fetchSubtitle(caption.uri))
+    // Instigate fetching caption data from Opencast
+    if (getStatus === 'idle' && subtitle === undefined && captionTrack !== undefined ) {
+      dispatch(fetchSubtitle(captionTrack.uri))
+    // Or create a new subtitle instead
+    } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined) {
+      // Create a captionTrack
+      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitle: {}}))
+      // Reset request
+      dispatch(resetRequestState)
+    // Error while fetching
     } else if (getStatus === 'failed') {
-      // dispatch(getError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+      // dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
     }
-  }, [getStatus, dispatch, caption])
+  }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
 
-  // const fileReader = new FileReader()
-  // fileReader.onload = (event) => console.log(event)
-
-  // const reader = (file: string) => {
-  //   return new Promise((resolve, reject) => {
-  //     const fileReader = new FileReader();
-  //     fileReader.onload = () => resolve(fileReader.result);
-  //     fileReader.readAsDataURL(file);
-  //   })
-  // }
-
-  // const readFile = (file: string) => {
-  //   reader(file).then(result => console.log(result));
-  // }
-
-  // if (caption !== undefined) {
-  //   readFile(caption.uri)
-  // }
-
+  // Parse caption data after fetching
   useEffect(() => {
-    if (getStatus === 'success' && leCaption !== undefined) {
+    if (getStatus === 'success' && rawCaption !== undefined) {
+
+      // Used parsing library: https://www.npmjs.com/package/webvtt-parser
+      // - Unmaintained and does have bugs, so we will need to switch eventually
+      // Other interesting vtt parsing libraries:
+      // https://github.com/osk/node-webvtt
+      // - Pros: Parses styles and meta information
+      // - Cons: Parses timestamps in seconds, Maybe not maintained anymore
+      // https://github.com/gsantiago/subtitle.js
+      // - Pros: Parses styles, can also parse SRT, actively maintained
+      // - Cons: Uses node streaming library, can't polyfill without ejecting CreateReactApp
       // TODO: Parse caption
-      const nodes = parseSync(leCaption)
-      console.log(nodes)
+      const parser = new WebVTTParser();
+      const tree = parser.parse(rawCaption, 'metadata');
+      for (const node of tree.cues) {
+        console.log("Cue: " + node.text)
+      }
+      for (const node of tree.errors) {
+        console.log("Error: " + node)
+      }
+
+      console.log(tree)
+      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitle: tree.cues}))
+
+      // Reset request
+      dispatch(resetRequestState)
+
+
+
+
+      // const nodes = parseSync(leCaption)
 
       // // do something with your subtitles
       // // ...
 
       // const output = stringifySync(nodes, { format: 'WebVTT' })
       // console.log(output)
+
+
+
+      // Reset request
+      dispatch(resetRequestState)
     }
-  }, [getStatus, dispatch, leCaption])
+  }, [getStatus, dispatch, rawCaption, selectedFlavorSubtype])
 
 
 
@@ -137,7 +167,7 @@ import { parseSync, stringifySync } from 'subtitle'
 
   return (
     <div css={subtitleEditorStyle}>
-      <div>{"HEE HOO" + leCaption}</div>
+      <div>{"HEE HO" + rawCaption}</div>
       <div css={headerRowStyle}>
         <BackButton displayEditView={displayEditView.displayEditView}/>
         <div css={[titleStyle, titleStyleBold]}>
@@ -245,4 +275,4 @@ const SubtitleVideoPlayer : React.FC<{}> = () => {
   );
 }
 
-export default SubtitleEditor;
+export default SubtitleEditor

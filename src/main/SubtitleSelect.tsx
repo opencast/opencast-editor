@@ -2,6 +2,8 @@ import React from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { settings } from '../config'
+import { setSelectedSubtitleFlavor } from "../redux/subtitleSlice";
+import { useDispatch } from "react-redux";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -15,7 +17,7 @@ import { settings } from '../config'
   })
 
   const parseCountryCode = (parseString: string) => {
-    return parseString.split("_").pop();
+    return parseString.split("+").pop();
   }
 
   const renderButtons = () => {
@@ -28,7 +30,14 @@ import { settings } from '../config'
       let key = lan // left side
       let value = settings.subtitles.languages[lan] // right side
       buttons.push(
-        <SubtitleSelectButton title={key} iconIdentifier={parseCountryCode(value)} segmentNumber={0} key={key} displayEditView={displayEditView.displayEditView}/>
+        <SubtitleSelectButton
+          title={key}
+          iconIdentifier={parseCountryCode(value)}
+          segmentNumber={0}
+          displayEditView={displayEditView.displayEditView}
+          flavor={value}
+          key={key}
+        />
       )
     }
     return buttons
@@ -42,12 +51,17 @@ import { settings } from '../config'
 }
 
 const SubtitleSelectButton: React.FC<{
-  title: string, iconIdentifier: string | undefined, segmentNumber: number, displayEditView: (e: boolean) => void
+  title: string,
+  iconIdentifier: string | undefined,
+  segmentNumber: number,
+  displayEditView: (e: boolean) => void,
+  flavor: string,
 }> = ({
-  title, iconIdentifier, segmentNumber, displayEditView
+  title, iconIdentifier, segmentNumber, displayEditView, flavor
 }) => {
 
   // const { t } = useTranslation();
+  const dispatch = useDispatch()
 
   const subtitleSelectButtonStyle = css({
     width: '250px',
@@ -91,9 +105,13 @@ const SubtitleSelectButton: React.FC<{
   return (
     <div css={[basicButtonStyle, subtitleSelectButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ () => displayEditView(true) }
+      onClick={ () => {
+        displayEditView(true)
+        dispatch(setSelectedSubtitleFlavor(flavor))
+      } }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         displayEditView(true)
+        dispatch(setSelectedSubtitleFlavor(flavor))
       }}}
       >
       {iconIdentifier && getFlagEmoji(iconIdentifier) && <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>}

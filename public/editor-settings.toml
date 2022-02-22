@@ -12,7 +12,7 @@
 # This is very useful as demo, but has no purpose otherwise.
 # Type: string | undefined
 # Default: undefined
-id = '44528b09-b6aa-4b91-bb88-2597891edcfa'
+id = '63af7c8b-faf9-4b14-be58-07ab268db5fe'
 
 
 ####
@@ -105,15 +105,15 @@ password = "opencast"
 # TODO: Comment out example
 # Example:
 [subtitles.languages]
-"Deutsch" = "de_DE"
-"Deutsch (Gehörlos)" = "de_DE"
-"English (US)" = "en_US"
-"English (GB)" = "en_GB"
-"Donaudampfschifffahrtsgesellschaft" = "de_DE"
-"Deutsch 2" = "de_DE"
-"Deutsch 3" = "de_DE"
-"Deutsch 4" = "de_DE"
-"Deutsch 5" = "de_DE"
+"Deutsch" = "source+de"
+"Deutsch (Gehörlos)" = "source+de"
+"English (US)" = "source+en"
+"English (GB)" = "source+en"
+"Donaudampfschifffahrtsgesellschaft" = "source+de"
+"Deutsch 2" = "source+de"
+"Deutsch 3" = "source+de"
+"Deutsch 4" = "source+de"
+"Deutsch 5" = "source+de"
 "🦝" = "🦝"
 
 ####

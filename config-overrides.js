@@ -4,10 +4,4 @@
   
   module.exports = override(
     addBabelPreset('@emotion/babel-preset-css-prop')
-    resolve: {
-      alias: {
-  
-      process: “process/browser”
-  
-      }}
   )
