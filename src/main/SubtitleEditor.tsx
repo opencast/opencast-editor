@@ -34,7 +34,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '60%',
+    height: '100%',
     width: '100%',
   })
 
@@ -69,7 +69,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
         <div css={[titleStyle, titleStyleBold]}>
           Subtitle Editor - [Language Name]
         </div>
-        <div css={{widht: '50px'}}></div>
+        <div css={{width: '50px'}}></div>
       </div>
       <div css={subAreaStyle}>
         <SubtitleListEditor />
