@@ -1,6 +1,8 @@
 import { css } from "@emotion/react"
 import { faArrowDown, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Hidden } from "@material-ui/core"
+import { createRef, useRef } from "react"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 
 /**
@@ -38,8 +40,8 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
     display: 'flex',
     flexDirection: 'column',
     ...(flexGapReplacementStyle(20, false)),
-    paddingTop: '2px',  // Else the select highlighting gets cut off
-    paddingBottom: '2px',
+    paddingTop: '10px',  // Else the select highlighting gets cut off
+    paddingBottom: '10px',
     paddingRight: '10px',
     overflowY: 'auto',
   })
@@ -72,12 +74,46 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
  */
 const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endInit: string}> = ({textInit, startInit, endInit}) => {
 
+  const textAreaRef = createRef<HTMLTextAreaElement>()
+
+  const isFocused = () => {
+    console.log("IsFocused?")
+    if (textAreaRef.current?.focus()) {
+      return true
+    }
+    return false
+  }
+  
+  const helep = () => {
+    console.log("HELEP")
+    return (
+      {
+        gap: '1px',
+      }
+    );
+  }
+
   const segmentStyle = css({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
     height: '100px',
     ...(flexGapReplacementStyle(20, false)),
+    "&:hover": {
+      "& .functionButtonAreaStyle": {
+        visibility: "visible",
+      }
+    },
+    "&:focus": {
+      "& .functionButtonAreaStyle": {
+        visibility: "visible",
+      }
+    },
+    "&:active": {
+      "& .functionButtonAreaStyle": {
+        visibility: "visible",
+      }
+    },
   })
 
   const timeAreaStyle = css({
@@ -99,13 +135,16 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
 
   const functionButtonAreaStyle = css({
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap',
     ...(flexGapReplacementStyle(10, false)),
-    flexGrow: '1',
-    minWidth: '50px',
+    flexGrow: '0.5',
+    minWidth: '20px',
+    height: '125px',
+
+    visibility: isFocused() ? 'visible' : 'hidden',
   })
 
   const fieldStyle = css({
@@ -132,29 +171,31 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
   })
 
   const addSegmentButtonStyle = css({
-    maxWidth: '35px',
-    maxHeight: '15px',
-    padding: '16px',
+    // maxWidth: '35px',
+    // maxHeight: '15px',
+    width: '32px',
+    height: '32px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     // gridRow: 'row1-end',
+    top: '-10px;',
+    left: '-5px;',
   })
 
   return (
     <div css={segmentStyle}>
-      <textarea css={[fieldStyle, textFieldStyle]} name={"test"} defaultValue={textInit}></textarea>
-      <div css={functionButtonAreaStyle}>
+      <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
         {/* <div css={[basicButtonStyle, addSegmentButtonStyle]}>
-          <FontAwesomeIcon icon={faArrowUp} size="1x" />
           <FontAwesomeIcon icon={faPlus} size="1x" />
         </div> */}
+        <div></div>
         <div css={[basicButtonStyle, addSegmentButtonStyle]}>
           <FontAwesomeIcon icon={faTrash} size="1x" />
         </div>
         <div css={[basicButtonStyle, addSegmentButtonStyle]}>
-          <FontAwesomeIcon icon={faArrowDown} size="1x" />
           <FontAwesomeIcon icon={faPlus} size="1x" />
         </div>
       </div>
+      <textarea css={[fieldStyle, textFieldStyle]} name={"test"} defaultValue={textInit} ref={textAreaRef}></textarea>
       <div css={timeAreaStyle}>
         <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={startInit}></input>
         <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={endInit}></input>
