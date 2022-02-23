@@ -1,6 +1,5 @@
 import React from "react";
 import { css } from "@emotion/react";
-import { useState } from "react";
 import SubtitleEditor from "./SubtitleEditor";
 import SubtitleSelect from "./SubtitleSelect";
 import { useSelector } from "react-redux";
