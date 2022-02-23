@@ -5,11 +5,13 @@ import ReactPlayer from "react-player";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { faArrowDown, faChevronLeft, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch } from "react-redux";
+import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 /**
  * Displays an editor view for a selected subtitle file
  */
- const SubtitleEditor : React.FC<{displayEditView: (e: boolean) => void}> = (displayEditView) => {
+ const SubtitleEditor : React.FC<{}> = () => {
 
   const subtitleEditorStyle = css({
     display: 'flex',
@@ -34,7 +36,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '60%',
+    height: '100%',
     width: '100%',
   })
 
@@ -65,7 +67,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   return (
     <div css={subtitleEditorStyle}>
       <div css={headerRowStyle}>
-        <BackButton displayEditView={displayEditView.displayEditView}/>
+        <BackButton />
         <div css={[titleStyle, titleStyleBold]}>
           Subtitle Editor - [Language Name]
         </div>
@@ -294,7 +296,9 @@ const SubtitleVideoPlayer : React.FC<{}> = () => {
 /**
  * Takes you to a different page
  */
- export const BackButton : React.FC<{displayEditView: (e: boolean) => void}> = ({displayEditView}) => {
+ export const BackButton : React.FC<{}> = () => {
+
+  const dispatch = useDispatch();
 
   const backButtonStyle = css({
     width: '50px',
@@ -307,9 +311,9 @@ const SubtitleVideoPlayer : React.FC<{}> = () => {
   return (
     <div css={[basicButtonStyle, backButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ () => displayEditView(false) }
+      onClick={ () => dispatch(setIsDisplayEditView(false)) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        displayEditView(false)
+        dispatch(setIsDisplayEditView(false))
       }}}>
       <FontAwesomeIcon icon={faChevronLeft} size="1x" />
       <span>{"Back"}</span>
