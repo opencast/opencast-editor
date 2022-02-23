@@ -1,6 +1,7 @@
 import { css } from "@emotion/react"
 import { faArrowDown, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useEffect } from "react"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 
 /**
@@ -8,6 +9,7 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
  */
  const SubtitleListEditor : React.FC<{}> = () => {
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dummyData : [string, string, string][] = [
     ["", "", ""],
     ["Bla", "00:00:00.000", "00:00:03.000"],
@@ -16,6 +18,14 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
     ["", "", ""],
     ["", "", ""],
   ]
+
+  // Automatically create a segment if there are no segments
+  useEffect(() => {
+    if (dummyData.length === 0) {
+      // TODO: Actually create a segment here
+      console.log("TODO: Create a segment")
+    }
+  }, [dummyData])
 
   const listStyle = css({
     display: 'flex',
