@@ -1,8 +1,6 @@
 import { css } from "@emotion/react"
-import { faArrowDown, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Hidden } from "@material-ui/core"
-import { createRef, useRef } from "react"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 
 /**
@@ -74,42 +72,20 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
  */
 const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endInit: string}> = ({textInit, startInit, endInit}) => {
 
-  const textAreaRef = createRef<HTMLTextAreaElement>()
-
-  const isFocused = () => {
-    console.log("IsFocused?")
-    if (textAreaRef.current?.focus()) {
-      return true
-    }
-    return false
-  }
-  
-  const helep = () => {
-    console.log("HELEP")
-    return (
-      {
-        gap: '1px',
-      }
-    );
-  }
-
   const segmentStyle = css({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
     height: '100px',
     ...(flexGapReplacementStyle(20, false)),
+    // Make function buttons visible when hovered or focused
     "&:hover": {
       "& .functionButtonAreaStyle": {
         visibility: "visible",
       }
     },
-    "&:focus": {
-      "& .functionButtonAreaStyle": {
-        visibility: "visible",
-      }
-    },
-    "&:active": {
+    "&:focus-within": {
       "& .functionButtonAreaStyle": {
         visibility: "visible",
       }
@@ -120,31 +96,19 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    height: '100%',
   })
-
-  // const functionButtonAreaStyle = css({
-  //   display: 'grid',
-  //   gridTemplateRows: '[row1-start] 20% [row1-end] 50% [third-line] 20% [last-line]',
-  //   // gridTemplateRows: '[row1-start] 50% [row1-end] 50% [last-line]',
-  //   gridTemplateColumns: 'repeat(2, 50%)',
-  //   placeitems: 'center',
-  //   gridGap: '10px',
-  //   flexGrow: '1',
-  //   minWidth: '50px',
-  // })
 
   const functionButtonAreaStyle = css({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // flexWrap: 'wrap',
     ...(flexGapReplacementStyle(10, false)),
     flexGrow: '0.5',
     minWidth: '20px',
-    height: '125px',
-
-    visibility: isFocused() ? 'visible' : 'hidden',
+    height: '152px',    // Hackily moves buttons beyond the segment border. Specific value causes buttons from neighboring segments to overlay
+    visibility: 'hidden',
   })
 
   const fieldStyle = css({
@@ -158,6 +122,7 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
 
   const textFieldStyle = css({
     flexGrow: '7',
+    height: '80%',
     minWidth: '100px',
     // TODO: Find a way to allow resizing without breaking the UI
     //  Manual or automatic resizing can cause neighboring textareas to overlap
@@ -176,29 +141,29 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
     width: '32px',
     height: '32px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    // gridRow: 'row1-end',
-    top: '-10px;',
-    left: '-5px;',
+    zIndex: '1000',
   })
 
   return (
     <div css={segmentStyle}>
+
+      <textarea css={[fieldStyle, textFieldStyle]} name={"test"} defaultValue={textInit}></textarea>
+      <div css={timeAreaStyle}>
+        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={startInit}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={endInit}></input>
+      </div>
+
       <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
-        {/* <div css={[basicButtonStyle, addSegmentButtonStyle]}>
+        <div css={[basicButtonStyle, addSegmentButtonStyle]}>
           <FontAwesomeIcon icon={faPlus} size="1x" />
-        </div> */}
-        <div></div>
+        </div>
+        {/* <div></div> */}
         <div css={[basicButtonStyle, addSegmentButtonStyle]}>
           <FontAwesomeIcon icon={faTrash} size="1x" />
         </div>
         <div css={[basicButtonStyle, addSegmentButtonStyle]}>
           <FontAwesomeIcon icon={faPlus} size="1x" />
         </div>
-      </div>
-      <textarea css={[fieldStyle, textFieldStyle]} name={"test"} defaultValue={textInit} ref={textAreaRef}></textarea>
-      <div css={timeAreaStyle}>
-        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={startInit}></input>
-        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={endInit}></input>
       </div>
       {/* <input id={"end"} type={"text"} value={end} onInput={e => setEnd((e.target as HTMLInputElement).value)}></input> */}
     </div>
