@@ -2,11 +2,13 @@ import React from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { settings } from '../config'
+import { useDispatch } from "react-redux";
+import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
- const SubtitleSelect : React.FC<{displayEditView: (e: boolean) => void}> = (displayEditView) => {
+ const SubtitleSelect : React.FC<{}> = () => {
 
   const subtitleSelectStyle = css({
     display: 'grid',
@@ -28,7 +30,7 @@ import { settings } from '../config'
       let key = lan // left side
       let value = settings.subtitles.languages[lan] // right side
       buttons.push(
-        <SubtitleSelectButton title={key} iconIdentifier={parseCountryCode(value)} segmentNumber={0} key={key} displayEditView={displayEditView.displayEditView}/>
+        <SubtitleSelectButton title={key} iconIdentifier={parseCountryCode(value)} segmentNumber={0} key={key} />
       )
     }
     return buttons
@@ -42,12 +44,12 @@ import { settings } from '../config'
 }
 
 const SubtitleSelectButton: React.FC<{
-  title: string, iconIdentifier: string | undefined, segmentNumber: number, displayEditView: (e: boolean) => void
+  title: string, iconIdentifier: string | undefined, segmentNumber: number,
 }> = ({
-  title, iconIdentifier, segmentNumber, displayEditView
+  title, iconIdentifier, segmentNumber,
 }) => {
 
-  // const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const subtitleSelectButtonStyle = css({
     width: '250px',
@@ -91,9 +93,9 @@ const SubtitleSelectButton: React.FC<{
   return (
     <div css={[basicButtonStyle, subtitleSelectButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ () => displayEditView(true) }
+      onClick={ () => dispatch(setIsDisplayEditView(true)) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        displayEditView(true)
+        dispatch(setIsDisplayEditView(true))
       }}}
       >
       {iconIdentifier && getFlagEmoji(iconIdentifier) && <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>}
