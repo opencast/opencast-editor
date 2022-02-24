@@ -16,6 +16,21 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
   ])
 
   // Automatically create a segment if there are no segments

@@ -15,9 +15,7 @@ import SubtitleListEditor from "./SubtitleListEditor";
  const SubtitleEditor : React.FC<{}> = () => {
 
   const subtitleEditorStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: 'block',
     paddingRight: '20px',
     paddingLeft: '20px',
     gap: '20px',
@@ -29,7 +27,8 @@ import SubtitleListEditor from "./SubtitleListEditor";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
+    height: '5%',
   })
 
   const subAreaStyle = css({
@@ -37,7 +36,7 @@ import SubtitleListEditor from "./SubtitleListEditor";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '100%',
+    height: '75%',
     width: '100%',
   })
 
