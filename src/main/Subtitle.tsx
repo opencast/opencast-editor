@@ -1,12 +1,13 @@
 import React from "react";
 import { css } from "@emotion/react";
-import { useState } from "react";
 import SubtitleEditor from "./SubtitleEditor";
 import SubtitleSelect from "./SubtitleSelect";
+import { useSelector } from "react-redux";
+import { selectIsDisplayEditView } from "../redux/subtitleSlice";
 
 const Subtitle : React.FC<{}> = () => {
 
-  const [displayEditView, setDisplayEditView] = useState(false);
+  const displayEditView = useSelector(selectIsDisplayEditView)
 
   const pageSelectStyle = css({
     display: !displayEditView ? 'block' :'none',
@@ -17,18 +18,13 @@ const Subtitle : React.FC<{}> = () => {
     height: '100%',
   })
 
-  const setEditViewCallback = (displayEditView: boolean) => {
-    console.log("Callback called: " + displayEditView)
-    setDisplayEditView(displayEditView);
-  }
-
   return (
     <>
       <div css={pageSelectStyle} >
-        <SubtitleSelect displayEditView={setEditViewCallback}/>
+        <SubtitleSelect />
       </div>
       <div css={pageEditStyle} >
-        <SubtitleEditor displayEditView={setEditViewCallback}/>
+        <SubtitleEditor />
       </div>
     </>
   );

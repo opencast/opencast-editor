@@ -19,6 +19,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
+import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -66,6 +67,9 @@ const MainMenuButton: React.FC<{iconName: any, stateName: mainMenu["value"]}> = 
     // Reset multi-page content to their first page
     if (stateName === MainMenuStateNames.finish) {
       dispatch(setPageNumber(0))
+    }
+    if (stateName === MainMenuStateNames.subtitles) {
+      dispatch(setIsDisplayEditView(false))
     }
     // Halt ongoing events
     dispatch(setIsPlaying(false))

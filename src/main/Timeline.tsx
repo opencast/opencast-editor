@@ -76,7 +76,7 @@ const Timeline: React.FC<{
       setCurrentlyAt={setCurrentlyAt}
       setIsPlaying={setIsPlaying}
     />
-    <div css={{position: 'relative', height: '230px'}} >
+    <div css={{position: 'relative', height: '250px'}} >
       <Waveforms />
       <SegmentsList timelineWidth={width}/>
     </div>

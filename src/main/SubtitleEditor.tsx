@@ -17,11 +17,12 @@ import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
- const SubtitleEditor : React.FC<{displayEditView: (e: boolean) => void}> = (displayEditView) => {
+ const SubtitleEditor : React.FC<{}> = () => {
 
   const subtitleEditorStyle = css({
     display: 'flex',
@@ -46,7 +47,7 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '60%',
+    height: '100%',
     width: '100%',
   })
 
@@ -77,11 +78,11 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
   return (
     <div css={subtitleEditorStyle}>
       <div css={headerRowStyle}>
-        <BackButton displayEditView={displayEditView.displayEditView}/>
+        <BackButton />
         <div css={[titleStyle, titleStyleBold]}>
           Subtitle Editor - [Language Name]
         </div>
-        <div css={{widht: '50px'}}></div>
+        <div css={{width: '50px'}}></div>
       </div>
       <div css={subAreaStyle}>
         <SubtitleListEditor />
@@ -299,7 +300,9 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
 /**
  * Takes you to a different page
  */
- export const BackButton : React.FC<{displayEditView: (e: boolean) => void}> = ({displayEditView}) => {
+ export const BackButton : React.FC<{}> = () => {
+
+  const dispatch = useDispatch();
 
   const backButtonStyle = css({
     width: '50px',
@@ -312,9 +315,9 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
   return (
     <div css={[basicButtonStyle, backButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ () => displayEditView(false) }
+      onClick={ () => dispatch(setIsDisplayEditView(false)) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        displayEditView(false)
+        dispatch(setIsDisplayEditView(false))
       }}}>
       <FontAwesomeIcon icon={faChevronLeft} size="1x" />
       <span>{"Back"}</span>
