@@ -69,7 +69,7 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
       <div css={segmentListStyle}>
         {dummyData.map((item, i) => {
           return (
-            <SubtitleListSegment textInit={item[0]} startInit={item[1]} endInit={item[2]} key={i}/>
+            <SubtitleListSegment textInit={item[0]} startInit={item[1]} endInit={item[2]} key={i} setDummyData={setDummyData}/>
           )
         })}
       </div>
@@ -80,7 +80,7 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 /**
  * A single subtitle segment
  */
-const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endInit: string}> = ({textInit, startInit, endInit}) => {
+const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endInit: string, setDummyData: any}> = ({textInit, startInit, endInit, setDummyData}) => {
 
   const segmentStyle = css({
     display: 'flex',
@@ -157,10 +157,21 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
   return (
     <div css={segmentStyle}>
 
-      <textarea css={[fieldStyle, textFieldStyle]} name={"test"} defaultValue={textInit}></textarea>
+      <textarea
+        css={[fieldStyle, textFieldStyle]}
+        name={"test"}
+        defaultValue={textInit}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
+          // TODO: Actually create a segment here
+          // TODO: Focus the textarea in the new segment
+          console.log("TODO: Create a segment")
+          event.preventDefault()
+          setDummyData((dummyData: any) => [...dummyData, ["", "", ""]])
+        }}}
+      />
       <div css={timeAreaStyle}>
-        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={startInit}></input>
-        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={endInit}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} defaultValue={startInit}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} defaultValue={endInit}></input>
       </div>
 
       <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
