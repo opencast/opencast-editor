@@ -190,23 +190,23 @@ const SubtitleTimeline: React.FC<{
   const currentlyAt = useSelector(selectCurrentlyAt)
 
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
+  const { ref: refMini, width: widthMiniTimeline = 1, } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLDivElement>(null);
 
-  const timelineCutoutInMs = 10000
+  const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
     height: '220px',
-    width: (duration / timelineCutoutInMs) * 100 + '%'
+    width: (duration / timelineCutoutInMs) * 100 + '%'    // Total length of timeline based on number of cutouts
   });
 
-  // Update the current time based on the position clicked on the timeline
+  // Update the current time based on the position clicked on the miniTimeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log("Set currently at")
     let rect = e.currentTarget.getBoundingClientRect()
     let offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
-    dispatch(setCurrentlyAt((offsetX / width) * (duration)))
+    dispatch(setCurrentlyAt((offsetX / widthMiniTimeline) * (duration)))
   }
 
   // Apply horizonal scrolling when scrolled from somewhere else
@@ -216,8 +216,30 @@ const SubtitleTimeline: React.FC<{
     }
   }, [currentlyAt, duration, width]);
 
+  // draws a triangle on top of the middle line
+  const triangleStyle = css({
+    width: 0,
+    height: 0,
+    left: '-19px',
+    borderLeft: '20px solid transparent',
+    borderRight: '20px solid transparent',
+    position: "relative",
+    borderTop: '20px solid black',
+  })
+
   return (
-    <div css={{width: '100%', height: '230px'}}>
+    <div css={{position: 'relative', width: '100%', height: '230px'}}>
+      {/* Sits smack dab in the middle and does not move */}
+      <div
+        css={{position: 'absolute',
+        width: '2px',
+        height: '190px',
+        ...(refTop.current) && {left: (refTop.current.clientWidth / 2)},
+        top: '10px',
+        background: 'black'}}>
+          <div css={triangleStyle} />
+      </div>
+      {/* Scrollable timeline */}
       <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}>
         <div ref={ref} css={timelineStyle} title="Timeline"
           // onMouseDown={e => setCurrentlyAtToClick(e)}
@@ -232,23 +254,20 @@ const SubtitleTimeline: React.FC<{
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
           <TimelineSubtitleSegmentsList timelineWidth={width}/>
           <div css={{position: 'relative', height: '100px'}} >
-            <div
-              css={{position: 'absolute', width: '2px', height: '100%', ...(refTop.current) && {left: (refTop.current.clientWidth / 2) + ((currentlyAt / duration)) * refTop.current.scrollWidth}, top: '10px', background: 'black'}}
-            />
             <Waveforms />
             <CuttingSegmentsList timelineWidth={width}/>
           </div>
-
         </div>
-
       </div>
+      {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
       <div
         title="Mini Timeline"
         onMouseDown={e => setCurrentlyAtToClick(e)}
         css={{position: 'relative', width: '100%', height: '15px', background: 'lightgrey'}}
+        ref={refMini}
       >
         <div
-          css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (width), top: 0, background: 'black'}}
+          css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
         >
         </div>
       </div>
