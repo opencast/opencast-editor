@@ -192,13 +192,12 @@ const SubtitleTimeline: React.FC<{
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLDivElement>(null);
 
-  const milliseconds = 10000
+  const timelineCutoutInMs = 10000
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
     height: '220px',
-    // width: 100 * 2 + '%',
-    width: (duration / milliseconds) * 100 + '%'
+    width: (duration / timelineCutoutInMs) * 100 + '%'
   });
 
   // Update the current time based on the position clicked on the timeline
@@ -291,7 +290,8 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
 
   const dispatch = useDispatch()
   const duration = useSelector(selectDuration)
-  const [controlledPosition, setControlledPosition] = useState({x: 0, y: 0});
+  const [controlledPosition, setControlledPosition] = useState({x: 0, y: 0})
+  const [isGrabbed, setIsGrabbed] = useState(false)
   const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
   // Callback for when the scrubber gets dragged by the user
@@ -316,7 +316,7 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
   },[duration, startInit, timelineWidth])
 
   const onStartDrag = () => {
-    // setIsGrabbed(true)
+    setIsGrabbed(true)
 
     // // Halt video playback
     // if (isPlaying) {
@@ -332,7 +332,7 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
     // setControlledPosition({x, y: 0});
     // dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
 
-    // setIsGrabbed(false)
+    setIsGrabbed(false)
     // // Resume video playback
     // if (wasPlayingWhenGrabbed) {
     //   dispatch(setIsPlaying(true))
@@ -354,6 +354,8 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
     borderWidth: '1px',
     boxSizing: 'border-box',
     zIndex: 1,
+
+    cursor: isGrabbed ? "grabbing" : "grab",
 
     // Center text
     display: 'flex',
