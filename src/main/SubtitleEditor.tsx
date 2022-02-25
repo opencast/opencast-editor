@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import ReactPlayer from "react-player";
@@ -7,9 +7,11 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   selectCurrentlyAt,
+  selectDummyData,
   selectIsPlaying,
   setClickTriggered,
   setCurrentlyAt,
+  setDummySegment,
   setIsPlaying,
 } from '../redux/subtitleSlice'
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +20,7 @@ import { selectDuration } from "../redux/videoSlice";
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
+import Draggable from "react-draggable";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -191,9 +194,6 @@ const SubtitleTimeline: React.FC<{
 
   const milliseconds = 10000
 
-  console.log("width: " + width)
-  console.log("(duration / milliseconds) * width: " + (duration / milliseconds) * width)
-
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
     height: '220px',
@@ -213,9 +213,6 @@ const SubtitleTimeline: React.FC<{
   // Apply horizonal scrolling when scrolled from somewhere else
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
-      console.log("refTop.current.scrollWidth: " + refTop.current.scrollWidth)
-      console.log("(currentlyAt / duration) * (width): " + (currentlyAt / duration) * (width))
-      console.log("((currentlyAt / duration)): " + ((currentlyAt / duration) / 100))
       refTop.current.scrollTo(((currentlyAt / duration)) * refTop.current.scrollWidth, 0)
     }
   }, [currentlyAt, duration, width]);
@@ -266,14 +263,7 @@ const SubtitleTimeline: React.FC<{
  */
 const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
-  const dummyData : [string, number, number][] = [
-    ["Bla", 0, 3000],
-    ["Fischers Frizt fischt frische Fische. Frische Fische fischt Fischers Fritz!", 5000, 7000],
-    ["Overlap 1", 10000, 20000],
-    ["Overlap 2", 15000, 25000],
-    ["", 50000, 50000],
-    ["", 500000, 600000],
-  ]
+  const dummyData = useSelector(selectDummyData)
 
   const segmentsListStyle = css({
     position: 'relative',
@@ -286,7 +276,7 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
     <div css={segmentsListStyle}>
       {dummyData.map((item, i) => {
         return (
-          <TimelineSubtitleSegment timelineWidth={timelineWidth} textInit={item[0]} startInit={item[1]} endInit={item[2]} key={i}/>
+          <TimelineSubtitleSegment timelineWidth={timelineWidth} textInit={item[0]} startInit={item[1]} endInit={item[2]} key={i} index={i}/>
         )
       })}
     </div>
@@ -297,15 +287,63 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
 /**
  * A single segments for the timeline subtitle segments list
  */
-const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string, startInit: number, endInit: number}> = ({timelineWidth, textInit, startInit, endInit}) => {
+const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string, startInit: number, endInit: number, index: number}> = ({timelineWidth, textInit, startInit, endInit, index}) => {
 
+  const dispatch = useDispatch()
   const duration = useSelector(selectDuration)
+  const [controlledPosition, setControlledPosition] = useState({x: 0, y: 0});
+  const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
+
+  // Callback for when the scrubber gets dragged by the user
+  const onControlledDrag = (e: any, position: any) => {
+    // Update position
+    const {x} = position
+    dispatch(setDummySegment({
+      index: index,
+      text: textInit,
+      start: (x / timelineWidth) * (duration),
+      end: (x / timelineWidth) * (duration) + (endInit - startInit),
+    }))
+  }
+
+  // Reposition scrubber when the current x position was changed externally
+  useEffect(() => {
+    // if(currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
+      // updateXPos();
+      setControlledPosition({x: (startInit / duration) * (timelineWidth), y: 0});
+      // wasCurrentlyAtRef.current = currentlyAt;
+    // }
+  },[duration, startInit, timelineWidth])
+
+  const onStartDrag = () => {
+    // setIsGrabbed(true)
+
+    // // Halt video playback
+    // if (isPlaying) {
+    //   setWasPlayingWhenGrabbed(true)
+    //   dispatch(setIsPlaying(false))
+    // } else {
+    //   setWasPlayingWhenGrabbed(false)
+    // }
+  }
+  const onStopDrag = (e: any, position: any) => {
+    // // Update position
+    // const {x} = position;
+    // setControlledPosition({x, y: 0});
+    // dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
+
+    // setIsGrabbed(false)
+    // // Resume video playback
+    // if (wasPlayingWhenGrabbed) {
+    //   dispatch(setIsPlaying(true))
+    // }
+  }
 
   const segmentStyle = css({
     // Use absolute positioning to allow for overlap
     position: 'absolute',
-    top: 0,
-    left: (startInit / duration) * 100 + '%',
+    // top: 0,
+    // left: (startInit / duration) * 100 + '%',
     height: '100%',
     width: ((endInit - startInit) / duration) * 100 + '%',
 
@@ -331,9 +369,20 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
   })
 
   return (
-    <div css={segmentStyle}>
-      <span css={textStyle}>{textInit}</span>
-    </div>
+    <Draggable
+      onDrag={onControlledDrag}
+      onStart={onStartDrag}
+      onStop={onStopDrag}
+      axis="x"
+      bounds="parent"
+      position={controlledPosition}
+      // defaultPosition={{x: (startInit / duration) * (timelineWidth), y: 0}}
+      nodeRef={nodeRef}
+      >
+        <div ref={nodeRef} css={segmentStyle}>
+          <span css={textStyle}>{textInit}</span>
+        </div>
+    </Draggable>
   );
 }
 
