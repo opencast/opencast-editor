@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { css } from "@emotion/react";
-import { Scrubber, SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
+import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import ReactPlayer from "react-player";
 import { basicButtonStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -47,7 +47,7 @@ import { setIsDisplayEditView } from "../redux/subtitleSlice";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '100%',
+    height: '50%',
     width: '100%',
   })
 
@@ -184,41 +184,82 @@ const SubtitleTimeline: React.FC<{
   // Init redux variables
   const dispatch = useDispatch();
   const duration = useSelector(selectDuration)
+  const currentlyAt = useSelector(selectCurrentlyAt)
 
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
+  const refTop = useRef<HTMLDivElement>(null);
+
+  const milliseconds = 10000
+
+  console.log("width: " + width)
+  console.log("(duration / milliseconds) * width: " + (duration / milliseconds) * width)
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
     height: '220px',
-    width: '100%',
+    // width: 100 * 2 + '%',
+    width: (duration / milliseconds) * 100 + '%'
   });
 
   // Update the current time based on the position clicked on the timeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log("Set currently at")
     let rect = e.currentTarget.getBoundingClientRect()
     let offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / width) * (duration)))
   }
 
+  // Apply horizonal scrolling when scrolled from somewhere else
+  useEffect(() => {
+    if (currentlyAt !== undefined && refTop.current) {
+      console.log("refTop.current.scrollWidth: " + refTop.current.scrollWidth)
+      console.log("(currentlyAt / duration) * (width): " + (currentlyAt / duration) * (width))
+      console.log("((currentlyAt / duration)): " + ((currentlyAt / duration) / 100))
+      refTop.current.scrollTo(((currentlyAt / duration)) * refTop.current.scrollWidth, 0)
+    }
+  }, [currentlyAt, duration, width]);
+
   return (
-  <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber
-      timelineWidth={width}
-      selectCurrentlyAt={selectCurrentlyAt}
-      selectIsPlaying={selectIsPlaying}
-      setCurrentlyAt={setCurrentlyAt}
-      setIsPlaying={setIsPlaying}
-    />
-    <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
-    <TimelineSubtitleSegmentsList timelineWidth={width}/>
-    <div css={{position: 'relative', height: '100px'}} >
-      <Waveforms />
-      <CuttingSegmentsList timelineWidth={width}/>
+    <div css={{width: '100%', height: '230px'}}>
+      <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}>
+        <div ref={ref} css={timelineStyle} title="Timeline"
+          // onMouseDown={e => setCurrentlyAtToClick(e)}
+        >
+          {/* <Scrubber
+            timelineWidth={width}
+            selectCurrentlyAt={selectCurrentlyAt}
+            selectIsPlaying={selectIsPlaying}
+            setCurrentlyAt={setCurrentlyAt}
+            setIsPlaying={setIsPlaying}
+          /> */}
+          <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
+          <TimelineSubtitleSegmentsList timelineWidth={width}/>
+          <div css={{position: 'relative', height: '100px'}} >
+            <div
+              css={{position: 'absolute', width: '2px', height: '100%', ...(refTop.current) && {left: (refTop.current.clientWidth / 2) + ((currentlyAt / duration)) * refTop.current.scrollWidth}, top: '10px', background: 'black'}}
+            />
+            <Waveforms />
+            <CuttingSegmentsList timelineWidth={width}/>
+          </div>
+
+        </div>
+
+      </div>
+      <div
+        title="Mini Timeline"
+        onMouseDown={e => setCurrentlyAtToClick(e)}
+        css={{position: 'relative', width: '100%', height: '15px', background: 'lightgrey'}}
+      >
+        <div
+          css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (width), top: 0, background: 'black'}}
+        >
+        </div>
+      </div>
     </div>
-  </div>
   );
 };
+
 
 /**
  * Displays subtitle segments as a row of boxes
@@ -237,7 +278,7 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
   const segmentsListStyle = css({
     position: 'relative',
     width: '100%',
-    height: '100px',
+    height: '80px',
     overflow: 'hidden',
   })
 
@@ -264,7 +305,7 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
     // Use absolute positioning to allow for overlap
     position: 'absolute',
     top: 0,
-    left: timelineWidth * (startInit / duration),
+    left: (startInit / duration) * 100 + '%',
     height: '100%',
     width: ((endInit - startInit) / duration) * 100 + '%',
 
