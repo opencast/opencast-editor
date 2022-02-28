@@ -5,6 +5,7 @@ import { client } from '../util/client';
 import { httpRequestState, Subtitle } from '../types';
 
 export interface subtitle {
+  isDisplayEditView: boolean    // Should the edit view be displayed
   isPlaying: boolean,             // Are videos currently playing?
   currentlyAt: number,            // Position in the video in milliseconds
   clickTriggered: boolean,        // Another video player callback
@@ -14,6 +15,7 @@ export interface subtitle {
 }
 
 const initialState: subtitle & httpRequestState = {
+  isDisplayEditView: false,
   isPlaying: false,
   currentlyAt: 0,   // Position in the video in milliseconds
   clickTriggered: false,
@@ -45,6 +47,9 @@ export const subtitleSlice = createSlice({
   name: 'subtitleState',
   initialState,
   reducers: {
+    setIsDisplayEditView: (state, action: PayloadAction<subtitle["isDisplayEditView"]>) => {
+      state.isDisplayEditView = action.payload;
+    },
     setIsPlaying: (state, action: PayloadAction<subtitle["isPlaying"]>) => {
       state.isPlaying = action.payload;
     },
@@ -95,9 +100,11 @@ export const subtitleSlice = createSlice({
 })
 
 // Export Actions
-export const { setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor } = subtitleSlice.actions
+export const { setIsDisplayEditView, setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor } = subtitleSlice.actions
 
 // Export Selectors
+export const selectIsDisplayEditView = (state: RootState) =>
+  state.subtitleState.isDisplayEditView
 export const selectIsPlaying = (state: RootState) =>
   state.videoState.isPlaying
 export const selectCurrentlyAt = (state: RootState) =>

@@ -56,7 +56,7 @@ const Timeline: React.FC<{}> = () => {
   return (
   <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
     <Scrubber timelineWidth={width}/>
-    <div css={{height: '230px'}} >
+    <div css={{height: '250px'}} >
       <Waveforms />
       <SegmentsList timelineWidth={width}/>
     </div>

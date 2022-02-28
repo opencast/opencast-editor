@@ -12,11 +12,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSubtitle, resetRequestState, selectCaption, selectGetStatus, selectSelectedSubtitleFlavor, selectSubtitles, setSubtitle } from "../redux/subtitleSlice";
 import { Subtitle, Track } from "../types";
 import { WebVTTParser } from 'webvtt-parser';
+import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
- const SubtitleEditor : React.FC<{displayEditView: (e: boolean) => void}> = (displayEditView) => {
+ const SubtitleEditor : React.FC<{}> = () => {
 
   const dispatch = useDispatch()
   const getStatus = useSelector(selectGetStatus);
@@ -137,7 +138,7 @@ import { WebVTTParser } from 'webvtt-parser';
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '60%',
+    height: '100%',
     width: '100%',
   })
 
@@ -169,11 +170,11 @@ import { WebVTTParser } from 'webvtt-parser';
     <div css={subtitleEditorStyle}>
       <div>{"HEE HO" + rawCaption}</div>
       <div css={headerRowStyle}>
-        <BackButton displayEditView={displayEditView.displayEditView}/>
+        <BackButton />
         <div css={[titleStyle, titleStyleBold]}>
           Subtitle Editor - [Language Name]
         </div>
-        <div css={{widht: '50px'}}></div>
+        <div css={{width: '50px'}}></div>
       </div>
       <div css={subAreaStyle}>
         <SubtitleListEditor />
@@ -252,7 +253,9 @@ const SubtitleVideoPlayer : React.FC<{}> = () => {
 /**
  * Takes you to a different page
  */
- export const BackButton : React.FC<{displayEditView: (e: boolean) => void}> = ({displayEditView}) => {
+ export const BackButton : React.FC<{}> = () => {
+
+  const dispatch = useDispatch();
 
   const backButtonStyle = css({
     width: '50px',
@@ -265,9 +268,9 @@ const SubtitleVideoPlayer : React.FC<{}> = () => {
   return (
     <div css={[basicButtonStyle, backButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ () => displayEditView(false) }
+      onClick={ () => dispatch(setIsDisplayEditView(false)) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        displayEditView(false)
+        dispatch(setIsDisplayEditView(false))
       }}}>
       <FontAwesomeIcon icon={faChevronLeft} size="1x" />
       <span>{"Back"}</span>

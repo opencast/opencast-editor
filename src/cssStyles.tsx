@@ -127,6 +127,36 @@ export const backOrContinueStyle = css(({
 }))
 
 /**
+ * CSS for big buttons in a dynamic grid
+ */
+ export const tileButtonStyle = css({
+  width: '250px',
+  height: '220px',
+  display: 'flex',
+  flexDirection: 'column' as const,
+  fontSize: "x-large",
+  ...(flexGapReplacementStyle(30, false)),
+  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  alignItems: 'unset',  // overwrite from basicButtonStyle to allow for textOverflow to work
+  placeSelf: 'center',
+});
+
+/**
+ * CSS for disabling the animation of the basicButtonStyle
+ */
+export const disableButtonAnimation = css({
+  "&:hover": {
+    transform: 'none',
+  },
+  "&:focus": {
+    transform: 'none',
+  },
+  "&:active": {
+    transform: 'none',
+  },
+})
+
+/**
  * CSS for ariaLive regions that should not be visible
  */
 export const ariaLive = css({
