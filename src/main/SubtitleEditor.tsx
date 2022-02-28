@@ -9,10 +9,9 @@ import {
   selectCaptions,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSubtitle, resetRequestState, selectCaption, selectGetStatus, selectSelectedSubtitleFlavor, selectSubtitles, setSubtitle } from "../redux/subtitleSlice";
-import { Subtitle, Track } from "../types";
-import { WebVTTParser } from 'webvtt-parser';
+import { fetchSubtitle, resetRequestState, selectGetError, selectGetStatus, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
+import { Track } from "../types";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -20,27 +19,18 @@ import { setIsDisplayEditView } from "../redux/subtitleSlice";
  const SubtitleEditor : React.FC<{}> = () => {
 
   const dispatch = useDispatch()
-  const getStatus = useSelector(selectGetStatus);
-  const rawCaption = useSelector(selectCaption);    // VTT file fetched from Opencast
+  const getStatus = useSelector(selectGetStatus)
+  const getError = useSelector(selectGetError)
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
-  const subtitles = useSelector(selectSubtitles)    // Parsed
+  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
 
   // let selectedFlavorSubtype = "source+en"
   const selectedFlavorSubtype = useSelector(selectSelectedSubtitleFlavor)
-
   let captionTrack: Track | undefined = undefined   // track object received from Opencast
-  let subtitle: Subtitle | undefined = undefined    // Parsed
 
-  // Grab subtitle from redux store
-  for (const sub of subtitles) {
-    if (sub.identifier === selectedFlavorSubtype) {
-      subtitle = sub
-    }
-  }
-
-  // If subtitle is not in our redux store, we gotta fetch it
-  // Get the correct captions url
-  // TODO: Turn this into a redux selector maybe?
+  // If subtitle is not in our redux store, dynamically fetch it
+  // First, Get the correct captions url
+  // TODO: Turn this into a redux selector, possibly by figuring out "currying"
   if (subtitle === undefined) {
     for (const cap of captionTracks) {
       if (cap.flavor.subtype === selectedFlavorSubtype) {
@@ -49,71 +39,27 @@ import { setIsDisplayEditView } from "../redux/subtitleSlice";
     }
   }
 
-
   useEffect(() => {
     // Instigate fetching caption data from Opencast
-    if (getStatus === 'idle' && subtitle === undefined && captionTrack !== undefined ) {
-      dispatch(fetchSubtitle(captionTrack.uri))
+    if (getStatus === 'idle' && subtitle === undefined && captionTrack !== undefined && selectedFlavorSubtype) {
+      dispatch(fetchSubtitle({identifier: selectedFlavorSubtype, uri: captionTrack.uri}))
     // Or create a new subtitle instead
-    } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined) {
-      // Create a captionTrack
+    } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined && selectedFlavorSubtype) {
+      // Create an empty subtitle
       dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitle: {}}))
       // Reset request
-      dispatch(resetRequestState)
+      dispatch(resetRequestState())
     // Error while fetching
     } else if (getStatus === 'failed') {
+      // TODO: Smart error handling
       // dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+      // Reset request
+      dispatch(resetRequestState())
+    } else if (getStatus === 'success') {
+      // Reset request
+      dispatch(resetRequestState())
     }
   }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
-
-  // Parse caption data after fetching
-  useEffect(() => {
-    if (getStatus === 'success' && rawCaption !== undefined) {
-
-      // Used parsing library: https://www.npmjs.com/package/webvtt-parser
-      // - Unmaintained and does have bugs, so we will need to switch eventually
-      // Other interesting vtt parsing libraries:
-      // https://github.com/osk/node-webvtt
-      // - Pros: Parses styles and meta information
-      // - Cons: Parses timestamps in seconds, Maybe not maintained anymore
-      // https://github.com/gsantiago/subtitle.js
-      // - Pros: Parses styles, can also parse SRT, actively maintained
-      // - Cons: Uses node streaming library, can't polyfill without ejecting CreateReactApp
-      // TODO: Parse caption
-      const parser = new WebVTTParser();
-      const tree = parser.parse(rawCaption, 'metadata');
-      for (const node of tree.cues) {
-        console.log("Cue: " + node.text)
-      }
-      for (const node of tree.errors) {
-        console.log("Error: " + node)
-      }
-
-      console.log(tree)
-      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitle: tree.cues}))
-
-      // Reset request
-      dispatch(resetRequestState)
-
-
-
-
-      // const nodes = parseSync(leCaption)
-
-      // // do something with your subtitles
-      // // ...
-
-      // const output = stringifySync(nodes, { format: 'WebVTT' })
-      // console.log(output)
-
-
-
-      // Reset request
-      dispatch(resetRequestState)
-    }
-  }, [getStatus, dispatch, rawCaption, selectedFlavorSubtype])
-
-
 
   const subtitleEditorStyle = css({
     display: 'flex',
@@ -168,7 +114,14 @@ import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
   return (
     <div css={subtitleEditorStyle}>
-      <div>{"HEE HO" + rawCaption}</div>
+      {/* TODO: Remove example visualization */}
+      <div>{"HEE HO" + subtitle?.identifier}</div>
+      <div>
+        {subtitle?.subtitle.map((cue: any, index: number) =>
+          <span key={index}>{cue.text}</span>
+        )}
+      </div>
+      <span>{getError}</span>
       <div css={headerRowStyle}>
         <BackButton />
         <div css={[titleStyle, titleStyleBold]}>

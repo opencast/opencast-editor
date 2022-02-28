@@ -199,7 +199,7 @@ export const videoSlice = createSlice({
         });
 
         state.aspectRatios = new Array(state.videoCount)
-        state.captions = action.payload.tracks.filter((track: Track) => track.flavor.type === "captions") // TODO: Is this at all reliable? Should this be done in the backend?
+        state.captions = action.payload.tracks.filter((track: Track) => track.flavor.type === settings.subtitles.mainFlavor)
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {

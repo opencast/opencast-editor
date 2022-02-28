@@ -47,6 +47,7 @@ interface iSettings {
   },
   subtitles: {
     show: boolean,
+    mainFlavor: string,
     languages: { [key: string]: string } | undefined,
   }
 }
@@ -77,6 +78,7 @@ var defaultSettings: iSettings = {
   },
   subtitles: {
     show: true, // TODO: Set this false
+    mainFlavor: "captions",
     languages: undefined,
   }
 }
@@ -329,6 +331,7 @@ const SCHEMA = {
   },
   subtitles: {
     show: types.boolean,
+    mainFlavor: types.string,
     languages: types.map,
   },
   thumbnail: {

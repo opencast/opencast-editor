@@ -3,6 +3,8 @@ import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
 import { client } from '../util/client';
 import { httpRequestState, Subtitle } from '../types';
+import { WebVTTParser } from 'webvtt-parser';
+import { WritableDraft } from 'immer/dist/internal';
 
 export interface subtitle {
   isDisplayEditView: boolean    // Should the edit view be displayed
@@ -35,9 +37,9 @@ const updateCurrentlyAt = (state: subtitle, milliseconds: number) => {
   }
 };
 
-export const fetchSubtitle = createAsyncThunk('subtitle/fetchSubtitle', async (uri: string) => {
+export const fetchSubtitle = createAsyncThunk('subtitle/fetchSubtitle', async ({identifier, uri} : {identifier: string, uri: string}) => {
   const response = await client.get(uri)
-  return response
+  return {identifier, response}
 })
 
 /**
@@ -87,9 +89,29 @@ export const subtitleSlice = createSlice({
     })
     builder.addCase(
       fetchSubtitle.fulfilled, (state, action) => {
-        state.caption = action.payload
-
         state.status = 'success'
+        // Used parsing library: https://www.npmjs.com/package/webvtt-parser
+        // - Unmaintained and does have bugs, so we will need to switch eventually
+        // Other interesting vtt parsing libraries:
+        // https://github.com/osk/node-webvtt
+        // - Pros: Parses styles and meta information
+        // - Cons: Parses timestamps in seconds, Maybe not maintained anymore
+        // https://github.com/gsantiago/subtitle.js
+        // - Pros: Parses styles, can also parse SRT, actively maintained
+        // - Cons: Uses node streaming library, can't polyfill without ejecting CreateReactApp
+        // TODO: Parse caption
+        const parser = new WebVTTParser();
+        const tree = parser.parse(action.payload.response, 'metadata');
+        if (tree.errors.length !== 0) {
+          state.status = 'failed'
+          const errors = []
+          for (const er of tree.errors) {
+            errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message)
+          }
+          state.error = errors.join("\n")
+        }
+
+        setSubtitleOnState(state, {identifier: action.payload.identifier, subtitle: tree.cues})
     })
     builder.addCase(
       fetchSubtitle.rejected, (state, action) => {
@@ -98,6 +120,38 @@ export const subtitleSlice = createSlice({
     })
   }
 })
+
+/**
+ * Update the subtitle array state with a particular subtitle
+ * @param state
+ * @param parsedSubtitle
+ * @returns
+ */
+const setSubtitleOnState = (state: WritableDraft<subtitle>, parsedSubtitle: Subtitle) => {
+  let index = 0
+  for (const sub of state.subtitles) {
+    if (sub.identifier === parsedSubtitle.identifier) {
+      state.subtitles[index] = parsedSubtitle.subtitle
+      return
+    }
+    index++
+  }
+  state.subtitles.push({identifier: parsedSubtitle.identifier, subtitle: parsedSubtitle.subtitle})
+}
+
+/**
+ * Get a subtitle from the array by its identifier
+ * @param subtitles
+ * @param subtitleFlavor
+ * @returns
+ */
+const getSubtitleByFlavor = (subtitles: Subtitle[], subtitleFlavor: string) => {
+  for (const sub of subtitles) {
+    if (sub.identifier === subtitleFlavor) {
+      return sub
+    }
+  }
+}
 
 // Export Actions
 export const { setIsDisplayEditView, setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor } = subtitleSlice.actions
@@ -122,5 +176,8 @@ export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["s
   state.subtitleState.subtitles
 export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"] } }) =>
   state.subtitleState.selectedSubtitleFlavor
+export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
+  { subtitles: subtitle["subtitles"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
+  getSubtitleByFlavor(state.subtitleState.subtitles, state.subtitleState.selectedSubtitleFlavor)
 
 export default subtitleSlice.reducer

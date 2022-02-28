@@ -12,7 +12,7 @@
 # This is very useful as demo, but has no purpose otherwise.
 # Type: string | undefined
 # Default: undefined
-id = '63af7c8b-faf9-4b14-be58-07ab268db5fe'
+id = 'ID-dual-stream-demo'
 
 
 ####
@@ -25,7 +25,7 @@ id = '63af7c8b-faf9-4b14-be58-07ab268db5fe'
 # The default will work just fine if integrated in Opencast.
 # Type: URL
 # Default: Current server
-url = 'http://localhost:8080'
+url = 'https://develop.opencast.org'
 
 # Username, used for HTTP basic authentication against Opencast.
 # Not defining this will work just fine if integrated in Opencast.
@@ -98,6 +98,13 @@ password = "opencast"
 # Type: boolean
 # Default: true
 #show = true
+
+# The main flavor of the subtitle tracks in Opencast
+# No other tracks should have the same main flavor as subtitle tracks
+# Type: string
+# Default: "captions"
+# TODO: Allow multiple main flavors?
+mainFlavor = "captions"
 
 ## A list of languages for which subtitles can be created
 #
