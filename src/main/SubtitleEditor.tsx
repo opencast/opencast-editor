@@ -46,7 +46,7 @@ import { Track } from "../types";
     // Or create a new subtitle instead
     } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined && selectedFlavorSubtype) {
       // Create an empty subtitle
-      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitle: {}}))
+      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitle: []}))
       // Reset request
       dispatch(resetRequestState())
     // Error while fetching
@@ -112,30 +112,41 @@ import { Track } from "../types";
     verticalAlign: '-2.5px',
   })
 
+  const render = () => {
+    if (getError !== undefined) {
+      return (
+        <span>{"Subtitle Parsing Error(s): " + getError}</span>
+      )
+    } else {
+      return(
+        <>
+          <div>
+            {subtitle?.subtitles.map((cue: any, index: number) =>
+              <span key={index}>{cue.text}</span>
+            )}
+          </div>
+          <div css={headerRowStyle}>
+            <BackButton />
+            <div css={[titleStyle, titleStyleBold]}>
+              Subtitle Editor - [Language Name]
+            </div>
+            <div css={{width: '50px'}}></div>
+          </div>
+          <div css={subAreaStyle}>
+            <SubtitleListEditor />
+            <div css={videoPlayerAreaStyle}>
+              <SubtitleVideoPlayer />
+            </div>
+          </div>
+          <Timeline />
+        </>
+      )
+    }
+  }
+
   return (
     <div css={subtitleEditorStyle}>
-      {/* TODO: Remove example visualization */}
-      <div>{"HEE HO" + subtitle?.identifier}</div>
-      <div>
-        {subtitle?.subtitle.map((cue: any, index: number) =>
-          <span key={index}>{cue.text}</span>
-        )}
-      </div>
-      <span>{getError}</span>
-      <div css={headerRowStyle}>
-        <BackButton />
-        <div css={[titleStyle, titleStyleBold]}>
-          Subtitle Editor - [Language Name]
-        </div>
-        <div css={{width: '50px'}}></div>
-      </div>
-      <div css={subAreaStyle}>
-        <SubtitleListEditor />
-        <div css={videoPlayerAreaStyle}>
-          <SubtitleVideoPlayer />
-        </div>
-      </div>
-      <Timeline />
+      {render()}
     </div>
   );
 }

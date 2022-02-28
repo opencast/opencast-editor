@@ -27,7 +27,14 @@ export interface TimelineState {
 
 export interface Subtitle {
   identifier: string
-  subtitle: any
+  subtitles: SubtitleCue[]
+}
+
+export interface SubtitleCue {
+  text: string,
+  startTime: number,
+  endTime: number,
+  // And many more
 }
 
 export interface PostEditArgument {

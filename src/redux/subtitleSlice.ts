@@ -76,7 +76,7 @@ export const subtitleSlice = createSlice({
         }
         index++
       }
-      state.subtitles.push({identifier: action.payload.identifier, subtitle: action.payload.subtitle})
+      state.subtitles.push({identifier: action.payload.identifier, subtitles: action.payload.subtitle})
     },
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
       state.selectedSubtitleFlavor = action.payload
@@ -111,7 +111,7 @@ export const subtitleSlice = createSlice({
           state.error = errors.join("\n")
         }
 
-        setSubtitleOnState(state, {identifier: action.payload.identifier, subtitle: tree.cues})
+        setSubtitleOnState(state, {identifier: action.payload.identifier, subtitles: tree.cues})
     })
     builder.addCase(
       fetchSubtitle.rejected, (state, action) => {
@@ -131,12 +131,12 @@ const setSubtitleOnState = (state: WritableDraft<subtitle>, parsedSubtitle: Subt
   let index = 0
   for (const sub of state.subtitles) {
     if (sub.identifier === parsedSubtitle.identifier) {
-      state.subtitles[index] = parsedSubtitle.subtitle
+      state.subtitles[index] = parsedSubtitle
       return
     }
     index++
   }
-  state.subtitles.push({identifier: parsedSubtitle.identifier, subtitle: parsedSubtitle.subtitle})
+  state.subtitles.push(parsedSubtitle)
 }
 
 /**
