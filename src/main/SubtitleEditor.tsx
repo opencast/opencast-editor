@@ -12,9 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSubtitle, resetRequestState, selectGetError, selectGetStatus, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 import { Track } from "../types";
+import SubtitleListEditor from "./SubtitleListEditor";
 
 /**
- * Displays a menu for selecting what should be done with the current changes
+ * Displays an editor view for a selected subtitle file
  */
  const SubtitleEditor : React.FC<{}> = () => {
 
@@ -62,9 +63,7 @@ import { Track } from "../types";
   }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
 
   const subtitleEditorStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: 'block',
     paddingRight: '20px',
     paddingLeft: '20px',
     gap: '20px',
@@ -76,7 +75,8 @@ import { Track } from "../types";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
+    height: '5%',
   })
 
   const subAreaStyle = css({
@@ -84,7 +84,7 @@ import { Track } from "../types";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '100%',
+    height: '75%',
     width: '100%',
   })
 
@@ -147,21 +147,6 @@ import { Track } from "../types";
   return (
     <div css={subtitleEditorStyle}>
       {render()}
-    </div>
-  );
-}
-
-const SubtitleListEditor : React.FC<{}> = () => {
-
-  const listStyle = css({
-    backgroundColor: 'red',
-    height: '100%',
-    width: '60%',
-  })
-
-  return (
-    <div css={listStyle}>
-      List View
     </div>
   );
 }
