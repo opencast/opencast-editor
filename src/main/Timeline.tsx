@@ -7,8 +7,8 @@ import { css } from '@emotion/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
-  selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered
+  selectSegments, selectActiveSegmentIndex, selectDuration,
+  selectVideoURL,
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +24,8 @@ import { scrubberKeyMap } from '../globalKeys';
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectMainMenuState } from '../redux/mainMenuSlice';
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { RootState } from '../redux/store';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -31,7 +33,19 @@ import { selectMainMenuState } from '../redux/mainMenuSlice';
  * Its width corresponds to the duration of the video
  * TODO: Figure out why ResizeObserver does not update anymore if we stop passing the width to the SegmentsList
  */
-const Timeline: React.FC<{}> = () => {
+const Timeline: React.FC<{
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setClickTriggered: ActionCreatorWithPayload<any, string>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setClickTriggered,
+  setCurrentlyAt,
+  setIsPlaying
+}) => {
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -55,8 +69,14 @@ const Timeline: React.FC<{}> = () => {
 
   return (
   <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber timelineWidth={width}/>
-    <div css={{height: '250px'}} >
+    <Scrubber
+      timelineWidth={width}
+      selectCurrentlyAt={selectCurrentlyAt}
+      selectIsPlaying={selectIsPlaying}
+      setCurrentlyAt={setCurrentlyAt}
+      setIsPlaying={setIsPlaying}
+    />
+    <div css={{position: 'relative', height: '250px'}} >
       <Waveforms />
       <SegmentsList timelineWidth={width}/>
     </div>
@@ -68,7 +88,19 @@ const Timeline: React.FC<{}> = () => {
  * Displays and defines the current position in the video
  * @param param0
  */
-const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+export const Scrubber: React.FC<{
+  timelineWidth: number,
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  timelineWidth,
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setCurrentlyAt,
+  setIsPlaying,
+}) => {
 
   const { t } = useTranslation();
 
@@ -154,9 +186,9 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const scrubberStyle = css({
     backgroundColor: 'black',
-    height: '240px',
+    height: '100%',
     width: '1px',
-    position: 'absolute' as 'absolute',
+    position: 'absolute',
     zIndex: 2,
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
     display: 'flex',
@@ -242,7 +274,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 /**
  * Container responsible for rendering the segments that are created when cutting
  */
-const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+export const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const { t } = useTranslation();
 
@@ -296,7 +328,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
           borderWidth: '1px',
           boxSizing: 'border-box',
           width: ((segment.end - segment.start) / duration) * 100 + '%',
-          height: '230px',
+          height: '100%',
           zIndex: 1,
         }}>
         </div>
@@ -306,8 +338,9 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const segmentsStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     paddingTop: '10px',
+    height: '100%',
   })
 
   return (
@@ -320,7 +353,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 /**
  * Generates waveform images and displays them
  */
-const Waveforms: React.FC<{}> = () => {
+export const Waveforms: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
@@ -338,7 +371,7 @@ const Waveforms: React.FC<{}> = () => {
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
-    height: '230px',
+    height: '100%',
     paddingTop: '10px',
   });
 

@@ -14,6 +14,7 @@ export interface subtitle {
   caption: string | undefined,
   subtitles: Subtitle[],
   selectedSubtitleFlavor: string,
+  dummyData : [string, number, number][],
 }
 
 const initialState: subtitle & httpRequestState = {
@@ -27,6 +28,15 @@ const initialState: subtitle & httpRequestState = {
 
   status: 'idle',
   error: undefined,
+  dummyData: [
+    ["Bla", 0, 3000],
+    ["Fischers Frizt fischt frische Fische. Frische Fische fischt Fischers Fritz!", 5000, 7000],
+    ["Overlap 1", 10000, 20000],
+    ["Overlap 2", 15000, 25000],
+    ["", 50000, 50000],
+    ["The End", 60000, 70000],
+    ["", 500000, 600000],
+  ]
 }
 
 const updateCurrentlyAt = (state: subtitle, milliseconds: number) => {
@@ -80,7 +90,10 @@ export const subtitleSlice = createSlice({
     },
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
       state.selectedSubtitleFlavor = action.payload
-    }
+    },
+    setDummySegment: (state, action: PayloadAction<{index: number} & {text: string, start: number, end: number}> ) => {
+      state.dummyData[action.payload.index] = [action.payload.text, action.payload.start, action.payload.end]
+    },
   },
   extraReducers: builder => {
     builder.addCase(
@@ -154,7 +167,7 @@ const getSubtitleByFlavor = (subtitles: Subtitle[], subtitleFlavor: string) => {
 }
 
 // Export Actions
-export const { setIsDisplayEditView, setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor } = subtitleSlice.actions
+export const { setIsDisplayEditView, setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor, setDummySegment } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
@@ -179,5 +192,8 @@ export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedS
 export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
   { subtitles: subtitle["subtitles"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   getSubtitleByFlavor(state.subtitleState.subtitles, state.subtitleState.selectedSubtitleFlavor)
+
+export const selectDummyData = (state: { subtitleState: { dummyData: subtitle["dummyData"]; }; }) =>
+  state.subtitleState.dummyData
 
 export default subtitleSlice.reducer
