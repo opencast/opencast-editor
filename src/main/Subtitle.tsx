@@ -1,5 +1,4 @@
 import React from "react";
-import { css } from "@emotion/react";
 import SubtitleEditor from "./SubtitleEditor";
 import SubtitleSelect from "./SubtitleSelect";
 import { useSelector } from "react-redux";
@@ -9,23 +8,22 @@ const Subtitle : React.FC<{}> = () => {
 
   const displayEditView = useSelector(selectIsDisplayEditView)
 
-  const pageSelectStyle = css({
-    display: !displayEditView ? 'block' :'none',
-  })
+  const render = () => {
+    if (displayEditView) {
+      return (
+        <SubtitleSelect />
 
-  const pageEditStyle = css({
-    display: displayEditView ? 'block' :'none',
-    height: '100%',
-  })
+      )
+    } else {
+      return (
+        <SubtitleEditor />
+      )
+    }
+  }
 
   return (
     <>
-      <div css={pageSelectStyle} >
-        <SubtitleSelect />
-      </div>
-      <div css={pageEditStyle} >
-        <SubtitleEditor />
-      </div>
+      {render()}
     </>
   );
 }
