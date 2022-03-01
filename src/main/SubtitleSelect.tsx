@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation } from "../cssStyles";
 import { settings } from '../config'
-import { setSelectedSubtitleFlavor } from "../redux/subtitleSlice";
-import { useDispatch } from "react-redux";
+import { selectSubtitles, setSelectedSubtitleFlavor } from "../redux/subtitleSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -11,11 +11,53 @@ import { Form } from "react-final-form";
 import { Select } from "mui-rff";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { selectCaptions } from "../redux/videoSlice";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
  const SubtitleSelect : React.FC<{}> = () => {
+
+  const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
+  const subtitles = useSelector(selectSubtitles)    // parsed subtitles stored in redux
+
+  const [displayFlavors, setDisplayFlavors] = useState<{subFlavor: string, title: string}[]>([])
+  const [canBeAddedFlavors, setCanBeAddedFlavors] = useState<{subFlavor: string, title: string}[]>([])
+
+  // Update the two groups of flavors
+  useEffect(() => {
+    let tempDisplayFlavors = []
+    let tempCanBeAddedFlavors = []
+
+    for (let lan in settings.subtitles.languages) {
+      let found = false
+      let subFlavor = lan // left side
+      let name = settings.subtitles.languages[lan] // right side
+
+      for (const cap of captionTracks) {
+        if (cap.flavor.subtype === subFlavor) {
+          found = true
+        }
+      }
+
+      // Need to check this in case of added/deleted subtitles
+      // (aka changes) that are not yet published to Opencast
+      for (const sub of subtitles) {
+        if (sub.identifier === subFlavor) {
+          found = true
+        }
+      }
+
+      if (found) {
+        tempDisplayFlavors.push({subFlavor: subFlavor, title: name})
+      } else {
+        tempCanBeAddedFlavors.push({subFlavor: subFlavor, title: name})
+      }
+    }
+
+    setDisplayFlavors(tempDisplayFlavors)
+    setCanBeAddedFlavors(tempCanBeAddedFlavors)
+  }, [captionTracks, subtitles])
 
   const subtitleSelectStyle = css({
     display: 'grid',
@@ -37,16 +79,14 @@ import { useTranslation } from "react-i18next";
     // TODO: Only show buttons for languages with existing subtitles
     //  Can only complete this TODO after getting subtitles from Opencast works
 
-    for (let lan in settings.subtitles.languages) {
-      let subFlavor = lan // left side
-      let title = settings.subtitles.languages[lan] // right side
+    for (let subFlavor of displayFlavors) {
       buttons.push(
         <SubtitleSelectButton
-          title={title}
-          iconIdentifier={parseCountryCode(subFlavor)}
+          title={subFlavor.title}
+          iconIdentifier={parseCountryCode(subFlavor.subFlavor)}
           segmentNumber={0}
-          flavor={subFlavor}
-          key={subFlavor}
+          flavor={subFlavor.subFlavor}
+          key={subFlavor.subFlavor}
         />
       )
     }
@@ -57,7 +97,7 @@ import { useTranslation } from "react-i18next";
     <div css={subtitleSelectStyle}>
       {renderButtons()}
       {/* TODO: Only show the add button when there are still languages to add*/}
-      <SubtitleAddButton languages={settings.subtitles.languages} />
+      <SubtitleAddButton languages={canBeAddedFlavors} />
     </div>
   );
 }
@@ -117,7 +157,7 @@ const SubtitleSelectButton: React.FC<{
   );
 };
 
-const SubtitleAddButton: React.FC<{languages: {[key: string]: string} | undefined}> = ({languages}) => {
+const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}[]}> = ({languages}) => {
 
   const { t } = useTranslation();
 
@@ -126,8 +166,8 @@ const SubtitleAddButton: React.FC<{languages: {[key: string]: string} | undefine
   // Parse language data into a format the dropdown understands
   const selectData = () => {
     const data = []
-    for (let lan in languages) {
-      data.push({label: languages[lan], value: lan})
+    for (const lan of languages) {
+      data.push({label: lan.title, value: lan.subFlavor})
     }
     return data
   }
