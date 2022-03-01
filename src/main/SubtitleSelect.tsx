@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation } from "../cssStyles";
 import { settings } from '../config'
-import { selectSubtitles, setSelectedSubtitleFlavor } from "../redux/subtitleSlice";
+import { selectSubtitles, setSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -160,6 +160,7 @@ const SubtitleSelectButton: React.FC<{
 const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}[]}> = ({languages}) => {
 
   const { t } = useTranslation();
+  const dispatch = useDispatch()
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true)
 
@@ -173,9 +174,15 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
   }
 
   const onSubmit = (values: { languages: any; }) => {
-    // TODO: Create new subtitle in redux
-    console.log(values.languages)
+    // Create new subtitle for the given flavor
+    dispatch(setSubtitle({identifier: values.languages, subtitle: []}))
+
+    // Reset
     setIsPlusDisplay(true)
+
+    // Move to editor view
+    dispatch(setIsDisplayEditView(true))
+    dispatch(setSelectedSubtitleFlavor(values.languages))
   }
 
   const plusIconStyle = css({
@@ -219,7 +226,9 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
             // // Ugly fix for form not getting updated after submit. TODO: Find a better fix
             // form.reset()
           }} css={subtitleAddFormStyle}>
-
+              {/* TODO: Fix the following warning, caused by removing items from data:
+                MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
+              */}
               <Select // {...input}
                 // styles={selectFieldTypeStyle}
                 label={t("subtitles.createSubtitleDropdownLabel")}
