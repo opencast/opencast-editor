@@ -27,6 +27,7 @@ import { selectDuration } from "../redux/videoSlice";
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import Draggable from "react-draggable";
+import { settings } from "../config";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -75,6 +76,11 @@ import Draggable from "react-draggable";
       dispatch(resetRequestState())
     }
   }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
+
+
+  const getTitle = () => {
+    return (settings.subtitles.languages !== undefined && subtitle && subtitle.identifier) ? settings.subtitles.languages[subtitle?.identifier] : "Loading"
+  }
 
   const subtitleEditorStyle = css({
     display: 'block',
@@ -142,7 +148,7 @@ import Draggable from "react-draggable";
           <div css={headerRowStyle}>
             <BackButton />
             <div css={[titleStyle, titleStyleBold]}>
-              Subtitle Editor - [Language Name]
+              {"Subtitle Editor - " + getTitle()}
             </div>
             <div css={{width: '50px'}}></div>
           </div>
