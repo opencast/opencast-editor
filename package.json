@@ -83,7 +83,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.18.1",
-    "@types/lodash": "^4.14.178",
+    "@types/lodash": "^4.14.179",
     "@types/luxon": "^2.0.9",
     "@types/react-beforeunload": "^2.1.1",
     "@redux-devtools/core": "^3.11.0",
