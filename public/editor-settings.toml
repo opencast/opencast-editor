@@ -114,15 +114,16 @@ mainFlavor = "captions"
 # TODO: Comment out example
 # Example:
 [subtitles.languages]
-"Deutsch" = "source+de"
-"Deutsch (Gehörlos)" = "source+de"
-"English (US)" = "source+en"
-"English (GB)" = "source+en"
-"Donaudampfschifffahrtsgesellschaft" = "source+de"
-"Deutsch 2" = "source+de"
-"Deutsch 3" = "source+de"
-"Deutsch 4" = "source+de"
-"Deutsch 5" = "source+de"
+"source+de" = "Deutsch"
+"source+de_Irgendwas" = "Deutsch (Gehörlos)"
+"source+en" = "English"
+"source+en_US" = "English (US)"
+"source+en_GB" = "English (GB)"
+"source+br" = "Donaudampfschifffahrtsgesellschaft"
+"source+de_2" = "Deutsch 2"
+"source+de_3" = "Deutsch 3"
+"source+de_4" = "Deutsch 4"
+"source+de_5" = "Deutsch 5"
 "🦝" = "🦝"
 
 ####
