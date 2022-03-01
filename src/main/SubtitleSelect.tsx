@@ -23,8 +23,9 @@ import { useTranslation } from "react-i18next";
     gridRowGap: '30px',
   })
 
+  // TODO: Make this function more robust
   const parseCountryCode = (parseString: string) => {
-    return parseString.split("+").pop();
+    return parseString.split("+").pop()?.slice(0, 2);
   }
 
   const renderButtons = () => {
@@ -37,15 +38,15 @@ import { useTranslation } from "react-i18next";
     //  Can only complete this TODO after getting subtitles from Opencast works
 
     for (let lan in settings.subtitles.languages) {
-      let key = lan // left side
-      let value = settings.subtitles.languages[lan] // right side
+      let subFlavor = lan // left side
+      let title = settings.subtitles.languages[lan] // right side
       buttons.push(
         <SubtitleSelectButton
-          title={key}
-          iconIdentifier={parseCountryCode(value)}
+          title={title}
+          iconIdentifier={parseCountryCode(subFlavor)}
           segmentNumber={0}
-          flavor={value}
-          key={key}
+          flavor={subFlavor}
+          key={subFlavor}
         />
       )
     }
@@ -72,18 +73,6 @@ const SubtitleSelectButton: React.FC<{
 
   // const { t } = useTranslation();
   const dispatch = useDispatch()
-
-  const subtitleSelectButtonStyle = css({
-    width: '250px',
-    height: '220px',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    fontSize: "x-large",
-    ...(flexGapReplacementStyle(30, false)),
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    alignItems: 'unset',  // overwrite from basicButtonStyle to allow for textOverflow to work
-    placeSelf: 'center',
-  });
 
   /**
    * Quick and dirty function to get a flag unicode character by country code
@@ -138,7 +127,7 @@ const SubtitleAddButton: React.FC<{languages: {[key: string]: string} | undefine
   const selectData = () => {
     const data = []
     for (let lan in languages) {
-      data.push({label: lan, value: lan})
+      data.push({label: languages[lan], value: lan})
     }
     return data
   }
