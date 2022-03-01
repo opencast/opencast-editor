@@ -9,10 +9,9 @@ const Subtitle : React.FC<{}> = () => {
   const displayEditView = useSelector(selectIsDisplayEditView)
 
   const render = () => {
-    if (displayEditView) {
+    if (!displayEditView) {
       return (
         <SubtitleSelect />
-
       )
     } else {
       return (
