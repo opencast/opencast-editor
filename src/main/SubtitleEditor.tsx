@@ -9,7 +9,7 @@ import {
   selectCaptions,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSubtitle, resetRequestState, selectGetError, selectGetStatus, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
+import { fetchSubtitle, selectErrorByFlavor, resetRequestState, selectGetStatus, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { Track } from "../types";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
@@ -36,7 +36,7 @@ import { settings } from "../config";
 
   const dispatch = useDispatch()
   const getStatus = useSelector(selectGetStatus)
-  const getError = useSelector(selectGetError)
+  const getError = useSelector(selectErrorByFlavor)
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
 
@@ -76,7 +76,6 @@ import { settings } from "../config";
       dispatch(resetRequestState())
     }
   }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
-
 
   const getTitle = () => {
     return (settings.subtitles.languages !== undefined && subtitle && subtitle.identifier) ? settings.subtitles.languages[subtitle?.identifier] : "Loading"

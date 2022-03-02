@@ -15,9 +15,12 @@ export interface subtitle {
   subtitles: Subtitle[],
   selectedSubtitleFlavor: string,
   dummyData : [string, number, number][],
+
+  status: 'idle' | 'loading' | 'success' | 'failed',
+  errors: {identifier: string, error: string}[],
 }
 
-const initialState: subtitle & httpRequestState = {
+const initialState: subtitle = {
   isDisplayEditView: false,
   isPlaying: false,
   currentlyAt: 0,   // Position in the video in milliseconds
@@ -27,7 +30,7 @@ const initialState: subtitle & httpRequestState = {
   selectedSubtitleFlavor: "",
 
   status: 'idle',
-  error: undefined,
+  errors: [],
   dummyData: [
     ["Bla", 0, 3000],
     ["Fischers Frizt fischt frische Fische. Frische Fische fischt Fischers Fritz!", 5000, 7000],
@@ -121,7 +124,7 @@ export const subtitleSlice = createSlice({
           for (const er of tree.errors) {
             errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message)
           }
-          state.error = errors.join("\n")
+          setError(state, action.payload.identifier, errors.join("\n"))
         }
 
         setSubtitleOnState(state, {identifier: action.payload.identifier, subtitles: tree.cues})
@@ -129,7 +132,7 @@ export const subtitleSlice = createSlice({
     builder.addCase(
       fetchSubtitle.rejected, (state, action) => {
         state.status = 'failed'
-        state.error = action.error.message
+        setError(state, state.selectedSubtitleFlavor, action.error.message ? action.error.message : "")
     })
   }
 })
@@ -152,6 +155,18 @@ const setSubtitleOnState = (state: WritableDraft<subtitle>, parsedSubtitle: Subt
   state.subtitles.push(parsedSubtitle)
 }
 
+const setError = (state: WritableDraft<subtitle>, identifier: string, error: string) => {
+  let index = 0
+  for (const err of state.errors) {
+    if (err.identifier === identifier) {
+      state.errors[index] = {identifier, error}
+      return
+    }
+    index++
+  }
+  state.errors.push({identifier: identifier, error: error})
+}
+
 /**
  * Get a subtitle from the array by its identifier
  * @param subtitles
@@ -162,6 +177,14 @@ const getSubtitleByFlavor = (subtitles: Subtitle[], subtitleFlavor: string) => {
   for (const sub of subtitles) {
     if (sub.identifier === subtitleFlavor) {
       return sub
+    }
+  }
+}
+
+const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) => {
+  for (const err of errors) {
+    if (err.identifier === subtitleFlavor) {
+      return err.error
     }
   }
 }
@@ -183,8 +206,8 @@ export const selectCaption = (state: { subtitleState: { caption: subtitle["capti
   state.subtitleState.caption
 export const selectGetStatus = (state: { subtitleState: { status: httpRequestState["status"] } }) =>
   state.subtitleState.status
-export const selectGetError = (state: { subtitleState: { error: httpRequestState["error"] } }) =>
-  state.subtitleState.error
+export const selectGetErrors = (state: { subtitleState: { errors: subtitle["errors"] } }) =>
+  state.subtitleState.errors
 export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"] } }) =>
   state.subtitleState.subtitles
 export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"] } }) =>
@@ -192,6 +215,9 @@ export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedS
 export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
   { subtitles: subtitle["subtitles"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   getSubtitleByFlavor(state.subtitleState.subtitles, state.subtitleState.selectedSubtitleFlavor)
+export const selectErrorByFlavor = (state: { subtitleState:
+  { errors: subtitle["errors"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
+  getErrorByFlavor(state.subtitleState.errors, state.subtitleState.selectedSubtitleFlavor)
 
 export const selectDummyData = (state: { subtitleState: { dummyData: subtitle["dummyData"]; }; }) =>
   state.subtitleState.dummyData
