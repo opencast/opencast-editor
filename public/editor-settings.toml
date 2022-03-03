@@ -116,6 +116,12 @@ password = "opencast"
 "Deutsch 5" = "de_DE"
 "🦝" = "🦝"
 
+# Specify the default video in the subtitle video player by flavor
+# If not specified, the editor will decide on a default by itself
+[subtitles.defaultVideoFlavor]
+"type" = "presentation"
+"subtype" = "preview"
+
 ####
 # Thumbnail Selection
 ##

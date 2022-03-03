@@ -284,7 +284,7 @@ const skipDeletedSegments = (state: WritableDraft<video>) => {
  * TODO: Error checking
  * TODO: Improve calculation to handle multiple rows of videos
  */
-const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
+export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   let minHeight = Math.min.apply(Math, aspectRatios.map(function(o) { return o.height; }))
   let minWidth = Math.min.apply(Math, aspectRatios.map(function(o) { return o.width; }))
   minWidth *= aspectRatios.length

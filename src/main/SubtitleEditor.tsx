@@ -1,12 +1,12 @@
 import React from "react";
 import { css } from "@emotion/react";
 import Timeline from "./Timeline";
-import ReactPlayer from "react-player";
 import { basicButtonStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
+import SubtitleVideoArea from "./SubtitleVideoArea";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -40,14 +40,6 @@ import { setIsDisplayEditView } from "../redux/subtitleSlice";
     width: '100%',
   })
 
-  const videoPlayerAreaStyle = css({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    width: '40%',
-  });
-
   // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx
   const titleStyle = css({
     display: 'inline-block',
@@ -75,9 +67,7 @@ import { setIsDisplayEditView } from "../redux/subtitleSlice";
       </div>
       <div css={subAreaStyle}>
         <SubtitleListEditor />
-        <div css={videoPlayerAreaStyle}>
-          <SubtitleVideoPlayer />
-        </div>
+        <SubtitleVideoArea />
       </div>
       <Timeline />
     </div>
@@ -99,52 +89,6 @@ const SubtitleListEditor : React.FC<{}> = () => {
   );
 }
 
-const SubtitleVideoPlayer : React.FC<{}> = () => {
-
-  const url = "https://data.lkiesow.io/opencast/test-media/goat.mp4"
-
-  const playerWrapper = css({
-    position: 'relative',
-    width: '100%',
-    paddingTop: '50%',
-  });
-
-  const reactPlayerStyle = css({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  })
-
-  const render = () => {
-    return(
-      <div css={playerWrapper}>
-        <ReactPlayer url={url}
-          css={reactPlayerStyle}
-          controls={true}
-          // ref={ref}
-          width='100%'
-          height='100%'
-          // playing={isPlaying}
-          // muted={!isPrimary}
-          // onProgress={onProgressCallback}
-          progressInterval={100}
-          // onReady={onReadyCallback}
-          // onEnded={onEndedCallback}
-          // onError={onErrorCallback}
-          tabIndex={-1}
-          // config={playerConfig}
-          // disablePictureInPicture
-        />
-      </div>
-    );
-  }
-
-  return (
-    <>
-      {render()}
-    </>
-  );
-}
 
 
 /**

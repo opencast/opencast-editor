@@ -29,6 +29,8 @@ import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
 import { sleep } from './../util/utilityFunctions'
+import { RootState } from "../redux/store";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 /**
  * Container for the videos and their controls
@@ -68,7 +70,22 @@ const Video: React.FC<{}> = () => {
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
     // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i === 0}/>);
+    videoPlayers.push(<VideoPlayer
+      key={i}
+      dataKey={i}
+      url={videoURLs[i]}
+      isPrimary={i === 0}
+      selectIsPlaying={selectIsPlaying}
+      selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
+      selectPreviewTriggered={selectPreviewTriggered}
+      selectClickTriggered={selectClickTriggered}
+      selectAspectRatio={selectAspectRatio}
+      setIsPlaying={setIsPlaying}
+      setPreviewTriggered={setPreviewTriggered}
+      setClickTriggered={setClickTriggered}
+      setCurrentlyAtInSeconds={setCurrentlyAtInSeconds}
+      setAspectRatio={setAspectRatio}
+    />);
   }
 
   // Style
@@ -96,7 +113,11 @@ const Video: React.FC<{}> = () => {
       <div css={videoPlayerAreaStyle}>
         {videoPlayers}
       </div>
-      <VideoControls />
+      <VideoControls
+        selectCurrentlyAt={selectCurrentlyAt}
+        selectIsPlaying={selectIsPlaying}
+        setIsPlaying={setIsPlaying}
+      />
     </div>
   );
 };
@@ -106,7 +127,35 @@ const Video: React.FC<{}> = () => {
  * @param {string} url - URL to load video from
  * @param {boolean} isPrimary - If the player is the main control
  */
-const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
+export const VideoPlayer: React.FC<{
+  dataKey: number,
+  url: string | undefined,
+  isPrimary: boolean,
+  selectIsPlaying:(state: RootState) => boolean,
+  selectCurrentlyAtInSeconds: (state: RootState) => number,
+  selectPreviewTriggered:(state: RootState) => boolean,
+  selectClickTriggered:(state: RootState) => boolean,
+  selectAspectRatio: (state: RootState) => number,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+  setPreviewTriggered: ActionCreatorWithPayload<any, string>,
+  setClickTriggered: ActionCreatorWithPayload<any, string>,
+  setCurrentlyAtInSeconds: ActionCreatorWithPayload<number, string>,
+  setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
+}> = ({
+  dataKey,
+  url,
+  isPrimary,
+  selectIsPlaying,
+  selectCurrentlyAtInSeconds,
+  selectPreviewTriggered,
+  selectClickTriggered,
+  selectAspectRatio,
+  setIsPlaying,
+  setPreviewTriggered,
+  setClickTriggered,
+  setCurrentlyAtInSeconds,
+  setAspectRatio,
+}) => {
 
   const { t } = useTranslation();
 
@@ -128,7 +177,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
     if (isPrimary) {
       // Only update redux if there was a substantial change
-      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3)) {
+      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) && state.playedSeconds !== 0) {
         dispatch(setCurrentlyAtInSeconds(state.playedSeconds))
       }
     }
@@ -178,6 +227,18 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
       dispatch(setClickTriggered(false))
     }
   })
+
+  // Callback specifically for the subtitle editor view
+  // When changing urls while the player is playing, don't reset to 0
+  // (due to onProgressCallback resetting to 0),
+  // but keep the current currentlyAt
+  useEffect(() => {
+    if (ref.current && ready) {
+      console.log("AAAAAAAH: " + currentlyAt)
+      ref.current.seekTo(currentlyAt, "seconds")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url])
 
   const onErrorCallback = (e: any) => {
     setError(true)
@@ -259,7 +320,15 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
  * Contains controls for manipulating multiple video players at once
  * Flexbox magic keeps the play button at the center
  */
-const VideoControls: React.FC<{}> = () => {
+export const VideoControls: React.FC<{
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setIsPlaying
+}) => {
 
   const { t } = useTranslation();
 
@@ -290,9 +359,14 @@ const VideoControls: React.FC<{}> = () => {
       <div css={leftSideBoxStyle}>
         <PreviewMode />
       </div>
-      <PlayButton />
+      <PlayButton
+        selectIsPlaying={selectIsPlaying}
+        setIsPlaying={setIsPlaying}
+      />
       <div css={rightSideBoxStyle}>
-        <TimeDisplay />
+        <TimeDisplay
+        selectCurrentlyAt={selectCurrentlyAt}
+        />
       </div>
     </div>
   );
@@ -368,7 +442,13 @@ const PreviewMode: React.FC<{}> = () => {
 /**
  * Start/Pause playing the videos
  */
-const PlayButton: React.FC<{}> = () => {
+const PlayButton: React.FC<{
+  selectIsPlaying:(state: RootState) => boolean,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectIsPlaying,
+  setIsPlaying,
+}) => {
 
   const { t } = useTranslation();
 
@@ -407,7 +487,11 @@ const PlayButton: React.FC<{}> = () => {
 /**
  * Live update for the current time
  */
-const TimeDisplay: React.FC<{}> = () => {
+const TimeDisplay: React.FC<{
+  selectCurrentlyAt: (state: RootState) => number,
+}> = ({
+  selectCurrentlyAt,
+}) => {
 
   const { t } = useTranslation();
 
