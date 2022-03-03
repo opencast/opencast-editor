@@ -185,8 +185,8 @@ export const videoSlice = createSlice({
         // });
 
         // New API
-        // eslint-disable-next-line no-sequences
         state.videoURLs = action.payload.tracks.filter((track: Track) => track.video_stream.available === true)
+          // eslint-disable-next-line no-sequences
           .reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
