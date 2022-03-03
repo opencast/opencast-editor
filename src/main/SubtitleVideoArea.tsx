@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectCurrentlyAt,
   selectIsPlaying,
   setClickTriggered,
@@ -87,6 +87,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>
           <VideoSelectDropdown
+            // eslint-disable-next-line no-sequences
             flavors={tracks.reduce((a: Flavor[], o: { flavor: Flavor }) => (a.push(o.flavor), a), [])}
             changeFlavorcallback={setSelectedFlavor}
             defaultFlavor={selectedFlavor}
