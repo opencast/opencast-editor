@@ -75,6 +75,7 @@ const Video: React.FC<{}> = () => {
       dataKey={i}
       url={videoURLs[i]}
       isPrimary={i === 0}
+      subtitleUrl={""}
       selectIsPlaying={selectIsPlaying}
       selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
       selectPreviewTriggered={selectPreviewTriggered}
@@ -131,6 +132,7 @@ export const VideoPlayer: React.FC<{
   dataKey: number,
   url: string | undefined,
   isPrimary: boolean,
+  subtitleUrl: string,
   selectIsPlaying:(state: RootState) => boolean,
   selectCurrentlyAtInSeconds: (state: RootState) => number,
   selectPreviewTriggered:(state: RootState) => boolean,
@@ -146,6 +148,7 @@ export const VideoPlayer: React.FC<{
   url,
   isPrimary,
   selectIsPlaying,
+  subtitleUrl,
   selectCurrentlyAtInSeconds,
   selectPreviewTriggered,
   selectClickTriggered,
@@ -213,6 +216,10 @@ export const VideoPlayer: React.FC<{
     }
   }
 
+  const onErrorCallback = (e: any) => {
+    setError(true)
+  }
+
   useEffect(() => {
     // Seek if the position in the video got changed externally
     if (!isPlaying && ref.current && ready) {
@@ -234,19 +241,21 @@ export const VideoPlayer: React.FC<{
   // but keep the current currentlyAt
   useEffect(() => {
     if (ref.current && ready) {
-      console.log("AAAAAAAH: " + currentlyAt)
       ref.current.seekTo(currentlyAt, "seconds")
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url])
 
-  const onErrorCallback = (e: any) => {
-    setError(true)
-  }
-
-  // Skip player when navigating page with keyboard
   const playerConfig: Config = {
-    file: { attributes: { tabIndex: '-1' }}
+    file: {
+      attributes: {
+        // Skip player when navigating page with keyboard
+        tabIndex: '-1',
+      },
+      tracks: [
+        {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
+      ]
+    }
   }
 
   const errorBoxStyle = css({

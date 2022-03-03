@@ -29,6 +29,20 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
   const tracks = useSelector(selectTracks)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
+  const [subtitleUrl, setSubtitleUrl] = useState("")
+
+  const dummyVTT = `WEBVTT
+
+  00:01.000 --> 00:04.000
+  - Never drink liquid nitrogen.
+
+  00:05.000 --> 00:09.000
+  - It will perforate your stomach.
+  - You could die.
+
+  00:10.000 --> 00:59.000
+  TEST
+  `
 
   // Decide on initial flavor on mount
   useEffect(() => {
@@ -66,6 +80,12 @@ const SubtitleVideoArea : React.FC<{}> = () => {
     }
   }
 
+  // Parse subtitles to something the video player understands
+  useEffect(() => {
+    setSubtitleUrl(window.URL.createObjectURL(new Blob([dummyVTT], {type : 'text/vtt'})))
+  }, [dummyVTT])
+
+
   const areaWrapper = css({
     display: 'block',
     height: '100%',
@@ -97,6 +117,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
             dataKey={0}
             url={getTrackURI()}
             isPrimary={true}
+            subtitleUrl={subtitleUrl}
             selectIsPlaying={selectIsPlaying}
             selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
             selectPreviewTriggered={selectPreviewTriggered}
