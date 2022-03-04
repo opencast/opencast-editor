@@ -9,12 +9,15 @@ import { WritableDraft } from 'immer/dist/internal';
 export interface subtitle {
   isDisplayEditView: boolean    // Should the edit view be displayed
   isPlaying: boolean,             // Are videos currently playing?
+  isPlayPreview: boolean,         // Should deleted segments be skipped?
+  previewTriggered: boolean,      // Basically acts as a callback for the video players.
   currentlyAt: number,            // Position in the video in milliseconds
   clickTriggered: boolean,        // Another video player callback
   caption: string | undefined,
   subtitles: Subtitle[],
   selectedSubtitleFlavor: string,
   dummyData : [string, number, number][],
+  aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
 
   status: 'idle' | 'loading' | 'success' | 'failed',
   errors: {identifier: string, error: string}[],
@@ -23,7 +26,9 @@ export interface subtitle {
 const initialState: subtitle = {
   isDisplayEditView: false,
   isPlaying: false,
-  currentlyAt: 0,   // Position in the video in milliseconds
+  isPlayPreview: true,
+  previewTriggered: false,
+  currentlyAt: 0,
   clickTriggered: false,
   caption: undefined,
   subtitles: [],
@@ -39,7 +44,8 @@ const initialState: subtitle = {
     ["", 50000, 50000],
     ["The End", 60000, 70000],
     ["", 500000, 600000],
-  ]
+  ],
+  aspectRatios: [],
 }
 
 const updateCurrentlyAt = (state: subtitle, milliseconds: number) => {
@@ -67,6 +73,12 @@ export const subtitleSlice = createSlice({
     },
     setIsPlaying: (state, action: PayloadAction<subtitle["isPlaying"]>) => {
       state.isPlaying = action.payload;
+    },
+    setIsPlayPreview: (state, action: PayloadAction<subtitle["isPlaying"]>) => {
+      state.isPlayPreview = action.payload;
+    },
+    setPreviewTriggered: (state, action) => {
+      state.previewTriggered = action.payload
     },
     setCurrentlyAt: (state, action: PayloadAction<subtitle["currentlyAt"]>) => {
       updateCurrentlyAt(state, action.payload);
@@ -96,6 +108,9 @@ export const subtitleSlice = createSlice({
     },
     setDummySegment: (state, action: PayloadAction<{index: number} & {text: string, start: number, end: number}> ) => {
       state.dummyData[action.payload.index] = [action.payload.text, action.payload.start, action.payload.end]
+    },
+    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
+      state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
   },
   extraReducers: builder => {
@@ -190,17 +205,27 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 }
 
 // Export Actions
-export const { setIsDisplayEditView, setIsPlaying, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor, setDummySegment } = subtitleSlice.actions
+export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor, setDummySegment, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
   state.subtitleState.isDisplayEditView
 export const selectIsPlaying = (state: RootState) =>
-  state.videoState.isPlaying
+  state.subtitleState.isPlaying
+export const selectIsPlayPreview = (state: { subtitleState: { isPlayPreview: subtitle["isPlayPreview"] }; }) =>
+  state.subtitleState.isPlayPreview
+export const selectPreviewTriggered = (state: { subtitleState: { previewTriggered: subtitle["previewTriggered"] } }) =>
+  state.subtitleState.previewTriggered
 export const selectCurrentlyAt = (state: RootState) =>
   state.subtitleState.currentlyAt
 export const selectCurrentlyAtInSeconds = (state: { subtitleState: { currentlyAt: subtitle["currentlyAt"]; }; }) =>
   state.subtitleState.currentlyAt / 1000
+export const selectClickTriggered = (state: { subtitleState: { clickTriggered: subtitle["clickTriggered"] } }) =>
+  state.subtitleState.clickTriggered
+// Hardcoding this value to achieve a desired size for the video player
+// TODO: Don't hardcode this value, instead make the video player component more flexible
+export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
+  50
 
 export const selectCaption = (state: { subtitleState: { caption: subtitle["caption"] } }) =>
   state.subtitleState.caption

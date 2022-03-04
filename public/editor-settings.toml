@@ -126,6 +126,12 @@ mainFlavor = "captions"
 "source+de_5" = "Deutsch 5"
 "🦝" = "🦝"
 
+# Specify the default video in the subtitle video player by flavor
+# If not specified, the editor will decide on a default by itself
+[subtitles.defaultVideoFlavor]
+"type" = "presentation"
+"subtype" = "preview"
+
 ####
 # Thumbnail Selection
 ##

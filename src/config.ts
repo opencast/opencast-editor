@@ -7,6 +7,7 @@
  */
 import parseToml from '@iarna/toml/parse-string';
 import deepmerge from 'deepmerge';
+import { Flavor } from './types';
 
 /**
  * Local constants
@@ -49,6 +50,7 @@ interface iSettings {
     show: boolean,
     mainFlavor: string,
     languages: { [key: string]: string } | undefined,
+    defaultVideoFlavor: Flavor | undefined,
   }
 }
 
@@ -80,6 +82,7 @@ var defaultSettings: iSettings = {
     show: true, // TODO: Set this false
     mainFlavor: "captions",
     languages: undefined,
+    defaultVideoFlavor: undefined,
   }
 }
 var configFileSettings: iSettings
@@ -333,6 +336,7 @@ const SCHEMA = {
     show: types.boolean,
     mainFlavor: types.string,
     languages: types.map,
+    defaultVideoFlavor: types.map,
   },
   thumbnail: {
     show : types.boolean,

@@ -200,5 +200,9 @@
       "createSubtitleButton": "Create",
       "createSubtitleButtonTooltip": "Start a new subtitle file with the chosen title.",
       "createSubtitleDropdownLabel": "Pick a language"
+    },
+
+    "subtitleVideoArea": {
+      "selectVideoLabel": "Video Flavors"
     }
   }

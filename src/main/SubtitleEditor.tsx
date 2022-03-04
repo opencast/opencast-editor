@@ -1,15 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
-import ReactPlayer from "react-player";
-import { basicButtonStyle } from "../cssStyles";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   selectCaptions,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSubtitle, selectErrorByFlavor, resetRequestState, selectGetStatus, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { Track } from "../types";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
@@ -21,6 +16,13 @@ import {
   setCurrentlyAt,
   setDummySegment,
   setIsPlaying,
+  fetchSubtitle,
+  selectErrorByFlavor,
+  resetRequestState,
+  selectGetStatus,
+  selectSelectedSubtitleByFlavor,
+  selectSelectedSubtitleFlavor,
+  setSubtitle
 } from '../redux/subtitleSlice'
 import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
@@ -28,6 +30,10 @@ import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import Draggable from "react-draggable";
 import { settings } from "../config";
+import { basicButtonStyle } from "../cssStyles";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SubtitleVideoArea from "./SubtitleVideoArea";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -107,14 +113,6 @@ import { settings } from "../config";
     width: '100%',
   })
 
-  const videoPlayerAreaStyle = css({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    width: '40%',
-  });
-
   // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx
   const titleStyle = css({
     display: 'inline-block',
@@ -153,9 +151,7 @@ import { settings } from "../config";
           </div>
           <div css={subAreaStyle}>
             <SubtitleListEditor />
-            <div css={videoPlayerAreaStyle}>
-              <SubtitleVideoPlayer />
-            </div>
+            <SubtitleVideoArea />
           </div>
           <SubtitleTimeline
             selectIsPlaying={selectIsPlaying}
@@ -176,52 +172,6 @@ import { settings } from "../config";
   );
 }
 
-const SubtitleVideoPlayer : React.FC<{}> = () => {
-
-  const url = "https://data.lkiesow.io/opencast/test-media/goat.mp4"
-
-  const playerWrapper = css({
-    position: 'relative',
-    width: '100%',
-    paddingTop: '50%',
-  });
-
-  const reactPlayerStyle = css({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  })
-
-  const render = () => {
-    return(
-      <div css={playerWrapper}>
-        <ReactPlayer url={url}
-          css={reactPlayerStyle}
-          controls={true}
-          // ref={ref}
-          width='100%'
-          height='100%'
-          // playing={isPlaying}
-          // muted={!isPrimary}
-          // onProgress={onProgressCallback}
-          progressInterval={100}
-          // onReady={onReadyCallback}
-          // onEnded={onEndedCallback}
-          // onError={onErrorCallback}
-          tabIndex={-1}
-          // config={playerConfig}
-          // disablePictureInPicture
-        />
-      </div>
-    );
-  }
-
-  return (
-    <>
-      {render()}
-    </>
-  );
-}
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
