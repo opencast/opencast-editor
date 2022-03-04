@@ -30,6 +30,10 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   const tracks = useSelector(selectTracks)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
+  // A temporary "url" for the video component.
+  // Intended to force reloading the player config through changing the video url.
+  // Due to a bug in react-player: https://github.com/cookpete/react-player/issues/1162
+  const [reloadUrl, setReloadUrl] = useState("banana")
 
   const dummyVTT = `WEBVTT
 
@@ -70,8 +74,12 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
   // Get a track URI by any means necessary
   const getTrackURI = () => {
+    // Fake url for forcing player config reload
+    if (reloadUrl) {
+      return reloadUrl
+    }
+
     const trackURIByFlavor = getTrackURIBySelectedFlavor()
-    console.log("trackURIByFlavor: " + trackURIByFlavor)
     if (trackURIByFlavor) {
       return trackURIByFlavor
     }
@@ -83,8 +91,14 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   // Parse subtitles to something the video player understands
   useEffect(() => {
     setSubtitleUrl(window.URL.createObjectURL(new Blob([dummyVTT], {type : 'text/vtt'})))
+    // Force player config reload
+    setReloadUrl("banana")
   }, [dummyVTT])
 
+  // After forcing player config reload, go back to the actual video url
+  useEffect(() => {
+    setReloadUrl("")
+  }, [reloadUrl])
 
   const areaWrapper = css({
     display: 'block',
@@ -103,6 +117,8 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   });
 
   const render = () => {
+    console.log("getTrackURI" + getTrackURI())
+    console.log("subtitleUrl" + subtitleUrl)
     return(
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>
