@@ -19,6 +19,7 @@ export interface video {
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
 
+  videos: Track[],
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
   duration: number,     // Video duration in milliseconds
@@ -41,6 +42,7 @@ export const initialState: video & httpRequestState = {
   aspectRatios: [],
   hasChanges: false,
 
+  videos: [],
   videoURLs: [],
   videoCount: 0,
   duration: 0,
@@ -185,9 +187,9 @@ export const videoSlice = createSlice({
         // });
 
         // New API
-        state.videoURLs = action.payload.tracks.filter((track: Track) => track.video_stream.available === true)
-          // eslint-disable-next-line no-sequences
-          .reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videos = action.payload.tracks.filter((track: Track) => track.video_stream.available === true)
+        // eslint-disable-next-line no-sequences
+        state.videoURLs = state.videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
@@ -327,6 +329,7 @@ export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"
   state.videoState.hasChanges
 
 // Selectors mainly pertaining to the information fetched from Opencast
+export const selectVideos = (state: { videoState: { videos: video["videos"] } }) => state.videoState.videos
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
 export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"] } }) => state.videoState.videoCount
 export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
