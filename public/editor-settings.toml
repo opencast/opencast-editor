@@ -12,8 +12,7 @@
 # This is very useful as demo, but has no purpose otherwise.
 # Type: string | undefined
 # Default: undefined
-# id = '63af7c8b-faf9-4b14-be58-07ab268db5fe'
-id = '3569e20d-7181-4a60-9816-43fd887063b3'
+id = 'ID-dual-stream-demo'
 
 
 ####
@@ -26,7 +25,7 @@ id = '3569e20d-7181-4a60-9816-43fd887063b3'
 # The default will work just fine if integrated in Opencast.
 # Type: URL
 # Default: Current server
-url = 'http://localhost:8080'
+url = 'https://develop.opencast.org'
 
 
 
