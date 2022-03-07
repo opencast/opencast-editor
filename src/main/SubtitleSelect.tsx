@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
 
 /**
- * Displays a menu for selecting what should be done with the current changes
+ * Displays buttons that allow the user to select the flavor/language they want to edit
  */
  const SubtitleSelect : React.FC<{}> = () => {
 
@@ -24,7 +24,7 @@ import { selectCaptions } from "../redux/videoSlice";
   const [displayFlavors, setDisplayFlavors] = useState<{subFlavor: string, title: string}[]>([])
   const [canBeAddedFlavors, setCanBeAddedFlavors] = useState<{subFlavor: string, title: string}[]>([])
 
-  // Update the two groups of flavors
+  // Update the displayFlavors and canBeAddedFlavors
   useEffect(() => {
     let tempDisplayFlavors = []
     let tempCanBeAddedFlavors = []
@@ -34,6 +34,7 @@ import { selectCaptions } from "../redux/videoSlice";
       let subFlavor = lan // left side
       let name = settings.subtitles.languages[lan] // right side
 
+      // Check if flavor already exists in the tracks from Opencast
       for (const cap of captionTracks) {
         if (cap.flavor.subtype === subFlavor) {
           found = true
@@ -59,16 +60,16 @@ import { selectCaptions } from "../redux/videoSlice";
     setCanBeAddedFlavors(tempCanBeAddedFlavors)
   }, [captionTracks, subtitles])
 
+  // TODO: Make this function more robust
+  const parseCountryCode = (parseString: string) => {
+    return parseString.split("+").pop()?.slice(0, 2);
+  }
+
   const subtitleSelectStyle = css({
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(20em, 1fr))',
     gridRowGap: '30px',
   })
-
-  // TODO: Make this function more robust
-  const parseCountryCode = (parseString: string) => {
-    return parseString.split("+").pop()?.slice(0, 2);
-  }
 
   const renderButtons = () => {
     let buttons : JSX.Element[] = []
@@ -76,15 +77,11 @@ import { selectCaptions } from "../redux/videoSlice";
       return buttons
     }
 
-    // TODO: Only show buttons for languages with existing subtitles
-    //  Can only complete this TODO after getting subtitles from Opencast works
-
     for (let subFlavor of displayFlavors) {
       buttons.push(
         <SubtitleSelectButton
           title={subFlavor.title}
           iconIdentifier={parseCountryCode(subFlavor.subFlavor)}
-          segmentNumber={0}
           flavor={subFlavor.subFlavor}
           key={subFlavor.subFlavor}
         />
@@ -102,16 +99,19 @@ import { selectCaptions } from "../redux/videoSlice";
   );
 }
 
+/**
+ * A button that sets the flavor that should be edited
+ */
 const SubtitleSelectButton: React.FC<{
   title: string,
   iconIdentifier: string | undefined,
-  segmentNumber: number,
   flavor: string,
 }> = ({
-  title, iconIdentifier, segmentNumber, flavor
+  title,
+  iconIdentifier,
+  flavor
 }) => {
 
-  // const { t } = useTranslation();
   const dispatch = useDispatch()
 
   /**
@@ -157,6 +157,9 @@ const SubtitleSelectButton: React.FC<{
   );
 };
 
+/**
+ * Actually not a button, but a container for a form that allows creating new flavors for editing
+ */
 const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}[]}> = ({languages}) => {
 
   const { t } = useTranslation();

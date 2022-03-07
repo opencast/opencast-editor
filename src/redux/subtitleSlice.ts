@@ -14,7 +14,6 @@ export interface subtitle {
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   currentlyAt: number,            // Position in the video in milliseconds
   clickTriggered: boolean,        // Another video player callback
-  caption: string | undefined,
   subtitles: Subtitle[],
   selectedSubtitleFlavor: string,
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
@@ -30,7 +29,6 @@ const initialState: subtitle = {
   previewTriggered: false,
   currentlyAt: 0,
   clickTriggered: false,
-  caption: undefined,
   subtitles: [],
   selectedSubtitleFlavor: "",
 
@@ -278,7 +276,9 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 }
 
 // Export Actions
-export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue, setSelectedSubtitleFlavor, setAspectRatio } = subtitleSlice.actions
+export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
+  setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
+  setSelectedSubtitleFlavor, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
@@ -300,8 +300,6 @@ export const selectClickTriggered = (state: { subtitleState: { clickTriggered: s
 export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
   50
 
-export const selectCaption = (state: { subtitleState: { caption: subtitle["caption"] } }) =>
-  state.subtitleState.caption
 export const selectGetStatus = (state: { subtitleState: { status: httpRequestState["status"] } }) =>
   state.subtitleState.status
 export const selectGetErrors = (state: { subtitleState: { errors: subtitle["errors"] } }) =>

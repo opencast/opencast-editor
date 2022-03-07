@@ -20,7 +20,13 @@ import { SubtitleCue } from "../types"
   // Automatically create a segment if there are no segments
   useEffect(() => {
     if (subtitle && subtitle.subtitles.length === 0) {
-      dispatch(addCueAtIndex({identifier: subtitle.identifier, cueIndex: 0, text: "", startTime: 0, endTime: defaultSegmentLength}))
+      dispatch(addCueAtIndex({
+        identifier: subtitle.identifier,
+        cueIndex: 0,
+        text: "",
+        startTime: 0,
+        endTime: defaultSegmentLength
+      }))
     }
   }, [dispatch, subtitle])
 
@@ -98,27 +104,53 @@ const SubtitleListSegment : React.FC<{
   const dispatch = useDispatch()
 
   const updateCueText = (event: { target: { value: any } }) => {
-    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, newCue: {id: cue.id, text: event.target.value, startTime: cue.startTime, endTime: cue.endTime, tree: cue.tree}}))
+    dispatch(setCueAtIndex({
+      identifier: identifier,
+      cueIndex: dataKey,
+      newCue: {id: cue.id, text: event.target.value, startTime: cue.startTime, endTime: cue.endTime, tree: cue.tree}
+    }))
   };
 
   const updateCueStart = (event: { target: { value: any } }) => {
-    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, newCue: {id: cue.id, text: cue.text, startTime: event.target.value, endTime: cue.endTime, tree: cue.tree}}))
+    dispatch(setCueAtIndex({
+      identifier: identifier,
+      cueIndex: dataKey,
+      newCue: {id: cue.id, text: cue.text, startTime: event.target.value, endTime: cue.endTime, tree: cue.tree}
+    }))
   };
 
   const updateCueEnd = (event: { target: { value: any } }) => {
-    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, newCue: {id: cue.id, text: cue.text, startTime: cue.startTime, endTime: event.target.value, tree: cue.tree}}))
+    dispatch(setCueAtIndex({
+      identifier: identifier,
+      cueIndex: dataKey,
+      newCue: {id: cue.id, text: cue.text, startTime: cue.startTime, endTime: event.target.value, tree: cue.tree}
+    }))
   };
 
   const addCueAbove = () => {
-    dispatch(addCueAtIndex({identifier: identifier, cueIndex: dataKey, text: "", startTime: cue.startTime - defaultSegmentLength, endTime: cue.startTime}))
+    dispatch(addCueAtIndex({identifier: identifier,
+      cueIndex: dataKey,
+      text: "",
+      startTime: cue.startTime - defaultSegmentLength,
+      endTime: cue.startTime
+    }))
   }
 
   const addCueBelow = () => {
-    dispatch(addCueAtIndex({identifier: identifier, cueIndex: dataKey + 1, text: "", startTime: cue.endTime, endTime: cue.endTime + defaultSegmentLength}))
+    dispatch(addCueAtIndex({
+      identifier: identifier,
+      cueIndex: dataKey + 1,
+      text: "",
+      startTime: cue.endTime,
+      endTime: cue.endTime + defaultSegmentLength
+    }))
   }
 
   const deleteCue = () => {
-    dispatch(removeCue({identifier: identifier, cue: cue}))
+    dispatch(removeCue({
+      identifier: identifier,
+      cue: cue
+    }))
   }
 
   const segmentStyle = css({
@@ -185,8 +217,6 @@ const SubtitleListSegment : React.FC<{
   })
 
   const addSegmentButtonStyle = css({
-    // maxWidth: '35px',
-    // maxHeight: '15px',
     width: '32px',
     height: '32px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
@@ -198,7 +228,6 @@ const SubtitleListSegment : React.FC<{
 
       <textarea
         css={[fieldStyle, textFieldStyle]}
-        name={"test"}
         defaultValue={cue.text}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
           // TODO: Focus the textarea in the new segment
@@ -207,9 +236,22 @@ const SubtitleListSegment : React.FC<{
         }}}
         onChange={updateCueText}
       />
+
       <div css={timeAreaStyle}>
-        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={cue.startTime} onChange={updateCueStart}></input>
-        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={cue.endTime} onChange={updateCueEnd}></input>
+        <input
+          css={[fieldStyle, timeFieldStyle]}
+          id={"start"}
+          type={"text"}
+          value={cue.startTime}
+          onChange={updateCueStart}
+        />
+        <input
+          css={[fieldStyle, timeFieldStyle]}
+          id={"end"}
+          type={"text"}
+          value={cue.endTime}
+          onChange={updateCueEnd}
+        />
       </div>
 
       <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
@@ -232,7 +274,7 @@ const SubtitleListSegment : React.FC<{
           <FontAwesomeIcon icon={faPlus} size="1x" />
         </div>
       </div>
-      {/* <input id={"end"} type={"text"} value={end} onInput={e => setEnd((e.target as HTMLInputElement).value)}></input> */}
+
     </div>
   );
 }

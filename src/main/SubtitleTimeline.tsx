@@ -20,16 +20,12 @@ import { SubtitleCue } from "../types";
  */
  const SubtitleTimeline: React.FC<{
   selectCurrentlyAt: (state: RootState) => number,
-  selectIsPlaying:(state: RootState) => boolean,
   setClickTriggered: ActionCreatorWithPayload<any, string>,
   setCurrentlyAt: ActionCreatorWithPayload<number, string>,
-  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   selectCurrentlyAt,
-  selectIsPlaying,
   setClickTriggered,
   setCurrentlyAt,
-  setIsPlaying
 }) => {
 
   // Init redux variables
@@ -42,12 +38,6 @@ import { SubtitleCue } from "../types";
   const refTop = useRef<HTMLDivElement>(null);
 
   const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
-
-  const timelineStyle = css({
-    position: 'relative',     // Need to set position for Draggable bounds to work
-    height: '220px',
-    width: (duration / timelineCutoutInMs) * 100 + '%'    // Total length of timeline based on number of cutouts
-  });
 
   // Update the current time based on the position clicked on the miniTimeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -63,6 +53,12 @@ import { SubtitleCue } from "../types";
       refTop.current.scrollTo(((currentlyAt / duration)) * refTop.current.scrollWidth, 0)
     }
   }, [currentlyAt, duration, width]);
+
+  const timelineStyle = css({
+    position: 'relative',     // Need to set position for Draggable bounds to work
+    height: '220px',
+    width: (duration / timelineCutoutInMs) * 100 + '%'    // Total length of timeline based on number of cutouts
+  });
 
   // draws a triangle on top of the middle line
   const triangleStyle = css({
@@ -92,13 +88,6 @@ import { SubtitleCue } from "../types";
         <div ref={ref} css={timelineStyle} title="Timeline"
           // onMouseDown={e => setCurrentlyAtToClick(e)}
         >
-          {/* <Scrubber
-            timelineWidth={width}
-            selectCurrentlyAt={selectCurrentlyAt}
-            selectIsPlaying={selectIsPlaying}
-            setCurrentlyAt={setCurrentlyAt}
-            setIsPlaying={setIsPlaying}
-          /> */}
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
           <TimelineSubtitleSegmentsList timelineWidth={width}/>
           <div css={{position: 'relative', height: '100px'}} >
@@ -249,7 +238,6 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
       axis="x"
       bounds="parent"
       position={controlledPosition}
-      // defaultPosition={{x: (startInit / duration) * (timelineWidth), y: 0}}
       nodeRef={nodeRef}
       >
         <div ref={nodeRef} css={segmentStyle}>

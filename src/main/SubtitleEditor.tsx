@@ -12,10 +12,8 @@ import SubtitleListEditor from "./SubtitleListEditor";
 import {
   setIsDisplayEditView,
   selectCurrentlyAt,
-  selectIsPlaying,
   setClickTriggered,
   setCurrentlyAt,
-  setIsPlaying,
   fetchSubtitle,
   selectErrorByFlavor,
   resetRequestState,
@@ -38,9 +36,8 @@ import SubtitleTimeline from "./SubtitleTimeline";
   const getError = useSelector(selectErrorByFlavor)
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
-
-  // let selectedFlavorSubtype = "source+en"
   const selectedFlavorSubtype = useSelector(selectSelectedSubtitleFlavor)
+
   let captionTrack: Track | undefined = undefined   // track object received from Opencast
 
   // If subtitle is not in our redux store, dynamically fetch it
@@ -77,7 +74,8 @@ import SubtitleTimeline from "./SubtitleTimeline";
   }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
 
   const getTitle = () => {
-    return (settings.subtitles.languages !== undefined && subtitle && subtitle.identifier) ? settings.subtitles.languages[subtitle?.identifier] : "Loading"
+    return (settings.subtitles.languages !== undefined && subtitle && subtitle.identifier) ?
+      settings.subtitles.languages[subtitle?.identifier] : "Loading"
   }
 
   const subtitleEditorStyle = css({
@@ -142,9 +140,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
             <SubtitleVideoArea />
           </div>
           <SubtitleTimeline
-            selectIsPlaying={selectIsPlaying}
             selectCurrentlyAt={selectCurrentlyAt}
-            setIsPlaying={setIsPlaying}
             setCurrentlyAt={setCurrentlyAt}
             setClickTriggered={setClickTriggered}
           />

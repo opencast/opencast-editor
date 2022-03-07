@@ -4,6 +4,9 @@ import SubtitleSelect from "./SubtitleSelect";
 import { useSelector } from "react-redux";
 import { selectIsDisplayEditView } from "../redux/subtitleSlice";
 
+/**
+ * A container for the various subtitle views
+ */
 const Subtitle : React.FC<{}> = () => {
 
   const displayEditView = useSelector(selectIsDisplayEditView)
