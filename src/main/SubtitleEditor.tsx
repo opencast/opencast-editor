@@ -130,11 +130,6 @@ import SubtitleTimeline from "./SubtitleTimeline";
     } else {
       return(
         <>
-          <div>
-            {subtitle?.subtitles.map((cue: any, index: number) =>
-              <span key={index}>{cue.text}</span>
-            )}
-          </div>
           <div css={headerRowStyle}>
             <BackButton />
             <div css={[titleStyle, titleStyleBold]}>
