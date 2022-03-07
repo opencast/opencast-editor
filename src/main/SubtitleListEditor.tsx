@@ -15,7 +15,7 @@ import { SubtitleCue } from "../types"
   const dispatch = useDispatch()
 
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
-  const defaultSegmentLength = 5
+  const defaultSegmentLength = 5000
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
@@ -98,15 +98,15 @@ const SubtitleListSegment : React.FC<{
   const dispatch = useDispatch()
 
   const updateCueText = (event: { target: { value: any } }) => {
-    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, cue: {id: cue.id, text: event.target.value, startTime: cue.startTime, endTime: cue.endTime}}))
+    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, newCue: {id: cue.id, text: event.target.value, startTime: cue.startTime, endTime: cue.endTime, tree: cue.tree}}))
   };
 
   const updateCueStart = (event: { target: { value: any } }) => {
-    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, cue: {id: cue.id, text: cue.text, startTime: event.target.value, endTime: cue.endTime}}))
+    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, newCue: {id: cue.id, text: cue.text, startTime: event.target.value, endTime: cue.endTime, tree: cue.tree}}))
   };
 
   const updateCueEnd = (event: { target: { value: any } }) => {
-    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, cue: {id: cue.id, text: cue.text, startTime: cue.startTime, endTime: event.target.value}}))
+    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, newCue: {id: cue.id, text: cue.text, startTime: cue.startTime, endTime: event.target.value, tree: cue.tree}}))
   };
 
   const addCueAbove = () => {

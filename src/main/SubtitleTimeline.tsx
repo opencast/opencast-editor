@@ -194,11 +194,12 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
     dispatch(setCueAtIndex({
       identifier: selectedFlavor,
       cueIndex: index,
-      cue: {
+      newCue: {
         id: cue.id,
         text: cue.text,
         startTime: (x / timelineWidth) * (duration),
         endTime: (x / timelineWidth) * (duration) + (cue.endTime - cue.startTime),
+        tree: cue.tree
       }
     }))
 

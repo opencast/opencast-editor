@@ -40,6 +40,7 @@ export interface SubtitleCue {
   text: string,
   startTime: number,
   endTime: number,
+  tree: {children: [{type: string, value: string}]}   // Odditiy of the webvtt parser. Changes to text also need to be applied to tree.children[0].value
   // And many more
 }
 

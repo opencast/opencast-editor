@@ -94,7 +94,7 @@ export const subtitleSlice = createSlice({
       }
       state.subtitles.push(action.payload)
     },
-    setCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, cue: SubtitleCue}>) => {
+    setCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, newCue: SubtitleCue}>) => {
       let index = 0
       for (const sub of state.subtitles) {
         if (sub.identifier === action.payload.identifier) {
@@ -103,13 +103,15 @@ export const subtitleSlice = createSlice({
             return
           }
           console.log("SetCue")
-          const formattedCue = {
-            id: action.payload.cue.id,
-            text: action.payload.cue.text,
-            startTime: Math.round(action.payload.cue.startTime),
-            endTime: Math.round(action.payload.cue.endTime)
-          }
-          state.subtitles[index].subtitles[action.payload.cueIndex] = formattedCue
+          let cue = state.subtitles[index].subtitles[action.payload.cueIndex]
+          cue.id = action.payload.newCue.id
+          cue.text = action.payload.newCue.text
+          cue.startTime = Math.round(action.payload.newCue.startTime)
+          cue.endTime = Math.round(action.payload.newCue.endTime)
+
+          cue.tree.children[0].value = action.payload.newCue.text
+
+          state.subtitles[index].subtitles[action.payload.cueIndex] = cue
           return
         }
         index++
@@ -121,7 +123,8 @@ export const subtitleSlice = createSlice({
         id: nanoid(),
         text: action.payload.text,
         startTime: Math.round(startTime),
-        endTime: Math.round(action.payload.endTime)
+        endTime: Math.round(action.payload.endTime),
+        tree: { children: [{type: 'text', value: action.payload.text}] }
       }
 
       let index = 0

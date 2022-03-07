@@ -11,8 +11,9 @@ import { selectCurrentlyAt,
   setPreviewTriggered,
   selectAspectRatio,
   setAspectRatio,
-  selectCurrentlyAtInSeconds } from "../redux/subtitleSlice";
-import { selectTracks, selectVideos } from "../redux/videoSlice";
+  selectCurrentlyAtInSeconds,
+  selectSelectedSubtitleByFlavor} from "../redux/subtitleSlice";
+import { selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
 import { Form } from "react-final-form";
@@ -21,32 +22,24 @@ import { useTranslation } from "react-i18next";
 import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
 import { flexGapReplacementStyle } from "../cssStyles";
+import { WebVTTSerializer } from 'webvtt-parser';
+
 
 /**
  * A part of the subtitle editor that displays a video and related controls
  */
 const SubtitleVideoArea : React.FC<{}> = () => {
 
+  const seri = new WebVTTSerializer();
+
   const tracks = useSelector(selectVideos)
+  let subtitle = useSelector(selectSelectedSubtitleByFlavor)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
   // A temporary "url" for the video component.
   // Intended to force reloading the player config through changing the video url.
   // Due to a bug in react-player: https://github.com/cookpete/react-player/issues/1162
   const [reloadUrl, setReloadUrl] = useState("banana")
-
-  const dummyVTT = `WEBVTT
-
-  00:01.000 --> 00:04.000
-  - Never drink liquid nitrogen.
-
-  00:05.000 --> 00:09.000
-  - It will perforate your stomach.
-  - You could die.
-
-  00:10.000 --> 00:59.000
-  TEST
-  `
 
   // Decide on initial flavor on mount
   useEffect(() => {
@@ -90,10 +83,29 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
   // Parse subtitles to something the video player understands
   useEffect(() => {
-    setSubtitleUrl(window.URL.createObjectURL(new Blob([dummyVTT], {type : 'text/vtt'})))
-    // Force player config reload
-    setReloadUrl("banana")
-  }, [dummyVTT])
+    if(subtitle) {
+      // Fix cues to work with serialize
+      let cueIndex = 0
+      const cues = [...subtitle.subtitles];
+      for (let cue of subtitle.subtitles) {
+        cue = {...cue}
+        cue.startTime = cue.startTime / 1000
+        cue.endTime = cue.endTime / 1000
+
+        cues[cueIndex] = cue
+
+        cueIndex++
+      }
+      console.log("cues")
+      console.log(cues)
+      const serializedSubtitle = seri.serialize(cues)
+      console.log(serializedSubtitle)
+      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type : 'text/vtt'})))
+      // Force player config reload
+      setReloadUrl("banana")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtitle?.subtitles])
 
   // After forcing player config reload, go back to the actual video url
   useEffect(() => {
