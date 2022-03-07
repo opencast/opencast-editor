@@ -195,7 +195,7 @@ const SubtitleListSegment : React.FC<{
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
           // TODO: Focus the textarea in the new segment
           event.preventDefault()
-          addCueAbove()
+          addCueBelow()
         }}}
         onChange={updateCue}
       />
