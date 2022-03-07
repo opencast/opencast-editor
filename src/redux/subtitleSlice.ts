@@ -17,7 +17,6 @@ export interface subtitle {
   caption: string | undefined,
   subtitles: Subtitle[],
   selectedSubtitleFlavor: string,
-  dummyData : [string, number, number][],
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
 
   status: 'idle' | 'loading' | 'success' | 'failed',
@@ -37,15 +36,6 @@ const initialState: subtitle = {
 
   status: 'idle',
   errors: [],
-  dummyData: [
-    ["Bla", 0, 3000],
-    ["Fischers Frizt fischt frische Fische. Frische Fische fischt Fischers Fritz!", 5000, 7000],
-    ["Overlap 1", 10000, 20000],
-    ["Overlap 2", 15000, 25000],
-    ["", 50000, 50000],
-    ["The End", 60000, 70000],
-    ["", 500000, 600000],
-  ],
   aspectRatios: [],
 }
 
@@ -160,9 +150,6 @@ export const subtitleSlice = createSlice({
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
       state.selectedSubtitleFlavor = action.payload
     },
-    setDummySegment: (state, action: PayloadAction<{index: number} & {text: string, start: number, end: number}> ) => {
-      state.dummyData[action.payload.index] = [action.payload.text, action.payload.start, action.payload.end]
-    },
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
@@ -198,12 +185,19 @@ export const subtitleSlice = createSlice({
 
         // Attach a unique id to each segment/cue
         // This is used by React to keep track of cues between changes (e.g. addition, deletion)
+        console.log(tree.cues)
         let index = 0
         for (let cue of tree.cues) {
           if (!cue.id) {
             cue.id = nanoid()
             tree.cues[index] = cue
           }
+
+          // Turn times into milliseconds
+          cue.startTime = cue.startTime * 1000
+          cue.endTime = cue.endTime * 1000
+          tree.cues[index] = cue
+
           index++
         }
 
@@ -270,7 +264,7 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 }
 
 // Export Actions
-export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue, setSelectedSubtitleFlavor, setDummySegment, setAspectRatio } = subtitleSlice.actions
+export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue, setSelectedSubtitleFlavor, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
@@ -308,8 +302,5 @@ export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
 export const selectErrorByFlavor = (state: { subtitleState:
   { errors: subtitle["errors"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   getErrorByFlavor(state.subtitleState.errors, state.subtitleState.selectedSubtitleFlavor)
-
-export const selectDummyData = (state: { subtitleState: { dummyData: subtitle["dummyData"]; }; }) =>
-  state.subtitleState.dummyData
 
 export default subtitleSlice.reducer

@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import {
-  selectDummyData,
-  setDummySegment,
+  selectSelectedSubtitleByFlavor,
+  selectSelectedSubtitleFlavor,
+  setCueAtIndex,
 } from '../redux/subtitleSlice'
 import { useDispatch, useSelector } from "react-redux";
 import useResizeObserver from "use-resize-observer";
@@ -11,6 +12,7 @@ import { selectDuration } from "../redux/videoSlice";
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import Draggable from "react-draggable";
+import { SubtitleCue } from "../types";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
@@ -127,7 +129,7 @@ import Draggable from "react-draggable";
  */
 const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
-  const dummyData = useSelector(selectDummyData)
+  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
 
   const segmentsListStyle = css({
     position: 'relative',
@@ -138,9 +140,9 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
 
   return (
     <div css={segmentsListStyle}>
-      {dummyData.map((item, i) => {
+      {subtitle?.subtitles.map((item, i) => {
         return (
-          <TimelineSubtitleSegment timelineWidth={timelineWidth} textInit={item[0]} startInit={item[1]} endInit={item[2]} key={i} index={i}/>
+          <TimelineSubtitleSegment timelineWidth={timelineWidth} cue={item} key={item.id} index={i}/>
         )
       })}
     </div>
@@ -151,9 +153,11 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
 /**
  * A single segments for the timeline subtitle segments list
  */
-const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string, startInit: number, endInit: number, index: number}> = ({timelineWidth, textInit, startInit, endInit, index}) => {
+const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue, index: number}> = ({timelineWidth, cue, index}) => {
 
   const dispatch = useDispatch()
+  const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
+
   const duration = useSelector(selectDuration)
   const [controlledPosition, setControlledPosition] = useState({x: 0, y: 0})
   const [isGrabbed, setIsGrabbed] = useState(false)
@@ -161,24 +165,17 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
 
   // Callback for when the scrubber gets dragged by the user
   const onControlledDrag = (e: any, position: any) => {
-    // Update position
-    const {x} = position
-    dispatch(setDummySegment({
-      index: index,
-      text: textInit,
-      start: (x / timelineWidth) * (duration),
-      end: (x / timelineWidth) * (duration) + (endInit - startInit),
-    }))
+    // Update position code was here
   }
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
     // if(currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
       // updateXPos();
-      setControlledPosition({x: (startInit / duration) * (timelineWidth), y: 0});
+      setControlledPosition({x: (cue.startTime / duration) * (timelineWidth), y: 0});
       // wasCurrentlyAtRef.current = currentlyAt;
     // }
-  },[duration, startInit, timelineWidth])
+  },[cue.startTime, duration, timelineWidth])
 
   const onStartDrag = () => {
     setIsGrabbed(true)
@@ -192,10 +189,18 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
     // }
   }
   const onStopDrag = (e: any, position: any) => {
-    // // Update position
-    // const {x} = position;
-    // setControlledPosition({x, y: 0});
-    // dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
+    // Update position
+    const {x} = position
+    dispatch(setCueAtIndex({
+      identifier: selectedFlavor,
+      cueIndex: index,
+      cue: {
+        id: cue.id,
+        text: cue.text,
+        startTime: (x / timelineWidth) * (duration),
+        endTime: (x / timelineWidth) * (duration) + (cue.endTime - cue.startTime),
+      }
+    }))
 
     setIsGrabbed(false)
     // // Resume video playback
@@ -210,7 +215,7 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
     // top: 0,
     // left: (startInit / duration) * 100 + '%',
     height: '100%',
-    width: ((endInit - startInit) / duration) * 100 + '%',
+    width: ((cue.endTime - cue.startTime) / duration) * 100 + '%',
 
     background: 'rgba(0, 0, 0, 0.4)',
     borderRadius: '5px',
@@ -247,7 +252,7 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, textInit: string
       nodeRef={nodeRef}
       >
         <div ref={nodeRef} css={segmentStyle}>
-          <span css={textStyle}>{textInit}</span>
+          <span css={textStyle}>{cue.text}</span>
         </div>
     </Draggable>
   );
