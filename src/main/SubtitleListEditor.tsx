@@ -1,46 +1,28 @@
 import { css } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
+import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, setCueAtIndex } from "../redux/subtitleSlice"
+import { SubtitleCue } from "../types"
 
 /**
  * Displays everything needed to edit subtitles
  */
  const SubtitleListEditor : React.FC<{}> = () => {
 
-  const [dummyData, setDummyData] = useState<[string, string, string][]>([
-    ["", "", ""],
-    ["Bla", "00:00:00.000", "00:00:03.000"],
-    ["Fischers Frizt fischt frische Fische. Frische Fische fischt Fischers Fritz!", "00:00:05.000", "00:00:07.000"],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-  ])
+  const dispatch = useDispatch()
+
+  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
+  const defaultSegmentLength = 5
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
-    if (dummyData.length === 0) {
-      // TODO: Actually create a segment here
-      console.log("TODO: Create a segment")
-      setDummyData(dummyData => [...dummyData, ["", "", ""]])
+    if (subtitle && subtitle.subtitles.length === 0) {
+      dispatch(addCueAtIndex({identifier: subtitle.identifier, cueIndex: 0, text: "", startTime: 0, endTime: defaultSegmentLength}))
     }
-  }, [dummyData])
+  }, [dispatch, subtitle])
 
   const listStyle = css({
     display: 'flex',
@@ -82,9 +64,15 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
         <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Alles löschen</div>
       </div>
       <div css={segmentListStyle}>
-        {dummyData.map((item, i) => {
+        {subtitle?.subtitles.map((item, i) => {
           return (
-            <SubtitleListSegment textInit={item[0]} startInit={item[1]} endInit={item[2]} key={i} setDummyData={setDummyData}/>
+            <SubtitleListSegment
+              identifier={subtitle.identifier}
+              dataKey={i}
+              cue={item}
+              defaultSegmentLength={defaultSegmentLength}
+              key={item.id}
+            />
           )
         })}
       </div>
@@ -95,7 +83,35 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 /**
  * A single subtitle segment
  */
-const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endInit: string, setDummyData: any}> = ({textInit, startInit, endInit, setDummyData}) => {
+const SubtitleListSegment : React.FC<{
+  identifier: string,
+  dataKey: number,
+  cue: SubtitleCue,
+  defaultSegmentLength: number,
+}>= ({
+  identifier,
+  dataKey,
+  cue,
+  defaultSegmentLength,
+}) => {
+
+  const dispatch = useDispatch()
+
+  const updateCue = (event: { target: { value: any } }) => {
+    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, cue: {id: cue.id, text: event.target.value, startTime: cue.startTime, endTime: cue.endTime}}))
+  };
+
+  const addCueAbove = () => {
+    dispatch(addCueAtIndex({identifier: identifier, cueIndex: dataKey, text: "", startTime: cue.startTime - defaultSegmentLength, endTime: cue.startTime}))
+  }
+
+  const addCueBelow = () => {
+    dispatch(addCueAtIndex({identifier: identifier, cueIndex: dataKey + 1, text: "", startTime: cue.endTime, endTime: cue.endTime + defaultSegmentLength}))
+  }
+
+  const deleteCue = () => {
+    dispatch(removeCue({identifier: identifier, cue: cue}))
+  }
 
   const segmentStyle = css({
     display: 'flex',
@@ -175,29 +191,36 @@ const SubtitleListSegment : React.FC<{textInit: string, startInit: string, endIn
       <textarea
         css={[fieldStyle, textFieldStyle]}
         name={"test"}
-        defaultValue={textInit}
+        defaultValue={cue.text}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
-          // TODO: Actually create a segment here
           // TODO: Focus the textarea in the new segment
-          console.log("TODO: Create a segment")
           event.preventDefault()
-          setDummyData((dummyData: any) => [...dummyData, ["", "", ""]])
+          addCueAbove()
         }}}
+        onChange={updateCue}
       />
       <div css={timeAreaStyle}>
-        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} defaultValue={startInit}></input>
-        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} defaultValue={endInit}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} defaultValue={cue.startTime}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} defaultValue={cue.endTime}></input>
       </div>
 
       <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
-        <div css={[basicButtonStyle, addSegmentButtonStyle]}>
+        <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          role="button" tabIndex={0}
+          onClick={addCueAbove}
+        >
           <FontAwesomeIcon icon={faPlus} size="1x" />
         </div>
-        {/* <div></div> */}
-        <div css={[basicButtonStyle, addSegmentButtonStyle]}>
+        <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          role="button" tabIndex={0}
+          onClick={deleteCue}
+        >
           <FontAwesomeIcon icon={faTrash} size="1x" />
         </div>
-        <div css={[basicButtonStyle, addSegmentButtonStyle]}>
+        <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          role="button" tabIndex={0}
+          onClick={addCueBelow}
+        >
           <FontAwesomeIcon icon={faPlus} size="1x" />
         </div>
       </div>

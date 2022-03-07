@@ -175,7 +175,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
 
   const onSubmit = (values: { languages: any; }) => {
     // Create new subtitle for the given flavor
-    dispatch(setSubtitle({identifier: values.languages, subtitle: []}))
+    dispatch(setSubtitle({identifier: values.languages, subtitles: []}))
 
     // Reset
     setIsPlusDisplay(true)

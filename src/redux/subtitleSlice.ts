@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { SubtitleCue } from './../types';
+import { createAsyncThunk, createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
 import { client } from '../util/client';
@@ -92,16 +93,69 @@ export const subtitleSlice = createSlice({
     resetRequestState: (state) => {
       state.status = 'idle'
     },
-    setSubtitle: (state, action: PayloadAction<{identifier: string} & {subtitle: any}>) => {
+    setSubtitle: (state, action: PayloadAction<Subtitle>) => {
       let index = 0
       for (const sub of state.subtitles) {
         if (sub.identifier === action.payload.identifier) {
-          state.subtitles[index] = action.payload.subtitle
+          state.subtitles[index] = action.payload
           return
         }
         index++
       }
-      state.subtitles.push({identifier: action.payload.identifier, subtitles: action.payload.subtitle})
+      state.subtitles.push(action.payload)
+    },
+    setCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, cue: SubtitleCue}>) => {
+      let index = 0
+      for (const sub of state.subtitles) {
+        if (sub.identifier === action.payload.identifier) {
+          if (action.payload.cueIndex < 0 || action.payload.cueIndex >= state.subtitles[index].subtitles.length) {
+            console.log("WARNING: Tried to set segment for subtitle " + action.payload.identifier + " but was out of range")
+            return
+          }
+          console.log("SetCue")
+          state.subtitles[index].subtitles[action.payload.cueIndex] = action.payload.cue
+          return
+        }
+        index++
+      }
+    },
+    addCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>) => {
+      const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0
+      const cue: SubtitleCue = { id: nanoid(), text: action.payload.text, startTime: startTime, endTime: action.payload.endTime }
+
+      let index = 0
+      for (const sub of state.subtitles) {
+        if (sub.identifier === action.payload.identifier) {
+
+          if (action.payload.cueIndex < 0 ) {
+            state.subtitles[index].subtitles.splice(0, 0, cue);
+            return
+          }
+
+          if (action.payload.cueIndex >= 0 || action.payload.cueIndex < state.subtitles[index].subtitles.length) {
+            state.subtitles[index].subtitles.splice(action.payload.cueIndex, 0, cue);
+            return
+          }
+
+          if (action.payload.cueIndex >= state.subtitles[index].subtitles.length) {
+            state.subtitles[index].subtitles.push(cue)
+            return
+          }
+        }
+        index++
+      }
+    },
+    removeCue: (state, action: PayloadAction<{identifier: string, cue: SubtitleCue}>) => {
+      let index = 0
+      for (const sub of state.subtitles) {
+        if (sub.identifier === action.payload.identifier) {
+          const cueIndex = state.subtitles[index].subtitles.findIndex(i => i.id === action.payload.cue.id);
+          if (cueIndex > -1) {
+            state.subtitles[index].subtitles.splice(cueIndex, 1);
+          }
+        }
+        index++
+      }
     },
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
       state.selectedSubtitleFlavor = action.payload
@@ -140,6 +194,17 @@ export const subtitleSlice = createSlice({
             errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message)
           }
           setError(state, action.payload.identifier, errors.join("\n"))
+        }
+
+        // Attach a unique id to each segment/cue
+        // This is used by React to keep track of cues between changes (e.g. addition, deletion)
+        let index = 0
+        for (let cue of tree.cues) {
+          if (!cue.id) {
+            cue.id = nanoid()
+            tree.cues[index] = cue
+          }
+          index++
         }
 
         setSubtitleOnState(state, {identifier: action.payload.identifier, subtitles: tree.cues})
@@ -205,7 +270,7 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 }
 
 // Export Actions
-export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setSelectedSubtitleFlavor, setDummySegment, setAspectRatio } = subtitleSlice.actions
+export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt, setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue, setSelectedSubtitleFlavor, setDummySegment, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>

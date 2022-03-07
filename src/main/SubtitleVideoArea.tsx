@@ -117,8 +117,6 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   });
 
   const render = () => {
-    console.log("getTrackURI" + getTrackURI())
-    console.log("subtitleUrl" + subtitleUrl)
     return(
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>

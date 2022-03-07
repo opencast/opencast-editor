@@ -36,6 +36,7 @@ export interface Subtitle {
 }
 
 export interface SubtitleCue {
+  id: string,
   text: string,
   startTime: number,
   endTime: number,

@@ -61,7 +61,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
     // Or create a new subtitle instead
     } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined && selectedFlavorSubtype) {
       // Create an empty subtitle
-      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitle: []}))
+      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitles: []}))
       // Reset request
       dispatch(resetRequestState())
     // Error while fetching
