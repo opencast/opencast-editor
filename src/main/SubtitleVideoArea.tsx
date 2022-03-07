@@ -12,7 +12,7 @@ import { selectCurrentlyAt,
   selectAspectRatio,
   setAspectRatio,
   selectCurrentlyAtInSeconds } from "../redux/subtitleSlice";
-import { selectTracks } from "../redux/videoSlice";
+import { selectTracks, selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
 import { Form } from "react-final-form";
@@ -27,7 +27,7 @@ import { flexGapReplacementStyle } from "../cssStyles";
  */
 const SubtitleVideoArea : React.FC<{}> = () => {
 
-  const tracks = useSelector(selectTracks)
+  const tracks = useSelector(selectVideos)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
   // A temporary "url" for the video component.
