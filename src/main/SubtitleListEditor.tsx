@@ -97,8 +97,16 @@ const SubtitleListSegment : React.FC<{
 
   const dispatch = useDispatch()
 
-  const updateCue = (event: { target: { value: any } }) => {
+  const updateCueText = (event: { target: { value: any } }) => {
     dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, cue: {id: cue.id, text: event.target.value, startTime: cue.startTime, endTime: cue.endTime}}))
+  };
+
+  const updateCueStart = (event: { target: { value: any } }) => {
+    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, cue: {id: cue.id, text: cue.text, startTime: event.target.value, endTime: cue.endTime}}))
+  };
+
+  const updateCueEnd = (event: { target: { value: any } }) => {
+    dispatch(setCueAtIndex({identifier: identifier, cueIndex: dataKey, cue: {id: cue.id, text: cue.text, startTime: cue.startTime, endTime: event.target.value}}))
   };
 
   const addCueAbove = () => {
@@ -197,11 +205,11 @@ const SubtitleListSegment : React.FC<{
           event.preventDefault()
           addCueBelow()
         }}}
-        onChange={updateCue}
+        onChange={updateCueText}
       />
       <div css={timeAreaStyle}>
-        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} defaultValue={cue.startTime}></input>
-        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} defaultValue={cue.endTime}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"start"} type={"text"} value={cue.startTime} onChange={updateCueStart}></input>
+        <input css={[fieldStyle, timeFieldStyle]} id={"end"} type={"text"} value={cue.endTime} onChange={updateCueEnd}></input>
       </div>
 
       <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">

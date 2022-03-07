@@ -103,7 +103,13 @@ export const subtitleSlice = createSlice({
             return
           }
           console.log("SetCue")
-          state.subtitles[index].subtitles[action.payload.cueIndex] = action.payload.cue
+          const formattedCue = {
+            id: action.payload.cue.id,
+            text: action.payload.cue.text,
+            startTime: Math.round(action.payload.cue.startTime),
+            endTime: Math.round(action.payload.cue.endTime)
+          }
+          state.subtitles[index].subtitles[action.payload.cueIndex] = formattedCue
           return
         }
         index++
@@ -111,7 +117,12 @@ export const subtitleSlice = createSlice({
     },
     addCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0
-      const cue: SubtitleCue = { id: nanoid(), text: action.payload.text, startTime: startTime, endTime: action.payload.endTime }
+      const cue: SubtitleCue = {
+        id: nanoid(),
+        text: action.payload.text,
+        startTime: Math.round(startTime),
+        endTime: Math.round(action.payload.endTime)
+      }
 
       let index = 0
       for (const sub of state.subtitles) {
