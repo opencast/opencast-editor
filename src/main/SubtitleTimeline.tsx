@@ -37,6 +37,7 @@ import Draggable from "react-draggable";
 
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLDivElement>(null);
+  const { ref: refMini, width: widthMiniTimeline = 1, } = useResizeObserver<HTMLDivElement>();
 
   const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
 
@@ -48,11 +49,11 @@ import Draggable from "react-draggable";
     paddingRight: '50%',
   });
 
-  // Update the current time based on the position scrolled to on the timeline
-  const setCurrentlyAtOnScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const scrollLeftMax = (e.currentTarget.scrollWidth - e.currentTarget.clientWidth)
+  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    let rect = e.currentTarget.getBoundingClientRect()
+    let offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
-    dispatch(setCurrentlyAt((e.currentTarget.scrollLeft / scrollLeftMax) * (duration)))
+    dispatch(setCurrentlyAt((offsetX / widthMiniTimeline) * (duration)))
   }
 
   // Apply horizonal scrolling when scrolled from somewhere else
@@ -88,7 +89,7 @@ import Draggable from "react-draggable";
       </div>
       {/* Scrollable timeline */}
       {/* Container. Has width of parent*/}
-      <div ref={refTop} css={{overflowX: 'auto', overflowY: 'hidden', width: '100%', height: '100%'}} onScroll={setCurrentlyAtOnScroll}>
+      <div ref={refTop} css={{overflowX: 'auto', overflowY: 'hidden', width: '100%', height: '100%'}}>
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle} title="Timeline" >
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
@@ -97,6 +98,18 @@ import Draggable from "react-draggable";
             <Waveforms />
             <CuttingSegmentsList timelineWidth={width}/>
           </div>
+        </div>
+      </div>
+      {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
+      <div
+        title="Mini Timeline"
+        onMouseDown={e => setCurrentlyAtToClick(e)}
+        css={{position: 'relative', width: '100%', height: '15px', background: 'lightgrey'}}
+        ref={refMini}
+      >
+        <div
+          css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
+        >
         </div>
       </div>
     </div>
