@@ -36,7 +36,6 @@ import Draggable from "react-draggable";
   const currentlyAt = useSelector(selectCurrentlyAt)
 
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
-  const { ref: refMini, width: widthMiniTimeline = 1, } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLDivElement>(null);
 
   const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
@@ -44,21 +43,23 @@ import Draggable from "react-draggable";
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
     height: '220px',
-    width: (duration / timelineCutoutInMs) * 100 + '%'    // Total length of timeline based on number of cutouts
+    width: ((duration / timelineCutoutInMs)) * 100 + '%',    // Total length of timeline based on number of cutouts
+    paddingLeft: '50%',
+    paddingRight: '50%',
   });
 
-  // Update the current time based on the position clicked on the miniTimeline
-  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    let rect = e.currentTarget.getBoundingClientRect()
-    let offsetX = e.clientX - rect.left
+  // Update the current time based on the position scrolled to on the timeline
+  const setCurrentlyAtOnScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollLeftMax = (e.currentTarget.scrollWidth - e.currentTarget.clientWidth)
     dispatch(setClickTriggered(true))
-    dispatch(setCurrentlyAt((offsetX / widthMiniTimeline) * (duration)))
+    dispatch(setCurrentlyAt((e.currentTarget.scrollLeft / scrollLeftMax) * (duration)))
   }
 
   // Apply horizonal scrolling when scrolled from somewhere else
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
-      refTop.current.scrollTo(((currentlyAt / duration)) * refTop.current.scrollWidth, 0)
+      const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth)
+      refTop.current.scrollTo(((currentlyAt / duration)) * scrollLeftMax, 0)
     }
   }, [currentlyAt, duration, width]);
 
@@ -86,35 +87,16 @@ import Draggable from "react-draggable";
           <div css={triangleStyle} />
       </div>
       {/* Scrollable timeline */}
-      <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}>
-        <div ref={ref} css={timelineStyle} title="Timeline"
-          // onMouseDown={e => setCurrentlyAtToClick(e)}
-        >
-          {/* <Scrubber
-            timelineWidth={width}
-            selectCurrentlyAt={selectCurrentlyAt}
-            selectIsPlaying={selectIsPlaying}
-            setCurrentlyAt={setCurrentlyAt}
-            setIsPlaying={setIsPlaying}
-          /> */}
+      {/* Container. Has width of parent*/}
+      <div ref={refTop} css={{overflowX: 'auto', overflowY: 'hidden', width: '100%', height: '100%'}} onScroll={setCurrentlyAtOnScroll}>
+        {/* Container. Overflows. Width based on parent times zoom level*/}
+        <div ref={ref} css={timelineStyle} title="Timeline" >
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
           <TimelineSubtitleSegmentsList timelineWidth={width}/>
           <div css={{position: 'relative', height: '100px'}} >
             <Waveforms />
             <CuttingSegmentsList timelineWidth={width}/>
           </div>
-        </div>
-      </div>
-      {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
-      <div
-        title="Mini Timeline"
-        onMouseDown={e => setCurrentlyAtToClick(e)}
-        css={{position: 'relative', width: '100%', height: '15px', background: 'lightgrey'}}
-        ref={refMini}
-      >
-        <div
-          css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
-        >
         </div>
       </div>
     </div>
