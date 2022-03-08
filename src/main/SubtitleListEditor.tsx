@@ -63,8 +63,8 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
     display: 'flex',
     flexDirection: 'column',
     ...(flexGapReplacementStyle(20, false)),
-    paddingTop: '10px',  // Else the select highlighting gets cut off
-    paddingBottom: '10px',
+    paddingTop: '30px',  // Else the select highlighting gets cut off
+    paddingBottom: '30px',
     paddingRight: '10px',
     overflowY: 'auto',
   })
