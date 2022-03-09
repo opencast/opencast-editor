@@ -1,7 +1,7 @@
-import { css } from "@emotion/react"
+import { css, SerializedStyles } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, setCueAtIndex } from "../redux/subtitleSlice"
@@ -120,6 +120,7 @@ const SubtitleListSegment : React.FC<{
   };
 
   const updateCueEnd = (event: { target: { value: any } }) => {
+    console.log("updateCueEnd: " + event.target.value)
     dispatch(setCueAtIndex({
       identifier: identifier,
       cueIndex: dataKey,
@@ -196,7 +197,7 @@ const SubtitleListSegment : React.FC<{
     fontSize: '1em',
     marginLeft: '15px',
     borderRadius: '5px',
-    boxShadow: '0 0 1px rgba(0, 0, 0, 0.3)',
+    borderWidth: '1px',
     padding: '10px 10px',
     background: 'snow',
   })
@@ -209,11 +210,6 @@ const SubtitleListSegment : React.FC<{
     //  Manual or automatic resizing can cause neighboring textareas to overlap
     //  Can use TextareaAutosize from mui, but that does not fix the overlap problem
     resize: 'none',
-  })
-
-  const timeFieldStyle = css({
-    height: '20%',
-    width: '100px',
   })
 
   const addSegmentButtonStyle = css({
@@ -238,19 +234,17 @@ const SubtitleListSegment : React.FC<{
       />
 
       <div css={timeAreaStyle}>
-        <input
-          css={[fieldStyle, timeFieldStyle]}
-          id={"start"}
-          type={"text"}
+        <TimeInput
+          generalFieldStyle={[fieldStyle,
+            css({...(cue.startTime > cue.endTime && {borderColor: 'red'}) })]}
           value={cue.startTime}
-          onChange={updateCueStart}
+          changeCallback={updateCueStart}
         />
-        <input
-          css={[fieldStyle, timeFieldStyle]}
-          id={"end"}
-          type={"text"}
+        <TimeInput
+          generalFieldStyle={[fieldStyle,
+            css({...(cue.startTime > cue.endTime && {borderColor: 'red'}) })]}
           value={cue.endTime}
-          onChange={updateCueEnd}
+          changeCallback={updateCueEnd}
         />
       </div>
 
@@ -277,6 +271,128 @@ const SubtitleListSegment : React.FC<{
 
     </div>
   );
+}
+
+/**
+ * Input field for the time values for a subtitle segment
+ */
+const TimeInput : React.FC<{
+  value: number,
+  changeCallback: any,
+  generalFieldStyle: SerializedStyles[]
+}>= ({
+  value,
+  changeCallback,
+  generalFieldStyle,
+}) => {
+
+  /**
+   * Converts a number into a string with leading zeros
+   */
+  const fillIn = (val: number) => {
+    return val < 10 ? `0${val}` : val
+  }
+  const fillInMilliseconds = (val: number) => {
+    console.log("val: " + val)
+    if (val < 10) {
+      return `00${val}`
+    } else if (val < 100) {
+      return `0${val}`
+    } else {
+      return val
+    }
+  }
+
+  /**
+   * Converts a number in milliseoncsd to a string of the format HH:MM:SS:MSS
+   */
+  const toHHMMSSMS = (ms: number) => {
+    const milliseconds = (ms % 1000)
+    , seconds = Math.floor((ms/1000)%60)
+    , minutes = Math.floor((ms/(1000*60))%60)
+    , hours = Math.floor((ms/(1000*60*60)))
+    console.log(milliseconds)
+    console.log(seconds)
+    console.log(minutes)
+    console.log(hours)
+
+    const millisecondsString = fillInMilliseconds(milliseconds)
+    const secondsString = fillIn(seconds)
+    const minutesString = fillIn(minutes)
+    const hoursString = fillIn(hours)
+
+    return [hoursString, minutesString, secondsString, millisecondsString].join(":")
+  };
+
+  // Stores the millisecond value as a string for the input element
+  const [myValue, setMyValue] = useState(toHHMMSSMS(value));
+
+  /**
+   * Converts a string of the format HH:MM:SS:MSS to a millisecond number
+   */
+  const getMillisecondsFromHHMMSSMS = (value: string) => {
+    const [str1, str2, str3, str4] = value.split(":");
+
+    const val1 = Number(str1);
+    const val2 = Number(str2);
+    const val3 = Number(str3);
+    const val4 = Number(str4);
+
+    if (!isNaN(val1) && isNaN(val2) && isNaN(val3) && isNaN(val4)) {
+    // milliseconds
+      return val1;
+    }
+
+    if (!isNaN(val1) && !isNaN(val2) && isNaN(val3) && isNaN(val4)) {
+    // seconds * 1000 + milliseconds
+      return val1 * 1000 + val2;
+    }
+
+    if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && isNaN(val3)) {
+    // minutes * 60 * 1000 + seconds * 60 + milliseconds
+      return val1 * 60 * 1000 + val2 * 1000 + val3;
+    }
+
+    if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && !isNaN(val3)) {
+    // hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 60 + milliseconds
+      return val1 * 60 * 60 * 1000 + val2 * 60 * 1000 + val3 * 1000 + val4;
+    }
+
+    return 0;
+  };
+
+  // Update local state with user input
+  // Works around "input" being read-only without an onChange callback specified
+  const onChange = (event: { target: { value: string; }; }) => {
+    const value = event.target.value;
+    setMyValue(value);
+  };
+
+  // Update state in redux
+  // Also fix ill-formatted input
+  const onBlur = (event: { target: { value: any; }; }) => {
+    const value = event.target.value;
+    const milliseconds = Math.max(0, getMillisecondsFromHHMMSSMS(value));
+    changeCallback({ target: { value: milliseconds } });
+
+    const time = toHHMMSSMS(milliseconds);
+    setMyValue(time);
+  };
+
+  const timeFieldStyle = css({
+    height: '20%',
+    width: '100px',
+  })
+
+  return (
+    <input
+      css={[generalFieldStyle, timeFieldStyle]}
+      type="text"
+      onChange={onChange}
+      onBlur={onBlur}
+      value={myValue}
+     />
+  )
 }
 
 export default SubtitleListEditor
