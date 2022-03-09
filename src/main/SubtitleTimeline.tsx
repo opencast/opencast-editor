@@ -89,7 +89,7 @@ import Draggable from "react-draggable";
       </div>
       {/* Scrollable timeline */}
       {/* Container. Has width of parent*/}
-      <div ref={refTop} css={{overflowX: 'auto', overflowY: 'hidden', width: '100%', height: '100%'}}>
+      <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}>
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle} title="Timeline" >
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
