@@ -77,7 +77,7 @@ const MainMenu: React.FC<{}> = () => {
         <MainMenuButton
           iconName={faKeyboard}
           stateName={MainMenuStateNames.keyboardControls}
-          bottomText={t(MainMenuStateNames.keyboardControls)}
+          bottomText={""}
           ariaLabelText={t("keyboardControls.header")}
           miniButton={true}
         />
@@ -134,8 +134,8 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
   });
 
   const miniMenuButtonStyle = css({
-    width: '100px',
-    height: '90px',
+    width: '75px',
+    height: '67px',
     marginBottom: '35px',
     ...(activeState === stateName) && {
       backgroundColor: '#DDD',
