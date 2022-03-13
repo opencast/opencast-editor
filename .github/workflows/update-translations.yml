@@ -35,7 +35,7 @@ jobs:
         working-directory: src/i18n/locales
         run: |
           echo -n '[ "' > locales.json
-          echo -n ??.json | sed 's/  */", "/g' >> locales.json
+          echo -n ??-??.json | sed 's/  */", "/g' >> locales.json
           echo '" ]' >> locales.json
 
       - name: upload translations
