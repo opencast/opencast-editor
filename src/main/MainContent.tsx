@@ -7,6 +7,7 @@ import Metadata from './Metadata';
 import TrackSelection from './TrackSelection';
 import Subtitle from "./Subtitle";
 import Finish from "./Finish"
+import KeyboardControls from "./KeyboardControls";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -57,7 +58,7 @@ const MainContent: React.FC<{}> = () => {
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
-    paddingLeft: '20px',
+    paddingLeft: '161px',
   })
 
   const metadataStyle = css({
@@ -66,7 +67,7 @@ const MainContent: React.FC<{}> = () => {
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
-    paddingLeft: '20px',
+    paddingLeft: '161px',
   })
 
   const trackSelectStyle = css({
@@ -75,14 +76,16 @@ const MainContent: React.FC<{}> = () => {
     alignContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
+    paddingLeft: '161px',
     height: '100%',
   })
-
 
   const subtitleSelectStyle = css({
     ...displayState(MainMenuStateNames.subtitles),
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
+    paddingRight: '20px',
+    paddingLeft: '161px',
     height: '100%',
   })
 
@@ -92,7 +95,17 @@ const MainContent: React.FC<{}> = () => {
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
+    paddingLeft: '161px',
     height: '100%',
+  })
+
+  const keyboardControlsStyle = css({
+    ...displayState(MainMenuStateNames.keyboardControls),
+    // flexDirection: 'column' as const,
+    // justifyContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '161px',
   })
 
   const defaultStyle = css({
@@ -121,6 +134,9 @@ const MainContent: React.FC<{}> = () => {
       </div>
       <div css={finishStyle}>
         <Finish />
+      </div>
+      <div css={keyboardControlsStyle}>
+          <KeyboardControls />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />
