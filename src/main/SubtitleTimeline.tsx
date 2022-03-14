@@ -148,7 +148,11 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
 /**
  * A single segments for the timeline subtitle segments list
  */
-const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue, index: number}> = ({timelineWidth, cue, index}) => {
+const TimelineSubtitleSegment: React.FC<{
+  timelineWidth: number,
+  cue: SubtitleCue,
+  index: number
+}> = React.memo(props => {
 
   const dispatch = useDispatch()
   const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
@@ -167,10 +171,10 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
   useEffect(() => {
     // if(currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
       // updateXPos();
-      setControlledPosition({x: (cue.startTime / duration) * (timelineWidth), y: 0});
+      setControlledPosition({x: (props.cue.startTime / duration) * (props.timelineWidth), y: 0});
       // wasCurrentlyAtRef.current = currentlyAt;
     // }
-  },[cue.startTime, duration, timelineWidth])
+  },[props.cue.startTime, duration, props.timelineWidth])
 
   const onStartDrag = () => {
     setIsGrabbed(true)
@@ -188,13 +192,13 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
     const {x} = position
     dispatch(setCueAtIndex({
       identifier: selectedFlavor,
-      cueIndex: index,
+      cueIndex: props.index,
       newCue: {
-        id: cue.id,
-        text: cue.text,
-        startTime: (x / timelineWidth) * (duration),
-        endTime: (x / timelineWidth) * (duration) + (cue.endTime - cue.startTime),
-        tree: cue.tree
+        id: props.cue.id,
+        text: props.cue.text,
+        startTime: (x / props.timelineWidth) * (duration),
+        endTime: (x / props.timelineWidth) * (duration) + (props.cue.endTime - props.cue.startTime),
+        tree: props.cue.tree
       }
     }))
 
@@ -211,7 +215,7 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
     // top: 0,
     // left: (startInit / duration) * 100 + '%',
     height: '100%',
-    width: ((cue.endTime - cue.startTime) / duration) * 100 + '%',
+    width: ((props.cue.endTime - props.cue.startTime) / duration) * 100 + '%',
 
     background: 'rgba(0, 0, 0, 0.4)',
     borderRadius: '5px',
@@ -238,11 +242,11 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
 
   const onClick = () => {
     // Scroll to segment start
-    dispatch(setCurrentlyAt(cue.startTime))
+    dispatch(setCurrentlyAt(props.cue.startTime))
 
     // Inform list view which segment was clicked
     dispatch(setTimelineSegmentClickTriggered(true))
-    dispatch(setTimelineSegmentClicked(cue.id))
+    dispatch(setTimelineSegmentClicked(props.cue.id))
   }
 
   return (
@@ -256,10 +260,10 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
       nodeRef={nodeRef}
       >
         <div ref={nodeRef} css={segmentStyle} onClick={onClick}>
-          <span css={textStyle}>{cue.text}</span>
+          <span css={textStyle}>{props.cue.text}</span>
         </div>
     </Draggable>
   );
-}
+})
 
 export default SubtitleTimeline
