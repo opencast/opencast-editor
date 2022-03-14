@@ -1,10 +1,11 @@
 import { css, SerializedStyles } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { createRef, RefObject, useEffect, useState } from "react"
+import React from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
-import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, selectTimelineSegmentClicked, selectTimelineSegmentClickTriggered, setCueAtIndex, setTimelineSegmentClickTriggered } from "../redux/subtitleSlice"
+import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, setCueAtIndex } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 
 /**
@@ -15,19 +16,19 @@ import { SubtitleCue } from "../types"
   const dispatch = useDispatch()
 
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
-  const timelineClickTriggered = useSelector(selectTimelineSegmentClickTriggered)
-  const timelineClicked = useSelector(selectTimelineSegmentClicked)
+  // const timelineClickTriggered = useSelector(selectTimelineSegmentClickTriggered)
+  // const timelineClicked = useSelector(selectTimelineSegmentClicked)
   const defaultSegmentLength = 5000
 
-  interface refAssocArrayType {
-    [key: string]: RefObject<HTMLDivElement>
-  }
+  // interface refAssocArrayType {
+  //   [key: string]: RefObject<HTMLDivElement>
+  // }
 
-  // TODO: Get this to work. List of references is empty
-  const segmentRefs = subtitle?.subtitles.reduce((acc: refAssocArrayType, value) => {
-    acc[value.id] = createRef<HTMLDivElement>();
-    return acc;
-  }, {});
+  // // TODO: Get this to work. List of references is empty
+  // const segmentRefs = subtitle?.subtitles.reduce((acc: refAssocArrayType, value) => {
+  //   acc[value.id] = createRef<HTMLDivElement>();
+  //   return acc;
+  // }, {});
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
@@ -42,25 +43,25 @@ import { SubtitleCue } from "../types"
     }
   }, [dispatch, subtitle])
 
-  // Scroll to segment when triggered by reduxState
-  useEffect(() => {
-    if (timelineClickTriggered) {
-      console.log("timelineClickTriggered: " + timelineClickTriggered)
-      if (segmentRefs) {
-        console.log("segmentRefs: " + segmentRefs)
-        console.log(segmentRefs)
-        const currentRef = segmentRefs[timelineClicked].current
-        if (currentRef) {
-          console.log("currentRef: " + currentRef)
-          currentRef.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        }
-      }
-      dispatch(setTimelineSegmentClickTriggered(true))
-    }
-  }, [dispatch, segmentRefs, timelineClickTriggered, timelineClicked])
+  // // Scroll to segment when triggered by reduxState
+  // useEffect(() => {
+  //   if (timelineClickTriggered) {
+  //     console.log("timelineClickTriggered: " + timelineClickTriggered)
+  //     if (segmentRefs) {
+  //       console.log("segmentRefs: " + segmentRefs)
+  //       console.log(segmentRefs)
+  //       const currentRef = segmentRefs[timelineClicked].current
+  //       if (currentRef) {
+  //         console.log("currentRef: " + currentRef)
+  //         currentRef.scrollIntoView({
+  //           behavior: 'smooth',
+  //           block: 'start',
+  //         });
+  //       }
+  //     }
+  //     dispatch(setTimelineSegmentClickTriggered(true))
+  //   }
+  // }, [dispatch, segmentRefs, timelineClickTriggered, timelineClicked])
 
   const listStyle = css({
     display: 'flex',
@@ -103,7 +104,7 @@ import { SubtitleCue } from "../types"
       </div>
       <div css={segmentListStyle}>
         {subtitle?.subtitles.map((item, i) => {
-          if (segmentRefs) {
+          // if (segmentRefs) {
             return (
               <SubtitleListSegment
                 identifier={subtitle.identifier}
@@ -111,10 +112,10 @@ import { SubtitleCue } from "../types"
                 cue={item}
                 defaultSegmentLength={defaultSegmentLength}
                 key={item.id}
-                ref={segmentRefs[item.id]}
+                // ref={segmentRefs[item.id]}
               />
             )
-          }
+          // }
         })}
       </div>
     </div>
@@ -129,65 +130,59 @@ const SubtitleListSegment : React.FC<{
   dataKey: number,
   cue: SubtitleCue,
   defaultSegmentLength: number,
-  ref: RefObject<HTMLDivElement>,
-}>= ({
-  identifier,
-  dataKey,
-  cue,
-  defaultSegmentLength,
-  ref,
-}) => {
+  // ref: RefObject<HTMLDivElement>,
+}> = React.memo(props => {
 
   const dispatch = useDispatch()
 
   const updateCueText = (event: { target: { value: any } }) => {
     dispatch(setCueAtIndex({
-      identifier: identifier,
-      cueIndex: dataKey,
-      newCue: {id: cue.id, text: event.target.value, startTime: cue.startTime, endTime: cue.endTime, tree: cue.tree}
+      identifier: props.identifier,
+      cueIndex: props.dataKey,
+      newCue: {id: props.cue.id, text: event.target.value, startTime: props.cue.startTime, endTime: props.cue.endTime, tree: props.cue.tree}
     }))
   };
 
   const updateCueStart = (event: { target: { value: any } }) => {
     dispatch(setCueAtIndex({
-      identifier: identifier,
-      cueIndex: dataKey,
-      newCue: {id: cue.id, text: cue.text, startTime: event.target.value, endTime: cue.endTime, tree: cue.tree}
+      identifier: props.identifier,
+      cueIndex: props.dataKey,
+      newCue: {id: props.cue.id, text: props.cue.text, startTime: event.target.value, endTime: props.cue.endTime, tree: props.cue.tree}
     }))
   };
 
   const updateCueEnd = (event: { target: { value: any } }) => {
     console.log("updateCueEnd: " + event.target.value)
     dispatch(setCueAtIndex({
-      identifier: identifier,
-      cueIndex: dataKey,
-      newCue: {id: cue.id, text: cue.text, startTime: cue.startTime, endTime: event.target.value, tree: cue.tree}
+      identifier: props.identifier,
+      cueIndex: props.dataKey,
+      newCue: {id: props.cue.id, text: props.cue.text, startTime: props.cue.startTime, endTime: event.target.value, tree: props.cue.tree}
     }))
   };
 
   const addCueAbove = () => {
-    dispatch(addCueAtIndex({identifier: identifier,
-      cueIndex: dataKey,
+    dispatch(addCueAtIndex({identifier: props.identifier,
+      cueIndex: props.dataKey,
       text: "",
-      startTime: cue.startTime - defaultSegmentLength,
-      endTime: cue.startTime
+      startTime: props.cue.startTime - props.defaultSegmentLength,
+      endTime: props.cue.startTime
     }))
   }
 
   const addCueBelow = () => {
     dispatch(addCueAtIndex({
-      identifier: identifier,
-      cueIndex: dataKey + 1,
+      identifier: props.identifier,
+      cueIndex: props.dataKey + 1,
       text: "",
-      startTime: cue.endTime,
-      endTime: cue.endTime + defaultSegmentLength
+      startTime: props.cue.endTime,
+      endTime: props.cue.endTime + props.defaultSegmentLength
     }))
   }
 
   const deleteCue = () => {
     dispatch(removeCue({
-      identifier: identifier,
-      cue: cue
+      identifier: props.identifier,
+      cue: props.cue
     }))
   }
 
@@ -256,12 +251,15 @@ const SubtitleListSegment : React.FC<{
     zIndex: '1000',
   })
 
+  console.log("Rerender: " + props.cue.id)
   return (
-    <div css={segmentStyle} ref={ref} >
+    <div css={segmentStyle}
+      // ref={ref}
+    >
 
       <textarea
         css={[fieldStyle, textFieldStyle]}
-        defaultValue={cue.text}
+        defaultValue={props.cue.text}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
           // TODO: Focus the textarea in the new segment
           event.preventDefault()
@@ -273,14 +271,14 @@ const SubtitleListSegment : React.FC<{
       <div css={timeAreaStyle}>
         <TimeInput
           generalFieldStyle={[fieldStyle,
-            css({...(cue.startTime > cue.endTime && {borderColor: 'red'}) })]}
-          value={cue.startTime}
+            css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
+          value={props.cue.startTime}
           changeCallback={updateCueStart}
         />
         <TimeInput
           generalFieldStyle={[fieldStyle,
-            css({...(cue.startTime > cue.endTime && {borderColor: 'red'}) })]}
-          value={cue.endTime}
+            css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
+          value={props.cue.endTime}
           changeCallback={updateCueEnd}
         />
       </div>
@@ -308,7 +306,7 @@ const SubtitleListSegment : React.FC<{
 
     </div>
   );
-}
+})
 
 /**
  * Input field for the time values for a subtitle segment
