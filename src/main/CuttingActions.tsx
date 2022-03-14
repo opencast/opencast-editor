@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
 } from '../redux/videoSlice'
-import { GlobalHotKeys, KeySequence } from "react-hotkeys";
+import { GlobalHotKeys, KeySequence, KeyMapOptions } from "react-hotkeys";
 import { selectMainMenuState } from "../redux/mainMenuSlice";
 import { MainMenuStateNames } from "../types";
 import { cuttingKeyMap } from "../globalKeys";
@@ -82,19 +82,21 @@ const CuttingActions: React.FC<{}> = () => {
           <div css={blockStyle}>
             <CuttingActionsButton iconName={faCut}
               actionName="Cut" actionHandler={dispatchAction} action={cut}
-              tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: cuttingKeyMap[handlers.cut.name] })}
-              ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: cuttingKeyMap[handlers.cut.name] })}
+              tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
+              ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
             />
-            <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive} hotKeyName={cuttingKeyMap[handlers.delete.name]}/>
+            <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
+              hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
+            />
             <CuttingActionsButton iconName={faStepBackward}
               actionName="Merge Left" actionHandler={dispatchAction} action={mergeLeft}
-              tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeLeft.name] })}
-              ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: cuttingKeyMap[handlers.mergeLeft.name] })}
+              tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
+              ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
             />
             <CuttingActionsButton iconName={faStepForward}
               actionName="Merge Right" actionHandler={dispatchAction} action={mergeRight}
-              tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
-              ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: cuttingKeyMap[handlers.mergeRight.name] })}
+              tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
+              ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
             />
           </div>
           <div css={blockStyle}>
