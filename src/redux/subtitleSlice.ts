@@ -17,6 +17,8 @@ export interface subtitle {
   subtitles: Subtitle[],
   selectedSubtitleFlavor: string,
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
+  timelineSegmentClickTriggered: boolean,   // a segment in the timeline was clicked
+  timelineSegmentClicked: string,           // which segment in the timeline was clicked
 
   status: 'idle' | 'loading' | 'success' | 'failed',
   errors: {identifier: string, error: string}[],
@@ -31,6 +33,8 @@ const initialState: subtitle = {
   clickTriggered: false,
   subtitles: [],
   selectedSubtitleFlavor: "",
+  timelineSegmentClickTriggered: false,
+  timelineSegmentClicked: "",
 
   status: 'idle',
   errors: [],
@@ -162,6 +166,12 @@ export const subtitleSlice = createSlice({
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
       state.selectedSubtitleFlavor = action.payload
     },
+    setTimelineSegmentClickTriggered: (state, action: PayloadAction<subtitle["timelineSegmentClickTriggered"]>) => {
+      state.timelineSegmentClickTriggered = action.payload
+    },
+    setTimelineSegmentClicked: (state, action: PayloadAction<subtitle["timelineSegmentClicked"]>) => {
+      state.timelineSegmentClicked = action.payload
+    },
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
@@ -278,7 +288,8 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 // Export Actions
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
   setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
-  setSelectedSubtitleFlavor, setAspectRatio } = subtitleSlice.actions
+  setSelectedSubtitleFlavor, setTimelineSegmentClickTriggered,
+  setTimelineSegmentClicked, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
@@ -295,6 +306,10 @@ export const selectCurrentlyAtInSeconds = (state: { subtitleState: { currentlyAt
   state.subtitleState.currentlyAt / 1000
 export const selectClickTriggered = (state: { subtitleState: { clickTriggered: subtitle["clickTriggered"] } }) =>
   state.subtitleState.clickTriggered
+export const selectTimelineSegmentClickTriggered = (state: { subtitleState: { timelineSegmentClickTriggered: subtitle["timelineSegmentClickTriggered"] } }) =>
+  state.subtitleState.timelineSegmentClickTriggered
+export const selectTimelineSegmentClicked = (state: { subtitleState: { timelineSegmentClicked: subtitle["timelineSegmentClicked"] } }) =>
+  state.subtitleState.timelineSegmentClicked
 // Hardcoding this value to achieve a desired size for the video player
 // TODO: Don't hardcode this value, instead make the video player component more flexible
 export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>

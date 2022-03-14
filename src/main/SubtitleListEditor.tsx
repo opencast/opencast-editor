@@ -1,10 +1,10 @@
 import { css, SerializedStyles } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
+import { createRef, RefObject, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
-import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, setCueAtIndex } from "../redux/subtitleSlice"
+import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, selectTimelineSegmentClicked, selectTimelineSegmentClickTriggered, setCueAtIndex, setTimelineSegmentClickTriggered } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 
 /**
@@ -15,7 +15,19 @@ import { SubtitleCue } from "../types"
   const dispatch = useDispatch()
 
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
+  const timelineClickTriggered = useSelector(selectTimelineSegmentClickTriggered)
+  const timelineClicked = useSelector(selectTimelineSegmentClicked)
   const defaultSegmentLength = 5000
+
+  interface refAssocArrayType {
+    [key: string]: RefObject<HTMLDivElement>
+  }
+
+  // TODO: Get this to work. List of references is empty
+  const segmentRefs = subtitle?.subtitles.reduce((acc: refAssocArrayType, value) => {
+    acc[value.id] = createRef<HTMLDivElement>();
+    return acc;
+  }, {});
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
@@ -29,6 +41,26 @@ import { SubtitleCue } from "../types"
       }))
     }
   }, [dispatch, subtitle])
+
+  // Scroll to segment when triggered by reduxState
+  useEffect(() => {
+    if (timelineClickTriggered) {
+      console.log("timelineClickTriggered: " + timelineClickTriggered)
+      if (segmentRefs) {
+        console.log("segmentRefs: " + segmentRefs)
+        console.log(segmentRefs)
+        const currentRef = segmentRefs[timelineClicked].current
+        if (currentRef) {
+          console.log("currentRef: " + currentRef)
+          currentRef.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }
+      dispatch(setTimelineSegmentClickTriggered(true))
+    }
+  }, [dispatch, segmentRefs, timelineClickTriggered, timelineClicked])
 
   const listStyle = css({
     display: 'flex',
@@ -71,15 +103,18 @@ import { SubtitleCue } from "../types"
       </div>
       <div css={segmentListStyle}>
         {subtitle?.subtitles.map((item, i) => {
-          return (
-            <SubtitleListSegment
-              identifier={subtitle.identifier}
-              dataKey={i}
-              cue={item}
-              defaultSegmentLength={defaultSegmentLength}
-              key={item.id}
-            />
-          )
+          if (segmentRefs) {
+            return (
+              <SubtitleListSegment
+                identifier={subtitle.identifier}
+                dataKey={i}
+                cue={item}
+                defaultSegmentLength={defaultSegmentLength}
+                key={item.id}
+                ref={segmentRefs[item.id]}
+              />
+            )
+          }
         })}
       </div>
     </div>
@@ -94,11 +129,13 @@ const SubtitleListSegment : React.FC<{
   dataKey: number,
   cue: SubtitleCue,
   defaultSegmentLength: number,
+  ref: RefObject<HTMLDivElement>,
 }>= ({
   identifier,
   dataKey,
   cue,
   defaultSegmentLength,
+  ref,
 }) => {
 
   const dispatch = useDispatch()
@@ -220,7 +257,7 @@ const SubtitleListSegment : React.FC<{
   })
 
   return (
-    <div css={segmentStyle}>
+    <div css={segmentStyle} ref={ref} >
 
       <textarea
         css={[fieldStyle, textFieldStyle]}
@@ -293,7 +330,6 @@ const TimeInput : React.FC<{
     return val < 10 ? `0${val}` : val
   }
   const fillInMilliseconds = (val: number) => {
-    console.log("val: " + val)
     if (val < 10) {
       return `00${val}`
     } else if (val < 100) {
@@ -311,10 +347,6 @@ const TimeInput : React.FC<{
     , seconds = Math.floor((ms/1000)%60)
     , minutes = Math.floor((ms/(1000*60))%60)
     , hours = Math.floor((ms/(1000*60*60)))
-    console.log(milliseconds)
-    console.log(seconds)
-    console.log(minutes)
-    console.log(hours)
 
     const millisecondsString = fillInMilliseconds(milliseconds)
     const secondsString = fillIn(seconds)

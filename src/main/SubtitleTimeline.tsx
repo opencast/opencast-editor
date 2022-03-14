@@ -5,6 +5,9 @@ import {
   selectSelectedSubtitleByFlavor,
   selectSelectedSubtitleFlavor,
   setCueAtIndex,
+  setCurrentlyAt,
+  setTimelineSegmentClicked,
+  setTimelineSegmentClickTriggered,
 } from '../redux/subtitleSlice'
 import { useDispatch, useSelector } from "react-redux";
 import useResizeObserver from "use-resize-observer";
@@ -58,6 +61,7 @@ import { SubtitleCue } from "../types";
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
       const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth)
+      console.log("currentlyAt: " + currentlyAt)
       refTop.current.scrollTo(((currentlyAt / duration)) * scrollLeftMax, 0)
     }
   }, [currentlyAt, duration, width]);
@@ -232,6 +236,15 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
     color: 'white',
   })
 
+  const onClick = () => {
+    // Scroll to segment start
+    dispatch(setCurrentlyAt(cue.startTime))
+
+    // Inform list view which segment was clicked
+    dispatch(setTimelineSegmentClickTriggered(true))
+    dispatch(setTimelineSegmentClicked(cue.id))
+  }
+
   return (
     <Draggable
       onDrag={onControlledDrag}
@@ -242,7 +255,7 @@ const TimelineSubtitleSegment: React.FC<{timelineWidth: number, cue: SubtitleCue
       position={controlledPosition}
       nodeRef={nodeRef}
       >
-        <div ref={nodeRef} css={segmentStyle}>
+        <div ref={nodeRef} css={segmentStyle} onClick={onClick}>
           <span css={textStyle}>{cue.text}</span>
         </div>
     </Draggable>
