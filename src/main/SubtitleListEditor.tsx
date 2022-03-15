@@ -321,75 +321,13 @@ const TimeInput : React.FC<{
   generalFieldStyle,
 }) => {
 
-  /**
-   * Converts a number into a string with leading zeros
-   */
-  const fillIn = (val: number) => {
-    return val < 10 ? `0${val}` : val
-  }
-  const fillInMilliseconds = (val: number) => {
-    if (val < 10) {
-      return `00${val}`
-    } else if (val < 100) {
-      return `0${val}`
-    } else {
-      return val
-    }
-  }
-
-  /**
-   * Converts a number in milliseoncsd to a string of the format HH:MM:SS:MSS
-   */
-  const toHHMMSSMS = (ms: number) => {
-    const milliseconds = (ms % 1000)
-    , seconds = Math.floor((ms/1000)%60)
-    , minutes = Math.floor((ms/(1000*60))%60)
-    , hours = Math.floor((ms/(1000*60*60)))
-
-    const millisecondsString = fillInMilliseconds(milliseconds)
-    const secondsString = fillIn(seconds)
-    const minutesString = fillIn(minutes)
-    const hoursString = fillIn(hours)
-
-    return [hoursString, minutesString, secondsString, millisecondsString].join(":")
-  };
-
   // Stores the millisecond value as a string for the input element
   const [myValue, setMyValue] = useState(toHHMMSSMS(value));
 
-  /**
-   * Converts a string of the format HH:MM:SS:MSS to a millisecond number
-   */
-  const getMillisecondsFromHHMMSSMS = (value: string) => {
-    const [str1, str2, str3, str4] = value.split(":");
-
-    const val1 = Number(str1);
-    const val2 = Number(str2);
-    const val3 = Number(str3);
-    const val4 = Number(str4);
-
-    if (!isNaN(val1) && isNaN(val2) && isNaN(val3) && isNaN(val4)) {
-    // milliseconds
-      return val1;
-    }
-
-    if (!isNaN(val1) && !isNaN(val2) && isNaN(val3) && isNaN(val4)) {
-    // seconds * 1000 + milliseconds
-      return val1 * 1000 + val2;
-    }
-
-    if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && isNaN(val3)) {
-    // minutes * 60 * 1000 + seconds * 60 + milliseconds
-      return val1 * 60 * 1000 + val2 * 1000 + val3;
-    }
-
-    if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && !isNaN(val3)) {
-    // hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 60 + milliseconds
-      return val1 * 60 * 60 * 1000 + val2 * 60 * 1000 + val3 * 1000 + val4;
-    }
-
-    return 0;
-  };
+  // Update time value if it got changed externally
+  useEffect(() => {
+    setMyValue(toHHMMSSMS(value))
+  }, [value])
 
   // Update local state with user input
   // Works around "input" being read-only without an onChange callback specified
@@ -424,5 +362,74 @@ const TimeInput : React.FC<{
      />
   )
 }
+
+/**
+ * Converts a number into a string with leading zeros
+ */
+ const fillIn = (val: number) => {
+  return val < 10 ? `0${val}` : val
+}
+const fillInMilliseconds = (val: number) => {
+  if (val < 10) {
+    return `00${val}`
+  } else if (val < 100) {
+    return `0${val}`
+  } else {
+    return val
+  }
+}
+
+/**
+ * Utility function for TimeInpit
+ * Converts a number in milliseoncsd to a string of the format HH:MM:SS:MSS
+ */
+  function toHHMMSSMS (ms: number)  {
+  const milliseconds = (ms % 1000)
+  , seconds = Math.floor((ms/1000)%60)
+  , minutes = Math.floor((ms/(1000*60))%60)
+  , hours = Math.floor((ms/(1000*60*60)))
+
+  const millisecondsString = fillInMilliseconds(milliseconds)
+  const secondsString = fillIn(seconds)
+  const minutesString = fillIn(minutes)
+  const hoursString = fillIn(hours)
+
+  return [hoursString, minutesString, secondsString, millisecondsString].join(":")
+};
+
+/**
+  Utility function for TimeInpit
+ * Converts a string of the format HH:MM:SS:MSS to a millisecond number
+ */
+  function getMillisecondsFromHHMMSSMS(value: string) {
+  const [str1, str2, str3, str4] = value.split(":");
+
+  const val1 = Number(str1);
+  const val2 = Number(str2);
+  const val3 = Number(str3);
+  const val4 = Number(str4);
+
+  if (!isNaN(val1) && isNaN(val2) && isNaN(val3) && isNaN(val4)) {
+  // milliseconds
+    return val1;
+  }
+
+  if (!isNaN(val1) && !isNaN(val2) && isNaN(val3) && isNaN(val4)) {
+  // seconds * 1000 + milliseconds
+    return val1 * 1000 + val2;
+  }
+
+  if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && isNaN(val3)) {
+  // minutes * 60 * 1000 + seconds * 60 + milliseconds
+    return val1 * 60 * 1000 + val2 * 1000 + val3;
+  }
+
+  if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && !isNaN(val3)) {
+  // hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 60 + milliseconds
+    return val1 * 60 * 60 * 1000 + val2 * 60 * 1000 + val3 * 1000 + val4;
+  }
+
+  return 0;
+};
 
 export default SubtitleListEditor
