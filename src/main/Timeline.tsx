@@ -9,6 +9,8 @@ import { Segment, httpRequestState, MainMenuStateNames } from '../types'
 import {
   selectSegments, selectActiveSegmentIndex, selectDuration,
   selectVideoURL,
+  selectWaveformImages,
+  setWaveformImages,
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -357,11 +359,12 @@ export const Waveforms: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
+  const dispatch = useDispatch();
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
 
   // Update based on current fetching status
-  const [images, setImages] = useState<string[]>([])
+  const images = useSelector(selectWaveformImages)
   const [waveformWorkerError, setWaveformWorkerError] = useState<boolean>(false)
 
   const waveformDisplayTestStyle = css({
@@ -377,7 +380,7 @@ export const Waveforms: React.FC<{}> = () => {
 
   // When the URLs to the videos are fetched, generate waveforms
   useEffect( () => {
-    if (videoURLStatus === 'success') {
+    if (videoURLStatus === 'success' && images.length === 0) {
       const images: string[] = []    // Store local paths to image files
       let waveformsProcessed : number = 0  // Counter for checking if all workers are done
 
@@ -409,7 +412,7 @@ export const Waveforms: React.FC<{}> = () => {
             waveformsProcessed++
             // If all images are generated, rerender
             if (waveformsProcessed === array.length) {
-              setImages(images)
+              dispatch(setWaveformImages(images))
             }
           }
         }
@@ -417,7 +420,7 @@ export const Waveforms: React.FC<{}> = () => {
         xhr.send()
       })
     }
-  }, [videoURLStatus, videoURLs]);
+  }, [dispatch, images.length, videoURLStatus, videoURLs]);
 
 
   const renderImages = () => {

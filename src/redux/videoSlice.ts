@@ -17,7 +17,8 @@ export interface video {
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowIndex: number,  // Index of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
-  hasChanges: boolean             // Did user make changes in cutting view since last save
+  hasChanges: boolean,             // Did user make changes in cutting view since last save
+  waveformImages: string[]
 
   videos: Track[],
   videoURLs: string[],  // Links to each video
@@ -41,6 +42,7 @@ export const initialState: video & httpRequestState = {
   clickTriggered: false,
   aspectRatios: [],
   hasChanges: false,
+  waveformImages: [],
 
   videos: [],
   videoURLs: [],
@@ -123,6 +125,9 @@ export const videoSlice = createSlice({
     },
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
       state.hasChanges = action.payload
+    },
+    setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
+      state.waveformImages = action.payload
     },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
@@ -298,7 +303,7 @@ export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) =
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
+  addSegment, setAspectRatio, setHasChanges, setWaveformImages, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
   setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
@@ -327,6 +332,8 @@ export const selectSelectedWorkflowIndex = (state: { videoState:
   state.videoState.selectedWorkflowIndex
 export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
+export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
+  state.videoState.waveformImages
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideos = (state: { videoState: { videos: video["videos"] } }) => state.videoState.videos
