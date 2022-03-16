@@ -151,7 +151,7 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
 
   return (
     <div css={segmentsListStyle}>
-      {subtitle?.subtitles.map((item, i) => {
+      {subtitle?.map((item, i) => {
         return (
           <TimelineSubtitleSegment timelineWidth={timelineWidth} cue={item} height={arbitraryHeight} key={item.id} index={i}/>
         )

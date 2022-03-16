@@ -3,9 +3,13 @@ import { createAsyncThunk, createSlice, nanoid, PayloadAction } from '@reduxjs/t
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
 import { client } from '../util/client';
-import { httpRequestState, Subtitle } from '../types';
+import { httpRequestState } from '../types';
 import { WebVTTParser } from 'webvtt-parser';
 import { WritableDraft } from 'immer/dist/internal';
+
+export interface test {
+  [key: string]: SubtitleCue[]
+}
 
 export interface subtitle {
   isDisplayEditView: boolean    // Should the edit view be displayed
@@ -14,7 +18,7 @@ export interface subtitle {
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   currentlyAt: number,            // Position in the video in milliseconds
   clickTriggered: boolean,        // Another video player callback
-  subtitles: Subtitle[],
+  subtitles: { [identifier: string]: SubtitleCue[] },
   selectedSubtitleFlavor: string,
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   timelineSegmentClickTriggered: boolean,   // a segment in the timeline was clicked
@@ -31,7 +35,7 @@ const initialState: subtitle = {
   previewTriggered: false,
   currentlyAt: 0,
   clickTriggered: false,
-  subtitles: [],
+  subtitles: {},
   selectedSubtitleFlavor: "",
   timelineSegmentClickTriggered: false,
   timelineSegmentClicked: "",
@@ -85,39 +89,24 @@ export const subtitleSlice = createSlice({
     resetRequestState: (state) => {
       state.status = 'idle'
     },
-    setSubtitle: (state, action: PayloadAction<Subtitle>) => {
-      let index = 0
-      for (const sub of state.subtitles) {
-        if (sub.identifier === action.payload.identifier) {
-          state.subtitles[index] = action.payload
-          return
-        }
-        index++
-      }
-      state.subtitles.push(action.payload)
+    setSubtitle: (state, action: PayloadAction<{identifier: string, subtitles: SubtitleCue[]}>) => {
+      state.subtitles[action.payload.identifier] = action.payload.subtitles
     },
     setCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, newCue: SubtitleCue}>) => {
-      let index = 0
-      for (const sub of state.subtitles) {
-        if (sub.identifier === action.payload.identifier) {
-          if (action.payload.cueIndex < 0 || action.payload.cueIndex >= state.subtitles[index].subtitles.length) {
-            console.log("WARNING: Tried to set segment for subtitle " + action.payload.identifier + " but was out of range")
-            return
-          }
-          console.log("SetCue")
-          let cue = state.subtitles[index].subtitles[action.payload.cueIndex]
-          cue.id = action.payload.newCue.id
-          cue.text = action.payload.newCue.text
-          cue.startTime = Math.round(action.payload.newCue.startTime)
-          cue.endTime = Math.round(action.payload.newCue.endTime)
-
-          cue.tree.children[0].value = action.payload.newCue.text
-
-          state.subtitles[index].subtitles[action.payload.cueIndex] = cue
-          return
-        }
-        index++
+      if (action.payload.cueIndex < 0 || action.payload.cueIndex >= state.subtitles[action.payload.identifier].length) {
+        console.log("WARNING: Tried to set segment for subtitle " + action.payload.identifier + " but was out of range")
+        return
       }
+
+      let cue = state.subtitles[action.payload.identifier][action.payload.cueIndex]
+      cue.id = action.payload.newCue.id
+      cue.text = action.payload.newCue.text
+      cue.startTime = Math.round(action.payload.newCue.startTime)
+      cue.endTime = Math.round(action.payload.newCue.endTime)
+
+      cue.tree.children[0].value = action.payload.newCue.text
+
+      state.subtitles[action.payload.identifier][action.payload.cueIndex] = cue
     },
     addCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0
@@ -129,38 +118,26 @@ export const subtitleSlice = createSlice({
         tree: { children: [{type: 'text', value: action.payload.text}] }
       }
 
-      let index = 0
-      for (const sub of state.subtitles) {
-        if (sub.identifier === action.payload.identifier) {
 
-          if (action.payload.cueIndex < 0 ) {
-            state.subtitles[index].subtitles.splice(0, 0, cue);
-            return
-          }
+      if (action.payload.cueIndex < 0 ) {
+        state.subtitles[action.payload.identifier].splice(0, 0, cue);
+        return
+      }
 
-          if (action.payload.cueIndex >= 0 || action.payload.cueIndex < state.subtitles[index].subtitles.length) {
-            state.subtitles[index].subtitles.splice(action.payload.cueIndex, 0, cue);
-            return
-          }
+      if (action.payload.cueIndex >= 0 || action.payload.cueIndex < state.subtitles[action.payload.identifier].length) {
+        state.subtitles[action.payload.identifier].splice(action.payload.cueIndex, 0, cue);
+        return
+      }
 
-          if (action.payload.cueIndex >= state.subtitles[index].subtitles.length) {
-            state.subtitles[index].subtitles.push(cue)
-            return
-          }
-        }
-        index++
+      if (action.payload.cueIndex >= state.subtitles[action.payload.identifier].length) {
+        state.subtitles[action.payload.identifier].push(cue)
+        return
       }
     },
     removeCue: (state, action: PayloadAction<{identifier: string, cue: SubtitleCue}>) => {
-      let index = 0
-      for (const sub of state.subtitles) {
-        if (sub.identifier === action.payload.identifier) {
-          const cueIndex = state.subtitles[index].subtitles.findIndex(i => i.id === action.payload.cue.id);
-          if (cueIndex > -1) {
-            state.subtitles[index].subtitles.splice(cueIndex, 1);
-          }
-        }
-        index++
+      const cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.cue.id);
+      if (cueIndex > -1) {
+        state.subtitles[action.payload.identifier].splice(cueIndex, 1);
       }
     },
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
@@ -223,7 +200,7 @@ export const subtitleSlice = createSlice({
           index++
         }
 
-        setSubtitleOnState(state, {identifier: action.payload.identifier, subtitles: tree.cues})
+        state.subtitles[action.payload.identifier] = tree.cues
     })
     builder.addCase(
       fetchSubtitle.rejected, (state, action) => {
@@ -232,24 +209,6 @@ export const subtitleSlice = createSlice({
     })
   }
 })
-
-/**
- * Update the subtitle array state with a particular subtitle
- * @param state
- * @param parsedSubtitle
- * @returns
- */
-const setSubtitleOnState = (state: WritableDraft<subtitle>, parsedSubtitle: Subtitle) => {
-  let index = 0
-  for (const sub of state.subtitles) {
-    if (sub.identifier === parsedSubtitle.identifier) {
-      state.subtitles[index] = parsedSubtitle
-      return
-    }
-    index++
-  }
-  state.subtitles.push(parsedSubtitle)
-}
 
 const setError = (state: WritableDraft<subtitle>, identifier: string, error: string) => {
   let index = 0
@@ -261,20 +220,6 @@ const setError = (state: WritableDraft<subtitle>, identifier: string, error: str
     index++
   }
   state.errors.push({identifier: identifier, error: error})
-}
-
-/**
- * Get a subtitle from the array by its identifier
- * @param subtitles
- * @param subtitleFlavor
- * @returns
- */
-const getSubtitleByFlavor = (subtitles: Subtitle[], subtitleFlavor: string) => {
-  for (const sub of subtitles) {
-    if (sub.identifier === subtitleFlavor) {
-      return sub
-    }
-  }
 }
 
 const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) => {
@@ -325,7 +270,7 @@ export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedS
   state.subtitleState.selectedSubtitleFlavor
 export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
   { subtitles: subtitle["subtitles"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
-  getSubtitleByFlavor(state.subtitleState.subtitles, state.subtitleState.selectedSubtitleFlavor)
+  state.subtitleState.subtitles[state.subtitleState.selectedSubtitleFlavor]
 export const selectErrorByFlavor = (state: { subtitleState:
   { errors: subtitle["errors"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   getErrorByFlavor(state.subtitleState.errors, state.subtitleState.selectedSubtitleFlavor)

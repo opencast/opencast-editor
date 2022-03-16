@@ -43,8 +43,8 @@ import { selectCaptions } from "../redux/videoSlice";
 
       // Need to check this in case of added/deleted subtitles
       // (aka changes) that are not yet published to Opencast
-      for (const sub of subtitles) {
-        if (sub.identifier === subFlavor) {
+      for (const identifier in subtitles) {
+        if (identifier === subFlavor) {
           found = true
         }
       }

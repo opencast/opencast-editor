@@ -74,8 +74,8 @@ import SubtitleTimeline from "./SubtitleTimeline";
   }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
 
   const getTitle = () => {
-    return (settings.subtitles.languages !== undefined && subtitle && subtitle.identifier) ?
-      settings.subtitles.languages[subtitle?.identifier] : "Loading"
+    return (settings.subtitles.languages !== undefined && subtitle && selectedFlavorSubtype) ?
+      settings.subtitles.languages[selectedFlavorSubtype] : "Loading"
   }
 
   const subtitleEditorStyle = css({

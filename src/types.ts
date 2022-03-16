@@ -30,11 +30,6 @@ export interface TimelineState {
   scrubberPos: number
 }
 
-export interface Subtitle {
-  identifier: string
-  subtitles: SubtitleCue[]
-}
-
 export interface SubtitleCue {
   id: string,
   text: string,

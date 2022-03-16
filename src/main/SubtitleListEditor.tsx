@@ -5,7 +5,7 @@ import React from "react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
-import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, setCueAtIndex } from "../redux/subtitleSlice"
+import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setCueAtIndex } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 
 /**
@@ -16,6 +16,7 @@ import { SubtitleCue } from "../types"
   const dispatch = useDispatch()
 
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
+  const subtitleFlavor = useSelector(selectSelectedSubtitleFlavor)
   // const timelineClickTriggered = useSelector(selectTimelineSegmentClickTriggered)
   // const timelineClicked = useSelector(selectTimelineSegmentClicked)
   const defaultSegmentLength = 5000
@@ -32,16 +33,16 @@ import { SubtitleCue } from "../types"
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
-    if (subtitle && subtitle.subtitles.length === 0) {
+    if (subtitle && subtitle.length === 0) {
       dispatch(addCueAtIndex({
-        identifier: subtitle.identifier,
+        identifier: subtitleFlavor,
         cueIndex: 0,
         text: "",
         startTime: 0,
         endTime: defaultSegmentLength
       }))
     }
-  }, [dispatch, subtitle])
+  }, [dispatch, subtitle, subtitleFlavor])
 
   // // Scroll to segment when triggered by reduxState
   // useEffect(() => {
@@ -103,11 +104,11 @@ import { SubtitleCue } from "../types"
         <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Alles löschen</div>
       </div>
       <div css={segmentListStyle}>
-        {subtitle?.subtitles.map((item, i) => {
+        {subtitle?.map((item, i) => {
           // if (segmentRefs) {
             return (
               <SubtitleListSegment
-                identifier={subtitle.identifier}
+                identifier={subtitleFlavor}
                 dataKey={i}
                 cue={item}
                 defaultSegmentLength={defaultSegmentLength}

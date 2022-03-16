@@ -86,8 +86,8 @@ const SubtitleVideoArea : React.FC<{}> = () => {
     if(subtitle) {
       // Fix cues to work with serialize
       let cueIndex = 0
-      const cues = [...subtitle.subtitles];
-      for (let cue of subtitle.subtitles) {
+      const cues = [...subtitle];
+      for (let cue of subtitle) {
         cue = {...cue}
         cue.startTime = cue.startTime / 1000
         cue.endTime = cue.endTime / 1000
@@ -105,7 +105,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
       setReloadUrl("banana")
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subtitle?.subtitles])
+  }, [subtitle])
 
   // After forcing player config reload, go back to the actual video url
   useEffect(() => {
