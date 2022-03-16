@@ -107,6 +107,8 @@ export const subtitleSlice = createSlice({
       cue.tree.children[0].value = action.payload.newCue.text
 
       state.subtitles[action.payload.identifier][action.payload.cueIndex] = cue
+
+      sortSubtitle(state, action.payload.identifier)
     },
     addCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0
@@ -133,12 +135,16 @@ export const subtitleSlice = createSlice({
         state.subtitles[action.payload.identifier].push(cue)
         return
       }
+
+      sortSubtitle(state, action.payload.identifier)
     },
     removeCue: (state, action: PayloadAction<{identifier: string, cue: SubtitleCue}>) => {
       const cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.cue.id);
       if (cueIndex > -1) {
         state.subtitles[action.payload.identifier].splice(cueIndex, 1);
       }
+
+      sortSubtitle(state, action.payload.identifier)
     },
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
       state.selectedSubtitleFlavor = action.payload
@@ -209,6 +215,11 @@ export const subtitleSlice = createSlice({
     })
   }
 })
+
+// Sort a subtitle array by startTime
+const sortSubtitle = (state: WritableDraft<subtitle>, identifier: string) => {
+  state.subtitles[identifier].sort((a, b) => a.startTime - b.startTime)
+}
 
 const setError = (state: WritableDraft<subtitle>, identifier: string, error: string) => {
   let index = 0
