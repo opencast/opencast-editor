@@ -302,6 +302,8 @@ const TimelineSubtitleSegment: React.FC<{
   }
 
   const segmentStyle = css({
+    position: 'absolute',
+
     // Apply resizable calculations
     width: absoluteWidth,
     height: absoluteHeight,
