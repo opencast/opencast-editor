@@ -188,7 +188,8 @@ export const videoSlice = createSlice({
         // });
 
         // New API
-        let videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
+        state.tracks = action.payload.tracks
+        const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
@@ -196,7 +197,6 @@ export const videoSlice = createSlice({
         state.title = action.payload.title
         state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
         });
