@@ -1,3 +1,4 @@
+import { ApplicationKeyMap, ExtendedKeyMapOptions, KeyMapOptions, MouseTrapKeySequence } from 'react-hotkeys';
 /**
  * Contains mappings for special keyboard controls, beyond what is usually expected of a webpage
  * Learn more about keymaps at https://github.com/greena13/react-hotkeys#defining-key-maps (12.03.2021)
@@ -21,6 +22,38 @@ const rewriteKeys = (key: string) => {
   }
 
   return newKey
+}
+
+/**
+ * Combines all keyMaps into a single list of keys for KeyboardControls to display
+ */
+export const getAllHotkeys = () => {
+  const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap]
+  const allKeys : ApplicationKeyMap = {}
+
+  for (const keyMap of allKeyMaps) {
+    for (const [key, value] of Object.entries(keyMap)) {
+
+      // Parse sequences
+      let sequences : KeyMapOptions[] = []
+      if ((value as ExtendedKeyMapOptions).sequences !== undefined) {
+        for (const sequence of (value as ExtendedKeyMapOptions).sequences) {
+          sequences.push({sequence: sequence as MouseTrapKeySequence, action: (value as ExtendedKeyMapOptions).action})
+        }
+      } else {
+        sequences = [ {sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action } ]
+      }
+
+      // Create new key
+      allKeys[key] = {
+        name: (value as ExtendedKeyMapOptions).name,
+        group: (value as ExtendedKeyMapOptions).group,
+        sequences: sequences,
+      }
+    }
+  }
+
+  return allKeys
 }
 
 /**
