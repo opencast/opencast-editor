@@ -9,8 +9,8 @@ import i18next from "i18next";
 
 // Groups for displaying hotkeys in the overview page
 const groupVideoPlayer = "Video Player"
-const groupCuttingView = "Cutting View"
-const groupCuttingViewScrubber = "Cutting View - Scrubber"
+const groupCuttingView = "Cutting"
+const groupCuttingViewScrubber = "Scrubbing"
 
 /**
  * Helper function that rewrites keys based on the OS
