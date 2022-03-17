@@ -4,11 +4,12 @@
  * - GET parameters
  * and exports them.
  * Code was largely adapted from https://github.com/elan-ev/opencast-studio/blob/master/src/settings.js (January 11th, 2021)
+ * 
+ * Also does some global hotkey configuration
  */
 import parseToml from '@iarna/toml/parse-string';
 import deepmerge from 'deepmerge';
 import { configure } from 'react-hotkeys';
-import { configOpts } from './globalKeys';
 import { Flavor } from './types';
 
 /**
@@ -137,7 +138,24 @@ export const init = async () => {
   settings = merge.all([defaultSettings, configFileSettings, urlParameterSettings]) as iSettings;
 
   // Configure hotkeys
-  configure (configOpts)
+  configure({
+    ignoreTags: [],   // Do not ignore hotkeys when focused on a textarea, input, select
+    ignoreEventsCondition: (e: any) => {
+      // Ignore hotkeys when focused on a textarea, input, select IF that hotkey is expected to perform
+      // a certain function in that element that is more important than any hotkey function
+      // (e.g. you need "Space" in a textarea to create whitespaces, not play/pause videos)
+      if (e.target && e.target.tagName) {
+        const tagname = e.target.tagName
+        console.log(e)
+        if ((tagname === "TEXTAREA" || tagname === "input" || tagname === "select")
+          && (!e.altKey && !e.ctrlKey)
+          && (e.code === "Space" || e.code === "ArrowLeft" || e.code === "ArrowRight" || e.code === "ArrowUp" || e.code === "ArrowDown")) {
+          return true
+        }
+      }
+      return false
+    },
+  })
 };
 
 /**

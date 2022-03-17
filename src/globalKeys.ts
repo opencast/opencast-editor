@@ -1,7 +1,10 @@
-import { ApplicationKeyMap, ConfigurationOptions, ExtendedKeyMapOptions, KeyMapOptions, MouseTrapKeySequence } from 'react-hotkeys';
+import { ApplicationKeyMap, ExtendedKeyMapOptions, KeyMapOptions, MouseTrapKeySequence } from 'react-hotkeys';
 /**
  * Contains mappings for special keyboard controls, beyond what is usually expected of a webpage
  * Learn more about keymaps at https://github.com/greena13/react-hotkeys#defining-key-maps (12.03.2021)
+ *
+ * Additional global configuration settins are placed in './config.ts'
+ * (They are not placed here, because that somehow makes the name fields of keymaps undefined for some reason)
  */
 import { KeyMap } from "react-hotkeys";
 import { isMacOs } from 'react-device-detect';
@@ -54,28 +57,6 @@ export const getAllHotkeys = () => {
   }
 
   return allKeys
-}
-
-/**
- * Global configuration settings
- */
-export const configOpts: ConfigurationOptions = {
-  ignoreTags: [],   // Do not ignore hotkeys when focused on a textarea, input, select
-  ignoreEventsCondition: (e: any) => {
-    // Ignore hotkeys when focused on a textarea, input, select IF that hotkey is expected to perform
-    // a certain function in that element that is more important than any hotkey function
-    // (e.g. you need "Space" in a textarea to create whitespaces, not play/pause videos)
-    if (e.target && e.target.tagName) {
-      const tagname = e.target.tagName
-      console.log(e)
-      if ((tagname === "TEXTAREA" || tagname === "input" || tagname === "select")
-        && (!e.altKey && !e.ctrlKey)
-        && (e.code === "Space" || e.code === "ArrowLeft" || e.code === "ArrowRight" || e.code === "ArrowUp" || e.code === "ArrowDown")) {
-        return true
-      }
-    }
-    return false
-  },
 }
 
 /**
