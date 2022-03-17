@@ -20,14 +20,12 @@ export interface video {
   hasChanges: boolean,             // Did user make changes in cutting view since last save
   waveformImages: string[]
 
-  videos: Track[],
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
   duration: number,     // Video duration in milliseconds
   title: string,
   presenters: string[],
   workflows: Workflow[],
-  captions: Track[],
 }
 
 export const initialState: video & httpRequestState = {
@@ -44,14 +42,12 @@ export const initialState: video & httpRequestState = {
   hasChanges: false,
   waveformImages: [],
 
-  videos: [],
   videoURLs: [],
   videoCount: 0,
   duration: 0,
   title: '',
   presenters: [],
   workflows: [],
-  captions: [],
 
   status: 'idle',
   error: undefined,
@@ -192,9 +188,9 @@ export const videoSlice = createSlice({
         // });
 
         // New API
-        state.videos = action.payload.tracks.filter((track: Track) => track.video_stream.available === true)
+        let videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
         // eslint-disable-next-line no-sequences
-        state.videoURLs = state.videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
@@ -206,7 +202,6 @@ export const videoSlice = createSlice({
         });
 
         state.aspectRatios = new Array(state.videoCount)
-        state.captions = action.payload.tracks.filter((track: Track) => track.flavor.type === settings.subtitles.mainFlavor)
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -336,7 +331,8 @@ export const selectWaveformImages = (state: { videoState: { waveformImages: vide
   state.videoState.waveformImages
 
 // Selectors mainly pertaining to the information fetched from Opencast
-export const selectVideos = (state: { videoState: { videos: video["videos"] } }) => state.videoState.videos
+export const selectVideos = (state: { videoState: { tracks: video["tracks"] } }) =>
+  state.videoState.tracks.filter((track: Track) => track.video_stream.available === true)
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
 export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"] } }) => state.videoState.videoCount
 export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
@@ -347,6 +343,7 @@ export const selectTracks = (state: { videoState: { tracks: video["tracks"] } })
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
-export const selectCaptions = (state: { videoState: { captions: video["captions"] } }) => state.videoState.captions
+export const selectCaptions = (state: { videoState: { tracks: video["tracks"] } }) =>
+  state.videoState.tracks.filter((track: Track) => track.flavor.type === settings.subtitles.mainFlavor)
 
 export default videoSlice.reducer
