@@ -7,6 +7,8 @@
  */
 import parseToml from '@iarna/toml/parse-string';
 import deepmerge from 'deepmerge';
+import { configure } from 'react-hotkeys';
+import { configOpts } from './globalKeys';
 import { Flavor } from './types';
 
 /**
@@ -133,6 +135,9 @@ export const init = async () => {
 
   // Combine results
   settings = merge.all([defaultSettings, configFileSettings, urlParameterSettings]) as iSettings;
+
+  // Configure hotkeys
+  configure (configOpts)
 };
 
 /**
