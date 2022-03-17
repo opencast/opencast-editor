@@ -7,6 +7,7 @@ import { isMacOs } from 'react-device-detect';
 import i18next from "i18next";
 
 // Groups for displaying hotkeys in the overview page
+const groupVideoPlayer = "Video Player"
 const groupCuttingView = "Cutting View"
 const groupCuttingViewScrubber = "Cutting View - Scrubber"
 
@@ -20,6 +21,24 @@ const rewriteKeys = (key: string) => {
   }
 
   return newKey
+}
+
+/**
+ * (Semi-) global map for video player controls
+ */
+export const videoPlayerKeyMap: KeyMap = {
+  preview: {
+    name: i18next.t("video.previewButton"),
+    sequence: rewriteKeys("Control+Alt+p"),
+    action: "keydown",
+    group: groupVideoPlayer,
+  },
+  play: {
+    name: i18next.t("keyboardControls.videoPlayButton"),
+    sequence: rewriteKeys("Space"),
+    action: "keydown",
+    group: groupVideoPlayer,
+  },
 }
 
 /**
@@ -47,18 +66,6 @@ export const cuttingKeyMap: KeyMap = {
   mergeRight: {
     name: i18next.t("cuttingActions.mergeRight-button"),
     sequence: rewriteKeys("Control+Alt+m"),
-    action: "keydown",
-    group: groupCuttingView,
-  },
-  preview: {
-    name: i18next.t("video.previewButton"),
-    sequence: rewriteKeys("Control+Alt+p"),
-    action: "keydown",
-    group: groupCuttingView,
-  },
-  play: {
-    name: i18next.t("keyboardControls.videoPlayButton"),
-    sequence: rewriteKeys("Space"),
     action: "keydown",
     group: groupCuttingView,
   },

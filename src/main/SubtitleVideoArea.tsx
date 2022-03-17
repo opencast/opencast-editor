@@ -12,7 +12,9 @@ import { selectCurrentlyAt,
   selectAspectRatio,
   setAspectRatio,
   selectCurrentlyAtInSeconds,
-  selectSelectedSubtitleByFlavor} from "../redux/subtitleSlice";
+  selectSelectedSubtitleByFlavor,
+  selectIsPlayPreview,
+  setIsPlayPreview} from "../redux/subtitleSlice";
 import { selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
@@ -158,7 +160,9 @@ const SubtitleVideoArea : React.FC<{}> = () => {
           <VideoControls
             selectCurrentlyAt={selectCurrentlyAt}
             selectIsPlaying={selectIsPlaying}
+            selectIsPlayPreview={selectIsPlayPreview}
             setIsPlaying={setIsPlaying}
+            setIsPlayPreview={setIsPlayPreview}
           />
         </div>
       </div>

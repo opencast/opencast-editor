@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { css } from '@emotion/react'
 
-import { httpRequestState, MainMenuStateNames } from '../types'
+import { httpRequestState } from '../types'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
@@ -19,9 +19,8 @@ import ReactPlayer, { Config } from 'react-player'
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
-import { GlobalHotKeys } from 'react-hotkeys';
-import { selectMainMenuState } from "../redux/mainMenuSlice";
-import { cuttingKeyMap } from "../globalKeys";
+import { GlobalHotKeys, KeyMapOptions } from 'react-hotkeys';
+import { videoPlayerKeyMap } from "../globalKeys";
 import { SyntheticEvent } from "react";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
@@ -117,7 +116,9 @@ const Video: React.FC<{}> = () => {
       <VideoControls
         selectCurrentlyAt={selectCurrentlyAt}
         selectIsPlaying={selectIsPlaying}
+        selectIsPlayPreview={selectIsPlayPreview}
         setIsPlaying={setIsPlaying}
+        setIsPlayPreview={setIsPlayPreview}
       />
     </div>
   );
@@ -331,12 +332,16 @@ export const VideoPlayer: React.FC<{
  */
 export const VideoControls: React.FC<{
   selectCurrentlyAt: (state: RootState) => number,
-  selectIsPlaying:(state: RootState) => boolean,
+  selectIsPlaying: (state: RootState) => boolean,
+  selectIsPlayPreview: (state: RootState) => boolean,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+  setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   selectCurrentlyAt,
   selectIsPlaying,
-  setIsPlaying
+  selectIsPlayPreview,
+  setIsPlaying,
+  setIsPlayPreview
 }) => {
 
   const { t } = useTranslation();
@@ -366,15 +371,18 @@ export const VideoControls: React.FC<{
   return (
     <div css={videoControlsRowStyle} title={t("video.controls-tooltip")}>
       <div css={leftSideBoxStyle}>
-        <PreviewMode />
+        <PreviewMode
+          selectIsPlayPreview={selectIsPlayPreview}
+          setIsPlayPreview={setIsPlayPreview}
+        />
       </div>
-      <PlayButton
-        selectIsPlaying={selectIsPlaying}
-        setIsPlaying={setIsPlaying}
-      />
+        <PlayButton
+          selectIsPlaying={selectIsPlaying}
+          setIsPlaying={setIsPlaying}
+        />
       <div css={rightSideBoxStyle}>
         <TimeDisplay
-        selectCurrentlyAt={selectCurrentlyAt}
+          selectCurrentlyAt={selectCurrentlyAt}
         />
       </div>
     </div>
@@ -384,7 +392,13 @@ export const VideoControls: React.FC<{
 /**
  * Enable/Disable Preview Mode
  */
-const PreviewMode: React.FC<{}> = () => {
+const PreviewMode: React.FC<{
+  selectIsPlayPreview: (state: RootState) => boolean,
+  setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectIsPlayPreview,
+  setIsPlayPreview
+}) => {
 
   const { t } = useTranslation();
   const ref = React.useRef<HTMLDivElement>(null)
@@ -392,7 +406,6 @@ const PreviewMode: React.FC<{}> = () => {
   // Init redux variables
   const dispatch = useDispatch();
   const isPlayPreview = useSelector(selectIsPlayPreview)
-  const mainMenuState = useSelector(selectMainMenuState)
 
   // Change preview mode from "on" to "off" and vice versa
   const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent, ref: React.RefObject<HTMLDivElement> | undefined) => {
@@ -432,14 +445,14 @@ const PreviewMode: React.FC<{}> = () => {
   return (
     <div css={previewModeStyle}
       ref={ref}
-      title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: cuttingKeyMap[handlers.preview.name] })}
+      title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-      aria-label={t("video.previewButton-aria", { hotkeyName: cuttingKeyMap[handlers.preview.name] })}
+      aria-label={t("video.previewButton-aria", { hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
       onClick={ (event: SyntheticEvent) => switchPlayPreview(event, ref) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
         switchPlayPreview(event, undefined)
       }}}>
-      <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
+      <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
         {t("video.previewButton")}
       </div>
@@ -464,7 +477,6 @@ const PlayButton: React.FC<{
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
-  const mainMenuState = useSelector(selectMainMenuState)
 
   // Change play mode from "on" to "off" and vice versa
   const switchIsPlaying = (event: KeyboardEvent | SyntheticEvent) => {
@@ -479,16 +491,20 @@ const PlayButton: React.FC<{
 
   return (
     <>
-    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
-    <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
-      title={t("video.playButton-tooltip")}
-      role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-      aria-label={t("video.playButton-tooltip")}
-      onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
-      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
-        switchIsPlaying(event)
-      }}}
-    />
+      <GlobalHotKeys
+        keyMap={videoPlayerKeyMap}
+        handlers={handlers}
+        allowChanges={true}
+      />
+      <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
+        title={t("video.playButton-tooltip")}
+        role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
+        aria-label={t("video.playButton-tooltip")}
+        onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
+          switchIsPlaying(event)
+        }}}
+      />
     </>
   );
 }
