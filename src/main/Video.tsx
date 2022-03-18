@@ -175,6 +175,7 @@ export const VideoPlayer: React.FC<{
   const ref = useRef<ReactPlayer>(null);
   const [ready, setReady] = useState(false);
   const [errorState, setError] = useState(false);
+  const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false)
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
@@ -198,15 +199,13 @@ export const VideoPlayer: React.FC<{
         h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
       }
       dispatch(setAspectRatio({dataKey, width: w, height: h}))
+      setIsAspectRatioUpdated(true)
     }
   }
 
   // Callback for checking whether the video element is ready
   const onReadyCallback = () => {
     setReady(true);
-
-    // Update the store with video dimensions for rendering purposes
-    updateAspectRatio();
   }
 
   const onEndedCallback = () => {
@@ -232,6 +231,10 @@ export const VideoPlayer: React.FC<{
     if (clickTriggered && ref.current && ready) {
       ref.current.seekTo(currentlyAt, "seconds")
       dispatch(setClickTriggered(false))
+    }
+    if (!isAspectRatioUpdated && ready) {
+      // Update the store with video dimensions for rendering purposes
+      updateAspectRatio();
     }
   })
 
