@@ -63,7 +63,6 @@ import "react-resizable/css/styles.css";
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
       const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth)
-      console.log("currentlyAt: " + currentlyAt)
       refTop.current.scrollTo(((currentlyAt / duration)) * scrollLeftMax, 0)
     }
   }, [currentlyAt, duration, width]);

@@ -1,11 +1,11 @@
 import { css, SerializedStyles } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React from "react"
+import React, { useRef } from "react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
-import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setCueAtIndex } from "../redux/subtitleSlice"
+import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, selectTimelineSegmentClicked, selectTimelineSegmentClickTriggered, setCueAtIndex, setTimelineSegmentClickTriggered } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 
 /**
@@ -17,19 +17,40 @@ import { SubtitleCue } from "../types"
 
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
   const subtitleFlavor = useSelector(selectSelectedSubtitleFlavor)
-  // const timelineClickTriggered = useSelector(selectTimelineSegmentClickTriggered)
-  // const timelineClicked = useSelector(selectTimelineSegmentClicked)
+  const timelineClickTriggered = useSelector(selectTimelineSegmentClickTriggered)
+  const timelineClicked = useSelector(selectTimelineSegmentClicked)
   const defaultSegmentLength = 5000
 
-  // interface refAssocArrayType {
-  //   [key: string]: RefObject<HTMLDivElement>
-  // }
+  const itemsRef = useRef<HTMLTextAreaElement[] | null[]>([]);
 
-  // // TODO: Get this to work. List of references is empty
-  // const segmentRefs = subtitle?.subtitles.reduce((acc: refAssocArrayType, value) => {
-  //   acc[value.id] = createRef<HTMLDivElement>();
-  //   return acc;
-  // }, {});
+  // Update ref array size
+  useEffect(() => {
+    if (subtitle) {
+      itemsRef.current = itemsRef.current.slice(0, subtitle.length);
+    }
+ }, [subtitle]);
+
+  // Scroll to segment when triggered by reduxState
+  useEffect(() => {
+    if (timelineClickTriggered) {
+      console.log("timelineClickTriggered: " + timelineClickTriggered)
+      if (itemsRef && itemsRef.current && subtitle) {
+        console.log("itemsRef: " + itemsRef)
+        console.log(itemsRef)
+        const currentRef = itemsRef.current[subtitle.findIndex(item => item.id === timelineClicked)]
+        if (currentRef) {
+          console.log("currentRef: " + currentRef)
+          console.log(currentRef)
+          currentRef.focus()
+          currentRef.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }
+      dispatch(setTimelineSegmentClickTriggered(false))
+    }
+  }, [dispatch, itemsRef, subtitle, timelineClickTriggered, timelineClicked])
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
@@ -43,26 +64,6 @@ import { SubtitleCue } from "../types"
       }))
     }
   }, [dispatch, subtitle, subtitleFlavor])
-
-  // // Scroll to segment when triggered by reduxState
-  // useEffect(() => {
-  //   if (timelineClickTriggered) {
-  //     console.log("timelineClickTriggered: " + timelineClickTriggered)
-  //     if (segmentRefs) {
-  //       console.log("segmentRefs: " + segmentRefs)
-  //       console.log(segmentRefs)
-  //       const currentRef = segmentRefs[timelineClicked].current
-  //       if (currentRef) {
-  //         console.log("currentRef: " + currentRef)
-  //         currentRef.scrollIntoView({
-  //           behavior: 'smooth',
-  //           block: 'start',
-  //         });
-  //       }
-  //     }
-  //     dispatch(setTimelineSegmentClickTriggered(true))
-  //   }
-  // }, [dispatch, segmentRefs, timelineClickTriggered, timelineClicked])
 
   const listStyle = css({
     display: 'flex',
@@ -105,34 +106,33 @@ import { SubtitleCue } from "../types"
       </div>
       <div css={segmentListStyle}>
         {subtitle?.map((item, i) => {
-          // if (segmentRefs) {
-            return (
-              <SubtitleListSegment
-                identifier={subtitleFlavor}
-                dataKey={i}
-                cue={item}
-                defaultSegmentLength={defaultSegmentLength}
-                key={item.id}
-                // ref={segmentRefs[item.id]}
-              />
-            )
-          // }
+          return (
+            <SubtitleListSegment
+              identifier={subtitleFlavor}
+              dataKey={i}
+              cue={item}
+              defaultSegmentLength={defaultSegmentLength}
+              key={item.id}
+              ref={(el: HTMLTextAreaElement) => itemsRef.current[i] = el}
+            />
+          )
         })}
       </div>
     </div>
   );
 }
 
-/**
- * A single subtitle segment
- */
-const SubtitleListSegment : React.FC<{
+type subtitleListSegmentProps = {
   identifier: string,
   dataKey: number,
   cue: SubtitleCue,
   defaultSegmentLength: number,
-  // ref: RefObject<HTMLDivElement>,
-}> = React.memo(props => {
+};
+
+/**
+ * A single subtitle segment
+ */
+const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, subtitleListSegmentProps>((props, ref) => {
 
   const dispatch = useDispatch()
 
@@ -252,13 +252,11 @@ const SubtitleListSegment : React.FC<{
     zIndex: '1000',
   })
 
-  console.log("Rerender: " + props.cue.id)
   return (
-    <div css={segmentStyle}
-      // ref={ref}
-    >
+    <div css={segmentStyle}>
 
       <textarea
+           ref={ref}
         css={[fieldStyle, textFieldStyle]}
         defaultValue={props.cue.text}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
@@ -307,7 +305,7 @@ const SubtitleListSegment : React.FC<{
 
     </div>
   );
-})
+}))
 
 /**
  * Input field for the time values for a subtitle segment
