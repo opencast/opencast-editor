@@ -31,6 +31,13 @@ jobs:
         run: |
           git add src/i18n/locales
 
+      - name: update language list
+        working-directory: src/i18n/locales
+        run: |
+          echo -n '[ "' > locales.json
+          echo -n ??-??.json | sed 's/  */", "/g' >> locales.json
+          echo '" ]' >> locales.json
+
       - name: upload translations
         run: |
           if git commit -m "Automatically update translation keys"; then
