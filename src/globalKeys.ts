@@ -16,6 +16,7 @@ import i18next from "i18next";
 const groupVideoPlayer = "Video Player"
 const groupCuttingView = "Cutting"
 const groupCuttingViewScrubber = "Scrubbing"
+const groupSubtitleList = "Subtitles"
 
 /**
  * Helper function that rewrites keys based on the OS
@@ -116,12 +117,45 @@ export const scrubberKeyMap: KeyMap = {
   },
 }
 
+export const subtitleListKeyMap: KeyMap = {
+  addAbove: {
+    name: i18next.t("subtitleList.addSegmentAbove"),
+    sequence: rewriteKeys("Control+Alt+q"),
+    action: "keydown",
+    group: groupSubtitleList,
+  },
+  addBelow: {
+    name: i18next.t("subtitleList.addSegmentBelow"),
+    sequence: rewriteKeys("Control+Alt+a"),
+    action: "keydown",
+    group: groupSubtitleList,
+  },
+  jumpAbove: {
+    name: i18next.t("subtitleList.jumpToSegmentAbove"),
+    sequence: rewriteKeys("Control+Alt+w"),
+    action: "keydown",
+    group: groupSubtitleList,
+  },
+  jumpBelow: {
+    name: i18next.t("subtitleList.jumpToSegmentBelow"),
+    sequence: rewriteKeys("Control+Alt+s"),
+    action: "keydown",
+    group: groupSubtitleList,
+  },
+  delete : {
+    name: i18next.t("subtitleList.deleteSegment"),
+    sequence: rewriteKeys("Control+Alt+d"),
+    action: "keydown",
+    group: groupSubtitleList,
+  }
+}
+
 /**
  * Combines all keyMaps into a single list of keys for KeyboardControls to display
  * Placing this under the keyMaps is important, else the translation hooks won't happen
  */
  export const getAllHotkeys = () => {
-  const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap]
+  const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap, subtitleListKeyMap]
   const allKeys : ApplicationKeyMap = {}
 
   for (const keyMap of allKeyMaps) {

@@ -207,6 +207,14 @@
       "selectVideoLabel": "Video Flavors"
     },
 
+    "subtitleList": {
+      "addSegmentAbove": "Add segment above",
+      "addSegmentBelow": "Add segment below",
+      "jumpToSegmentAbove": "Jump to segment above",
+      "jumpToSegmentBelow": "Jump to segment below",
+      "deleteSegment": "Delete segment"
+    },
+
     "keyboardControls": {
       "header": "Keyboard Controls",
       "defaultGroupName": "General",

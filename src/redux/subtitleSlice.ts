@@ -158,6 +158,24 @@ export const subtitleSlice = createSlice({
     setFocusSegmentId: (state, action: PayloadAction<subtitle["focusSegmentId"]>) => {
       state.focusSegmentId = action.payload
     },
+    setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
+      console.log("HOI")
+      let cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.segmentId);
+      cueIndex = cueIndex - 1
+      if (cueIndex < 0 ) {
+        cueIndex = 0
+      }
+      console.log(cueIndex)
+      state.focusSegmentId = state.subtitles[action.payload.identifier][cueIndex].id
+    },
+    setFocusToSegmentBelowId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
+      let cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.segmentId);
+      cueIndex = cueIndex + 1
+      if (cueIndex >= state.subtitles[action.payload.identifier].length) {
+        cueIndex = state.subtitles[action.payload.identifier].length - 1
+      }
+      state.focusSegmentId = state.subtitles[action.payload.identifier][cueIndex].id
+    },
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
@@ -248,7 +266,7 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
   setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
   setSelectedSubtitleFlavor, setFocusSegmentTriggered,
-  setFocusSegmentId, setAspectRatio } = subtitleSlice.actions
+  setFocusSegmentId, setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>

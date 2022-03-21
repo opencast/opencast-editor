@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { memoize } from "lodash"
 import React, { useMemo, useRef } from "react"
 import { useEffect, useState } from "react"
+import { HotKeys } from "react-hotkeys"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
-import { addCueAtIndex, removeCue, selectFocusSegmentId, selectFocusSegmentTriggered, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setCueAtIndex, setFocusSegmentTriggered } from "../redux/subtitleSlice"
+import { subtitleListKeyMap } from "../globalKeys"
+import { addCueAtIndex, removeCue, selectFocusSegmentId, selectFocusSegmentTriggered, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setCueAtIndex, setFocusSegmentId, setFocusSegmentTriggered, setFocusToSegmentAboveId, setFocusToSegmentBelowId } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 
 /**
@@ -266,60 +268,81 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
     zIndex: '1000',
   })
 
+  // Maps functions to hotkeys
+  const handlers = {
+    addAbove: () => addCueAbove(),
+    addBelow: () => addCueBelow(),
+    jumpAbove: () => {
+      dispatch(setFocusSegmentTriggered(true))
+      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
+    },
+    jumpBelow: () => {
+      dispatch(setFocusSegmentTriggered(true))
+      dispatch(setFocusToSegmentBelowId({identifier: props.identifier, segmentId: props.cue.id}))
+    },
+    delete: () => {
+      dispatch(setFocusSegmentTriggered(true))
+      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
+      deleteCue()
+    },
+  }
+
   return (
-    <div css={segmentStyle}>
+    <HotKeys keyMap={subtitleListKeyMap} handlers={handlers}>
+      <div css={segmentStyle}>
 
-      <textarea
-        ref={ref}
-        css={[fieldStyle, textFieldStyle]}
-        defaultValue={props.cue.text}
-        onKeyDown={(event: React.KeyboardEvent) => {
-          if (event.key === "Enter" && !event.shiftKey) {
-            // TODO: Focus the textarea in the new segment
-            event.preventDefault()
-            addCueBelow()
-          }
-        }}
-        onChange={updateCueText}
-      />
-
-      <div css={timeAreaStyle}>
-        <TimeInput
-          generalFieldStyle={[fieldStyle,
-            css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
-          value={props.cue.startTime}
-          changeCallback={updateCueStart}
+        <textarea
+          ref={ref}
+          css={[fieldStyle, textFieldStyle]}
+          defaultValue={props.cue.text}
+          onKeyDown={(event: React.KeyboardEvent) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+              // TODO: Focus the textarea in the new segment
+              event.preventDefault()
+              addCueBelow()
+            }
+          }}
+          onChange={updateCueText}
         />
-        <TimeInput
-          generalFieldStyle={[fieldStyle,
-            css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
-          value={props.cue.endTime}
-          changeCallback={updateCueEnd}
-        />
-      </div>
 
-      <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
-        <div css={[basicButtonStyle, addSegmentButtonStyle]}
-          role="button" tabIndex={0}
-          onClick={addCueAbove}
-        >
-          <FontAwesomeIcon icon={faPlus} size="1x" />
+        <div css={timeAreaStyle}>
+          <TimeInput
+            generalFieldStyle={[fieldStyle,
+              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
+            value={props.cue.startTime}
+            changeCallback={updateCueStart}
+          />
+          <TimeInput
+            generalFieldStyle={[fieldStyle,
+              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
+            value={props.cue.endTime}
+            changeCallback={updateCueEnd}
+          />
         </div>
-        <div css={[basicButtonStyle, addSegmentButtonStyle]}
-          role="button" tabIndex={0}
-          onClick={deleteCue}
-        >
-          <FontAwesomeIcon icon={faTrash} size="1x" />
-        </div>
-        <div css={[basicButtonStyle, addSegmentButtonStyle]}
-          role="button" tabIndex={0}
-          onClick={addCueBelow}
-        >
-          <FontAwesomeIcon icon={faPlus} size="1x" />
-        </div>
-      </div>
 
-    </div>
+        <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
+          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+            role="button" tabIndex={0}
+            onClick={addCueAbove}
+          >
+            <FontAwesomeIcon icon={faPlus} size="1x" />
+          </div>
+          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+            role="button" tabIndex={0}
+            onClick={deleteCue}
+          >
+            <FontAwesomeIcon icon={faTrash} size="1x" />
+          </div>
+          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+            role="button" tabIndex={0}
+            onClick={addCueBelow}
+          >
+            <FontAwesomeIcon icon={faPlus} size="1x" />
+          </div>
+        </div>
+
+      </div>
+    </HotKeys>
   );
 }))
 
