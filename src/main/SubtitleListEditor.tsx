@@ -1,7 +1,8 @@
 import { css, SerializedStyles } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useRef } from "react"
+import { memoize } from "lodash"
+import React, { useCallback, useMemo, useRef } from "react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
@@ -97,6 +98,17 @@ import { SubtitleCue } from "../types"
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   };
 
+  // Avoid rerendering every segment on every change
+  // Still rerenders many segments on addition/deletion, basically every segment after the currently added/deleted one
+  // Emulates useCallback
+  const setRefInArray = useMemo(
+    () =>
+      memoize(
+        (i) => (el: HTMLTextAreaElement) => itemsRef.current[i] = el
+      ),
+    []
+  );
+
   return (
     <div css={listStyle}>
       <div css={headerStyle}>
@@ -113,7 +125,7 @@ import { SubtitleCue } from "../types"
               cue={item}
               defaultSegmentLength={defaultSegmentLength}
               key={item.id}
-              ref={(el: HTMLTextAreaElement) => itemsRef.current[i] = el}
+              ref={setRefInArray(i)}
             />
           )
         })}
@@ -133,6 +145,8 @@ type subtitleListSegmentProps = {
  * A single subtitle segment
  */
 const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, subtitleListSegmentProps>((props, ref) => {
+
+  console.log("RERENDER")
 
   const dispatch = useDispatch()
 
@@ -256,7 +270,7 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
     <div css={segmentStyle}>
 
       <textarea
-           ref={ref}
+        ref={ref}
         css={[fieldStyle, textFieldStyle]}
         defaultValue={props.cue.text}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
