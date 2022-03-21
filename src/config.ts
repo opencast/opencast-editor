@@ -146,7 +146,6 @@ export const init = async () => {
       // (e.g. you need "Space" in a textarea to create whitespaces, not play/pause videos)
       if (e.target && e.target.tagName) {
         const tagname = e.target.tagName
-        console.log(e)
         if ((tagname === "TEXTAREA" || tagname === "input" || tagname === "select")
           && (!e.altKey && !e.ctrlKey)
           && (e.code === "Space" || e.code === "ArrowLeft" || e.code === "ArrowRight" || e.code === "ArrowUp" || e.code === "ArrowDown")) {

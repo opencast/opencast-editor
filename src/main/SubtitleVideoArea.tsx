@@ -98,10 +98,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
         cueIndex++
       }
-      console.log("cues")
-      console.log(cues)
       const serializedSubtitle = seri.serialize(cues)
-      console.log(serializedSubtitle)
       setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type : 'text/vtt'})))
       // Force player config reload
       setReloadUrl("banana")
