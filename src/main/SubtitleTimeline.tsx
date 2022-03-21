@@ -6,8 +6,8 @@ import {
   selectSelectedSubtitleFlavor,
   setCueAtIndex,
   setCurrentlyAt,
-  setTimelineSegmentClicked,
-  setTimelineSegmentClickTriggered,
+  setFocusSegmentId,
+  setFocusSegmentTriggered,
 } from '../redux/subtitleSlice'
 import { useDispatch, useSelector } from "react-redux";
 import useResizeObserver from "use-resize-observer";
@@ -312,8 +312,8 @@ const TimelineSubtitleSegment: React.FC<{
     dispatch(setCurrentlyAt(props.cue.startTime))
 
     // Inform list view which segment was clicked
-    dispatch(setTimelineSegmentClickTriggered(true))
-    dispatch(setTimelineSegmentClicked(props.cue.id))
+    dispatch(setFocusSegmentTriggered(true))
+    dispatch(setFocusSegmentId(props.cue.id))
   }
 
   const segmentStyle = css({

@@ -2,11 +2,11 @@ import { css, SerializedStyles } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { memoize } from "lodash"
-import React, { useCallback, useMemo, useRef } from "react"
+import React, { useMemo, useRef } from "react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
-import { addCueAtIndex, removeCue, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, selectTimelineSegmentClicked, selectTimelineSegmentClickTriggered, setCueAtIndex, setTimelineSegmentClickTriggered } from "../redux/subtitleSlice"
+import { addCueAtIndex, removeCue, selectFocusSegmentId, selectFocusSegmentTriggered, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setCueAtIndex, setFocusSegmentTriggered } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 
 /**
@@ -18,8 +18,8 @@ import { SubtitleCue } from "../types"
 
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
   const subtitleFlavor = useSelector(selectSelectedSubtitleFlavor)
-  const timelineClickTriggered = useSelector(selectTimelineSegmentClickTriggered)
-  const timelineClicked = useSelector(selectTimelineSegmentClicked)
+  const focusTriggered = useSelector(selectFocusSegmentTriggered)
+  const focusId = useSelector(selectFocusSegmentId)
   const defaultSegmentLength = 5000
 
   const itemsRef = useRef<HTMLTextAreaElement[] | null[]>([]);
@@ -33,25 +33,25 @@ import { SubtitleCue } from "../types"
 
   // Scroll to segment when triggered by reduxState
   useEffect(() => {
-    if (timelineClickTriggered) {
-      console.log("timelineClickTriggered: " + timelineClickTriggered)
+    if (focusTriggered) {
+      console.log("timelineClickTriggered: " + focusTriggered)
       if (itemsRef && itemsRef.current && subtitle) {
         console.log("itemsRef: " + itemsRef)
         console.log(itemsRef)
-        const currentRef = itemsRef.current[subtitle.findIndex(item => item.id === timelineClicked)]
+        const currentRef = itemsRef.current[subtitle.findIndex(item => item.id === focusId)]
         if (currentRef) {
           console.log("currentRef: " + currentRef)
           console.log(currentRef)
           currentRef.focus()
           currentRef.scrollIntoView({
             behavior: 'smooth',
-            block: 'start',
+            block: 'nearest',
           });
         }
       }
-      dispatch(setTimelineSegmentClickTriggered(false))
+      dispatch(setFocusSegmentTriggered(false))
     }
-  }, [dispatch, itemsRef, subtitle, timelineClickTriggered, timelineClicked])
+  }, [dispatch, focusId, focusTriggered, itemsRef, subtitle])
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
