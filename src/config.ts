@@ -145,8 +145,8 @@ export const init = async () => {
       // a certain function in that element that is more important than any hotkey function
       // (e.g. you need "Space" in a textarea to create whitespaces, not play/pause videos)
       if (e.target && e.target.tagName) {
-        const tagname = e.target.tagName
-        if ((tagname === "TEXTAREA" || tagname === "input" || tagname === "select")
+        const tagname = e.target.tagName.toLowerCase()
+        if ((tagname === "textarea" || tagname === "input" || tagname === "select")
           && (!e.altKey && !e.ctrlKey)
           && (e.code === "Space" || e.code === "ArrowLeft" || e.code === "ArrowRight" || e.code === "ArrowUp" || e.code === "ArrowDown")) {
           return true
