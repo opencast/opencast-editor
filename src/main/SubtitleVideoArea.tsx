@@ -12,7 +12,9 @@ import { selectCurrentlyAt,
   selectAspectRatio,
   setAspectRatio,
   selectCurrentlyAtInSeconds,
-  selectSelectedSubtitleByFlavor} from "../redux/subtitleSlice";
+  selectSelectedSubtitleByFlavor,
+  selectIsPlayPreview,
+  setIsPlayPreview} from "../redux/subtitleSlice";
 import { selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
@@ -39,7 +41,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   // A temporary "url" for the video component.
   // Intended to force reloading the player config through changing the video url.
   // Due to a bug in react-player: https://github.com/cookpete/react-player/issues/1162
-  const [reloadUrl, setReloadUrl] = useState("banana")
+  const [reloadUrl, setReloadUrl] = useState("")
 
   // Decide on initial flavor on mount
   useEffect(() => {
@@ -109,7 +111,9 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
   // After forcing player config reload, go back to the actual video url
   useEffect(() => {
-    setReloadUrl("")
+    if (reloadUrl === "banana") {
+      setReloadUrl("")
+    }
   }, [reloadUrl])
 
   const areaWrapper = css({
@@ -158,7 +162,9 @@ const SubtitleVideoArea : React.FC<{}> = () => {
           <VideoControls
             selectCurrentlyAt={selectCurrentlyAt}
             selectIsPlaying={selectIsPlaying}
+            selectIsPlayPreview={selectIsPlayPreview}
             setIsPlaying={setIsPlaying}
+            setIsPlayPreview={setIsPlayPreview}
           />
         </div>
       </div>

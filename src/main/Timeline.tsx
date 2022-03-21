@@ -5,7 +5,7 @@ import Draggable from 'react-draggable';
 import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Segment, httpRequestState, MainMenuStateNames } from '../types'
+import { Segment, httpRequestState } from '../types'
 import {
   selectSegments, selectActiveSegmentIndex, selectDuration,
   selectVideoURL,
@@ -25,7 +25,6 @@ import { scrubberKeyMap } from '../globalKeys';
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { selectMainMenuState } from '../redux/mainMenuSlice';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
 
@@ -113,7 +112,6 @@ export const Scrubber: React.FC<{
   const duration = useSelector(selectDuration)
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
   const segments = useSelector(selectSegments)                      // For ARIA information display
-  const mainMenuState = useSelector(selectMainMenuState)            // For hotkey enabling/disabling
 
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
@@ -244,7 +242,7 @@ export const Scrubber: React.FC<{
   // }
 
   return (
-    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true}>
+    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
       <Draggable
         onDrag={onControlledDrag}
         onStart={onStartDrag}

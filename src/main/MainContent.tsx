@@ -45,19 +45,8 @@ const MainContent: React.FC<{}> = () => {
     }
   });
 
-  // Return display 'flex' if state is currently active
-  // also keep track if any state was activated
-  var stateActive = false;
-  let displayState = (state: MainMenuStateNames): object => {
-    if (mainMenuState === state) {
-      stateActive = true;
-      return { display: "flex" };
-    }
-    return { display: 'none' };
-  }
-
   const cuttingStyle = css({
-    ...displayState(MainMenuStateNames.cutting),
+    display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -66,7 +55,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const metadataStyle = css({
-    ...displayState(MainMenuStateNames.metadata),
+    display: 'flex',
     // flexDirection: 'column' as const,
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -75,7 +64,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const trackSelectStyle = css({
-    ...displayState(MainMenuStateNames.trackSelection),
+    display: 'flex',
     flexDirection: 'column' as const,
     alignContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -85,7 +74,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const subtitleSelectStyle = css({
-    ...displayState(MainMenuStateNames.subtitles),
+    display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     paddingRight: '20px',
@@ -94,7 +83,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const finishStyle = css({
-    ...displayState(MainMenuStateNames.finish),
+    display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -104,7 +93,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const keyboardControlsStyle = css({
-    ...displayState(MainMenuStateNames.keyboardControls),
+    display: 'flex',
     // flexDirection: 'column' as const,
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -113,39 +102,63 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const defaultStyle = css({
-    display: stateActive ? 'none' : 'flex',
+    display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
     ...(flexGapReplacementStyle(20, false)),
   })
 
-  return (
-     <main css={{width: '100%'}} role="main">
-      <div css={cuttingStyle}>
+  const render = () => {
+    if (mainMenuState === MainMenuStateNames.cutting) {
+      return (
+        <div css={cuttingStyle}>
           <Video />
           <CuttingActions />
           <CuttingTimeline />
-      </div>
-      <div css={metadataStyle}>
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.metadata) {
+      return (
+        <div css={metadataStyle}>
           <Metadata />
-      </div>
-      <div css={trackSelectStyle}>
-          <TrackSelection />
-      </div>
-      <div css={subtitleSelectStyle}>
-          <Subtitle />
-      </div>
-      <div css={finishStyle}>
-        <Finish />
-      </div>
-      <div css={keyboardControlsStyle}>
-          <KeyboardControls />
-      </div>
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.trackSelection) {
+      return (
+        <div css={trackSelectStyle}>
+        <TrackSelection />
+    </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.subtitles) {
+      return (
+        <div css={subtitleSelectStyle}>
+        <Subtitle />
+    </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.finish) {
+      return (
+        <div css={finishStyle}>
+          <Finish />
+        </div>
+        )
+    } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
+      return (
+        <div css={keyboardControlsStyle}>
+        <KeyboardControls />
+    </div>
+        )
+    } else {
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />
         Placeholder
       </div>
+    }
+  }
+
+  return (
+     <main css={{width: '100%'}} role="main">
+      {render()}
      </main>
   );
 };

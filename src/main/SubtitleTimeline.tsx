@@ -18,6 +18,8 @@ import Draggable from "react-draggable";
 import { SubtitleCue } from "../types";
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
+import { GlobalHotKeys } from "react-hotkeys";
+import { scrubberKeyMap } from "../globalKeys";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
@@ -67,6 +69,18 @@ import "react-resizable/css/styles.css";
     }
   }, [currentlyAt, duration, width]);
 
+  const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000)  // In milliseconds. For keyboard navigation
+
+  // Callbacks for keyboard controls
+  // TODO: Better increases and decreases than ten intervals
+  // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
+  const handlers = {
+    left: () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
+    right: () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
+    increase: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
+    decrease: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1))
+  }
+
   // draws a triangle on top of the middle line
   const triangleStyle = css({
     width: 0,
@@ -104,17 +118,19 @@ import "react-resizable/css/styles.css";
         </div>
       </div>
       {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
-      <div
-        title="Mini Timeline"
-        onMouseDown={e => setCurrentlyAtToClick(e)}
-        css={{position: 'relative', width: '100%', height: '15px', background: 'lightgrey'}}
-        ref={refMini}
-      >
+      <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
         <div
-          css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
+          title="Mini Timeline"
+          onMouseDown={e => setCurrentlyAtToClick(e)}
+          css={{position: 'relative', width: '100%', height: '15px', background: 'lightgrey'}}
+          ref={refMini}
         >
+          <div
+            css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
+          >
+          </div>
         </div>
-      </div>
+      </GlobalHotKeys>
     </div>
 
 
