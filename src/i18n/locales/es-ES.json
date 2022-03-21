@@ -5,6 +5,7 @@
         "select-tracks-button": "Pistas",
         "thumbnail-button": "Miniatura",
         "metadata-button": "Metadatos",
+        "keyboard-controls-button": "Keyboard Controls",
         "tooltip-aria": "Navegación principal"
     },
     "cuttingActions": {
@@ -179,5 +180,17 @@
         "deleteTrackTooltip": "No procesar ni publicar esta pista.",
         "restoreTrackTooltip": "Procesar y publicar esta pista.",
         "cannotDeleteTrackTooltip": "No se puede eliminar esta pista de la publicación."
+    },
+    "keyboardControls": {
+        "header": "Keyboard Controls",
+        "defaultGroupName": "General",
+        "missingLabel": "Unknown",
+        "sequenceSeperator": "or",
+        "genericError": "Failed to load overview",
+        "videoPlayButton": "Play/Pause Video",
+        "scrubberLeft": "Move left",
+        "scrubberRight": "Move right",
+        "scubberIncrease": "Move faster",
+        "scrubberDecrease": "Move slower"
     }
 }
