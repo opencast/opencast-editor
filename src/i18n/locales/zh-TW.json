@@ -1,0 +1,196 @@
+{
+    "mainMenu": {
+        "cutting-button": "裁剪",
+        "finish-button": "完成",
+        "select-tracks-button": "影音軌道",
+        "thumbnail-button": "縮圖",
+        "metadata-button": "後設資料",
+        "keyboard-controls-button": "鍵盤控制",
+        "tooltip-aria": "主導航"
+    },
+    "cuttingActions": {
+        "cut-button": "裁剪",
+        "cut-tooltip": "在當前清除器位置分割區段。 熱鍵：{{hotkeyName}}",
+        "cut-tooltip-aria": "裁剪。在當前清除器位置分割區段。 熱鍵：{{hotkeyName}}",
+        "delete-button": "刪除",
+        "delete-restore-tooltip": "在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotkeyName}}",
+        "delete-restore-tooltip-aria": "刪除或還原。 在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotKeyName}}。",
+        "restore-button": "還原",
+        "mergeLeft-button": "左合併",
+        "mergeLeft-tooltip": "將當前活動區段與其左側的區段合併。 熱鍵：{{hotkeyName}}",
+        "mergeLeft-tooltip-aria": "左合併。 將當前活動區段與其左側的區段合併。 熱鍵：{{hotkeyName}}。",
+        "mergeRight-button": "右合併",
+        "mergeRight-tooltip": "將當前活動區段與其右側的區段合併。 熱鍵：{{hotkeyName}}",
+        "mergeRight-tooltip-aria": "右合併。將當前活動區段與其右側的區段合併。 熱鍵：{{hotkeyName}}"
+    },
+    "video": {
+        "previewButton": "預覽模式",
+        "previewButton-tooltip": "播放影片時跳過已刪除的片段。 當前 {{status}}。 熱鍵：{{hotkeyName}}",
+        "previewButton-aria": "啟用或禁用預覽模式。 熱鍵：{{hotkeyName}}。",
+        "playButton-tooltip": "播放按鈕",
+        "time-duration-tooltip": "播放時間和持續時間",
+        "duration-aria": "持續時間",
+        "time-aria": "目前時間",
+        "comError-text": "與 Opencast 通訊時出現問題。",
+        "loadError-text": "載入此影片時出現錯誤。",
+        "title-tooltip": "影片標題",
+        "presenter-tooltip": "影片簡報者",
+        "controls-tooltip": "影片控制"
+    },
+    "finishMenu": {
+        "save-button": "儲存變更",
+        "start-button": "開始處理",
+        "discard-button": "放棄變更"
+    },
+    "save": {
+        "headline-text": "儲存目前專案",
+        "confirm-button": "是的，儲存變更",
+        "confirmButton-default-tooltip": "儲存按鈕",
+        "confirmButton-attempting-tooltip": "嘗試儲存",
+        "confirmButton-success-tooltip": "儲存成功",
+        "confirmButton-failed-tooltip": "儲存失敗",
+        "info-text": "影片不會被處理，但所有裁剪訊息都將存儲在 Opencast 中。 您可以稍後繼續編輯。",
+        "success-text": "變更儲存成功",
+        "success-tooltip-aria": "儲存成功",
+        "saveArea-tooltip": "儲存區域"
+    },
+    "discard": {
+        "headline-text": "放棄變更",
+        "confirm-button": "是的，放棄變更",
+        "confirm-tooltip": "放棄變更按鈕",
+        "info-text": "放棄您所做的所有更改？ 這不能被還原！"
+    },
+    "theEnd": {
+        "discarded-text": "您的所有更改現在都已經遺失。 您現在可以關閉編輯器。",
+        "startOver-button": "讓我重新開始！",
+        "startOver-tooltip": "重新載入頁面以重新開始",
+        "info-text": "更改已成功儲存到 Opencast。 處理您的更改最多可能需要 {{duration}} 小時。 您現在可以關閉編輯器。\n"
+    },
+    "workflowSelection": {
+        "saveAndProcess-text": "儲存和處理",
+        "selectWF-text": "選擇工作流程",
+        "noWorkflows-text": "出現問題，沒有用於處理您的更改的工作流程。<3/> 請儲存您的更改並聯繫 Opencast 管理員。\n",
+        "oneWorkflow-text": "影片將使用工作流程“{{workflow}}”進行裁剪和處理。 <3/> 這需要一些時間。\n",
+        "manyWorkflows-text": "選擇 Opencast 應該使用哪個工作流程進行處理。",
+        "startProcessing-button": "開始處理",
+        "back-button": "回到上一步",
+        "selectWF-button": "單擊以選擇此工作流程",
+        "selectWF-button-aria": "按下要選擇的工作流程：{{stateName}}\n"
+    },
+    "timeline": {
+        "generateWaveform-text": "生成波形",
+        "segment-tooltip": "片段{{segment}}",
+        "scrubber-text-aria": "清除器。 {{currentTime}}。 活動片段：{{segment}}。{{segmentStatus}}。 控制：{{moveLeft}} 和 {{moveRight}} 移動清除器。 {{increase}} 和 {{decrease}} 增加/減少移動增量。\n",
+        "segments-text-aria": "片段 {{index}}. {{segmentStatus}}. 開始: {{start}}. 結束: {{end}}.\n"
+    },
+    "workflowConfig": {
+        "headline-text": "工作流程配置",
+        "area-tooltip": "工作流程配置區域",
+        "satisfied-text": "對您的配置滿意嗎？",
+        "confirm-button": "是的，開始處理"
+    },
+    "metadata": {
+        "EVENTS-EVENTS-DETAILS-CATALOG-EPISODE": "劇集後設資料",
+        "submit-button": "提交",
+        "submit-button-tooltip": "確認您的變更",
+        "reset-button": "重置",
+        "reset-button-tooltip": "取消所有更改",
+        "submit-helpertext": "根據需要進行更改，然後點擊 {{buttonName}} 按鈕。\n請注意，您仍然必須開始處理才能使更改生效。",
+        "validation": {
+            "required": "必須的",
+            "duration-format": "格式必須為 HH:MM:SS",
+            "datetime": "不合法"
+        },
+        "labels": {
+            "title": "標題",
+            "subject": "主旨",
+            "description": "描述",
+            "language": "語言",
+            "rightsHolder": "版權所有人",
+            "license": "版權",
+            "isPartOf": "系列",
+            "creator": "演講者",
+            "contributor": "貢獻者",
+            "startDate": "開始日期",
+            "duration": "持續時間",
+            "location": "位置",
+            "source": "來源",
+            "created": "建立",
+            "publisher": "發行人",
+            "identifier": "UID"
+        },
+        "language": {
+            "LANGUAGES-SLOVENIAN": "斯洛文尼亞語",
+            "LANGUAGES-PORTUGESE": "葡萄牙語",
+            "LANGUAGES-ROMANSH": "羅曼什語",
+            "LANGUAGES-ARABIC": "阿拉伯語",
+            "LANGUAGES-POLISH": "波蘭語",
+            "LANGUAGES-ITALIAN": "意大利語",
+            "LANGUAGES-CHINESE": "繁體中文",
+            "LANGUAGES-FINNISH": "芬蘭語",
+            "LANGUAGES-DANISH": "丹麥語",
+            "LANGUAGES-UKRAINIAN": "烏克蘭",
+            "LANGUAGES-FRENCH": "法語",
+            "LANGUAGES-SPANISH": "西班牙語",
+            "LANGUAGES-GERMAN_CH": "瑞士德語",
+            "LANGUAGES-NORWEGIAN": "挪威",
+            "LANGUAGES-RUSSIAN": "俄語",
+            "LANGUAGES-JAPANESE": "日語",
+            "LANGUAGES-DUTCH": "荷蘭語",
+            "LANGUAGES-TURKISH": "土耳其語",
+            "LANGUAGES-HINDI": "印度語",
+            "LANGUAGES-SWEDISH": "瑞典語",
+            "LANGUAGES-ENGLISH": "英語",
+            "LANGUAGES-GERMAN": "德語"
+        },
+        "license": {
+            "EVENTS-LICENSE-CC0": "創作共享 CC0",
+            "EVENTS-LICENSE-CCBYND": "CC-BY-ND 創作分享-姓名標示-禁止改作",
+            "EVENTS-LICENSE-CCBYNCND": "創作分享-姓名標示-非商業性使用-禁止改作",
+            "EVENTS-LICENSE-CCBYNCSA": "創作分享-姓名標示-非商業性使用-相同方式分享",
+            "EVENTS-LICENSE-ALLRIGHTS": "保留所有權利",
+            "EVENTS-LICENSE-CCBYSA": "創作分享-姓名標示-相同方式分享",
+            "EVENTS-LICENSE-CCBYNC": "創作分享-姓名標示-非商業性使用",
+            "EVENTS-LICENSE-CCBY": "創作分享-姓名標示"
+        }
+    },
+    "error": {
+        "generic-message": "發生嚴重錯誤！",
+        "details": "細節: "
+    },
+    "landing": {
+        "main-heading": "歡迎使用影片編輯器",
+        "contact-admin": "如果您嘗試編輯特定影片但看到此頁面時，請聯繫您的管理員。",
+        "start-editing-1": "要開始編輯，請指定參數 ",
+        "start-editing-2": " 使用您要編輯的影片的媒體識別 ID。",
+        "link-to-documentation": "有關配置影片編輯器的更多信息，請參閱管理指南，網址為 "
+    },
+    "various": {
+        "error-details-text": "詳細訊息：{{errorMessage}}",
+        "error-noDetails-text": "沒有可用的錯誤詳細訊息。",
+        "error-text": "發生了錯誤。 請稍等，然後再重試。",
+        "goBack-button": "不，回到上一步"
+    },
+    "trackSelection": {
+        "description": "選擇或取消選擇用於處理和發佈的影音軌道。",
+        "trackInactive": "不活動的",
+        "deleteTrackText": "刪除影音軌道",
+        "restoreTrackText": "還原影音軌道",
+        "cannotDeleteTrackText": "無法刪除影音軌道",
+        "deleteTrackTooltip": "請勿編碼和發佈此影音軌道。",
+        "restoreTrackTooltip": "編碼並發佈此影音軌道",
+        "cannotDeleteTrackTooltip": "無法從發佈的影片中刪除此影音軌道。"
+    },
+    "keyboardControls": {
+        "header": "鍵盤控制",
+        "defaultGroupName": "一般",
+        "missingLabel": "未知",
+        "sequenceSeperator": "或",
+        "genericError": "無法載入概觀資料",
+        "videoPlayButton": "播放/暫停 影片",
+        "scrubberLeft": "往左移",
+        "scrubberRight": "往右移",
+        "scubberIncrease": "移動快一點",
+        "scrubberDecrease": "移動慢一點"
+    }
+}
