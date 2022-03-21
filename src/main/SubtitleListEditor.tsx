@@ -273,11 +273,13 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
         ref={ref}
         css={[fieldStyle, textFieldStyle]}
         defaultValue={props.cue.text}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") {
-          // TODO: Focus the textarea in the new segment
-          event.preventDefault()
-          addCueBelow()
-        }}}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            // TODO: Focus the textarea in the new segment
+            event.preventDefault()
+            addCueBelow()
+          }
+        }}
         onChange={updateCueText}
       />
 
