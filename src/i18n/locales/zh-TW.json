@@ -2,9 +2,10 @@
     "mainMenu": {
         "cutting-button": "裁剪",
         "finish-button": "完成",
-        "select-tracks-button": "追蹤",
+        "select-tracks-button": "影音軌道",
         "thumbnail-button": "縮圖",
         "metadata-button": "後設資料",
+        "keyboard-controls-button": "鍵盤控制",
         "tooltip-aria": "主導航"
     },
     "cuttingActions": {
@@ -171,13 +172,25 @@
         "goBack-button": "不，回到上一步"
     },
     "trackSelection": {
-        "description": "選擇或取消選擇用於處理和發佈的軌道。",
+        "description": "選擇或取消選擇用於處理和發佈的影音軌道。",
         "trackInactive": "不活動的",
-        "deleteTrackText": "刪除軌道",
-        "restoreTrackText": "還原軌道",
-        "cannotDeleteTrackText": "無法刪除軌道",
-        "deleteTrackTooltip": "請勿編碼和發佈此軌道。",
-        "restoreTrackTooltip": "編碼並發佈此軌道",
-        "cannotDeleteTrackTooltip": "無法從發佈的影片中刪除此軌道。"
+        "deleteTrackText": "刪除影音軌道",
+        "restoreTrackText": "還原影音軌道",
+        "cannotDeleteTrackText": "無法刪除影音軌道",
+        "deleteTrackTooltip": "請勿編碼和發佈此影音軌道。",
+        "restoreTrackTooltip": "編碼並發佈此影音軌道",
+        "cannotDeleteTrackTooltip": "無法從發佈的影片中刪除此影音軌道。"
+    },
+    "keyboardControls": {
+        "header": "鍵盤控制",
+        "defaultGroupName": "一般",
+        "missingLabel": "未知",
+        "sequenceSeperator": "或",
+        "genericError": "無法載入概觀資料",
+        "videoPlayButton": "播放/暫停 影片",
+        "scrubberLeft": "往左移",
+        "scrubberRight": "往右移",
+        "scubberIncrease": "移動快一點",
+        "scrubberDecrease": "移動慢一點"
     }
 }
