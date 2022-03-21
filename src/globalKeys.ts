@@ -5,6 +5,8 @@ import { ApplicationKeyMap, ExtendedKeyMapOptions, KeyMapOptions, MouseTrapKeySe
  *
  * Additional global configuration settins are placed in './config.ts'
  * (They are not placed here, because that somehow makes the name fields of keymaps undefined for some reason)
+ *
+ * If you add a new keyMap, be sure to add it to the getAllHotkeys function
  */
 import { KeyMap } from "react-hotkeys";
 import { isMacOs } from 'react-device-detect';
@@ -25,38 +27,6 @@ const rewriteKeys = (key: string) => {
   }
 
   return newKey
-}
-
-/**
- * Combines all keyMaps into a single list of keys for KeyboardControls to display
- */
-export const getAllHotkeys = () => {
-  const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap]
-  const allKeys : ApplicationKeyMap = {}
-
-  for (const keyMap of allKeyMaps) {
-    for (const [key, value] of Object.entries(keyMap)) {
-
-      // Parse sequences
-      let sequences : KeyMapOptions[] = []
-      if ((value as ExtendedKeyMapOptions).sequences !== undefined) {
-        for (const sequence of (value as ExtendedKeyMapOptions).sequences) {
-          sequences.push({sequence: sequence as MouseTrapKeySequence, action: (value as ExtendedKeyMapOptions).action})
-        }
-      } else {
-        sequences = [ {sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action } ]
-      }
-
-      // Create new key
-      allKeys[key] = {
-        name: (value as ExtendedKeyMapOptions).name,
-        group: (value as ExtendedKeyMapOptions).group,
-        sequences: sequences,
-      }
-    }
-  }
-
-  return allKeys
 }
 
 /**
@@ -144,4 +114,37 @@ export const scrubberKeyMap: KeyMap = {
     action: "keydown",
     group: groupCuttingViewScrubber,
   },
+}
+
+/**
+ * Combines all keyMaps into a single list of keys for KeyboardControls to display
+ * Placing this under the keyMaps is important, else the translation hooks won't happen
+ */
+ export const getAllHotkeys = () => {
+  const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap]
+  const allKeys : ApplicationKeyMap = {}
+
+  for (const keyMap of allKeyMaps) {
+    for (const [key, value] of Object.entries(keyMap)) {
+
+      // Parse sequences
+      let sequences : KeyMapOptions[] = []
+      if ((value as ExtendedKeyMapOptions).sequences !== undefined) {
+        for (const sequence of (value as ExtendedKeyMapOptions).sequences) {
+          sequences.push({sequence: sequence as MouseTrapKeySequence, action: (value as ExtendedKeyMapOptions).action})
+        }
+      } else {
+        sequences = [ {sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action } ]
+      }
+
+      // Create new key
+      allKeys[key] = {
+        name: (value as ExtendedKeyMapOptions).name,
+        group: (value as ExtendedKeyMapOptions).group,
+        sequences: sequences,
+      }
+    }
+  }
+
+  return allKeys
 }
