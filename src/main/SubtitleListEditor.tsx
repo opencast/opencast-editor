@@ -308,13 +308,13 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
         <div css={timeAreaStyle}>
           <TimeInput
             generalFieldStyle={[fieldStyle,
-              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
+              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
             value={props.cue.startTime}
             changeCallback={updateCueStart}
           />
           <TimeInput
             generalFieldStyle={[fieldStyle,
-              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red'}) })]}
+              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
             value={props.cue.endTime}
             changeCallback={updateCueEnd}
           />
@@ -361,6 +361,7 @@ const TimeInput : React.FC<{
 
   // Stores the millisecond value as a string for the input element
   const [myValue, setMyValue] = useState(toHHMMSSMS(value));
+  const [parsingError, setParsingError] = useState(false)
 
   // Update time value if it got changed externally
   useEffect(() => {
@@ -375,12 +376,19 @@ const TimeInput : React.FC<{
   };
 
   // Update state in redux
-  // Also fix ill-formatted input
   const onBlur = (event: { target: { value: any; }; }) => {
+    setParsingError(false)
+
+    // Parse value and pass it to parent
     const value = event.target.value;
-    const milliseconds = Math.max(0, getMillisecondsFromHHMMSSMS(value));
+    const milliseconds = getMillisecondsFromHHMMSSMS(value)
+    if (milliseconds === undefined) {
+      setParsingError(true)
+      return
+    }
     changeCallback({ target: { value: milliseconds } });
 
+    // Make sure to set state to the parsed value
     const time = toHHMMSSMS(milliseconds);
     setMyValue(time);
   };
@@ -388,6 +396,7 @@ const TimeInput : React.FC<{
   const timeFieldStyle = css({
     height: '20%',
     width: '100px',
+    ...(parsingError && {borderColor: 'red', borderWidth: '2px'})
   })
 
   return (
@@ -457,17 +466,17 @@ const fillInMilliseconds = (val: number) => {
     return val1 * 1000 + val2;
   }
 
-  if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && isNaN(val3)) {
+  if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && isNaN(val4)) {
   // minutes * 60 * 1000 + seconds * 60 + milliseconds
     return val1 * 60 * 1000 + val2 * 1000 + val3;
   }
 
-  if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && !isNaN(val3)) {
+  if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3) && !isNaN(val4)) {
   // hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 60 + milliseconds
     return val1 * 60 * 60 * 1000 + val2 * 60 * 1000 + val3 * 1000 + val4;
   }
 
-  return 0;
+  return undefined
 };
 
 export default SubtitleListEditor
