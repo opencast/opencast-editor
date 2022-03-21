@@ -1,9 +1,10 @@
 import { css } from "@emotion/react";
 import React from "react";
 
-import { getApplicationKeyMap, KeyMapDisplayOptions } from 'react-hotkeys';
+import { KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation } from "react-i18next";
 import { flexGapReplacementStyle } from "../cssStyles";
+import { getAllHotkeys } from "../globalKeys";
 
 const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
@@ -97,7 +98,7 @@ const KeyboardControls: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
-  const keyMap = getApplicationKeyMap();
+  const keyMap = getAllHotkeys()
 
   const groupsStyle = css({
     display: 'flex',
