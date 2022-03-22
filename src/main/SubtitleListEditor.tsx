@@ -8,7 +8,18 @@ import { HotKeys } from "react-hotkeys"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 import { subtitleListKeyMap } from "../globalKeys"
-import { addCueAtIndex, removeCue, selectFocusSegmentId, selectFocusSegmentTriggered, selectSelectedSubtitleByFlavor, selectSelectedSubtitleFlavor, setCueAtIndex, setFocusSegmentId, setFocusSegmentTriggered, setFocusToSegmentAboveId, setFocusToSegmentBelowId } from "../redux/subtitleSlice"
+import { addCueAtIndex,
+  removeCue,
+  selectFocusSegmentId,
+  selectFocusSegmentTriggered,
+  selectSelectedSubtitleByFlavor,
+  selectSelectedSubtitleFlavor,
+  setCueAtIndex,
+  setCurrentlyAt,
+  setFocusSegmentTriggered,
+  setFocusToSegmentAboveId,
+  setFocusToSegmentBelowId
+} from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 
 /**
@@ -68,6 +79,17 @@ import { SubtitleCue } from "../types"
     }
   }, [dispatch, subtitle, subtitleFlavor])
 
+  // Avoid rerendering every segment on every change
+  // Still rerenders many segments on addition/deletion, basically every segment after the currently added/deleted one
+  // Emulates useCallback
+  const setRefInArray = useMemo(
+    () =>
+      memoize(
+        (i) => (el: HTMLTextAreaElement) => itemsRef.current[i] = el
+      ),
+    []
+  );
+
   const listStyle = css({
     display: 'flex',
     flexDirection: 'column',
@@ -99,17 +121,6 @@ import { SubtitleCue } from "../types"
     padding: '16px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   };
-
-  // Avoid rerendering every segment on every change
-  // Still rerenders many segments on addition/deletion, basically every segment after the currently added/deleted one
-  // Emulates useCallback
-  const setRefInArray = useMemo(
-    () =>
-      memoize(
-        (i) => (el: HTMLTextAreaElement) => itemsRef.current[i] = el
-      ),
-    []
-  );
 
   return (
     <div css={listStyle}>
@@ -146,9 +157,8 @@ type subtitleListSegmentProps = {
 /**
  * A single subtitle segment
  */
-const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, subtitleListSegmentProps>((props, ref) => {
-
-  console.log("RERENDER")
+const SubtitleListSegment = React.memo(
+  React.forwardRef<HTMLTextAreaElement, subtitleListSegmentProps>((props, ref) => {
 
   const dispatch = useDispatch()
 
@@ -156,7 +166,13 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
     dispatch(setCueAtIndex({
       identifier: props.identifier,
       cueIndex: props.dataKey,
-      newCue: {id: props.cue.id, text: event.target.value, startTime: props.cue.startTime, endTime: props.cue.endTime, tree: props.cue.tree}
+      newCue: {
+        id: props.cue.id,
+        text: event.target.value,
+        startTime: props.cue.startTime,
+        endTime: props.cue.endTime,
+        tree: props.cue.tree
+      }
     }))
   };
 
@@ -164,7 +180,13 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
     dispatch(setCueAtIndex({
       identifier: props.identifier,
       cueIndex: props.dataKey,
-      newCue: {id: props.cue.id, text: props.cue.text, startTime: event.target.value, endTime: props.cue.endTime, tree: props.cue.tree}
+      newCue: {
+        id: props.cue.id,
+        text: props.cue.text,
+        startTime: event.target.value,
+        endTime: props.cue.endTime,
+        tree: props.cue.tree
+      }
     }))
   };
 
@@ -173,7 +195,13 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
     dispatch(setCueAtIndex({
       identifier: props.identifier,
       cueIndex: props.dataKey,
-      newCue: {id: props.cue.id, text: props.cue.text, startTime: props.cue.startTime, endTime: event.target.value, tree: props.cue.tree}
+      newCue: {
+        id: props.cue.id,
+        text: props.cue.text,
+        startTime: props.cue.startTime,
+        endTime: event.target.value,
+        tree: props.cue.tree
+      }
     }))
   };
 
@@ -201,6 +229,29 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
       identifier: props.identifier,
       cue: props.cue
     }))
+  }
+
+  // Maps functions to hotkeys
+  const handlers = {
+    addAbove: () => addCueAbove(),
+    addBelow: () => addCueBelow(),
+    jumpAbove: () => {
+      dispatch(setFocusSegmentTriggered(true))
+      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
+    },
+    jumpBelow: () => {
+      dispatch(setFocusSegmentTriggered(true))
+      dispatch(setFocusToSegmentBelowId({identifier: props.identifier, segmentId: props.cue.id}))
+    },
+    delete: () => {
+      dispatch(setFocusSegmentTriggered(true))
+      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
+      deleteCue()
+    },
+  }
+
+  const setTimeToSegmentStart = () => {
+    dispatch(setCurrentlyAt(props.cue.startTime))
   }
 
   const segmentStyle = css({
@@ -268,25 +319,6 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
     zIndex: '1000',
   })
 
-  // Maps functions to hotkeys
-  const handlers = {
-    addAbove: () => addCueAbove(),
-    addBelow: () => addCueBelow(),
-    jumpAbove: () => {
-      dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
-    },
-    jumpBelow: () => {
-      dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentBelowId({identifier: props.identifier, segmentId: props.cue.id}))
-    },
-    delete: () => {
-      dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
-      deleteCue()
-    },
-  }
-
   return (
     <HotKeys keyMap={subtitleListKeyMap} handlers={handlers}>
       <div css={segmentStyle}>
@@ -303,6 +335,7 @@ const SubtitleListSegment = React.memo(React.forwardRef<HTMLTextAreaElement, sub
             }
           }}
           onChange={updateCueText}
+          onFocus={e => setTimeToSegmentStart()}
         />
 
         <div css={timeAreaStyle}>
