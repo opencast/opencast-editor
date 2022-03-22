@@ -103,9 +103,12 @@ import { useTranslation } from "react-i18next";
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '75%',
+    height: '74%',
     width: '100%',
+    paddingTop: '10px',
+    paddingBottom: '10px',
     ...(flexGapReplacementStyle(30, true)),
+    borderBottom: '1px solid #BBB',
   })
 
   // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx
@@ -143,7 +146,6 @@ import { useTranslation } from "react-i18next";
             <SubtitleListEditor />
             <SubtitleVideoArea />
           </div>
-          <hr css={{background: '#BBB'}}></hr>
           <SubtitleTimeline
             selectCurrentlyAt={selectCurrentlyAt}
             setCurrentlyAt={setCurrentlyAt}
