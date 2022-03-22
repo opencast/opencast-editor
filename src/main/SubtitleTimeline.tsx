@@ -108,12 +108,12 @@ import { scrubberKeyMap } from "../globalKeys";
       {/* Container. Has width of parent*/}
       <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}>
         {/* Container. Overflows. Width based on parent times zoom level*/}
-        <div ref={ref} css={timelineStyle} title="Timeline" >
+        <div ref={ref} css={timelineStyle}>
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
           <TimelineSubtitleSegmentsList timelineWidth={width}/>
           <div css={{position: 'relative', height: '100px'}} >
             <Waveforms />
-            <CuttingSegmentsList timelineWidth={width}/>
+            <CuttingSegmentsList timelineWidth={width} styleByActiveSegment={false} tabable={false}/>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { memoize } from "lodash"
 import React, { useMemo, useRef } from "react"
 import { useEffect, useState } from "react"
 import { HotKeys } from "react-hotkeys"
+import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 import { subtitleListKeyMap } from "../globalKeys"
@@ -21,6 +22,7 @@ import { addCueAtIndex,
   setFocusToSegmentBelowId
 } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
+import { convertMsToReadableString } from "../util/utilityFunctions"
 
 /**
  * Displays everything needed to edit subtitles
@@ -162,6 +164,7 @@ type subtitleListSegmentProps = {
 const SubtitleListSegment = React.memo(
   React.forwardRef<HTMLTextAreaElement, subtitleListSegmentProps>((props, ref) => {
 
+  const { t } = useTranslation();
   const dispatch = useDispatch()
 
   const updateCueText = (event: { target: { value: any } }) => {
@@ -346,30 +349,40 @@ const SubtitleListSegment = React.memo(
               css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
             value={props.cue.startTime}
             changeCallback={updateCueStart}
+            tooltip={t("subtitleList.startTime-tooltip")}
+            tooltipAria={t("subtitleList.startTime-tooltip-aria")+": " + convertMsToReadableString(props.cue.startTime)}
           />
           <TimeInput
             generalFieldStyle={[fieldStyle,
               css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
             value={props.cue.endTime}
             changeCallback={updateCueEnd}
+            tooltip={t("subtitleList.endTime-tooltip")}
+            tooltipAria={t("subtitleList.endTime-tooltip-aria")+": " + convertMsToReadableString(props.cue.endTime)}
           />
         </div>
 
         <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
           <div css={[basicButtonStyle, addSegmentButtonStyle]}
             role="button" tabIndex={0}
+            title={t("subtitleList.addSegmentAbove")}
+            arial-label={t("subtitleList.addSegmentAbove")}
             onClick={addCueAbove}
           >
             <FontAwesomeIcon icon={faPlus} size="1x" />
           </div>
           <div css={[basicButtonStyle, addSegmentButtonStyle]}
             role="button" tabIndex={0}
+            title={t("subtitleList.deleteSegment")}
+            arial-label={t("subtitleList.deleteSegment")}
             onClick={deleteCue}
           >
             <FontAwesomeIcon icon={faTrash} size="1x" />
           </div>
           <div css={[basicButtonStyle, addSegmentButtonStyle]}
             role="button" tabIndex={0}
+            title={t("subtitleList.addSegmentBelow")}
+            arial-label={t("subtitleList.addSegmentBelow")}
             onClick={addCueBelow}
           >
             <FontAwesomeIcon icon={faPlus} size="1x" />
@@ -387,11 +400,15 @@ const SubtitleListSegment = React.memo(
 const TimeInput : React.FC<{
   value: number,
   changeCallback: any,
-  generalFieldStyle: SerializedStyles[]
+  generalFieldStyle: SerializedStyles[],
+  tooltip: string,
+  tooltipAria: string,
 }>= ({
   value,
   changeCallback,
   generalFieldStyle,
+  tooltip,
+  tooltipAria,
 }) => {
 
   // Stores the millisecond value as a string for the input element
@@ -437,6 +454,8 @@ const TimeInput : React.FC<{
   return (
     <input
       css={[generalFieldStyle, timeFieldStyle]}
+      title={tooltip}
+      aria-label={tooltipAria}
       type="text"
       onChange={onChange}
       onBlur={onBlur}

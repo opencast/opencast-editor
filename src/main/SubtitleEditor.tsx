@@ -25,11 +25,14 @@ import {
 import { settings } from "../config";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
+import { useTranslation } from "react-i18next";
 
 /**
  * Displays an editor view for a selected subtitle file
  */
  const SubtitleEditor : React.FC<{}> = () => {
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch()
   const getStatus = useSelector(selectGetStatus)
@@ -75,7 +78,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
 
   const getTitle = () => {
     return (settings.subtitles.languages !== undefined && subtitle && selectedFlavorSubtype) ?
-      settings.subtitles.languages[selectedFlavorSubtype] : "Loading"
+      settings.subtitles.languages[selectedFlavorSubtype] : t("subtitles.editTitle-loading")
   }
 
   const subtitleEditorStyle = css({
@@ -132,7 +135,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
           <div css={headerRowStyle}>
             <BackButton />
             <div css={[titleStyle, titleStyleBold]}>
-              {"Subtitle Editor - " + getTitle()}
+              {t("subtitles.editTitle", {title: getTitle()})}
             </div>
             <div css={{width: '50px'}}></div>
           </div>
@@ -164,6 +167,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
  */
  export const BackButton : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const backButtonStyle = css({
@@ -177,12 +181,14 @@ import SubtitleTimeline from "./SubtitleTimeline";
   return (
     <div css={[basicButtonStyle, backButtonStyle]}
       role="button" tabIndex={0}
+      title={t("subtitles.backButton-tooltip")}
+      aria-label={t("subtitles.backButton-tooltip")}
       onClick={ () => dispatch(setIsDisplayEditView(false)) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         dispatch(setIsDisplayEditView(false))
       }}}>
       <FontAwesomeIcon icon={faChevronLeft} size="1x" />
-      <span>{"Back"}</span>
+      <span>{t("subtitles.backButton")}</span>
     </div>
   );
 }

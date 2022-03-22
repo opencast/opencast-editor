@@ -111,7 +111,7 @@ const SubtitleSelectButton: React.FC<{
   iconIdentifier,
   flavor
 }) => {
-
+  const { t } = useTranslation();
   const dispatch = useDispatch()
 
   /**
@@ -143,6 +143,8 @@ const SubtitleSelectButton: React.FC<{
   return (
     <div css={[basicButtonStyle, tileButtonStyle]}
       role="button" tabIndex={0}
+      title={t("subtitles.selectSubtitleButton-tooltip", {title: title})}
+      aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", {title: title})}
       onClick={ () => {
         dispatch(setIsDisplayEditView(true))
         dispatch(setSelectedSubtitleFlavor(flavor))
@@ -214,6 +216,8 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
   return (
     <div css={[basicButtonStyle, tileButtonStyle, !isPlusDisplay && disableButtonAnimation]}
       role="button" tabIndex={0}
+      title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}
+      aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("createSubtitleButton-clicked-tooltip-aria")}
       onClick={ () => setIsPlusDisplay(false) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         setIsPlusDisplay(false)
@@ -234,7 +238,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               */}
               <Select // {...input}
                 // styles={selectFieldTypeStyle}
-                label={t("subtitles.createSubtitleDropdownLabel")}
+                label={t("subtitles.createSubtitleDropdown-label")}
                 name="languages"
                 data={selectData()}
               >
@@ -242,10 +246,10 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
 
               <button css={[basicButtonStyle, createButtonStyle]}
                 type="submit"
-                title={t("subtitles.createSubtitleButtonTooltip")}
-                aria-label={t("subtitles.createSubtitleButtonTooltip")}
+                title={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
                 disabled={submitting || pristine}>
-                  {t("subtitles.createSubtitleButton")}
+                  {t("subtitles.createSubtitleButton-createButton")}
               </button>
 
           </form>

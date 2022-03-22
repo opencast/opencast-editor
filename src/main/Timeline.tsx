@@ -69,7 +69,7 @@ const Timeline: React.FC<{
   }
 
   return (
-  <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
+  <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
     <Scrubber
       timelineWidth={width}
       selectCurrentlyAt={selectCurrentlyAt}
@@ -79,7 +79,7 @@ const Timeline: React.FC<{
     />
     <div css={{position: 'relative', height: '250px'}} >
       <Waveforms />
-      <SegmentsList timelineWidth={width}/>
+      <SegmentsList timelineWidth={width} styleByActiveSegment={true} tabable={true}/>
     </div>
   </div>
   );
@@ -274,7 +274,15 @@ export const Scrubber: React.FC<{
 /**
  * Container responsible for rendering the segments that are created when cutting
  */
-export const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+export const SegmentsList: React.FC<{
+  timelineWidth: number,
+  styleByActiveSegment: boolean,
+  tabable: boolean,
+}> = ({
+  timelineWidth,
+  styleByActiveSegment = true,
+  tabable = true,
+}) => {
 
   const { t } = useTranslation();
 
@@ -313,24 +321,25 @@ export const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth})
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id} title={t("timeline.segment-tooltip", {segment: index})}
+        <div key={segment.id}
+          title={t("timeline.segment-tooltip", {segment: index})}
           aria-label={t("timeline.segments-text-aria",
                      {segment: index,
                       segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
                       start: convertMsToReadableString(segment.start),
                       end: convertMsToReadableString(segment.end) })}
-          tabIndex={0}
-        css={{
-          background: bgColor(segment.deleted, activeSegmentIndex === index),
-          borderRadius: '5px',
-          borderStyle: activeSegmentIndex === index ? 'dashed' : 'solid',
-          borderColor: 'white',
-          borderWidth: '1px',
-          boxSizing: 'border-box',
-          width: ((segment.end - segment.start) / duration) * 100 + '%',
-          height: '100%',
-          zIndex: 1,
-        }}>
+          tabIndex={tabable ? 0 : -1}
+          css={{
+            background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
+            borderRadius: '5px',
+            borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
+            borderColor: 'white',
+            borderWidth: '1px',
+            boxSizing: 'border-box',
+            width: ((segment.end - segment.start) / duration) * 100 + '%',
+            height: '100%',
+            zIndex: 1,
+          }}>
         </div>
       ))
     );
