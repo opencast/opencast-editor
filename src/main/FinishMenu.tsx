@@ -57,6 +57,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     fontSize: "x-large",
     ...(flexGapReplacementStyle(30, false)),
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    padding: '0px 20px',
   });
 
   var buttonString;
@@ -70,7 +71,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     case "Discard changes":
       buttonString = t("finishMenu.discard-button");
       break;
-    default: 
+    default:
       buttonString = "Could not load String value";
       break;
   }
