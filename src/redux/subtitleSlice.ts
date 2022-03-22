@@ -126,17 +126,14 @@ export const subtitleSlice = createSlice({
 
       if (action.payload.cueIndex < 0 ) {
         state.subtitles[action.payload.identifier].splice(0, 0, cue);
-        return
       }
 
       if (action.payload.cueIndex >= 0 || action.payload.cueIndex < state.subtitles[action.payload.identifier].length) {
         state.subtitles[action.payload.identifier].splice(action.payload.cueIndex, 0, cue);
-        return
       }
 
       if (action.payload.cueIndex >= state.subtitles[action.payload.identifier].length) {
         state.subtitles[action.payload.identifier].push(cue)
-        return
       }
 
       sortSubtitle(state, action.payload.identifier)
