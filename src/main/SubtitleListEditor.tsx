@@ -98,15 +98,6 @@ import { SubtitleCue } from "../types"
     ...(flexGapReplacementStyle(20, false)),
   })
 
-  const headerStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    flexWrap: 'wrap',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingRight: '20px',
-  })
-
   const segmentListStyle = css({
     display: 'flex',
     flexDirection: 'column',
@@ -117,18 +108,29 @@ import { SubtitleCue } from "../types"
     overflowY: 'auto',
   })
 
-  const cuttingActionButtonStyle = {
-    padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-  };
+  // Old CSS for not yet implemented buttons
+  // const headerStyle = css({
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  //   justifyContent: 'flex-end',
+  //   flexWrap: 'wrap',
+  //   ...(flexGapReplacementStyle(20, false)),
+  //   paddingRight: '20px',
+  // })
+
+  // const cuttingActionButtonStyle = {
+  //   padding: '16px',
+  //   boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  // };
 
   return (
     <div css={listStyle}>
-      <div css={headerStyle}>
+      {/* Not yet implemented buttons */}
+      {/* <div css={headerStyle}>
         <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Herunterladen</div>
         <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Hochladen</div>
         <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Alles löschen</div>
-      </div>
+      </div> */}
       <div css={segmentListStyle}>
         {subtitle?.map((item, i) => {
           return (

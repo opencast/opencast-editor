@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -102,6 +102,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
     alignItems: 'center',
     height: '75%',
     width: '100%',
+    ...(flexGapReplacementStyle(30, true)),
   })
 
   // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx
@@ -139,6 +140,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
             <SubtitleListEditor />
             <SubtitleVideoArea />
           </div>
+          <hr css={{background: '#BBB'}}></hr>
           <SubtitleTimeline
             selectCurrentlyAt={selectCurrentlyAt}
             setCurrentlyAt={setCurrentlyAt}
