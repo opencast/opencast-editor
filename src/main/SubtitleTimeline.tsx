@@ -20,6 +20,7 @@ import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 import { GlobalHotKeys } from "react-hotkeys";
 import { scrubberKeyMap } from "../globalKeys";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
@@ -41,7 +42,7 @@ import { scrubberKeyMap } from "../globalKeys";
   const currentlyAt = useSelector(selectCurrentlyAt)
 
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
-  const refTop = useRef<HTMLDivElement>(null);
+  const refTop = useRef<ScrollContainer>(null);
   const { ref: refMini, width: widthMiniTimeline = 1, } = useResizeObserver<HTMLDivElement>();
 
   const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
@@ -64,8 +65,8 @@ import { scrubberKeyMap } from "../globalKeys";
   // Apply horizonal scrolling when scrolled from somewhere else
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
-      const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth)
-      refTop.current.scrollTo(((currentlyAt / duration)) * scrollLeftMax, 0)
+      const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
+      refTop.current.getElement().scrollTo(((currentlyAt / duration)) * scrollLeftMax, 0)
     }
   }, [currentlyAt, duration, width]);
 
@@ -99,14 +100,14 @@ import { scrubberKeyMap } from "../globalKeys";
         css={{position: 'absolute',
         width: '2px',
         height: '190px',
-        ...(refTop.current) && {left: (refTop.current.clientWidth / 2)},
+        ...(refTop.current) && {left: (refTop.current.getElement().clientWidth / 2)},
         top: '10px',
         background: 'black'}}>
           <div css={triangleStyle} />
       </div>
       {/* Scrollable timeline */}
       {/* Container. Has width of parent*/}
-      <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}>
+      <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}} vertical={false} horizontal={true}>
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle} title="Timeline" >
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
@@ -116,7 +117,7 @@ import { scrubberKeyMap } from "../globalKeys";
             <CuttingSegmentsList timelineWidth={width}/>
           </div>
         </div>
-      </div>
+      </ScrollContainer>
       {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
       <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
         <div
