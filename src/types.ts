@@ -42,6 +42,7 @@ export interface SubtitleCue {
 export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
+  subtitles: {flavor: Flavor, subtitle: string}[]
 }
 
 export interface PostAndProcessEditArgument extends PostEditArgument{

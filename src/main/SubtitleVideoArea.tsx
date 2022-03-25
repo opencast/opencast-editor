@@ -24,15 +24,13 @@ import { useTranslation } from "react-i18next";
 import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
 import { flexGapReplacementStyle } from "../cssStyles";
-import { WebVTTSerializer } from 'webvtt-parser';
+import { serializeSubtitle } from "../util/utilityFunctions";
 
 
 /**
  * A part of the subtitle editor that displays a video and related controls
  */
 const SubtitleVideoArea : React.FC<{}> = () => {
-
-  const seri = new WebVTTSerializer();
 
   const tracks = useSelector(selectVideos)
   let subtitle = useSelector(selectSelectedSubtitleByFlavor)
@@ -86,19 +84,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   // Parse subtitles to something the video player understands
   useEffect(() => {
     if(subtitle) {
-      // Fix cues to work with serialize
-      let cueIndex = 0
-      const cues = [...subtitle];
-      for (let cue of subtitle) {
-        cue = {...cue}
-        cue.startTime = cue.startTime / 1000
-        cue.endTime = cue.endTime / 1000
-
-        cues[cueIndex] = cue
-
-        cueIndex++
-      }
-      const serializedSubtitle = seri.serialize(cues)
+      const serializedSubtitle = serializeSubtitle(subtitle)
       setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type : 'text/vtt'})))
       // Force player config reload
       setReloadUrl("banana")

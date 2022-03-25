@@ -39,7 +39,7 @@ import { useTranslation } from "react-i18next";
   const getError = useSelector(selectErrorByFlavor)
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
-  const selectedFlavorSubtype = useSelector(selectSelectedSubtitleFlavor)
+  const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
 
   let captionTrack: Track | undefined = undefined   // track object received from Opencast
 
@@ -48,7 +48,7 @@ import { useTranslation } from "react-i18next";
   // TODO: Turn this into a redux selector, possibly by figuring out "currying"
   if (subtitle === undefined) {
     for (const cap of captionTracks) {
-      if (cap.flavor.subtype === selectedFlavorSubtype) {
+      if (cap.flavor.type+"/"+cap.flavor.subtype === selectedFlavor) {
         captionTrack = cap
       }
     }
@@ -56,12 +56,12 @@ import { useTranslation } from "react-i18next";
 
   useEffect(() => {
     // Instigate fetching caption data from Opencast
-    if (getStatus === 'idle' && subtitle === undefined && captionTrack !== undefined && selectedFlavorSubtype) {
-      dispatch(fetchSubtitle({identifier: selectedFlavorSubtype, uri: captionTrack.uri}))
+    if (getStatus === 'idle' && subtitle === undefined && captionTrack !== undefined && selectedFlavor) {
+      dispatch(fetchSubtitle({identifier: selectedFlavor, uri: captionTrack.uri}))
     // Or create a new subtitle instead
-    } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined && selectedFlavorSubtype) {
+    } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined && selectedFlavor) {
       // Create an empty subtitle
-      dispatch(setSubtitle({identifier: selectedFlavorSubtype, subtitles: []}))
+      dispatch(setSubtitle({identifier: selectedFlavor, subtitles: []}))
       // Reset request
       dispatch(resetRequestState())
     // Error while fetching
@@ -74,11 +74,11 @@ import { useTranslation } from "react-i18next";
       // Reset request
       dispatch(resetRequestState())
     }
-  }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavorSubtype])
+  }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavor])
 
   const getTitle = () => {
-    return (settings.subtitles.languages !== undefined && subtitle && selectedFlavorSubtype) ?
-      settings.subtitles.languages[selectedFlavorSubtype] : t("subtitles.editTitle-loading")
+    return (settings.subtitles.languages !== undefined && subtitle && selectedFlavor) ?
+      settings.subtitles.languages[selectedFlavor] : t("subtitles.editTitle-loading")
   }
 
   const subtitleEditorStyle = css({

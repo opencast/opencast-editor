@@ -36,7 +36,7 @@ import { selectCaptions } from "../redux/videoSlice";
 
       // Check if flavor already exists in the tracks from Opencast
       for (const cap of captionTracks) {
-        if (cap.flavor.subtype === subFlavor) {
+        if (cap.flavor.type+"/"+cap.flavor.subtype === subFlavor) {
           found = true
         }
       }
