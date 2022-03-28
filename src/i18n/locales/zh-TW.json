@@ -185,6 +185,8 @@
         "header": "鍵盤控制",
         "defaultGroupName": "一般",
         "missingLabel": "未知",
+        "groupCuttingView": "Cutting View",
+        "groupCuttingViewScrubber": "Cutting View - Scrubber",
         "sequenceSeperator": "或",
         "genericError": "無法載入概觀資料",
         "videoPlayButton": "播放/暫停 影片",
