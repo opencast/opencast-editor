@@ -53,7 +53,7 @@
     "react-use": "^17.3.2",
     "redux": "^4.1.2",
     "standardized-audio-context": "^25.3.20",
-    "typescript": "^4.5.5"
+    "typescript": "^4.6.3"
   },
   "scripts": {
     "start": "REACT_APP_GIT_SHA=`git rev-parse HEAD` REACT_APP_BUILD_DATE=\"`date`\" react-app-rewired start",
