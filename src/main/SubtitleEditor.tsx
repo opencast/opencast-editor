@@ -4,16 +4,13 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  selectCaptions,
+  selectCaptionTrackByFlavor,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { Track } from "../types";
+import { SubtitleCue, Track } from "../types";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
   setIsDisplayEditView,
-  selectCurrentlyAt,
-  setClickTriggered,
-  setCurrentlyAt,
   fetchSubtitle,
   selectErrorByFlavor,
   resetRequestState,
@@ -37,22 +34,9 @@ import { useTranslation } from "react-i18next";
   const dispatch = useDispatch()
   const getStatus = useSelector(selectGetStatus)
   const getError = useSelector(selectErrorByFlavor)
-  const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
-  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
+  const subtitle : SubtitleCue[] = useSelector(selectSelectedSubtitleByFlavor)
   const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
-
-  let captionTrack: Track | undefined = undefined   // track object received from Opencast
-
-  // If subtitle is not in our redux store, dynamically fetch it
-  // First, Get the correct captions url
-  // TODO: Turn this into a redux selector, possibly by figuring out "currying"
-  if (subtitle === undefined) {
-    for (const cap of captionTracks) {
-      if (cap.flavor.type+"/"+cap.flavor.subtype === selectedFlavor) {
-        captionTrack = cap
-      }
-    }
-  }
+  const captionTrack: Track | undefined = useSelector(selectCaptionTrackByFlavor(selectedFlavor))   // track object received from Opencast
 
   useEffect(() => {
     // Instigate fetching caption data from Opencast
@@ -127,6 +111,8 @@ import { useTranslation } from "react-i18next";
     verticalAlign: '-2.5px',
   })
 
+  console.log("Rerender SubtitleEditor")
+
   const render = () => {
     if (getError !== undefined) {
       return (
@@ -146,11 +132,7 @@ import { useTranslation } from "react-i18next";
             <SubtitleListEditor />
             <SubtitleVideoArea />
           </div>
-          <SubtitleTimeline
-            selectCurrentlyAt={selectCurrentlyAt}
-            setCurrentlyAt={setCurrentlyAt}
-            setClickTriggered={setClickTriggered}
-          />
+          <SubtitleTimeline />
         </>
       )
     }
