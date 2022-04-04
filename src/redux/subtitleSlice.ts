@@ -7,10 +7,6 @@ import { httpRequestState } from '../types';
 import { WebVTTParser } from 'webvtt-parser';
 import { WritableDraft } from 'immer/dist/internal';
 
-export interface test {
-  [key: string]: SubtitleCue[]
-}
-
 export interface subtitle {
   isDisplayEditView: boolean    // Should the edit view be displayed
   isPlaying: boolean,             // Are videos currently playing?

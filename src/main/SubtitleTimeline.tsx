@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import {
+  selectCurrentlyAt,
   selectSelectedSubtitleByFlavor,
   selectSelectedSubtitleFlavor,
+  setClickTriggered,
   setCueAtIndex,
   setCurrentlyAt,
   setFocusSegmentId,
@@ -12,8 +14,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
-import { RootState } from "../redux/store";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import Draggable from "react-draggable";
 import { SubtitleCue } from "../types";
 import { Resizable } from "react-resizable";
@@ -25,15 +25,7 @@ import { scrubberKeyMap } from "../globalKeys";
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
  */
- const SubtitleTimeline: React.FC<{
-  selectCurrentlyAt: (state: RootState) => number,
-  setClickTriggered: ActionCreatorWithPayload<any, string>,
-  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
-}> = ({
-  selectCurrentlyAt,
-  setClickTriggered,
-  setCurrentlyAt,
-}) => {
+ const SubtitleTimeline: React.FC<{}> = () => {
 
   // Init redux variables
   const dispatch = useDispatch();

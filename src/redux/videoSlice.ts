@@ -345,5 +345,13 @@ export const selectAspectRatio = (state: { videoState: { aspectRatios: video["as
   calculateTotalAspectRatio(state.videoState.aspectRatios)
 export const selectCaptions = (state: { videoState: { tracks: video["tracks"] } }) =>
   state.videoState.tracks.filter((track: Track) => track.flavor.type === settings.subtitles.mainFlavor)
+export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { tracks: any[]; }; }) => {
+  const captionTracks = state.videoState.tracks.filter((track: Track) => track.flavor.type === settings.subtitles.mainFlavor)
+  for (const cap of captionTracks) {
+    if (cap.flavor.type+"/"+cap.flavor.subtype === flavor) {
+      return cap
+    }
+  }
+}
 
 export default videoSlice.reducer
