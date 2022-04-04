@@ -48,7 +48,7 @@
     "react-final-form-listeners": "^1.0.3",
     "react-hotkeys": "^2.0.0",
     "react-i18next": "^11.15.4",
-    "react-player": "^2.9.0",
+    "react-player": "git+https://arnei@github.com/Arnei/react-player.git#20fe6c061cf7d71d33d764b4a51c9b9bbb614bf6",
     "react-redux": "^7.2.6",
     "react-resizable": "^3.0.4",
     "react-scripts": "5.0.0",

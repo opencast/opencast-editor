@@ -29,6 +29,12 @@ import { serializeSubtitle } from "../util/utilityFunctions";
 
 /**
  * A part of the subtitle editor that displays a video and related controls
+ *
+ * A bug in the react-player module prevents hotloading subtitle files:
+ * https://github.com/cookpete/react-player/issues/1162
+ * We have "fixed" this in a fork https://github.com/Arnei/react-player, because
+ * coming up with a proper fix appears to be rather difficult
+ * TODO: Come up with a proper fix and create a PR
  */
 const SubtitleVideoArea : React.FC<{}> = () => {
 
@@ -36,10 +42,6 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   let subtitle = useSelector(selectSelectedSubtitleByFlavor)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
-  // A temporary "url" for the video component.
-  // Intended to force reloading the player config through changing the video url.
-  // Due to a bug in react-player: https://github.com/cookpete/react-player/issues/1162
-  const [reloadUrl, setReloadUrl] = useState("")
 
   // Decide on initial flavor on mount
   useEffect(() => {
@@ -67,11 +69,6 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
   // Get a track URI by any means necessary
   const getTrackURI = () => {
-    // Fake url for forcing player config reload
-    if (reloadUrl) {
-      return reloadUrl
-    }
-
     const trackURIByFlavor = getTrackURIBySelectedFlavor()
     if (trackURIByFlavor) {
       return trackURIByFlavor
@@ -86,18 +83,9 @@ const SubtitleVideoArea : React.FC<{}> = () => {
     if(subtitle) {
       const serializedSubtitle = serializeSubtitle(subtitle)
       setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type : 'text/vtt'})))
-      // Force player config reload
-      setReloadUrl("banana")
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtitle])
-
-  // After forcing player config reload, go back to the actual video url
-  useEffect(() => {
-    if (reloadUrl === "banana") {
-      setReloadUrl("")
-    }
-  }, [reloadUrl])
 
   const areaWrapper = css({
     display: 'block',
