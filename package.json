@@ -54,6 +54,8 @@
     "react-scripts": "5.0.0",
     "react-select": "^5.2.2",
     "react-use": "^17.3.2",
+    "react-virtualized-auto-sizer": "^1.0.6",
+    "react-window": "^1.8.6",
     "redux": "^4.1.2",
     "standardized-audio-context": "^25.3.20",
     "stream": "0.0.2",
@@ -95,6 +97,8 @@
     "@types/react-beforeunload": "^2.1.1",
     "@types/react-final-form-listeners": "^1.0.0",
     "@types/react-resizable": "^1.7.4",
+    "@types/react-virtualized-auto-sizer": "^1.0.1",
+    "@types/react-window": "^1.8.5",
     "use-resize-observer": "^8.0.0"
   }
 }

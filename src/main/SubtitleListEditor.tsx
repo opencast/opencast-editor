@@ -2,42 +2,49 @@ import { css, SerializedStyles } from "@emotion/react"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { memoize } from "lodash"
-import React, { useMemo, useRef } from "react"
+import React, { useRef } from "react"
 import { useEffect, useState } from "react"
 import { HotKeys } from "react-hotkeys"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 import { subtitleListKeyMap } from "../globalKeys"
 import { addCueAtIndex,
   removeCue,
   selectFocusSegmentId,
   selectFocusSegmentTriggered,
+  selectFocusSegmentTriggered2,
   selectSelectedSubtitleByFlavor,
   selectSelectedSubtitleFlavor,
   setCueAtIndex,
   setCurrentlyAt,
   setFocusSegmentTriggered,
+  setFocusSegmentTriggered2,
   setFocusToSegmentAboveId,
   setFocusToSegmentBelowId
 } from "../redux/subtitleSlice"
 import { SubtitleCue } from "../types"
 import { convertMsToReadableString } from "../util/utilityFunctions"
+import { VariableSizeList } from "react-window"
+import { CSSProperties } from "react"
+import AutoSizer from "react-virtualized-auto-sizer"
 
 /**
  * Displays everything needed to edit subtitles
  */
- const SubtitleListEditor : React.FC<{}> = () => {
+const SubtitleListEditor : React.FC<{}> = () => {
 
   const dispatch = useDispatch()
 
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)
-  const subtitleFlavor = useSelector(selectSelectedSubtitleFlavor)
-  const focusTriggered = useSelector(selectFocusSegmentTriggered)
-  const focusId = useSelector(selectFocusSegmentId)
+  const subtitleFlavor = useSelector(selectSelectedSubtitleFlavor, shallowEqual)
+  const focusTriggered = useSelector(selectFocusSegmentTriggered, shallowEqual)
+  const focusId = useSelector(selectFocusSegmentId, shallowEqual)
   const defaultSegmentLength = 5000
+  const segmentHeight = 100
 
   const itemsRef = useRef<HTMLTextAreaElement[] | null[]>([]);
+  const listRef = useRef<VariableSizeList>(null);
 
   // Update ref array size
   useEffect(() => {
@@ -51,17 +58,10 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
     if (focusTriggered) {
       console.log("timelineClickTriggered: " + focusTriggered)
       if (itemsRef && itemsRef.current && subtitle) {
-        console.log("itemsRef: " + itemsRef)
-        console.log(itemsRef)
-        const currentRef = itemsRef.current[subtitle.findIndex(item => item.id === focusId)]
-        if (currentRef) {
-          console.log("currentRef: " + currentRef)
-          console.log(currentRef)
-          currentRef.focus()
-          currentRef.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-          });
+        const itemIndex = subtitle.findIndex(item => item.id === focusId)
+        if (listRef && listRef.current) {
+          listRef.current.scrollToItem(itemIndex, "center");
+
         }
       }
       dispatch(setFocusSegmentTriggered(false))
@@ -81,33 +81,12 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
     }
   }, [dispatch, subtitle, subtitleFlavor])
 
-  // Avoid rerendering every segment on every change
-  // Still rerenders many segments on addition/deletion, basically every segment after the currently added/deleted one
-  // Emulates useCallback
-  const setRefInArray = useMemo(
-    () =>
-      memoize(
-        (i) => (el: HTMLTextAreaElement) => itemsRef.current[i] = el
-      ),
-    []
-  );
-
   const listStyle = css({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
     width: '60%',
     ...(flexGapReplacementStyle(20, false)),
-  })
-
-  const segmentListStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingTop: '30px',  // Else the select highlighting gets cut off
-    paddingBottom: '30px',
-    paddingRight: '10px',
-    overflowY: 'auto',
   })
 
   // Old CSS for not yet implemented buttons
@@ -125,72 +104,127 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
   //   boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   // };
 
+  const calcEstimatedSize = React.useCallback(() => {
+    return segmentHeight
+  }, [])
+
+  const itemData = createItemData(subtitle, subtitleFlavor, defaultSegmentLength)
+
   return (
     <div css={listStyle}>
-      {/* Not yet implemented buttons */}
-      {/* <div css={headerStyle}>
-        <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Herunterladen</div>
-        <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Hochladen</div>
-        <div css={[basicButtonStyle, cuttingActionButtonStyle]}>Alles löschen</div>
-      </div> */}
-      <div css={segmentListStyle}>
-        {subtitle?.map((item, i) => {
-          return (
-            <SubtitleListSegment
-              identifier={subtitleFlavor}
-              dataKey={i}
-              cue={item}
-              defaultSegmentLength={defaultSegmentLength}
-              key={item.id}
-              ref={setRefInArray(i)}
-            />
-          )
-        })}
-      </div>
+      <AutoSizer>
+        {({ height, width }) => (
+          <VariableSizeList
+            height={height}
+            itemCount={subtitle !== undefined ? subtitle.length : 0}
+            itemData={itemData}
+            itemSize={(index) => segmentHeight}
+            itemKey={(index, data) => data.items[index].id}
+            width={width}
+            overscanCount={4}
+            estimatedItemSize={calcEstimatedSize()}
+            innerElementType={innerElementType}
+            ref={listRef}
+          >
+            {SubtitleListSegment}
+          </VariableSizeList>
+        )}
+      </AutoSizer>
     </div>
   );
 }
 
+/**
+ * Helper function for reducing rerender calls caused by react-window
+ */
+const createItemData = memoize((items, identifier, defaultSegmentLength) => ({
+  items,
+  identifier,
+  defaultSegmentLength,
+}));
+
+/**
+ * Global variable to synchronize padding for react-window elements
+ */
+const PADDING_SIZE = 20;
+
+// Used for padding in the VariableSizeList
+const innerElementType = React.forwardRef<HTMLDivElement, {style: CSSProperties}>(({ style, ...rest }, ref) => (
+  <div
+    ref={ref}
+    style={{
+      ...style,
+      // height: `${parseFloat(style.height !== undefined ? style.height.toString() : "0") + PADDING_SIZE * 2}px`,
+      paddingTop: PADDING_SIZE + 'px',
+      zIndex: '1000',
+    }}
+    {...rest}
+  />
+));
+
+/**
+ * Type definition for SubtitleListSegment
+ */
 type subtitleListSegmentProps = {
-  identifier: string,
-  dataKey: number,
-  cue: SubtitleCue,
-  defaultSegmentLength: number,
+  index: number,
+  data: {items: SubtitleCue[], identifier: string, defaultSegmentLength: number},
+  style: CSSProperties
 };
 
 /**
  * A single subtitle segment
  */
-const SubtitleListSegment = React.memo(
-  React.forwardRef<HTMLTextAreaElement, subtitleListSegmentProps>((props, ref) => {
+const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
+
+  // Parse props
+  const { items, identifier, defaultSegmentLength } = props.data
+  const cue = items[props.index]
 
   const { t } = useTranslation();
   const dispatch = useDispatch()
 
+  // Unfortunately, the focus selectors will cause every element to rerender,
+  // even if they are not the ones that are focused
+  // However, since the number of list segments rendered is severly limited
+  // by react-window, so it should not be an issue
+  const focusTriggered2 = useSelector(selectFocusSegmentTriggered2, shallowEqual)
+  const focusId2 = useSelector(selectFocusSegmentId, shallowEqual)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Set focus to textarea
+  useEffect(() => {
+    if (focusTriggered2 && focusId2 === cue.id) {
+      if (textAreaRef && textAreaRef.current) {
+        textAreaRef.current.focus()
+      }
+      dispatch(setFocusSegmentTriggered2(false))
+    }
+  }, [cue.id, dispatch, focusId2, focusTriggered2])
+
   const updateCueText = (event: { target: { value: any } }) => {
     dispatch(setCueAtIndex({
-      identifier: props.identifier,
-      cueIndex: props.dataKey,
+      identifier: identifier,
+      cueIndex: props.index,
       newCue: {
-        id: props.cue.id,
+        id: cue.id,
         text: event.target.value,
-        startTime: props.cue.startTime,
-        endTime: props.cue.endTime,
-        tree: props.cue.tree
+        startTime: cue.startTime,
+        endTime: cue.endTime,
+        tree: cue.tree
       }
     }))
   };
 
   const updateCueStart = (event: { target: { value: any } }) => {
     dispatch(setCueAtIndex({
-      identifier: props.identifier,
-      cueIndex: props.dataKey,
+      identifier: identifier,
+      cueIndex: props.index,
       newCue: {
-        id: props.cue.id,
-        text: props.cue.text,
+        id: cue.id,
+        text: cue.text,
         startTime: event.target.value,
-        endTime: props.cue.endTime,
-        tree: props.cue.tree
+        endTime: cue.endTime,
+        tree: cue.tree
       }
     }))
   };
@@ -198,41 +232,41 @@ const SubtitleListSegment = React.memo(
   const updateCueEnd = (event: { target: { value: any } }) => {
     console.log("updateCueEnd: " + event.target.value)
     dispatch(setCueAtIndex({
-      identifier: props.identifier,
-      cueIndex: props.dataKey,
+      identifier: identifier,
+      cueIndex: props.index,
       newCue: {
-        id: props.cue.id,
-        text: props.cue.text,
-        startTime: props.cue.startTime,
+        id: cue.id,
+        text: cue.text,
+        startTime: cue.startTime,
         endTime: event.target.value,
-        tree: props.cue.tree
+        tree: cue.tree
       }
     }))
   };
 
   const addCueAbove = () => {
-    dispatch(addCueAtIndex({identifier: props.identifier,
-      cueIndex: props.dataKey,
+    dispatch(addCueAtIndex({identifier: identifier,
+      cueIndex: props.index,
       text: "",
-      startTime: props.cue.startTime - props.defaultSegmentLength,
-      endTime: props.cue.startTime
+      startTime: cue.startTime - defaultSegmentLength,
+      endTime: cue.startTime
     }))
   }
 
   const addCueBelow = () => {
     dispatch(addCueAtIndex({
-      identifier: props.identifier,
-      cueIndex: props.dataKey + 1,
+      identifier: identifier,
+      cueIndex: props.index + 1,
       text: "",
-      startTime: props.cue.endTime,
-      endTime: props.cue.endTime + props.defaultSegmentLength
+      startTime: cue.endTime,
+      endTime: cue.endTime + defaultSegmentLength
     }))
   }
 
   const deleteCue = () => {
     dispatch(removeCue({
-      identifier: props.identifier,
-      cue: props.cue
+      identifier: identifier,
+      cue: cue
     }))
   }
 
@@ -242,21 +276,21 @@ const SubtitleListSegment = React.memo(
     addBelow: () => addCueBelow(),
     jumpAbove: () => {
       dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
+      dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.id}))
     },
     jumpBelow: () => {
       dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentBelowId({identifier: props.identifier, segmentId: props.cue.id}))
+      dispatch(setFocusToSegmentBelowId({identifier: identifier, segmentId: cue.id}))
     },
     delete: () => {
       dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentAboveId({identifier: props.identifier, segmentId: props.cue.id}))
+      dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.id}))
       deleteCue()
     },
   }
 
   const setTimeToSegmentStart = () => {
-    dispatch(setCurrentlyAt(props.cue.startTime))
+    dispatch(setCurrentlyAt(cue.startTime))
   }
 
   const segmentStyle = css({
@@ -264,7 +298,6 @@ const SubtitleListSegment = React.memo(
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: '100px',
     ...(flexGapReplacementStyle(20, false)),
     // Make function buttons visible when hovered or focused
     "&:hover": {
@@ -326,15 +359,20 @@ const SubtitleListSegment = React.memo(
 
   return (
     <HotKeys keyMap={subtitleListKeyMap} handlers={handlers}>
-      <div css={segmentStyle}>
+      <div css={segmentStyle} style={{
+        ...props.style,
+        // Used for padding in the VariableSizeList
+        top: props.style.top !== undefined ? `${parseFloat(props.style.top.toString()) + PADDING_SIZE}px` : '0px',
+        height: props.style.height !== undefined ? `${parseFloat(props.style.height.toString()) - PADDING_SIZE}px` : '0px',
+        zIndex: '1000',
+      }}>
 
         <textarea
-          ref={ref}
+          ref={textAreaRef}
           css={[fieldStyle, textFieldStyle]}
-          defaultValue={props.cue.text}
+          defaultValue={cue.text}
           onKeyDown={(event: React.KeyboardEvent) => {
             if (event.key === "Enter" && !event.shiftKey) {
-              // TODO: Focus the textarea in the new segment
               event.preventDefault()
               addCueBelow()
             }
@@ -346,19 +384,19 @@ const SubtitleListSegment = React.memo(
         <div css={timeAreaStyle}>
           <TimeInput
             generalFieldStyle={[fieldStyle,
-              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
-            value={props.cue.startTime}
+              css({...(cue.startTime > cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
+            value={cue.startTime}
             changeCallback={updateCueStart}
             tooltip={t("subtitleList.startTime-tooltip")}
-            tooltipAria={t("subtitleList.startTime-tooltip-aria")+": " + convertMsToReadableString(props.cue.startTime)}
+            tooltipAria={t("subtitleList.startTime-tooltip-aria")+": " + convertMsToReadableString(cue.startTime)}
           />
           <TimeInput
             generalFieldStyle={[fieldStyle,
-              css({...(props.cue.startTime > props.cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
-            value={props.cue.endTime}
+              css({...(cue.startTime > cue.endTime && {borderColor: 'red', borderWidth: '2px'}) })]}
+            value={cue.endTime}
             changeCallback={updateCueEnd}
             tooltip={t("subtitleList.endTime-tooltip")}
-            tooltipAria={t("subtitleList.endTime-tooltip-aria")+": " + convertMsToReadableString(props.cue.endTime)}
+            tooltipAria={t("subtitleList.endTime-tooltip-aria")+": " + convertMsToReadableString(cue.endTime)}
           />
         </div>
 
@@ -392,7 +430,7 @@ const SubtitleListSegment = React.memo(
       </div>
     </HotKeys>
   );
-}))
+})
 
 /**
  * Input field for the time values for a subtitle segment

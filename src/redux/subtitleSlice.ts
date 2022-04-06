@@ -19,6 +19,7 @@ export interface subtitle {
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   focusSegmentTriggered: boolean,   // a segment in the timeline was clicked
   focusSegmentId: string,           // which segment in the timeline was clicked
+  focusSegmentTriggered2: boolean,   // a different trigger for a child component, to avoid additional rerenders from the parent
 
   status: 'idle' | 'loading' | 'success' | 'failed',
   errors: {identifier: string, error: string}[],
@@ -35,6 +36,7 @@ const initialState: subtitle = {
   selectedSubtitleFlavor: "",
   focusSegmentTriggered: false,
   focusSegmentId: "",
+  focusSegmentTriggered2: false,
 
   status: 'idle',
   errors: [],
@@ -118,6 +120,7 @@ export const subtitleSlice = createSlice({
 
       // Trigger a callback in the list component that focuses the newly added element
       state.focusSegmentTriggered = true
+      state.focusSegmentTriggered2 = true
       state.focusSegmentId = cue.id
 
       if (action.payload.cueIndex < 0 ) {
@@ -147,9 +150,13 @@ export const subtitleSlice = createSlice({
     },
     setFocusSegmentTriggered: (state, action: PayloadAction<subtitle["focusSegmentTriggered"]>) => {
       state.focusSegmentTriggered = action.payload
+      state.focusSegmentTriggered2 = action.payload
     },
     setFocusSegmentId: (state, action: PayloadAction<subtitle["focusSegmentId"]>) => {
       state.focusSegmentId = action.payload
+    },
+    setFocusSegmentTriggered2: (state, action: PayloadAction<subtitle["focusSegmentTriggered2"]>) => {
+      state.focusSegmentTriggered2 = action.payload
     },
     setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
       console.log("HOI")
@@ -258,8 +265,8 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 // Export Actions
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
   setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
-  setSelectedSubtitleFlavor, setFocusSegmentTriggered,
-  setFocusSegmentId, setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
+  setSelectedSubtitleFlavor, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
+  setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
@@ -280,6 +287,8 @@ export const selectFocusSegmentTriggered = (state: { subtitleState: { focusSegme
   state.subtitleState.focusSegmentTriggered
 export const selectFocusSegmentId = (state: { subtitleState: { focusSegmentId: subtitle["focusSegmentId"] } }) =>
   state.subtitleState.focusSegmentId
+export const selectFocusSegmentTriggered2 = (state: { subtitleState: { focusSegmentTriggered2: subtitle["focusSegmentTriggered2"] } }) =>
+  state.subtitleState.focusSegmentTriggered2
 // Hardcoding this value to achieve a desired size for the video player
 // TODO: Don't hardcode this value, instead make the video player component more flexible
 export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>

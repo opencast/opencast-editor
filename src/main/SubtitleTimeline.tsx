@@ -10,6 +10,7 @@ import {
   setCurrentlyAt,
   setFocusSegmentId,
   setFocusSegmentTriggered,
+  setFocusSegmentTriggered2,
 } from '../redux/subtitleSlice'
 import { useDispatch, useSelector } from "react-redux";
 import useResizeObserver from "use-resize-observer";
@@ -306,6 +307,7 @@ const TimelineSubtitleSegment: React.FC<{
     // Inform list view which segment was clicked
     dispatch(setFocusSegmentTriggered(true))
     dispatch(setFocusSegmentId(props.cue.id))
+    dispatch(setFocusSegmentTriggered2(true))
   }
 
   const segmentStyle = css({
