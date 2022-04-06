@@ -327,7 +327,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     ...(flexGapReplacementStyle(10, false)),
     flexGrow: '0.5',
     minWidth: '20px',
-    height: '152px',    // Hackily moves buttons beyond the segment border. Specific value causes buttons from neighboring segments to overlay
+    height: '132px',    // Hackily moves buttons beyond the segment border. Specific value causes buttons from neighboring segments to overlay
     visibility: 'hidden',
   })
 
