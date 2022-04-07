@@ -112,7 +112,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   const deleteTooltip = [
     t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.'),
     t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
-    t('trackSelection.restorerackTooltip', 'Encode and publish this track.')
+    t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
     ][deleteStatus];
   const deleteIcon = [faTrash, faTrash, faTrashRestore][deleteStatus];
   const trackEnabledChange = () => {
