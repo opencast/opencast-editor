@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -20,16 +20,19 @@ for (const lang of locales) {
   })
 }
 
-i18n.use(initReactI18next)
+i18next
+    .use(initReactI18next)
     .use(LanguageDetector)
     .init({
         resources,
-        fallbackLng: 'en-US',
+        fallbackLng: ['en-US', 'en'],
         nonExplicitSupportedLngs: true,
         debug: debug,
   });
 
 if (debug) {
-  console.debug('language', i18n.language);
-  console.debug('languages', i18n.languages);
+  console.debug('language', i18next.language);
+  console.debug('languages', i18next.languages);
 }
+
+export default i18next;

@@ -207,6 +207,8 @@
       "header": "Keyboard Controls",
       "defaultGroupName": "General",
       "missingLabel": "Unknown",
+      "groupCuttingView": "Cutting View",
+      "groupCuttingViewScrubber": "Cutting View - Scrubber",
       "sequenceSeperator": "or",
       "genericError": "Failed to load overview",
       "videoPlayButton": "Play/Pause Video",
