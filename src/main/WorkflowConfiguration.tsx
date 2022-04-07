@@ -8,7 +8,7 @@ import { faTools} from "@fortawesome/free-solid-svg-icons";
 import { faSpinner, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectCaptions } from '../redux/videoSlice'
+import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
