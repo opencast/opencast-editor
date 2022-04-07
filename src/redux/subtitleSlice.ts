@@ -1,11 +1,12 @@
-import { SubtitleCue } from './../types';
-import { createAsyncThunk, createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { Segment, SubtitleCue } from './../types';
+import { createAsyncThunk, createSlice, Dispatch, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
 import { client } from '../util/client';
 import { httpRequestState } from '../types';
 import { WebVTTParser } from 'webvtt-parser';
 import { WritableDraft } from 'immer/dist/internal';
+import { video } from './videoSlice';
 
 export interface subtitle {
   isDisplayEditView: boolean    // Should the edit view be displayed
@@ -308,5 +309,49 @@ export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
 export const selectErrorByFlavor = (state: { subtitleState:
   { errors: subtitle["errors"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   getErrorByFlavor(state.subtitleState.errors, state.subtitleState.selectedSubtitleFlavor)
+
+
+/**
+ * Alternative middleware to setCurrentlyAt.
+ * Will grab the state from videoState to skip past deleted segment if preview
+ * mode is active.
+ */
+export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
+  return (dispatch: Dispatch, getState: any) => {
+    milliseconds = roundToDecimalPlace(milliseconds, 0);
+
+    if (milliseconds < 0) {
+      milliseconds = 0;
+    }
+
+    const allStates = getState() as { videoState: video, subtitleState: subtitle }
+    const segments: Segment[] = allStates.videoState.segments
+    let triggered = false
+
+    if (allStates.subtitleState.isPlayPreview) {
+      for (let i = 0; i < segments.length; i++) {
+        if (segments[i].start < milliseconds && segments[i].end > milliseconds) {
+          if (segments[i].deleted) {
+            milliseconds = segments[i].end + 1
+            for (let j = i; j < segments.length; j++) {
+              if (segments[j].deleted) {
+                milliseconds = segments[j].end + 1
+              } else {
+                break
+              }
+            }
+            triggered = true
+          }
+          break
+        }
+      }
+    }
+
+    dispatch(setCurrentlyAt(milliseconds))
+    if (triggered) {
+      dispatch(setPreviewTriggered(true))
+    }
+  };
+}
 
 export default subtitleSlice.reducer

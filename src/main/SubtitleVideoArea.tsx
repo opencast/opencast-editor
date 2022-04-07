@@ -5,7 +5,6 @@ import { selectCurrentlyAt,
   selectIsPlaying,
   setClickTriggered,
   setIsPlaying,
-  setCurrentlyAtInSeconds,
   selectClickTriggered,
   selectPreviewTriggered,
   setPreviewTriggered,
@@ -14,7 +13,8 @@ import { selectCurrentlyAt,
   selectCurrentlyAtInSeconds,
   selectSelectedSubtitleByFlavor,
   selectIsPlayPreview,
-  setIsPlayPreview} from "../redux/subtitleSlice";
+  setIsPlayPreview,
+  setCurrentlyAtAndTriggerPreview} from "../redux/subtitleSlice";
 import { selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
@@ -127,7 +127,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
             setIsPlaying={setIsPlaying}
             setPreviewTriggered={setPreviewTriggered}
             setClickTriggered={setClickTriggered}
-            setCurrentlyAtInSeconds={setCurrentlyAtInSeconds}
+            setCurrentlyAt={setCurrentlyAtAndTriggerPreview}
             setAspectRatio={setAspectRatio}
           />
           <VideoControls

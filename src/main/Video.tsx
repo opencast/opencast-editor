@@ -9,9 +9,9 @@ import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
+  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
@@ -83,7 +83,7 @@ const Video: React.FC<{}> = () => {
       setIsPlaying={setIsPlaying}
       setPreviewTriggered={setPreviewTriggered}
       setClickTriggered={setClickTriggered}
-      setCurrentlyAtInSeconds={setCurrentlyAtInSeconds}
+      setCurrentlyAt={setCurrentlyAt}
       setAspectRatio={setAspectRatio}
     />);
   }
@@ -142,7 +142,7 @@ export const VideoPlayer: React.FC<{
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
   setPreviewTriggered: ActionCreatorWithPayload<any, string>,
   setClickTriggered: ActionCreatorWithPayload<any, string>,
-  setCurrentlyAtInSeconds: ActionCreatorWithPayload<number, string>,
+  setCurrentlyAt: any,
   setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
 }> = ({
   dataKey,
@@ -157,7 +157,7 @@ export const VideoPlayer: React.FC<{
   setIsPlaying,
   setPreviewTriggered,
   setClickTriggered,
-  setCurrentlyAtInSeconds,
+  setCurrentlyAt,
   setAspectRatio,
 }) => {
 
@@ -183,7 +183,7 @@ export const VideoPlayer: React.FC<{
     if (isPrimary) {
       // Only update redux if there was a substantial change
       if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) && state.playedSeconds !== 0) {
-        dispatch(setCurrentlyAtInSeconds(state.playedSeconds))
+        dispatch(setCurrentlyAt(state.playedSeconds * 1000))
       }
     }
   }
@@ -212,7 +212,7 @@ export const VideoPlayer: React.FC<{
   const onEndedCallback = () => {
     if (isPrimary) {
       dispatch(setIsPlaying(false));
-      dispatch(setCurrentlyAtInSeconds(duration)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+      dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
     }
   }
 

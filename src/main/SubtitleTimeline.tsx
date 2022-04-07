@@ -342,7 +342,6 @@ const TimelineSubtitleSegment: React.FC<{
   })
 
   return (
-    <div>
       <Draggable
         onStart={onStartDrag}
         onStop={onStopDrag}
@@ -369,7 +368,6 @@ const TimelineSubtitleSegment: React.FC<{
           </div>
         </Resizable>
       </Draggable>
-    </div>
   )
 })
 
