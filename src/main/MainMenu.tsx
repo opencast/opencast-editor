@@ -3,7 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faKeyboard, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faKeyboard } from "@fortawesome/free-solid-svg-icons";
 import { faClosedCaptioning } from "@fortawesome/free-regular-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -94,7 +94,7 @@ const MainMenu: React.FC<{}> = () => {
 };
 
 interface mainMenuButtonInterface {
-  iconName: IconDefinition,
+  iconName: any, // Unfortunately, icons from different packages don't share the same IconDefinition type. Works anyway.
   stateName: mainMenu["value"],
   bottomText: string,
   ariaLabelText: string;
