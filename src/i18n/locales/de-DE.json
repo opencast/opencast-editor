@@ -185,6 +185,8 @@
         "header": "Tastatursteuerung",
         "defaultGroupName": "Allgemein",
         "missingLabel": "Unbekannt",
+        "groupCuttingView": "Schnittansicht",
+        "groupCuttingViewScrubber": "Schnittansicht - Scrubber",
         "sequenceSeperator": "oder",
         "genericError": "Fehler beim Laden der Übersicht",
         "videoPlayButton": "Video abspielen/pausieren",
