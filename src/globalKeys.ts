@@ -4,11 +4,10 @@
  */
 import { KeyMap } from "react-hotkeys";
 import { isMacOs } from 'react-device-detect';
-import i18next from "i18next";
 
 // Groups for displaying hotkeys in the overview page
-const groupCuttingView = "Cutting View"
-const groupCuttingViewScrubber = "Cutting View - Scrubber"
+const groupCuttingView = 'keyboardControls.groupCuttingView'
+const groupCuttingViewScrubber = 'keyboardControls.groupCuttingViewScrubber'
 
 /**
  * Helper function that rewrites keys based on the OS
@@ -27,37 +26,37 @@ const rewriteKeys = (key: string) => {
  */
 export const cuttingKeyMap: KeyMap = {
   cut: {
-    name: i18next.t("cuttingActions.cut-button"),
+    name: "cuttingActions.cut-button",
     sequence: rewriteKeys("Control+Alt+c"),
     action: "keydown",
     group: groupCuttingView,
   },
   delete: {
-    name: i18next.t("cuttingActions.delete-button"),
+    name: "cuttingActions.delete-button",
     sequence: rewriteKeys("Control+Alt+d"),
     action: "keydown",
     group: groupCuttingView,
   },
   mergeLeft: {
-    name: i18next.t("cuttingActions.mergeLeft-button"),
+    name: "cuttingActions.mergeLeft-button",
     sequence: rewriteKeys("Control+Alt+n"),
     action: "keydown",
     group: groupCuttingView,
   },
   mergeRight: {
-    name: i18next.t("cuttingActions.mergeRight-button"),
+    name: "cuttingActions.mergeRight-button",
     sequence: rewriteKeys("Control+Alt+m"),
     action: "keydown",
     group: groupCuttingView,
   },
   preview: {
-    name: i18next.t("video.previewButton"),
+    name: "video.previewButton",
     sequence: rewriteKeys("Control+Alt+p"),
     action: "keydown",
     group: groupCuttingView,
   },
   play: {
-    name: i18next.t("keyboardControls.videoPlayButton"),
+    name: "keyboardControls.videoPlayButton",
     sequence: rewriteKeys("Space"),
     action: "keydown",
     group: groupCuttingView,
@@ -69,7 +68,7 @@ export const cuttingKeyMap: KeyMap = {
  */
 export const scrubberKeyMap: KeyMap = {
   left: {
-    name: i18next.t("keyboardControls.scrubberLeft"),
+    name: "keyboardControls.scrubberLeft",
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+j"),
     sequences: [rewriteKeys("Control+Alt+j"), "Left"],
@@ -77,7 +76,7 @@ export const scrubberKeyMap: KeyMap = {
     group: groupCuttingViewScrubber,
   },
   right: {
-    name: i18next.t("keyboardControls.scrubberRight"),
+    name: "keyboardControls.scrubberRight",
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+l"),
     sequences: [rewriteKeys("Control+Alt+l"), "Right"],
@@ -85,7 +84,7 @@ export const scrubberKeyMap: KeyMap = {
     group: groupCuttingViewScrubber,
   },
   increase: {
-    name: i18next.t("keyboardControls.scubberIncrease"),
+    name: "keyboardControls.scubberIncrease",
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+i"),
     sequences: [rewriteKeys("Control+Alt+i"), "Up"],
@@ -93,7 +92,7 @@ export const scrubberKeyMap: KeyMap = {
     group: groupCuttingViewScrubber,
   },
   decrease: {
-    name: i18next.t("keyboardControls.scrubberDecrease"),
+    name: "keyboardControls.scrubberDecrease",
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+k"),
     sequences: [rewriteKeys("Control+Alt+k"), "Down"],
