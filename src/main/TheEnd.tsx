@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector } from 'react-redux';
-import { selectDuration } from '../redux/videoSlice'
 import { selectEndState } from '../redux/endSlice'
 import { basicButtonStyle, flexGapReplacementStyle, nagivationButtonStyle } from "../cssStyles";
 
@@ -23,7 +22,6 @@ const TheEnd : React.FC<{}> = () => {
 
   // Init redux variables
   const endState = useSelector(selectEndState)
-  const duration = useSelector(selectDuration)
 
   const icon = () => {
     if (endState === 'discarded') {
@@ -37,8 +35,7 @@ const TheEnd : React.FC<{}> = () => {
     if (endState === 'discarded') {
       return t("theEnd.discarded-text")
     } else if (endState === 'success') {
-      return t("theEnd.info-text", {duration: `${new Date((duration * 2)).toISOString().substr(11, 8)}`}
-      )
+      return t("theEnd.info-text")
     }
   }
 
@@ -53,7 +50,7 @@ const TheEnd : React.FC<{}> = () => {
   })
 
   return (
-    <div css={theEndStyle} title="The End">
+    <div css={theEndStyle}>
       <FontAwesomeIcon icon={icon()} size="10x" />
       <div>{text()}</div>
       {(endState === 'discarded') && <StartOverButton />}
