@@ -66,23 +66,23 @@ const initialState: metadata & httpRequestState & postRequestState = {
 }
 
 export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async () => {
-  if (!settings.mediaPackageId) {
-    throw new Error("Missing mediaPackageId")
+  if (!settings.id) {
+    throw new Error("Missing media package identifier")
   }
 
-  const response = await client.get(`${settings.opencast.url}/editor/${settings.mediaPackageId}/metadata.json`)
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/metadata.json`)
   return response
 })
 
 export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, { getState }) => {
-  if (!settings.mediaPackageId) {
-    throw new Error("Missing mediaPackageId")
+  if (!settings.id) {
+    throw new Error("Missing media package identifier")
   }
 
   // TODO: Get only metadataState instead of all states
   const allStates = getState() as { metadataState: { catalogs: metadata["catalogs"] } }
 
-  const response = await client.post(`${settings.opencast.url}/editor/${settings.mediaPackageId}/metadata.json`,
+  const response = await client.post(`${settings.opencast.url}/editor/${settings.id}/metadata.json`,
     allStates.metadataState.catalogs
   )
 
@@ -100,8 +100,14 @@ const metadataSlice = createSlice({
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value
       state.hasChanges = true
     },
+    setFieldReadonly: (state, action: any) => {
+      state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].readOnly = action.payload.value
+    },
     setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
       state.hasChanges = action.payload
+    },
+    resetPostRequestState: (state) => {
+      state.postStatus = 'idle'
     }
   },
   extraReducers: builder => {
@@ -136,7 +142,7 @@ const metadataSlice = createSlice({
   }
 })
 
-export const { setFieldValue, setHasChanges } = metadataSlice.actions
+export const { setFieldValue, setHasChanges, setFieldReadonly,resetPostRequestState } = metadataSlice.actions
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs

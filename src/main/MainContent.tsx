@@ -4,7 +4,9 @@ import Video from './Video';
 import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
+import TrackSelection from './TrackSelection';
 import Finish from "./Finish"
+import KeyboardControls from "./KeyboardControls";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
@@ -38,37 +40,66 @@ const MainContent: React.FC<{}> = () => {
     }
   });
 
+  // Return display 'flex' if state is currently active
+  // also keep track if any state was activated
+  var stateActive = false;
+  let displayState = (state: MainMenuStateNames): object => {
+    if (mainMenuState === state) {
+      stateActive = true;
+      return { display: "flex" };
+    }
+    return { display: 'none' };
+  }
+
   const cuttingStyle = css({
-    display: mainMenuState !== MainMenuStateNames.cutting ? 'none' :'flex',
+    ...displayState(MainMenuStateNames.cutting),
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
-    paddingLeft: '20px',
+    paddingLeft: '161px',
   })
 
   const metadataStyle = css({
-    display: mainMenuState !== MainMenuStateNames.metadata ? 'none' :'flex',
+    ...displayState(MainMenuStateNames.metadata),
     // flexDirection: 'column' as const,
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
-    paddingLeft: '20px',
+    paddingLeft: '161px',
+  })
+
+  const trackSelectStyle = css({
+    ...displayState(MainMenuStateNames.trackSelection),
+    flexDirection: 'column' as const,
+    alignContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '161px',
+    height: '100%',
   })
 
   const finishStyle = css({
-    display: mainMenuState !== MainMenuStateNames.finish ? 'none' : 'flex',
+    ...displayState(MainMenuStateNames.finish),
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
+    paddingLeft: '161px',
     height: '100%',
   })
 
+  const keyboardControlsStyle = css({
+    ...displayState(MainMenuStateNames.keyboardControls),
+    // flexDirection: 'column' as const,
+    // justifyContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '161px',
+  })
+
   const defaultStyle = css({
-    display: (mainMenuState === MainMenuStateNames.cutting || mainMenuState === MainMenuStateNames.finish
-              || mainMenuState === MainMenuStateNames.metadata)
-              ? 'none' : 'flex',
+    display: stateActive ? 'none' : 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
@@ -85,8 +116,14 @@ const MainContent: React.FC<{}> = () => {
       <div css={metadataStyle}>
           <Metadata />
       </div>
+      <div css={trackSelectStyle}>
+          <TrackSelection />
+      </div>
       <div css={finishStyle}>
         <Finish />
+      </div>
+      <div css={keyboardControlsStyle}>
+          <KeyboardControls />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />

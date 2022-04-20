@@ -47,7 +47,8 @@ export function Waveform(opts) {
       })
       .catch((e) => {
         console.log("Waveform Worker: " + e);
-        this.onarne = e.toString();
+        this._error = e.toString()
+        this.onerror.forEach(fn => fn(e.toString()));
       });
   }
 
@@ -69,17 +70,20 @@ export function Waveform(opts) {
   });
 
   var _error = "";
-  Object.defineProperty(this, 'onarne', {
+  var _errorFuncs = [];
+  Object.defineProperty(this, 'onerror', {
     get: function() {
-      return _error;
+      return _errorFuncs;
     },
     set: function(fn, opt) {
       if (typeof fn == 'function') {
-        fn(_error);
-      } else {
-        _error = fn
+        if (this._error && this._error !== "") {
+          fn(_error);
+          return;
+        }
       }
-      return;
+
+      _errorFuncs.push(fn);
     }
   });
 }

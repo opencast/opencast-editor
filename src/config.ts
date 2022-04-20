@@ -18,16 +18,28 @@ const SRC_SERVER = 'src-server';
 const SRC_URL = 'src-url';
 
 /**
+ * Possible configuration values for a metadata catalog field
+ */
+export interface configureFieldsAttributes {
+  show: boolean,
+  readonly: boolean,
+}
+
+/**
  * Settings interface
  */
 interface iSettings {
-  mediaPackageId: string | undefined,
+  id: string | undefined,
   opencast: {
     url: string,
     name: string | undefined,
     password: string | undefined,
   },
   metadata: {
+    show: boolean,
+    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } }  | undefined,
+  },
+  trackSelection: {
     show: boolean,
   },
   thumbnail: {
@@ -43,7 +55,7 @@ interface iSettings {
  * settings: contains the combined values from all other setting objects
  */
 var defaultSettings: iSettings = {
-  mediaPackageId: undefined,
+  id: undefined,
   opencast: {
     url: window.location.origin,
     name: undefined,
@@ -51,9 +63,13 @@ var defaultSettings: iSettings = {
   },
   metadata: {
     show: true,
+    configureFields: undefined,
+  },
+  trackSelection: {
+    show: true,
   },
   thumbnail: {
-    show: true,
+    show: false,
   }
 }
 var configFileSettings: iSettings
@@ -77,10 +93,19 @@ export const init = async () => {
   var urlParams = new URLSearchParams(window.location.search);
 
   let rawUrlSettings = {};
-  urlParams.forEach(function(value, key) {
+  urlParams.forEach((value, key) => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
     let obj : {[k: string]: any} = rawUrlSettings;
+    if (key.startsWith('opencast.')) {
+      return;
+    }
+
+    // Fallback for old parameter
+    if (key === 'mediaPackageId') {
+      key = 'id';
+    }
+
     const segments = key.split('.');
     segments.slice(0, -1).forEach((segment) => {
       if (!(segment in obj)) {
@@ -235,6 +260,29 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
+  'objectsWithinObjects': (v: any, allowParse: any) => {
+    for (let catalogName in v) {
+      if (typeof catalogName !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+      for (let fieldName in v[catalogName]) {
+        if (typeof fieldName !== 'string') {
+          throw new Error("is not a string, but should be");
+        }
+        for (let attributeName in v[catalogName][fieldName]) {
+          if (typeof attributeName !== 'string') {
+            throw new Error("is not a string, but should be");
+          }
+          if (attributeName === 'show' && typeof v[catalogName][fieldName][attributeName] !== 'boolean') {
+            throw new Error("is not a boolean");
+          }
+          if (attributeName === 'readonly' && typeof v[catalogName][fieldName][attributeName] !== 'boolean') {
+            throw new Error("is not a boolean");
+          }
+        }
+      }
+    }
+  }
 };
 
 // Defines all potential settings and their types.
@@ -248,13 +296,17 @@ const types = {
 // input is valid, but is replaced by that new value. See the `types` object
 // above for some examples.
 const SCHEMA = {
-  mediaPackageId: types.string,
+  id: types.string,
   opencast: {
     url: types.string,
     name: types.string,
     password: types.string,
   },
   metadata: {
+    show : types.boolean,
+    configureFields: types.objectsWithinObjects,
+  },
+  trackSelection: {
     show : types.boolean,
   },
   thumbnail: {

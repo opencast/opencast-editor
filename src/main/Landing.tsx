@@ -42,12 +42,14 @@ import { useTranslation } from 'react-i18next';
         </li>
         <li>
           {t("landing.start-editing-1")}
-          <code> ?=mediaPackageId=[media-package-id]</code>
+          <code> ?=id=[media-package-id]</code>
           {t("landing.start-editing-2")}
         </li>
         <li>
           {t("landing.link-to-documentation")}
-          <a href="https://docs.opencast.org/stable/admin/">docs.opencast.org</a>
+          <a href="https://docs.opencast.org/stable/admin/modules/editor/">
+            docs.opencast.org
+          </a>
         </li>
       </div>
     </div>
