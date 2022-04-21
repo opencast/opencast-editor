@@ -452,7 +452,7 @@ const VideoHeader: React.FC<{}> = () => {
       presenter_header = <div css={titleStyle} title={t("video.presenter-tooltip")}>by {presenters.join(", ")}</div>
   }
   return (
-    <div title={t("video.area-tooltip")} css={{fontSize: '16px'}}>
+    <div css={{fontSize: '16px'}}>
       <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>
         {metadataTitle ? metadataTitle : title}
       </div>

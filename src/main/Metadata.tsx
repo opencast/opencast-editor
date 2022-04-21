@@ -13,8 +13,8 @@ import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
 import {
-  KeyboardDateTimePicker,
-  KeyboardTimePicker,
+  DateTimePicker,
+  TimePicker,
   showErrorOnBlur,
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
@@ -93,6 +93,10 @@ const Metadata: React.FC<{}> = () => {
     // maxWidth: '1500px',
     // margin: '10px',
     padding: '20px',
+    marginLeft:'auto',
+    marginRight:'auto',
+    minWidth: '50%',
+    display: 'grid',
   })
 
   const fieldStyle = css({
@@ -110,17 +114,15 @@ const Metadata: React.FC<{}> = () => {
   })
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
-    return (
-      css({
-        flex: '1',
-        fontSize: '1em',
-        marginLeft: '15px',
-        borderRadius: '5px',
-        backgroundColor: 'snow',
-        boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-        ...isReadOnly && {color: 'grey'}
-      })
-    );
+    return css({
+      flex: '1',
+      fontSize: '1em',
+      marginLeft: '15px',
+      borderRadius: '5px',
+      backgroundColor: 'snow',
+      boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
+      ...(isReadOnly && {color: 'grey'})
+    });
   }
 
   const inputFieldTypeStyle = (isReadOnly: boolean) => {
@@ -155,14 +157,12 @@ const Metadata: React.FC<{}> = () => {
   }
 
   const validateStyle = (isError: boolean) => {
-    return (
-      css({
-        lineHeight: '32px',
-        marginLeft: '10px',
-        ...(isError) && {color: '#800'},
-        fontWeight: 'bold',
-      })
-    )
+    return css({
+      lineHeight: '32px',
+      marginLeft: '10px',
+      ...(isError && {color: '#800'}),
+      fontWeight: 'bold',
+    });
   }
 
   // const buttonContainerStyle = css({
@@ -530,27 +530,33 @@ const Metadata: React.FC<{}> = () => {
 
     } else if (field.type === "date") {
       return (
-        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardDateTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+        <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
+          <DateTimePicker {...input}
             name={field.id}
-            format="yyyy/MM/dd HH:mm"
+            inputFormat="yyyy/MM/dd HH:mm"
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
-            showError={showErrorOnBlur}
+            TextFieldProps={{
+              variant: 'standard', // Removes default outline
+              onBlur: (e: any) => {blurWithSubmit(e, input)},
+              showError: showErrorOnBlur
+            }}
           />
         </div>
       );
     } else if (field.type === "time") {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+          <TimePicker {...input}
             name={field.id}
-            format="HH:mm"
+            inputFormat="HH:mm"
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
-            showError={showErrorOnBlur}
+            TextFieldProps={{
+              variant: 'standard', // Removes default outline
+              onBlur: (e: any) => {blurWithSubmit(e, input)},
+              showError: showErrorOnBlur
+            }}
           />
         </div>
       );
@@ -583,7 +589,7 @@ const Metadata: React.FC<{}> = () => {
 
     /**
      * Wrapper function for component generation.
-     * Handles the special case of KeyboardDateTimePicker/KeyboardTimePicker, which
+     * Handles the special case of DateTimePicker/TimePicker, which
      * can't handle empty string as a value (which is what Opencast uses to
      * represent no date/time)
      */
@@ -603,7 +609,7 @@ const Metadata: React.FC<{}> = () => {
                 type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
                 >
                 {({ input, meta }) => (
-                  <div css={fieldStyle}>
+                  <div css={fieldStyle} data-testid={field.id}>
                     <label css={fieldLabelStyle} htmlFor={input.name}>{
                       i18n.exists(`metadata.labels.${field.id}`) ?
                       t(`metadata.labels.${field.id}`) : field.id
@@ -679,7 +685,7 @@ const Metadata: React.FC<{}> = () => {
                 return renderCatalog(catalog, i, {})
               })}
 
-{/* 
+{/*
                 <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>{t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}</div>
 
 

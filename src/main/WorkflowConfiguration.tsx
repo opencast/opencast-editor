@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, flexGapReplacementStyle } from '../cssStyles'
@@ -70,6 +70,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
+  const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
@@ -79,14 +80,26 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
     }
   }, [dispatch, metadataStatus, workflowStatus])
 
+  // Dispatches first save request
+  // Subsequent save requests should be wrapped in useEffect hooks,
+  // so they are only sent after the previous one has finished
   const saveAndProcess = () => {
+    setMetadataSaveStarted(true)
     dispatch(postMetadata())
-    dispatch(postVideoInformationWithWorkflow({
-      segments: segments,
-      tracks: tracks,
-      workflow: [{id: workflows[selectedWorkflowIndex].id}],
-    }))
   }
+
+  // Subsequent save request
+  useEffect(() => {
+    if (metadataStatus === 'success' && metadataSaveStarted) {
+      setMetadataSaveStarted(false)
+      dispatch(postVideoInformationWithWorkflow({
+        segments: segments,
+        tracks: tracks,
+        workflow: [{id: workflows[selectedWorkflowIndex].id}],
+      }))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadataStatus])
 
   // Update based on current fetching status
   let icon = faFileExport
