@@ -167,7 +167,9 @@
 
     "error": {
       "generic-message": "A critical error has occurred!",
-      "details": "Details: "
+      "details": "Details: ",
+      "workflowActive-errorTitle": "Temporarily unavailable",
+      "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
     },
 
     "landing": {
@@ -180,7 +182,6 @@
 
     "various": {
       "error-details-text": "Details: {{errorMessage}}\n",
-      "error-noDetails-text": "No error details are available.",
       "error-text": "An error has occurred. Please wait a bit and try again.",
       "goBack-button": "No, take me back"
     },

@@ -8,6 +8,7 @@ import { settings } from '../config'
 const initialState: httpRequestState = {
   status: 'idle',
   error: undefined,
+  errorReason: 'unknown',
 }
 
 export const postVideoInformationWithWorkflow = createAsyncThunk('video/postVideoInformationWithWorkflow', async (argument: PostAndProcessEditArgument) => {
