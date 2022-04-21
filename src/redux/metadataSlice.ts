@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
 import { httpRequestState }  from '../types'
@@ -45,6 +45,7 @@ export interface MetadataField {
 
 interface metadata {
   catalogs: Catalog[]
+  hasChanges: boolean         // Did user make changes to metadata view since last save
 }
 
 interface postRequestState {
@@ -55,6 +56,7 @@ interface postRequestState {
 // TODO: Create an 'httpRequestState' array or something
 const initialState: metadata & httpRequestState & postRequestState = {
   catalogs: [],
+  hasChanges: false,
 
   status: 'idle',
   error: undefined,
@@ -64,23 +66,23 @@ const initialState: metadata & httpRequestState & postRequestState = {
 }
 
 export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async () => {
-  if (!settings.mediaPackageId) {
-    throw new Error("Missing mediaPackageId")
+  if (!settings.id) {
+    throw new Error("Missing media package identifier")
   }
 
-  const response = await client.get(`${settings.opencast.url}/editor/${settings.mediaPackageId}/metadata.json`)
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/metadata.json`)
   return response
 })
 
 export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, { getState }) => {
-  if (!settings.mediaPackageId) {
-    throw new Error("Missing mediaPackageId")
+  if (!settings.id) {
+    throw new Error("Missing media package identifier")
   }
 
   // TODO: Get only metadataState instead of all states
   const allStates = getState() as { metadataState: { catalogs: metadata["catalogs"] } }
 
-  const response = await client.post(`${settings.opencast.url}/editor/${settings.mediaPackageId}/metadata.json`,
+  const response = await client.post(`${settings.opencast.url}/editor/${settings.id}/metadata.json`,
     allStates.metadataState.catalogs
   )
 
@@ -96,6 +98,16 @@ const metadataSlice = createSlice({
   reducers: {
     setFieldValue: (state, action: any) => {
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value
+      state.hasChanges = true
+    },
+    setFieldReadonly: (state, action: any) => {
+      state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].readOnly = action.payload.value
+    },
+    setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
+      state.hasChanges = action.payload
+    },
+    resetPostRequestState: (state) => {
+      state.postStatus = 'idle'
     }
   },
   extraReducers: builder => {
@@ -130,10 +142,12 @@ const metadataSlice = createSlice({
   }
 })
 
-export const { setFieldValue } = metadataSlice.actions
+export const { setFieldValue, setHasChanges, setFieldReadonly,resetPostRequestState } = metadataSlice.actions
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs
+export const hasChanges = (state: { metadataState: { hasChanges: metadata["hasChanges"] } }) =>
+  state.metadataState.hasChanges
 export const selectGetStatus = (state: { metadataState: { status: httpRequestState["status"] } }) =>
   state.metadataState.status
 export const selectGetError = (state: { metadataState: { error: httpRequestState["error"] } }) =>

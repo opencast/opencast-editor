@@ -28,6 +28,8 @@ import { useTranslation } from 'react-i18next';
 import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
+import { sleep } from './../util/utilityFunctions'
+
 /**
  * Container for the videos and their controls
  * TODO: Move fetching to a more central part of the app
@@ -137,15 +139,27 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
     }
   }
 
+  // Tries to get video dimensions from the HTML5 elements until they are not 0,
+  // then updates the store
+  async function updateAspectRatio() {
+    if (ref.current && ref.current.getInternalPlayer()) {
+      let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
+      let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+      while (w === 0 || h === 0) {
+        await sleep(100);
+        w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
+        h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+      }
+      dispatch(setAspectRatio({dataKey, width: w, height: h}))
+    }
+  }
+
   // Callback for checking whether the video element is ready
   const onReadyCallback = () => {
     setReady(true);
 
-    if (ref.current && ref.current.getInternalPlayer()) {
-      let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
-      let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
-      dispatch(setAspectRatio({dataKey, width: w, height: h}))
-    }
+    // Update the store with video dimensions for rendering purposes
+    updateAspectRatio();
   }
 
   const onEndedCallback = () => {
@@ -452,7 +466,7 @@ const VideoHeader: React.FC<{}> = () => {
       presenter_header = <div css={titleStyle} title={t("video.presenter-tooltip")}>by {presenters.join(", ")}</div>
   }
   return (
-    <div title={t("video.area-tooltip")} css={{fontSize: '16px'}}>
+    <div css={{fontSize: '16px'}}>
       <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>
         {metadataTitle ? metadataTitle : title}
       </div>

@@ -67,7 +67,7 @@ const StartOverButton: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   const reloadPage = () => {
-    window.location.reload(true);
+    window.location.reload();
   };
 
   return (

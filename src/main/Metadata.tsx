@@ -6,24 +6,26 @@ import { errorBoxStyle } from '../cssStyles'
 import { useSelector, useDispatch } from 'react-redux';
 import {
   fetchMetadata, postMetadata, selectCatalogs,
-  Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus
+  Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus, setFieldReadonly
 } from '../redux/metadataSlice'
 
-import { Form, Field } from 'react-final-form'
+import { Form, Field, FieldInputProps } from 'react-final-form'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
 import {
-  KeyboardDateTimePicker,
-  KeyboardTimePicker,
+  DateTimePicker,
+  TimePicker,
   showErrorOnBlur,
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { DateTime as LuxonDateTime} from "luxon";
+
+import { configureFieldsAttributes, settings } from '../config'
+
 
 /**
  * Creates a Metadata form
@@ -53,6 +55,36 @@ const Metadata: React.FC<{}> = () => {
     }
   }, [getStatus, dispatch])
 
+  // Overwrite readonly property of fields based on config settings
+  useEffect(() => {
+    if (getStatus === 'success') {
+      for(let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
+        if (settings.metadata.configureFields) {
+          let configureFields = settings.metadata.configureFields
+          let catalog = catalogs[catalogIndex]
+
+          if (catalog.title in configureFields) {
+            if (Object.keys(configureFields[catalog.title]).length > 0) {
+              let configureFieldsCatalog = configureFields[catalog.title]
+
+              for (let fieldIndex = 0; fieldIndex < catalog.fields.length; fieldIndex++) {
+                if (catalog.fields[fieldIndex].id in configureFieldsCatalog) {
+                  if ("readonly" in configureFieldsCatalog[catalog.fields[fieldIndex].id]) {
+                    dispatch(setFieldReadonly({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
+                      value: configureFieldsCatalog[catalog.fields[fieldIndex].id].readonly
+                    }))
+                  }
+                }
+              }
+            } else {
+              return undefined
+            }
+          }
+        }
+      }
+    }
+  }, [getStatus, catalogs, dispatch])
+
   /**
    * CSS
    */
@@ -61,6 +93,10 @@ const Metadata: React.FC<{}> = () => {
     // maxWidth: '1500px',
     // margin: '10px',
     padding: '20px',
+    marginLeft:'auto',
+    marginRight:'auto',
+    minWidth: '50%',
+    display: 'grid',
   })
 
   const fieldStyle = css({
@@ -78,17 +114,15 @@ const Metadata: React.FC<{}> = () => {
   })
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
-    return (
-      css({
-        flex: '1',
-        fontSize: '1em',
-        marginLeft: '15px',
-        borderRadius: '5px',
-        backgroundColor: 'snow',
-        boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-        ...isReadOnly && {color: 'grey'}
-      })
-    );
+    return css({
+      flex: '1',
+      fontSize: '1em',
+      marginLeft: '15px',
+      borderRadius: '5px',
+      backgroundColor: 'snow',
+      boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
+      ...(isReadOnly && {color: 'grey'})
+    });
   }
 
   const inputFieldTypeStyle = (isReadOnly: boolean) => {
@@ -123,14 +157,12 @@ const Metadata: React.FC<{}> = () => {
   }
 
   const validateStyle = (isError: boolean) => {
-    return (
-      css({
-        lineHeight: '32px',
-        marginLeft: '10px',
-        ...(isError) && {color: '#800'},
-        fontWeight: 'bold',
-      })
-    )
+    return css({
+      lineHeight: '32px',
+      marginLeft: '10px',
+      ...(isError && {color: '#800'}),
+      fontWeight: 'bold',
+    });
   }
 
   // const buttonContainerStyle = css({
@@ -249,6 +281,30 @@ const Metadata: React.FC<{}> = () => {
     return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
+  /**
+   * Validator for the date time fields
+   * @param date
+   */
+  const dateTimeValidator = (date: any) => {
+    // Empty field is valid value in Opencast
+    if (!date) {
+      return undefined
+    }
+
+    let dt = undefined
+    if (Object.prototype.toString.call(date) === '[object Date]') {
+      dt = LuxonDateTime.fromJSDate(date);
+    }
+    if (typeof(date) === 'string') {
+      dt = LuxonDateTime.fromISO(date);
+    }
+
+    if (dt) {
+      return dt.isValid ? undefined : t("metadata.validation.datetime")
+    }
+    return t("metadata.validation.datetime")
+  }
+
   // // Function that combines multiple validation functions. Needs to be made typescript conform
   // const composeValidators = (...validators) => value =>
   // validators.reduce((error, validator) => error || validator(value), undefined)
@@ -263,6 +319,8 @@ const Metadata: React.FC<{}> = () => {
       return required
     } else if (field.id === "duration") {
       return duration
+    } else if (field.type === "date" || field.type === "time") {
+      return dateTimeValidator
     } else {
       return undefined
     }
@@ -342,9 +400,16 @@ const Metadata: React.FC<{}> = () => {
 
     // For these fields, the value needs to be inside an array
     if (field && (field.type === "date" || field.type === "time") && Object.prototype.toString.call(returnValue) === '[object Date]') {
-      returnValue = returnValue.toJSON()
+      // If invalid date
+      if ((isNaN(returnValue.getTime()))) {
+        // Do nothing
+      } else {
+        returnValue = returnValue.toJSON()
+      }
     } else if (field && (field.type === "date" || field.type === "time") && typeof returnValue === "string") {
-      returnValue = new Date(returnValue).toJSON()
+      if (returnValue !== "") { // Empty string is allowed
+        returnValue = new Date(returnValue).toJSON()
+      }
     }
 
     return returnValue
@@ -439,8 +504,10 @@ const Metadata: React.FC<{}> = () => {
           <CreatableSelect {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
             isMulti
-            isClearable
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
@@ -450,7 +517,10 @@ const Metadata: React.FC<{}> = () => {
         return (
           <Select {...input}
             onBlur={e => {blurWithSubmit(e, input)}}
-            readOnly={field.readOnly}
+            isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
+            isSearchable={!field.readOnly}    // by setting other settings
+            openMenuOnClick={!field.readOnly}
+            menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
             styles={selectFieldTypeStyle}
             css={fieldTypeStyle(field.readOnly)}>
@@ -460,27 +530,33 @@ const Metadata: React.FC<{}> = () => {
 
     } else if (field.type === "date") {
       return (
-        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardDateTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+        <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
+          <DateTimePicker {...input}
             name={field.id}
-            format="yyyy/MM/dd HH:mm"
+            inputFormat="yyyy/MM/dd HH:mm"
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
-            showError={showErrorOnBlur}
+            TextFieldProps={{
+              variant: 'standard', // Removes default outline
+              onBlur: (e: any) => {blurWithSubmit(e, input)},
+              showError: showErrorOnBlur
+            }}
           />
         </div>
       );
     } else if (field.type === "time") {
       return (
         <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <KeyboardTimePicker {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+          <TimePicker {...input}
             name={field.id}
-            format="HH:mm"
+            inputFormat="HH:mm"
             disabled={field.readOnly}
             dateFunsUtils={DateFnsUtils}
-            showError={showErrorOnBlur}
+            TextFieldProps={{
+              variant: 'standard', // Removes default outline
+              onBlur: (e: any) => {blurWithSubmit(e, input)},
+              showError: showErrorOnBlur
+            }}
           />
         </div>
       );
@@ -510,6 +586,22 @@ const Metadata: React.FC<{}> = () => {
    * @param fieldIndex
    */
   const renderField = (field: MetadataField, catalogIndex: number, fieldIndex: number) => {
+
+    /**
+     * Wrapper function for component generation.
+     * Handles the special case of DateTimePicker/TimePicker, which
+     * can't handle empty string as a value (which is what Opencast uses to
+     * represent no date/time)
+     */
+    const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
+      if ((field.type === "date" || field.type === "time") && input.value === "") {
+        var {value, ...other} = input
+        return generateComponent(field, other)
+      } else {
+        return generateComponent(field, input)
+      }
+    }
+
     return (
         <Field key={fieldIndex}
                 name={"catalog" + catalogIndex + "." + field.id}
@@ -517,27 +609,25 @@ const Metadata: React.FC<{}> = () => {
                 type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
                 >
                 {({ input, meta }) => (
-                  <div css={fieldStyle}>
+                  <div css={fieldStyle} data-testid={field.id}>
                     <label css={fieldLabelStyle} htmlFor={input.name}>{
                       i18n.exists(`metadata.labels.${field.id}`) ?
                       t(`metadata.labels.${field.id}`) : field.id
                     }</label>
 
-                    {generateComponent(field, input)}
+                    {generateComponentWithModifiedInput(field, input)}
                     {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
-                    {meta.modified && meta.valid && !meta.active && <span css={validateStyle(false)}><FontAwesomeIcon icon={faCheck}/></span>}
                   </div>
                 )}
         </Field>
     );
   }
 
-  /**
-   * Renders a single catalog (e.g. dublincore/episode) in the form
-   * @param catalog
-   * @param catalogIndex
-   */
-  const renderCatalog = (catalog: Catalog, catalogIndex: number) => {
+  const renderCatalog = (
+    catalog: Catalog,
+    catalogIndex: number,
+    configureFields: { [key: string]: configureFieldsAttributes }
+  ) => {
     return (
       <div key={catalogIndex}>
         <h2>
@@ -547,6 +637,14 @@ const Metadata: React.FC<{}> = () => {
         </h2>
 
         {catalog.fields.map((field, i) => {
+          // Render fields based on given array (usually parsed from config settings)
+          if (field.id in configureFields && "show" in configureFields[field.id]) {
+            if (configureFields[field.id].show) {
+              return renderField(field, catalogIndex, i)
+            } else {
+              return undefined
+            }
+          }
           return renderField(field, catalogIndex, i)
         })}
 
@@ -576,10 +674,21 @@ const Metadata: React.FC<{}> = () => {
               </div>
 
               {catalogs.map((catalog, i) => {
-                return renderCatalog(catalog, i)
+                if (settings.metadata.configureFields) {
+                  if (catalog.title in settings.metadata.configureFields) {
+                    // If there are no fields for a given catalog, do not render
+                    if (Object.keys(settings.metadata.configureFields[catalog.title]).length > 0) {
+                      return renderCatalog(catalog, i, settings.metadata.configureFields[catalog.title])
+                    } else {
+                      return undefined
+                    }
+                  }
+                }
+                // If there are no settings for a given catalog, just render it completely
+                return renderCatalog(catalog, i, {})
               })}
 
-{/* 
+{/*
                 <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>{t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}</div>
 
 

@@ -1,0 +1,42 @@
+name: Playwright UI-Test
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v2
+
+    - name: Install Node Dependency
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright
+      run: npm i -D @playwright/test
+
+    - name: Install supported browsers
+      run: npx playwright install
+
+    - name: Prepare configuration
+      run: >
+        sed -i
+        's_https://develop.opencast.org_http://localhost:3000_'
+        public/editor-settings.toml
+
+    - name: Prepare mock files
+      run: cp -r .github/mock/editor public/
+
+    - name: Run playwright-test
+      run: npx playwright test --config=playwright.config.ts

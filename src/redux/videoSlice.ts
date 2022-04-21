@@ -17,6 +17,7 @@ export interface video {
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowIndex: number,  // Index of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
+  hasChanges: boolean             // Did user make changes in cutting view since last save
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
@@ -37,6 +38,7 @@ export const initialState: video & httpRequestState = {
   previewTriggered: false,
   clickTriggered: false,
   aspectRatios: [],
+  hasChanges: false,
 
   videoURLs: [],
   videoCount: 0,
@@ -50,12 +52,12 @@ export const initialState: video & httpRequestState = {
 }
 
 export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
-  if (!settings.mediaPackageId) {
-    throw new Error("Missing mediaPackageId")
+  if (!settings.id) {
+    throw new Error("Missing media package identifier")
   }
 
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  const response = await client.get(`${settings.opencast.url}/editor/${settings.mediaPackageId}/edit.json`)
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/edit.json`)
   return response
 })
 
@@ -82,6 +84,15 @@ export const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
+    setTrackEnabled: (state, action) => {
+      for (let track of state.tracks) {
+        if (track.id === action.payload.id) {
+          track.audio_stream.enabled = action.payload.enabled;
+          track.video_stream.enabled = action.payload.enabled;
+        }
+      }
+      state.hasChanges = true;
+    },
     setIsPlaying: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlaying = action.payload;
     },
@@ -106,6 +117,9 @@ export const videoSlice = createSlice({
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
+    setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
+      state.hasChanges = action.payload
+    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -125,18 +139,23 @@ export const videoSlice = createSlice({
 
       // Add the new segments and remove the old one
       state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
+
+      state.hasChanges = true
     },
     markAsDeletedOrAlive: (state) => {
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
+      state.hasChanges = true
     },
     setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowIndex"]>) => {
       state.selectedWorkflowIndex = action.payload
     },
     mergeLeft: (state) => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex - 1)
+      state.hasChanges = true
     },
     mergeRight: (state) => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
+      state.hasChanges = true
     },
   },
   // For Async Requests
@@ -173,9 +192,7 @@ export const videoSlice = createSlice({
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
         state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
-          if (n1.displayOrder > n2.displayOrder) { return 1; }
-          if (n1.displayOrder < n2.displayOrder) { return -1; }
-          return 0;
+          return n1.displayOrder - n2.displayOrder;
         });
 
         state.aspectRatios = new Array(state.videoCount)
@@ -242,13 +259,20 @@ const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, 
 const skipDeletedSegments = (state: WritableDraft<video>) => {
   if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
       let endTime = state.segments[state.activeSegmentIndex].end
-      let index = state.activeSegmentIndex
-      while (index < state.segments.length && state.segments[index].deleted) {
+
+      for (let index = state.activeSegmentIndex; index < state.segments.length; index++) {
         endTime = state.segments[index].end
-        index++
+
+        if (!state.segments[index].deleted) {
+          // Need to at +1 as start and end of neighbouring segments are identical
+          endTime = state.segments[index].start + 1
+          break
+        }
       }
+
       state.currentlyAt = endTime
       state.previewTriggered = true
+      updateActiveSegment(state);
     }
 }
 
@@ -267,9 +291,9 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
-export const { setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds, addSegment, setAspectRatio, cut,
-  markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
+  addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
+  setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -295,6 +319,8 @@ export const selectIsCurrentSegmentAlive = (state: { videoState:
 export const selectSelectedWorkflowIndex = (state: { videoState:
   { selectedWorkflowIndex: video["selectedWorkflowIndex"]; }; }) =>
   state.videoState.selectedWorkflowIndex
+export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
+  state.videoState.hasChanges
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
@@ -303,8 +329,7 @@ export const selectDuration = (state: { videoState: { duration: video["duration"
 export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
-export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) =>
-  state.videoState.tracks
+export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
