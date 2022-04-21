@@ -6,7 +6,7 @@ Opencast Video Editor
 [![Demo deployment](https://img.shields.io/badge/demo-editor.opencast.org-blue)
 ](https://editor.opencast.org)
 
-The Opencast Video Editor is a stand-alone tool included by [Opencast](https://opencast.org) to cut and arrange recordings.
+The Opencast Video Editor is a tool included by [Opencast](https://opencast.org) to cut and arrange recordings.
 
 
 Quick Test
