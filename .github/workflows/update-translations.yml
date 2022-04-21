@@ -1,0 +1,45 @@
+name: Update translations
+
+on:
+  schedule:
+  - cron: "0 5 * * 1"
+
+jobs:
+  update-translations:
+    if: github.repository_owner == 'opencast'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: prepare git
+        run: |
+          git config --global user.email 'crowdin-bot@editor.opencast.org'
+          git config --global user.name 'Crowdin Bot'
+
+      - name: prepare crowdin client
+        run: |
+          wget --quiet https://artifacts.crowdin.com/repo/deb/crowdin3.deb -O crowdin.deb
+          sudo dpkg -i crowdin.deb
+
+      - name: download translations
+        env:
+          CROWDIN_TOKEN: ${{ secrets.CROWDIN_TOKEN }}
+        run: |
+          crowdin download --config .crowdin.yaml -b main
+
+      - name: add new translations
+        run: |
+          git add src/i18n/locales
+
+      - name: update language list
+        working-directory: src/i18n/locales
+        run: |
+          echo -n '[ "' > locales.json
+          echo -n ??-??.json | sed 's/  */", "/g' >> locales.json
+          echo '" ]' >> locales.json
+
+      - name: upload translations
+        run: |
+          if git commit -m "Automatically update translation keys"; then
+            git push
+          fi

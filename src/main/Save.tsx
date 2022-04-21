@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
@@ -6,7 +6,7 @@ import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave,
+  faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave, faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,16 +43,35 @@ const Save : React.FC<{}> = () => {
     ...(flexGapReplacementStyle(30, false)),
   })
 
+  const render = () => {
+    // Post (successful) save
+    if (postWorkflowStatus === 'success' && postMetadataStatus === 'success') {
+      return(
+        <>
+          <FontAwesomeIcon icon={faCheckCircle} size="10x" />
+          <div>{t("save.success-text")}</div>
+        </>
+      )
+    // Pre save
+    } else {
+      return (
+        <>
+          <span css={{maxWidth: '500px'}}>
+            {t("save.info-text")}
+          </span>
+          <div css={backOrContinueStyle}>
+            <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
+            <SaveButton />
+          </div>
+        </>
+      )
+    }
+  }
+
   return (
     <div css={saveStyle} title={t("save.saveArea-tooltip")}>
       <h1>{t("save.headline-text")}</h1>
-      <span css={{maxWidth: '500px'}}>
-        {t("save.info-text")}
-      </span>
-      <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
-        <SaveButton />
-      </div>
+      {render()}
       <div css={errorBoxStyle(postWorkflowStatus === "failed")} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
@@ -79,6 +98,7 @@ export const SaveButton: React.FC<{}> = () => {
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
+  const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status
   let icon = faSave
@@ -104,13 +124,27 @@ export const SaveButton: React.FC<{}> = () => {
     }
   }
 
+  // Dispatches first save request
+  // Subsequent save requests should be wrapped in useEffect hooks,
+  // so they are only sent after the previous one has finished
   const save = () => {
+    setMetadataSaveStarted(true)
     dispatch(postMetadata())
-    dispatch(postVideoInformation({
-      segments: segments,
-      tracks: tracks,
-    }))
   }
+
+  // Subsequent save request
+  useEffect(() => {
+    if (metadataStatus === 'success' && metadataSaveStarted) {
+      setMetadataSaveStarted(false)
+      console.log("EDIT")
+      dispatch(postVideoInformation({
+        segments: segments,
+        tracks: tracks,
+      }))
+
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadataStatus])
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {

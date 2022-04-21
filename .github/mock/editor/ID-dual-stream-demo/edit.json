@@ -1,0 +1,57 @@
+{
+  "segments": [],
+  "workflows": [
+    {
+      "id": "publish",
+      "name": "Publish",
+      "displayOrder": 1000,
+      "description": ""
+    }
+  ],
+  "tracks": [
+    {
+      "audio_stream": {
+        "available": true,
+        "thumbnail_uri": null,
+        "enabled": true
+      },
+      "video_stream": {
+        "available": true,
+        "thumbnail_uri": null,
+        "enabled": true
+      },
+      "flavor": {
+        "type": "presentation",
+        "subtype": "preview"
+      },
+      "uri": "http://localhost:3000/editor/test.mp4",
+      "id": "f7bb98b5-e02d-4738-8b0b-7c6f6ec24c4f"
+    },
+    {
+      "audio_stream": {
+        "available": true,
+        "thumbnail_uri": null,
+        "enabled": true
+      },
+      "video_stream": {
+        "available": true,
+        "thumbnail_uri": null,
+        "enabled": true
+      },
+      "flavor": {
+        "type": "presenter",
+        "subtype": "preview"
+      },
+      "uri": "http://localhost:3000/editor/test.mp4",
+      "id": "38cbcf48-bc16-4ccf-8346-8bd921d159fe"
+    }
+  ],
+  "title": "Dual-Stream Demo",
+  "date": "2022-02-03T01:02:00Z",
+  "duration": 64715,
+  "series": {
+    "id": null,
+    "title": null
+  },
+  "workflow_active": false
+}

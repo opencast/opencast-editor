@@ -12,7 +12,7 @@
 # This is very useful as demo, but has no purpose otherwise.
 # Type: string | undefined
 # Default: undefined
-mediaPackageId = 'ID-dual-stream-demo'
+id = 'ID-dual-stream-demo'
 
 
 ####
