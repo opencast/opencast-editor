@@ -15,7 +15,7 @@ export interface video {
   segments: Segment[],
   tracks: Track[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
-  selectedWorkflowIndex: number,  // Index of the currently selected workflow
+  selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
 
@@ -34,7 +34,7 @@ export const initialState: video & httpRequestState = {
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
   activeSegmentIndex: 0,
-  selectedWorkflowIndex: 0,
+  selectedWorkflowId: "",
   previewTriggered: false,
   clickTriggered: false,
   aspectRatios: [],
@@ -146,8 +146,8 @@ export const videoSlice = createSlice({
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
       state.hasChanges = true
     },
-    setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowIndex"]>) => {
-      state.selectedWorkflowIndex = action.payload
+    setSelectedWorkflowId: (state, action: PayloadAction<video["selectedWorkflowId"]>) => {
+      state.selectedWorkflowId = action.payload
     },
     mergeLeft: (state) => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex - 1)
@@ -292,7 +292,7 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
+  addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowId, mergeLeft, mergeRight,
   setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
@@ -316,9 +316,9 @@ export const selectActiveSegmentIndex = (state: { videoState: { activeSegmentInd
 export const selectIsCurrentSegmentAlive = (state: { videoState:
   { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
   !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
-export const selectSelectedWorkflowIndex = (state: { videoState:
-  { selectedWorkflowIndex: video["selectedWorkflowIndex"]; }; }) =>
-  state.videoState.selectedWorkflowIndex
+export const selectSelectedWorkflowId = (state: { videoState:
+    { selectedWorkflowId: video["selectedWorkflowId"]; }; }) =>
+    state.videoState.selectedWorkflowId
 export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
 
