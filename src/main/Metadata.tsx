@@ -25,6 +25,8 @@ import { useTranslation } from 'react-i18next';
 import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 
 /**
@@ -531,17 +533,19 @@ const Metadata: React.FC<{}> = () => {
     } else if (field.type === "date") {
       return (
         <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <DateTimePicker {...input}
-            name={field.id}
-            inputFormat="yyyy/MM/dd HH:mm"
-            disabled={field.readOnly}
-            dateFunsUtils={DateFnsUtils}
-            TextFieldProps={{
-              variant: 'standard', // Removes default outline
-              onBlur: (e: any) => {blurWithSubmit(e, input)},
-              showError: showErrorOnBlur
-            }}
-          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DateTimePicker {...input}
+              name={field.id}
+              inputFormat="yyyy/MM/dd HH:mm"
+              disabled={field.readOnly}
+              dateFunsUtils={DateFnsUtils}
+              TextFieldProps={{
+                variant: 'standard', // Removes default outline
+                onBlur: (e: any) => {blurWithSubmit(e, input)},
+                showError: showErrorOnBlur
+              }}
+            />
+          </LocalizationProvider>
         </div>
       );
     } else if (field.type === "time") {
