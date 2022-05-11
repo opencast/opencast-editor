@@ -406,6 +406,11 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             title={t("subtitleList.addSegmentAbove")}
             arial-label={t("subtitleList.addSegmentAbove")}
             onClick={addCueAbove}
+            onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+              event.preventDefault()                      // Prevent page scrolling due to Space bar press
+              event.stopPropagation()                     // Prevent video playback due to Space bar press
+              addCueAbove()
+            }}}
           >
             <FontAwesomeIcon icon={faPlus} size="1x" />
           </div>
@@ -414,6 +419,11 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             title={t("subtitleList.deleteSegment")}
             arial-label={t("subtitleList.deleteSegment")}
             onClick={deleteCue}
+            onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+              event.preventDefault()                      // Prevent page scrolling due to Space bar press
+              event.stopPropagation()                     // Prevent video playback due to Space bar press
+              deleteCue()
+            }}}
           >
             <FontAwesomeIcon icon={faTrash} size="1x" />
           </div>
@@ -422,6 +432,11 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             title={t("subtitleList.addSegmentBelow")}
             arial-label={t("subtitleList.addSegmentBelow")}
             onClick={addCueBelow}
+            onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+              event.preventDefault()                      // Prevent page scrolling due to Space bar press
+              event.stopPropagation()                     // Prevent video playback due to Space bar press
+              addCueBelow()
+            }}}
           >
             <FontAwesomeIcon icon={faPlus} size="1x" />
           </div>
