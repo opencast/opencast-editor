@@ -41,7 +41,6 @@ import { scrubberKeyMap } from "../globalKeys";
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
-    height: '220px',
     width: ((duration / timelineCutoutInMs)) * 100 + '%',    // Total length of timeline based on number of cutouts
     paddingLeft: '50%',
     paddingRight: '50%',
@@ -86,7 +85,7 @@ import { scrubberKeyMap } from "../globalKeys";
   })
 
   return (
-    <div css={{position: 'relative', width: '100%', height: '230px'}}>
+    <div css={{position: 'relative', width: '100%', height: '250px'}}>
       {/* Sits smack dab in the middle and does not move */}
       <div
         css={{position: 'absolute',
@@ -99,7 +98,7 @@ import { scrubberKeyMap } from "../globalKeys";
       </div>
       {/* Scrollable timeline */}
       {/* Container. Has width of parent*/}
-      <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}>
+      <div ref={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}>
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle}>
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}

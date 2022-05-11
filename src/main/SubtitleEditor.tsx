@@ -66,7 +66,8 @@ import { useTranslation } from "react-i18next";
   }
 
   const subtitleEditorStyle = css({
-    display: 'block',
+    display: 'flex',
+    flexDirection: 'column',
     paddingRight: '20px',
     paddingLeft: '20px',
     gap: '20px',
@@ -79,15 +80,14 @@ import { useTranslation } from "react-i18next";
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    height: '5%',
   })
 
   const subAreaStyle = css({
     display: 'flex',
     flexDirection: 'row',
+    flexGrow: 1,  // No fixed height, fill available space
     justifyContent: 'space-between',
-    alignItems: 'center',
-    height: '74%',
+    alignItems: 'top',
     width: '100%',
     paddingTop: '10px',
     paddingBottom: '10px',
