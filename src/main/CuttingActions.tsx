@@ -2,9 +2,9 @@ import React, { SyntheticEvent } from "react";
 
 import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  IconDefinition,
   faCut,
   faStepBackward,
   faStepForward,
@@ -120,7 +120,7 @@ const cuttingActionButtonStyle = {
 };
 
 interface cuttingActionsButtonInterface {
-  iconName: IconDefinition,
+  iconName: IconProp,
   actionName: string,
   actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>, ref: React.RefObject<HTMLDivElement> | undefined) => void,
   action: ActionCreatorWithoutPayload<string>,
