@@ -290,6 +290,7 @@ export const VideoPlayer: React.FC<{
     }
 
     if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
+      // eslint-disable-next-line array-callback-return
       playerConfig.file.tracks.map((t, trackIdx) => {
         const track = document.createElement('track');
         track.kind = t.kind!;
