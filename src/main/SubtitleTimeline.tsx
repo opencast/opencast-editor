@@ -14,7 +14,7 @@ import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import Draggable from "react-draggable";
+import Draggable, { DraggableEvent } from "react-draggable";
 import { SubtitleCue } from "../types";
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
@@ -22,6 +22,14 @@ import { GlobalHotKeys } from "react-hotkeys";
 import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer from "react-indiana-drag-scroll";
 
+/**
+ * Issues:
+ * - Subtitles displayed in the video are duplicated when dragging and dropping
+ * - ScrollContainer callbacks are always triggered when the container is scrolled
+ *   (by user input or external), and since precision is lost when setting scroll,
+ *   currentlyAt will be changed in a subsequent rerender through onEndScroll
+ *   (e.g. from 5.000 to 5.004)
+ */
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
@@ -60,13 +68,18 @@ import ScrollContainer from "react-indiana-drag-scroll";
     let offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / widthMiniTimeline) * (duration)))
+    console.log("setCurrentlyAtToClick: " + currentlyAt + "___" + (offsetX / widthMiniTimeline) * (duration))
   }
 
   // Apply horizonal scrolling when scrolled from somewhere else
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
       const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
-      refTop.current.getElement().scrollTo(((currentlyAt / duration)) * scrollLeftMax, 0)
+      refTop.current.getElement().scrollTo(Math.round((currentlyAt / duration) * scrollLeftMax), 0)
+      console.log("currentlyAt: " + currentlyAt)
+      console.log("duration: " + duration)
+      console.log("scrollLeftMax: " + scrollLeftMax)
+      console.log("useEffect scrollTo: " + (currentlyAt / duration) * scrollLeftMax)
     }
   }, [currentlyAt, duration, width]);
 
@@ -80,6 +93,24 @@ import ScrollContainer from "react-indiana-drag-scroll";
     right: () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
     increase: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
     decrease: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1))
+  }
+
+  const onStartScroll = () => {
+		console.log('onStartScroll');
+  }
+
+
+  const onEndScroll = () => {
+		console.log('onEndScroll');
+    if (refTop && refTop.current) {
+      const offsetX = refTop.current.getElement().scrollLeft
+      const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
+      console.log("offsetX: " + offsetX)
+      console.log("duration: " + duration)
+      console.log("scrollLeftMax: " + scrollLeftMax)
+      console.log("onEndScroll: " + currentlyAt + "___" + (offsetX / scrollLeftMax) * (duration))
+      dispatch(setCurrentlyAt((offsetX / scrollLeftMax) * (duration)))
+    }
   }
 
   // draws a triangle on top of the middle line
@@ -107,7 +138,13 @@ import ScrollContainer from "react-indiana-drag-scroll";
       </div>
       {/* Scrollable timeline */}
       {/* Container. Has width of parent*/}
-      <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}} vertical={false} horizontal={true}>
+      <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}
+        vertical={false}
+        horizontal={true}
+        onStartScroll={onStartScroll}
+        onEndScroll={onEndScroll}
+        ignoreElements={"#no-scrolling"}
+      >
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle} title="Timeline" >
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
@@ -293,11 +330,11 @@ const TimelineSubtitleSegment: React.FC<{
     setAbsoluteTop(0)
   }
 
-  const onStartDrag = () => {
+  const onStartDrag = (e: DraggableEvent) => {
     setIsGrabbed(true)
   }
 
-  const onStopDrag = (e: any, position: any) => {
+  const onStopDrag = (e: DraggableEvent, position: any) => {
     // Update position and thereby start/end times in redux
     const {x} = position
     dispatchNewTimes(
@@ -371,7 +408,7 @@ const TimelineSubtitleSegment: React.FC<{
           //  Fix most likely requires changes in one of those modules
           resizeHandles={['w']}
         >
-          <div css={ segmentStyle } ref={nodeRef} onClick={onClick}>
+          <div css={ segmentStyle } ref={nodeRef} onClick={onClick} id="no-scrolling">
             <span css={textStyle}>{props.cue.text}</span>
           </div>
         </Resizable>
