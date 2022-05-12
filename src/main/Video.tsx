@@ -250,6 +250,16 @@ export const VideoPlayer: React.FC<{
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url])
 
+  // Trigger a workaround for subtitles not being displayed in the video in Firefox
+  useEffect(() => {
+    // Only trigger workaround in Firefox, as it will cause issues in Chrome
+    // @ts-ignore
+    if (typeof InstallTrigger !== 'undefined') {
+      reAddTrack()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtitleUrl])
+
   const playerConfig: Config = {
     file: {
       attributes: {
@@ -259,6 +269,55 @@ export const VideoPlayer: React.FC<{
       tracks: [
         {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
       ]
+    }
+  }
+
+  /**
+   * Workaround for subtitles not appearing in Firefox (or only appearing on inital mount, then disappearing
+   * when changed). Removes old tracks and readds them, because letting React to it does not seem
+   * to work properly.
+   * Fairly hacky, currently only works for a page with only one video
+   * https://github.com/CookPete/react-player/issues/490
+   */
+  function reAddTrack() {
+    const video = document.querySelector('video');
+
+    if (video) {
+      const oldTracks = video.querySelectorAll('track');
+      oldTracks.forEach((oldTrack) => {
+        video.removeChild(oldTrack);
+      });
+    }
+
+    if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
+      playerConfig.file.tracks.map((t, trackIdx) => {
+        const track = document.createElement('track');
+        track.kind = t.kind!;
+        track.label = t.label!;
+        track.srclang = t.srcLang!;
+        track.default = t.default!;
+        track.src = t.src!;
+        track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
+        track.addEventListener('error', (e: Event) => {
+          console.warn(`Cannot load track ${t.src!}`)
+        });
+        track.addEventListener('load', (e: Event) => {
+          const textTrack = e.currentTarget as HTMLTrackElement;
+          if (textTrack) {
+            if (t.default === true) {
+              textTrack.track.mode = 'showing';
+              video!.textTracks[trackIdx].mode = 'showing'; // thanks Firefox
+            } else {
+              textTrack.track.mode = 'hidden';
+              video!.textTracks[trackIdx].mode = 'hidden'; // thanks Firefox
+            }
+          }
+        });
+        const video = document.querySelector('video');
+        if (video) {
+          video.appendChild(track);
+        }
+      });
     }
   }
 
