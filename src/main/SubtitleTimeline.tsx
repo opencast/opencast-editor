@@ -2,18 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import {
+  selectCurrentlyAt,
   selectSelectedSubtitleByFlavor,
   selectSelectedSubtitleFlavor,
+  setClickTriggered,
   setCueAtIndex,
   setCurrentlyAt,
   setFocusSegmentId,
   setFocusSegmentTriggered,
+  setFocusSegmentTriggered2,
 } from '../redux/subtitleSlice'
 import { useDispatch, useSelector } from "react-redux";
 import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
-import { RootState } from "../redux/store";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import Draggable, { DraggableEvent } from "react-draggable";
 import { SubtitleCue } from "../types";
 import { Resizable } from "react-resizable";
@@ -34,15 +35,7 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
  */
- const SubtitleTimeline: React.FC<{
-  selectCurrentlyAt: (state: RootState) => number,
-  setClickTriggered: ActionCreatorWithPayload<any, string>,
-  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
-}> = ({
-  selectCurrentlyAt,
-  setClickTriggered,
-  setCurrentlyAt,
-}) => {
+ const SubtitleTimeline: React.FC<{}> = () => {
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -57,7 +50,6 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
-    height: '220px',
     width: ((duration / timelineCutoutInMs)) * 100 + '%',    // Total length of timeline based on number of cutouts
     paddingLeft: '50%',
     paddingRight: '50%',
@@ -75,11 +67,11 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
       const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
-      refTop.current.getElement().scrollTo(Math.round((currentlyAt / duration) * scrollLeftMax), 0)
       console.log("currentlyAt: " + currentlyAt)
       console.log("duration: " + duration)
       console.log("scrollLeftMax: " + scrollLeftMax)
       console.log("useEffect scrollTo: " + (currentlyAt / duration) * scrollLeftMax)
+      refTop.current.getElement().scrollTo(Math.round((currentlyAt / duration) * scrollLeftMax), 0)
     }
   }, [currentlyAt, duration, width]);
 
@@ -125,7 +117,7 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
   })
 
   return (
-    <div css={{position: 'relative', width: '100%', height: '230px'}}>
+    <div css={{position: 'relative', width: '100%', height: '250px'}}>
       {/* Sits smack dab in the middle and does not move */}
       <div
         css={{position: 'absolute',
@@ -138,7 +130,7 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
       </div>
       {/* Scrollable timeline */}
       {/* Container. Has width of parent*/}
-      <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '100%'}}
+      <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
         vertical={false}
         horizontal={true}
         onStartScroll={onStartScroll}
@@ -146,12 +138,12 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
         ignoreElements={"#no-scrolling"}
       >
         {/* Container. Overflows. Width based on parent times zoom level*/}
-        <div ref={ref} css={timelineStyle} title="Timeline" >
+        <div ref={ref} css={timelineStyle}>
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
           <TimelineSubtitleSegmentsList timelineWidth={width}/>
           <div css={{position: 'relative', height: '100px'}} >
             <Waveforms />
-            <CuttingSegmentsList timelineWidth={width}/>
+            <CuttingSegmentsList timelineWidth={width} styleByActiveSegment={false} tabable={false}/>
           </div>
         </div>
       </ScrollContainer>
@@ -352,6 +344,7 @@ const TimelineSubtitleSegment: React.FC<{
     // Inform list view which segment was clicked
     dispatch(setFocusSegmentTriggered(true))
     dispatch(setFocusSegmentId(props.cue.id))
+    dispatch(setFocusSegmentTriggered2(true))
   }
 
   const segmentStyle = css({
@@ -386,7 +379,6 @@ const TimelineSubtitleSegment: React.FC<{
   })
 
   return (
-    <div>
       <Draggable
         onStart={onStartDrag}
         onStop={onStopDrag}
@@ -413,7 +405,6 @@ const TimelineSubtitleSegment: React.FC<{
           </div>
         </Resizable>
       </Draggable>
-    </div>
   )
 })
 

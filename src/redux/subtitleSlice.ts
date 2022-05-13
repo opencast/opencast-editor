@@ -1,15 +1,12 @@
-import { SubtitleCue } from './../types';
-import { createAsyncThunk, createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { Segment, SubtitleCue } from './../types';
+import { createAsyncThunk, createSlice, Dispatch, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
 import { client } from '../util/client';
 import { httpRequestState } from '../types';
 import { WebVTTParser } from 'webvtt-parser';
 import { WritableDraft } from 'immer/dist/internal';
-
-export interface test {
-  [key: string]: SubtitleCue[]
-}
+import { video } from './videoSlice';
 
 export interface subtitle {
   isDisplayEditView: boolean    // Should the edit view be displayed
@@ -23,6 +20,7 @@ export interface subtitle {
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   focusSegmentTriggered: boolean,   // a segment in the timeline was clicked
   focusSegmentId: string,           // which segment in the timeline was clicked
+  focusSegmentTriggered2: boolean,   // a different trigger for a child component, to avoid additional rerenders from the parent
 
   status: 'idle' | 'loading' | 'success' | 'failed',
   errors: {identifier: string, error: string}[],
@@ -39,6 +37,7 @@ const initialState: subtitle = {
   selectedSubtitleFlavor: "",
   focusSegmentTriggered: false,
   focusSegmentId: "",
+  focusSegmentTriggered2: false,
 
   status: 'idle',
   errors: [],
@@ -122,6 +121,7 @@ export const subtitleSlice = createSlice({
 
       // Trigger a callback in the list component that focuses the newly added element
       state.focusSegmentTriggered = true
+      state.focusSegmentTriggered2 = true
       state.focusSegmentId = cue.id
 
       if (action.payload.cueIndex < 0 ) {
@@ -151,9 +151,13 @@ export const subtitleSlice = createSlice({
     },
     setFocusSegmentTriggered: (state, action: PayloadAction<subtitle["focusSegmentTriggered"]>) => {
       state.focusSegmentTriggered = action.payload
+      state.focusSegmentTriggered2 = action.payload
     },
     setFocusSegmentId: (state, action: PayloadAction<subtitle["focusSegmentId"]>) => {
       state.focusSegmentId = action.payload
+    },
+    setFocusSegmentTriggered2: (state, action: PayloadAction<subtitle["focusSegmentTriggered2"]>) => {
+      state.focusSegmentTriggered2 = action.payload
     },
     setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
       console.log("HOI")
@@ -262,8 +266,8 @@ const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) =>
 // Export Actions
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
   setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
-  setSelectedSubtitleFlavor, setFocusSegmentTriggered,
-  setFocusSegmentId, setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
+  setSelectedSubtitleFlavor, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
+  setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
@@ -284,6 +288,8 @@ export const selectFocusSegmentTriggered = (state: { subtitleState: { focusSegme
   state.subtitleState.focusSegmentTriggered
 export const selectFocusSegmentId = (state: { subtitleState: { focusSegmentId: subtitle["focusSegmentId"] } }) =>
   state.subtitleState.focusSegmentId
+export const selectFocusSegmentTriggered2 = (state: { subtitleState: { focusSegmentTriggered2: subtitle["focusSegmentTriggered2"] } }) =>
+  state.subtitleState.focusSegmentTriggered2
 // Hardcoding this value to achieve a desired size for the video player
 // TODO: Don't hardcode this value, instead make the video player component more flexible
 export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
@@ -303,5 +309,49 @@ export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
 export const selectErrorByFlavor = (state: { subtitleState:
   { errors: subtitle["errors"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   getErrorByFlavor(state.subtitleState.errors, state.subtitleState.selectedSubtitleFlavor)
+
+
+/**
+ * Alternative middleware to setCurrentlyAt.
+ * Will grab the state from videoState to skip past deleted segment if preview
+ * mode is active.
+ */
+export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
+  return (dispatch: Dispatch, getState: any) => {
+    milliseconds = roundToDecimalPlace(milliseconds, 0);
+
+    if (milliseconds < 0) {
+      milliseconds = 0;
+    }
+
+    const allStates = getState() as { videoState: video, subtitleState: subtitle }
+    const segments: Segment[] = allStates.videoState.segments
+    let triggered = false
+
+    if (allStates.subtitleState.isPlayPreview) {
+      for (let i = 0; i < segments.length; i++) {
+        if (segments[i].start < milliseconds && segments[i].end > milliseconds) {
+          if (segments[i].deleted) {
+            milliseconds = segments[i].end + 1
+            for (let j = i; j < segments.length; j++) {
+              if (segments[j].deleted) {
+                milliseconds = segments[j].end + 1
+              } else {
+                break
+              }
+            }
+            triggered = true
+          }
+          break
+        }
+      }
+    }
+
+    dispatch(setCurrentlyAt(milliseconds))
+    if (triggered) {
+      dispatch(setPreviewTriggered(true))
+    }
+  };
+}
 
 export default subtitleSlice.reducer

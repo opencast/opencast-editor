@@ -2,9 +2,10 @@ import { css } from "@emotion/react";
 import React from "react";
 
 import { KeyMapDisplayOptions } from 'react-hotkeys';
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans} from "react-i18next";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { getAllHotkeys } from "../globalKeys";
+import i18next from "./../i18n/config";
 
 const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
@@ -21,7 +22,7 @@ const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name,
 
   return (
     <div css={groupStyle}>
-      <h3 css={headingStyle}>{name}</h3>
+      <h3 css={headingStyle}>{i18next.t(name)}</h3>
       {entries.map((entry: KeyMapDisplayOptions, index: number) => (
         <Entry params={entry} key={index}></Entry>
       ))}
@@ -80,13 +81,13 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   return (
     <div css={entryStyle}>
-      <div css={labelStyle}>{params.name || t("keyboardControls.missingLabel")}</div>
+      <div css={labelStyle}><Trans>{params.name || t("keyboardControls.missingLabel")}</Trans></div>
       {params.sequences.map((sequence, index, arr) => (
         <div css={sequenceStyle} key={index}>
           {sequence.sequence.toString().split('+').map((singleKey, index) => (
             <div css={singleKeyStyle} key={index}>{singleKey}</div>
           ))}
-          <div css={orStyle}>{arr.length - 1 !== index && t("keyboardControls.sequenceSeperator")}</div>
+          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeperator")}</Trans></div>
         </div>
       ))}
     </div>

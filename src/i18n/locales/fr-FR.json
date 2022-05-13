@@ -1,18 +1,18 @@
 {
     "mainMenu": {
-        "cutting-button": "Cutting",
-        "finish-button": "Finish",
-        "select-tracks-button": "Tracks",
-        "thumbnail-button": "Thumbnail",
-        "metadata-button": "Metadata",
-        "keyboard-controls-button": "Keyboard Controls",
-        "tooltip-aria": "Main Navigation"
+        "cutting-button": "Editer",
+        "finish-button": "Terminer",
+        "select-tracks-button": "Pistes",
+        "thumbnail-button": "Image de prévisualisation",
+        "metadata-button": "Metadonnées",
+        "keyboard-controls-button": "Controles clavier",
+        "tooltip-aria": "Navigation principale"
     },
     "cuttingActions": {
-        "cut-button": "Cut",
-        "cut-tooltip": "Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}",
-        "cut-tooltip-aria": "Cut. Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}.",
-        "delete-button": "Delete",
+        "cut-button": "Couper",
+        "cut-tooltip": "Diviser le segment à la position actuelle de la tête de lecture. Raccourci : {{hotkeyName}}",
+        "cut-tooltip-aria": "Couper. Diviser le segment à la position actuelle de la tête de lecture. Raccourci : {{hotkeyName}}.",
+        "delete-button": "Supprimer",
         "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotKeyName}}.",
         "restore-button": "Restore",
@@ -182,9 +182,11 @@
         "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
     },
     "keyboardControls": {
-        "header": "Keyboard Controls",
+        "header": "Controles clavier",
         "defaultGroupName": "General",
         "missingLabel": "Unknown",
+        "groupCuttingView": "Cutting View",
+        "groupCuttingViewScrubber": "Cutting View - Scrubber",
         "sequenceSeperator": "or",
         "genericError": "Failed to load overview",
         "videoPlayButton": "Play/Pause Video",

@@ -1,3 +1,6 @@
+import { WebVTTSerializer } from 'webvtt-parser';
+import { SubtitleCue } from '../types';
+
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
   let decimalFactor = Math.pow(10, decimalPlace)
   return Math.round((num + Number.EPSILON) * decimalFactor) / decimalFactor
@@ -69,4 +72,25 @@ export function checkFlexGapSupport() {
   }
 
 	return flexGapIsSupported
+}
+
+/**
+ * Converts a working subtitle representation into a string
+ */
+export function serializeSubtitle(subtitle: SubtitleCue[]) {
+  const seri = new WebVTTSerializer();
+
+  // Fix cues to work with serialize
+  let cueIndex = 0
+  const cues = [...subtitle];
+  for (let cue of subtitle) {
+    cue = {...cue}
+    cue.startTime = cue.startTime / 1000
+    cue.endTime = cue.endTime / 1000
+
+    cues[cueIndex] = cue
+
+    cueIndex++
+  }
+  return seri.serialize(cues)
 }

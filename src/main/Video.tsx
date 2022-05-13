@@ -9,9 +9,9 @@ import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
+  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
@@ -83,7 +83,7 @@ const Video: React.FC<{}> = () => {
       setIsPlaying={setIsPlaying}
       setPreviewTriggered={setPreviewTriggered}
       setClickTriggered={setClickTriggered}
-      setCurrentlyAtInSeconds={setCurrentlyAtInSeconds}
+      setCurrentlyAt={setCurrentlyAt}
       setAspectRatio={setAspectRatio}
     />);
   }
@@ -142,7 +142,7 @@ export const VideoPlayer: React.FC<{
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
   setPreviewTriggered: ActionCreatorWithPayload<any, string>,
   setClickTriggered: ActionCreatorWithPayload<any, string>,
-  setCurrentlyAtInSeconds: ActionCreatorWithPayload<number, string>,
+  setCurrentlyAt: any,
   setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
 }> = ({
   dataKey,
@@ -157,7 +157,7 @@ export const VideoPlayer: React.FC<{
   setIsPlaying,
   setPreviewTriggered,
   setClickTriggered,
-  setCurrentlyAtInSeconds,
+  setCurrentlyAt,
   setAspectRatio,
 }) => {
 
@@ -183,7 +183,7 @@ export const VideoPlayer: React.FC<{
     if (isPrimary) {
       // Only update redux if there was a substantial change
       if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) && state.playedSeconds !== 0) {
-        dispatch(setCurrentlyAtInSeconds(state.playedSeconds))
+        dispatch(setCurrentlyAt(state.playedSeconds * 1000))
       }
     }
   }
@@ -212,7 +212,7 @@ export const VideoPlayer: React.FC<{
   const onEndedCallback = () => {
     if (isPrimary) {
       dispatch(setIsPlaying(false));
-      dispatch(setCurrentlyAtInSeconds(duration)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+      dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
     }
   }
 
@@ -250,6 +250,16 @@ export const VideoPlayer: React.FC<{
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url])
 
+  // Trigger a workaround for subtitles not being displayed in the video in Firefox
+  useEffect(() => {
+    // Only trigger workaround in Firefox, as it will cause issues in Chrome
+    // @ts-ignore
+    if (typeof InstallTrigger !== 'undefined') {
+      reAddTrack()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtitleUrl])
+
   const playerConfig: Config = {
     file: {
       attributes: {
@@ -259,6 +269,56 @@ export const VideoPlayer: React.FC<{
       tracks: [
         {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
       ]
+    }
+  }
+
+  /**
+   * Workaround for subtitles not appearing in Firefox (or only appearing on inital mount, then disappearing
+   * when changed). Removes old tracks and readds them, because letting React to it does not seem
+   * to work properly.
+   * Fairly hacky, currently only works for a page with only one video
+   * https://github.com/CookPete/react-player/issues/490
+   */
+  function reAddTrack() {
+    const video = document.querySelector('video');
+
+    if (video) {
+      const oldTracks = video.querySelectorAll('track');
+      oldTracks.forEach((oldTrack) => {
+        video.removeChild(oldTrack);
+      });
+    }
+
+    if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
+      // eslint-disable-next-line array-callback-return
+      playerConfig.file.tracks.map((t, trackIdx) => {
+        const track = document.createElement('track');
+        track.kind = t.kind!;
+        track.label = t.label!;
+        track.srclang = t.srcLang!;
+        track.default = t.default!;
+        track.src = t.src!;
+        track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
+        track.addEventListener('error', (e: Event) => {
+          console.warn(`Cannot load track ${t.src!}`)
+        });
+        track.addEventListener('load', (e: Event) => {
+          const textTrack = e.currentTarget as HTMLTrackElement;
+          if (textTrack) {
+            if (t.default === true) {
+              textTrack.track.mode = 'showing';
+              video!.textTracks[trackIdx].mode = 'showing'; // thanks Firefox
+            } else {
+              textTrack.track.mode = 'hidden';
+              video!.textTracks[trackIdx].mode = 'hidden'; // thanks Firefox
+            }
+          }
+        });
+        const video = document.querySelector('video');
+        if (video) {
+          video.appendChild(track);
+        }
+      });
     }
   }
 
@@ -574,7 +634,7 @@ const VideoHeader: React.FC<{}> = () => {
       presenter_header = <div css={titleStyle} title={t("video.presenter-tooltip")}>by {presenters.join(", ")}</div>
   }
   return (
-    <div title={t("video.area-tooltip")} css={{fontSize: '16px'}}>
+    <div css={{fontSize: '16px'}}>
       <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>
         {metadataTitle ? metadataTitle : title}
       </div>

@@ -2,9 +2,9 @@ import React, { SyntheticEvent } from "react";
 
 import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  IconDefinition,
   faCut,
   faStepBackward,
   faStepForward,
@@ -78,7 +78,7 @@ const CuttingActions: React.FC<{}> = () => {
       <div css={cuttingStyle}>
           <div css={blockStyle}>
             <CuttingActionsButton iconName={faCut}
-              actionName="Cut" actionHandler={dispatchAction} action={cut}
+              actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut}
               tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
               ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
             />
@@ -86,12 +86,12 @@ const CuttingActions: React.FC<{}> = () => {
               hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
             />
             <CuttingActionsButton iconName={faStepBackward}
-              actionName="Merge Left" actionHandler={dispatchAction} action={mergeLeft}
+              actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
               tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
               ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
             />
             <CuttingActionsButton iconName={faStepForward}
-              actionName="Merge Right" actionHandler={dispatchAction} action={mergeRight}
+              actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
               tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
               ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
             />
@@ -120,7 +120,7 @@ const cuttingActionButtonStyle = {
 };
 
 interface cuttingActionsButtonInterface {
-  iconName: IconDefinition,
+  iconName: IconProp,
   actionName: string,
   actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>, ref: React.RefObject<HTMLDivElement> | undefined) => void,
   action: ActionCreatorWithoutPayload<string>,

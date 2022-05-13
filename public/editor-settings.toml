@@ -114,17 +114,17 @@ mainFlavor = "captions"
 # TODO: Comment out example
 # Example:
 [subtitles.languages]
-"source+de" = "Deutsch"
-"source+de_Irgendwas" = "Deutsch (Gehörlos)"
-"source+en" = "English"
-"source+en_US" = "English (US)"
-"source+en_GB" = "English (GB)"
-"source+br" = "Donaudampfschifffahrtsgesellschaft"
-"source+de_2" = "Deutsch 2"
-"source+de_3" = "Deutsch 3"
-"source+de_4" = "Deutsch 4"
-"source+de_5" = "Deutsch 5"
-"🦝" = "🦝"
+"captions/source+de" = "Deutsch"
+"captions/source+de_Irgendwas" = "Deutsch (Gehörlos)"
+"captions/source+en" = "English"
+"captions/source+en_US" = "English (US)"
+"captions/source+en_GB" = "English (GB)"
+"captions/source+br" = "Donaudampfschifffahrtsgesellschaft"
+"captions/source+de_2" = "Deutsch 2"
+"captions/source+de_3" = "Deutsch 3"
+"captions/source+de_4" = "Deutsch 4"
+"captions/source+de_5" = "Deutsch 5"
+"captions/🦝" = "🦝"
 
 # Specify the default video in the subtitle video player by flavor
 # If not specified, the editor will decide on a default by itself
