@@ -20,7 +20,7 @@ import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 import { GlobalHotKeys } from "react-hotkeys";
 import { scrubberKeyMap } from "../globalKeys";
-import ScrollContainer from "react-indiana-drag-scroll";
+import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
 
 /**
  * Issues:
@@ -100,9 +100,9 @@ import ScrollContainer from "react-indiana-drag-scroll";
   }
 
 
-  const onEndScroll = () => {
-		console.log('onEndScroll');
-    if (refTop && refTop.current) {
+  const onEndScroll = (e: ScrollEvent) => {
+		console.log('onEndScroll', e);
+    if (!e.external && refTop && refTop.current) {
       const offsetX = refTop.current.getElement().scrollLeft
       const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
       console.log("offsetX: " + offsetX)
