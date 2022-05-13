@@ -49,6 +49,7 @@
     "react-final-form-listeners": "^1.0.3",
     "react-hotkeys": "^2.0.0",
     "react-i18next": "^11.16.9",
+    "react-indiana-drag-scroll": "^2.1.0",
     "react-player": "git+https://arnei@github.com/Arnei/react-player.git#20fe6c061cf7d71d33d764b4a51c9b9bbb614bf6",
     "react-redux": "^7.2.8",
     "react-resizable": "^3.0.4",
