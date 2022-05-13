@@ -24,14 +24,6 @@ import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
 
 /**
- * Issues:
- * - Subtitles displayed in the video are duplicated when dragging and dropping
- * - ScrollContainer callbacks are always triggered when the container is scrolled
- *   (by user input or external), and since precision is lost when setting scroll,
- *   currentlyAt will be changed in a subsequent rerender through onEndScroll
- *   (e.g. from 5.000 to 5.004)
- */
-/**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
  */
@@ -60,17 +52,12 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
     let offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / widthMiniTimeline) * (duration)))
-    console.log("setCurrentlyAtToClick: " + currentlyAt + "___" + (offsetX / widthMiniTimeline) * (duration))
   }
 
   // Apply horizonal scrolling when scrolled from somewhere else
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
       const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
-      console.log("currentlyAt: " + currentlyAt)
-      console.log("duration: " + duration)
-      console.log("scrollLeftMax: " + scrollLeftMax)
-      console.log("useEffect scrollTo: " + (currentlyAt / duration) * scrollLeftMax)
       refTop.current.getElement().scrollTo(Math.round((currentlyAt / duration) * scrollLeftMax), 0)
     }
   }, [currentlyAt, duration, width]);
@@ -87,20 +74,12 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
     decrease: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1))
   }
 
-  const onStartScroll = () => {
-		console.log('onStartScroll');
-  }
-
-
+  // Callback for the scroll container
   const onEndScroll = (e: ScrollEvent) => {
-		console.log('onEndScroll', e);
+    // If scrolled by user
     if (!e.external && refTop && refTop.current) {
       const offsetX = refTop.current.getElement().scrollLeft
       const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
-      console.log("offsetX: " + offsetX)
-      console.log("duration: " + duration)
-      console.log("scrollLeftMax: " + scrollLeftMax)
-      console.log("onEndScroll: " + currentlyAt + "___" + (offsetX / scrollLeftMax) * (duration))
       dispatch(setCurrentlyAt((offsetX / scrollLeftMax) * (duration)))
     }
   }
@@ -128,14 +107,12 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
         background: 'black'}}>
           <div css={triangleStyle} />
       </div>
-      {/* Scrollable timeline */}
-      {/* Container. Has width of parent*/}
+      {/* Scrollable timeline container. Has width of parent*/}
       <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
         vertical={false}
         horizontal={true}
-        onStartScroll={onStartScroll}
         onEndScroll={onEndScroll}
-        ignoreElements={"#no-scrolling"}
+        ignoreElements={"#no-scrolling"}  // dom elements with this id in the container will not trigger scrolling when dragged
       >
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle}>
@@ -203,7 +180,6 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
       })}
     </div>
   );
-
 }
 
 /**
