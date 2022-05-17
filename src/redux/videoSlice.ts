@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, Workflow }  from '../types'
+import { Segment, httpRequestState, Track, Workflow, Flavor }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 import { settings } from '../config';
@@ -183,8 +183,10 @@ export const videoSlice = createSlice({
         // });
 
         // New API
-        // eslint-disable-next-line no-sequences
-        state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videoURLs = action.payload.tracks
+          .filter((t: Track) => t.video_stream.available)
+          // eslint-disable-next-line no-sequences
+          .reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
@@ -333,5 +335,11 @@ export const selectTracks = (state: { videoState: { tracks: video["tracks"] } })
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
+export const selectTracksByFlavor = (flavor: Flavor | undefined) => (state: { videoState: { tracks: video["tracks"]; }; }) => {
+  if (!flavor) {
+    return undefined
+  }
+  return state.videoState.tracks.filter((track: Track) => track.flavor.type === flavor.type && track.flavor.subtype === flavor.subtype)
+}
 
 export default videoSlice.reducer

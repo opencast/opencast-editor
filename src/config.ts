@@ -7,6 +7,7 @@
  */
 import parseToml from '@iarna/toml/parse-string';
 import deepmerge from 'deepmerge';
+import { Flavor } from './types';
 
 /**
  * Local constants
@@ -34,6 +35,7 @@ interface iSettings {
     url: string,
     name: string | undefined,
     password: string | undefined,
+    audioFileFlavor: Flavor | undefined,
   },
   metadata: {
     show: boolean,
@@ -60,6 +62,7 @@ var defaultSettings: iSettings = {
     url: window.location.origin,
     name: undefined,
     password: undefined,
+    audioFileFlavor: undefined,
   },
   metadata: {
     show: true,
@@ -260,6 +263,16 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
+  'map': (v: any, allowParse: any) => {
+    for (let key in v) {
+      if (typeof key !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+      if (typeof v[key] !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+    }
+  },
   'objectsWithinObjects': (v: any, allowParse: any) => {
     for (let catalogName in v) {
       if (typeof catalogName !== 'string') {
@@ -301,6 +314,7 @@ const SCHEMA = {
     url: types.string,
     name: types.string,
     password: types.string,
+    audioFileFlavor: types.map,
   },
   metadata: {
     show : types.boolean,
