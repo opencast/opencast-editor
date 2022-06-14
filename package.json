@@ -89,6 +89,6 @@
     "@types/luxon": "^2.3.2",
     "@types/react-beforeunload": "^2.1.1",
     "@redux-devtools/core": "^3.13.1",
-    "use-resize-observer": "^8.0.0"
+    "use-resize-observer": "^9.0.2"
   }
 }
