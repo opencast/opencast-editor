@@ -395,7 +395,7 @@ const Waveforms: React.FC<{}> = () => {
   const renderImages = () => {
     if (images.length > 0) {
       return (
-        <img alt='Waveform' src={images[0]} css={{minHeight: 0}}></img>
+        <img alt='Waveform' src={images[0]} css={{minHeight: 0, height: '100%'}}></img>
         // images.map((image, index) =>
         //   <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
         // )
