@@ -57,7 +57,6 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     fontSize: "x-large",
     ...(flexGapReplacementStyle(30, false)),
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    padding: '0px 20px',
   });
 
   var buttonString;
@@ -84,7 +83,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
         finish()
       }}}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
-      <div>{buttonString}</div>
+      <div style={{padding: '0px 20px'}}>{buttonString}</div>
     </div>
   );
 };
