@@ -200,6 +200,7 @@ export const videoSlice = createSlice({
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
         });
+        state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
 
         state.aspectRatios = new Array(state.videoCount)
     })
@@ -298,8 +299,8 @@ export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) =
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight,
-  setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  addSegment, setAspectRatio, setHasChanges, setWaveformImages, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex,
+  mergeLeft, mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state

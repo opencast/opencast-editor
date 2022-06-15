@@ -7,10 +7,7 @@ import { css } from '@emotion/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
 import {
-  selectSegments, selectActiveSegmentIndex, selectDuration,
-  selectVideoURL,
-  selectWaveformImages,
-  setWaveformImages,
+  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL,  selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -387,8 +384,12 @@ export const Waveforms: React.FC<{}> = () => {
 
   // When the URLs to the videos are fetched, generate waveforms
   useEffect( () => {
-    if (videoURLStatus === 'success' && images.length === 0) {
-      const images: string[] = []    // Store local paths to image files
+    if (videoURLStatus === 'success') {
+      if (images.length > 0) {
+        return
+      }
+
+      const newImages: string[] = []    // Store local paths to image files
       let waveformsProcessed : number = 0  // Counter for checking if all workers are done
 
       // Only display the waveform of the first video we get
@@ -415,11 +416,11 @@ export const Waveforms: React.FC<{}> = () => {
 
           // When done, save path to generated waveform img
           waveformWorker.oncomplete = function(image: any, numSamples: any) {
-            images.push(image)
+            newImages.push(image)
             waveformsProcessed++
             // If all images are generated, rerender
             if (waveformsProcessed === array.length) {
-              dispatch(setWaveformImages(images))
+              dispatch(setWaveformImages(newImages))
             }
           }
         }
@@ -427,15 +428,16 @@ export const Waveforms: React.FC<{}> = () => {
         xhr.send()
       })
     }
-  }, [dispatch, images.length, videoURLStatus, videoURLs]);
+  }, [dispatch, images, videoURLStatus, videoURLs]);
 
 
   const renderImages = () => {
     if (images.length > 0) {
       return (
-        images.map((image, index) =>
-          <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
-        )
+        <img alt='Waveform' src={images[0]} css={{minHeight: 0}}></img>
+        // images.map((image, index) =>
+        //   <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
+        // )
       );
     } else if (waveformWorkerError) {
       return (
