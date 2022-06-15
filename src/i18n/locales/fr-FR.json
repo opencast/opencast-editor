@@ -1,63 +1,64 @@
 {
     "mainMenu": {
-        "cutting-button": "Cutting",
-        "finish-button": "Finish",
-        "select-tracks-button": "Tracks",
-        "thumbnail-button": "Thumbnail",
-        "metadata-button": "Metadata",
-        "tooltip-aria": "Main Navigation"
+        "cutting-button": "Editer",
+        "finish-button": "Terminer",
+        "select-tracks-button": "Pistes",
+        "thumbnail-button": "Image de prévisualisation",
+        "metadata-button": "Metadonnées",
+        "keyboard-controls-button": "Controles clavier",
+        "tooltip-aria": "Navigation principale"
     },
     "cuttingActions": {
-        "cut-button": "Cut",
-        "cut-tooltip": "Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}",
-        "cut-tooltip-aria": "Cut. Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}.",
-        "delete-button": "Delete",
-        "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotKeyName}}.",
-        "restore-button": "Restore",
-        "mergeLeft-button": "Merge Left",
-        "mergeLeft-tooltip": "Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}",
-        "mergeLeft-tooltip-aria": "Merge Left. Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}.",
-        "mergeRight-button": "Merge Right",
-        "mergeRight-tooltip": "Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}",
-        "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}."
+        "cut-button": "Couper",
+        "cut-tooltip": "Diviser le segment à la position actuelle de la tête de lecture. Raccourci : {{hotkeyName}}",
+        "cut-tooltip-aria": "Couper. Diviser le segment à la position actuelle de la tête de lecture. Raccourci : {{hotkeyName}}.",
+        "delete-button": "Supprimer",
+        "delete-restore-tooltip": "Sélectionner ou désélectionner un segment à la position actuelle pour suppression. Raccourci : {{hotkeyName}}",
+        "delete-restore-tooltip-aria": "Supprimer et Restaurer. Sélectionner ou désélectionner un segment à la position actuelle pour suppression. Raccourci : {{hotKeyName}}.",
+        "restore-button": "Restaurer",
+        "mergeLeft-button": "Fusionner à gauche",
+        "mergeLeft-tooltip": "Combine le segment actif avec le segment à sa gauche. Raccourci : {{hotkeyName}}",
+        "mergeLeft-tooltip-aria": "Fusionner à gauche. Combiner le segment actif avec le segment à gauche. Raccourci : {{hotkeyName}}.",
+        "mergeRight-button": "Fusionner à droite",
+        "mergeRight-tooltip": "Combine le segment actif avec le segment à sa droite. Raccourci : {{hotkeyName}}",
+        "mergeRight-tooltip-aria": "Fusionner à droite. Combiner le segment actif avec le segment à droite. Raccourci : {{hotkeyName}}."
     },
     "video": {
-        "previewButton": "Preview Mode",
-        "previewButton-tooltip": "Skips deleted segments when playing the video. Currently {{status}}. Hotkey: {{hotkeyName}}",
-        "previewButton-aria": "Enable or disable preview mode. Hotkey: {{hotkeyName}}.",
-        "playButton-tooltip": "Play Button",
-        "time-duration-tooltip": "Playback time and duration",
-        "duration-aria": "Duration",
-        "time-aria": "Current time",
-        "comError-text": "A problem occurred during communication with Opencast.",
-        "loadError-text": "An error has occurred loading this video.",
-        "title-tooltip": "Video Title",
-        "presenter-tooltip": "Video Presenters",
-        "controls-tooltip": "Video Controls"
+        "previewButton": "Mode aperçu",
+        "previewButton-tooltip": "Ignore les segments supprimés lors de la lecture de la vidéo. Actuellement {{status}}. Raccourci : {{hotkeyName}}",
+        "previewButton-aria": "Activer ou désactiver le mode aperçu. Raccourci clavier : {{hotkeyName}}.",
+        "playButton-tooltip": "Bouton de lecture",
+        "time-duration-tooltip": "Temps et durée de lecture",
+        "duration-aria": "Durée",
+        "time-aria": "Temps actuel",
+        "comError-text": "Un problème est survenu lors de la communication avec Opencast.",
+        "loadError-text": "Une erreur s'est produite lors du chargement de cette vidéo.",
+        "title-tooltip": "Titre de la vidéo",
+        "presenter-tooltip": "Présentateurs vidéo",
+        "controls-tooltip": "Contrôles vidéo"
     },
     "finishMenu": {
-        "save-button": "Save changes",
-        "start-button": "Start processing",
-        "discard-button": "Discard changes"
+        "save-button": "Enregistrer les modifications",
+        "start-button": "Démarrer le traitement",
+        "discard-button": "Ignorer les modifications"
     },
     "save": {
-        "headline-text": "Save current project",
-        "confirm-button": "Yes, save changes",
-        "confirmButton-default-tooltip": "Save Button",
-        "confirmButton-attempting-tooltip": "Attempting to save",
-        "confirmButton-success-tooltip": "Saved successfully",
-        "confirmButton-failed-tooltip": "Save failed",
-        "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
-        "success-text": "Changes saved successfully!",
-        "success-tooltip-aria": "Saved successfully",
-        "saveArea-tooltip": "Save Area"
+        "headline-text": "Enregtistrer le projet actuel",
+        "confirm-button": "Oui, enregistrer les modifications",
+        "confirmButton-default-tooltip": "Bouton « Enregistrer »",
+        "confirmButton-attempting-tooltip": "Tentative de sauvegarde",
+        "confirmButton-success-tooltip": "Sauvegarde réussie",
+        "confirmButton-failed-tooltip": "Echec de l'enregistrement",
+        "info-text": "La vidéo ne sera pas traitée mais toutes les informations de coupe seront stockées dans Opencast. Vous pouvez continuer votre modification plus tard.",
+        "success-text": "Les modifications ont été enregistrées !",
+        "success-tooltip-aria": "Sauvegarde réussie",
+        "saveArea-tooltip": "Enregistrer la zone"
     },
     "discard": {
-        "headline-text": "Discard changes",
-        "confirm-button": "Yes, discard changes",
-        "confirm-tooltip": "Discard changes button",
-        "info-text": "Discard all the changes you made? This cannot be undone!"
+        "headline-text": "Ignorer les modifications",
+        "confirm-button": "Oui, ignorer les modifications",
+        "confirm-tooltip": "Boutton \"Ignorer les modifications\"",
+        "info-text": "Ignorer toutes les modifications que vous avez apportées ? Cette action est irréversible !"
     },
     "theEnd": {
         "discarded-text": "All your changes are now lost forever. You can now close the editor.",
@@ -71,7 +72,7 @@
         "noWorkflows-text": "A problem occurred, there are no workflows to process your changes with.<3/> Please save your changes and contact an Opencast Administrator.\n",
         "oneWorkflow-text": "The video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
         "manyWorkflows-text": "Select which workflow Opencast should use for processing.",
-        "startProcessing-button": "Start processing",
+        "startProcessing-button": "Démarrer le traitement",
         "back-button": "Take me back",
         "selectWF-button": "Click to select this workflow",
         "selectWF-button-aria": "Press to select the workflow: {{stateName}}\n"
@@ -111,7 +112,7 @@
             "creator": "Presenter(s)",
             "contributor": "Contributor(s)",
             "startDate": "Start date",
-            "duration": "Duration",
+            "duration": "Durée",
             "location": "Location",
             "source": "Source",
             "created": "Created",
@@ -179,5 +180,19 @@
         "deleteTrackTooltip": "Do not encode and publish this track.",
         "restoreTrackTooltip": "Encode and publish this track.",
         "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
+    },
+    "keyboardControls": {
+        "header": "Controles clavier",
+        "defaultGroupName": "General",
+        "missingLabel": "Unknown",
+        "groupCuttingView": "Cutting View",
+        "groupCuttingViewScrubber": "Cutting View - Scrubber",
+        "sequenceSeperator": "or",
+        "genericError": "Failed to load overview",
+        "videoPlayButton": "Play/Pause Video",
+        "scrubberLeft": "Move left",
+        "scrubberRight": "Move right",
+        "scubberIncrease": "Move faster",
+        "scrubberDecrease": "Move slower"
     }
 }

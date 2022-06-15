@@ -5,6 +5,7 @@
       "select-tracks-button": "Tracks",
       "thumbnail-button": "Thumbnail",
       "metadata-button": "Metadata",
+      "keyboard-controls-button": "Keyboard Controls",
       "tooltip-aria": "Main Navigation"
     },
 
@@ -193,5 +194,20 @@
       "deleteTrackTooltip": "Do not encode and publish this track.",
       "restoreTrackTooltip": "Encode and publish this track.",
       "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
+    },
+
+    "keyboardControls": {
+      "header": "Keyboard Controls",
+      "defaultGroupName": "General",
+      "missingLabel": "Unknown",
+      "groupCuttingView": "Cutting View",
+      "groupCuttingViewScrubber": "Cutting View - Scrubber",
+      "sequenceSeperator": "or",
+      "genericError": "Failed to load overview",
+      "videoPlayButton": "Play/Pause Video",
+      "scrubberLeft": "Move left",
+      "scrubberRight": "Move right",
+      "scubberIncrease": "Move faster",
+      "scrubberDecrease": "Move slower"
     }
   }

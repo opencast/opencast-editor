@@ -4,5 +4,5 @@ base_path: .
 preserve_hierarchy: true
 
 files:
-  - source: /src/i18n/locales/en.json
-    translation: /src/i18n/locales/%two_letters_code%.json
+  - source: /src/i18n/locales/en-US.json
+    translation: /src/i18n/locales/%locale%.json

@@ -6,7 +6,7 @@ Opencast Video Editor
 [![Demo deployment](https://img.shields.io/badge/demo-editor.opencast.org-blue)
 ](https://editor.opencast.org)
 
-The Opencast Video Editor is a stand-alone tool included by [Opencast](https://opencast.org) to cut and arrange recordings.
+The Opencast Video Editor is a tool included by [Opencast](https://opencast.org) to cut and arrange recordings.
 
 
 Quick Test
@@ -78,3 +78,42 @@ If you want to use current editor frontend with an earlier Opencast version, you
 Translating the Editor
 -------------
 You can help translating the editor to your language on [crowdin.com/project/opencast-editor](https://crowdin.com/project/opencast-editor). Simply request to join the project on Crowdin and start translating. If you are interested in translating a language which is not a target language right now, please create [a GitHub issue](https://github.com/opencast/opencast-editor/issues) and we will add the language.
+
+
+Configuration
+-------------
+
+### Configuration Methods
+
+Most configuration options can be set either as a URL parameter or as an option in the configuration file.
+
+If the option belongs to a section, URL parameters are a combination of section and option separated by a single dot.
+
+For example, the following option in the configuration file:
+
+```toml
+[trackSelection]
+show = true
+```
+
+…can be specified as URL parameter in the form `trackSelection.show=true`.
+
+If an option can be specified both ways, the URL parameter will always take precedence.
+
+
+### Settings
+
+Options which are usually specified in the configuration file are documented in there as well. Metadata configuration options are only documented in the configuration file.
+
+| Option              | URL | File | Description
+| --------------------|-----|------|------------
+| id                  | ✓   | ✓    | Id of the event that the editor should open by default.
+| mediaPackageId      | ✓   | ✓    | Deprecated. Use `id` instead.
+| opencast.url        | ✗   | ✓    | URL of the opencast server to connect to.
+| opencast.name       | ✗   | ✓    | Opencast user to use. For demo purposes only.
+| opencast.password   | ✗   | ✓    | Password to use for authentication. For demo purposes only.
+| metadata.show       | ✓   | ✓    | Show metadata tab.
+| trackSelection.show | ✓   | ✓    | Show track selection tab.
+| thumbnail.show      | ✓   | ✓    | Show thumbnail tab. Demo only.
+| debug               | ✓   | ✗    | Enable internationalization debugging.
+| lng                 | ✓   | ✗    | Select a specific language. Use language codes like `de` or `en-US`.

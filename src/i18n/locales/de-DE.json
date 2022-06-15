@@ -5,6 +5,7 @@
         "select-tracks-button": "Spuren",
         "thumbnail-button": "Vorschaubild",
         "metadata-button": "Metadaten",
+        "keyboard-controls-button": "Tastatursteuerung",
         "tooltip-aria": "Hauptnavigation"
     },
     "cuttingActions": {
@@ -16,11 +17,11 @@
         "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
         "restore-button": "Wiederherstellen",
         "mergeLeft-button": "Links zusammenfügen",
-        "mergeLeft-tooltip": "Kombiniere das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}",
-        "mergeLeft-tooltip-aria": "Links zusammenfügen. Kombinieren Sie das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}.",
+        "mergeLeft-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}",
+        "mergeLeft-tooltip-aria": "Links zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}.",
         "mergeRight-button": "Rechts zusammenfügen",
-        "mergeRight-tooltip": "Kombiniere das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}",
-        "mergeRight-tooltip-aria": "Rechts zusammenfügen. Kombinieren Sie das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}."
+        "mergeRight-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}",
+        "mergeRight-tooltip-aria": "Rechts zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}."
     },
     "video": {
         "previewButton": "Vorschaumodus",
@@ -179,5 +180,19 @@
         "deleteTrackTooltip": "Diesen Track nicht verarbeiten und veröffentlichen.",
         "restoreTrackTooltip": "Diesen Track verarbeiten und veröffentlichen.",
         "cannotDeleteTrackTooltip": "Dieser Track kann nicht entfernt werden."
+    },
+    "keyboardControls": {
+        "header": "Tastatursteuerung",
+        "defaultGroupName": "Allgemein",
+        "missingLabel": "Unbekannt",
+        "groupCuttingView": "Schnittansicht",
+        "groupCuttingViewScrubber": "Schnittansicht - Scrubber",
+        "sequenceSeperator": "oder",
+        "genericError": "Fehler beim Laden der Übersicht",
+        "videoPlayButton": "Video abspielen/pausieren",
+        "scrubberLeft": "Nach links",
+        "scrubberRight": "Nach rechts",
+        "scubberIncrease": "Schneller",
+        "scrubberDecrease": "Langsamer"
     }
 }
