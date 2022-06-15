@@ -160,13 +160,11 @@ export const subtitleSlice = createSlice({
       state.focusSegmentTriggered2 = action.payload
     },
     setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
-      console.log("HOI")
       let cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.segmentId);
       cueIndex = cueIndex - 1
       if (cueIndex < 0 ) {
         cueIndex = 0
       }
-      console.log(cueIndex)
       state.focusSegmentId = state.subtitles[action.payload.identifier][cueIndex].id
     },
     setFocusToSegmentBelowId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
@@ -212,7 +210,6 @@ export const subtitleSlice = createSlice({
 
         // Attach a unique id to each segment/cue
         // This is used by React to keep track of cues between changes (e.g. addition, deletion)
-        console.log(tree.cues)
         let index = 0
         for (let cue of tree.cues) {
           if (!cue.id) {

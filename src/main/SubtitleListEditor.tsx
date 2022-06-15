@@ -56,7 +56,6 @@ const SubtitleListEditor : React.FC<{}> = () => {
   // Scroll to segment when triggered by reduxState
   useEffect(() => {
     if (focusTriggered) {
-      console.log("timelineClickTriggered: " + focusTriggered)
       if (itemsRef && itemsRef.current && subtitle) {
         const itemIndex = subtitle.findIndex(item => item.id === focusId)
         if (listRef && listRef.current) {
@@ -230,7 +229,6 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   };
 
   const updateCueEnd = (event: { target: { value: any } }) => {
-    console.log("updateCueEnd: " + event.target.value)
     dispatch(setCueAtIndex({
       identifier: identifier,
       cueIndex: props.index,

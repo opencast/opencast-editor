@@ -151,7 +151,6 @@ export const SaveButton: React.FC<{}> = () => {
   useEffect(() => {
     if (metadataStatus === 'success' && metadataSaveStarted) {
       setMetadataSaveStarted(false)
-      console.log("EDIT")
       dispatch(postVideoInformation({
         segments: segments,
         tracks: tracks,

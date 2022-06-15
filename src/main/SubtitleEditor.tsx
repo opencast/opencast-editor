@@ -111,8 +111,6 @@ import { useTranslation } from "react-i18next";
     verticalAlign: '-2.5px',
   })
 
-  console.log("Rerender SubtitleEditor")
-
   const render = () => {
     if (getError !== undefined) {
       return (
