@@ -8,7 +8,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState, MainMenuStateNames, Track } from '../types'
 import {
   selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, setCurrentlyAt, setClickTriggered, selectTracksByFlavor, selectTracks
+  setIsPlaying, setCurrentlyAt, setClickTriggered, selectTracksByFlavor, selectTracks,
+  selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -325,6 +326,7 @@ const Waveforms: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
+  const dispatch = useDispatch();
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const tracks = useSelector(selectTracks)
   const tracksByFlavor = useSelector(selectTracksByFlavor(settings.opencast.audioFileFlavor ?
@@ -333,7 +335,7 @@ const Waveforms: React.FC<{}> = () => {
   ))
 
   // Update based on current fetching status
-  const [images, setImages] = useState<string[]>([])
+  const images = useSelector(selectWaveformImages)
   const [waveformWorkerError, setWaveformWorkerError] = useState<boolean>(false)
 
   const waveformDisplayTestStyle = css({
@@ -350,7 +352,11 @@ const Waveforms: React.FC<{}> = () => {
   // When the URLs to the videos are fetched, generate waveforms
   useEffect( () => {
     if (videoURLStatus === 'success') {
-      const images: string[] = []    // Store local paths to image files
+      if (images.length > 0) {
+        return
+      }
+
+      const newImages: string[] = []    // Store local paths to image files
       let waveformsProcessed : number = 0  // Counter for checking if all workers are done
 
       // Only display the waveform of the first video we get
@@ -394,11 +400,11 @@ const Waveforms: React.FC<{}> = () => {
 
           // When done, save path to generated waveform img
           waveformWorker.oncomplete = function(image: any, numSamples: any) {
-            images.push(image)
+            newImages.push(image)
             waveformsProcessed++
             // If all images are generated, rerender
             if (waveformsProcessed === array.length) {
-              setImages(images)
+              dispatch(setWaveformImages(newImages))
             }
           }
         }
@@ -414,9 +420,10 @@ const Waveforms: React.FC<{}> = () => {
   const renderImages = () => {
     if (images.length > 0) {
       return (
-        images.map((image, index) =>
-          <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
-        )
+        <img alt='Waveform' src={images[0]} css={{minHeight: 0}}></img>
+        // images.map((image, index) =>
+        //   <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
+        // )
       );
     } else if (waveformWorkerError) {
       return (
