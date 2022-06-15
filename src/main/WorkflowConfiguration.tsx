@@ -8,7 +8,7 @@ import { faTools} from "@fortawesome/free-solid-svg-icons";
 import { faSpinner, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
+import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectSelectedWorkflowId } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
@@ -64,8 +64,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   // Initialize redux variables
   const dispatch = useDispatch()
 
-  const workflows = useSelector(selectWorkflows)
-  const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
+  const selectedWorkflowId = useSelector(selectSelectedWorkflowId)
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
@@ -95,7 +94,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
       dispatch(postVideoInformationWithWorkflow({
         segments: segments,
         tracks: tracks,
-        workflow: [{id: workflows[selectedWorkflowIndex].id}],
+        workflow: [{id: selectedWorkflowId}],
       }))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
