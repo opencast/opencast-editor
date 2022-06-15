@@ -18,6 +18,7 @@ export interface video {
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
+  waveformImages: string[]
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
@@ -39,6 +40,7 @@ export const initialState: video & httpRequestState = {
   clickTriggered: false,
   aspectRatios: [],
   hasChanges: false,
+  waveformImages: [],
 
   videoURLs: [],
   videoCount: 0,
@@ -120,6 +122,9 @@ export const videoSlice = createSlice({
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
       state.hasChanges = action.payload
     },
+    setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
+      state.waveformImages = action.payload
+    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -146,7 +151,7 @@ export const videoSlice = createSlice({
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
       state.hasChanges = true
     },
-    setSelectedWorkflowId: (state, action: PayloadAction<video["selectedWorkflowId"]>) => {
+    setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowId"]>) => {
       state.selectedWorkflowId = action.payload
     },
     mergeLeft: (state) => {
@@ -194,6 +199,7 @@ export const videoSlice = createSlice({
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
         });
+        state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
 
         state.aspectRatios = new Array(state.videoCount)
     })
@@ -292,8 +298,8 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, cut, markAsDeletedOrAlive, setSelectedWorkflowId, mergeLeft, mergeRight,
-  setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  addSegment, setAspectRatio, setHasChanges, setWaveformImages, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex,
+  mergeLeft, mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -321,6 +327,8 @@ export const selectSelectedWorkflowId = (state: { videoState:
     state.videoState.selectedWorkflowId
 export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
+export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
+  state.videoState.waveformImages
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
