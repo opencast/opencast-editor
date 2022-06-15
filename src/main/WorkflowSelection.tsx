@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectWorkflows, setSelectedWorkflowId } from '../redux/videoSlice'
+import { selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice'
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
 import { PageButton } from './Finish'
@@ -59,7 +59,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   })
 
   const handleWorkflowSelectChange = (event: { target: { value: string}; }) => {
-    dispatch(setSelectedWorkflowId(event.target.value))
+    dispatch(setSelectedWorkflowIndex(event.target.value))
   };
 
   // Layout template
