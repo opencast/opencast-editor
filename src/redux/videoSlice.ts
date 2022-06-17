@@ -51,6 +51,7 @@ export const initialState: video & httpRequestState = {
 
   status: 'idle',
   error: undefined,
+  errorReason: 'unknown',
 }
 
 export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
@@ -188,6 +189,11 @@ export const videoSlice = createSlice({
         // });
 
         // New API
+        if (action.payload.workflow_active) {
+          state.status = 'failed'
+          state.errorReason = 'workflowActive'
+          state.error = "An Opencast workflow is currently running, please wait until it is finished."
+        }
         // eslint-disable-next-line no-sequences
         state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length

@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import { httpRequestState, MainMenuStateNames } from '../types'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faToggleOn, faToggleOff, faGears} from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -44,15 +44,20 @@ const Video: React.FC<{}> = () => {
   const videoCount = useSelector(selectVideoCount)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
+  const errorReason = useSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
 
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
-      dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+      if (errorReason === 'workflowActive') {
+        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorDetails: undefined, errorIcon: faGears}))
+      } else {
+        dispatch(setError({error: true, errorTitle: undefined, errorMessage: t("video.comError-text"), errorDetails: error, errorIcon: undefined}))
+      }
     }
-  }, [videoURLStatus, dispatch, error, t])
+  }, [videoURLStatus, dispatch, error, t, errorReason])
 
   // Update based on current fetching status
   // let content
