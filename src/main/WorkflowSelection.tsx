@@ -3,7 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice'
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
@@ -20,6 +20,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup, withStyles } from "@material-ui/core";
+import { getTheme } from "./ThemeSwitcher";
 
 /**
  * Allows the user to select a workflow
@@ -27,6 +28,8 @@ import { FormControlLabel, Radio, RadioGroup, withStyles } from "@material-ui/co
 const WorkflowSelection : React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   const dispatch = useDispatch();
 
@@ -88,7 +91,7 @@ const WorkflowSelection : React.FC<{}> = () => {
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
-        <div css={errorBoxStyle(errorStatus === "failed")} role="alert">
+        <div css={errorBoxStyle(errorStatus === "failed", theme)} role="alert">
           <span>{t("various.error-text")}</span><br />
           {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
         </div>

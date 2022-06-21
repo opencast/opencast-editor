@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faKeyboard, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch, useSelector } from 'react-redux'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
 import { setPageNumber } from '../redux/finishSlice'
 
@@ -18,6 +18,8 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
+
+import ThemeSwitcher, { getTheme } from './ThemeSwitcher';
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -42,6 +44,7 @@ const MainMenu: React.FC<{}> = () => {
 
   return (
     <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
+      <ThemeSwitcher/>
       <MainMenuButton
         iconName={faCut}
         stateName={MainMenuStateNames.cutting}
@@ -102,6 +105,9 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
+  
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   const onMenuItemClicked = () => {
     dispatch(setState(stateName));
@@ -128,7 +134,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     width: '100%',
     height: '100px',
     ...(activeState === stateName) && {
-      backgroundColor: '#DDD',
+      backgroundColor: theme.menuButton,
     },
     flexDirection: 'column' as const,
   });
@@ -138,7 +144,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     height: '67px',
     marginBottom: '35px',
     ...(activeState === stateName) && {
-      backgroundColor: '#DDD',
+      backgroundColor: theme.menuButton,
     },
     flexDirection: 'column' as const,
   });

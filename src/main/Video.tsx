@@ -7,7 +7,7 @@ import { httpRequestState, MainMenuStateNames } from '../types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
@@ -29,6 +29,7 @@ import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
 import { sleep } from './../util/utilityFunctions'
+import { getTheme } from "./ThemeSwitcher";
 
 /**
  * Container for the videos and their controls
@@ -109,6 +110,8 @@ const Video: React.FC<{}> = () => {
 const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
 
   const { t } = useTranslation();
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -190,7 +193,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
 
   const errorBoxStyle = css({
     ...(!errorState) && {display: "none"},
-    borderColor: 'red',
+    borderColor: theme.error,
     borderStyle: 'dashed',
     fontWeight: 'bold',
     padding: '10px',

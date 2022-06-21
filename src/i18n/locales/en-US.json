@@ -209,5 +209,10 @@
       "scrubberRight": "Move right",
       "scubberIncrease": "Move faster",
       "scrubberDecrease": "Move slower"
+    },
+
+    "theme": {
+      "darkmode": "Darkmode",
+      "lightmode": "Lightmode"
     }
   }

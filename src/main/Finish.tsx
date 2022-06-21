@@ -14,8 +14,9 @@ import {
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { selectPageNumber, setPageNumber } from '../redux/finishSlice'
+import { getTheme } from './ThemeSwitcher';
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -58,6 +59,9 @@ const Finish : React.FC<{}> = () => {
  */
 export const PageButton : React.FC<{pageNumber: number, label: string, iconName: IconDefinition}> = ({pageNumber, label, iconName}) => {
 
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
+  
   // Initialize redux variables
   const dispatch = useDispatch()
 
@@ -68,8 +72,9 @@ export const PageButton : React.FC<{pageNumber: number, label: string, iconName:
   const pageButtonStyle = css({
     width: '200px',
     padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    boxShadow: theme.boxShadow,
+    background: theme.element_bg,
   })
 
   return (

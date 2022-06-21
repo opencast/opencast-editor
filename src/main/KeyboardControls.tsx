@@ -3,8 +3,10 @@ import React from "react";
 
 import { getApplicationKeyMap, KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation, Trans} from "react-i18next";
+import { RootStateOrAny, useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
 import i18next from "./../i18n/config";
+import { getTheme } from './ThemeSwitcher';
 
 const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
@@ -32,6 +34,8 @@ const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name,
 const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   const { t } = useTranslation();
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   const entryStyle = css({
     display: 'flex',
@@ -68,8 +72,8 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
     borderRadius: '5px',
     borderWidth: '2px',
     borderStyle: 'solid',
-    borderColor: 'Gainsboro',
-    background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
+    borderColor: theme.singleKey_border,
+    background: theme.singleKey_bg,
     padding: '10px',
   })
 

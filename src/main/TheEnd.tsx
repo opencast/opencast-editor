@@ -5,12 +5,13 @@ import { css } from '@emotion/react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
-import { useSelector } from 'react-redux';
+import { RootStateOrAny, useSelector } from 'react-redux';
 import { selectEndState } from '../redux/endSlice'
-import { basicButtonStyle, flexGapReplacementStyle, nagivationButtonStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { getTheme } from './ThemeSwitcher';
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -62,13 +63,15 @@ const TheEnd : React.FC<{}> = () => {
 const StartOverButton: React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   const reloadPage = () => {
     window.location.reload();
   };
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("theEnd.startOver-tooltip")}
+    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={t("theEnd.startOver-tooltip")}
       role="button" tabIndex={0}
       onClick={ reloadPage }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

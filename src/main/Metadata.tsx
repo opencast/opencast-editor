@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { css } from '@emotion/react'
 import { errorBoxStyle } from '../cssStyles'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 import {
   fetchMetadata, postMetadata, selectCatalogs,
   Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus, setFieldReadonly
@@ -28,6 +28,7 @@ import { configureFieldsAttributes, settings } from '../config'
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
+import { getTheme } from './ThemeSwitcher'
 
 /**
  * Creates a Metadata form
@@ -41,6 +42,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 const Metadata: React.FC<{}> = () => {
 
   const { t, i18n } = useTranslation();
+
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   // Init redux variables
   const dispatch = useDispatch()
@@ -92,8 +96,6 @@ const Metadata: React.FC<{}> = () => {
    */
 
   const metadataStyle = css({
-    // maxWidth: '1500px',
-    // margin: '10px',
     padding: '20px',
     marginLeft:'auto',
     marginRight:'auto',
@@ -121,9 +123,9 @@ const Metadata: React.FC<{}> = () => {
       fontSize: '1em',
       marginLeft: '15px',
       borderRadius: '5px',
-      backgroundColor: 'snow',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-      ...(isReadOnly && {color: 'grey'})
+      ...(isReadOnly && {color: theme.text}),
+      color: theme.text
     });
   }
 
@@ -132,6 +134,7 @@ const Metadata: React.FC<{}> = () => {
       css({
         padding: '10px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
+        background: isReadOnly ? theme.background : theme.element_bg,
       })
     );
   }
@@ -139,13 +142,33 @@ const Metadata: React.FC<{}> = () => {
   const selectFieldTypeStyle = {
     control: (provided: any) => ({
       ...provided,
-      background: 'snow'
+      background: theme.element_bg,
     }),
     menu: (provided: any) => ({
       ...provided,
-      background: 'snow',
+      background: theme.element_bg,
+      border: '1px solid #ccc',
       // kill the gap
-      marginTop: 0
+      marginTop: 0,
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: theme.text,
+    }),
+    multiValue: (provided: any) =>({
+      ...provided,
+      color: theme.text,
+      background: theme.multiValue,
+    }),
+    multiValueLabel: (provided: any) =>({
+      ...provided,
+      color: theme.text,
+    }),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      background: state.isFocused ? theme.focused : theme.background 
+        && state.isSelected ? theme.selected : theme.background,
+      ...(state.isFocused && {color: theme.black})
     }),
   }
 
@@ -154,6 +177,14 @@ const Metadata: React.FC<{}> = () => {
       css ({
         padding: '5px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
+        background: isReadOnly ? theme.background : theme.element_bg,
+        '.Mui-disabled': {
+          color: `${theme.disabled} !important`,
+          '-webkit-text-fill-color': theme.disabled,
+        },
+        '.MuiInput-input, button': {
+          color: theme.text,
+        }
       })
     );
   }
@@ -162,7 +193,7 @@ const Metadata: React.FC<{}> = () => {
     return css({
       lineHeight: '32px',
       marginLeft: '10px',
-      ...(isError && {color: '#800'}),
+      ...(isError && {color: theme.error}),
       fontWeight: 'bold',
     });
   }
@@ -672,7 +703,7 @@ const Metadata: React.FC<{}> = () => {
               form.reset()
             }} css={metadataStyle}>
 
-              <div css={errorBoxStyle(getStatus === "failed")} role="alert">
+              <div css={errorBoxStyle(getStatus === "failed", theme)} role="alert">
                 <span>A problem occurred during communication with Opencast.</span><br />
                 {getError ? "Details: " + getError : "No error details are available."}<br />
               </div>
@@ -714,7 +745,7 @@ const Metadata: React.FC<{}> = () => {
                 </button>
               </div> */}
 
-              <div css={errorBoxStyle(postStatus === "failed")} role="alert">
+              <div css={errorBoxStyle(postStatus === "failed", theme)} role="alert">
                 <span>A problem occurred during communication with Opencast. <br />
                       Changes could not be saved to Opencast.</span><br />
                 {postError ? "Details: " + postError : "No error details are available."}<br />

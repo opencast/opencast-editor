@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
-  nagivationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+  navigationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave, faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
 import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
@@ -19,6 +19,7 @@ import { PageButton } from './Finish'
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { getTheme } from './ThemeSwitcher';
 
 /**
  * Shown if the user wishes to save.
@@ -27,6 +28,8 @@ import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metad
 const Save : React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   const finishState = useSelector(selectFinishState)
 
@@ -72,11 +75,11 @@ const Save : React.FC<{}> = () => {
     <div css={saveStyle} title={t("save.saveArea-tooltip")}>
       <h1>{t("save.headline-text")}</h1>
       {render()}
-      <div css={errorBoxStyle(postWorkflowStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
       </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
       </div>
@@ -90,6 +93,8 @@ const Save : React.FC<{}> = () => {
 export const SaveButton: React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   // Initialize redux variables
   const dispatch = useDispatch()
@@ -155,7 +160,7 @@ export const SaveButton: React.FC<{}> = () => {
   }, [dispatch, metadataStatus, workflowStatus])
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={tooltip}
+    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={tooltip}
       role="button" tabIndex={0}
       onClick={ save }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

@@ -1,14 +1,14 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, nagivationButtonStyle, flexGapReplacementStyle} from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle} from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft, faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
 import { setEnd } from '../redux/endSlice'
 
@@ -16,6 +16,7 @@ import { PageButton } from './Finish'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { getTheme } from "./ThemeSwitcher";
 
 /**
  * Shown if the user wishes to abort.
@@ -54,6 +55,8 @@ const Discard : React.FC<{}> = () => {
 const DiscardButton : React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const mode = useSelector((state: RootStateOrAny) => state.theme);
+  const theme = getTheme(mode);
 
   // Initialize redux variables
   const dispatch = useDispatch()
@@ -63,7 +66,7 @@ const DiscardButton : React.FC<{}> = () => {
   }
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("discard.confirm-tooltip")}
+    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={t("discard.confirm-tooltip")}
       role="button" tabIndex={0}
       onClick={ discard }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

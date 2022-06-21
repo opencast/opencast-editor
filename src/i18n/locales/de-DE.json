@@ -194,5 +194,10 @@
         "scrubberRight": "Nach rechts",
         "scubberIncrease": "Schneller",
         "scrubberDecrease": "Langsamer"
+    },
+    
+    "theme": {
+        "darkmode": "Dunkles Design",
+        "lightmode": "Helles Design"
     }
 }
