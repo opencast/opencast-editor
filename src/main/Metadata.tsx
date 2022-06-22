@@ -168,8 +168,12 @@ const Metadata: React.FC<{}> = () => {
       ...provided,
       background: state.isFocused ? theme.focused : theme.background 
         && state.isSelected ? theme.selected : theme.background,
-      ...(state.isFocused && {color: theme.black})
+      ...(state.isFocused && {color: theme.black}),
     }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: theme.text
+    })
   }
 
   const dateTimeTypeStyle = (isReadOnly: boolean) => {
