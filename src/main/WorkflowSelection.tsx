@@ -115,6 +115,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         )
       );
     } else if (workflows.length === 1) {
+      dispatch(setSelectedWorkflowIndex(workflows[0].id))
       return (
         render(
           t("workflowSelection.saveAndProcess-text"),

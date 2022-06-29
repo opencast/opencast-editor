@@ -73,7 +73,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     case "Discard changes":
       buttonString = t("finishMenu.discard-button");
       break;
-    default: 
+    default:
       buttonString = "Could not load String value";
       break;
   }
@@ -86,7 +86,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
         finish()
       }}}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
-      <div>{buttonString}</div>
+      <div style={{padding: '0px 20px'}}>{buttonString}</div>
     </div>
   );
 };
