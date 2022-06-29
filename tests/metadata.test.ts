@@ -48,24 +48,24 @@ test.describe('Test Metadata-Page', () => {
 
         // Language
         await page.click('text=LanguageNo value >> :nth-match(svg, 2)');
-        await page.click('#react-select-3-option-22');
+        await page.click('#react-select-5-option-22');
 
         // License
         await page.click('text=LicenseCC-BY-SA >> :nth-match(svg, 2)');
-        await page.click('#react-select-5-option-8');
+        await page.click('#react-select-7-option-8');
 
         // Series / isPartOf
         await page.click('text=SeriesNo value >> :nth-match(svg, 2)');
-        await page.click('#react-select-7-option-4');
+        await page.click('#react-select-9-option-4');
 
         // Creator
         await page.click('[id="catalog0.creator"] div div >> :nth-match(div, 4)');
-        await page.click('#react-select-9-option-15');
+        await page.click('#react-select-11-option-15');
         await page.click('[aria-label="Remove Lars Kiesow"]');
 
         // Contributor
         await page.click('text=Contributor(s)Select... >> svg');
-        await page.click('#react-select-11-option-15');
+        await page.click('#react-select-13-option-15');
 
         // startDate
         // Expect date-time selector to pop up and hide again
