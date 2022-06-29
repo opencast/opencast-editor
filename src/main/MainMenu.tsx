@@ -3,9 +3,9 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faKeyboard, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faGear, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
 import { setPageNumber } from '../redux/finishSlice'
 
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
 
-import ThemeSwitcher, { getTheme } from './ThemeSwitcher';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -27,9 +27,10 @@ import ThemeSwitcher, { getTheme } from './ThemeSwitcher';
 const MainMenu: React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme);
 
   const mainMenuStyle = css({
-    borderRight: '1px solid #BBB',
+    borderRight: `${theme.menuBorder}`,
     width: '100px',
     display: 'flex',
     flexDirection: 'column' as const,
@@ -44,7 +45,6 @@ const MainMenu: React.FC<{}> = () => {
 
   return (
     <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
-      <ThemeSwitcher/>
       <MainMenuButton
         iconName={faCut}
         stateName={MainMenuStateNames.cutting}
@@ -78,7 +78,7 @@ const MainMenu: React.FC<{}> = () => {
       {/* A space for buttons that would normally go in a header or footer */}
       <div css={{flexGrow: 99, display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
         <MainMenuButton
-          iconName={faKeyboard}
+          iconName={faGear}
           stateName={MainMenuStateNames.keyboardControls}
           bottomText={""}
           ariaLabelText={t("keyboardControls.header")}
@@ -105,9 +105,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
-  
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
+  const theme = useSelector(selectTheme);
 
   const onMenuItemClicked = () => {
     dispatch(setState(stateName));
@@ -134,7 +132,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     width: '100%',
     height: '100px',
     ...(activeState === stateName) && {
-      backgroundColor: theme.menuButton,
+      backgroundColor: `${theme.menuButton}`,
     },
     flexDirection: 'column' as const,
   });
@@ -144,7 +142,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     height: '67px',
     marginBottom: '35px',
     ...(activeState === stateName) && {
-      backgroundColor: theme.menuButton,
+      backgroundColor: `${theme.menuButton}`,
     },
     flexDirection: 'column' as const,
   });

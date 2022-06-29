@@ -9,7 +9,7 @@ import {
   faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave, faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
 import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
@@ -19,7 +19,7 @@ import { PageButton } from './Finish'
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
-import { getTheme } from './ThemeSwitcher';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Shown if the user wishes to save.
@@ -28,8 +28,6 @@ import { getTheme } from './ThemeSwitcher';
 const Save : React.FC<{}> = () => {
 
   const { t } = useTranslation();
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
 
   const finishState = useSelector(selectFinishState)
 
@@ -37,6 +35,7 @@ const Save : React.FC<{}> = () => {
   const postError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
+  const theme = useSelector(selectTheme);
 
   const saveStyle = css({
     height: '100%',
@@ -93,8 +92,6 @@ const Save : React.FC<{}> = () => {
 export const SaveButton: React.FC<{}> = () => {
 
   const { t } = useTranslation();
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
 
   // Initialize redux variables
   const dispatch = useDispatch()
@@ -103,6 +100,7 @@ export const SaveButton: React.FC<{}> = () => {
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
+  const theme = useSelector(selectTheme);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status

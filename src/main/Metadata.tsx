@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { css } from '@emotion/react'
 import { errorBoxStyle } from '../cssStyles'
 
-import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   fetchMetadata, postMetadata, selectCatalogs,
   Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus, setFieldReadonly
@@ -27,8 +27,8 @@ import { DateTime as LuxonDateTime} from "luxon";
 import { configureFieldsAttributes, settings } from '../config'
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { selectTheme } from "../redux/themeSlice";
 
-import { getTheme } from './ThemeSwitcher'
 
 /**
  * Creates a Metadata form
@@ -43,9 +43,6 @@ const Metadata: React.FC<{}> = () => {
 
   const { t, i18n } = useTranslation();
 
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
-
   // Init redux variables
   const dispatch = useDispatch()
   const catalogs = useSelector(selectCatalogs);
@@ -53,6 +50,7 @@ const Metadata: React.FC<{}> = () => {
   const getError = useSelector(selectGetError);
   const postStatus = useSelector(selectPostStatus);
   const postError = useSelector(selectPostError);
+  const theme = useSelector(selectTheme);
 
   // Try to fetch URL from external API
   useEffect(() => {
@@ -124,8 +122,8 @@ const Metadata: React.FC<{}> = () => {
       marginLeft: '15px',
       borderRadius: '5px',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-      ...(isReadOnly && {color: theme.text}),
-      color: theme.text
+      ...(isReadOnly && {color: `${theme.text}`}),
+      color: `${theme.text}`
     });
   }
 
@@ -134,7 +132,7 @@ const Metadata: React.FC<{}> = () => {
       css({
         padding: '10px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
-        background: isReadOnly ? theme.background : theme.element_bg,
+        background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
       })
     );
   }
@@ -168,7 +166,7 @@ const Metadata: React.FC<{}> = () => {
       ...provided,
       background: state.isFocused ? theme.focused : theme.background 
         && state.isSelected ? theme.selected : theme.background,
-      ...(state.isFocused && {color: theme.black}),
+      ...(state.isFocused && {color: '#000'}),
     }),
     placeholder: (provided: any) => ({
       ...provided,
@@ -181,14 +179,18 @@ const Metadata: React.FC<{}> = () => {
       css ({
         padding: '5px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
-        background: isReadOnly ? theme.background : theme.element_bg,
+        background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
         '.Mui-disabled': {
           color: `${theme.disabled} !important`,
-          '-webkit-text-fill-color': theme.disabled,
+          'WebkitTextFillColor':`${theme.disabled}`,
         },
         '.MuiInput-input, button': {
-          color: theme.text,
-        }
+          color: `${theme.text}`,
+          background: 'transparent !important',
+          '&:hover': {
+            background: 'transparent !important',
+          }
+        },    
       })
     );
   }
@@ -197,7 +199,7 @@ const Metadata: React.FC<{}> = () => {
     return css({
       lineHeight: '32px',
       marginLeft: '10px',
-      ...(isError && {color: theme.error}),
+      ...(isError && {color: `${theme.error}`}),
       fontWeight: 'bold',
     });
   }

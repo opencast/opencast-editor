@@ -9,13 +9,12 @@ import {
 import ReactPlayer from 'react-player'
 
 import { Track }  from '../types'
-import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectTracks, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
-import { getTheme } from "./ThemeSwitcher";
-
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Creates the track selection.
@@ -146,8 +145,8 @@ interface selectButtonInterface {
 }
 
 const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, tooltip, active}) => {
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
+
+  const theme = useSelector(selectTheme);
   
   const buttonStyle = [
     active ? basicButtonStyle : deactivatedButtonStyle,
@@ -155,8 +154,8 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
       margin: '10px 15px',
       padding: '16px',
       width: '25%',
-      boxShadow: theme.boxShadow,
-      background: theme.element_bg,
+      boxShadow: `${theme.boxShadow}`,
+      background: `${theme.element_bg}`,
     }];
   const clickHandler = () => {
     active && handler();

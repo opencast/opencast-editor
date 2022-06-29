@@ -19,6 +19,6 @@ export default configureStore({
     endState: endReducer,
     metadataState: metadataReducer,
     errorState: errorReducer,
-    theme: themeReducer,
+    themeState: themeReducer,
   }
 })

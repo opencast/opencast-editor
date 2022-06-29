@@ -212,7 +212,9 @@
     },
 
     "theme": {
-      "darkmode": "Darkmode",
-      "lightmode": "Lightmode"
+      "appearance": "Appearance",
+      "darkmode": "Dark mode",
+      "lightmode": "Light mode",
+      "system": "System design"
     }
   }

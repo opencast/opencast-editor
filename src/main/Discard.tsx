@@ -8,7 +8,7 @@ import {
   faChevronLeft, faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
 import { setEnd } from '../redux/endSlice'
 
@@ -16,7 +16,7 @@ import { PageButton } from './Finish'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { getTheme } from "./ThemeSwitcher";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Shown if the user wishes to abort.
@@ -55,11 +55,10 @@ const Discard : React.FC<{}> = () => {
 const DiscardButton : React.FC<{}> = () => {
 
   const { t } = useTranslation();
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
 
   // Initialize redux variables
   const dispatch = useDispatch()
+  const theme = useSelector(selectTheme);
 
   const discard = () => {
     dispatch(setEnd({hasEnded: true, value: 'discarded'}))

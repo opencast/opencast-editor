@@ -1,71 +1,92 @@
 import React from "react";
-import { css } from "@emotion/react";
-import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
-import { setTheme } from '../redux/themeSlice';
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons";
-import { darkTheme, lightTheme, flexGapReplacementStyle } from "../cssStyles";
 import { useTranslation } from "react-i18next";
-
-
+import { useDispatch, useSelector } from "react-redux"
+import { selectTheme, selectThemeState, setTheme, setState } from "../redux/themeSlice";
+import Select from "react-select";
 
 const ThemeSwitcher: React.FC<{}> = () => {
 
   const { t } = useTranslation();
-  
-  const theme = useSelector((state: RootStateOrAny) => state.theme);
+
   const dispatch = useDispatch();
-  const design = getTheme(theme);
+  const themeState = useSelector(selectThemeState);
+  const theme = useSelector(selectTheme);
 
   React.useEffect(() => {
-    localStorage.setItem('theme', theme);
-  }, [ theme ])
+    localStorage.setItem('theme', themeState)
+    dispatch(setTheme(theme))
+    // Listen to system preference changes
+    const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
+    isDarkPrefered.addEventListener('change', () => {
+      dispatch(setTheme(theme))
+    })
+  }, [ themeState, theme, dispatch ] )
 
-  const switchTheme = () => {
-    const mode = (theme === 'dark' ? 'light' : 'dark');
-    dispatch(setTheme(mode));
+  const switchTheme = (themeState: String) => {
+    if(themeState === 'system'){
+      dispatch(setState('system'))
+    } 
+    else if(themeState === 'dark') {
+      dispatch(setState('dark'))
+    }
+    else {
+      dispatch(setState('light'))
+    }
   }
 
-  const buttonStyle = css({
-    backgroundColor: 'transparent',
-    color: design.text,
-    width: '100%',
-    height: 'auto',
-    fontSize: '14px',
-    border: 'none',
-    borderRadius: '10px',
-    cursor: "pointer",
-    // Position
-    padding: '10px 10px',
-    display: 'flex',
+  const baseStyle = {
+    maxWidth: '50vw',
+    width: '870px',
+    alignSelf: 'center',
+    padding: '20px',
+  }
+
+  const headerStyle = {
+    display: 'flex', 
     flexDirection: 'column' as const,
-    ...(flexGapReplacementStyle(10, false)),
-    // Animation
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    '&:hover': {
-      backgroundColor: design.menuButton,
-      transform: 'scale(1.1)',
-    },
-    '&:active': {
-      transform: 'scale(0.9)',
-    },
-  });
+    alignItems: 'center',
+  }
 
+  const selectStyle = {
+    control: (provided: any) => ({
+      ...provided,
+      background: theme.element_bg,
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      background: theme.element_bg,
+      border: '1px solid #ccc',
+      // kill the gap
+      marginTop: 0,
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: theme.text,
+    }),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      background: state.isFocused ? theme.focused : theme.background 
+        && state.isSelected ? theme.selected : theme.background,
+      ...(state.isFocused && {color: '#000'}),
+    })
+  }
+
+  const themes = [
+    { value: 'system', label: t('theme.system') },
+    { value: 'light', label: t('theme.lightmode') },
+    { value: 'dark', label: t('theme.darkmode') },
+  ]
+  
   return (
-    <button css={buttonStyle} onClick={switchTheme}>
-      <FontAwesomeIcon icon={faCircleHalfStroke} css={{fontSize: '20px'}}/>
-      {theme === 'dark' ? t('theme.lightmode') : t('theme.darkmode')}
-    </button>
+    <div css={baseStyle}>
+      <h2 css={headerStyle}>{t('theme.appearance')}</h2>
+      <Select styles={selectStyle}
+        defaultValue={themes.filter(({value}) => value === themeState)}
+        options={themes}
+        onChange={themes => switchTheme(themes!.value)}
+      />
+    </div>
   )
-}
-
-export const getTheme = (theme: any) => {
-  if (theme === 'dark') {
-    return darkTheme
-  } 
-  return lightTheme
 }
 
 export default ThemeSwitcher;

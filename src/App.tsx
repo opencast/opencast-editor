@@ -1,12 +1,12 @@
 import React from 'react';
 import Body from './main/Body';
 import { GlobalStyle } from './cssStyles';
-import { RootStateOrAny, useSelector } from 'react-redux';
-import { getTheme } from './main/ThemeSwitcher';
+import { useSelector } from 'react-redux';
+import { selectThemeState } from './redux/themeSlice';
 
 function App() {
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
+  const theme = useSelector(selectThemeState);
+  
   return (
     <div className="App" css={theme}>
       <GlobalStyle />

@@ -13,7 +13,7 @@ import { faTools} from "@fortawesome/free-solid-svg-icons";
 
 import { css } from '@emotion/react'
 
-import { RootStateOrAny, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { selectMainMenuState } from '../redux/mainMenuSlice'
 
 import { MainMenuStateNames } from '../types'
@@ -22,7 +22,8 @@ import { flexGapReplacementStyle } from "../cssStyles";
 import { useBeforeunload } from 'react-beforeunload';
 import { hasChanges as videoHasChanges } from "../redux/videoSlice";
 import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
-import { getTheme } from './ThemeSwitcher';
+import { selectTheme } from "../redux/themeSlice";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 /**
  * A container for the main functionality
@@ -33,9 +34,7 @@ const MainContent: React.FC<{}> = () => {
   const mainMenuState = useSelector(selectMainMenuState)
   const videoChanged = useSelector(videoHasChanges)
   const metadataChanged = useSelector(metadataHasChanges)
-
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
+  const theme = useSelector(selectTheme)
 
   // Display warning when leaving the page if there are unsaved changes
   useBeforeunload((event: { preventDefault: () => void; }) => {
@@ -62,7 +61,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    background: theme.background,
+    background: `${theme.background}`,
   })
 
   const metadataStyle = css({
@@ -70,7 +69,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    background: theme.background,
+    background: `${theme.background}`,
   })
 
   const trackSelectStyle = css({
@@ -80,7 +79,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    background: theme.background,
+    background: `${theme.background}`,
   })
 
   const finishStyle = css({
@@ -91,15 +90,16 @@ const MainContent: React.FC<{}> = () => {
     paddingRight: '20px',
     paddingLeft: '161px',
     minHeight: '100vh',
-    background: theme.background,
+    background: `${theme.background}`,
   })
 
   const keyboardControlsStyle = css({
+    flexDirection: 'column' as const,
     ...displayState(MainMenuStateNames.keyboardControls),
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    background: theme.background,
+    background: `${theme.background}`,
   })
 
   const defaultStyle = css({
@@ -127,7 +127,8 @@ const MainContent: React.FC<{}> = () => {
         <Finish />
       </div>
       <div css={keyboardControlsStyle}>
-          <KeyboardControls />
+        <ThemeSwitcher/>
+        <KeyboardControls />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />

@@ -16,3 +16,67 @@ code {
 html, body, #root, .App {
   height: 100%;
 }
+
+[data-theme = 'dark'] {
+  --main-bg-color: #2b2b2b;
+  --selected-bg: #a1a1a1;
+  --selected-color: #000;
+  --border: 2px solid #a1a1a1;
+  --color: rgba(255, 255, 255, 0.87);
+  --color2: #a1a1a1;
+  --hover-color: rgba(255, 255, 255, 0.2);
+  --inner-clock: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme = 'light'] {
+  --main-bg-color: snow;
+  --selected-bg: #1565c0;
+  --selected-color: #fff;
+  --border: none;
+  --color: #000;
+  --color2: #6B6969;
+  --hover-color: rgba(0, 0, 0, 0.04);
+  --inner-clock: rgba(0,0,0,.07);
+}
+
+/* Calendar modal Metadata */
+.MuiPaper-root, .MuiClockPicker-root {
+  outline: var(--border) !important;
+}
+.MuiCalendarPicker-root, .MuiPickersDay-root {
+  background-color: var(--main-bg-color) !important;
+  color: var(--color) !important;
+}
+.MuiSvgIcon-root, .MuiButtonBase-root {
+  background: transparent;
+  color: var(--color) !important;
+}
+.MuiButtonBase-root:hover {
+  background-color: var(--hover-color) !important;
+  color: var(--color) !important;
+}
+.MuiTypography-root {
+  color: var(--color2) !important;
+}
+.Mui-selected {
+  background-color: var(--selected-bg) !important;
+  color: var(--selected-color) !important;
+}
+
+/* Clock modal Metadata */
+.MuiClockPicker-root {
+  background-color: var(--main-bg-color) !important;
+}
+.css-eziifo { /* bg of the clock*/
+  background-color: var(--inner-clock) !important;
+}
+.css-1flhz3h { /* digits on the clock */
+  color: var(--color) !important;
+}
+.MuiClockPicker-root .MuiTypography-root {
+  color: white !important;
+}
+.MuiClockPicker-root .Mui-selected {
+  background-color: #1565c0 !important;
+  color: white !important;
+}

@@ -197,7 +197,9 @@
     },
     
     "theme": {
+        "appearance": "Aussehen",
         "darkmode": "Dunkles Design",
-        "lightmode": "Helles Design"
+        "lightmode": "Helles Design",
+        "system": "System Design"
     }
 }

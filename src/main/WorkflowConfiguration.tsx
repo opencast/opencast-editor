@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools} from "@fortawesome/free-solid-svg-icons";
 import { faSpinner, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
 
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectSelectedWorkflowId } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
@@ -17,7 +17,7 @@ import { setEnd } from "../redux/endSlice";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
-import { getTheme } from "./ThemeSwitcher";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -25,13 +25,12 @@ import { getTheme } from "./ThemeSwitcher";
 const WorkflowConfiguration : React.FC<{}> = () => {
 
   const { t } = useTranslation();
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
 
   const postAndProcessWorkflowStatus = useSelector(selectStatus);
   const postAndProcessError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
+  const theme = useSelector(selectTheme);
 
   const workflowConfigurationStyle = css({
     display: 'flex',
@@ -69,9 +68,6 @@ const WorkflowConfiguration : React.FC<{}> = () => {
  */
 export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
-  
   // Initialize redux variables
   const dispatch = useDispatch()
 
@@ -81,6 +77,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
+  const theme = useSelector(selectTheme);
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
@@ -129,8 +126,8 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   const saveButtonStyle = css({
     padding: '16px',
-    boxShadow: theme.boxShadow,
-    background: theme.element_bg,
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
   })
 
   return (

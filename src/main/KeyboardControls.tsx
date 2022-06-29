@@ -3,12 +3,14 @@ import React from "react";
 
 import { getApplicationKeyMap, KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation, Trans} from "react-i18next";
-import { RootStateOrAny, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
+import { selectTheme } from "../redux/themeSlice";
 import i18next from "./../i18n/config";
-import { getTheme } from './ThemeSwitcher';
 
 const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
+
+  const theme = useSelector(selectTheme);
 
   const groupStyle = css({
     display: 'flex',
@@ -18,7 +20,7 @@ const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name,
   });
 
   const headingStyle = css({
-    borderBottom: '1px solid #BBB',
+    borderBottom: `${theme.menuBorder}`
   })
 
   return (
@@ -34,8 +36,7 @@ const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name,
 const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   const { t } = useTranslation();
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
+  const theme = useSelector(selectTheme);
 
   const entryStyle = css({
     display: 'flex',
@@ -72,8 +73,8 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
     borderRadius: '5px',
     borderWidth: '2px',
     borderStyle: 'solid',
-    borderColor: theme.singleKey_border,
-    background: theme.singleKey_bg,
+    borderColor: `${theme.singleKey_border}`,
+    background: `${theme.singleKey_bg}`,
     padding: '10px',
   })
 

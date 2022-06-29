@@ -8,12 +8,12 @@ import {
   faSave, faFileExport, faTimesCircle, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { getTheme } from './ThemeSwitcher';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -43,10 +43,9 @@ const FinishMenu : React.FC<{}> = () => {
 const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["value"]}> = ({iconName, stateName}) => {
 
   const { t } = useTranslation();
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
 
   const dispatch = useDispatch();
+  const theme = useSelector(selectTheme);
 
   const finish = () => {
     dispatch(setState(stateName));
@@ -59,8 +58,8 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     flexDirection: 'column' as const,
     fontSize: "x-large",
     ...(flexGapReplacementStyle(30, false)),
-    boxShadow: theme.boxShadow,
-    background: theme.element_bg,
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
   });
 
   var buttonString;

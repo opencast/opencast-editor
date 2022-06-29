@@ -5,13 +5,13 @@ import { css } from '@emotion/react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
-import { RootStateOrAny, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectEndState } from '../redux/endSlice'
 import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { getTheme } from './ThemeSwitcher';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -63,8 +63,7 @@ const TheEnd : React.FC<{}> = () => {
 const StartOverButton: React.FC<{}> = () => {
 
   const { t } = useTranslation();
-  const mode = useSelector((state: RootStateOrAny) => state.theme);
-  const theme = getTheme(mode);
+  const theme = useSelector(selectTheme);
 
   const reloadPage = () => {
     window.location.reload();
