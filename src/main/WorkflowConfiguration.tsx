@@ -17,6 +17,7 @@ import { setEnd } from "../redux/endSlice";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { AppDispatch } from "../redux/store";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -67,7 +68,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
 export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   // Initialize redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   const selectedWorkflowId = useSelector(selectSelectedWorkflowId)
   const segments = useSelector(selectSegments)

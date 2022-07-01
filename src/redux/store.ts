@@ -8,7 +8,7 @@ import endReducer from './endSlice'
 import metadataReducer from './metadataSlice'
 import errorReducer from './errorSlice'
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
     mainMenuState: mainMenuStateReducer,
     finishState: finishStateReducer,
@@ -20,3 +20,7 @@ export default configureStore({
     errorState: errorReducer,
   }
 })
+
+export type AppDispatch = typeof store.dispatch
+
+export default store

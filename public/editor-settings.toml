@@ -13,6 +13,7 @@
 # Type: string | undefined
 # Default: undefined
 id = 'ID-dual-stream-demo'
+#id= '6c514156-e308-44da-91a5-a5d0f13c7b49'
 
 
 ####
@@ -26,6 +27,7 @@ id = 'ID-dual-stream-demo'
 # Type: URL
 # Default: Current server
 url = 'https://develop.opencast.org'
+#url ='http://localhost:8080'
 
 # Username, used for HTTP basic authentication against Opencast.
 # Not defining this will work just fine if integrated in Opencast.

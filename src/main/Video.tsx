@@ -29,6 +29,7 @@ import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
 import { sleep } from './../util/utilityFunctions'
+import { AppDispatch } from "../redux/store";
 
 /**
  * Container for the videos and their controls
@@ -39,7 +40,7 @@ const Video: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
