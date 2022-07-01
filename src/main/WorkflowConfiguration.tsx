@@ -79,6 +79,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   // Let users leave the page without warning after a successful save
   useEffect(() => {
     if (workflowStatus === 'success' && metadataStatus === 'success') {
+      dispatch(setEnd({hasEnded: true, value: 'success'}))
       dispatch(videoSetHasChanges(false))
       dispatch(metadataSetHasChanges(false))
     }
@@ -114,7 +115,6 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
     icon = faCheck
     spin = false
-    dispatch(setEnd({hasEnded: true, value: 'success'}))
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
     icon = faSpinner
     spin = true

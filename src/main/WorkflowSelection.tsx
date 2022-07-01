@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
 import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
@@ -58,6 +58,12 @@ const WorkflowSelection : React.FC<{}> = () => {
     maxHeight: '50vh',
   })
 
+  useEffect(() => {
+    if (workflows.length === 1) {
+      dispatch(setSelectedWorkflowIndex(workflows[0].id))
+    }
+  }, [dispatch, workflows])
+
   const handleWorkflowSelectChange = (event: { target: { value: string}; }) => {
     dispatch(setSelectedWorkflowIndex(event.target.value))
   };
@@ -113,7 +119,6 @@ const WorkflowSelection : React.FC<{}> = () => {
         )
       );
     } else if (workflows.length === 1) {
-      dispatch(setSelectedWorkflowIndex(workflows[0].id))
       return (
         render(
           t("workflowSelection.saveAndProcess-text"),
