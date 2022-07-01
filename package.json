@@ -47,7 +47,7 @@
     "react-final-form": "^6.5.9",
     "react-final-form-listeners": "^1.0.3",
     "react-hotkeys": "^2.0.0",
-    "react-i18next": "^11.16.9",
+    "react-i18next": "^11.17.4",
     "react-player": "^2.10.0",
     "react-redux": "^7.2.8",
     "react-scripts": "5.0.1",
@@ -84,7 +84,7 @@
     ]
   },
   "devDependencies": {
-    "@playwright/test": "^1.22.2",
+    "@playwright/test": "^1.23.1",
     "@types/lodash": "^4.14.182",
     "@types/luxon": "^2.3.2",
     "@types/react-beforeunload": "^2.1.1",
