@@ -68,7 +68,7 @@ const ThemeSwitcher: React.FC<{}> = () => {
       ...provided,
       background: state.isFocused ? theme.focused : theme.background 
         && state.isSelected ? theme.selected : theme.background,
-      ...(state.isFocused && {color: '#000'}),
+      ...(state.isFocused && {color: theme.focus_text}),
     })
   }
 
