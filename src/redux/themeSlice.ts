@@ -8,6 +8,7 @@ export interface Theme {
   element_bg: String
   multiValue: String
   focused: String
+  focus_text: String
   selected: String
   disabled: String
   menuButton: String
@@ -56,7 +57,7 @@ export interface theme {
 
 const initialState: theme = {
   value: getValue(),
-  theme: getTheme()
+  theme: getTheme(),
 }
 
 export const themeSlice = createSlice({
@@ -66,14 +67,14 @@ export const themeSlice = createSlice({
     setState: (state, action: PayloadAction<theme["value"]>) => {
       state.value = action.payload;
     },
-    setTheme: (state, action: PayloadAction<theme["theme"]>) => {
+    toggleTheme: (state, action: PayloadAction<theme["theme"]>) => {
       state.theme = getTheme();
     },
   }
 })
 
 // Export Actions
-export const { setState, setTheme } = themeSlice.actions
+export const { setState, toggleTheme } = themeSlice.actions
 
 // Export Selectors
 export const selectThemeState = (state: { themeState: { value: theme["value"]; }; }) => state.themeState.value

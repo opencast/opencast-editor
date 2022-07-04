@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux"
-import { selectTheme, selectThemeState, setTheme, setState } from "../redux/themeSlice";
+import { selectTheme, selectThemeState, toggleTheme, setState } from "../redux/themeSlice";
 import Select from "react-select";
 
 const ThemeSwitcher: React.FC<{}> = () => {
@@ -14,13 +14,14 @@ const ThemeSwitcher: React.FC<{}> = () => {
 
   React.useEffect(() => {
     localStorage.setItem('theme', themeState)
-    dispatch(setTheme(theme))
-    // Listen to system preference changes
-    const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
-    isDarkPrefered.addEventListener('change', () => {
-      dispatch(setTheme(theme))
-    })
+    dispatch(toggleTheme(theme))
   }, [ themeState, theme, dispatch ] )
+
+  // Listen to system preference changes
+  const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
+  isDarkPrefered.addEventListener('change', () => {
+    dispatch(toggleTheme(theme))
+  })
 
   const switchTheme = (themeState: String) => {
     if(themeState === 'system'){
