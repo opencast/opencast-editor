@@ -83,7 +83,7 @@ const updateCurrentlyAt = (state: video, milliseconds: number) => {
  * Slice for the state of the "video"
  * Treats the multitude of videos that may exist as one video
  */
-export const videoSlice = createSlice({
+const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
@@ -130,7 +130,7 @@ export const videoSlice = createSlice({
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
           state.segments[state.activeSegmentIndex].end === state.currentlyAt ) {
-        return state;
+        return
       }
 
       // Make two (new) segments out of it
