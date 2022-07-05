@@ -16,6 +16,7 @@ export const lightMode: Theme = {
   singleKey_bg: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
   singleKey_border: 'Gainsboro',
   invert_wave: 'invert(0%)',
+  inverted_text: '#000', // for "Generating waveform" text: in lightMode it's not inverted, so it has to be black
 };
 
 export const darkMode: Theme = {
@@ -34,4 +35,5 @@ export const darkMode: Theme = {
   singleKey_bg: 'linear-gradient(180deg, rgba(40,40,40,1) 0%, rgba(30,30,30,1) 100%)',
   singleKey_border: '#404040',
   invert_wave: 'invert(100%)',
+  inverted_text: '#000',
 };

@@ -157,3 +157,41 @@ export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
   );
 }
 
+export function selectFieldStyle(theme: Theme) {
+  return {
+    control: (provided: any) => ({
+      ...provided,
+      background: theme.element_bg,
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      background: theme.element_bg,
+      border: '1px solid #ccc',
+      // kill the gap
+      marginTop: 0,
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: theme.text,
+    }),
+    multiValue: (provided: any) =>({
+      ...provided,
+      color: theme.text,
+      background: theme.multiValue,
+    }),
+    multiValueLabel: (provided: any) =>({
+      ...provided,
+      color: theme.text,
+    }),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      background: state.isFocused ? theme.focused : theme.background 
+        && state.isSelected ? theme.selected : theme.background,
+      ...(state.isFocused && {color: theme.focus_text}),
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: theme.text
+    })
+  }
+}

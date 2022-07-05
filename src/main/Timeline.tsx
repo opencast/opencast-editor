@@ -345,6 +345,7 @@ const Waveforms: React.FC<{}> = () => {
     height: '230px',
     paddingTop: '10px',
     filter: `${theme.invert_wave}`,
+    color: `${theme.inverted_text}`,
   });
 
   // When the URLs to the videos are fetched, generate waveforms

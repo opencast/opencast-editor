@@ -17,6 +17,7 @@ export interface Theme {
   singleKey_bg: String
   singleKey_border: String
   invert_wave: String
+  inverted_text: String
 };
 
 const getValue = () => {
@@ -67,8 +68,8 @@ export const themeSlice = createSlice({
     setState: (state, action: PayloadAction<theme["value"]>) => {
       state.value = action.payload;
     },
-    toggleTheme: (state, action: PayloadAction<theme["theme"]>) => {
-      state.theme = getTheme();
+    toggleTheme: (state) => {
+      state.theme = getTheme()
     },
   }
 })
