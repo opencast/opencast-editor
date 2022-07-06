@@ -20,6 +20,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup, withStyles } from "@material-ui/core";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Allows the user to select a workflow
@@ -34,6 +35,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   const workflows = useSelector(selectWorkflows)
   const finishState = useSelector(selectFinishState)
   const pageNumber = useSelector(selectPageNumber)
+  const theme = useSelector(selectTheme)
 
   const postAndProcessWorkflowStatus = useSelector(selectStatus);
   const postAndProcessError = useSelector(selectError)
@@ -94,7 +96,7 @@ const WorkflowSelection : React.FC<{}> = () => {
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
-        <div css={errorBoxStyle(errorStatus === "failed")} role="alert">
+        <div css={errorBoxStyle(errorStatus === "failed", theme)} role="alert">
           <span>{t("various.error-text")}</span><br />
           {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
         </div>

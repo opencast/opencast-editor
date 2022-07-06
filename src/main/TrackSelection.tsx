@@ -14,7 +14,7 @@ import { selectTracks, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
-
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Creates the track selection.
@@ -49,7 +49,6 @@ const Description: React.FC<{}> = () => {
     alignItems: 'center',
     margin: '20px',
     padding: '10px',
-    backgroundColor: '#eee',
   });
 
   return (
@@ -76,7 +75,6 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     alignItems: 'center',
     margin: '20px',
     paddingBottom: '10px',
-    backgroundColor: '#eee',
     verticalAlign: 'middle',
   });
 
@@ -144,17 +142,20 @@ interface selectButtonInterface {
   icon: any,
   tooltip: string,
   active: boolean,
-  color?: string,
 }
 
-const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, tooltip, active, color = 'black'}) => {
+const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, tooltip, active}) => {
+
+  const theme = useSelector(selectTheme);
+  
   const buttonStyle = [
     active ? basicButtonStyle : deactivatedButtonStyle,
     {
       margin: '10px 15px',
       padding: '16px',
-      boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
       width: '25%',
+      boxShadow: `${theme.boxShadow}`,
+      background: `${theme.element_bg}`,
     }];
   const clickHandler = () => {
     active && handler();
@@ -175,7 +176,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
          aria-label={ tooltip }
          onClick={ clickHandler }
          onKeyDown={ keyHandler } >
-      <FontAwesomeIcon css={{ color: color }} icon={ icon } size="1x" />
+      <FontAwesomeIcon icon={ icon } size="1x" />
       <div>{ text }</div>
     </div>
   );

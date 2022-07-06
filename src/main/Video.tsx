@@ -29,6 +29,7 @@ import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
 import { sleep } from './../util/utilityFunctions'
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Container for the videos and their controls
@@ -44,6 +45,7 @@ const Video: React.FC<{}> = () => {
   const videoCount = useSelector(selectVideoCount)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
+  const theme = useSelector(selectTheme);
   const errorReason = useSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
 
   // Try to fetch URL from external API
@@ -84,7 +86,7 @@ const Video: React.FC<{}> = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px',
-    borderBottom: '1px solid #BBB',
+    borderBottom: `${theme.menuBorder}`,
   });
 
   const videoPlayerAreaStyle = css({
@@ -123,6 +125,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
   const previewTriggered = useSelector(selectPreviewTriggered)
   const clickTriggered = useSelector(selectClickTriggered)
   const aspectRatio = useSelector(selectAspectRatio)
+  const theme = useSelector(selectTheme)
 
   // Init state variables
   const ref = useRef<ReactPlayer>(null);
@@ -195,7 +198,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
 
   const errorBoxStyle = css({
     ...(!errorState) && {display: "none"},
-    borderColor: 'red',
+    borderColor: `${theme.error}`,
     borderStyle: 'dashed',
     fontWeight: 'bold',
     padding: '10px',

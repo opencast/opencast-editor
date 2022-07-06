@@ -17,6 +17,7 @@ import { setEnd } from "../redux/endSlice";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -29,6 +30,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
   const postAndProcessError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
+  const theme = useSelector(selectTheme);
 
   const workflowConfigurationStyle = css({
     display: 'flex',
@@ -48,11 +50,11 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         <PageButton pageNumber={1} label={t("various.goBack-button")} iconName={faChevronLeft}/>
         <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
       </div>
-      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
       </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
       </div>
@@ -75,6 +77,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
+  const theme = useSelector(selectTheme);
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
@@ -123,7 +126,8 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   const saveButtonStyle = css({
     padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
   })
 
   return (
