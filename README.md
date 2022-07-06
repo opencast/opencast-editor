@@ -46,6 +46,7 @@ The editor can be configured through the `editor-settings.toml` settings file. I
 How to cut a release for Opencast
 ---------------------------------
 
+0. Make sure all merged pull requests have proper `type:` labels. They are used for generating the release notes.
 1. Switch to the commit you want to turn into the release
 2. Create and push a new tag
    ```

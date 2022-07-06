@@ -64,7 +64,7 @@
         "discarded-text": "Todos sus cambios se han perdido para siempre. Ahora puede cerrar el editor.",
         "startOver-button": "¡Déjame empezar de nuevo!",
         "startOver-tooltip": "Recargar la página para empezar de nuevo",
-        "info-text": "Cambios guardados con éxito en Opencast. El procesamiento de los cambios puede tardar hasta {{duration}} horas. Ahora puede cerrar el editor.\n"
+        "info-text": "Changes successfully saved to Opencast. Processing your changes may take quite some time so please be patient. You can now close the editor.\n"
     },
     "workflowSelection": {
         "saveAndProcess-text": "Guardar y procesar",
@@ -156,7 +156,9 @@
     },
     "error": {
         "generic-message": "¡Un error critico ha ocurrido!",
-        "details": "Detalles: "
+        "details": "Detalles: ",
+        "workflowActive-errorTitle": "Temporarily unavailable",
+        "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
     },
     "landing": {
         "main-heading": "Bienvenido al editor de vídeos",
@@ -167,7 +169,6 @@
     },
     "various": {
         "error-details-text": "Detalles: {{errorMessage}}\n",
-        "error-noDetails-text": "No hay detalles del error disponibles.",
         "error-text": "Ha ocurrido un error. Por favor, espere un poco e inténtelo de nuevo.",
         "goBack-button": "¡De ninguna manera! Volver atrás"
     },

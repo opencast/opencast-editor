@@ -15,7 +15,7 @@ export interface video {
   segments: Segment[],
   tracks: Track[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
-  selectedWorkflowIndex: number,  // Index of the currently selected workflow
+  selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
   waveformImages: string[]
@@ -35,7 +35,7 @@ export const initialState: video & httpRequestState = {
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
   activeSegmentIndex: 0,
-  selectedWorkflowIndex: 0,
+  selectedWorkflowId: "",
   previewTriggered: false,
   clickTriggered: false,
   aspectRatios: [],
@@ -51,6 +51,7 @@ export const initialState: video & httpRequestState = {
 
   status: 'idle',
   error: undefined,
+  errorReason: 'unknown',
 }
 
 export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
@@ -82,7 +83,7 @@ const updateCurrentlyAt = (state: video, milliseconds: number) => {
  * Slice for the state of the "video"
  * Treats the multitude of videos that may exist as one video
  */
-export const videoSlice = createSlice({
+const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
@@ -129,7 +130,7 @@ export const videoSlice = createSlice({
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
           state.segments[state.activeSegmentIndex].end === state.currentlyAt ) {
-        return state;
+        return
       }
 
       // Make two (new) segments out of it
@@ -151,8 +152,8 @@ export const videoSlice = createSlice({
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
       state.hasChanges = true
     },
-    setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowIndex"]>) => {
-      state.selectedWorkflowIndex = action.payload
+    setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowId"]>) => {
+      state.selectedWorkflowId = action.payload
     },
     mergeLeft: (state) => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex - 1)
@@ -188,6 +189,11 @@ export const videoSlice = createSlice({
         // });
 
         // New API
+        if (action.payload.workflow_active) {
+          state.status = 'failed'
+          state.errorReason = 'workflowActive'
+          state.error = "An Opencast workflow is currently running, please wait until it is finished."
+        }
         state.videoURLs = action.payload.tracks
           .filter((t: Track) => t.video_stream.available)
           // eslint-disable-next-line no-sequences
@@ -324,9 +330,9 @@ export const selectActiveSegmentIndex = (state: { videoState: { activeSegmentInd
 export const selectIsCurrentSegmentAlive = (state: { videoState:
   { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
   !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
-export const selectSelectedWorkflowIndex = (state: { videoState:
-  { selectedWorkflowIndex: video["selectedWorkflowIndex"]; }; }) =>
-  state.videoState.selectedWorkflowIndex
+export const selectSelectedWorkflowId = (state: { videoState:
+    { selectedWorkflowId: video["selectedWorkflowId"]; }; }) =>
+    state.videoState.selectedWorkflowId
 export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
