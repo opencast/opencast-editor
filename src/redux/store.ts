@@ -7,6 +7,7 @@ import workflowPostAndProcessReducer from './workflowPostAndProcessSlice'
 import endReducer from './endSlice'
 import metadataReducer from './metadataSlice'
 import errorReducer from './errorSlice'
+import themeReducer from './themeSlice'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     endState: endReducer,
     metadataState: metadataReducer,
     errorState: errorReducer,
+    themeState: themeReducer,
   }
 })
 

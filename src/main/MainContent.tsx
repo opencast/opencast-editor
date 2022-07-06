@@ -22,6 +22,8 @@ import { flexGapReplacementStyle } from "../cssStyles";
 import { useBeforeunload } from 'react-beforeunload';
 import { hasChanges as videoHasChanges } from "../redux/videoSlice";
 import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
+import { selectTheme } from "../redux/themeSlice";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 /**
  * A container for the main functionality
@@ -32,6 +34,7 @@ const MainContent: React.FC<{}> = () => {
   const mainMenuState = useSelector(selectMainMenuState)
   const videoChanged = useSelector(videoHasChanges)
   const metadataChanged = useSelector(metadataHasChanges)
+  const theme = useSelector(selectTheme)
 
   // Display warning when leaving the page if there are unsaved changes
   useBeforeunload((event: { preventDefault: () => void; }) => {
@@ -58,15 +61,15 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
+    background: `${theme.background}`,
   })
 
   const metadataStyle = css({
     ...displayState(MainMenuStateNames.metadata),
-    // flexDirection: 'column' as const,
-    // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
+    background: `${theme.background}`,
   })
 
   const trackSelectStyle = css({
@@ -76,7 +79,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    height: '100%',
+    background: `${theme.background}`,
   })
 
   const finishStyle = css({
@@ -86,16 +89,17 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    height: '100%',
+    minHeight: '100vh',
+    background: `${theme.background}`,
   })
 
   const keyboardControlsStyle = css({
+    flexDirection: 'column' as const,
     ...displayState(MainMenuStateNames.keyboardControls),
-    // flexDirection: 'column' as const,
-    // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
+    background: `${theme.background}`,
   })
 
   const defaultStyle = css({
@@ -123,7 +127,8 @@ const MainContent: React.FC<{}> = () => {
         <Finish />
       </div>
       <div css={keyboardControlsStyle}>
-          <KeyboardControls />
+        <ThemeSwitcher/>
+        <KeyboardControls />
       </div>
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />

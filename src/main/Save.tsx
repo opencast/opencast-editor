@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
-  nagivationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+  navigationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +20,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
 import { AppDispatch } from "../redux/store";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Shown if the user wishes to save.
@@ -35,6 +36,7 @@ const Save : React.FC<{}> = () => {
   const postError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
+  const theme = useSelector(selectTheme);
 
   const saveStyle = css({
     height: '100%',
@@ -73,11 +75,11 @@ const Save : React.FC<{}> = () => {
     <div css={saveStyle} title={t("save.saveArea-tooltip")}>
       <h1>{t("save.headline-text")}</h1>
       {render()}
-      <div css={errorBoxStyle(postWorkflowStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
       </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
       </div>
@@ -99,6 +101,7 @@ export const SaveButton: React.FC<{}> = () => {
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
+  const theme = useSelector(selectTheme);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status
@@ -156,7 +159,7 @@ export const SaveButton: React.FC<{}> = () => {
   }, [dispatch, metadataStatus, workflowStatus])
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={tooltip}
+    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={tooltip}
       role="button" tabIndex={0}
       onClick={ save }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
