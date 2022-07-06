@@ -171,7 +171,9 @@
 
     "error": {
       "generic-message": "A critical error has occurred!",
-      "details": "Details: "
+      "details": "Details: ",
+      "workflowActive-errorTitle": "Temporarily unavailable",
+      "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
     },
 
     "landing": {
@@ -217,5 +219,12 @@
       "scrubberRight": "Move right",
       "scubberIncrease": "Move faster",
       "scrubberDecrease": "Move slower"
+    },
+
+    "theme": {
+      "appearance": "Appearance",
+      "darkmode": "Dark mode",
+      "lightmode": "Light mode",
+      "system": "System design"
     }
   }

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
+import { selectFieldStyle } from '../cssStyles'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -27,6 +28,7 @@ import { DateTime as LuxonDateTime} from "luxon";
 import { configureFieldsAttributes, settings } from '../config'
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { selectTheme } from "../redux/themeSlice";
 
 
 /**
@@ -49,6 +51,7 @@ const Metadata: React.FC<{}> = () => {
   const getError = useSelector(selectGetError);
   const postStatus = useSelector(selectPostStatus);
   const postError = useSelector(selectPostError);
+  const theme = useSelector(selectTheme);
 
   // Try to fetch URL from external API
   useEffect(() => {
@@ -92,8 +95,6 @@ const Metadata: React.FC<{}> = () => {
    */
 
   const metadataStyle = css({
-    // maxWidth: '1500px',
-    // margin: '10px',
     padding: '20px',
     marginLeft:'auto',
     marginRight:'auto',
@@ -121,9 +122,9 @@ const Metadata: React.FC<{}> = () => {
       fontSize: '1em',
       marginLeft: '15px',
       borderRadius: '5px',
-      backgroundColor: 'snow',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-      ...(isReadOnly && {color: 'grey'})
+      ...(isReadOnly && {color: `${theme.text}`}),
+      color: `${theme.text}`
     });
   }
 
@@ -132,21 +133,9 @@ const Metadata: React.FC<{}> = () => {
       css({
         padding: '10px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
+        background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
       })
     );
-  }
-
-  const selectFieldTypeStyle = {
-    control: (provided: any) => ({
-      ...provided,
-      background: 'snow'
-    }),
-    menu: (provided: any) => ({
-      ...provided,
-      background: 'snow',
-      // kill the gap
-      marginTop: 0
-    }),
   }
 
   const dateTimeTypeStyle = (isReadOnly: boolean) => {
@@ -154,6 +143,18 @@ const Metadata: React.FC<{}> = () => {
       css ({
         padding: '5px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
+        background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
+        '.Mui-disabled': {
+          color: `${theme.disabled} !important`,
+          'WebkitTextFillColor':`${theme.disabled}`,
+        },
+        '.MuiInput-input, button': {
+          color: `${theme.text}`,
+          background: 'transparent !important',
+          '&:hover': {
+            background: 'transparent !important',
+          }
+        },    
       })
     );
   }
@@ -162,7 +163,7 @@ const Metadata: React.FC<{}> = () => {
     return css({
       lineHeight: '32px',
       marginLeft: '10px',
-      ...(isError && {color: '#800'}),
+      ...(isError && {color: `${theme.error}`}),
       fontWeight: 'bold',
     });
   }
@@ -511,7 +512,7 @@ const Metadata: React.FC<{}> = () => {
             openMenuOnClick={!field.readOnly}
             menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
-            styles={selectFieldTypeStyle}
+            styles={selectFieldStyle(theme)}
             css={fieldTypeStyle(field.readOnly)}>
           </CreatableSelect>
           );
@@ -524,7 +525,7 @@ const Metadata: React.FC<{}> = () => {
             openMenuOnClick={!field.readOnly}
             menuIsOpen={field.readOnly ? false : undefined}
             options={generateReactSelectLibrary(field)}
-            styles={selectFieldTypeStyle}
+            styles={selectFieldStyle(theme)}
             css={fieldTypeStyle(field.readOnly)}>
           </Select>
           );

@@ -18,6 +18,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -70,10 +71,12 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
+  const theme = useSelector(selectTheme);
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
     if (workflowStatus === 'success' && metadataStatus === 'success') {
+      dispatch(setEnd({hasEnded: true, value: 'success'}))
       dispatch(videoSetHasChanges(false))
       dispatch(metadataSetHasChanges(false))
     }
@@ -109,7 +112,6 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
     icon = faCheck
     spin = false
-    dispatch(setEnd({hasEnded: true, value: 'success'}))
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
     icon = faSpinner
     spin = true
@@ -118,7 +120,8 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   const saveButtonStyle = css({
     padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
   })
 
   return (

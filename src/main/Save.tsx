@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, ariaLive,
-  nagivationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, ariaLive, flexGapReplacementStyle,
+  navigationButtonStyle } from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +20,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Shown if the user wishes to save.
@@ -93,6 +94,7 @@ export const SaveButton: React.FC<{}> = () => {
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
+  const theme = useSelector(selectTheme);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status
@@ -150,7 +152,7 @@ export const SaveButton: React.FC<{}> = () => {
   }, [dispatch, metadataStatus, workflowStatus])
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={tooltip}
+    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={tooltip}
       role="button" tabIndex={0}
       onClick={ save }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

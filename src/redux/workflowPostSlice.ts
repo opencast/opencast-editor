@@ -6,6 +6,7 @@ import { settings } from '../config'
 const initialState: httpRequestState = {
   status: 'idle',
   error: undefined,
+  errorReason: 'unknown',
 }
 
 export const postVideoInformation = createAsyncThunk('video/postVideoInformation', async (argument: PostEditArgument) => {

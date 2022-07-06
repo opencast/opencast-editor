@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
 import { backOrContinueStyle, flexGapReplacementStyle } from '../cssStyles'
@@ -58,6 +58,12 @@ const WorkflowSelection : React.FC<{}> = () => {
     flexWrap: 'wrap',
     maxHeight: '50vh',
   })
+
+  useEffect(() => {
+    if (workflows.length === 1) {
+      dispatch(setSelectedWorkflowIndex(workflows[0].id))
+    }
+  }, [dispatch, workflows])
 
   const handleWorkflowSelectChange = (event: { target: { value: string}; }) => {
     dispatch(setSelectedWorkflowIndex(event.target.value))

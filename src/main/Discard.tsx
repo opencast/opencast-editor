@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, nagivationButtonStyle, flexGapReplacementStyle} from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle} from '../cssStyles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,6 +16,7 @@ import { PageButton } from './Finish'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Shown if the user wishes to abort.
@@ -57,13 +58,14 @@ const DiscardButton : React.FC<{}> = () => {
 
   // Initialize redux variables
   const dispatch = useDispatch()
+  const theme = useSelector(selectTheme);
 
   const discard = () => {
     dispatch(setEnd({hasEnded: true, value: 'discarded'}))
   }
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("discard.confirm-tooltip")}
+    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={t("discard.confirm-tooltip")}
       role="button" tabIndex={0}
       onClick={ discard }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

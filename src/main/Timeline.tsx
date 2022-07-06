@@ -24,6 +24,7 @@ import { scrubberKeyMap } from '../globalKeys';
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectMainMenuState } from '../redux/mainMenuSlice';
+import { selectTheme } from '../redux/themeSlice';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -80,6 +81,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
   const segments = useSelector(selectSegments)                      // For ARIA information display
   const mainMenuState = useSelector(selectMainMenuState)            // For hotkey enabling/disabling
+  const theme = useSelector(selectTheme)
 
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
@@ -153,12 +155,12 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   }
 
   const scrubberStyle = css({
-    backgroundColor: 'black',
+    backgroundColor: `${theme.text}`,
     height: '240px',
     width: '1px',
     position: 'absolute' as 'absolute',
     zIndex: 2,
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: `${theme.boxShadow}`,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -167,13 +169,13 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const scrubberDragHandleStyle = css({
     // Base style
-    background: "black",
+    background: `${theme.text}`,
     display: "inline-block",
     height: "10px",
     position: "relative",
     width: "20px",
     "&:after": {
-      borderTop: '10px solid black',
+      borderTop: `10px solid ${theme.text}`,
       borderLeft: '10px solid transparent',
       borderRight: '10px solid transparent',
       content: '""',
@@ -201,7 +203,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const scrubberDragHandleIconStyle = css({
     transform: 'scaleY(0.7) rotate(90deg)',
     paddingRight: '5px',
-    color: "white"
+    color: `${theme.background}`,
   })
 
   // // Possible TODO: Find a way to use ariaLive in a way that only the latest change is announced
@@ -327,6 +329,7 @@ const Waveforms: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+  const theme = useSelector(selectTheme);
 
   // Update based on current fetching status
   const images = useSelector(selectWaveformImages)
@@ -341,6 +344,8 @@ const Waveforms: React.FC<{}> = () => {
     width: '100%',
     height: '230px',
     paddingTop: '10px',
+    filter: `${theme.invert_wave}`,
+    color: `${theme.inverted_text}`,
   });
 
   // When the URLs to the videos are fetched, generate waveforms
