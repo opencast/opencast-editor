@@ -62,5 +62,6 @@ export enum MainMenuStateNames {
 
 export interface httpRequestState {
   status: 'idle' | 'loading' | 'success' | 'failed',
-  error: string | undefined
+  error: string | undefined,
+  errorReason: 'unknown' | 'workflowActive'
 }

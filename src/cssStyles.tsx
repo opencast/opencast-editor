@@ -5,24 +5,28 @@ import { css, Global } from '@emotion/react'
 import React from "react";
 import emotionNormalize from 'emotion-normalize';
 import { checkFlexGapSupport } from './util/utilityFunctions';
+import { useSelector } from 'react-redux';
+import { selectTheme, Theme } from './redux/themeSlice';
 
 /**
  * An emotion component that inserts styles globally
  * Is removed when the styles change or when the Global component unmounts.
  */
 export const GlobalStyle: React.FC = () => {
+  const theme = useSelector(selectTheme);
   return (
-    <Global styles={globalStyle} />
+    <Global styles={globalStyle(theme)} />
   );
 }
 
 /**
  * CSS for the global style component
  */
-export const globalStyle = css({
+export const globalStyle = (theme: Theme) => css({
   emotionNormalize,
   body: {
-    backgroundColor: 'snow',
+    backgroundColor: `${theme.background}`,
+    color: `${theme.text}`,
     fontSize: 'medium',
     // Makes the body span to the bottom of the page
     minHeight: "100vh",
@@ -110,11 +114,12 @@ export const deactivatedButtonStyle = css({
 /**
  * CSS for nagivation styled buttons
  */
-export const nagivationButtonStyle = css({
+export const navigationButtonStyle = (theme: Theme) => css({
   width: '200px',
   padding: '16px',
-  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-  justifyContent: 'space-around'
+  justifyContent: 'space-around',
+  boxShadow: `${theme.boxShadow}`,
+  background: `${theme.element_bg}`,
  })
 
 /**
@@ -170,14 +175,53 @@ export const ariaLive = css({
 /**
  * CSS for displaying of errors
  */
-export const errorBoxStyle = (errorStatus: boolean) => {
+export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
   return (
     css({
       ...(!errorStatus) && {display: "none"},
-      borderColor: 'red',
+      borderColor: `${theme.error}`,
       borderStyle: 'dashed',
       fontWeight: 'bold',
       padding: '10px',
     })
   );
+}
+
+export function selectFieldStyle(theme: Theme) {
+  return {
+    control: (provided: any) => ({
+      ...provided,
+      background: theme.element_bg,
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      background: theme.element_bg,
+      border: '1px solid #ccc',
+      // kill the gap
+      marginTop: 0,
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: theme.text,
+    }),
+    multiValue: (provided: any) =>({
+      ...provided,
+      color: theme.text,
+      background: theme.multiValue,
+    }),
+    multiValueLabel: (provided: any) =>({
+      ...provided,
+      color: theme.text,
+    }),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      background: state.isFocused ? theme.focused : theme.background 
+        && state.isSelected ? theme.selected : theme.background,
+      ...(state.isFocused && {color: theme.focus_text}),
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: theme.text
+    })
+  }
 }

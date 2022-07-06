@@ -3,7 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faKeyboard } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faGear } from "@fortawesome/free-solid-svg-icons";
 import { faClosedCaptioning } from "@fortawesome/free-regular-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,15 +21,18 @@ import { resetPostRequestState as metadataResetPostRequestState } from "../redux
 import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
+import { selectTheme } from "../redux/themeSlice";
+
 /**
  * A container for selecting the functionality shown in the main part of the app
  */
 const MainMenu: React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme);
 
   const mainMenuStyle = css({
-    borderRight: '1px solid #BBB',
+    borderRight: `${theme.menuBorder}`,
     width: '100px',
     display: 'flex',
     flexDirection: 'column' as const,
@@ -83,7 +86,7 @@ const MainMenu: React.FC<{}> = () => {
       {/* A space for buttons that would normally go in a header or footer */}
       <div css={{flexGrow: 99, display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
         <MainMenuButton
-          iconName={faKeyboard}
+          iconName={faGear}
           stateName={MainMenuStateNames.keyboardControls}
           bottomText={""}
           ariaLabelText={t("keyboardControls.header")}
@@ -110,6 +113,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
+  const theme = useSelector(selectTheme);
 
   const onMenuItemClicked = () => {
     dispatch(setState(stateName));
@@ -139,7 +143,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     width: '100%',
     height: '100px',
     ...(activeState === stateName) && {
-      backgroundColor: '#DDD',
+      backgroundColor: `${theme.menuButton}`,
     },
     flexDirection: 'column' as const,
   });
@@ -149,7 +153,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     height: '67px',
     marginBottom: '35px',
     ...(activeState === stateName) && {
-      backgroundColor: '#DDD',
+      backgroundColor: `${theme.menuButton}`,
     },
     flexDirection: 'column' as const,
   });

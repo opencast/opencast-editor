@@ -27,6 +27,8 @@ import {
   selectIsPlaying, selectCurrentlyAt,
   setIsPlaying, setCurrentlyAt, setClickTriggered,
 } from '../redux/videoSlice'
+import { selectTheme } from "../redux/themeSlice";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 /**
  * A container for the main functionality
@@ -37,6 +39,7 @@ const MainContent: React.FC<{}> = () => {
   const mainMenuState = useSelector(selectMainMenuState)
   const videoChanged = useSelector(videoHasChanges)
   const metadataChanged = useSelector(metadataHasChanges)
+  const theme = useSelector(selectTheme)
 
   // Display warning when leaving the page if there are unsaved changes
   useBeforeunload((event: { preventDefault: () => void; }) => {
@@ -52,6 +55,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
+    background: `${theme.background}`,
   })
 
   const metadataStyle = css({
@@ -61,6 +65,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
+    background: `${theme.background}`,
   })
 
   const trackSelectStyle = css({
@@ -70,7 +75,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    height: '100%',
+    background: `${theme.background}`,
   })
 
   const subtitleSelectStyle = css({
@@ -89,7 +94,8 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
-    height: '100%',
+    minHeight: '100vh',
+    background: `${theme.background}`,
   })
 
   const keyboardControlsStyle = css({
@@ -99,6 +105,7 @@ const MainContent: React.FC<{}> = () => {
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
+    background: `${theme.background}`,
   })
 
   const defaultStyle = css({
@@ -145,8 +152,9 @@ const MainContent: React.FC<{}> = () => {
     } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
       return (
         <div css={keyboardControlsStyle}>
-        <KeyboardControls />
-    </div>
+          <ThemeSwitcher/>
+          <KeyboardControls />
+        </div>
         )
     } else {
       <div css={defaultStyle}>

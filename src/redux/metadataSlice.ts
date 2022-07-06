@@ -51,6 +51,7 @@ interface metadata {
 interface postRequestState {
   postStatus: 'idle' | 'loading' | 'success' | 'failed',
   postError: string | undefined,
+  postErrorReason: 'unknown',
 }
 
 // TODO: Create an 'httpRequestState' array or something
@@ -60,9 +61,11 @@ const initialState: metadata & httpRequestState & postRequestState = {
 
   status: 'idle',
   error: undefined,
+  errorReason: 'unknown',
 
   postStatus: 'idle',
   postError: undefined,
+  postErrorReason: 'unknown',
 }
 
 export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async () => {

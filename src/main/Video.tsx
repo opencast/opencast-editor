@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import { httpRequestState } from '../types'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faToggleOn, faToggleOff, faGears} from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -30,6 +30,7 @@ import { setError } from "../redux/errorSlice";
 import { sleep } from './../util/utilityFunctions'
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Container for the videos and their controls
@@ -45,15 +46,21 @@ const Video: React.FC<{}> = () => {
   const videoCount = useSelector(selectVideoCount)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
+  const theme = useSelector(selectTheme);
+  const errorReason = useSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
 
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
-      dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+      if (errorReason === 'workflowActive') {
+        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorDetails: undefined, errorIcon: faGears}))
+      } else {
+        dispatch(setError({error: true, errorTitle: undefined, errorMessage: t("video.comError-text"), errorDetails: error, errorIcon: undefined}))
+      }
     }
-  }, [videoURLStatus, dispatch, error, t])
+  }, [videoURLStatus, dispatch, error, t, errorReason])
 
   // Update based on current fetching status
   // let content
@@ -96,7 +103,7 @@ const Video: React.FC<{}> = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px',
-    borderBottom: '1px solid #BBB',
+    borderBottom: `${theme.menuBorder}`,
   });
 
   const videoPlayerAreaStyle = css({
@@ -171,6 +178,7 @@ export const VideoPlayer: React.FC<{
   const previewTriggered = useSelector(selectPreviewTriggered)
   const clickTriggered = useSelector(selectClickTriggered)
   const aspectRatio = useSelector(selectAspectRatio)
+  const theme = useSelector(selectTheme)
 
   // Init state variables
   const ref = useRef<ReactPlayer>(null);
@@ -324,7 +332,7 @@ export const VideoPlayer: React.FC<{
 
   const errorBoxStyle = css({
     ...(!errorState) && {display: "none"},
-    borderColor: 'red',
+    borderColor: `${theme.error}`,
     borderStyle: 'dashed',
     fontWeight: 'bold',
     padding: '10px',
