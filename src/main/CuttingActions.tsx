@@ -2,9 +2,9 @@ import React, { SyntheticEvent } from "react";
 
 import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  IconDefinition,
   faCut,
   faStepBackward,
   faStepForward,
@@ -26,6 +26,7 @@ import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectTheme, Theme } from "../redux/themeSlice";
 
 /**
  * Defines the different actions a user can perform while in cutting mode
@@ -117,13 +118,14 @@ const CuttingActions: React.FC<{}> = () => {
 /**
  * CSS for cutting buttons
  */
-const cuttingActionButtonStyle = {
+const cuttingActionButtonStyle = (theme: Theme) => css({
   padding: '16px',
-  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-};
+  boxShadow: `${theme.boxShadow}`,
+  background: `${theme.element_bg}`
+});
 
 interface cuttingActionsButtonInterface {
-  iconName: IconDefinition,
+  iconName: IconProp,
   actionName: string,
   actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>, ref: React.RefObject<HTMLDivElement> | undefined) => void,
   action: ActionCreatorWithoutPayload<string>,
@@ -137,8 +139,10 @@ interface cuttingActionsButtonInterface {
  */
 const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName, actionName, actionHandler, action, tooltip, ariaLabelText}) => {
   const ref = React.useRef<HTMLDivElement>(null)
+  const theme = useSelector(selectTheme);
+
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle]}
+    <div css={[basicButtonStyle, cuttingActionButtonStyle(theme)]}
       title={tooltip}
       ref={ref}
       role="button" tabIndex={0} aria-label={ariaLabelText}
@@ -167,8 +171,10 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
   const ref = React.useRef<HTMLDivElement>(null)
 
+  const theme = useSelector(selectTheme);
+
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle]}
+    <div css={[basicButtonStyle, cuttingActionButtonStyle(theme)]}
       title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}
       ref={ref}
       role="button" tabIndex={0}

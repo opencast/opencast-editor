@@ -6,7 +6,7 @@ Opencast Video Editor
 [![Demo deployment](https://img.shields.io/badge/demo-editor.opencast.org-blue)
 ](https://editor.opencast.org)
 
-The Opencast Video Editor is a stand-alone tool included by [Opencast](https://opencast.org) to cut and arrange recordings.
+The Opencast Video Editor is a tool included by [Opencast](https://opencast.org) to cut and arrange recordings.
 
 
 Quick Test
@@ -46,6 +46,7 @@ The editor can be configured through the `editor-settings.toml` settings file. I
 How to cut a release for Opencast
 ---------------------------------
 
+0. Make sure all merged pull requests have proper `type:` labels. They are used for generating the release notes.
 1. Switch to the commit you want to turn into the release
 2. Create and push a new tag
    ```

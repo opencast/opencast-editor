@@ -64,7 +64,7 @@
         "discarded-text": "Al uw wijzigingen zijn nu voorgoed verloren. U kunt nu de editor sluiten.",
         "startOver-button": "Opnieuw beginnen!",
         "startOver-tooltip": "Herlaad de pagina om opnieuw te beginnen",
-        "info-text": "Wijzigingen succesvol opgeslagen in Opencast. Het verwerken van uw wijzigingen kan {{duration}} uren duren. U kunt nu de editor sluiten.\n"
+        "info-text": "Changes successfully saved to Opencast. Processing your changes may take quite some time so please be patient. You can now close the editor.\n"
     },
     "workflowSelection": {
         "saveAndProcess-text": "Opslaan en verwerken",
@@ -156,7 +156,9 @@
     },
     "error": {
         "generic-message": "Er is een kritische fout opgetreden!",
-        "details": "Details: "
+        "details": "Details: ",
+        "workflowActive-errorTitle": "Temporarily unavailable",
+        "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
     },
     "landing": {
         "main-heading": "Welkom in de Video Editor",
@@ -167,7 +169,6 @@
     },
     "various": {
         "error-details-text": "Details: {{errorMessage}}\n",
-        "error-noDetails-text": "Er zijn geen foutgegevens beschikbaar.",
         "error-text": "Er is een fout opgetreden. Wacht even en probeer het opnieuw.",
         "goBack-button": "Nee, breng me terug"
     },

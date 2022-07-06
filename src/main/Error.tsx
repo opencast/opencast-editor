@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrown } from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector } from 'react-redux';
-import { selectErrorDetails, selectErrorMessage } from '../redux/errorSlice'
+import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice'
 import { flexGapReplacementStyle } from "../cssStyles";
 
 import './../i18n/config';
@@ -21,8 +21,10 @@ import { useTranslation } from 'react-i18next';
   const { t } = useTranslation();
 
   // Init redux variables
+  const errorTitle = useSelector(selectErrorTitle)
   const errorMessage = useSelector(selectErrorMessage)
   const errorDetails = useSelector(selectErrorDetails)
+  const errorIcon = useSelector(selectErrorIcon)
 
   const detailsStyle = css({
     display: 'flex',
@@ -41,13 +43,15 @@ import { useTranslation } from 'react-i18next';
 
   return (
     <div css={theEndStyle} >
-      <div>{t("error.generic-message")}</div>
-      <FontAwesomeIcon icon={faFrown} size="10x" />
+      <div>{errorTitle ? errorTitle : t("error.generic-message")}</div>
+      <FontAwesomeIcon icon={errorIcon ? errorIcon : faFrown} size="10x" />
       <span>{errorMessage}</span><br />
-      <div css={detailsStyle}>
-        <span>{t("error.details")}</span><br />
-        <span>{errorDetails ? errorDetails : t("various.error-noDetails-text") }</span>
-      </div>
+      {errorDetails &&
+        <div css={detailsStyle}>
+          <span>{t("error.details")}</span><br />
+          <span>{errorDetails}</span>
+        </div>
+      }
     </div>
   );
 }

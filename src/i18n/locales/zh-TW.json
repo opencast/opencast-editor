@@ -64,7 +64,7 @@
         "discarded-text": "您的所有更改現在都已經遺失。 您現在可以關閉編輯器。",
         "startOver-button": "讓我重新開始！",
         "startOver-tooltip": "重新載入頁面以重新開始",
-        "info-text": "更改已成功儲存到 Opencast。 處理您的更改最多可能需要 {{duration}} 小時。 您現在可以關閉編輯器。\n"
+        "info-text": "Changes successfully saved to Opencast. Processing your changes may take quite some time so please be patient. You can now close the editor.\n"
     },
     "workflowSelection": {
         "saveAndProcess-text": "儲存和處理",
@@ -156,7 +156,9 @@
     },
     "error": {
         "generic-message": "發生嚴重錯誤！",
-        "details": "細節: "
+        "details": "細節: ",
+        "workflowActive-errorTitle": "Temporarily unavailable",
+        "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
     },
     "landing": {
         "main-heading": "歡迎使用影片編輯器",
@@ -167,7 +169,6 @@
     },
     "various": {
         "error-details-text": "詳細訊息：{{errorMessage}}",
-        "error-noDetails-text": "沒有可用的錯誤詳細訊息。",
         "error-text": "發生了錯誤。 請稍等，然後再重試。",
         "goBack-button": "不，回到上一步"
     },

@@ -8,7 +8,7 @@ import { faTools} from "@fortawesome/free-solid-svg-icons";
 import { faSpinner, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectWorkflows, selectSelectedWorkflowIndex, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
+import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectSelectedWorkflowId } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
@@ -17,6 +17,7 @@ import { setEnd } from "../redux/endSlice";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -29,6 +30,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
   const postAndProcessError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
+  const theme = useSelector(selectTheme);
 
   const workflowConfigurationStyle = css({
     display: 'flex',
@@ -48,11 +50,11 @@ const WorkflowConfiguration : React.FC<{}> = () => {
         <PageButton pageNumber={1} label={t("various.goBack-button")} iconName={faChevronLeft}/>
         <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
       </div>
-      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
       </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed")} role="alert">
+      <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
       </div>
@@ -69,17 +71,18 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   // Initialize redux variables
   const dispatch = useDispatch()
 
-  const workflows = useSelector(selectWorkflows)
-  const selectedWorkflowIndex = useSelector(selectSelectedWorkflowIndex)
+  const selectedWorkflowId = useSelector(selectSelectedWorkflowId)
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
+  const theme = useSelector(selectTheme);
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
     if (workflowStatus === 'success' && metadataStatus === 'success') {
+      dispatch(setEnd({hasEnded: true, value: 'success'}))
       dispatch(videoSetHasChanges(false))
       dispatch(metadataSetHasChanges(false))
     }
@@ -100,7 +103,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
       dispatch(postVideoInformationWithWorkflow({
         segments: segments,
         tracks: tracks,
-        workflow: [{id: workflows[selectedWorkflowIndex].id}],
+        workflow: [{id: selectedWorkflowId}],
       }))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,7 +118,6 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
     icon = faCheck
     spin = false
-    dispatch(setEnd({hasEnded: true, value: 'success'}))
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
     icon = faSpinner
     spin = true
@@ -124,7 +126,8 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   const saveButtonStyle = css({
     padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
   })
 
   return (

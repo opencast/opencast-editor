@@ -6,12 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector } from 'react-redux';
-import { selectDuration } from '../redux/videoSlice'
 import { selectEndState } from '../redux/endSlice'
-import { basicButtonStyle, flexGapReplacementStyle, nagivationButtonStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -23,7 +23,6 @@ const TheEnd : React.FC<{}> = () => {
 
   // Init redux variables
   const endState = useSelector(selectEndState)
-  const duration = useSelector(selectDuration)
 
   const icon = () => {
     if (endState === 'discarded') {
@@ -37,8 +36,7 @@ const TheEnd : React.FC<{}> = () => {
     if (endState === 'discarded') {
       return t("theEnd.discarded-text")
     } else if (endState === 'success') {
-      return t("theEnd.info-text", {duration: `${new Date((duration * 2)).toISOString().substr(11, 8)}`}
-      )
+      return t("theEnd.info-text")
     }
   }
 
@@ -53,7 +51,7 @@ const TheEnd : React.FC<{}> = () => {
   })
 
   return (
-    <div css={theEndStyle} title="The End">
+    <div css={theEndStyle}>
       <FontAwesomeIcon icon={icon()} size="10x" />
       <div>{text()}</div>
       {(endState === 'discarded') && <StartOverButton />}
@@ -65,13 +63,14 @@ const TheEnd : React.FC<{}> = () => {
 const StartOverButton: React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme);
 
   const reloadPage = () => {
     window.location.reload();
   };
 
   return (
-    <div css={[basicButtonStyle, nagivationButtonStyle]} title={t("theEnd.startOver-tooltip")}
+    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={t("theEnd.startOver-tooltip")}
       role="button" tabIndex={0}
       onClick={ reloadPage }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

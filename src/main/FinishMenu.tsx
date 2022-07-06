@@ -8,11 +8,12 @@ import {
   faSave, faFileExport, faTimesCircle, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -44,6 +45,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
+  const theme = useSelector(selectTheme);
 
   const finish = () => {
     dispatch(setState(stateName));
@@ -56,7 +58,8 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     flexDirection: 'column' as const,
     fontSize: "x-large",
     ...(flexGapReplacementStyle(30, false)),
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
   });
 
   var buttonString;
@@ -70,7 +73,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     case "Discard changes":
       buttonString = t("finishMenu.discard-button");
       break;
-    default: 
+    default:
       buttonString = "Could not load String value";
       break;
   }
@@ -83,7 +86,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
         finish()
       }}}>
       <FontAwesomeIcon  icon={iconName} size="2x"/>
-      <div>{buttonString}</div>
+      <div style={{padding: '0px 20px'}}>{buttonString}</div>
     </div>
   );
 };
