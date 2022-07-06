@@ -5,6 +5,8 @@ import { css } from '@emotion/react'
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { httpRequestState } from '../types'
+import { useSelector } from "react-redux";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * A component that can be displayed on a page in case of an error
@@ -13,6 +15,7 @@ import { httpRequestState } from '../types'
   = ({showBox, errorMessage, errorDetails}) => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme);
 
   const errorCodeMessages = (status: number) => {
     switch (status) {
@@ -38,7 +41,7 @@ import { httpRequestState } from '../types'
     return (
       css({
         ...(!errorStatus) && {display: "none"},
-        borderColor: 'red',
+        borderColor: `${theme.error}`,
         borderStyle: 'dashed',
         fontStyle: 'italic',
         padding: '10px',
