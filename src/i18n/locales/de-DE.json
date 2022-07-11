@@ -196,11 +196,10 @@
         "scubberIncrease": "Schneller",
         "scrubberDecrease": "Langsamer"
     },
-    
     "theme": {
-        "appearance": "Aussehen",
-        "darkmode": "Dunkles Design",
-        "lightmode": "Helles Design",
-        "system": "System Design"
+        "appearance": "Appearance",
+        "darkmode": "Dark mode",
+        "lightmode": "Light mode",
+        "system": "System design"
     }
 }
