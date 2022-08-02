@@ -123,7 +123,8 @@ const Metadata: React.FC<{}> = () => {
       borderRadius: '5px',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
       ...(isReadOnly && {color: `${theme.text}`}),
-      color: `${theme.text}`
+      color: `${theme.text}`,
+      outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`
     });
   }
 
@@ -143,15 +144,19 @@ const Metadata: React.FC<{}> = () => {
         padding: '5px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
-        '.Mui-disabled': {
+        '.Mui-disabled, .Mui-disabled button > svg': {
           color: `${theme.disabled} !important`,
           'WebkitTextFillColor':`${theme.disabled}`,
+        },
+        'button > svg': {
+          color: `${theme.indicator_color}`
         },
         '.MuiInput-input, button': {
           color: `${theme.text}`,
           background: 'transparent !important',
           '&:hover': {
             background: 'transparent !important',
+            outline: 'none'
           }
         },    
       })

@@ -132,7 +132,8 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     width: '100%',
     height: '100px',
     ...(activeState === stateName) && {
-      backgroundColor: `${theme.menuButton}`,
+      backgroundColor: `${theme.button_color}`,
+      color: `${theme.selected_text}`,
     },
     flexDirection: 'column' as const,
   });
@@ -142,13 +143,14 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     height: '67px',
     marginBottom: '35px',
     ...(activeState === stateName) && {
-      backgroundColor: `${theme.menuButton}`,
+      backgroundColor: `${theme.button_color}`,
+      color: `${theme.selected_text}`,
     },
     flexDirection: 'column' as const,
   });
 
   return (
-    <li css={[basicButtonStyle, buttonStyle()]}
+    <li css={[basicButtonStyle(theme), buttonStyle()]}
       role="menuitem" tabIndex={0}
       aria-label={ariaLabelText}
       onClick={ onMenuItemClicked }

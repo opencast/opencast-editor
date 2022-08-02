@@ -149,7 +149,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
   const theme = useSelector(selectTheme);
   
   const buttonStyle = [
-    active ? basicButtonStyle : deactivatedButtonStyle,
+    active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
       margin: '10px 15px',
       padding: '16px',

@@ -33,6 +33,12 @@ const ThemeSwitcher: React.FC<{}> = () => {
     if(themeState === 'system'){
       dispatch(setState('system'))
     } 
+    else if(themeState === 'high-contrast-dark'){
+      dispatch(setState('high-contrast-dark'))
+    }
+    else if(themeState === 'high-contrast-light'){
+      dispatch(setState('high-contrast-light'))
+    }
     else if(themeState === 'dark') {
       dispatch(setState('dark'))
     }
@@ -58,12 +64,15 @@ const ThemeSwitcher: React.FC<{}> = () => {
     { value: 'system', label: t('theme.system') },
     { value: 'light', label: t('theme.lightmode') },
     { value: 'dark', label: t('theme.darkmode') },
+    { value: 'high-contrast-light', label: t('theme.high-contrast-light') },
+    { value: 'high-contrast-dark', label: t('theme.high-contrast-dark') },
   ]
   
   return (
     <div css={baseStyle}>
       <h2 css={headerStyle}>{t('theme.appearance')}</h2>
       <Select styles={selectFieldStyle(theme)}
+        css={{outline: `${theme.element_outline}`, borderRadius: '5px'}}
         defaultValue={themes.filter(({value}) => value === themeState)}
         options={themes}
         onChange={themes => switchTheme(themes!.value)}

@@ -158,7 +158,7 @@ export const SaveButton: React.FC<{}> = () => {
   }, [dispatch, metadataStatus, workflowStatus])
 
   return (
-    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={tooltip}
+    <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]} title={tooltip}
       role="button" tabIndex={0}
       onClick={ save }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
