@@ -24,6 +24,8 @@ export interface Theme {
   button_color: String
   indicator_color: String
   icon_color: String
+  waveform_filter: String
+  waveform_bg: String
 };
 
 const getValue = () => {
