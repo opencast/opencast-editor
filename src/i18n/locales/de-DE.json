@@ -43,7 +43,7 @@
         "discard-button": "Änderungen verwerfen"
     },
     "save": {
-        "headline-text": "Verlasse aktuelles Projekt",
+        "headline-text": "Aktuelles Projekt speichern",
         "confirm-button": "Ja, meine Änderungen verwerfen",
         "confirmButton-default-tooltip": "Speichern-Button",
         "confirmButton-attempting-tooltip": "Kopplung wird durchgeführt\\u2026",
@@ -64,7 +64,7 @@
         "discarded-text": "Alle Ihre Änderungen sind nun für immer verloren gegangen. Sie können nun den Editor schließen.",
         "startOver-button": "Von neu beginnen!",
         "startOver-tooltip": "Seite neu laden, um neu zu starten",
-        "info-text": "Änderungen erfolgreich in Opencast gespeichert. Die Verarbeitung Ihrer Änderungen kann bis zu {} Stunden dauern. Sie können nun den Editor schließen.\n"
+        "info-text": "Änderungen erfolgreich in Opencast gespeichert. Die Bearbeitung Ihrer Änderungen kann einige Zeit dauern, bitte haben Sie etwas Geduld. Sie können nun den Editor schließen.\n"
     },
     "workflowSelection": {
         "saveAndProcess-text": "Speichern & verarbeiten",
@@ -157,8 +157,8 @@
     "error": {
         "generic-message": "Ein kritischer Fehler ist aufgetreten!",
         "details": "Details: ",
-        "workflowActive-errorTitle": "Temporarily unavailable",
-        "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
+        "workflowActive-errorTitle": "Vorübergehend nicht verfügbar",
+        "workflowActive-errorMessage": "Ein Opencast Workflow wird gerade ausgeführt, bitte warten Sie, bis er beendet ist."
     },
     "landing": {
         "main-heading": "Willkommen im Video-Editor",
