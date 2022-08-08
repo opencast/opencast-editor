@@ -24,6 +24,7 @@ import { hasChanges as videoHasChanges } from "../redux/videoSlice";
 import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
 import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
+import Thumbnail from "./Thumbnail";
 
 /**
  * A container for the main functionality
@@ -82,6 +83,16 @@ const MainContent: React.FC<{}> = () => {
     background: `${theme.background}`,
   })
 
+  const thumbnailSelectStyle = css({
+    ...displayState(MainMenuStateNames.thumbnail),
+    flexDirection: 'column' as const,
+    alignContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '161px',
+    background: `${theme.background}`,
+  })
+
   const finishStyle = css({
     ...displayState(MainMenuStateNames.finish),
     flexDirection: 'column' as const,
@@ -122,6 +133,9 @@ const MainContent: React.FC<{}> = () => {
       </div>
       <div css={trackSelectStyle}>
           <TrackSelection />
+      </div>
+      <div css={thumbnailSelectStyle}>
+          <Thumbnail />
       </div>
       <div css={finishStyle}>
         <Finish />

@@ -99,4 +99,4 @@ password = "opencast"
 # Warning: This interface is unfinished
 # Type: boolean
 # Default: false
-#show = false
+show = true

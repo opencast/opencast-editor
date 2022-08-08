@@ -41,8 +41,6 @@ const Video: React.FC<{}> = () => {
 
   // Init redux variables
   const dispatch = useDispatch()
-  const videoURLs = useSelector(selectVideoURL)
-  const videoCount = useSelector(selectVideoCount)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
   const theme = useSelector(selectTheme);
@@ -71,13 +69,6 @@ const Video: React.FC<{}> = () => {
   //   content = <div>{error}</div>
   // }
 
-  // Initialize video players
-  const videoPlayers: JSX.Element[] = [];
-  for (let i = 0; i < videoCount; i++) {
-    // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i === 0}/>);
-  }
-
   // Style
   const videoAreaStyle = css({
     display: 'flex',
@@ -89,6 +80,20 @@ const Video: React.FC<{}> = () => {
     borderBottom: `${theme.menuBorder}`,
   });
 
+  return (
+    <div css={videoAreaStyle}>
+      <VideoHeader />
+      <VideoPlayers />
+      <VideoControls />
+    </div>
+  );
+};
+
+const VideoPlayers: React.FC<{}> = () => {
+
+  const videoURLs = useSelector(selectVideoURL)
+  const videoCount = useSelector(selectVideoCount)
+
   const videoPlayerAreaStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
@@ -97,23 +102,26 @@ const Video: React.FC<{}> = () => {
     width: '100%',
   });
 
+  // Initialize video players
+  const videoPlayers: JSX.Element[] = [];
+  for (let i = 0; i < videoCount; i++) {
+    // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
+    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i === 0}/>);
+  }
+
   return (
-    <div css={videoAreaStyle}>
-      <VideoHeader />
-      <div css={videoPlayerAreaStyle}>
-        {videoPlayers}
-      </div>
-      <VideoControls />
+    <div css={videoPlayerAreaStyle}>
+      {videoPlayers}
     </div>
   );
-};
+}
 
 /**
  * A single video player
  * @param {string} url - URL to load video from
  * @param {boolean} isPrimary - If the player is the main control
  */
-const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
+export const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
 
   const { t } = useTranslation();
 
@@ -267,7 +275,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
  * Contains controls for manipulating multiple video players at once
  * Flexbox magic keeps the play button at the center
  */
-const VideoControls: React.FC<{}> = () => {
+export const VideoControls: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
