@@ -1,9 +1,9 @@
 import { css } from "@emotion/react";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { basicButtonStyle } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
-import { selectTracks } from "../redux/videoSlice";
+import { selectThumbnails, selectTracks, setThumbnail } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import { VideoControls, VideoPlayer } from "./Video";
@@ -55,8 +55,19 @@ const Thumbnail : React.FC<{}> = () => {
 
 const ThumbnailTable : React.FC<{}> = () => {
 
+  const dispatch = useDispatch()
+
   const tracks = useSelector(selectTracks)
   const theme = useSelector(selectTheme);
+  const thumbnails = useSelector(selectThumbnails)
+
+  const flavorSubtype = "player+preview"
+  const rootRef = React.useRef<any>([]);
+
+  const generate = (track: Track, index: number) => {
+    const uri = rootRef.current[index].captureVideo()
+    dispatch(setThumbnail({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri}))
+  }
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -118,19 +129,38 @@ const ThumbnailTable : React.FC<{}> = () => {
   return(
     <div css={thumbnailTableStyle}>
       {tracks.map( (track: Track, index: number) => (
-        <div>
+        <div key={index}>
           <div css={rowTitleStyle}>{track.flavor.type}</div>
           <div css={thumbnailRowStyle} key={index}>
             <div css={cellVideo}>
-              <VideoPlayer dataKey={index} url={track.uri} isPrimary={index === 0 ? true : false}/>
+              <VideoPlayer dataKey={index} url={track.uri} isPrimary={index === 0 ? true : false} ref={(el) => (rootRef.current[index] = el)} />
             </div>
             <div css={cellThumbnail}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/RedBananasMetepec.JPG"
-                alt="Banana"
-                css={imageStyle}></img>
+              {thumbnails.find(t => t.videoId === track.id)?.uri !== undefined ?
+                // Thumbnail image
+                <img src={thumbnails.find(t => t.videoId === track.id)?.uri}
+                  alt={"Thumbnail for: " + thumbnails.find(t => t.videoId === track.id)?.flavor.type}
+                  css={imageStyle}
+                />
+                :
+                // Placeholder
+                  <div css={{
+                    display: 'flex',
+                    backgroundColor: 'grey',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100%',
+                    aspectRatio: '16/9',
+                  }}>
+                    <span>No Thumbnail set</span>
+                  </div>
+              }
+
             </div>
             <div css={cellButtons}>
-              <div css={[basicButtonStyle, buttonsStyle(theme)]}>Generate</div>
+              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+                  generate(track, index)
+                }}>Generate</div>
               <div css={[basicButtonStyle, buttonsStyle(theme)]}>Upload</div>
               <div css={[basicButtonStyle, buttonsStyle(theme)]}>Use for other thumbnails</div>
               <div css={[basicButtonStyle, buttonsStyle(theme)]}>Discard</div>

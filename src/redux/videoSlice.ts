@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, Workflow }  from '../types'
+import { Segment, httpRequestState, Track, Workflow, Thumbnail }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 import { settings } from '../config';
@@ -26,6 +26,7 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: Workflow[],
+  thumbnails: Thumbnail[],
 }
 
 export const initialState: video & httpRequestState = {
@@ -48,6 +49,7 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
+  thumbnails: [],
 
   status: 'idle',
   error: undefined,
@@ -125,6 +127,17 @@ const videoSlice = createSlice({
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload
+    },
+    setThumbnails: (state, action: PayloadAction<video["thumbnails"]>) => {
+      state.thumbnails = action.payload
+    },
+    setThumbnail: (state, action: PayloadAction<Thumbnail>) => {
+      const index = state.thumbnails.findIndex(t => t.videoId === action.payload.videoId)
+      if (index >= 0) {
+        state.thumbnails[index] = action.payload
+      } else {
+        state.thumbnails.push(action.payload)
+      }
     },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
@@ -304,8 +317,8 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex,
-  mergeLeft, mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, cut, markAsDeletedOrAlive,
+  setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -345,6 +358,7 @@ export const selectTitle = (state: { videoState: { title: video["title"] } }) =>
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
 export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
+export const selectThumbnails = (state: { videoState: { thumbnails: video["thumbnails"] } }) => state.videoState.thumbnails
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
 

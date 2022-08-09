@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { css } from '@emotion/react'
 
@@ -121,7 +121,9 @@ const VideoPlayers: React.FC<{}> = () => {
  * @param {string} url - URL to load video from
  * @param {boolean} isPrimary - If the player is the main control
  */
-export const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
+export const VideoPlayer = React.forwardRef(
+  (props: {dataKey: number, url: string, isPrimary: boolean}, forwardRefThing) => {
+  const {dataKey, url, isPrimary } = props
 
   const { t } = useTranslation();
 
@@ -204,6 +206,23 @@ export const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boo
     file: { attributes: { tabIndex: '-1' }}
   }
 
+  // External functions
+  useImperativeHandle(forwardRefThing, () => ({
+    // Renders the current frame in the video element to a canvas
+    // Returns the data url
+    captureVideo() {
+      const video = ref.current?.getInternalPlayer() as HTMLVideoElement
+      var canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      var canvasContext = canvas.getContext("2d");
+      if (canvasContext !== null) {
+        canvasContext.drawImage(video, 0, 0);
+        return canvas.toDataURL('image/png')
+      }
+    }
+  }));
+
   const errorBoxStyle = css({
     ...(!errorState) && {display: "none"},
     borderColor: `${theme.error}`,
@@ -269,7 +288,7 @@ export const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boo
   //     </video>
   //   </div>
   // );
-};
+});
 
 /**
  * Contains controls for manipulating multiple video players at once
