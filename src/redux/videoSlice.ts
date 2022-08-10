@@ -139,6 +139,12 @@ const videoSlice = createSlice({
         state.thumbnails.push(action.payload)
       }
     },
+    removeThumbnail: (state, action: PayloadAction<string>) => {
+      const index = state.thumbnails.findIndex(t => t.videoId === action.payload)
+      if (index > -1) {
+        state.thumbnails.splice(index, 1);
+      }
+    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -317,8 +323,9 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, cut, markAsDeletedOrAlive,
-  setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
+  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state

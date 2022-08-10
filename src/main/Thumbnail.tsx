@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { basicButtonStyle } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
-import { selectThumbnails, selectTracks, setThumbnail, setThumbnails } from "../redux/videoSlice";
+import { removeThumbnail, selectThumbnails, selectTracks, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import { VideoControls, VideoPlayer } from "./Video";
@@ -114,6 +114,10 @@ const ThumbnailTable : React.FC<{}> = () => {
       changedThumbnails.push({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri})
     }
     dispatch(setThumbnails(changedThumbnails))
+  }
+
+  const discardThumbnail = (id: string) => {
+    dispatch(removeThumbnail(id))
   }
 
   const thumbnailTableStyle = css({
@@ -228,7 +232,9 @@ const ThumbnailTable : React.FC<{}> = () => {
               <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
                   setForOtherThumbnails(thumbnails.find(t => t.videoId === track.id)?.uri)
                 }}>Use for other thumbnails</div>
-              <div css={[basicButtonStyle, buttonsStyle(theme)]}>Discard</div>
+              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+                  discardThumbnail(track.id)
+                }}>Discard</div>
             </div>
 
           </div>
