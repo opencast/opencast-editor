@@ -62,12 +62,48 @@ const ThumbnailTable : React.FC<{}> = () => {
   const thumbnails = useSelector(selectThumbnails)
 
   const flavorSubtype = "player+preview"
+  // Generate Refs
   const rootRef = React.useRef<any>([]);
+  // Upload Refs
+  const inputRef = React.useRef<(HTMLInputElement | null)[]>([]);
 
+  // Generate image and save in redux
   const generate = (track: Track, index: number) => {
     const uri = rootRef.current[index].captureVideo()
     dispatch(setThumbnail({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri}))
   }
+
+  // Trigger file handler for upload input element
+  const upload = (index: number) => {
+    // 👇️ open file input box on click of other element
+    const ref =inputRef.current[index]
+    if (ref !== null) {
+      ref.click();
+    }
+  };
+
+  // Save uploaded file in redux
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, track: Track) => {
+    const fileObj = event.target.files && event.target.files[0];
+    if (!fileObj) {
+      return;
+    }
+
+    // Check if image
+    if (fileObj.type.split('/')[0] !== 'image') {
+      return
+    }
+
+    var reader  = new FileReader();
+    reader.onload = function(e)  {
+        // the result image data
+        if (e.target && e.target.result) {
+          const uri = e.target.result.toString();
+          dispatch(setThumbnail({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri}))
+        }
+     }
+     reader.readAsDataURL(fileObj);
+  };
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -130,11 +166,15 @@ const ThumbnailTable : React.FC<{}> = () => {
     <div css={thumbnailTableStyle}>
       {tracks.map( (track: Track, index: number) => (
         <div key={index}>
-          <div css={rowTitleStyle}>{track.flavor.type}</div>
+          <div css={rowTitleStyle}>
+            {track.flavor.type}
+          </div>
           <div css={thumbnailRowStyle} key={index}>
+
             <div css={cellVideo}>
               <VideoPlayer dataKey={index} url={track.uri} isPrimary={index === 0 ? true : false} ref={(el) => (rootRef.current[index] = el)} />
             </div>
+
             <div css={cellThumbnail}>
               {thumbnails.find(t => t.videoId === track.id)?.uri !== undefined ?
                 // Thumbnail image
@@ -157,14 +197,27 @@ const ThumbnailTable : React.FC<{}> = () => {
               }
 
             </div>
+
             <div css={cellButtons}>
               <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
                   generate(track, index)
                 }}>Generate</div>
-              <div css={[basicButtonStyle, buttonsStyle(theme)]}>Upload</div>
+              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+                  upload(index)
+                }}>Upload</div>
+                <input
+                  style={{display: 'none'}}
+                  ref={(el) => {
+                    inputRef.current[index] = el;
+                  }}
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => handleFileChange(event, track)}
+                />
               <div css={[basicButtonStyle, buttonsStyle(theme)]}>Use for other thumbnails</div>
               <div css={[basicButtonStyle, buttonsStyle(theme)]}>Discard</div>
             </div>
+
           </div>
         </div>
       ))}
