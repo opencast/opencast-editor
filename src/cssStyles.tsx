@@ -132,6 +132,28 @@ export const backOrContinueStyle = css(({
 }))
 
 /**
+ * CSS for a title
+ */
+export const titleStyle = css(({
+  display: 'inline-block',
+  padding: '15px',
+  overflow: 'hidden',
+  whiteSpace: "nowrap",
+  textOverflow: 'ellipsis',
+  maxWidth: '500px',
+}))
+
+/**
+ * Addendum for the titleStyle
+ * Used for page titles
+ */
+export const titleStyleBold = css({
+  fontWeight: 'bold',
+  fontSize: '24px',
+  verticalAlign: '-2.5px',
+})
+
+/**
  * CSS for ariaLive regions that should not be visible
  */
 export const ariaLive = css({

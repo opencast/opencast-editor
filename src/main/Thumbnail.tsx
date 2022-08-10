@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { basicButtonStyle } from "../cssStyles";
+import { basicButtonStyle, titleStyle, titleStyleBold } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
 import { removeThumbnail, selectThumbnails, selectTracks, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
@@ -10,7 +10,7 @@ import { VideoControls, VideoPlayer } from "./Video";
 
 
 /**
- * Displays a menu for selecting what should be done with the current changes
+ * User interface for handling thumbnails
  */
 const Thumbnail : React.FC<{}> = () => {
 
@@ -20,63 +20,179 @@ const Thumbnail : React.FC<{}> = () => {
     alignItems: 'center',
   })
 
-  const titleStyle = css({
-    display: 'inline-block',
-    padding: '15px',
-    overflow: 'hidden',
-    whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    maxWidth: '500px',
-    justifySelf: 'center'
-  })
-
-  const titleStyleBold = css({
-    fontWeight: 'bold',
-    fontSize: '24px',
-    verticalAlign: '-2.5px',
-  })
-
-  const videoContainerStyle = css({
+  const everythingElseStyle = css({
     width: '100%',
   })
 
   return (
     <div css={thumbnailStyle}>
       <div css={[titleStyle, titleStyleBold]}>Thumbnail Editor</div>
-      <div css={videoContainerStyle}>
+      <div css={everythingElseStyle}>
         <ThumbnailTable />
-        <GenerateAllRow />
         <VideoControls />
-        <Timeline></Timeline>
+        <Timeline />
       </div>
     </div>
   );
 }
 
+/**
+ * A table for each video+thumbnail pair
+ */
 const ThumbnailTable : React.FC<{}> = () => {
 
   const dispatch = useDispatch()
 
   const tracks = useSelector(selectTracks)
-  const theme = useSelector(selectTheme);
-  const thumbnails = useSelector(selectThumbnails)
 
   const flavorSubtype = "player+preview"
   // Generate Refs
-  const rootRef = React.useRef<any>([]);
+  const generateRefs = React.useRef<any>([]);
   // Upload Refs
-  const inputRef = React.useRef<(HTMLInputElement | null)[]>([]);
+  const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
 
   // Generate image and save in redux
   const generate = (track: Track, index: number) => {
-    const uri = rootRef.current[index].captureVideo()
+    const uri = generateRefs.current[index].captureVideo()
     dispatch(setThumbnail({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri}))
   }
+
+  const thumbnailTableStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  })
+
+  return(
+    <div css={thumbnailTableStyle}>
+      {tracks.map( (track: Track, index: number) => (
+        <ThumbnailTableRow track={track} index={index} generateRefs={generateRefs} inputRefs={inputRefs} generate={generate}/>
+      ))}
+      <AffectAllRow tracks={tracks} generate={generate}/>
+    </div>
+  )
+}
+
+/**
+ * A table entry for a single video+thumbnail pair
+ */
+const ThumbnailTableRow: React.FC<{
+  track: Track,
+  index: number,
+  generateRefs: any,
+  inputRefs: any,
+  generate: any,
+}> = ({track, index, generateRefs, inputRefs, generate}) => {
+
+  const rowTitleStyle = css({
+    textAlign: 'left',
+    textTransform: 'capitalize',
+    fontSize: 'larger',
+    fontWeight: 'bold',
+  })
+
+  const thumbnailRowStyle = css({
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    height: '200px',
+    justifyContent: 'center',
+  })
+
+  const cellVideo = css({
+    flex: 8,
+    width: '100%',
+    height: '100%',
+  })
+
+  return (
+    <div key={index}>
+      <div css={rowTitleStyle}>
+        {track.flavor.type}
+      </div>
+      <div css={thumbnailRowStyle} key={index}>
+
+        <div css={cellVideo}>
+          <VideoPlayer dataKey={index} url={track.uri} isPrimary={index === 0 ? true : false} ref={(el) => (generateRefs.current[index] = el)} />
+        </div>
+
+        <ThumbnailDisplayer track={track} />
+
+        <ThumbnailButtons track={track} index={index} generate={generate} inputRefs={inputRefs}/>
+
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Displays thumbnail associated with the given track
+ * or a placeholder
+ */
+const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
+
+  const thumbnails = useSelector(selectThumbnails)
+
+  const cellThumbnail = css({
+    display: 'flex',
+    flex: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  })
+
+  const imageStyle = css({
+    maxWidth: '100%',
+    maxHeight: '100%',
+    minWidth: '100px'
+  })
+
+  return (
+    <div css={cellThumbnail}>
+      {thumbnails.find(t => t.videoId === track.id)?.uri !== undefined ?
+        // Thumbnail image
+        <img src={thumbnails.find(t => t.videoId === track.id)?.uri}
+          alt={"Thumbnail for: " + thumbnails.find(t => t.videoId === track.id)?.flavor.type}
+          css={imageStyle}
+        />
+        :
+        // Placeholder
+          <div css={{
+            display: 'flex',
+            backgroundColor: 'grey',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            aspectRatio: '16/9',
+          }}>
+            <span>No Thumbnail set</span>
+          </div>
+      }
+    </div>
+  )
+}
+
+/**
+ * Buttons and actions related to thumbnails for a given track
+ */
+const ThumbnailButtons : React.FC<{
+  track: Track,
+  index: number,
+  generate: any,
+  inputRefs: any,
+}> = ({track, index, generate, inputRefs}) => {
+
+  const theme = useSelector(selectTheme);
+  const flavorSubtype = "player+preview"
+
+  const dispatch = useDispatch()
+
+  const tracks = useSelector(selectTracks)
+  const thumbnails = useSelector(selectThumbnails)
 
   // Trigger file handler for upload input element
   const upload = (index: number) => {
     // 👇️ open file input box on click of other element
-    const ref =inputRef.current[index]
+    const ref = inputRefs.current[index]
     if (ref !== null) {
       ref.click();
     }
@@ -101,8 +217,8 @@ const ThumbnailTable : React.FC<{}> = () => {
           const uri = e.target.result.toString();
           dispatch(setThumbnail({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri}))
         }
-     }
-     reader.readAsDataURL(fileObj);
+      }
+      reader.readAsDataURL(fileObj);
   };
 
   const setForOtherThumbnails = (uri: string | undefined) => {
@@ -119,46 +235,6 @@ const ThumbnailTable : React.FC<{}> = () => {
   const discardThumbnail = (id: string) => {
     dispatch(removeThumbnail(id))
   }
-
-  const thumbnailTableStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-  })
-
-  const rowTitleStyle = css({
-    textAlign: 'left',
-    textTransform: 'capitalize',
-    fontSize: 'larger',
-    fontWeight: 'bold',
-  })
-
-  const thumbnailRowStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    width: '100%',
-    height: '200px',
-    justifyContent: 'center',
-  })
-
-  const cellVideo = css({
-    flex: 8,
-    width: '100%',
-    height: '100%',
-  })
-
-  const cellThumbnail = css({
-    display: 'flex',
-    flex: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  })
-
-  const imageStyle = css({
-    maxWidth: '100%',
-    maxHeight: '100%',
-    minWidth: '100px'
-  })
 
   const cellButtons = css({
     display: 'grid',
@@ -177,76 +253,49 @@ const ThumbnailTable : React.FC<{}> = () => {
     padding: '20px'
   })
 
-  return(
-    <div css={thumbnailTableStyle}>
-      {tracks.map( (track: Track, index: number) => (
-        <div key={index}>
-          <div css={rowTitleStyle}>
-            {track.flavor.type}
-          </div>
-          <div css={thumbnailRowStyle} key={index}>
-
-            <div css={cellVideo}>
-              <VideoPlayer dataKey={index} url={track.uri} isPrimary={index === 0 ? true : false} ref={(el) => (rootRef.current[index] = el)} />
-            </div>
-
-            <div css={cellThumbnail}>
-              {thumbnails.find(t => t.videoId === track.id)?.uri !== undefined ?
-                // Thumbnail image
-                <img src={thumbnails.find(t => t.videoId === track.id)?.uri}
-                  alt={"Thumbnail for: " + thumbnails.find(t => t.videoId === track.id)?.flavor.type}
-                  css={imageStyle}
-                />
-                :
-                // Placeholder
-                  <div css={{
-                    display: 'flex',
-                    backgroundColor: 'grey',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%',
-                    aspectRatio: '16/9',
-                  }}>
-                    <span>No Thumbnail set</span>
-                  </div>
-              }
-
-            </div>
-
-            <div css={cellButtons}>
-              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
-                  generate(track, index)
-                }}>Generate</div>
-              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
-                  upload(index)
-                }}>Upload</div>
-                <input
-                  style={{display: 'none'}}
-                  ref={(el) => {
-                    inputRef.current[index] = el;
-                  }}
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) => handleFileChange(event, track)}
-                />
-              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
-                  setForOtherThumbnails(thumbnails.find(t => t.videoId === track.id)?.uri)
-                }}>Use for other thumbnails</div>
-              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
-                  discardThumbnail(track.id)
-                }}>Discard</div>
-            </div>
-
-          </div>
-        </div>
-      ))}
+  return (
+    <div css={cellButtons}>
+      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+          generate(track, index)
+        }}>Generate</div>
+      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+          upload(index)
+        }}>Upload</div>
+        <input
+          style={{display: 'none'}}
+          ref={(el) => {
+            inputRefs.current[index] = el;
+          }}
+          type="file"
+          accept="image/*"
+          onChange={(event) => handleFileChange(event, track)}
+        />
+      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+          setForOtherThumbnails(thumbnails.find(t => t.videoId === track.id)?.uri)
+        }}>Use for other thumbnails</div>
+      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+          discardThumbnail(track.id)
+        }}>Discard</div>
     </div>
   )
 }
 
-const GenerateAllRow : React.FC<{}> = () => {
+/**
+ * Bottom row of the table
+ * For e.g. buttons that affect all rows in the table
+ */
+const AffectAllRow : React.FC<{
+  tracks: Track[]
+  generate: any
+}> = ({generate, tracks}) => {
 
   const theme = useSelector(selectTheme);
+
+  const generateAll = () => {
+    for (let i = 0; i < tracks.length; i++) {
+      generate(tracks[i], i)
+    }
+  }
 
   const rowStyle = css({
     display: 'flex',
@@ -270,7 +319,9 @@ const GenerateAllRow : React.FC<{}> = () => {
   return (
     <div css={rowStyle}>
       <div>Some explanatory text or something</div>
-      <div css={[basicButtonStyle, buttonStyle]}>Generate All</div>
+      <div css={[basicButtonStyle, buttonStyle]} onClick={() => {
+        generateAll()
+      }}>Generate All</div>
     </div>
   )
 }

@@ -17,7 +17,7 @@ import {
 import ReactPlayer, { Config } from 'react-player'
 
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { selectMainMenuState } from "../redux/mainMenuSlice";
@@ -475,21 +475,6 @@ const VideoHeader: React.FC<{}> = () => {
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
   const presenters = useSelector(selectPresenters)
-
-  const titleStyle = css({
-    display: 'inline-block',
-    padding: '15px',
-    overflow: 'hidden',
-    whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    maxWidth: '500px',
-  })
-
-  const titleStyleBold = css({
-    fontWeight: 'bold',
-    fontSize: '24px',
-    verticalAlign: '-2.5px',
-  })
 
   let presenter_header;
   if (presenters && presenters.length) {
