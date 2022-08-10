@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { basicButtonStyle } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
-import { selectThumbnails, selectTracks, setThumbnail } from "../redux/videoSlice";
+import { selectThumbnails, selectTracks, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import { VideoControls, VideoPlayer } from "./Video";
@@ -104,6 +104,17 @@ const ThumbnailTable : React.FC<{}> = () => {
      }
      reader.readAsDataURL(fileObj);
   };
+
+  const setForOtherThumbnails = (uri: string | undefined) => {
+    if (uri === undefined) {
+      return
+    }
+    const changedThumbnails = []
+    for (const track of tracks) {
+      changedThumbnails.push({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri})
+    }
+    dispatch(setThumbnails(changedThumbnails))
+  }
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -214,7 +225,9 @@ const ThumbnailTable : React.FC<{}> = () => {
                   accept="image/*"
                   onChange={(event) => handleFileChange(event, track)}
                 />
-              <div css={[basicButtonStyle, buttonsStyle(theme)]}>Use for other thumbnails</div>
+              <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+                  setForOtherThumbnails(thumbnails.find(t => t.videoId === track.id)?.uri)
+                }}>Use for other thumbnails</div>
               <div css={[basicButtonStyle, buttonsStyle(theme)]}>Discard</div>
             </div>
 
