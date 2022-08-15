@@ -11,6 +11,7 @@ export interface Track {
   flavor: Flavor,
   audio_stream: any,
   video_stream: any,
+  thumbnailUri: string | undefined,
 }
 
 export interface Flavor {
@@ -28,12 +29,6 @@ export interface Workflow {
 export interface TimelineState {
   segments: Segment[]
   scrubberPos: number
-}
-
-export interface Thumbnail {
-  videoId: string,
-  flavor: Flavor,
-  uri: string,
 }
 
 export interface PostEditArgument {

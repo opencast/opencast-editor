@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, Workflow, Thumbnail }  from '../types'
+import { Segment, httpRequestState, Track, Workflow }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 import { settings } from '../config';
@@ -19,6 +19,7 @@ export interface video {
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
   waveformImages: string[]
+  originalThumbnails: {id: Track["id"], uri: Track["thumbnailUri"]}[]
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
@@ -26,7 +27,6 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: Workflow[],
-  thumbnails: Thumbnail[],
 }
 
 export const initialState: video & httpRequestState = {
@@ -42,6 +42,7 @@ export const initialState: video & httpRequestState = {
   aspectRatios: [],
   hasChanges: false,
   waveformImages: [],
+  originalThumbnails: [],
 
   videoURLs: [],
   videoCount: 0,
@@ -49,7 +50,6 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
-  thumbnails: [],
 
   status: 'idle',
   error: undefined,
@@ -128,22 +128,17 @@ const videoSlice = createSlice({
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload
     },
-    setThumbnails: (state, action: PayloadAction<video["thumbnails"]>) => {
-      state.thumbnails = action.payload
+    setThumbnail: (state, action: PayloadAction<{id: Track["id"], uri: Track["thumbnailUri"]}>) => {
+      setThumbnailHelper(state, action.payload.id, action.payload.uri)
     },
-    setThumbnail: (state, action: PayloadAction<Thumbnail>) => {
-      const index = state.thumbnails.findIndex(t => t.videoId === action.payload.videoId)
-      if (index >= 0) {
-        state.thumbnails[index] = action.payload
-      } else {
-        state.thumbnails.push(action.payload)
+    setThumbnails: (state, action: PayloadAction<{id: Track["id"], uri: Track["thumbnailUri"]}[]>) => {
+      for (const element of action.payload) {
+        setThumbnailHelper(state, element.id, element.uri)
       }
     },
     removeThumbnail: (state, action: PayloadAction<string>) => {
-      const index = state.thumbnails.findIndex(t => t.videoId === action.payload)
-      if (index > -1) {
-        state.thumbnails.splice(index, 1);
-      }
+      const index = state.tracks.findIndex(t => t.id === action.payload)
+      state.tracks[index].thumbnailUri = undefined
     },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
@@ -213,18 +208,20 @@ const videoSlice = createSlice({
           state.errorReason = 'workflowActive'
           state.error = "An Opencast workflow is currently running, please wait until it is finished."
         }
+        state.tracks = action.payload.tracks
+        const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
         // eslint-disable-next-line no-sequences
-        state.videoURLs = action.payload.tracks.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
         });
         state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
+        state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
     })
@@ -322,6 +319,13 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
+const setThumbnailHelper = (state:  WritableDraft<video>, id: Track["id"], uri: Track["thumbnailUri"]) => {
+  const index = state.tracks.findIndex(t => t.id === id)
+  if (index >= 0) {
+    state.tracks[index].thumbnailUri = uri
+  }
+}
+
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
   cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
@@ -355,6 +359,8 @@ export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"
   state.videoState.hasChanges
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
   state.videoState.waveformImages
+export const selectOriginalThumbnails = (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
+  state.videoState.originalThumbnails
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
@@ -365,7 +371,6 @@ export const selectTitle = (state: { videoState: { title: video["title"] } }) =>
 export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
 export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
-export const selectThumbnails = (state: { videoState: { thumbnails: video["thumbnails"] } }) => state.videoState.thumbnails
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
 

@@ -1,12 +1,13 @@
 import { css } from "@emotion/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { basicButtonStyle, titleStyle, titleStyleBold } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
-import { removeThumbnail, selectThumbnails, selectTracks, setThumbnail, setThumbnails } from "../redux/videoSlice";
+import { selectOriginalThumbnails, selectTracks, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
-import { VideoControls, VideoPlayer } from "./Video";
+import { VideoControls, VideoPlayers } from "./Video";
 
 
 /**
@@ -14,24 +15,33 @@ import { VideoControls, VideoPlayer } from "./Video";
  */
 const Thumbnail : React.FC<{}> = () => {
 
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
+
+  // Generate Refs
+  const generateRefs = React.useRef<any>([]);
+
+  // Generate image and save in redux
+  const generate = (track: Track, index: number) => {
+    const uri = generateRefs.current[index].captureVideo()
+    dispatch(setThumbnail({id: track.id, uri: uri}))
+  }
+
   const thumbnailStyle = css({
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  })
-
-  const everythingElseStyle = css({
     width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   })
 
   return (
     <div css={thumbnailStyle}>
-      <div css={[titleStyle, titleStyleBold]}>Thumbnail Editor</div>
-      <div css={everythingElseStyle}>
-        <ThumbnailTable />
-        <VideoControls />
-        <Timeline />
-      </div>
+      <div css={[titleStyle, titleStyleBold]}>{t('thumbnail.title')}</div>
+      <VideoPlayers refs={generateRefs} widthInPercent={50}/>
+      <VideoControls />
+      <Timeline timelineHeight={125}/>
+      <ThumbnailTable generate={generate}/>
     </div>
   );
 }
@@ -39,23 +49,12 @@ const Thumbnail : React.FC<{}> = () => {
 /**
  * A table for each video+thumbnail pair
  */
-const ThumbnailTable : React.FC<{}> = () => {
-
-  const dispatch = useDispatch()
+const ThumbnailTable : React.FC<{generate: any}> = ({generate}) => {
 
   const tracks = useSelector(selectTracks)
 
-  const flavorSubtype = "player+preview"
-  // Generate Refs
-  const generateRefs = React.useRef<any>([]);
   // Upload Refs
   const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
-
-  // Generate image and save in redux
-  const generate = (track: Track, index: number) => {
-    const uri = generateRefs.current[index].captureVideo()
-    dispatch(setThumbnail({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri}))
-  }
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -65,10 +64,10 @@ const ThumbnailTable : React.FC<{}> = () => {
 
   return(
     <div css={thumbnailTableStyle}>
-      {tracks.map( (track: Track, index: number) => (
-        <ThumbnailTableRow track={track} index={index} generateRefs={generateRefs} inputRefs={inputRefs} generate={generate}/>
-      ))}
       <AffectAllRow tracks={tracks} generate={generate}/>
+      {tracks.map( (track: Track, index: number) => (
+        <ThumbnailTableRow key={index} track={track} index={index} inputRefs={inputRefs} generate={generate}/>
+      ))}
     </div>
   )
 }
@@ -79,47 +78,43 @@ const ThumbnailTable : React.FC<{}> = () => {
 const ThumbnailTableRow: React.FC<{
   track: Track,
   index: number,
-  generateRefs: any,
   inputRefs: any,
   generate: any,
-}> = ({track, index, generateRefs, inputRefs, generate}) => {
+}> = ({track, index, inputRefs, generate}) => {
+
+  const rowStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    border: '1px solid grey',
+    backgroundColor: 'lightgrey',
+    height: '240px',
+    padding: '6px',
+  })
 
   const rowTitleStyle = css({
     textAlign: 'left',
     textTransform: 'capitalize',
     fontSize: 'larger',
     fontWeight: 'bold',
+    color: 'black',   // Override dark mode color invert
   })
 
   const thumbnailRowStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    width: '100%',
     height: '200px',
     justifyContent: 'center',
-  })
-
-  const cellVideo = css({
-    flex: 8,
-    width: '100%',
-    height: '100%',
+    gap: '20px',
   })
 
   return (
-    <div key={index}>
+    <div key={index} css={rowStyle}>
       <div css={rowTitleStyle}>
         {track.flavor.type}
       </div>
       <div css={thumbnailRowStyle} key={index}>
-
-        <div css={cellVideo}>
-          <VideoPlayer dataKey={index} url={track.uri} isPrimary={index === 0 ? true : false} ref={(el) => (generateRefs.current[index] = el)} />
-        </div>
-
         <ThumbnailDisplayer track={track} />
-
         <ThumbnailButtons track={track} index={index} generate={generate} inputRefs={inputRefs}/>
-
       </div>
     </div>
   )
@@ -131,41 +126,42 @@ const ThumbnailTableRow: React.FC<{
  */
 const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 
-  const thumbnails = useSelector(selectThumbnails)
+  const { t } = useTranslation()
 
   const cellThumbnail = css({
     display: 'flex',
-    flex: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
   })
 
   const imageStyle = css({
     maxWidth: '100%',
     maxHeight: '100%',
-    minWidth: '100px'
+    minWidth: '100px',
+  })
+
+  const placeholderStyle = css({
+    maxWidth: '100%',
+    maxHeight: '100%',
+    minWidth: '100px',
+    display: 'flex',
+    backgroundColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+    aspectRatio: '16/9',
   })
 
   return (
     <div css={cellThumbnail}>
-      {thumbnails.find(t => t.videoId === track.id)?.uri !== undefined ?
+      {(track.thumbnailUri !== null && track.thumbnailUri !== undefined) ?
         // Thumbnail image
-        <img src={thumbnails.find(t => t.videoId === track.id)?.uri}
-          alt={"Thumbnail for: " + thumbnails.find(t => t.videoId === track.id)?.flavor.type}
+        <img src={track.thumbnailUri}
+          alt={t('thumbnail.previewImageAlt') + ": " + track.flavor.type}
           css={imageStyle}
         />
         :
         // Placeholder
-          <div css={{
-            display: 'flex',
-            backgroundColor: 'grey',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            aspectRatio: '16/9',
-          }}>
-            <span>No Thumbnail set</span>
-          </div>
+        <div css={placeholderStyle}>
+          <span>{t('thumbnail.noThumbnailAvailable')}</span>
+        </div>
       }
     </div>
   )
@@ -182,12 +178,11 @@ const ThumbnailButtons : React.FC<{
 }> = ({track, index, generate, inputRefs}) => {
 
   const theme = useSelector(selectTheme);
-  const flavorSubtype = "player+preview"
-
+  const { t } = useTranslation()
   const dispatch = useDispatch()
 
   const tracks = useSelector(selectTracks)
-  const thumbnails = useSelector(selectThumbnails)
+  const originalThumbnails = useSelector(selectOriginalThumbnails)
 
   // Trigger file handler for upload input element
   const upload = (index: number) => {
@@ -215,7 +210,7 @@ const ThumbnailButtons : React.FC<{
         // the result image data
         if (e.target && e.target.result) {
           const uri = e.target.result.toString();
-          dispatch(setThumbnail({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri}))
+          dispatch(setThumbnail({id: track.id, uri: uri}))
         }
       }
       reader.readAsDataURL(fileObj);
@@ -225,21 +220,20 @@ const ThumbnailButtons : React.FC<{
     if (uri === undefined) {
       return
     }
-    const changedThumbnails = []
+    const thumbnails = []
     for (const track of tracks) {
-      changedThumbnails.push({videoId: track.id, flavor: {type: track.flavor.type, subtype: flavorSubtype}, uri: uri})
+      thumbnails.push({id: track.id, uri: uri})
     }
-    dispatch(setThumbnails(changedThumbnails))
+    dispatch(setThumbnails(thumbnails))
   }
 
   const discardThumbnail = (id: string) => {
-    dispatch(removeThumbnail(id))
+    dispatch(setThumbnail({ id: id, uri: originalThumbnails.find((e: any) => e.id === id)?.uri }))
   }
 
   const cellButtons = css({
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    flex: 4,
     gap: '20px'
   })
 
@@ -255,12 +249,30 @@ const ThumbnailButtons : React.FC<{
 
   return (
     <div css={cellButtons}>
-      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+      <div css={[basicButtonStyle, buttonsStyle(theme)]}
+        title={t('thumbnail.buttonGenerate-tooltip')}
+        role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerate-tooltip-aria')}
+        onClick={() => {
           generate(track, index)
-        }}>Generate</div>
-      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+        }}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+          generate(track, index)
+        }}}
+      >
+        {t('thumbnail.buttonGenerate')}
+      </div>
+      <div css={[basicButtonStyle, buttonsStyle(theme)]}
+        title={t('thumbnail.buttonUpload-tooltip')}
+        role="button" tabIndex={0} aria-label={t('thumbnail.buttonUpload-tooltip-aria')}
+        onClick={() => {
           upload(index)
-        }}>Upload</div>
+        }}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+          upload(index)
+        }}}
+      >
+        {t('thumbnail.buttonUpload')}
+      </div>
         <input
           style={{display: 'none'}}
           ref={(el) => {
@@ -270,12 +282,30 @@ const ThumbnailButtons : React.FC<{
           accept="image/*"
           onChange={(event) => handleFileChange(event, track)}
         />
-      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
-          setForOtherThumbnails(thumbnails.find(t => t.videoId === track.id)?.uri)
-        }}>Use for other thumbnails</div>
-      <div css={[basicButtonStyle, buttonsStyle(theme)]} onClick={() => {
+      <div css={[basicButtonStyle, buttonsStyle(theme)]}
+        title={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
+        role="button" tabIndex={0} aria-label={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
+        onClick={() => {
+          setForOtherThumbnails(track.thumbnailUri)
+        }}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+          setForOtherThumbnails(track.thumbnailUri)
+        }}}
+      >
+        {t('thumbnail.buttonUseForOtherThumbnails')}
+      </div>
+      <div css={[basicButtonStyle, buttonsStyle(theme)]}
+        title={t('thumbnail.buttonDiscard-tooltip')}
+        role="button" tabIndex={0} aria-label={t('thumbnail.buttonDiscard-tooltip-aria')}
+        onClick={() => {
           discardThumbnail(track.id)
-        }}>Discard</div>
+        }}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+          discardThumbnail(track.id)
+        }}}
+      >
+        {t('thumbnail.buttonDiscard')}
+      </div>
     </div>
   )
 }
@@ -289,6 +319,7 @@ const AffectAllRow : React.FC<{
   generate: any
 }> = ({generate, tracks}) => {
 
+  const { t } = useTranslation()
   const theme = useSelector(selectTheme);
 
   const generateAll = () => {
@@ -306,7 +337,7 @@ const AffectAllRow : React.FC<{
     gap: '20px',
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottom: `${theme.menuBorder}`,
+    borderTop: `${theme.menuBorder}`,
   })
 
   const buttonStyle = css({
@@ -318,12 +349,59 @@ const AffectAllRow : React.FC<{
 
   return (
     <div css={rowStyle}>
-      <div>Some explanatory text or something</div>
-      <div css={[basicButtonStyle, buttonStyle]} onClick={() => {
-        generateAll()
-      }}>Generate All</div>
+      <div>{t('thumbnail.explanation')}</div>
+      <div css={[basicButtonStyle, buttonStyle]}
+        title={t('thumbnail.buttonGenerateAll-tooltip')}
+        role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
+        onClick={() => {
+          generateAll()
+        }}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+          generateAll()
+        }}}
+      >
+        {t('thumbnail.buttonGenerateAll')}
+      </div>
     </div>
   )
 }
 
 export default Thumbnail;
+
+
+// const Under : React.FC<{}> = () => {
+
+//   const leRefs = React.useRef<any>([]);
+
+//   return(
+//     <div>Under
+//       <UnderOne leRefs={leRefs} index={0}></UnderOne>
+//       <button onClick={() => leRefs.current[0].log()}></button>
+//     </div>
+//   )
+// }
+
+
+// const UnderOne : React.FC<{leRefs: any, index: number}> = ({leRefs, index}) => {
+
+//   return (
+//     <div>Under One
+//       <UnderTwo ref={(el) => (leRefs.current[index] = el)} />
+//     </div>
+//   )
+// }
+
+// export const UnderTwo = React.forwardRef(
+//   (props: any, forwardRefThing) => {
+
+//     // External functions
+//     useImperativeHandle(forwardRefThing, () => ({
+//       log() {
+//         console.log("Under2")
+//       }
+//     }));
+
+//     return (
+//       <div>Under 2</div>
+//     )
+//   })

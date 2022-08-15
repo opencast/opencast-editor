@@ -35,7 +35,7 @@ import { selectTheme } from "../redux/themeSlice";
  * Container for the videos and their controls
  * TODO: Move fetching to a more central part of the app
  */
-const Video: React.FC<{}> = () => {
+export const Video: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
@@ -83,13 +83,13 @@ const Video: React.FC<{}> = () => {
   return (
     <div css={videoAreaStyle}>
       <VideoHeader />
-      <VideoPlayers />
+      <VideoPlayers refs={undefined}/>
       <VideoControls />
     </div>
   );
 };
 
-const VideoPlayers: React.FC<{}> = () => {
+export const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent=100}) => {
 
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
@@ -99,14 +99,24 @@ const VideoPlayers: React.FC<{}> = () => {
     flexDirection: 'row' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
+    width: widthInPercent + '%',
   });
 
   // Initialize video players
   const videoPlayers: JSX.Element[] = [];
   for (let i = 0; i < videoCount; i++) {
-    // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i === 0}/>);
+    videoPlayers.push(
+      <VideoPlayer
+        key={i}
+        dataKey={i}
+        url={videoURLs[i]}
+        isPrimary={i === 0}
+        ref={(el) => {
+          if (refs === undefined) return
+          (refs.current[i] = el)
+        }}
+      />
+    );
   }
 
   return (
@@ -141,6 +151,7 @@ export const VideoPlayer = React.forwardRef(
   const ref = useRef<ReactPlayer>(null);
   const [ready, setReady] = useState(false);
   const [errorState, setError] = useState(false);
+  const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
@@ -164,6 +175,7 @@ export const VideoPlayer = React.forwardRef(
         h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
       }
       dispatch(setAspectRatio({dataKey, width: w, height: h}))
+      setIsAspectRatioUpdated(true)
     }
   }
 
@@ -171,8 +183,8 @@ export const VideoPlayer = React.forwardRef(
   const onReadyCallback = () => {
     setReady(true);
 
-    // Update the store with video dimensions for rendering purposes
-    updateAspectRatio();
+    // // Update the store with video dimensions for rendering purposes
+    // updateAspectRatio();
   }
 
   const onEndedCallback = () => {
@@ -194,6 +206,10 @@ export const VideoPlayer = React.forwardRef(
     if (clickTriggered && ref.current && ready) {
       ref.current.seekTo(currentlyAt, "seconds")
       dispatch(setClickTriggered(false))
+    }
+    if (!isAspectRatioUpdated && ref.current && ready) {
+      // Update the store with video dimensions for rendering purposes
+      updateAspectRatio();
     }
   })
 
