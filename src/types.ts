@@ -12,6 +12,7 @@ export interface Track {
   audio_stream: any,
   video_stream: any,
   thumbnailUri: string | undefined,
+  thumbnailPriority: number,
 }
 
 export interface Flavor {

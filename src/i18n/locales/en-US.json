@@ -184,7 +184,14 @@
       "buttonGenerateAll": "Generate All",
       "buttonGenerateAll-tooltip": "Create new thumbnails from the current scrubber position",
       "buttonGenerateAll-tooltip-aria": "Create new thumbnails from the current scrubber position",
-      "explanation": "Some explanatory text can go here"
+      "explanation": "Here you can set the thumbnail for each video",
+      "primary": "Primary",
+      "secondary": "Secondary"
+    },
+
+    "thumbnailSimple": {
+      "rowTitle": "Change thumbnail here",
+      "from": "from"
     },
 
     "error": {

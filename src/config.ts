@@ -44,6 +44,7 @@ interface iSettings {
   },
   thumbnail: {
     show: boolean,
+    simpleMode: boolean,
   }
 }
 
@@ -70,6 +71,7 @@ var defaultSettings: iSettings = {
   },
   thumbnail: {
     show: false,
+    simpleMode: false,
   }
 }
 var configFileSettings: iSettings
@@ -311,6 +313,7 @@ const SCHEMA = {
   },
   thumbnail: {
     show : types.boolean,
+    simpleMode: types.boolean,
   }
 }
 

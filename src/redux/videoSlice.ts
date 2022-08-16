@@ -208,7 +208,7 @@ const videoSlice = createSlice({
           state.errorReason = 'workflowActive'
           state.error = "An Opencast workflow is currently running, please wait until it is finished."
         }
-        state.tracks = action.payload.tracks
+        state.tracks = action.payload.tracks.sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => a.thumbnailPriority - b.thumbnailPriority)
         const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
