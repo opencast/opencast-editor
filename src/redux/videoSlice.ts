@@ -280,6 +280,19 @@ const skipDeletedSegments = (state: WritableDraft<video>) => {
           endTime = state.segments[index].start + 1
           break
         }
+
+        // If this is the last segment and it is deleted
+        if (index + 1 === state.segments.length) {
+          // Properly pause the player
+          state.isPlaying = false
+          // Jump to start of first non-deleted segment
+          for (let j = 0; j < state.segments.length; j++) {
+            if (!state.segments[j].deleted) {
+              endTime = state.segments[j].start
+              break
+            }
+          }
+        }
       }
 
       state.currentlyAt = endTime
