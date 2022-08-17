@@ -344,7 +344,7 @@ export const selectIsCurrentSegmentAlive = (state: { videoState:
 export const selectSelectedWorkflowId = (state: { videoState:
     { selectedWorkflowId: video["selectedWorkflowId"]; }; }) =>
     state.videoState.selectedWorkflowId
-export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
+export const selectHasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
   state.videoState.waveformImages
