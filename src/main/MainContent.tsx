@@ -20,8 +20,8 @@ import { MainMenuStateNames } from '../types'
 import { flexGapReplacementStyle } from "../cssStyles";
 
 import { useBeforeunload } from 'react-beforeunload';
-import { hasChanges as videoHasChanges } from "../redux/videoSlice";
-import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
+import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
+import { selectHasChanges as metadataSelectHasChanges} from "../redux/metadataSlice";
 import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
 
@@ -32,8 +32,8 @@ import ThemeSwitcher from "./ThemeSwitcher";
 const MainContent: React.FC<{}> = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)
-  const videoChanged = useSelector(videoHasChanges)
-  const metadataChanged = useSelector(metadataHasChanges)
+  const videoChanged = useSelector(videoSelectHasChanges)
+  const metadataChanged = useSelector(metadataSelectHasChanges)
   const theme = useSelector(selectTheme)
 
   // Display warning when leaving the page if there are unsaved changes

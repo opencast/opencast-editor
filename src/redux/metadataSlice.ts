@@ -149,7 +149,7 @@ export const { setFieldValue, setHasChanges, setFieldReadonly,resetPostRequestSt
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs
-export const hasChanges = (state: { metadataState: { hasChanges: metadata["hasChanges"] } }) =>
+export const selectHasChanges = (state: { metadataState: { hasChanges: metadata["hasChanges"] } }) =>
   state.metadataState.hasChanges
 export const selectGetStatus = (state: { metadataState: { status: httpRequestState["status"] } }) =>
   state.metadataState.status

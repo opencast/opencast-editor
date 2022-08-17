@@ -11,7 +11,7 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
-import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
+import { selectHasChanges, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
 
 import { PageButton } from './Finish'
@@ -19,7 +19,8 @@ import { PageButton } from './Finish'
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
-import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
+  selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
 import { selectTheme } from "../redux/themeSlice";
 
 /**
@@ -36,6 +37,8 @@ const Save : React.FC<{}> = () => {
   const postError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
+  const metadataHasChanges = useSelector(metadataSelectHasChanges)
+  const hasChanges = useSelector(selectHasChanges)
 
   const saveStyle = css({
     height: '100%',
@@ -47,7 +50,8 @@ const Save : React.FC<{}> = () => {
 
   const render = () => {
     // Post (successful) save
-    if (postWorkflowStatus === 'success' && postMetadataStatus === 'success') {
+    if (postWorkflowStatus === 'success' && postMetadataStatus === 'success'
+      && !hasChanges && !metadataHasChanges) {
       return(
         <>
           <FontAwesomeIcon icon={faCheckCircle} size="10x" />
@@ -133,7 +137,6 @@ export const SaveButton: React.FC<{}> = () => {
   useEffect(() => {
     if (metadataStatus === 'success' && metadataSaveStarted) {
       setMetadataSaveStarted(false)
-      console.log("EDIT")
       dispatch(postVideoInformation({
         segments: segments,
         tracks: tracks,
