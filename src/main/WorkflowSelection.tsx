@@ -61,7 +61,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   })
 
   useEffect(() => {
-    if (workflows.length === 1) {
+    if (workflows.length >= 1) {
       dispatch(setSelectedWorkflowIndex(workflows[0].id))
     }
   }, [dispatch, workflows])
