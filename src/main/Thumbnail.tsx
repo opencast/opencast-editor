@@ -223,12 +223,18 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
   })
 
   const placeholderStyle = css({
-    maxHeight: '100%',
-    display: 'flex',
     backgroundColor: 'grey',
+    // For whatever reason, setting the width relative to height is way to difficult,
+    // so we hardcode the box size here
+    height: '200px',
+    width: '355px',
+    // Support for aspectRatio is still spotty and implementations across browsers
+    // differ too much
+    // aspectRatio: '16/9',
+
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    aspectRatio: '16/9',
   })
 
   return (
