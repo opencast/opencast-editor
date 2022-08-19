@@ -224,13 +224,12 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
   const imageStyle = css({
     maxWidth: '100%',
     maxHeight: '100%',
-    minWidth: '100px',
+    objectFit: 'contain',
   })
 
   const placeholderStyle = css({
     maxWidth: '100%',
     maxHeight: '100%',
-    minWidth: '100px',
     display: 'flex',
     backgroundColor: 'grey',
     justifyContent: 'center',
