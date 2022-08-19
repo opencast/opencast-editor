@@ -6,7 +6,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
-import { basicButtonStyle, deactivatedButtonStyle, titleStyle, titleStyleBold } from "../cssStyles";
+import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
 import { selectOriginalThumbnails, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
@@ -116,7 +116,7 @@ const ThumbnailTable : React.FC<{
   const thumbnailTableStyle = css({
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px',
+    ...(flexGapReplacementStyle(10, false)),
   })
 
   const renderSingleOrMultiple = () => {
@@ -533,7 +533,7 @@ const thumbnailTableRowStyle = css({
   border: '1px solid grey',
   backgroundColor: 'lightgrey',
   height: '240px',
-  padding: '6px 10px',
+  padding: '6px 12px',
 })
 
 const thumbnailTableRowTitleStyle = css({
@@ -549,7 +549,7 @@ const thumbnailTableRowRowStyle = css({
   flexDirection: 'row',
   height: '200px',
   justifyContent: 'center',
-  gap: '20px',
+  ...(flexGapReplacementStyle(20, true)),
 })
 
 const thumbnailButtonsStyle = css({
