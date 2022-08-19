@@ -117,6 +117,7 @@ const ThumbnailTable : React.FC<{
     display: 'flex',
     flexDirection: 'column',
     ...(flexGapReplacementStyle(10, false)),
+    paddingBottom: '10px',
   })
 
   const renderSingleOrMultiple = () => {
