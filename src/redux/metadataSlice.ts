@@ -140,7 +140,7 @@ const metadataSlice = createSlice({
     builder.addCase(
       postMetadata.rejected, (state, action) => {
         state.postStatus = 'failed'
-        state.postError = action.error.message ? JSON.parse(action.error.message) : ""
+        state.postError = action.error.message ? action.error.message : ""
     })
   }
 })
