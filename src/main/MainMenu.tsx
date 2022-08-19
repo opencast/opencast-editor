@@ -135,6 +135,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
       backgroundColor: `${theme.menuButton}`,
     },
     flexDirection: 'column' as const,
+    padding: '0px 2px',
   });
 
   const miniMenuButtonStyle = css({
