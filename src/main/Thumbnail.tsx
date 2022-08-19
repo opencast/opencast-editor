@@ -6,7 +6,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
-import { basicButtonStyle, titleStyle, titleStyleBold } from "../cssStyles";
+import { basicButtonStyle, deactivatedButtonStyle, titleStyle, titleStyleBold } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
 import { selectOriginalThumbnails, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
@@ -290,7 +290,8 @@ const ThumbnailButtons : React.FC<{
 
   return (
     <div css={thumbnailButtonsStyle}>
-      <div css={[basicButtonStyle, thumbnailButtonStyle(theme)]}
+      <div
+        css={thumbnailButtonStyle(true, theme)}
         title={t('thumbnail.buttonGenerate-tooltip')}
         role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerate-tooltip-aria')}
         onClick={() => {
@@ -302,7 +303,8 @@ const ThumbnailButtons : React.FC<{
       >
         {t('thumbnail.buttonGenerate')}
       </div>
-      <div css={[basicButtonStyle, thumbnailButtonStyle(theme)]}
+      <div
+        css={thumbnailButtonStyle(true, theme)}
         title={t('thumbnail.buttonUpload-tooltip')}
         role="button" tabIndex={0} aria-label={t('thumbnail.buttonUpload-tooltip-aria')}
         onClick={() => {
@@ -323,7 +325,8 @@ const ThumbnailButtons : React.FC<{
           accept="image/*"
           onChange={(event) => uploadCallback(event, track)}
         />
-      <div css={[basicButtonStyle, thumbnailButtonStyle(theme)]}
+      <div
+        css={thumbnailButtonStyle(track.thumbnailUri? track.thumbnailUri.startsWith("data"): false, theme)}
         title={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
         role="button" tabIndex={0} aria-label={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
         onClick={() => {
@@ -335,7 +338,8 @@ const ThumbnailButtons : React.FC<{
       >
         {t('thumbnail.buttonUseForOtherThumbnails')}
       </div>
-      <div css={[basicButtonStyle, thumbnailButtonStyle(theme)]}
+      <div
+        css={thumbnailButtonStyle(track.thumbnailUri? track.thumbnailUri.startsWith("data"): false, theme)}
         title={t('thumbnail.buttonDiscard-tooltip')}
         role="button" tabIndex={0} aria-label={t('thumbnail.buttonDiscard-tooltip-aria')}
         onClick={() => {
@@ -467,7 +471,8 @@ const ThumbnailButtonsSimple : React.FC<{
   return (
     <div css={thumbnailButtonsStyle}>
       {tracks.map( (generateTrack: Track, generateIndex: number) => (
-        <div css={[basicButtonStyle, thumbnailButtonStyle(theme)]}
+        <div
+          css={thumbnailButtonStyle(true, theme)}
           title={t('thumbnail.buttonGenerate-tooltip')}
           role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerate-tooltip-aria')}
           onClick={() => {
@@ -480,7 +485,8 @@ const ThumbnailButtonsSimple : React.FC<{
           {t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
         </div>
       ))}
-      <div css={[basicButtonStyle, thumbnailButtonStyle(theme)]}
+      <div
+        css={thumbnailButtonStyle(true, theme)}
         title={t('thumbnail.buttonUpload-tooltip')}
         role="button" tabIndex={0} aria-label={t('thumbnail.buttonUpload-tooltip-aria')}
         onClick={() => {
@@ -501,7 +507,8 @@ const ThumbnailButtonsSimple : React.FC<{
           accept="image/*"
           onChange={(event) => uploadCallback(event, track)}
         />
-      <div css={[basicButtonStyle, thumbnailButtonStyle(theme)]}
+      <div
+        css={thumbnailButtonStyle(track.thumbnailUri? track.thumbnailUri.startsWith("data"): false, theme)}
         title={t('thumbnail.buttonDiscard-tooltip')}
         role="button" tabIndex={0} aria-label={t('thumbnail.buttonDiscard-tooltip-aria')}
         onClick={() => {
@@ -551,15 +558,18 @@ const thumbnailButtonsStyle = css({
   gap: '20px'
 })
 
-const thumbnailButtonStyle = (theme: Theme) => css({
-  maxWidth: '75%',
-  maxHeight: '75%',
-  boxShadow: `${theme.boxShadow}`,
-  background: `${theme.element_bg}`,
-  justifySelf: 'center',
-  alignSelf: 'center',
-  padding: '20px'
-})
+const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
+  active ? basicButtonStyle : deactivatedButtonStyle,
+  {
+    maxWidth: '75%',
+    maxHeight: '75%',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
+    justifySelf: 'center',
+    alignSelf: 'center',
+    padding: '20px'
+  }
+];
 
 
 export default Thumbnail;
