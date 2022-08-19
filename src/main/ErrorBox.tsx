@@ -41,8 +41,9 @@ import { selectTheme } from "../redux/themeSlice";
     return (
       css({
         ...(!errorStatus) && {display: "none"},
-        borderColor: `${theme.error}`,
-        borderStyle: 'dashed',
+        maxWidth: '500px',
+        color: 'white',
+        backgroundColor: `${theme.error}`,
         fontStyle: 'italic',
         padding: '10px',
       })
