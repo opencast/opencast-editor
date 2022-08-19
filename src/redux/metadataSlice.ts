@@ -127,7 +127,7 @@ const metadataSlice = createSlice({
     builder.addCase(
       fetchMetadata.rejected, (state, action) => {
         state.status = 'failed'
-        state.error = action.error.message ? JSON.parse(action.error.message) : ""
+        state.error = action.error.message ? action.error.message : ""
     })
     builder.addCase(
       postMetadata.pending, (state, action) => {
