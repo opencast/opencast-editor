@@ -533,7 +533,7 @@ const thumbnailTableRowStyle = css({
   border: '1px solid grey',
   backgroundColor: 'lightgrey',
   height: '240px',
-  padding: '6px',
+  padding: '6px 10px',
 })
 
 const thumbnailTableRowTitleStyle = css({
@@ -555,19 +555,19 @@ const thumbnailTableRowRowStyle = css({
 const thumbnailButtonsStyle = css({
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
-  gap: '20px'
+  gridGap: '30px'
 })
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
   active ? basicButtonStyle : deactivatedButtonStyle,
   {
-    maxWidth: '75%',
-    maxHeight: '75%',
+    width: '100%',
+    height: '100%',
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
     justifySelf: 'center',
     alignSelf: 'center',
-    padding: '20px'
+    padding: '0px 2px'
   }
 ];
 
