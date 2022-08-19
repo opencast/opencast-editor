@@ -217,18 +217,11 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 
   const { t } = useTranslation()
 
-  const cellThumbnail = css({
-    display: 'flex',
-  })
-
   const imageStyle = css({
-    maxWidth: '100%',
     maxHeight: '100%',
-    objectFit: 'contain',
   })
 
   const placeholderStyle = css({
-    maxWidth: '100%',
     maxHeight: '100%',
     display: 'flex',
     backgroundColor: 'grey',
@@ -238,7 +231,7 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
   })
 
   return (
-    <div css={cellThumbnail}>
+    <>
       {(track.thumbnailUri !== null && track.thumbnailUri !== undefined) ?
         // Thumbnail image
         <img src={track.thumbnailUri}
@@ -251,7 +244,7 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
           <span>{t('thumbnail.noThumbnailAvailable')}</span>
         </div>
       }
-    </div>
+    </>
   )
 }
 
