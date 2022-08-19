@@ -219,7 +219,10 @@ export const VideoPlayer = React.forwardRef(
 
   // Skip player when navigating page with keyboard
   const playerConfig: Config = {
-    file: { attributes: { tabIndex: '-1' }}
+    file: { attributes: {
+      tabIndex: '-1',             // don't tab navigate onto the video
+      crossOrigin: "anonymous"    // allow thumbnail generation
+    }}
   }
 
   // External functions
