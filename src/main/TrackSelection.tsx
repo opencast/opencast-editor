@@ -62,6 +62,8 @@ const Description: React.FC<{}> = () => {
 
 const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
 
+  const theme = useSelector(selectTheme);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const header = track.flavor.type + ' '
