@@ -195,6 +195,7 @@ const ThumbnailTableRow: React.FC<{
       <div css={thumbnailTableRowTitleStyle}>
         {track.flavor.type + renderPriority(track.thumbnailPriority)}
       </div>
+      <hr css={{width: '100%'}}></hr>
       <div css={thumbnailTableRowRowStyle} key={index}>
         <ThumbnailDisplayer track={track} />
         <ThumbnailButtons
@@ -529,8 +530,6 @@ const ThumbnailButtonsSimple : React.FC<{
 const thumbnailTableRowStyle = css({
   display: 'flex',
   flexDirection: 'column',
-  border: '1px solid grey',
-  backgroundColor: 'lightgrey',
   height: '240px',
   padding: '6px 12px',
 })
@@ -540,7 +539,6 @@ const thumbnailTableRowTitleStyle = css({
   textTransform: 'capitalize',
   fontSize: 'larger',
   fontWeight: 'bold',
-  color: 'black',   // Override dark mode color invert
 })
 
 const thumbnailTableRowRowStyle = css({
