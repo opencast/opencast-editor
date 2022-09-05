@@ -49,7 +49,7 @@
     "react-hotkeys": "^2.0.0",
     "react-i18next": "^11.18.3",
     "react-player": "^2.10.1",
-    "react-redux": "^7.2.8",
+    "react-redux": "^8.0.2",
     "react-scripts": "5.0.1",
     "react-select": "^5.4.0",
     "react-use": "^17.4.0",
