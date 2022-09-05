@@ -222,6 +222,7 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 
   const imageStyle = css({
     maxHeight: '100%',
+    height: '280px',
   })
 
   const placeholderStyle = css({
@@ -531,7 +532,6 @@ const ThumbnailButtonsSimple : React.FC<{
 const thumbnailTableRowStyle = css({
   display: 'flex',
   flexDirection: 'column',
-  height: '240px',
   padding: '6px 12px',
 })
 
@@ -545,15 +545,21 @@ const thumbnailTableRowTitleStyle = css({
 const thumbnailTableRowRowStyle = css({
   display: 'flex',
   flexDirection: 'row',
-  height: '200px',
-  justifyContent: 'center',
   ...(flexGapReplacementStyle(20, true)),
+
+  justifyContent: 'space-around',
+  flexWrap: 'wrap',
 })
 
 const thumbnailButtonsStyle = css({
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gridGap: '30px'
+  // TODO: Avoid hard-coding max-width
+  "@media (max-width: 1000px)": {
+    flexDirection: 'row',
+    width: '100%',
+  },
+  display: 'flex',
+  flexDirection: 'column',
+  ...(flexGapReplacementStyle(20, true)),
 })
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
