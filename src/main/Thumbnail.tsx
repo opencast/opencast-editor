@@ -115,9 +115,10 @@ const ThumbnailTable : React.FC<{
 
   const thumbnailTableStyle = css({
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row' as const,
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
     ...(flexGapReplacementStyle(10, false)),
-    paddingBottom: '10px',
   })
 
   const renderSingleOrMultiple = () => {
