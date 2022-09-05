@@ -27,7 +27,7 @@
     "@types/react": "^17.0.45",
     "@types/react-dom": "^18.0.3",
     "@types/react-redux": "^7.1.24",
-    "@types/yup": "^0.29.14",
+    "@types/yup": "^0.32.0",
     "customize-cra": "^1.0.0",
     "deepmerge": "^4.2.2",
     "emotion": "^11.0.0",
