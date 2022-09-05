@@ -84,7 +84,7 @@
     ]
   },
   "devDependencies": {
-    "@playwright/test": "^1.24.2",
+    "@playwright/test": "^1.25.1",
     "@types/lodash": "^4.14.182",
     "@types/luxon": "^3.0.0",
     "@types/react-beforeunload": "^2.1.1",
