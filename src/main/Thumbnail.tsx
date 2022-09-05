@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faCopy, faInfoCircle, faTimesCircle, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { t } from "i18next";
 import React from "react";
@@ -303,6 +303,7 @@ const ThumbnailButtons : React.FC<{
           generate(track, index)
         }}}
       >
+        <FontAwesomeIcon icon={faCamera}/>
         {t('thumbnail.buttonGenerate')}
       </div>
       <div
@@ -316,6 +317,7 @@ const ThumbnailButtons : React.FC<{
           upload(index)
         }}}
       >
+        <FontAwesomeIcon icon={faUpload}/>
         {t('thumbnail.buttonUpload')}
       </div>
         <input
@@ -338,6 +340,7 @@ const ThumbnailButtons : React.FC<{
           setForOtherThumbnails(track.thumbnailUri)
         }}}
       >
+        <FontAwesomeIcon icon={faCopy}/>
         {t('thumbnail.buttonUseForOtherThumbnails')}
       </div>
       <div
@@ -351,6 +354,7 @@ const ThumbnailButtons : React.FC<{
           discard(track.id)
         }}}
       >
+        <FontAwesomeIcon icon={faTimesCircle}/>
         {t('thumbnail.buttonDiscard')}
       </div>
     </div>
@@ -408,6 +412,7 @@ const AffectAllRow : React.FC<{
           generateAll()
         }}}
       >
+        <FontAwesomeIcon icon={faCamera}/>
         {t('thumbnail.buttonGenerateAll')}
       </div>
     </div>
