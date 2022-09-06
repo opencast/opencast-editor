@@ -220,17 +220,19 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 
   const { t } = useTranslation()
 
+  const generalStyle = css({
+    height: '280px',
+  })
+
   const imageStyle = css({
     maxHeight: '100%',
-    height: '280px',
   })
 
   const placeholderStyle = css({
     backgroundColor: 'grey',
     // For whatever reason, setting the width relative to height is way to difficult,
     // so we hardcode the box size here
-    height: '200px',
-    width: '355px',
+    width: '497px',
     // Support for aspectRatio is still spotty and implementations across browsers
     // differ too much
     // aspectRatio: '16/9',
@@ -246,11 +248,11 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
         // Thumbnail image
         <img src={track.thumbnailUri}
           alt={t('thumbnail.previewImageAlt') + ": " + track.flavor.type}
-          css={imageStyle}
+          css={[generalStyle, imageStyle]}
         />
         :
         // Placeholder
-        <div css={placeholderStyle}>
+        <div css={[generalStyle, placeholderStyle]}>
           <span>{t('thumbnail.noThumbnailAvailable')}</span>
         </div>
       }
