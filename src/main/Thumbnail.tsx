@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faCamera, faCopy, faInfoCircle, faTimesCircle, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { t } from "i18next";
@@ -40,7 +41,7 @@ const Thumbnail : React.FC<{}> = () => {
 
   // Trigger file handler for upload input element
   const upload = (index: number) => {
-    // 👇️ open file input box on click of other element
+    // open file input box on click of other element
     const ref = inputRefs.current[index]
     if (ref !== null) {
       ref.click();
@@ -273,7 +274,6 @@ const ThumbnailButtons : React.FC<{
   discard: any,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
 
-  const theme = useSelector(selectTheme);
   const { t } = useTranslation()
   const dispatch = useDispatch()
 
@@ -294,34 +294,23 @@ const ThumbnailButtons : React.FC<{
 
   return (
     <div css={thumbnailButtonsStyle}>
-      <div
-        css={thumbnailButtonStyle(true, theme)}
-        title={t('thumbnail.buttonGenerate-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerate-tooltip-aria')}
-        onClick={() => {
-          generate(track, index)
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          generate(track, index)
-        }}}
-      >
-        <FontAwesomeIcon icon={faCamera}/>
-        {t('thumbnail.buttonGenerate')}
-      </div>
-      <div
-        css={thumbnailButtonStyle(true, theme)}
-        title={t('thumbnail.buttonUpload-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonUpload-tooltip-aria')}
-        onClick={() => {
-          upload(index)
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          upload(index)
-        }}}
-      >
-        <FontAwesomeIcon icon={faUpload}/>
-        {t('thumbnail.buttonUpload')}
-      </div>
+      <ThumbnailButton
+        handler={() => { generate(track, index) }}
+        text={t('thumbnail.buttonGenerate')}
+        tooltipText={t('thumbnail.buttonGenerate-tooltip')}
+        ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
+        icon={faCamera}
+        active={true}
+      />
+      <ThumbnailButton
+        handler={() => { upload(index) }}
+        text={t('thumbnail.buttonUpload')}
+        tooltipText={t('thumbnail.buttonUpload-tooltip')}
+        ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
+        icon={faUpload}
+        active={true}
+      />
+      {/* Hidden input field for upload */}
         <input
           style={{display: 'none'}}
           ref={(el) => {
@@ -331,34 +320,58 @@ const ThumbnailButtons : React.FC<{
           accept="image/*"
           onChange={(event) => uploadCallback(event, track)}
         />
-      <div
-        css={thumbnailButtonStyle(track.thumbnailUri? track.thumbnailUri.startsWith("data"): false, theme)}
-        title={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
-        onClick={() => {
-          setForOtherThumbnails(track.thumbnailUri)
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          setForOtherThumbnails(track.thumbnailUri)
-        }}}
-      >
-        <FontAwesomeIcon icon={faCopy}/>
-        {t('thumbnail.buttonUseForOtherThumbnails')}
-      </div>
-      <div
-        css={thumbnailButtonStyle(track.thumbnailUri? track.thumbnailUri.startsWith("data"): false, theme)}
-        title={t('thumbnail.buttonDiscard-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonDiscard-tooltip-aria')}
-        onClick={() => {
-          discard(track.id)
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          discard(track.id)
-        }}}
-      >
-        <FontAwesomeIcon icon={faTimesCircle}/>
-        {t('thumbnail.buttonDiscard')}
-      </div>
+      <ThumbnailButton
+        handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
+        text={t('thumbnail.buttonUseForOtherThumbnails')}
+        tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
+        ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
+        icon={faCopy}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+      />
+      <ThumbnailButton
+        handler={() => { discard(track.id) }}
+        text={t('thumbnail.buttonDiscard')}
+        tooltipText={t('thumbnail.buttonDiscard-tooltip')}
+        ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
+        icon={faTimesCircle}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+      />
+    </div>
+  )
+}
+
+const ThumbnailButton : React.FC<{
+  handler: any,
+  text: string
+  tooltipText: string,
+  ariaLabel: string,
+  icon: IconProp,
+  active: boolean,
+}> = ({handler, text, tooltipText, ariaLabel, icon, active}) => {
+  const theme = useSelector(selectTheme);
+  const ref = React.useRef<HTMLDivElement>(null)
+
+  const clickHandler = () => {
+    active && handler();
+    ref.current?.blur();
+  };
+  const keyHandler = (event: React.KeyboardEvent) => {
+    if (active && (event.key === " " || event.key === "Enter")) {
+      handler();
+    }
+  };
+
+  return (
+    <div
+      css={thumbnailButtonStyle(active, theme)}
+      ref={ref}
+      title={tooltipText}
+      role="button" tabIndex={0} aria-label={ariaLabel}
+      onClick={clickHandler}
+      onKeyDown={keyHandler}
+    >
+      <FontAwesomeIcon icon={icon}/>
+      {text}
     </div>
   )
 }
@@ -474,42 +487,29 @@ const ThumbnailButtonsSimple : React.FC<{
 }> = ({track, index, generate, inputRefs, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
-  const theme = useSelector(selectTheme);
-
   const tracks = useSelector(selectTracks)
 
   return (
     <div css={thumbnailButtonsStyle}>
       {tracks.map( (generateTrack: Track, generateIndex: number) => (
-        <div
-          css={thumbnailButtonStyle(true, theme)}
-          title={t('thumbnail.buttonGenerate-tooltip')}
-          role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerate-tooltip-aria')}
-          onClick={() => {
-            generate(track, generateIndex)
-          }}
-          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-            generate(track, generateIndex)
-          }}}
-        >
-          <FontAwesomeIcon icon={faCamera}/>
-          {t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
-        </div>
+        <ThumbnailButton
+          handler={() => { generate(track, generateIndex) }}
+          text={t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
+          tooltipText={t('thumbnail.buttonGenerate-tooltip')}
+          ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
+          icon={faCamera}
+          active={true}
+        />
       ))}
-      <div
-        css={thumbnailButtonStyle(true, theme)}
-        title={t('thumbnail.buttonUpload-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonUpload-tooltip-aria')}
-        onClick={() => {
-          upload(index)
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          upload(index)
-        }}}
-      >
-        <FontAwesomeIcon icon={faUpload}/>
-        {t('thumbnail.buttonUpload')}
-      </div>
+      <ThumbnailButton
+        handler={() => { upload(index) }}
+        text={t('thumbnail.buttonUpload')}
+        tooltipText={t('thumbnail.buttonUpload-tooltip')}
+        ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
+        icon={faUpload}
+        active={true}
+      />
+      {/* Hidden input field for upload */}
         <input
           style={{display: 'none'}}
           ref={(el) => {
@@ -519,20 +519,14 @@ const ThumbnailButtonsSimple : React.FC<{
           accept="image/*"
           onChange={(event) => uploadCallback(event, track)}
         />
-      <div
-        css={thumbnailButtonStyle(track.thumbnailUri? track.thumbnailUri.startsWith("data"): false, theme)}
-        title={t('thumbnail.buttonDiscard-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonDiscard-tooltip-aria')}
-        onClick={() => {
-          discard(track.id)
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          discard(track.id)
-        }}}
-      >
-        <FontAwesomeIcon icon={faTimesCircle}/>
-        {t('thumbnail.buttonDiscard')}
-      </div>
+      <ThumbnailButton
+        handler={() => { discard(track.id) }}
+        text={t('thumbnail.buttonDiscard')}
+        tooltipText={t('thumbnail.buttonDiscard-tooltip')}
+        ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
+        icon={faTimesCircle}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+      />
     </div>
   )
 }
