@@ -444,6 +444,7 @@ const ThumbnailTableSingleRow: React.FC<{
       <div css={thumbnailTableRowTitleStyle}>
         {t("thumbnailSimple.rowTitle")}
       </div>
+      <hr css={{width: '100%'}}></hr>
       <div css={thumbnailTableRowRowStyle} key={index}>
         <ThumbnailDisplayer track={track} />
         <ThumbnailButtonsSimple
@@ -491,6 +492,7 @@ const ThumbnailButtonsSimple : React.FC<{
             generate(track, generateIndex)
           }}}
         >
+          <FontAwesomeIcon icon={faCamera}/>
           {t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
         </div>
       ))}
@@ -505,6 +507,7 @@ const ThumbnailButtonsSimple : React.FC<{
           upload(index)
         }}}
       >
+        <FontAwesomeIcon icon={faUpload}/>
         {t('thumbnail.buttonUpload')}
       </div>
         <input
@@ -527,6 +530,7 @@ const ThumbnailButtonsSimple : React.FC<{
           discard(track.id)
         }}}
       >
+        <FontAwesomeIcon icon={faTimesCircle}/>
         {t('thumbnail.buttonDiscard')}
       </div>
     </div>
