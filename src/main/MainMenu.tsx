@@ -131,7 +131,12 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
   const mainMenuButtonStyle = css({
     width: '100%',
     height: '100px',
+    outline: `${theme.menuButton_outline}`,
     ...(activeState === stateName) && {
+      backgroundColor: `${theme.button_color}`,
+      color: `${theme.selected_text}`,
+    },
+    '&:hover': {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
     },
@@ -142,7 +147,12 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     width: '75px',
     height: '67px',
     marginBottom: '35px',
+    outline: `${theme.menuButton_outline}`,
     ...(activeState === stateName) && {
+      backgroundColor: `${theme.button_color}`,
+      color: `${theme.selected_text}`,
+    },
+    '&:hover': {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
     },

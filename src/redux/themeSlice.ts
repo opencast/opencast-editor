@@ -20,12 +20,14 @@ export interface Theme {
   element_outline: String
   selected_text: String
   dropdown_border: String
+  menuButton_outline: String
   button_outline: String
   button_color: String
   indicator_color: String
   icon_color: String
   waveform_filter: String
   waveform_bg: String
+  scrubber: String
 };
 
 const getValue = () => {
@@ -52,7 +54,8 @@ const getTheme = () => {
 
   if(themeId === 'system' || themeId === undefined) {
     const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
-    const isContrastPrefered = window.matchMedia('(prefers-contrast: more)')
+    const isContrastPrefered = window.matchMedia('(prefers-contrast: more)');
+    console.log('isContrastPrefered', isContrastPrefered)
 
     if(isDarkPrefered.matches && !isContrastPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'dark');

@@ -19,12 +19,14 @@ export const lightMode: Theme = {
   element_outline: '2px solid transparent',
   selected_text: '#000',
   dropdown_border: '1px solid #ccc',
+  menuButton_outline: '2px solid transparent',
   button_outline: 'none',
   button_color: '#DDD',
   indicator_color: '#3d3d3d',
   icon_color: '#000',
   waveform_filter: 'invert(0%)',
-  waveform_bg: '#fff'
+  waveform_bg: '#fff',
+  scrubber: '1px solid transparent',
 };
 
 export const darkMode: Theme = {
@@ -46,12 +48,14 @@ export const darkMode: Theme = {
   element_outline: '2px solid transparent',
   selected_text: '#fff',
   dropdown_border: '1px solid #ccc',
+  menuButton_outline: '2px solid transparent',
   button_outline: '0px solid transparent',
   button_color: '#2b2b2b',
   indicator_color: '#ccc',
   icon_color: 'rgba(255, 255, 255, 0.87)',
   waveform_filter: 'invert(11%)',
-  waveform_bg: '#fff'
+  waveform_bg: '#fff',
+  scrubber: '1px solid transparent',
 };
 
 export const highContrastDarkMode: Theme = {
@@ -60,7 +64,7 @@ export const highContrastDarkMode: Theme = {
   error: '#ED1741',
   element_bg: 'none',
   multiValue: '#c4c4c4',
-  focused: '#4dffd5',
+  focused: '#a6ffea',
   focus_text: '#000',
   selected: '#fff',
   disabled: 'rgba(255, 255, 255, 0.8)',
@@ -73,12 +77,14 @@ export const highContrastDarkMode: Theme = {
   element_outline: '2px solid #fff',
   selected_text: '#000',
   dropdown_border: '3px solid #fff',
-  button_outline: '2px solid #4dffd5',
-  button_color: '#4dffd5',
-  indicator_color: '#4dffd5',
-  icon_color: '#4dffd5',
+  menuButton_outline: '2px solid transparent',
+  button_outline: '2px solid #a6ffea',
+  button_color: '#a6ffea',
+  indicator_color: '#a6ffea',
+  icon_color: '#a6ffea',
   waveform_filter: 'invert(100%)',
-  waveform_bg: '#fff'
+  waveform_bg: '#80B8AC',
+  scrubber: '1px solid transparent',
 }
 
 export const highContrastLightMode: Theme = {
@@ -100,10 +106,12 @@ export const highContrastLightMode: Theme = {
   element_outline: '2px solid #000',
   selected_text: '#fff',
   dropdown_border: '3px solid #000',
+  menuButton_outline: '2px solid transparent',
   button_outline: '3px solid #000099',
   button_color: '#000099',
   indicator_color: '#000099',
   icon_color: '#000099',
   waveform_filter: 'invert(0%)',
-  waveform_bg: '#fff'
+  waveform_bg: '#fff',
+  scrubber: '1px solid transparent',
 }

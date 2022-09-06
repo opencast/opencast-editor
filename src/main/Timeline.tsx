@@ -165,6 +165,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
+    outline: `${theme.scrubber}`,
   });
 
   const scrubberDragHandleStyle = css({
