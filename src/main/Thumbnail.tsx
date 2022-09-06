@@ -500,6 +500,7 @@ const ThumbnailButtonsSimple : React.FC<{
           ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
           icon={faCamera}
           active={true}
+          key={generateIndex}
         />
       ))}
       <ThumbnailButton
