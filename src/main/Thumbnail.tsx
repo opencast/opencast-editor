@@ -319,6 +319,7 @@ const ThumbnailButtons : React.FC<{
           type="file"
           accept="image/*"
           onChange={(event) => uploadCallback(event, track)}
+          aria-hidden="true"
         />
       <ThumbnailButton
         handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
@@ -518,6 +519,7 @@ const ThumbnailButtonsSimple : React.FC<{
           type="file"
           accept="image/*"
           onChange={(event) => uploadCallback(event, track)}
+          aria-hidden="true"
         />
       <ThumbnailButton
         handler={() => { discard(track.id) }}
