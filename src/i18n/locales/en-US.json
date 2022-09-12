@@ -29,15 +29,15 @@
       "previewButton": "Preview Mode",
       "previewButton-tooltip": "Skips deleted segments when playing the video. Currently {{status}}. Hotkey: {{hotkeyName}}",
       "previewButton-aria": "Enable or disable preview mode. Hotkey: {{hotkeyName}}.",
-      "playButton-tooltip": "Play Button",
-      "time-duration-tooltip": "Playback time and duration",
+      "playButton-tooltip": "Play video",
+      "current-time-tooltip": "Current time",
+      "time-duration-tooltip": "Video duration",
       "duration-aria": "Duration",
       "time-aria": "Current time",
       "comError-text": "A problem occurred during communication with Opencast.",
       "loadError-text": "An error has occurred loading this video.",
       "title-tooltip": "Video Title",
-      "presenter-tooltip": "Video Presenters",
-      "controls-tooltip": "Video Controls"
+      "presenter-tooltip": "Video Presenters"
     },
 
     "finishMenu": {
@@ -49,7 +49,6 @@
     "save": {
       "headline-text": "Save current project",
       "confirm-button": "Yes, save changes",
-      "confirmButton-default-tooltip": "Save Button",
       "confirmButton-attempting-tooltip": "Attempting to save",
       "confirmButton-success-tooltip": "Saved successfully",
       "confirmButton-failed-tooltip": "Save failed",
@@ -62,7 +61,6 @@
     "discard": {
       "headline-text": "Discard changes",
       "confirm-button": "Yes, discard changes",
-      "confirm-tooltip": "Discard changes button",
       "info-text": "Discard all the changes you made? This cannot be undone!"
     },
 
@@ -94,7 +92,6 @@
 
     "workflowConfig": {
       "headline-text": "Workflow Configuration",
-      "area-tooltip": "Workflow Configuration Area",
       "satisfied-text": "Satisfied with your configuration?",
       "confirm-button": "Yes, start processing"
     },

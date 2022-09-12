@@ -15,6 +15,7 @@ import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
+import { ThemedTooltip } from "./Tooltip";
 
 /**
  * Creates the track selection.
@@ -168,17 +169,18 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
   };
   const ref = React.useRef<HTMLDivElement>(null)
   return (
-    <div css={ buttonStyle }
-         tabIndex={ 0 }
-         ref={ref}
-         role="button"
-         title={ tooltip }
-         aria-label={ tooltip }
-         onClick={ clickHandler }
-         onKeyDown={ keyHandler } >
-      <FontAwesomeIcon icon={ icon } size="1x" />
-      <div>{ text }</div>
-    </div>
+    <ThemedTooltip title={tooltip}>
+      <div css={ buttonStyle }
+          tabIndex={ 0 }
+          ref={ref}
+          role="button"
+          aria-label={ tooltip }
+          onClick={ clickHandler }
+          onKeyDown={ keyHandler } >
+        <FontAwesomeIcon icon={ icon } size="1x" />
+        <div>{ text }</div>
+      </div>
+    </ThemedTooltip>
   );
 }
 

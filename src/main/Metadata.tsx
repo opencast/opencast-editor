@@ -544,6 +544,8 @@ const Metadata: React.FC<{}> = () => {
                 onBlur: (e: any) => {blurWithSubmit(e, input)},
                 showError: showErrorOnBlur
               }}
+              leftArrowButtonText={''}
+              rightArrowButtonText={''}
             />
           </LocalizationProvider>
         </div>

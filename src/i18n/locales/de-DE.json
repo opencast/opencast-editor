@@ -27,15 +27,15 @@
         "previewButton": "Vorschaumodus",
         "previewButton-tooltip": "Überspringt gelöschte Segmente bei der Wiedergabe des Videos. Derzeit {{status}}. Hotkey: {{hotkeyName}}",
         "previewButton-aria": "Vorschaumodus aktivieren oder deaktivieren. Hotkey: {{hotkeyName}}.",
-        "playButton-tooltip": "Play-Button",
-        "time-duration-tooltip": "Wiedergabezeit und -dauer",
+        "playButton-tooltip": "Video abspielen",
+        "current-time-tooltip": "Aktuelle Zeit",
+        "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",
         "time-aria": "Aktuelle Zeit",
         "comError-text": "Ein Fehler trat bei der Kommunikation mit %1$s auf.",
         "loadError-text": "Beim Laden des Inhaltes ist ein Fehler aufgetreten.",
         "title-tooltip": "Videotitel",
-        "presenter-tooltip": "Vortragende",
-        "controls-tooltip": "Videosteuerungen"
+        "presenter-tooltip": "Vortragende"
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
@@ -45,7 +45,6 @@
     "save": {
         "headline-text": "Aktuelles Projekt speichern",
         "confirm-button": "Ja, meine Änderungen verwerfen",
-        "confirmButton-default-tooltip": "Speichern-Button",
         "confirmButton-attempting-tooltip": "Kopplung wird durchgeführt\\u2026",
         "confirmButton-success-tooltip": "Erfolgreich gespeichert",
         "confirmButton-failed-tooltip": "Speichern fehlgeschlagen",
@@ -57,7 +56,6 @@
     "discard": {
         "headline-text": "Änderungen verwerfen",
         "confirm-button": "Ja, meine Änderungen verwerfen",
-        "confirm-tooltip": "Änderungen verwerfen Button",
         "info-text": "Wollen Sie alle Änderungen verwerfen? Dies kann nicht rückgängig gemacht werden!"
     },
     "theEnd": {
@@ -85,7 +83,6 @@
     },
     "workflowConfig": {
         "headline-text": "Workflow Konfiguration",
-        "area-tooltip": "Workflow-Konfigurationsbereich",
         "satisfied-text": "Sind Sie zufrieden mit Ihrer Konfiguration?",
         "confirm-button": "Ja, Verarbeitung starten"
     },

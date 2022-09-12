@@ -17,6 +17,8 @@ export const lightMode: Theme = {
   singleKey_border: 'Gainsboro',
   invert_wave: 'invert(0%)',
   inverted_text: '#000', // for "Generating waveform" text: in lightMode it's not inverted, so it has to be black
+  tooltip: '#363636',
+  tooltip_text: '#fff',
 };
 
 export const darkMode: Theme = {
@@ -36,4 +38,6 @@ export const darkMode: Theme = {
   singleKey_border: '#404040',
   invert_wave: 'invert(100%)',
   inverted_text: '#000',
+  tooltip: '#dddddd',
+  tooltip_text: '#000',
 };

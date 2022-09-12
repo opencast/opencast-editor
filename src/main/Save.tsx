@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
   selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
 import { selectTheme } from "../redux/themeSlice";
+import { ThemedTooltip } from "./Tooltip";
 
 /**
  * Shown if the user wishes to save.
@@ -75,7 +76,7 @@ const Save : React.FC<{}> = () => {
   }
 
   return (
-    <div css={saveStyle} title={t("save.saveArea-tooltip")}>
+    <div css={saveStyle}>
       <h1>{t("save.headline-text")}</h1>
       {render()}
       <div css={errorBoxStyle(postWorkflowStatus === "failed", theme)} role="alert">
@@ -110,7 +111,7 @@ export const SaveButton: React.FC<{}> = () => {
   // Update based on current fetching status
   let icon = faSave
   let spin = false
-  let tooltip = t("save.confirmButton-default-tooltip")
+  let tooltip = ""
   if (workflowStatus === 'failed' || metadataStatus === 'failed'){
     icon = faExclamationCircle
     spin = false
@@ -161,16 +162,18 @@ export const SaveButton: React.FC<{}> = () => {
   }, [dispatch, metadataStatus, workflowStatus])
 
   return (
-    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={tooltip}
-      role="button" tabIndex={0}
-      onClick={ save }
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        save()
-      }}}>
-      <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
-      <span>{t("save.confirm-button")}</span>
-      <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
-    </div>
+    <ThemedTooltip title={tooltip}>
+      <div css={[basicButtonStyle, navigationButtonStyle(theme)]}
+        role="button" tabIndex={0}
+        onClick={ save }
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+          save()
+        }}}>
+        <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
+        <span>{t("save.confirm-button")}</span>
+        <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
+      </div>
+    </ThemedTooltip>
   );
 }
 

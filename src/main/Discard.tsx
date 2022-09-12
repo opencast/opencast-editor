@@ -65,15 +65,15 @@ const DiscardButton : React.FC<{}> = () => {
   }
 
   return (
-    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={t("discard.confirm-tooltip")}
-      role="button" tabIndex={0}
-      onClick={ discard }
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        discard()
-      }}}>
-      <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
-      <span>{t("discard.confirm-button")}</span>
-    </div>
+      <div css={[basicButtonStyle, navigationButtonStyle(theme)]}
+        role="button" tabIndex={0}
+        onClick={ discard }
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+          discard()
+        }}}>
+        <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
+        <span>{t("discard.confirm-button")}</span>
+      </div>
   );
 }
 

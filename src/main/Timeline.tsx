@@ -25,6 +25,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectMainMenuState } from '../redux/mainMenuSlice';
 import { selectTheme } from '../redux/themeSlice';
+import { ThemedTooltip } from './Tooltip';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -55,7 +56,7 @@ const Timeline: React.FC<{}> = () => {
   }
 
   return (
-  <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
+  <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
     <Scrubber timelineWidth={width}/>
     <div css={{height: '230px'}} >
       <Waveforms />
@@ -283,25 +284,27 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id} title={t("timeline.segment-tooltip", {segment: index})}
-          aria-label={t("timeline.segments-text-aria",
-                     {segment: index,
-                      segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
-                      start: convertMsToReadableString(segment.start),
-                      end: convertMsToReadableString(segment.end) })}
-          tabIndex={0}
-        css={{
-          background: bgColor(segment.deleted, activeSegmentIndex === index),
-          borderRadius: '5px',
-          borderStyle: activeSegmentIndex === index ? 'dashed' : 'solid',
-          borderColor: 'white',
-          borderWidth: '1px',
-          boxSizing: 'border-box',
-          width: ((segment.end - segment.start) / duration) * 100 + '%',
-          height: '230px',
-          zIndex: 1,
-        }}>
-        </div>
+        <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})}>
+          <div key={segment.id}
+            aria-label={t("timeline.segments-text-aria",
+                      {segment: index,
+                        segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                        start: convertMsToReadableString(segment.start),
+                        end: convertMsToReadableString(segment.end) })}
+            tabIndex={0}
+          css={{
+            background: bgColor(segment.deleted, activeSegmentIndex === index),
+            borderRadius: '5px',
+            borderStyle: activeSegmentIndex === index ? 'dashed' : 'solid',
+            borderColor: 'white',
+            borderWidth: '1px',
+            boxSizing: 'border-box',
+            width: ((segment.end - segment.start) / duration) * 100 + '%',
+            height: '230px',
+            zIndex: 1,
+          }}>
+          </div>
+        </ThemedTooltip>
       ))
     );
   }
@@ -313,7 +316,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
   })
 
   return (
-    <div css={segmentsStyle} title="Segments">
+    <div css={segmentsStyle}>
       {renderedSegments()}
     </div>
   );
