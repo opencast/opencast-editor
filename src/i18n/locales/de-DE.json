@@ -1,7 +1,7 @@
 {
     "mainMenu": {
         "cutting-button": "Schneiden",
-        "finish-button": "Verarbeitet",
+        "finish-button": "Verarbeiten",
         "select-tracks-button": "Spur",
         "thumbnail-button": "Miniaturbilder",
         "metadata-button": "Metadaten",
@@ -44,7 +44,7 @@
     },
     "save": {
         "headline-text": "Aktuelles Projekt speichern",
-        "confirm-button": "Ja, meine Änderungen verwerfen",
+        "confirm-button": "Ja, Änderungen speichern",
         "confirmButton-default-tooltip": "Speichern-Button",
         "confirmButton-attempting-tooltip": "Kopplung wird durchgeführt\\u2026",
         "confirmButton-success-tooltip": "Erfolgreich gespeichert",
