@@ -44,14 +44,13 @@
     },
     "save": {
         "headline-text": "Aktuelles Projekt speichern",
-        "confirm-button": "Ja, meine Änderungen verwerfen",
+        "confirm-button": "Ja, Änderungen speichern",
         "confirmButton-attempting-tooltip": "Kopplung wird durchgeführt\\u2026",
         "confirmButton-success-tooltip": "Erfolgreich gespeichert",
         "confirmButton-failed-tooltip": "Speichern fehlgeschlagen",
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
         "success-text": "Änderungen erfolgreich gespeichert!",
-        "success-tooltip-aria": "Erfolgreich gespeichert",
-        "saveArea-tooltip": "Speicherbereich"
+        "success-tooltip-aria": "Erfolgreich gespeichert"
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
@@ -149,7 +148,9 @@
             "EVENTS-LICENSE-CCBYSA": "CC-BY-SA",
             "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
             "EVENTS-LICENSE-CCBY": "CC-BY"
-        }
+        },
+        "calendar-prev-month": "Vorheriger Monat",
+        "calendar-next-month": "Nächster Monat"
     },
     "error": {
         "generic-message": "Ein kritischer Fehler ist aufgetreten!",

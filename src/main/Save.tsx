@@ -111,7 +111,7 @@ export const SaveButton: React.FC<{}> = () => {
   // Update based on current fetching status
   let icon = faSave
   let spin = false
-  let tooltip = ""
+  let tooltip = null
   if (workflowStatus === 'failed' || metadataStatus === 'failed'){
     icon = faExclamationCircle
     spin = false
@@ -162,7 +162,7 @@ export const SaveButton: React.FC<{}> = () => {
   }, [dispatch, metadataStatus, workflowStatus])
 
   return (
-    <ThemedTooltip title={tooltip}>
+    <ThemedTooltip title={tooltip == null ? tooltip = "" : tooltip}>
       <div css={[basicButtonStyle, navigationButtonStyle(theme)]}
         role="button" tabIndex={0}
         onClick={ save }

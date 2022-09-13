@@ -54,8 +54,7 @@
       "confirmButton-failed-tooltip": "Save failed",
       "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
       "success-text": "Changes saved successfully!",
-      "success-tooltip-aria": "Saved successfully",
-      "saveArea-tooltip": "Save Area"
+      "success-tooltip-aria": "Saved successfully"
     },
 
     "discard": {
@@ -159,7 +158,9 @@
         "EVENTS-LICENSE-CCBYSA": "CC-BY-SA",
         "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
         "EVENTS-LICENSE-CCBY": "CC-BY"
-      }
+      },
+      "calendar-prev-month": "Previous month",
+      "calendar-next-month": "Next month"
     },
 
     "error": {

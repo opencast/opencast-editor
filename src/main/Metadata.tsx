@@ -21,6 +21,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 
 import './../i18n/config';
+import i18next from "./../i18n/config";
 import { useTranslation } from 'react-i18next';
 import { DateTime as LuxonDateTime} from "luxon";
 
@@ -544,8 +545,8 @@ const Metadata: React.FC<{}> = () => {
                 onBlur: (e: any) => {blurWithSubmit(e, input)},
                 showError: showErrorOnBlur
               }}
-              leftArrowButtonText={''}
-              rightArrowButtonText={''}
+              leftArrowButtonText={i18next.t('metadata.calendar-prev-month')}
+              rightArrowButtonText={i18next.t('metadata.calendar-next-month')}
             />
           </LocalizationProvider>
         </div>
