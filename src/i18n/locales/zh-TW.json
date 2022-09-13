@@ -195,5 +195,11 @@
         "scrubberRight": "往右移",
         "scubberIncrease": "移動快一點",
         "scrubberDecrease": "移動慢一點"
+    },
+    "theme": {
+        "appearance": "Appearance",
+        "darkmode": "Dark mode",
+        "lightmode": "Light mode",
+        "system": "System design"
     }
 }

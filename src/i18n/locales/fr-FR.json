@@ -195,5 +195,11 @@
         "scrubberRight": "Déplacer vers la droite",
         "scubberIncrease": "Se déplacer plus vite",
         "scrubberDecrease": "Déplacement plus lent"
+    },
+    "theme": {
+        "appearance": "Appearance",
+        "darkmode": "Dark mode",
+        "lightmode": "Light mode",
+        "system": "System design"
     }
 }
