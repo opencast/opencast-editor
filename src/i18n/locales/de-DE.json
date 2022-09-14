@@ -28,6 +28,7 @@
         "previewButton-tooltip": "Überspringt gelöschte Segmente bei der Wiedergabe des Videos. Derzeit {{status}}. Hotkey: {{hotkeyName}}",
         "previewButton-aria": "Vorschaumodus aktivieren oder deaktivieren. Hotkey: {{hotkeyName}}.",
         "playButton-tooltip": "Video abspielen",
+        "pauseButton-tooltip": "Video pausieren",
         "current-time-tooltip": "Aktuelle Zeit",
         "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",

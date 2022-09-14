@@ -398,7 +398,7 @@ const PlayButton: React.FC<{}> = () => {
   }
 
   return (
-    <ThemedTooltip title={t("video.playButton-tooltip")}>
+    <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
       <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
       <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
