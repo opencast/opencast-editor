@@ -84,20 +84,9 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
     }
   }
 
-  // draws a triangle on top of the middle line
-  const triangleStyle = css({
-    width: 0,
-    height: 0,
-    left: '-19px',
-    borderLeft: '20px solid transparent',
-    borderRight: '20px solid transparent',
-    position: "relative",
-    borderTop: '20px solid black',
-  })
-
   return (
     <div css={{position: 'relative', width: '100%', height: '250px'}}>
-      {/* Sits smack dab in the middle and does not move */}
+      {/* "Scrubber". Sits smack dab in the middle and does not move */}
       <div
         css={{position: 'absolute',
         width: '2px',
@@ -105,7 +94,6 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
         ...(refTop.current) && {left: (refTop.current.getElement().clientWidth / 2)},
         top: '10px',
         background: 'black'}}>
-          <div css={triangleStyle} />
       </div>
       {/* Scrollable timeline container. Has width of parent*/}
       <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
