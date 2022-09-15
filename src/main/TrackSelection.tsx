@@ -62,6 +62,8 @@ const Description: React.FC<{}> = () => {
 
 const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
 
+  const theme = useSelector(selectTheme);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const header = track.flavor.type + ' '
@@ -90,7 +92,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     width: '100%',
     fontWeight: 'bold',
     padding: '5px 25px',
-    borderBottom: '1px solid white',
+    borderBottom: `${theme.menuBorder}`,
     textTransform: 'capitalize',
     fontSize: 'larger',
   });
