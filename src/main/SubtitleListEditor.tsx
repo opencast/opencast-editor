@@ -28,6 +28,7 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
 import { VariableSizeList } from "react-window"
 import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
+import { selectTheme } from "../redux/themeSlice"
 
 /**
  * Displays everything needed to edit subtitles
@@ -180,6 +181,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   const cue = items[props.index]
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
   const dispatch = useDispatch()
 
   // Unfortunately, the focus selectors will cause every element to rerender,
@@ -335,7 +337,9 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     borderRadius: '5px',
     borderWidth: '1px',
     padding: '10px 10px',
-    background: 'snow',
+    background: `${theme.element_bg}`,
+    border: '1px solid #ccc',
+    color: `${theme.text}`
   })
 
   const textFieldStyle = css({
@@ -351,7 +355,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   const addSegmentButtonStyle = css({
     width: '32px',
     height: '32px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
     zIndex: '1000',
   })
 

@@ -8,11 +8,12 @@ import {
   faSave, faFileExport, faTimesCircle, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -42,7 +43,7 @@ const FinishMenu : React.FC<{}> = () => {
 const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["value"]}> = ({iconName, stateName}) => {
 
   const { t } = useTranslation();
-
+  const theme = useSelector(selectTheme)
   const dispatch = useDispatch();
 
   const finish = () => {
@@ -67,7 +68,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
   }
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle]}
+    <div css={[basicButtonStyle, tileButtonStyle(theme)]}
     role="button" tabIndex={0}
       onClick={ finish }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

@@ -134,14 +134,15 @@ export const backOrContinueStyle = css(({
 /**
  * CSS for big buttons in a dynamic grid
  */
- export const tileButtonStyle = css({
+ export const tileButtonStyle = (theme: Theme) => css({
   width: '250px',
   height: '220px',
   display: 'flex',
   flexDirection: 'column' as const,
   fontSize: "x-large",
   ...(flexGapReplacementStyle(30, false)),
-  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  boxShadow: `${theme.boxShadow}`,
+  background: `${theme.element_bg}`,
   alignItems: 'unset',  // overwrite from basicButtonStyle to allow for textOverflow to work
   placeSelf: 'center',
 });

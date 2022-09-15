@@ -12,6 +12,8 @@ import { Select } from "mui-rff";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
+import { selectTheme } from "../redux/themeSlice";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
@@ -112,6 +114,7 @@ const SubtitleSelectButton: React.FC<{
   flavor
 }) => {
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
   const dispatch = useDispatch()
 
   /**
@@ -141,7 +144,7 @@ const SubtitleSelectButton: React.FC<{
   })
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle]}
+    <div css={[basicButtonStyle, tileButtonStyle(theme)]}
       role="button" tabIndex={0}
       title={t("subtitles.selectSubtitleButton-tooltip", {title: title})}
       aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", {title: title})}
@@ -165,6 +168,8 @@ const SubtitleSelectButton: React.FC<{
 const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}[]}> = ({languages}) => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
+  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
   const dispatch = useDispatch()
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true)
@@ -190,6 +195,12 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     dispatch(setSelectedSubtitleFlavor(values.languages))
   }
 
+  const muiTheme = createTheme({
+    palette: {
+      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
+    },
+  });
+
   const plusIconStyle = css({
     display: isPlusDisplay ? 'block' : 'none'
   });
@@ -214,7 +225,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
   });
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle, !isPlusDisplay && disableButtonAnimation]}
+    <div css={[basicButtonStyle, tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
       role="button" tabIndex={0}
       title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}
       aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("createSubtitleButton-clicked-tooltip-aria")}
@@ -236,13 +247,14 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               {/* TODO: Fix the following warning, caused by removing items from data:
                 MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
               */}
-              <Select // {...input}
-                // styles={selectFieldTypeStyle}
-                label={t("subtitles.createSubtitleDropdown-label")}
-                name="languages"
-                data={selectData()}
-              >
-              </Select>
+              <ThemeProvider theme={muiTheme}>
+                <Select
+                  label={t("subtitles.createSubtitleDropdown-label")}
+                  name="languages"
+                  data={selectData()}
+                >
+                </Select>
+              </ThemeProvider>
 
               <button css={[basicButtonStyle, createButtonStyle]}
                 type="submit"

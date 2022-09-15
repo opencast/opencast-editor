@@ -25,6 +25,7 @@ import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 /**
@@ -163,6 +164,7 @@ const VideoSelectDropdown : React.FC<{
 }) => {
 
   const { t } = useTranslation();
+  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
 
   const dropdownName: string = "flavors"
 
@@ -183,6 +185,12 @@ const VideoSelectDropdown : React.FC<{
 
   const onSubmit = () => {}
 
+  const muiTheme = createTheme({
+    palette: {
+      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
+    },
+  });
+
   const subtitleAddFormStyle = css({
     width: '100%',
   });
@@ -197,11 +205,13 @@ const VideoSelectDropdown : React.FC<{
         handleSubmit(event)
       }} css={subtitleAddFormStyle}>
 
-          <Select
-            label={t("subtitleVideoArea.selectVideoLabel")}
-            name={dropdownName}
-            data={selectData()}
-          />
+          <ThemeProvider theme={muiTheme}>
+            <Select
+              label={t("subtitleVideoArea.selectVideoLabel")}
+              name={dropdownName}
+              data={selectData()}
+            />
+          </ThemeProvider>
 
           <OnChange name={dropdownName}>
             {(value, previous) => {

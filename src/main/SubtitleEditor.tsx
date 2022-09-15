@@ -23,6 +23,7 @@ import { settings } from "../config";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -150,13 +151,15 @@ import { useTranslation } from "react-i18next";
  export const BackButton : React.FC<{}> = () => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
   const dispatch = useDispatch();
 
   const backButtonStyle = css({
     width: '50px',
     height: '10px',
     padding: '16px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
     justifyContent: 'space-around'
   })
 
