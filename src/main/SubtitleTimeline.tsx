@@ -22,12 +22,15 @@ import "react-resizable/css/styles.css";
 import { GlobalHotKeys } from "react-hotkeys";
 import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
+import { selectTheme } from "../redux/themeSlice";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
  */
  const SubtitleTimeline: React.FC<{}> = () => {
+
+  const theme = useSelector(selectTheme)
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -88,13 +91,15 @@ import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
     <div css={{position: 'relative', width: '100%', height: '250px'}}>
       {/* "Scrubber". Sits smack dab in the middle and does not move */}
       <div
-        css={{position: 'absolute',
-        width: '2px',
-        height: '190px',
-        ...(refTop.current) && {left: (refTop.current.getElement().clientWidth / 2)},
-        top: '10px',
-        background: 'black'}}>
-      </div>
+        css={{
+          position: 'absolute',
+          width: '2px',
+          height: '190px',
+          ...(refTop.current) && {left: (refTop.current.getElement().clientWidth / 2)},
+          top: '10px',
+          background: `${theme.text}`,
+        }}
+      />
       {/* Scrollable timeline container. Has width of parent*/}
       <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
         vertical={false}
