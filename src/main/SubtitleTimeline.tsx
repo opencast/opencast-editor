@@ -122,13 +122,18 @@ import { selectTheme } from "../redux/themeSlice";
         <div
           title="Mini Timeline"
           onMouseDown={e => setCurrentlyAtToClick(e)}
-          css={{position: 'relative', width: '100%', height: '15px', background: 'lightgrey'}}
+          css={{
+            position: 'relative',
+            width: '100%',
+            height: '15px',
+            background: `linear-gradient(to right, grey ${(currentlyAt / duration) * 100}%, lightgrey ${(currentlyAt / duration) * 100}%)`,
+            borderRadius: '3px',
+          }}
           ref={refMini}
         >
           <div
             css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
-          >
-          </div>
+          />
         </div>
       </GlobalHotKeys>
     </div>
