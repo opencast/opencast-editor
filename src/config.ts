@@ -82,7 +82,7 @@ var defaultSettings: iSettings = {
     show: false,
   },
   subtitles: {
-    show: true, // TODO: Set this false
+    show: false,
     mainFlavor: "captions",
     languages: undefined,
     defaultVideoFlavor: undefined,
