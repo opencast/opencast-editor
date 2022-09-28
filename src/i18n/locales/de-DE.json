@@ -1,11 +1,11 @@
 {
     "mainMenu": {
         "cutting-button": "Schneiden",
-        "finish-button": "Verarbeiten",
-        "select-tracks-button": "Spur",
-        "thumbnail-button": "Miniaturbilder",
+        "finish-button": "Fertigstellen",
+        "select-tracks-button": "Spuren",
+        "thumbnail-button": "Vorschaubild",
         "metadata-button": "Metadaten",
-        "keyboard-controls-button": "Tastatursteuerung aktivieren",
+        "keyboard-controls-button": "Tastatursteuerung",
         "tooltip-aria": "Hauptnavigation"
     },
     "cuttingActions": {
@@ -17,8 +17,8 @@
         "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
         "restore-button": "Wiederherstellen",
         "mergeLeft-button": "Links zusammenfügen",
-        "mergeLeft-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}",
-        "mergeLeft-tooltip-aria": "Rechts zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}.",
+        "mergeLeft-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}",
+        "mergeLeft-tooltip-aria": "Links zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}.",
         "mergeRight-button": "Rechts zusammenfügen",
         "mergeRight-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}",
         "mergeRight-tooltip-aria": "Rechts zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}."
@@ -31,22 +31,22 @@
         "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",
         "time-aria": "Aktuelle Zeit",
-        "comError-text": "Ein Fehler trat bei der Kommunikation mit %1$s auf.",
-        "loadError-text": "Beim Laden des Inhaltes ist ein Fehler aufgetreten.",
+        "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
+        "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
         "title-tooltip": "Videotitel",
         "presenter-tooltip": "Vortragende",
         "controls-tooltip": "Videosteuerungen"
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
-        "start-button": "Ja, Verarbeitung starten",
+        "start-button": "Verarbeitung starten",
         "discard-button": "Änderungen verwerfen"
     },
     "save": {
         "headline-text": "Aktuelles Projekt speichern",
         "confirm-button": "Ja, Änderungen speichern",
         "confirmButton-default-tooltip": "Speichern-Button",
-        "confirmButton-attempting-tooltip": "Kopplung wird durchgeführt\\u2026",
+        "confirmButton-attempting-tooltip": "Versuche zu speichern",
         "confirmButton-success-tooltip": "Erfolgreich gespeichert",
         "confirmButton-failed-tooltip": "Speichern fehlgeschlagen",
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
@@ -56,9 +56,9 @@
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
-        "confirm-button": "Ja, meine Änderungen verwerfen",
+        "confirm-button": "Ja, Änderungen verwerfen",
         "confirm-tooltip": "Änderungen verwerfen Button",
-        "info-text": "Wollen Sie alle Änderungen verwerfen? Dies kann nicht rückgängig gemacht werden!"
+        "info-text": "Alle vorgenommenen Änderungen verwerfen? Dies kann nicht rückgängig gemacht werden!"
     },
     "theEnd": {
         "discarded-text": "Alle Ihre Änderungen sind nun für immer verloren gegangen. Sie können nun den Editor schließen.",
@@ -72,7 +72,7 @@
         "noWorkflows-text": "Ein Problem ist aufgetreten, es gibt keine Workflows für die Verarbeitung Ihrer Änderungen mit.<3/> Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Opencast Administrator.\n",
         "oneWorkflow-text": "Das Video wird mit dem Workflow \"{{workflow}}\" geschnitten und verarbeitet. <3/> Dies wird einige Zeit dauern.\n",
         "manyWorkflows-text": "Wählen Sie aus, welchen Workflow Opencast für die Verarbeitung verwenden soll.",
-        "startProcessing-button": "Ja, Verarbeitung starten",
+        "startProcessing-button": "Verarbeitung starten",
         "back-button": "Zurück",
         "selectWF-button": "Klicken, um diesen Workflow auszuwählen",
         "selectWF-button-aria": "Klicken, um den Workflow auszuwählen: {{stateName}}\n"
