@@ -7,7 +7,7 @@ import {
   selectCaptionTrackByFlavor,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleCue, Track } from "../types";
+import { SubtitleCue } from "../types";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
   setIsDisplayEditView,
@@ -37,12 +37,12 @@ import { selectTheme } from "../redux/themeSlice";
   const getError = useSelector(selectErrorByFlavor)
   const subtitle : SubtitleCue[] = useSelector(selectSelectedSubtitleByFlavor)
   const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
-  const captionTrack: Track | undefined = useSelector(selectCaptionTrackByFlavor(selectedFlavor))   // track object received from Opencast
+  const captionTrack = useSelector(selectCaptionTrackByFlavor(selectedFlavor))
 
   useEffect(() => {
     // Instigate fetching caption data from Opencast
     if (getStatus === 'idle' && subtitle === undefined && captionTrack !== undefined && selectedFlavor) {
-      dispatch(fetchSubtitle({identifier: selectedFlavor, uri: captionTrack.uri}))
+      dispatch(fetchSubtitle({identifier: selectedFlavor, uri: captionTrack.subtitleURI}))
     // Or create a new subtitle instead
     } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined && selectedFlavor) {
       // Create an empty subtitle
