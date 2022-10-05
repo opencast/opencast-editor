@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -11,10 +11,6 @@ import { SubtitleCue } from "../types";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
   setIsDisplayEditView,
-  fetchSubtitle,
-  selectErrorByFlavor,
-  resetRequestState,
-  selectGetStatus,
   selectSelectedSubtitleByFlavor,
   selectSelectedSubtitleFlavor,
   setSubtitle
@@ -24,6 +20,7 @@ import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
 import { selectTheme } from "../redux/themeSlice";
+import { parseSubtitle } from "../util/utilityFunctions";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -33,33 +30,31 @@ import { selectTheme } from "../redux/themeSlice";
   const { t } = useTranslation();
 
   const dispatch = useDispatch()
-  const getStatus = useSelector(selectGetStatus)
-  const getError = useSelector(selectErrorByFlavor)
+  const [getError, setGetError] = useState<string | undefined>(undefined)
   const subtitle : SubtitleCue[] = useSelector(selectSelectedSubtitleByFlavor)
   const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
   const captionTrack = useSelector(selectCaptionTrackByFlavor(selectedFlavor))
 
+  // Prepare subtitle in redux
   useEffect(() => {
-    // Instigate fetching caption data from Opencast
-    if (getStatus === 'idle' && subtitle === undefined && captionTrack !== undefined && selectedFlavor) {
-      dispatch(fetchSubtitle({identifier: selectedFlavor, uri: captionTrack.subtitleURI}))
+    // Parse subtitle data from Opencast
+    if (subtitle === undefined && captionTrack !== undefined && captionTrack.subtitle !== undefined && selectedFlavor) {
+      try {
+        dispatch(setSubtitle({identifier: selectedFlavor, subtitles: parseSubtitle(captionTrack.subtitle)}))
+      } catch (error) {
+        if (error instanceof Error) {
+          setGetError(error.message)
+        } else {
+          setGetError(String(error))
+        }
+      }
+
     // Or create a new subtitle instead
-    } else if (getStatus === 'idle' && subtitle === undefined && captionTrack === undefined && selectedFlavor) {
+    } else if (subtitle === undefined && captionTrack === undefined && selectedFlavor) {
       // Create an empty subtitle
       dispatch(setSubtitle({identifier: selectedFlavor, subtitles: []}))
-      // Reset request
-      dispatch(resetRequestState())
-    // Error while fetching
-    } else if (getStatus === 'failed') {
-      // TODO: Smart error handling
-      // dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
-      // Reset request
-      dispatch(resetRequestState())
-    } else if (getStatus === 'success') {
-      // Reset request
-      dispatch(resetRequestState())
     }
-  }, [getStatus, dispatch, captionTrack, subtitle, selectedFlavor])
+  }, [dispatch, captionTrack, subtitle, selectedFlavor])
 
   const getTitle = () => {
     return (settings.subtitles.languages !== undefined && subtitle && selectedFlavor) ?

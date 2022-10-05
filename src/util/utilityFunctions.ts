@@ -1,4 +1,5 @@
-import { WebVTTSerializer } from 'webvtt-parser';
+import { nanoid } from '@reduxjs/toolkit';
+import { WebVTTParser, WebVTTSerializer } from 'webvtt-parser';
 import { SubtitleCue } from '../types';
 
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
@@ -93,4 +94,48 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
     cueIndex++
   }
   return seri.serialize(cues)
+}
+
+export function parseSubtitle(subtitle: String) {
+  // Used parsing library: https://www.npmjs.com/package/webvtt-parser
+  // - Unmaintained and does have bugs, so we will need to switch eventually
+  // Other interesting vtt parsing libraries:
+  // https://github.com/osk/node-webvtt
+  // - Pros: Parses styles and meta information
+  // - Cons: Parses timestamps in seconds, Maybe not maintained anymore
+  // https://github.com/gsantiago/subtitle.js
+  // - Pros: Parses styles, can also parse SRT, actively maintained
+  // - Cons: Uses node streaming library, can't polyfill without ejecting CreateReactApp
+  // TODO: Parse caption
+  const parser = new WebVTTParser();
+  const tree = parser.parse(subtitle, 'metadata');
+  if (tree.errors.length !== 0) {
+
+    // state.status = 'failed'
+    const errors = []
+    for (const er of tree.errors) {
+      errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message)
+    }
+    throw new Error(errors.join("\n"))
+    // setError(state, action.payload.identifier, errors.join("\n"))
+  }
+
+  // Attach a unique id to each segment/cue
+  // This is used by React to keep track of cues between changes (e.g. addition, deletion)
+  let index = 0
+  for (let cue of tree.cues) {
+    if (!cue.id) {
+      cue.id = nanoid()
+      tree.cues[index] = cue
+    }
+
+    // Turn times into milliseconds
+    cue.startTime = cue.startTime * 1000
+    cue.endTime = cue.endTime * 1000
+    tree.cues[index] = cue
+
+    index++
+  }
+
+  return tree.cues
 }

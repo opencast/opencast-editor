@@ -30,6 +30,11 @@ export interface TimelineState {
   scrubberPos: number
 }
 
+export interface SubtitlesFromOpencast {
+  flavor: Flavor,
+  subtitle: string,
+}
+
 export interface SubtitleCue {
   id: string,
   text: string,

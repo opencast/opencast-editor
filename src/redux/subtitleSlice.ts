@@ -1,10 +1,7 @@
 import { Segment, SubtitleCue } from './../types';
-import { createAsyncThunk, createSlice, Dispatch, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, Dispatch, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
-import { client } from '../util/client';
-import { httpRequestState } from '../types';
-import { WebVTTParser } from 'webvtt-parser';
 import { WritableDraft } from 'immer/dist/internal';
 import { video } from './videoSlice';
 
@@ -21,9 +18,6 @@ export interface subtitle {
   focusSegmentTriggered: boolean,   // a segment in the timeline was clicked
   focusSegmentId: string,           // which segment in the timeline was clicked
   focusSegmentTriggered2: boolean,   // a different trigger for a child component, to avoid additional rerenders from the parent
-
-  status: 'idle' | 'loading' | 'success' | 'failed',
-  errors: {identifier: string, error: string}[],
 }
 
 const initialState: subtitle = {
@@ -39,8 +33,6 @@ const initialState: subtitle = {
   focusSegmentId: "",
   focusSegmentTriggered2: false,
 
-  status: 'idle',
-  errors: [],
   aspectRatios: [],
 }
 
@@ -51,11 +43,6 @@ const updateCurrentlyAt = (state: subtitle, milliseconds: number) => {
     state.currentlyAt = 0;
   }
 };
-
-export const fetchSubtitle = createAsyncThunk('subtitle/fetchSubtitle', async ({identifier, uri} : {identifier: string, uri: string}) => {
-  const response = await client.get(uri)
-  return {identifier, response}
-})
 
 /**
  * Slice for the subtitle editor state
@@ -84,9 +71,6 @@ export const subtitleSlice = createSlice({
     },
     setClickTriggered: (state, action) => {
       state.clickTriggered = action.payload
-    },
-    resetRequestState: (state) => {
-      state.status = 'idle'
     },
     setSubtitle: (state, action: PayloadAction<{identifier: string, subtitles: SubtitleCue[]}>) => {
       state.subtitles[action.payload.identifier] = action.payload.subtitles
@@ -179,60 +163,6 @@ export const subtitleSlice = createSlice({
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
   },
-  extraReducers: builder => {
-    builder.addCase(
-      fetchSubtitle.pending, (state, action) => {
-        state.status = 'loading'
-    })
-    builder.addCase(
-      fetchSubtitle.fulfilled, (state, action) => {
-        state.status = 'success'
-        // Used parsing library: https://www.npmjs.com/package/webvtt-parser
-        // - Unmaintained and does have bugs, so we will need to switch eventually
-        // Other interesting vtt parsing libraries:
-        // https://github.com/osk/node-webvtt
-        // - Pros: Parses styles and meta information
-        // - Cons: Parses timestamps in seconds, Maybe not maintained anymore
-        // https://github.com/gsantiago/subtitle.js
-        // - Pros: Parses styles, can also parse SRT, actively maintained
-        // - Cons: Uses node streaming library, can't polyfill without ejecting CreateReactApp
-        // TODO: Parse caption
-        const parser = new WebVTTParser();
-        const tree = parser.parse(action.payload.response, 'metadata');
-        if (tree.errors.length !== 0) {
-          state.status = 'failed'
-          const errors = []
-          for (const er of tree.errors) {
-            errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message)
-          }
-          setError(state, action.payload.identifier, errors.join("\n"))
-        }
-
-        // Attach a unique id to each segment/cue
-        // This is used by React to keep track of cues between changes (e.g. addition, deletion)
-        let index = 0
-        for (let cue of tree.cues) {
-          if (!cue.id) {
-            cue.id = nanoid()
-            tree.cues[index] = cue
-          }
-
-          // Turn times into milliseconds
-          cue.startTime = cue.startTime * 1000
-          cue.endTime = cue.endTime * 1000
-          tree.cues[index] = cue
-
-          index++
-        }
-
-        state.subtitles[action.payload.identifier] = tree.cues
-    })
-    builder.addCase(
-      fetchSubtitle.rejected, (state, action) => {
-        state.status = 'failed'
-        setError(state, state.selectedSubtitleFlavor, action.error.message ? action.error.message : "")
-    })
-  }
 })
 
 // Sort a subtitle array by startTime
@@ -240,29 +170,9 @@ const sortSubtitle = (state: WritableDraft<subtitle>, identifier: string) => {
   state.subtitles[identifier].sort((a, b) => a.startTime - b.startTime)
 }
 
-const setError = (state: WritableDraft<subtitle>, identifier: string, error: string) => {
-  let index = 0
-  for (const err of state.errors) {
-    if (err.identifier === identifier) {
-      state.errors[index] = {identifier, error}
-      return
-    }
-    index++
-  }
-  state.errors.push({identifier: identifier, error: error})
-}
-
-const getErrorByFlavor = (errors: subtitle["errors"], subtitleFlavor: string) => {
-  for (const err of errors) {
-    if (err.identifier === subtitleFlavor) {
-      return err.error
-    }
-  }
-}
-
 // Export Actions
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
-  setCurrentlyAtInSeconds, setClickTriggered, resetRequestState, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
+  setCurrentlyAtInSeconds, setClickTriggered, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
   setSelectedSubtitleFlavor, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
   setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
 
@@ -292,10 +202,6 @@ export const selectFocusSegmentTriggered2 = (state: { subtitleState: { focusSegm
 export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
   50
 
-export const selectGetStatus = (state: { subtitleState: { status: httpRequestState["status"] } }) =>
-  state.subtitleState.status
-export const selectGetErrors = (state: { subtitleState: { errors: subtitle["errors"] } }) =>
-  state.subtitleState.errors
 export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"] } }) =>
   state.subtitleState.subtitles
 export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"] } }) =>
@@ -303,10 +209,6 @@ export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedS
 export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
   { subtitles: subtitle["subtitles"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   state.subtitleState.subtitles[state.subtitleState.selectedSubtitleFlavor]
-export const selectErrorByFlavor = (state: { subtitleState:
-  { errors: subtitle["errors"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
-  getErrorByFlavor(state.subtitleState.errors, state.subtitleState.selectedSubtitleFlavor)
-
 
 /**
  * Alternative middleware to setCurrentlyAt.

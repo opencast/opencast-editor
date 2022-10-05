@@ -1,15 +1,10 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, Workflow, Flavor }  from '../types'
+import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 import { settings } from '../config';
-
-export interface subtitleFromGet {
-  flavor: Flavor,
-  subtitleURI: string,
-}
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
@@ -19,7 +14,7 @@ export interface video {
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
-  subtitles: subtitleFromGet[],
+  captions: SubtitlesFromOpencast[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
@@ -40,7 +35,7 @@ export const initialState: video & httpRequestState = {
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
-  subtitles: [],
+  captions: [],
   activeSegmentIndex: 0,
   selectedWorkflowId: "",
   previewTriggered: false,
@@ -206,7 +201,7 @@ const videoSlice = createSlice({
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
-        state.subtitles = action.payload.subtitles
+        state.captions = action.payload.subtitles
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.presenters = []
@@ -371,10 +366,10 @@ export const selectTracks = (state: { videoState: { tracks: video["tracks"] } })
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
-export const selectCaptions = (state: { videoState: { subtitles: video["subtitles"]; }; }) =>
-  state.videoState.subtitles
-export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { subtitles: video["subtitles"]; }; }) => {
-  for (const cap of state.videoState.subtitles) {
+export const selectCaptions = (state: { videoState: { captions: video["captions"]; }; }) =>
+  state.videoState.captions
+export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { captions: video["captions"]; }; }) => {
+  for (const cap of state.videoState.captions) {
     if (cap.flavor.type+"/"+cap.flavor.subtype === flavor) {
       return cap
     }
