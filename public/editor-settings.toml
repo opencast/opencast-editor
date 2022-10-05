@@ -118,7 +118,7 @@ password = "opencast"
 
 # Specify the default video in the subtitle video player by flavor
 # If not specified, the editor will decide on a default by itself
-[subtitles.defaultVideoFlavor]
+#[subtitles.defaultVideoFlavor]
 # "type" = "presentation"
 # "subtype" = "preview"
 
