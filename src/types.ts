@@ -44,6 +44,16 @@ export interface SubtitleCue {
   // And many more
 }
 
+export interface ExtendedSubtitleCue extends SubtitleCue {
+  alignment : string
+  direction : string
+  lineAlign : string
+  linePosition : string
+  positionAlign : string
+  size : number
+  textPosition : string
+}
+
 export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]

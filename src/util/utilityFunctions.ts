@@ -1,6 +1,6 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { WebVTTParser, WebVTTSerializer } from 'webvtt-parser';
-import { SubtitleCue } from '../types';
+import { ExtendedSubtitleCue, SubtitleCue } from '../types';
 
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
   let decimalFactor = Math.pow(10, decimalPlace)
@@ -88,6 +88,26 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
     cue = {...cue}
     cue.startTime = cue.startTime / 1000
     cue.endTime = cue.endTime / 1000
+
+    const extendedCue : ExtendedSubtitleCue = {
+      id: cue.id,
+      text: cue.text,
+      startTime: cue.startTime,
+      endTime: cue.endTime,
+      tree: cue.tree,
+
+      // The serializer has a bug where some of the attributes like alignment are written to the VTT file
+      // as `alignment: undefined` if they are not set. This then causes illegal parsing exceptions with the
+      // parser. That's why we set some acceptable defaults here.
+      alignment: "center",
+      direction: "horizontal",
+      lineAlign: "start",
+      linePosition: "auto",
+      positionAlign: "auto",
+      size: 100,
+      textPosition: "auto",
+    }
+    cue = extendedCue
 
     cues[cueIndex] = cue
 
