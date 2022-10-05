@@ -178,6 +178,7 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       color: theme.text,
       background: theme.multiValue,
+      cursor: 'default',
     }),
     multiValueLabel: (provided: any) =>({
       ...provided,
@@ -192,6 +193,10 @@ export function selectFieldStyle(theme: Theme) {
     placeholder: (provided: any) => ({
       ...provided,
       color: theme.text
-    })
+    }),
+    valueContainer: (provided: any) => ({
+      ...provided,
+      cursor: "text",
+    }),
   }
 }
