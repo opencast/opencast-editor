@@ -1,0 +1,23 @@
+# This workflow runs on any change made to a pull-request and aims to verify
+# that the correct label is present.
+
+name: Check proper lable usage
+
+on:
+  pull_request_target:
+    types: [opened, labeled, unlabeled, synchronize]
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    steps:
+      # Ensure that one of the required labels is present and none of the undesired is absent
+      # See https://github.com/jesusvasquez333/verify-pr-label-action
+      - name: Verify PR label action
+        uses: jesusvasquez333/verify-pr-label-action@v1.4.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          valid-labels: 'type:tests, type:infrastructure, type:enhancement, type:feature, type:dependencies, type:documentation, type:accessibility, type:security, type:bug, type:usability, type:visual-clarity'
+          invalid-labels: 'status:duplicate, status:conflicts, status:wontfix'
+          pull-request-number: '${{ github.event.pull_request.number }}'
+          disable-reviews: true
