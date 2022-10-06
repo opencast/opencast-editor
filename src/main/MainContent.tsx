@@ -29,6 +29,7 @@ import {
 } from '../redux/videoSlice'
 import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
+import Thumbnail from "./Thumbnail";
 
 /**
  * A container for the main functionality
@@ -87,6 +88,16 @@ const MainContent: React.FC<{}> = () => {
     height: '100%',
   })
 
+  const thumbnailSelectStyle = css({
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '161px',
+    background: `${theme.background}`,
+  })
+
   const finishStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
@@ -134,14 +145,20 @@ const MainContent: React.FC<{}> = () => {
     } else if (mainMenuState === MainMenuStateNames.trackSelection) {
       return (
         <div css={trackSelectStyle}>
-        <TrackSelection />
-    </div>
+          <TrackSelection />
+        </div>
       )
     } else if (mainMenuState === MainMenuStateNames.subtitles) {
       return (
         <div css={subtitleSelectStyle}>
-        <Subtitle />
-    </div>
+          <Subtitle />
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.thumbnail) {
+      return (
+        <div css={thumbnailSelectStyle}>
+          <Thumbnail />
+        </div>
       )
     } else if (mainMenuState === MainMenuStateNames.finish) {
       return (

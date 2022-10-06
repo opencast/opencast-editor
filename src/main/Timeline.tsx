@@ -33,12 +33,14 @@ import { selectTheme } from '../redux/themeSlice';
  * TODO: Figure out why ResizeObserver does not update anymore if we stop passing the width to the SegmentsList
  */
 const Timeline: React.FC<{
+  timelineHeight?: number,
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying:(state: RootState) => boolean,
   setClickTriggered: ActionCreatorWithPayload<any, string>,
   setCurrentlyAt: ActionCreatorWithPayload<number, string>,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
+  timelineHeight = 250,
   selectCurrentlyAt,
   selectIsPlaying,
   setClickTriggered,
@@ -54,7 +56,7 @@ const Timeline: React.FC<{
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
-    height: '250px',
+    height: timelineHeight + 'px',
     width: '100%',
   });
 
@@ -70,14 +72,15 @@ const Timeline: React.FC<{
   <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
     <Scrubber
       timelineWidth={width}
+      timelineHeight={timelineHeight}
       selectCurrentlyAt={selectCurrentlyAt}
       selectIsPlaying={selectIsPlaying}
       setCurrentlyAt={setCurrentlyAt}
       setIsPlaying={setIsPlaying}
     />
-    <div css={{position: 'relative', height: '250px'}} >
-      <Waveforms />
-      <SegmentsList timelineWidth={width} styleByActiveSegment={true} tabable={true}/>
+    <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
+      <Waveforms timelineHeight={timelineHeight}/>
+      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={true} tabable={true}/>
     </div>
   </div>
   );
@@ -89,12 +92,14 @@ const Timeline: React.FC<{
  */
 export const Scrubber: React.FC<{
   timelineWidth: number,
+  timelineHeight: number,
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying:(state: RootState) => boolean,
   setCurrentlyAt: ActionCreatorWithPayload<number, string>,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   timelineWidth,
+  timelineHeight,
   selectCurrentlyAt,
   selectIsPlaying,
   setCurrentlyAt,
@@ -185,7 +190,7 @@ export const Scrubber: React.FC<{
 
   const scrubberStyle = css({
     backgroundColor: `${theme.text}`,
-    height: '100%',
+    height: timelineHeight - 10 + 'px', //    TODO: CHECK IF height: '100%',
     width: '1px',
     position: 'absolute',
     zIndex: 2,
@@ -275,10 +280,12 @@ export const Scrubber: React.FC<{
  */
 export const SegmentsList: React.FC<{
   timelineWidth: number,
+  timelineHeight: number,
   styleByActiveSegment: boolean,
   tabable: boolean,
 }> = ({
   timelineWidth,
+  timelineHeight,
   styleByActiveSegment = true,
   tabable = true,
 }) => {
@@ -336,7 +343,7 @@ export const SegmentsList: React.FC<{
             borderWidth: '1px',
             boxSizing: 'border-box',
             width: ((segment.end - segment.start) / duration) * 100 + '%',
-            height: '100%',
+            height: timelineHeight - 20 + 'px',     // CHECK IF 100%
             zIndex: 1,
           }}>
         </div>
@@ -361,7 +368,7 @@ export const SegmentsList: React.FC<{
 /**
  * Generates waveform images and displays them
  */
-export const Waveforms: React.FC<{}> = () => {
+export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) => {
 
   const { t } = useTranslation();
 
@@ -381,7 +388,7 @@ export const Waveforms: React.FC<{}> = () => {
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
-    height: '100%',
+    height: timelineHeight - 20 + 'px',   // CHECK IF     height: '100%',
     paddingTop: '10px',
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,

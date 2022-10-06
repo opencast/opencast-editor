@@ -112,8 +112,8 @@ import { selectTheme } from "../redux/themeSlice";
           <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
           <TimelineSubtitleSegmentsList timelineWidth={width}/>
           <div css={{position: 'relative', height: '100px'}} >
-            <Waveforms />
-            <CuttingSegmentsList timelineWidth={width} styleByActiveSegment={false} tabable={false}/>
+            <Waveforms timelineHeight={120}/>
+            <CuttingSegmentsList timelineWidth={width} timelineHeight={120} styleByActiveSegment={false} tabable={false}/>
           </div>
         </div>
       </ScrollContainer>

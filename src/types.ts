@@ -11,6 +11,8 @@ export interface Track {
   flavor: Flavor,
   audio_stream: {available: boolean, enabled: boolean, thumbnail_uri: string},
   video_stream: {available: boolean, enabled: boolean, thumbnail_uri: string},
+  thumbnailUri: string | undefined,
+  thumbnailPriority: number,
 }
 
 export interface Flavor {

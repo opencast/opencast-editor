@@ -48,6 +48,7 @@ interface iSettings {
   },
   thumbnail: {
     show: boolean,
+    simpleMode: boolean,
   },
   subtitles: {
     show: boolean,
@@ -80,6 +81,7 @@ var defaultSettings: iSettings = {
   },
   thumbnail: {
     show: false,
+    simpleMode: false,
   },
   subtitles: {
     show: false,
@@ -362,6 +364,7 @@ const SCHEMA = {
   },
   thumbnail: {
     show : types.boolean,
+    simpleMode: types.boolean,
   }
 }
 

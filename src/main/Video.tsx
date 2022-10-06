@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { css } from '@emotion/react'
 
@@ -17,7 +17,7 @@ import {
 import ReactPlayer, { Config } from 'react-player'
 
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
 
 import { GlobalHotKeys, KeyMapOptions } from 'react-hotkeys';
 import { videoPlayerKeyMap } from "../globalKeys";
@@ -36,14 +36,12 @@ import { selectTheme } from "../redux/themeSlice";
  * Container for the videos and their controls
  * TODO: Move fetching to a more central part of the app
  */
-const Video: React.FC<{}> = () => {
+export const Video: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch()
-  const videoURLs = useSelector(selectVideoURL)
-  const videoCount = useSelector(selectVideoCount)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
   const theme = useSelector(selectTheme);
@@ -72,29 +70,6 @@ const Video: React.FC<{}> = () => {
   //   content = <div>{error}</div>
   // }
 
-  // Initialize video players
-  const videoPlayers: JSX.Element[] = [];
-  for (let i = 0; i < videoCount; i++) {
-    // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer
-      key={i}
-      dataKey={i}
-      url={videoURLs[i]}
-      isPrimary={i === 0}
-      subtitleUrl={""}
-      selectIsPlaying={selectIsPlaying}
-      selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
-      selectPreviewTriggered={selectPreviewTriggered}
-      selectClickTriggered={selectClickTriggered}
-      selectAspectRatio={selectAspectRatio}
-      setIsPlaying={setIsPlaying}
-      setPreviewTriggered={setPreviewTriggered}
-      setClickTriggered={setClickTriggered}
-      setCurrentlyAt={setCurrentlyAt}
-      setAspectRatio={setAspectRatio}
-    />);
-  }
-
   // Style
   const videoAreaStyle = css({
     display: 'flex',
@@ -106,20 +81,10 @@ const Video: React.FC<{}> = () => {
     borderBottom: `${theme.menuBorder}`,
   });
 
-  const videoPlayerAreaStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  });
-
   return (
     <div css={videoAreaStyle}>
       <VideoHeader />
-      <div css={videoPlayerAreaStyle}>
-        {videoPlayers}
-      </div>
+      <VideoPlayers refs={undefined}/>
       <VideoControls
         selectCurrentlyAt={selectCurrentlyAt}
         selectIsPlaying={selectIsPlaying}
@@ -131,42 +96,94 @@ const Video: React.FC<{}> = () => {
   );
 };
 
+export const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent=100}) => {
+
+  const videoURLs = useSelector(selectVideoURL)
+  const videoCount = useSelector(selectVideoCount)
+
+  const videoPlayerAreaStyle = css({
+    display: 'flex',
+    flexDirection: 'row' as const,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: widthInPercent + '%',
+  });
+
+  // Initialize video players
+  const videoPlayers: JSX.Element[] = [];
+  for (let i = 0; i < videoCount; i++) {
+    videoPlayers.push(
+      <VideoPlayer
+        key={i}
+        dataKey={i}
+        url={videoURLs[i]}
+        isPrimary={i === 0}
+        subtitleUrl={""}
+        selectIsPlaying={selectIsPlaying}
+        selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
+        selectPreviewTriggered={selectPreviewTriggered}
+        selectClickTriggered={selectClickTriggered}
+        selectAspectRatio={selectAspectRatio}
+        setIsPlaying={setIsPlaying}
+        setPreviewTriggered={setPreviewTriggered}
+        setClickTriggered={setClickTriggered}
+        setCurrentlyAt={setCurrentlyAt}
+        setAspectRatio={setAspectRatio}
+        ref={(el) => {
+          if (refs === undefined) return
+          (refs.current[i] = el)
+        }}
+      />
+    );
+  }
+
+  return (
+    <div css={videoPlayerAreaStyle}>
+      {videoPlayers}
+    </div>
+  );
+}
+
 /**
  * A single video player
  * @param {string} url - URL to load video from
  * @param {boolean} isPrimary - If the player is the main control
  */
-export const VideoPlayer: React.FC<{
-  dataKey: number,
-  url: string | undefined,
-  isPrimary: boolean,
-  subtitleUrl: string,
-  selectIsPlaying:(state: RootState) => boolean,
-  selectCurrentlyAtInSeconds: (state: RootState) => number,
-  selectPreviewTriggered:(state: RootState) => boolean,
-  selectClickTriggered:(state: RootState) => boolean,
-  selectAspectRatio: (state: RootState) => number,
-  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
-  setPreviewTriggered: ActionCreatorWithPayload<any, string>,
-  setClickTriggered: ActionCreatorWithPayload<any, string>,
-  setCurrentlyAt: any,
-  setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
-}> = ({
-  dataKey,
-  url,
-  isPrimary,
-  selectIsPlaying,
-  subtitleUrl,
-  selectCurrentlyAtInSeconds,
-  selectPreviewTriggered,
-  selectClickTriggered,
-  selectAspectRatio,
-  setIsPlaying,
-  setPreviewTriggered,
-  setClickTriggered,
-  setCurrentlyAt,
-  setAspectRatio,
-}) => {
+export const VideoPlayer = React.forwardRef(
+  (props: {
+    dataKey: number,
+    url: string | undefined,
+    isPrimary: boolean,
+    subtitleUrl: string,
+    selectIsPlaying:(state: RootState) => boolean,
+    selectCurrentlyAtInSeconds: (state: RootState) => number,
+    selectPreviewTriggered:(state: RootState) => boolean,
+    selectClickTriggered:(state: RootState) => boolean,
+    selectAspectRatio: (state: RootState) => number,
+    setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+    setPreviewTriggered: ActionCreatorWithPayload<any, string>,
+    setClickTriggered: ActionCreatorWithPayload<any, string>,
+    setCurrentlyAt: any,
+    setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
+  },
+  forwardRefThing
+) => {
+  const {
+    dataKey,
+    url,
+    isPrimary,
+    selectIsPlaying,
+    subtitleUrl,
+    selectCurrentlyAtInSeconds,
+    selectPreviewTriggered,
+    selectClickTriggered,
+    selectAspectRatio,
+    setIsPlaying,
+    setPreviewTriggered,
+    setClickTriggered,
+    setCurrentlyAt,
+    setAspectRatio,
+  } = props
 
   const { t } = useTranslation();
 
@@ -184,7 +201,7 @@ export const VideoPlayer: React.FC<{
   const ref = useRef<ReactPlayer>(null);
   const [ready, setReady] = useState(false);
   const [errorState, setError] = useState(false);
-  const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false)
+  const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
@@ -241,7 +258,7 @@ export const VideoPlayer: React.FC<{
       ref.current.seekTo(currentlyAt, "seconds")
       dispatch(setClickTriggered(false))
     }
-    if (!isAspectRatioUpdated && ready) {
+    if (!isAspectRatioUpdated && ready) {     //     if (!isAspectRatioUpdated && ref.current && ready) {
       // Update the store with video dimensions for rendering purposes
       updateAspectRatio();
     }
@@ -273,6 +290,7 @@ export const VideoPlayer: React.FC<{
       attributes: {
         // Skip player when navigating page with keyboard
         tabIndex: '-1',
+        crossOrigin: "anonymous"    // allow thumbnail generation
       },
       tracks: [
         {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
@@ -329,6 +347,23 @@ export const VideoPlayer: React.FC<{
       });
     }
   }
+
+  // External functions
+  useImperativeHandle(forwardRefThing, () => ({
+    // Renders the current frame in the video element to a canvas
+    // Returns the data url
+    captureVideo() {
+      const video = ref.current?.getInternalPlayer() as HTMLVideoElement
+      var canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      var canvasContext = canvas.getContext("2d");
+      if (canvasContext !== null) {
+        canvasContext.drawImage(video, 0, 0);
+        return canvas.toDataURL('image/png')
+      }
+    }
+  }));
 
   const errorBoxStyle = css({
     ...(!errorState) && {display: "none"},
@@ -396,7 +431,7 @@ export const VideoPlayer: React.FC<{
   //     </video>
   //   </div>
   // );
-};
+});
 
 /**
  * Contains controls for manipulating multiple video players at once
@@ -621,21 +656,6 @@ const VideoHeader: React.FC<{}> = () => {
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
   const presenters = useSelector(selectPresenters)
-
-  const titleStyle = css({
-    display: 'inline-block',
-    padding: '15px',
-    overflow: 'hidden',
-    whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    maxWidth: '500px',
-  })
-
-  const titleStyleBold = css({
-    fontWeight: 'bold',
-    fontSize: '24px',
-    verticalAlign: '-2.5px',
-  })
 
   let presenter_header;
   if (presenters && presenters.length) {
