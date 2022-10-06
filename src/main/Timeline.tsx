@@ -34,7 +34,7 @@ import { selectTheme } from '../redux/themeSlice';
  * Its width corresponds to the duration of the video
  * TODO: Figure out why ResizeObserver does not update anymore if we stop passing the width to the SegmentsList
  */
-const Timeline: React.FC<{}> = () => {
+const Timeline: React.FC<{timelineHeight?: number}> = ({timelineHeight = 250}) => {
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const Timeline: React.FC<{}> = () => {
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
-    height: '250px',
+    height: timelineHeight + 'px',
     width: '100%',
   });
 
@@ -58,10 +58,10 @@ const Timeline: React.FC<{}> = () => {
 
   return (
   <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber timelineWidth={width}/>
-    <div css={{height: '230px'}} >
-      <Waveforms />
-      <SegmentsList timelineWidth={width}/>
+    <Scrubber timelineWidth={width} timelineHeight={timelineHeight}/>
+    <div css={{height: timelineHeight - 20 + 'px'}} >
+      <Waveforms timelineHeight={timelineHeight}/>
+      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight}/>
     </div>
   </div>
   );
@@ -71,7 +71,7 @@ const Timeline: React.FC<{}> = () => {
  * Displays and defines the current position in the video
  * @param param0
  */
-const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+const Scrubber: React.FC<{timelineWidth: number, timelineHeight: number}> = ({timelineWidth, timelineHeight}) => {
 
   const { t } = useTranslation();
 
@@ -158,7 +158,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const scrubberStyle = css({
     backgroundColor: `${theme.text}`,
-    height: '240px',
+    height: timelineHeight - 10 + 'px',
     width: '1px',
     position: 'absolute' as 'absolute',
     zIndex: 2,
@@ -246,7 +246,7 @@ const Scrubber: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 /**
  * Container responsible for rendering the segments that are created when cutting
  */
-const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
+const SegmentsList: React.FC<{timelineWidth: number, timelineHeight: number}> = ({timelineWidth, timelineHeight}) => {
 
   const { t } = useTranslation();
 
@@ -300,7 +300,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
           borderWidth: '1px',
           boxSizing: 'border-box',
           width: ((segment.end - segment.start) / duration) * 100 + '%',
-          height: '230px',
+          height: timelineHeight - 20 + 'px',
           zIndex: 1,
         }}>
         </div>
@@ -324,7 +324,7 @@ const SegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 /**
  * Generates waveform images and displays them
  */
-const Waveforms: React.FC<{}> = () => {
+const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) => {
 
   const { t } = useTranslation();
 
@@ -348,7 +348,7 @@ const Waveforms: React.FC<{}> = () => {
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
-    height: '230px',
+    height: timelineHeight - 20 + 'px',
     paddingTop: '10px',
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,

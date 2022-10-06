@@ -20,10 +20,11 @@ import { MainMenuStateNames } from '../types'
 import { flexGapReplacementStyle } from "../cssStyles";
 
 import { useBeforeunload } from 'react-beforeunload';
-import { hasChanges as videoHasChanges } from "../redux/videoSlice";
-import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
+import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
+import { selectHasChanges as metadataSelectHasChanges} from "../redux/metadataSlice";
 import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
+import Thumbnail from "./Thumbnail";
 
 /**
  * A container for the main functionality
@@ -32,8 +33,8 @@ import ThemeSwitcher from "./ThemeSwitcher";
 const MainContent: React.FC<{}> = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)
-  const videoChanged = useSelector(videoHasChanges)
-  const metadataChanged = useSelector(metadataHasChanges)
+  const videoChanged = useSelector(videoSelectHasChanges)
+  const metadataChanged = useSelector(metadataSelectHasChanges)
   const theme = useSelector(selectTheme)
 
   // Display warning when leaving the page if there are unsaved changes
@@ -82,6 +83,16 @@ const MainContent: React.FC<{}> = () => {
     background: `${theme.background}`,
   })
 
+  const thumbnailSelectStyle = css({
+    ...displayState(MainMenuStateNames.thumbnail),
+    flexDirection: 'column' as const,
+    alignContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '161px',
+    background: `${theme.background}`,
+  })
+
   const finishStyle = css({
     ...displayState(MainMenuStateNames.finish),
     flexDirection: 'column' as const,
@@ -122,6 +133,9 @@ const MainContent: React.FC<{}> = () => {
       </div>
       <div css={trackSelectStyle}>
           <TrackSelection />
+      </div>
+      <div css={thumbnailSelectStyle}>
+          <Thumbnail />
       </div>
       <div css={finishStyle}>
         <Finish />

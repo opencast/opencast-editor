@@ -19,6 +19,7 @@ export interface video {
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean             // Did user make changes in cutting view since last save
   waveformImages: string[]
+  originalThumbnails: {id: Track["id"], uri: Track["thumbnailUri"]}[]
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
@@ -41,6 +42,7 @@ export const initialState: video & httpRequestState = {
   aspectRatios: [],
   hasChanges: false,
   waveformImages: [],
+  originalThumbnails: [],
 
   videoURLs: [],
   videoCount: 0,
@@ -126,6 +128,18 @@ const videoSlice = createSlice({
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload
     },
+    setThumbnail: (state, action: PayloadAction<{id: Track["id"], uri: Track["thumbnailUri"]}>) => {
+      setThumbnailHelper(state, action.payload.id, action.payload.uri)
+    },
+    setThumbnails: (state, action: PayloadAction<{id: Track["id"], uri: Track["thumbnailUri"]}[]>) => {
+      for (const element of action.payload) {
+        setThumbnailHelper(state, element.id, element.uri)
+      }
+    },
+    removeThumbnail: (state, action: PayloadAction<string>) => {
+      const index = state.tracks.findIndex(t => t.id === action.payload)
+      state.tracks[index].thumbnailUri = undefined
+    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -194,20 +208,20 @@ const videoSlice = createSlice({
           state.errorReason = 'workflowActive'
           state.error = "An Opencast workflow is currently running, please wait until it is finished."
         }
-        state.videoURLs = action.payload.tracks
-          .filter((t: Track) => t.video_stream.available)
-          // eslint-disable-next-line no-sequences
-          .reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
+        state.tracks = action.payload.tracks.sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => a.thumbnailPriority - b.thumbnailPriority)
+        const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
+        // eslint-disable-next-line no-sequences
+        state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.tracks = action.payload.tracks
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
         });
         state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
+        state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
     })
@@ -282,6 +296,19 @@ const skipDeletedSegments = (state: WritableDraft<video>) => {
           endTime = state.segments[index].start + 1
           break
         }
+
+        // If this is the last segment and it is deleted
+        if (index + 1 === state.segments.length) {
+          // Properly pause the player
+          state.isPlaying = false
+          // Jump to start of first non-deleted segment
+          for (let j = 0; j < state.segments.length; j++) {
+            if (!state.segments[j].deleted) {
+              endTime = state.segments[j].start
+              break
+            }
+          }
+        }
       }
 
       state.currentlyAt = endTime
@@ -305,9 +332,17 @@ const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
+const setThumbnailHelper = (state:  WritableDraft<video>, id: Track["id"], uri: Track["thumbnailUri"]) => {
+  const index = state.tracks.findIndex(t => t.id === id)
+  if (index >= 0) {
+    state.tracks[index].thumbnailUri = uri
+  }
+}
+
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex,
-  mergeLeft, mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
+  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
+  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -333,10 +368,12 @@ export const selectIsCurrentSegmentAlive = (state: { videoState:
 export const selectSelectedWorkflowId = (state: { videoState:
     { selectedWorkflowId: video["selectedWorkflowId"]; }; }) =>
     state.videoState.selectedWorkflowId
-export const hasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
+export const selectHasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
   state.videoState.waveformImages
+export const selectOriginalThumbnails = (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
+  state.videoState.originalThumbnails
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs

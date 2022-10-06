@@ -154,6 +154,33 @@
             "EVENTS-LICENSE-CCBY": "CC-BY"
         }
     },
+    "thumbnail": {
+        "title": "Thumbnail Editor",
+        "noThumbnailAvailable": "No Thumbnail set",
+        "previewImageAlt": "Thumbnail for",
+        "buttonGenerate": "Generate",
+        "buttonGenerate-tooltip": "Create a new thumbnail from the current scrubber position",
+        "buttonGenerate-tooltip-aria": "Create a new thumbnail from the current scrubber position",
+        "buttonUpload": "Upload",
+        "buttonUpload-tooltip": "Upload an image",
+        "buttonUpload-tooltip-aria": "Upload an image",
+        "buttonUseForOtherThumbnails": "Use for other thumbnails",
+        "buttonUseForOtherThumbnails-tooltip": "Use the thumbnail for all other videos",
+        "buttonUseForOtherThumbnails-tooltip-aria": "Use the thumbnail for all other videos",
+        "buttonDiscard": "Discard",
+        "buttonDiscard-tooltip": "Undo all changes made to this thumbnail",
+        "buttonDiscard-tooltip-aria": "Undo all changes made to this thumbnail",
+        "buttonGenerateAll": "Generate All",
+        "buttonGenerateAll-tooltip": "Create new thumbnails from the current scrubber position",
+        "buttonGenerateAll-tooltip-aria": "Create new thumbnails from the current scrubber position",
+        "explanation": "Here you can set the thumbnail for each video",
+        "primary": "Primary",
+        "secondary": "Secondary"
+    },
+    "thumbnailSimple": {
+        "rowTitle": "Change thumbnail here",
+        "from": "from"
+    },
     "error": {
         "generic-message": "Er is een kritische fout opgetreden!",
         "details": "Details: ",
@@ -195,5 +222,11 @@
         "scrubberRight": "Move right",
         "scubberIncrease": "Move faster",
         "scrubberDecrease": "Move slower"
+    },
+    "theme": {
+        "appearance": "Appearance",
+        "darkmode": "Dark mode",
+        "lightmode": "Light mode",
+        "system": "System design"
     }
 }
