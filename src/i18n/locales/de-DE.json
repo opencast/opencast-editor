@@ -1,24 +1,24 @@
 {
     "mainMenu": {
         "cutting-button": "Schneiden",
-        "finish-button": "Verarbeitet",
-        "select-tracks-button": "Spur",
-        "thumbnail-button": "Miniaturbilder",
+        "finish-button": "Fertigstellen",
+        "select-tracks-button": "Spuren",
+        "thumbnail-button": "Vorschaubild",
         "metadata-button": "Metadaten",
-        "keyboard-controls-button": "Tastatursteuerung aktivieren",
+        "keyboard-controls-button": "Tastatursteuerung",
         "tooltip-aria": "Hauptnavigation"
     },
     "cuttingActions": {
         "cut-button": "Schneiden",
         "cut-tooltip": "Teilen Sie das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}",
         "cut-tooltip-aria": "Schnitt. Teilen Sie das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}.",
-        "delete-button": "Gelöscht",
+        "delete-button": "Löschen",
         "delete-restore-tooltip": "Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
         "restore-button": "Wiederherstellen",
         "mergeLeft-button": "Links zusammenfügen",
-        "mergeLeft-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}",
-        "mergeLeft-tooltip-aria": "Rechts zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}.",
+        "mergeLeft-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}",
+        "mergeLeft-tooltip-aria": "Links zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}.",
         "mergeRight-button": "Rechts zusammenfügen",
         "mergeRight-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}",
         "mergeRight-tooltip-aria": "Rechts zusammenfügen. Verbinden Sie das aktuell aktive Segment mit dem Segment auf der rechten Seite. Hotkey: {{hotkeyName}}."
@@ -27,26 +27,26 @@
         "previewButton": "Vorschaumodus",
         "previewButton-tooltip": "Überspringt gelöschte Segmente bei der Wiedergabe des Videos. Derzeit {{status}}. Hotkey: {{hotkeyName}}",
         "previewButton-aria": "Vorschaumodus aktivieren oder deaktivieren. Hotkey: {{hotkeyName}}.",
-        "playButton-tooltip": "Play-Button",
-        "time-duration-tooltip": "Wiedergabezeit und -dauer",
+        "playButton-tooltip": "Video abspielen",
+        "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",
         "time-aria": "Aktuelle Zeit",
-        "comError-text": "Ein Fehler trat bei der Kommunikation mit %1$s auf.",
-        "loadError-text": "Beim Laden des Inhaltes ist ein Fehler aufgetreten.",
+        "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
+        "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
         "title-tooltip": "Videotitel",
         "presenter-tooltip": "Vortragende",
         "controls-tooltip": "Videosteuerungen"
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
-        "start-button": "Ja, Verarbeitung starten",
+        "start-button": "Verarbeitung starten",
         "discard-button": "Änderungen verwerfen"
     },
     "save": {
         "headline-text": "Aktuelles Projekt speichern",
-        "confirm-button": "Ja, meine Änderungen verwerfen",
+        "confirm-button": "Ja, Änderungen speichern",
         "confirmButton-default-tooltip": "Speichern-Button",
-        "confirmButton-attempting-tooltip": "Kopplung wird durchgeführt\\u2026",
+        "confirmButton-attempting-tooltip": "Versuche zu speichern",
         "confirmButton-success-tooltip": "Erfolgreich gespeichert",
         "confirmButton-failed-tooltip": "Speichern fehlgeschlagen",
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
@@ -56,13 +56,13 @@
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
-        "confirm-button": "Ja, meine Änderungen verwerfen",
+        "confirm-button": "Ja, Änderungen verwerfen",
         "confirm-tooltip": "Änderungen verwerfen Button",
-        "info-text": "Wollen Sie alle Änderungen verwerfen? Dies kann nicht rückgängig gemacht werden!"
+        "info-text": "Alle vorgenommenen Änderungen verwerfen? Dies kann nicht rückgängig gemacht werden!"
     },
     "theEnd": {
         "discarded-text": "Alle Ihre Änderungen sind nun für immer verloren gegangen. Sie können nun den Editor schließen.",
-        "startOver-button": "Von neu beginnen!",
+        "startOver-button": "Von neuem beginnen!",
         "startOver-tooltip": "Seite neu laden, um neu zu starten",
         "info-text": "Änderungen erfolgreich in Opencast gespeichert. Die Bearbeitung Ihrer Änderungen kann einige Zeit dauern, bitte haben Sie etwas Geduld. Sie können nun den Editor schließen.\n"
     },
@@ -72,8 +72,8 @@
         "noWorkflows-text": "Ein Problem ist aufgetreten, es gibt keine Workflows für die Verarbeitung Ihrer Änderungen mit.<3/> Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Opencast Administrator.\n",
         "oneWorkflow-text": "Das Video wird mit dem Workflow \"{{workflow}}\" geschnitten und verarbeitet. <3/> Dies wird einige Zeit dauern.\n",
         "manyWorkflows-text": "Wählen Sie aus, welchen Workflow Opencast für die Verarbeitung verwenden soll.",
-        "startProcessing-button": "Ja, Verarbeitung starten",
-        "back-button": "Bring mich zurück",
+        "startProcessing-button": "Verarbeitung starten",
+        "back-button": "Zurück",
         "selectWF-button": "Klicken, um diesen Workflow auszuwählen",
         "selectWF-button-aria": "Klicken, um den Workflow auszuwählen: {{stateName}}\n"
     },
@@ -153,6 +153,33 @@
             "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
             "EVENTS-LICENSE-CCBY": "CC-BY"
         }
+    },
+    "thumbnail": {
+        "title": "Vorschaubildeditor",
+        "noThumbnailAvailable": "Kein Vorschaubild festgelegt",
+        "previewImageAlt": "Vorschaubild für",
+        "buttonGenerate": "Generieren",
+        "buttonGenerate-tooltip": "Erstelle ein neues Vorschaubild von der aktuellen Scrubber-Position",
+        "buttonGenerate-tooltip-aria": "Erstelle ein neues Vorschaubild von der aktuellen Scrubber-Position",
+        "buttonUpload": "Hochladen",
+        "buttonUpload-tooltip": "Ein Bild hochladen",
+        "buttonUpload-tooltip-aria": "Ein Bild hochladen",
+        "buttonUseForOtherThumbnails": "Für andere Vorschaubilder verwenden",
+        "buttonUseForOtherThumbnails-tooltip": "Benutze das Vorschaubild für alle anderen Videos",
+        "buttonUseForOtherThumbnails-tooltip-aria": "Benutze das Vorschaubild für alle anderen Videos",
+        "buttonDiscard": "Verwerfen",
+        "buttonDiscard-tooltip": "Alle Änderungen an diesem Vorschaubild rückgängig machen",
+        "buttonDiscard-tooltip-aria": "Alle Änderungen an diesem Vorschaubild rückgängig machen",
+        "buttonGenerateAll": "Alle generieren",
+        "buttonGenerateAll-tooltip": "Erstelle neue Vorschaubilder von der aktuellen Scrubber-Position",
+        "buttonGenerateAll-tooltip-aria": "Erstelle neue Vorschaubilder von der aktuellen Scrubber-Position",
+        "explanation": "Hier können Sie die Vorschaubilder für jedes Video festlegen",
+        "primary": "Primär",
+        "secondary": "Sekundär"
+    },
+    "thumbnailSimple": {
+        "rowTitle": "Vorschaubilder hier ändern",
+        "from": "von"
     },
     "error": {
         "generic-message": "Ein kritischer Fehler ist aufgetreten!",
