@@ -36,7 +36,7 @@
     "i18next": "^21.9.2",
     "i18next-browser-languagedetector": "^6.1.5",
     "lodash.clonedeep": "^4.5.0",
-    "luxon": "^3.0.1",
+    "luxon": "^3.0.4",
     "mui-rff": "^5.3.2",
     "react": "^17.0.2",
     "react-app-rewired": "^2.2.1",
@@ -86,7 +86,7 @@
   "devDependencies": {
     "@playwright/test": "^1.26.1",
     "@types/lodash": "^4.14.186",
-    "@types/luxon": "^3.0.0",
+    "@types/luxon": "^3.0.1",
     "@types/react-beforeunload": "^2.1.1",
     "@redux-devtools/core": "^3.13.1",
     "use-resize-observer": "^9.0.2"
