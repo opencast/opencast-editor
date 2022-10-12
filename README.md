@@ -46,18 +46,19 @@ The editor can be configured through the `editor-settings.toml` settings file. I
 How to cut a release for Opencast
 ---------------------------------
 
-0. Make sure all merged pull requests have proper `type:` labels. They are used for generating the release notes.
+1. (Optional) Run the [Update translations](https://github.com/opencast/opencast-editor/actions/workflows/update-translations.yml) workflow, to make sure all changes from crowdin are included in the next release.
 1. Switch to the commit you want to turn into the release
-2. Create and push a new tag
+1. Create and push a new tag
+   ```bash
+    DATE=$(date +%Y-%m-%d)
+    git tag -m Release -s "$DATE"
+    git push upstream "$DATE":"$DATE"
    ```
-   git tag -s 2021-11-27
-   git push upstream 2021-11-27:2021-11-27
-   ```
-3. Wait for the [Create release draft](https://github.com/opencast/opencast-editor/actions/workflows/create-release.yml)
+1. Wait for the [Create release draft](https://github.com/opencast/opencast-editor/actions/workflows/create-release.yml)
    workflow to finish
     - It will create a new [GitHub release draft](https://github.com/opencast/opencast-editor/releases)
     - Review and publish the draft
-4. Submit a pull request against Opencast
+1. Submit a pull request against Opencast
     - [Update the release](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/modules/editor/pom.xml#L16-L17)
     - [Adjust the documentation](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/docs/guides/admin/docs/modules/editor.md)
       if necessary
