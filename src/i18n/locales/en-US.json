@@ -54,7 +54,7 @@
       "confirmButton-success-tooltip": "Saved successfully",
       "confirmButton-failed-tooltip": "Save failed",
       "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
-      "success-text": "Changes saved successfully!",
+      "success-text": "Changes saved successfully! You can now close the editor or continue working.",
       "success-tooltip-aria": "Saved successfully",
       "saveArea-tooltip": "Save Area"
     },
