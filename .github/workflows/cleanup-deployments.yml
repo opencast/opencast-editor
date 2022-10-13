@@ -23,11 +23,11 @@ jobs:
         path: editor-test
     
     - name: remove old builds
-      run: rm -rf editor-test/${{ github.event.number }}
+      run: rm -rf "$GITHUB_WORKSPACE/editor-test/${{ github.event.number }}"
 
     - name: regenerate index.html
       run: |
-        cd ~/editor-test
+        cd "$GITHUB_WORKSPACE/editor-test"
         echo '<html><body><ul>' > index.html
         find . -maxdepth 2 -name '*_*' -type d \
           | sort -r \
@@ -37,5 +37,6 @@ jobs:
     - name: Commit changes
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
+        repository: $GITHUB_WORKSPACE/editor-test
         branch: gh-pages
         commit_message: Delete old deployments from PR ${{ github.event.number }}
