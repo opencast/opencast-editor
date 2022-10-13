@@ -113,8 +113,9 @@ password = "opencast"
 #
 # Example:
 [subtitles.languages]
-# "captions/source+de" = "Deutsch"
-# "captions/source+en" = "English"
+"captions/vtt+en" = "English"
+"captions/vtt+de" = "German"
+"captions/vtt+es" = "Spanish"
 
 # Specify the default video in the subtitle video player by flavor
 # If not specified, the editor will decide on a default by itself
