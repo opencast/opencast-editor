@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, Workflow }  from '../types'
+import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { WritableDraft } from 'immer/dist/internal';
 import { settings } from '../config';
@@ -14,10 +14,11 @@ export interface video {
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
+  captions: SubtitlesFromOpencast[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
-  hasChanges: boolean             // Did user make changes in cutting view since last save
+  hasChanges: boolean,             // Did user make changes in cutting view since last save
   waveformImages: string[]
   originalThumbnails: {id: Track["id"], uri: Track["thumbnailUri"]}[]
 
@@ -35,6 +36,7 @@ export const initialState: video & httpRequestState = {
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
+  captions: [],
   activeSegmentIndex: 0,
   selectedWorkflowId: "",
   previewTriggered: false,
@@ -63,7 +65,7 @@ export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformati
 
   // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
   const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/edit.json`)
-  return response
+  return JSON.parse(response)
 })
 
 const updateCurrentlyAt = (state: video, milliseconds: number) => {
@@ -213,6 +215,7 @@ const videoSlice = createSlice({
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
+        state.captions = action.payload.subtitles ? state.captions = action.payload.subtitles : []
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.presenters = []
@@ -325,7 +328,7 @@ const skipDeletedSegments = (state: WritableDraft<video>) => {
  * TODO: Error checking
  * TODO: Improve calculation to handle multiple rows of videos
  */
-const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
+export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
   let minHeight = Math.min.apply(Math, aspectRatios.map(function(o) { return o.height; }))
   let minWidth = Math.min.apply(Math, aspectRatios.map(function(o) { return o.width; }))
   minWidth *= aspectRatios.length
@@ -376,6 +379,8 @@ export const selectOriginalThumbnails = (state: { videoState: { originalThumbnai
   state.videoState.originalThumbnails
 
 // Selectors mainly pertaining to the information fetched from Opencast
+export const selectVideos = (state: { videoState: { tracks: video["tracks"] } }) =>
+  state.videoState.tracks.filter((track: Track) => track.video_stream.available === true)
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
 export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"] } }) => state.videoState.videoCount
 export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
@@ -386,5 +391,15 @@ export const selectTracks = (state: { videoState: { tracks: video["tracks"] } })
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
+export const selectCaptions = (state: { videoState: { captions: video["captions"]; }; }) =>
+  state.videoState.captions
+export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { captions: video["captions"]; }; }) => {
+  for (const cap of state.videoState.captions) {
+    if (cap.flavor.type+"/"+cap.flavor.subtype === flavor) {
+      return cap
+    }
+  }
+  return undefined
+}
 
 export default videoSlice.reducer

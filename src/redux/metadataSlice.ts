@@ -74,7 +74,7 @@ export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async ()
   }
 
   const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/metadata.json`)
-  return response
+  return JSON.parse(response)
 })
 
 export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, { getState }) => {
@@ -85,11 +85,11 @@ export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, 
   // TODO: Get only metadataState instead of all states
   const allStates = getState() as { metadataState: { catalogs: metadata["catalogs"] } }
 
-  const response = await client.post(`${settings.opencast.url}/editor/${settings.id}/metadata.json`,
+  await client.post(`${settings.opencast.url}/editor/${settings.id}/metadata.json`,
     allStates.metadataState.catalogs
   )
 
-  return response
+  return
 })
 
 /**
