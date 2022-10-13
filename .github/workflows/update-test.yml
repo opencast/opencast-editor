@@ -8,17 +8,17 @@ on:
 
 jobs:
   main:
+    if: steps.is_team_member.outputs.permitted == true
+    needs: member
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.repo.full_name == 'opencast/opencast-editor'
-      || github.event.pull_request.head.repo.full_name == 'Arnei/opencast-editor'
-      || github.event.pull_request.head.repo.full_name == 'naweidner/opencast-editor'
-      || github.event.pull_request.head.repo.full_name == 'lkiesow/opencast-editor' }}
+    
     steps:
     - name: generate build path
       run: echo "::set-output name=build::${{github.event.number}}/$(date +%Y-%m-%d_%H-%M-%S)/" | sed 's_build::/*_build::_'
       id: build-path
 
-    - uses: actions/checkout@v3
+    - name: Checkout Sources
+      uses: actions/checkout@v3
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
@@ -98,3 +98,40 @@ jobs:
           ](https://test.editor.opencast.org/${{ steps.build-path.outputs.build }}).
 
           It might take a few minutes for it to become available.
+
+
+  member:
+    name: Check organization membership
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if team member
+        id: is_team_member
+        uses: TheModdingInquisition/actions-team-membership@v1.0
+        with:
+          team: developers # required. The team to check for
+          token: ${{ secrets.GITHUB_ORG_TOKEN }} # required. Personal Access Token with the `read:org` permission
+
+
+  translations:
+    name: Translations only via Crowdin
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Sources
+      uses: actions/checkout@v3
+
+    - name: Get changed locale files
+      uses: dorny/paths-filter@v2
+      id: filter_locales
+      with:
+        filters: | # !(pattern) matches anything but pattern
+          locales:
+            - 'src/i18n/locales/!(en-US)*.json'
+
+    - name: Check for changes in translations
+      if: steps.filter_locales.outputs.locales == true
+      uses: actions/github-script@v6
+      with:
+        script: |
+            core.setFailed('You should not alter translations outside of Crowdin.')
