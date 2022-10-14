@@ -1,10 +1,11 @@
 import { css } from "@emotion/react";
 import React from "react";
 
-import { getApplicationKeyMap, KeyMapDisplayOptions } from 'react-hotkeys';
+import { KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation, Trans} from "react-i18next";
 import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
+import { getAllHotkeys } from "../globalKeys";
 import { selectTheme } from "../redux/themeSlice";
 import i18next from "./../i18n/config";
 
@@ -103,7 +104,7 @@ const KeyboardControls: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
-  const keyMap = getApplicationKeyMap();
+  const keyMap = getAllHotkeys()
 
   const groupsStyle = css({
     display: 'flex',

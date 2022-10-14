@@ -17,6 +17,9 @@ import { setEnd } from "../redux/endSlice";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { selectSubtitles } from "../redux/subtitleSlice";
+import { serializeSubtitle } from "../util/utilityFunctions";
+import { Flavor } from "../types";
 import { selectTheme } from "../redux/themeSlice";
 
 /**
@@ -74,6 +77,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   const selectedWorkflowId = useSelector(selectSelectedWorkflowId)
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)
+  const subtitles = useSelector(selectSubtitles)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
@@ -87,6 +91,17 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
       dispatch(metadataSetHasChanges(false))
     }
   }, [dispatch, metadataStatus, workflowStatus])
+
+  const prepareSubtitles = () => {
+    const subtitlesForPosting = []
+
+    for (const identifier in subtitles) {
+      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
+
+    }
+    return subtitlesForPosting
+  }
 
   // Dispatches first save request
   // Subsequent save requests should be wrapped in useEffect hooks,
@@ -104,6 +119,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
         segments: segments,
         tracks: tracks,
         workflow: [{id: selectedWorkflowId}],
+        subtitles: prepareSubtitles()
       }))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -13,6 +13,9 @@ import { selectOriginalThumbnails, selectTracks, setHasChanges, setThumbnail, se
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import { VideoControls, VideoPlayers } from "./Video";
+import {
+  selectIsPlaying, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setCurrentlyAt
+} from '../redux/videoSlice'
 
 
 /**
@@ -88,8 +91,21 @@ const Thumbnail : React.FC<{}> = () => {
     <div css={thumbnailStyle}>
       <div css={[titleStyle, titleStyleBold]}>{t('thumbnail.title')}</div>
       <VideoPlayers refs={generateRefs} widthInPercent={50}/>
-      <VideoControls />
-      <Timeline timelineHeight={125}/>
+      <VideoControls
+        selectCurrentlyAt={selectCurrentlyAt}
+        selectIsPlaying={selectIsPlaying}
+        selectIsPlayPreview={selectIsPlayPreview}
+        setIsPlaying={setIsPlaying}
+        setIsPlayPreview={setIsPlayPreview}
+      />
+      <Timeline
+        timelineHeight={125}
+        selectIsPlaying={selectIsPlaying}
+        selectCurrentlyAt={selectCurrentlyAt}
+        setIsPlaying={setIsPlaying}
+        setCurrentlyAt={setCurrentlyAt}
+        setClickTriggered={setClickTriggered}
+      />
       <ThumbnailTable
         inputRefs={inputRefs}
         generate={generate}
