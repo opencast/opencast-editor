@@ -19,6 +19,7 @@ import { PageButton } from './Finish'
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
+import { AppDispatch } from "../redux/store";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
   selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
 import { selectSubtitles } from "../redux/subtitleSlice";
@@ -95,7 +96,7 @@ export const SaveButton: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   // Initialize redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)

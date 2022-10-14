@@ -18,6 +18,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { AppDispatch } from "../redux/store";
 import { selectSubtitles } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { Flavor } from "../types";
@@ -66,7 +67,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
 export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   // Initialize redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   const selectedWorkflowId = useSelector(selectSelectedWorkflowId)
   const segments = useSelector(selectSegments)
