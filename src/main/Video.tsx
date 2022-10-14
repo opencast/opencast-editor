@@ -28,7 +28,7 @@ import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
 import { sleep } from './../util/utilityFunctions'
-import { RootState } from "../redux/store";
+import { AppDispatch, RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { selectTheme } from "../redux/themeSlice";
 
@@ -41,7 +41,7 @@ export const Video: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
   const theme = useSelector(selectTheme);

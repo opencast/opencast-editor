@@ -27,6 +27,7 @@ import { DateTime as LuxonDateTime} from "luxon";
 import { configureFieldsAttributes, settings } from '../config'
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
 
 
@@ -44,7 +45,7 @@ const Metadata: React.FC<{}> = () => {
   const { t, i18n } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const catalogs = useSelector(selectCatalogs);
   const getStatus = useSelector(selectGetStatus);
   const getError = useSelector(selectGetError);
