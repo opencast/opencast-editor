@@ -5,10 +5,9 @@ import Draggable from 'react-draggable';
 import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Segment, httpRequestState, MainMenuStateNames } from '../types'
+import { Segment, httpRequestState } from '../types'
 import {
-  selectIsPlaying, selectCurrentlyAt, selectSegments, selectActiveSegmentIndex, selectDuration,
-  setIsPlaying, selectVideoURL, setCurrentlyAt, setClickTriggered, selectWaveformImages, setWaveformImages
+  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL,  selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,7 +22,8 @@ import { scrubberKeyMap } from '../globalKeys';
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { selectMainMenuState } from '../redux/mainMenuSlice';
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { RootState } from '../redux/store';
 import { selectTheme } from '../redux/themeSlice';
 
 /**
@@ -32,7 +32,21 @@ import { selectTheme } from '../redux/themeSlice';
  * Its width corresponds to the duration of the video
  * TODO: Figure out why ResizeObserver does not update anymore if we stop passing the width to the SegmentsList
  */
-const Timeline: React.FC<{timelineHeight?: number}> = ({timelineHeight = 250}) => {
+const Timeline: React.FC<{
+  timelineHeight?: number,
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setClickTriggered: ActionCreatorWithPayload<any, string>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  timelineHeight = 250,
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setClickTriggered,
+  setCurrentlyAt,
+  setIsPlaying
+}) => {
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -55,11 +69,18 @@ const Timeline: React.FC<{timelineHeight?: number}> = ({timelineHeight = 250}) =
   }
 
   return (
-  <div ref={ref} css={timelineStyle} title="Timeline" onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber timelineWidth={width} timelineHeight={timelineHeight}/>
-    <div css={{height: timelineHeight - 20 + 'px'}} >
+  <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
+    <Scrubber
+      timelineWidth={width}
+      timelineHeight={timelineHeight}
+      selectCurrentlyAt={selectCurrentlyAt}
+      selectIsPlaying={selectIsPlaying}
+      setCurrentlyAt={setCurrentlyAt}
+      setIsPlaying={setIsPlaying}
+    />
+    <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
       <Waveforms timelineHeight={timelineHeight}/>
-      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight}/>
+      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={true} tabable={true}/>
     </div>
   </div>
   );
@@ -69,7 +90,21 @@ const Timeline: React.FC<{timelineHeight?: number}> = ({timelineHeight = 250}) =
  * Displays and defines the current position in the video
  * @param param0
  */
-const Scrubber: React.FC<{timelineWidth: number, timelineHeight: number}> = ({timelineWidth, timelineHeight}) => {
+export const Scrubber: React.FC<{
+  timelineWidth: number,
+  timelineHeight: number,
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying:(state: RootState) => boolean,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  timelineWidth,
+  timelineHeight,
+  selectCurrentlyAt,
+  selectIsPlaying,
+  setCurrentlyAt,
+  setIsPlaying,
+}) => {
 
   const { t } = useTranslation();
 
@@ -80,7 +115,6 @@ const Scrubber: React.FC<{timelineWidth: number, timelineHeight: number}> = ({ti
   const duration = useSelector(selectDuration)
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
   const segments = useSelector(selectSegments)                      // For ARIA information display
-  const mainMenuState = useSelector(selectMainMenuState)            // For hotkey enabling/disabling
   const theme = useSelector(selectTheme)
 
   // Init state variables
@@ -156,9 +190,9 @@ const Scrubber: React.FC<{timelineWidth: number, timelineHeight: number}> = ({ti
 
   const scrubberStyle = css({
     backgroundColor: `${theme.text}`,
-    height: timelineHeight - 10 + 'px',
+    height: timelineHeight - 10 + 'px', //    TODO: CHECK IF height: '100%',
     width: '1px',
-    position: 'absolute' as 'absolute',
+    position: 'absolute',
     zIndex: 2,
     boxShadow: `${theme.boxShadow}`,
     display: 'flex',
@@ -212,7 +246,7 @@ const Scrubber: React.FC<{timelineWidth: number, timelineHeight: number}> = ({ti
   // }
 
   return (
-    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true}>
+    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
       <Draggable
         onDrag={onControlledDrag}
         onStart={onStartDrag}
@@ -244,7 +278,17 @@ const Scrubber: React.FC<{timelineWidth: number, timelineHeight: number}> = ({ti
 /**
  * Container responsible for rendering the segments that are created when cutting
  */
-const SegmentsList: React.FC<{timelineWidth: number, timelineHeight: number}> = ({timelineWidth, timelineHeight}) => {
+export const SegmentsList: React.FC<{
+  timelineWidth: number,
+  timelineHeight: number,
+  styleByActiveSegment: boolean,
+  tabable: boolean,
+}> = ({
+  timelineWidth,
+  timelineHeight,
+  styleByActiveSegment = true,
+  tabable = true,
+}) => {
 
   const { t } = useTranslation();
 
@@ -283,24 +327,25 @@ const SegmentsList: React.FC<{timelineWidth: number, timelineHeight: number}> = 
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id} title={t("timeline.segment-tooltip", {segment: index})}
+        <div key={segment.id}
+          title={t("timeline.segment-tooltip", {segment: index})}
           aria-label={t("timeline.segments-text-aria",
                      {segment: index,
                       segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
                       start: convertMsToReadableString(segment.start),
                       end: convertMsToReadableString(segment.end) })}
-          tabIndex={0}
-        css={{
-          background: bgColor(segment.deleted, activeSegmentIndex === index),
-          borderRadius: '5px',
-          borderStyle: activeSegmentIndex === index ? 'dashed' : 'solid',
-          borderColor: 'white',
-          borderWidth: '1px',
-          boxSizing: 'border-box',
-          width: ((segment.end - segment.start) / duration) * 100 + '%',
-          height: timelineHeight - 20 + 'px',
-          zIndex: 1,
-        }}>
+          tabIndex={tabable ? 0 : -1}
+          css={{
+            background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
+            borderRadius: '5px',
+            borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
+            borderColor: 'white',
+            borderWidth: '1px',
+            boxSizing: 'border-box',
+            width: ((segment.end - segment.start) / duration) * 100 + '%',
+            height: timelineHeight - 20 + 'px',     // CHECK IF 100%
+            zIndex: 1,
+          }}>
         </div>
       ))
     );
@@ -308,8 +353,9 @@ const SegmentsList: React.FC<{timelineWidth: number, timelineHeight: number}> = 
 
   const segmentsStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     paddingTop: '10px',
+    height: '100%',
   })
 
   return (
@@ -322,7 +368,7 @@ const SegmentsList: React.FC<{timelineWidth: number, timelineHeight: number}> = 
 /**
  * Generates waveform images and displays them
  */
-const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) => {
+export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) => {
 
   const { t } = useTranslation();
 
@@ -342,7 +388,7 @@ const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) => {
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
-    height: timelineHeight - 20 + 'px',
+    height: timelineHeight - 20 + 'px',   // CHECK IF     height: '100%',
     paddingTop: '10px',
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,

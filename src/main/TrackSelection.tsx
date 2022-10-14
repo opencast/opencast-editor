@@ -10,7 +10,7 @@ import ReactPlayer from 'react-player'
 
 import { Track }  from '../types'
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTracks, setTrackEnabled } from '../redux/videoSlice'
+import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ import { selectTheme } from "../redux/themeSlice";
 const TrackSelection: React.FC<{}> = () => {
 
   // Generate list of tracks
-  const tracks: Track[] = useSelector(selectTracks);
+  const tracks: Track[] = useSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
     <TrackItem key={ track.id } track={ track } enabledCount={ enabledCount } />

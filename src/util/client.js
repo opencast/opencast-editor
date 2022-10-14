@@ -44,7 +44,7 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
     }
 
     if (response.ok) {
-      text.length ? data = JSON.parse(text) : data = ''
+      text.length ? data = text : data = ''
       return data
     }
     throw new Error(response.statusText)
