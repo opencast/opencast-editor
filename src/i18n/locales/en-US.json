@@ -3,6 +3,7 @@
       "cutting-button": "Cutting",
       "finish-button": "Finish",
       "select-tracks-button": "Tracks",
+      "subtitles-button": "Subtitles",
       "thumbnail-button": "Thumbnail",
       "metadata-button": "Metadata",
       "keyboard-controls-button": "Keyboard Controls",
@@ -54,7 +55,7 @@
       "confirmButton-success-tooltip": "Saved successfully",
       "confirmButton-failed-tooltip": "Save failed",
       "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
-      "success-text": "Changes saved successfully!",
+      "success-text": "Changes saved successfully! You can now close the editor or continue working.",
       "success-tooltip-aria": "Saved successfully",
       "saveArea-tooltip": "Save Area"
     },
@@ -226,12 +227,44 @@
       "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
     },
 
+    "subtitles": {
+      "selectSubtitleButton-tooltip": "Edit subtitles for {{title}}",
+      "selectSubtitleButton-tooltip-aria": "Select {{title}} for subtitle editing",
+      "createSubtitleButton-tooltip": "Opens a dialog for creating new subtitles",
+      "createSubtitleButton-clicked-tooltip-aria": "Contains a dialog for creating new subtitles",
+      "createSubtitleButton-createButton": "Create",
+      "createSubtitleButton-createButton-tooltip": "Start a new subtitle file with the chosen title.",
+      "createSubtitleDropdown-label": "Pick a language",
+      "backButton": "Back",
+      "backButton-tooltip": "Return to subtitle selection",
+      "editTitle": "Subtitle Editor - {{title}}",
+      "editTitle-loading": "Loading"
+    },
+
+    "subtitleList": {
+      "startTime-tooltip": "Beginning of the segment",
+      "startTime-tooltip-aria": "Beginning at",
+      "endTime-tooltip": "End of the segment",
+      "endTime-tooltip-aria": "Ending at",
+      "addSegmentAbove": "Add segment above",
+      "addSegmentBelow": "Add segment below",
+      "jumpToSegmentAbove": "Jump to segment above",
+      "jumpToSegmentBelow": "Jump to segment below",
+      "deleteSegment": "Delete segment"
+    },
+
+    "subtitleVideoArea": {
+      "selectVideoLabel": "Video Flavors"
+    },
+
     "keyboardControls": {
       "header": "Keyboard Controls",
       "defaultGroupName": "General",
       "missingLabel": "Unknown",
-      "groupCuttingView": "Cutting View",
-      "groupCuttingViewScrubber": "Cutting View - Scrubber",
+      "groupVideoPlayer": "Video Player",
+      "groupCuttingView": "Cutting",
+      "groupCuttingViewScrubber": "Scrubbing",
+      "groupSubtitleList": "Subtitles",
       "sequenceSeperator": "or",
       "genericError": "Failed to load overview",
       "videoPlayButton": "Play/Pause Video",
