@@ -26,8 +26,8 @@ jobs:
       run: rm -rf "$GITHUB_WORKSPACE/editor-test/${{ github.event.number }}"
 
     - name: regenerate index.html
+      working-directory: $GITHUB_WORKSPACE/editor-test
       run: |
-        cd "$GITHUB_WORKSPACE/editor-test"
         echo '<html><body><ul>' > index.html
         find . -maxdepth 2 -name '*_*' -type d \
           | sort -r \
