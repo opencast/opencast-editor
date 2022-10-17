@@ -18,8 +18,12 @@ import { PageButton } from './Finish'
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
+import { AppDispatch } from "../redux/store";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
   selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
+import { selectSubtitles } from "../redux/subtitleSlice";
+import { serializeSubtitle } from "../util/utilityFunctions";
+import { Flavor } from "../types";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";
 
@@ -99,10 +103,11 @@ export const SaveButton: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   // Initialize redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)
+  const subtitles = useSelector(selectSubtitles)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const theme = useSelector(selectTheme);
@@ -132,6 +137,17 @@ export const SaveButton: React.FC<{}> = () => {
     }
   }
 
+  const prepareSubtitles = () => {
+    const subtitlesForPosting = []
+
+    for (const identifier in subtitles) {
+      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
+
+    }
+    return subtitlesForPosting
+  }
+
   // Dispatches first save request
   // Subsequent save requests should be wrapped in useEffect hooks,
   // so they are only sent after the previous one has finished
@@ -147,6 +163,7 @@ export const SaveButton: React.FC<{}> = () => {
       dispatch(postVideoInformation({
         segments: segments,
         tracks: tracks,
+        subtitles: prepareSubtitles()
       }))
 
     }

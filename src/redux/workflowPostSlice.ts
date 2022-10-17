@@ -15,7 +15,7 @@ export const postVideoInformation = createAsyncThunk('video/postVideoInformation
   }
 
   const response = await client.post(`${settings.opencast.url}/editor/${settings.id}/edit.json`,
-    { segments: convertSegments(argument.segments), tracks: argument.tracks }
+    { segments: convertSegments(argument.segments), tracks: argument.tracks, subtitles: argument.subtitles }
   )
   return response
 })
