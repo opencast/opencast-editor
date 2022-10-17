@@ -23,23 +23,25 @@ jobs:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
 
-    - name: use node.js 16.x
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v3
       with:
         node-version: 16
 
-    - run: npm ci
+    - name: Clean install
+      run: npm ci
 
-    - run: npm run build
+    - name: Build App
+      run: npm run build
       env:
         PUBLIC_URL: /${{ steps.build-path.outputs.build }}
 
-    - name: prepare git
+    - name: Prepare Git
       run: |
         git config --global user.name "Editor Deployment Bot"
         git config --global user.email "opencast-support@elan-ev.de"
 
-    - name: prepare github ssh key
+    - name: Prepare GitHub SSH key
       env:
         DEPLOY_KEY: ${{ secrets.DEPLOY_KEY_TEST }}
       run: |
@@ -48,27 +50,27 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: wait for previous workflows to finish
+    - name: Wait for previous workflows to finish
       uses: softprops/turnstyle@v1
       with:
         same-branch-only: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: clone repository
+    - name: Clone repository
       run: |
         git clone "git@github.com:opencast/opencast-editor-test.git" ~/editor-test
         cd ~/editor-test
         git checkout gh-pages
 
-    - name: store build
+    - name: Store build
       env:
         DEPLOY_PATH: editor-test/${{ steps.build-path.outputs.build }}
       run: |
         mkdir -p "${HOME}/${DEPLOY_PATH}"
         cp -rv build/* "${HOME}/${DEPLOY_PATH}"
 
-    - name: generate index.html
+    - name: Generate index.html
       run: |
         cd ~/editor-test
         echo '<html><body><ul>' > index.html
@@ -77,18 +79,18 @@ jobs:
           | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
         echo '</ul></body></html>' >> index.html
 
-    - name: commit new version
+    - name: Commit new version
       run: |
         cd ~/editor-test
         git add .
         git commit -m "Build ${{ steps.build-path.outputs.build }}"
 
-    - name: push updates
+    - name: Push updates
       run: |
         cd ~/editor-test
         git push origin gh-pages
 
-    - name: add comment with deployment location
+    - name: Add comment with deployment location
       uses: thollander/actions-comment-pull-request@main
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

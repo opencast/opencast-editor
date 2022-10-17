@@ -17,28 +17,31 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout sources
+      uses: actions/checkout@v3
 
-    - name: use node.js 16.x
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v3
       with:
         node-version: 16
 
-    - run: npm ci
+    - name: Clean install
+      run: npm ci
 
-    - run: npm run build
+    - name: Build App
+      run: npm run build
 
     # tests are currently failing
     #- run: npm test
     #  env:
     #    CI: true
 
-    - name: prepare git
+    - name: Prepare git
       run: |
         git config --global user.name "Editor Deployment Bot"
         git config --global user.email "opencast-support@elan-ev.de"
 
-    - name: prepare github ssh key
+    - name: Prepare GitHub SSH key
       env:
         DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
       run: |
@@ -47,13 +50,13 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: clone repository
+    - name: Clone repository
       run: |
         git clone "git@github.com:opencast/opencast-editor.git" ~/editor-clone
         cd ~/editor-clone
         git checkout gh-pages
 
-    - name: commit new version
+    - name: Commit new version
       run: |
         # store build
         cp -r build ~/editor-build
@@ -68,7 +71,7 @@ jobs:
         git add ./*
         git diff --staged --quiet || git commit -m "Build $(date)"
 
-    - name: push updates
+    - name: Push updates
       run: |
         cd ~/editor-clone
         git push origin gh-pages
