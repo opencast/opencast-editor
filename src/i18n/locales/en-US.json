@@ -162,8 +162,8 @@
         "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
         "EVENTS-LICENSE-CCBY": "CC-BY"
       },
-      "calendar-prev-month": "Previous month",
-      "calendar-next-month": "Next month"
+      "calendar-prev": "Previous",
+      "calendar-next": "Next"
     },
 
     "thumbnail": {

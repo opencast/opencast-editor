@@ -546,8 +546,8 @@ const Metadata: React.FC<{}> = () => {
                 onBlur: (e: any) => {blurWithSubmit(e, input)},
                 showError: showErrorOnBlur
               }}
-              leftArrowButtonText={i18next.t('metadata.calendar-prev-month')}
-              rightArrowButtonText={i18next.t('metadata.calendar-next-month')}
+              leftArrowButtonText={i18next.t('metadata.calendar-prev')}
+              rightArrowButtonText={i18next.t('metadata.calendar-next')}
             />
           </LocalizationProvider>
         </div>
