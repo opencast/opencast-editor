@@ -434,7 +434,7 @@ const AffectAllRow : React.FC<{
     <div css={rowStyle}>
       <FontAwesomeIcon icon={faInfoCircle} size="2x" />
       {t('thumbnail.explanation')}
-      <div css={[basicButtonStyle, buttonStyle]}
+      <div css={[basicButtonStyle(theme), buttonStyle]}
         title={t('thumbnail.buttonGenerateAll-tooltip')}
         role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
         onClick={() => {
@@ -587,7 +587,7 @@ const thumbnailButtonsStyle = css({
 })
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
-  active ? basicButtonStyle : deactivatedButtonStyle,
+  active ? basicButtonStyle(theme) : deactivatedButtonStyle,
   {
     width: '100%',
     height: '100%',

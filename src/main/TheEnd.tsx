@@ -72,7 +72,7 @@ const StartOverButton: React.FC<{}> = () => {
 
   return (
     <ThemedTooltip title={t("theEnd.startOver-tooltip")}>
-      <div css={[basicButtonStyle, navigationButtonStyle(theme)]}
+      <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
         role="button" tabIndex={0}
         onClick={ reloadPage }
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

@@ -278,6 +278,8 @@
       "appearance": "Appearance",
       "darkmode": "Dark mode",
       "lightmode": "Light mode",
-      "system": "System design"
+      "system": "System design",
+      "high-contrast-dark": "High contrast (Dark mode)",
+      "high-contrast-light": "High contrast (Light mode)"
     }
   }

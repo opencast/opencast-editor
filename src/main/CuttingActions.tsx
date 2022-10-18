@@ -141,7 +141,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
 
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={[basicButtonStyle, cuttingActionButtonStyle(theme)]}
+      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
         ref={ref}
         role="button" tabIndex={0} aria-label={ariaLabelText}
         onClick={ (event: SyntheticEvent) => actionHandler(event, action, ref) }
@@ -174,7 +174,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
 
   return (
     <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName } )}>
-      <div css={[basicButtonStyle, cuttingActionButtonStyle(theme)]}
+      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
         ref={ref}
         role="button" tabIndex={0}
         aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}

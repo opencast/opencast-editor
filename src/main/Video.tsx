@@ -28,10 +28,12 @@ import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
 import { sleep } from './../util/utilityFunctions'
+
 import { AppDispatch, RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { selectTheme } from "../redux/themeSlice";
+
 import { ThemedTooltip } from "./Tooltip";
+import { selectTheme, Theme } from "../redux/themeSlice";
 
 /**
  * Container for the videos and their controls
@@ -512,6 +514,7 @@ const PreviewMode: React.FC<{
   // Init redux variables
   const dispatch = useDispatch();
   const isPlayPreview = useSelector(selectIsPlayPreview)
+  const theme = useSelector(selectTheme);
 
   // Change preview mode from "on" to "off" and vice versa
   const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent, ref: React.RefObject<HTMLDivElement> | undefined) => {
@@ -539,13 +542,14 @@ const PreviewMode: React.FC<{
     alignItems: 'center'
   })
 
-  const switchIconStyle = css({
+  const switchIconStyle = (theme: Theme) => css({
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
     "&:hover": {
       transform: 'scale(1.05)',
     },
+    color: `${theme.icon_color}`,
   })
 
   return (
@@ -563,7 +567,7 @@ const PreviewMode: React.FC<{
         <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
           {t("video.previewButton")}
         </div>
-        <FontAwesomeIcon css={switchIconStyle} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
+        <FontAwesomeIcon css={switchIconStyle(theme)} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
       </div>
     </ThemedTooltip>
   );
@@ -585,6 +589,7 @@ const PlayButton: React.FC<{
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
+  const theme = useSelector(selectTheme);
 
   // Change play mode from "on" to "off" and vice versa
   const switchIsPlaying = (event: KeyboardEvent | SyntheticEvent) => {
@@ -601,7 +606,7 @@ const PlayButton: React.FC<{
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
       <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
-      <FontAwesomeIcon css={[basicButtonStyle, {justifySelf: 'center'}]} icon={isPlaying ? faPause : faPlay} size="2x"
+      <FontAwesomeIcon css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]} icon={isPlaying ? faPause : faPlay} size="2x"
         role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
         aria-label={t("video.playButton-tooltip")}
         onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}

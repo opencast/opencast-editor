@@ -65,7 +65,7 @@ const DiscardButton : React.FC<{}> = () => {
   }
 
   return (
-    <div css={[basicButtonStyle, navigationButtonStyle(theme)]}
+    <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
       role="button" tabIndex={0}
       onClick={ discard }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

@@ -144,7 +144,7 @@ const SubtitleSelectButton: React.FC<{
   })
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle(theme)]}
+    <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
       role="button" tabIndex={0}
       title={t("subtitles.selectSubtitleButton-tooltip", {title: title})}
       aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", {title: title})}
@@ -225,7 +225,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
   });
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
+    <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
       role="button" tabIndex={0}
       title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}
       aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("createSubtitleButton-clicked-tooltip-aria")}
@@ -256,7 +256,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                 </Select>
               </ThemeProvider>
 
-              <button css={[basicButtonStyle, createButtonStyle]}
+              <button css={[basicButtonStyle(theme), createButtonStyle]}
                 type="submit"
                 title={t("subtitles.createSubtitleButton-createButton-tooltip")}
                 aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}

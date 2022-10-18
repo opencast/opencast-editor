@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { darkMode, lightMode } from "../themes";
+import { darkMode, lightMode, highContrastDarkMode, highContrastLightMode } from "../themes";
 
 export interface Theme {
   background: String
@@ -11,7 +11,6 @@ export interface Theme {
   focus_text: String
   selected: String
   disabled: String
-  menuButton: String
   menuBorder: String
   boxShadow: String
   singleKey_bg: String
@@ -20,6 +19,17 @@ export interface Theme {
   inverted_text: String
   tooltip: String
   tooltip_text: String
+  element_outline: String
+  selected_text: String
+  dropdown_border: String
+  menuButton_outline: String
+  button_outline: String
+  button_color: String
+  indicator_color: String
+  icon_color: String
+  waveform_filter: String
+  waveform_bg: String
+  scrubber: String
 };
 
 const getValue = () => {
@@ -27,6 +37,12 @@ const getValue = () => {
   
   if(value === 'system' || value === null) {
     return 'system'
+  }
+  else if(value === 'high-contrast-dark') {
+    return 'high-contrast-dark'
+  }
+  else if(value === 'high-contrast-light') {
+    return 'high-contrast-light'
   }
   else if(value === 'dark') {
     return 'dark'
@@ -40,11 +56,31 @@ const getTheme = () => {
 
   if(themeId === 'system' || themeId === undefined) {
     const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
-    if(isDarkPrefered.matches) {
+    const isContrastPrefered = window.matchMedia('(prefers-contrast: more)');
+    console.log('isContrastPrefered', isContrastPrefered)
+
+    if(isDarkPrefered.matches && !isContrastPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'dark');
       return darkMode
     }
+    else if(isContrastPrefered.matches && isDarkPrefered.matches) {
+      document.documentElement.setAttribute('data-theme', 'high-contrast-dark');
+      return highContrastDarkMode
+    }
+    else if(isContrastPrefered.matches && !isDarkPrefered.matches) {
+      document.documentElement.setAttribute('data-theme', 'high-contrast-light');
+      return highContrastLightMode
+    }
     return lightMode
+  }
+
+  if(themeId === 'high-contrast-dark') {
+    document.documentElement.setAttribute('data-theme', 'high-contrast-dark');
+    return highContrastDarkMode
+  }
+  if(themeId === 'high-contrast-light') {
+    document.documentElement.setAttribute('data-theme', 'high-contrast-light');
+    return highContrastLightMode
   }
   if(themeId === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
@@ -54,7 +90,7 @@ const getTheme = () => {
 }
 
 export interface theme {
-  value: 'dark' | 'light' | 'system',
+  value: 'dark' | 'light' | 'system' | 'high-contrast-dark' | 'high-contrast-light',
   theme: Theme
 }
 
