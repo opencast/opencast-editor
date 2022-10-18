@@ -27,14 +27,15 @@
         "previewButton": "Vorschaumodus",
         "previewButton-tooltip": "Überspringt gelöschte Segmente bei der Wiedergabe des Videos. Derzeit {{status}}. Hotkey: {{hotkeyName}}",
         "previewButton-aria": "Vorschaumodus aktivieren oder deaktivieren. Hotkey: {{hotkeyName}}.",
-        "playButton-tooltip": "Video abspielen",
-        "time-duration-tooltip": "Videodauer",
+        "playButton-tooltip": "Play-Button",
+        "time-duration-tooltip": "Wiedergabezeit und -dauer",
         "duration-aria": "Dauer",
         "time-aria": "Aktuelle Zeit",
         "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
         "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
         "title-tooltip": "Videotitel",
-        "presenter-tooltip": "Vortragende"
+        "presenter-tooltip": "Vortragende",
+        "controls-tooltip": "Videosteuerungen"
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
@@ -50,7 +51,8 @@
         "confirmButton-failed-tooltip": "Speichern fehlgeschlagen",
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
         "success-text": "Änderungen erfolgreich gespeichert!",
-        "success-tooltip-aria": "Erfolgreich gespeichert"
+        "success-tooltip-aria": "Erfolgreich gespeichert",
+        "saveArea-tooltip": "Speicherbereich"
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
@@ -83,6 +85,7 @@
     },
     "workflowConfig": {
         "headline-text": "Workflow Konfiguration",
+        "area-tooltip": "Workflow-Konfigurationsbereich",
         "satisfied-text": "Sind Sie zufrieden mit Ihrer Konfiguration?",
         "confirm-button": "Ja, Verarbeitung starten"
     },
@@ -149,9 +152,7 @@
             "EVENTS-LICENSE-CCBYSA": "CC-BY-SA",
             "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
             "EVENTS-LICENSE-CCBY": "CC-BY"
-        },
-        "calendar-prev-month": "Vorheriger Monat",
-        "calendar-next-month": "Nächster Monat"
+        }
     },
     "thumbnail": {
         "title": "Vorschaubildeditor",
