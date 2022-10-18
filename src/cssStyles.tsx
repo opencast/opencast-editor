@@ -73,7 +73,7 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
 /**
  * CSS for buttons
  */
-export const basicButtonStyle = css({
+export const basicButtonStyle = (theme: Theme) => css({
   borderRadius: '10px',
   cursor: "pointer",
   // Animation
@@ -94,6 +94,7 @@ export const basicButtonStyle = css({
   alignItems: 'center',
   ...(flexGapReplacementStyle(10, false)),
   textAlign: 'center' as const,
+  outline: `${theme.button_outline}`
 });
 
 /**
@@ -219,7 +220,7 @@ export function selectFieldStyle(theme: Theme) {
     menu: (provided: any) => ({
       ...provided,
       background: theme.element_bg,
-      border: '1px solid #ccc',
+      outline: theme.dropdown_border,
       // kill the gap
       marginTop: 0,
     }),
@@ -229,23 +230,33 @@ export function selectFieldStyle(theme: Theme) {
     }),
     multiValue: (provided: any) =>({
       ...provided,
-      color: theme.text,
+      color: theme.selected_text,
       background: theme.multiValue,
       cursor: 'default',
     }),
     multiValueLabel: (provided: any) =>({
       ...provided,
-      color: theme.text,
+      color: theme.selected_text,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      background: state.isFocused ? theme.focused : theme.background 
+      background: state.isFocused ? theme.focused : theme.background
         && state.isSelected ? theme.selected : theme.background,
       ...(state.isFocused && {color: theme.focus_text}),
+      color: state.isFocused ? theme.focus_text : theme.text
+        && state.isSelected ? theme.selected_text : theme.text,
     }),
     placeholder: (provided: any) => ({
       ...provided,
-      color: theme.text
+      color: theme.text,
+    }),
+    clearIndicator: (provided: any) => ({
+      ...provided,
+      color: theme.indicator_color,
+    }),
+    dropdownIndicator: (provided: any) => ({
+      ...provided,
+      color: theme.indicator_color,
     }),
     valueContainer: (provided: any) => ({
       ...provided,

@@ -159,7 +159,7 @@ import { parseSubtitle } from "../util/utilityFunctions";
   })
 
   return (
-    <div css={[basicButtonStyle, backButtonStyle]}
+    <div css={[basicButtonStyle(theme), backButtonStyle]}
       role="button" tabIndex={0}
       title={t("subtitles.backButton-tooltip")}
       aria-label={t("subtitles.backButton-tooltip")}
