@@ -10,7 +10,7 @@ import ReactPlayer from 'react-player'
 
 import { Track }  from '../types'
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTracks, setTrackEnabled } from '../redux/videoSlice'
+import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ import { selectTheme } from "../redux/themeSlice";
 const TrackSelection: React.FC<{}> = () => {
 
   // Generate list of tracks
-  const tracks: Track[] = useSelector(selectTracks);
+  const tracks: Track[] = useSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
     <TrackItem key={ track.id } track={ track } enabledCount={ enabledCount } />
@@ -62,6 +62,8 @@ const Description: React.FC<{}> = () => {
 
 const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
 
+  const theme = useSelector(selectTheme);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const header = track.flavor.type + ' '
@@ -90,7 +92,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     width: '100%',
     fontWeight: 'bold',
     padding: '5px 25px',
-    borderBottom: '1px solid white',
+    borderBottom: `${theme.menuBorder}`,
     textTransform: 'capitalize',
     fontSize: 'larger',
   });

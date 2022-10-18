@@ -19,8 +19,6 @@ import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
 } from '../redux/videoSlice'
 import { GlobalHotKeys, KeySequence, KeyMapOptions } from "react-hotkeys";
-import { selectMainMenuState } from "../redux/mainMenuSlice";
-import { MainMenuStateNames } from "../types";
 import { cuttingKeyMap } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
@@ -37,7 +35,6 @@ const CuttingActions: React.FC<{}> = () => {
 
   // Init redux variables
   const dispatch = useDispatch();
-  const mainMenuState = useSelector(selectMainMenuState)
 
   /**
    * General action callback for cutting actions
@@ -78,7 +75,7 @@ const CuttingActions: React.FC<{}> = () => {
   })
 
   return (
-    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} >
+    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={handlers} allowChanges={true} >
       <div css={cuttingStyle}>
           <div css={blockStyle}>
             <CuttingActionsButton iconName={faCut}

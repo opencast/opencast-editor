@@ -133,6 +133,59 @@ export const backOrContinueStyle = css(({
 }))
 
 /**
+ * CSS for big buttons in a dynamic grid
+ */
+ export const tileButtonStyle = (theme: Theme) => css({
+  width: '250px',
+  height: '220px',
+  display: 'flex',
+  flexDirection: 'column' as const,
+  fontSize: "x-large",
+  ...(flexGapReplacementStyle(30, false)),
+  boxShadow: `${theme.boxShadow}`,
+  background: `${theme.element_bg}`,
+  alignItems: 'unset',  // overwrite from basicButtonStyle to allow for textOverflow to work
+  placeSelf: 'center',
+});
+
+/**
+ * CSS for disabling the animation of the basicButtonStyle
+ */
+export const disableButtonAnimation = css({
+  "&:hover": {
+    transform: 'none',
+  },
+  "&:focus": {
+    transform: 'none',
+  },
+  "&:active": {
+    transform: 'none',
+  },
+})
+
+/**
+ * CSS for a title
+ */
+export const titleStyle = css(({
+  display: 'inline-block',
+  padding: '15px',
+  overflow: 'hidden',
+  whiteSpace: "nowrap",
+  textOverflow: 'ellipsis',
+  maxWidth: '500px',
+}))
+
+/**
+ * Addendum for the titleStyle
+ * Used for page titles
+ */
+export const titleStyleBold = css({
+  fontWeight: 'bold',
+  fontSize: '24px',
+  verticalAlign: '-2.5px',
+})
+
+/**
  * CSS for ariaLive regions that should not be visible
  */
 export const ariaLive = css({
@@ -179,6 +232,7 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       color: theme.selected_text,
       background: theme.multiValue,
+      cursor: 'default',
     }),
     multiValueLabel: (provided: any) =>({
       ...provided,
@@ -186,7 +240,7 @@ export function selectFieldStyle(theme: Theme) {
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      background: state.isFocused ? theme.focused : theme.background 
+      background: state.isFocused ? theme.focused : theme.background
         && state.isSelected ? theme.selected : theme.background,
       ...(state.isFocused && {color: theme.focus_text}),
       color: state.isFocused ? theme.focus_text : theme.text
@@ -199,11 +253,14 @@ export function selectFieldStyle(theme: Theme) {
     clearIndicator: (provided: any) => ({
       ...provided,
       color: theme.indicator_color,
-
     }),
     dropdownIndicator: (provided: any) => ({
       ...provided,
       color: theme.indicator_color,
+    }),
+    valueContainer: (provided: any) => ({
+      ...provided,
+      cursor: "text",
     }),
   }
 }

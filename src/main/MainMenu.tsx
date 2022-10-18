@@ -3,7 +3,8 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faGear, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faGear } from "@fortawesome/free-solid-svg-icons";
+import { faClosedCaptioning } from "@fortawesome/free-regular-svg-icons";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
@@ -18,6 +19,7 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
+import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 import { selectTheme } from "../redux/themeSlice";
 
@@ -58,16 +60,22 @@ const MainMenu: React.FC<{}> = () => {
         ariaLabelText={t(MainMenuStateNames.metadata)}
       />}
       {settings.trackSelection.show && <MainMenuButton
-      iconName={faFilm}
-      stateName={MainMenuStateNames.trackSelection}
-      bottomText={t(MainMenuStateNames.trackSelection)}
-      ariaLabelText={t(MainMenuStateNames.trackSelection)}
+        iconName={faFilm}
+        stateName={MainMenuStateNames.trackSelection}
+        bottomText={t(MainMenuStateNames.trackSelection)}
+        ariaLabelText={t(MainMenuStateNames.trackSelection)}
+      />}
+      {settings.subtitles.show && <MainMenuButton
+        iconName={faClosedCaptioning}
+        stateName={MainMenuStateNames.subtitles}
+        bottomText={t(MainMenuStateNames.subtitles)}
+        ariaLabelText={t(MainMenuStateNames.subtitles)}
       />}
       {settings.thumbnail.show && <MainMenuButton
-      iconName={faPhotoVideo}
-      stateName={MainMenuStateNames.thumbnail}
-      bottomText={t(MainMenuStateNames.thumbnail)}
-      ariaLabelText={t(MainMenuStateNames.thumbnail)}
+        iconName={faPhotoVideo}
+        stateName={MainMenuStateNames.thumbnail}
+        bottomText={t(MainMenuStateNames.thumbnail)}
+        ariaLabelText={t(MainMenuStateNames.thumbnail)}
       />}
       <MainMenuButton
         iconName={faSignOutAlt}
@@ -90,7 +98,7 @@ const MainMenu: React.FC<{}> = () => {
 };
 
 interface mainMenuButtonInterface {
-  iconName: IconDefinition,
+  iconName: any, // Unfortunately, icons from different packages don't share the same IconDefinition type. Works anyway.
   stateName: mainMenu["value"],
   bottomText: string,
   ariaLabelText: string;
@@ -112,6 +120,9 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     // Reset multi-page content to their first page
     if (stateName === MainMenuStateNames.finish) {
       dispatch(setPageNumber(0))
+    }
+    if (stateName === MainMenuStateNames.subtitles) {
+      dispatch(setIsDisplayEditView(false))
     }
     // Halt ongoing events
     dispatch(setIsPlaying(false))

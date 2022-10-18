@@ -5,6 +5,7 @@ import Timeline from './Timeline';
 import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
 import TrackSelection from './TrackSelection';
+import Subtitle from "./Subtitle";
 import Finish from "./Finish"
 import KeyboardControls from "./KeyboardControls";
 
@@ -20,10 +21,15 @@ import { MainMenuStateNames } from '../types'
 import { flexGapReplacementStyle } from "../cssStyles";
 
 import { useBeforeunload } from 'react-beforeunload';
-import { hasChanges as videoHasChanges } from "../redux/videoSlice";
-import { hasChanges as metadataHasChanges} from "../redux/metadataSlice";
+import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
+import { selectHasChanges as metadataSelectHasChanges} from "../redux/metadataSlice";
+import {
+  selectIsPlaying, selectCurrentlyAt,
+  setIsPlaying, setCurrentlyAt, setClickTriggered,
+} from '../redux/videoSlice'
 import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
+import Thumbnail from "./Thumbnail";
 
 /**
  * A container for the main functionality
@@ -32,8 +38,8 @@ import ThemeSwitcher from "./ThemeSwitcher";
 const MainContent: React.FC<{}> = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)
-  const videoChanged = useSelector(videoHasChanges)
-  const metadataChanged = useSelector(metadataHasChanges)
+  const videoChanged = useSelector(videoSelectHasChanges)
+  const metadataChanged = useSelector(metadataSelectHasChanges)
   const theme = useSelector(selectTheme)
 
   // Display warning when leaving the page if there are unsaved changes
@@ -43,19 +49,8 @@ const MainContent: React.FC<{}> = () => {
     }
   });
 
-  // Return display 'flex' if state is currently active
-  // also keep track if any state was activated
-  var stateActive = false;
-  let displayState = (state: MainMenuStateNames): object => {
-    if (mainMenuState === state) {
-      stateActive = true;
-      return { display: "flex" };
-    }
-    return { display: 'none' };
-  }
-
   const cuttingStyle = css({
-    ...displayState(MainMenuStateNames.cutting),
+    display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -65,7 +60,9 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const metadataStyle = css({
-    ...displayState(MainMenuStateNames.metadata),
+    display: 'flex',
+    // flexDirection: 'column' as const,
+    // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
@@ -73,7 +70,26 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const trackSelectStyle = css({
-    ...displayState(MainMenuStateNames.trackSelection),
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignContent: 'space-around',
+    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '20px',
+    paddingLeft: '161px',
+    background: `${theme.background}`,
+  })
+
+  const subtitleSelectStyle = css({
+    display: 'flex',
+    flexDirection: 'column' as const,
+    justifyContent: 'space-around',
+    paddingRight: '20px',
+    paddingLeft: '161px',
+    height: '100%',
+  })
+
+  const thumbnailSelectStyle = css({
+    display: 'flex',
     flexDirection: 'column' as const,
     alignContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -83,7 +99,7 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const finishStyle = css({
-    ...displayState(MainMenuStateNames.finish),
+    display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
@@ -94,8 +110,9 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const keyboardControlsStyle = css({
-    flexDirection: 'column' as const,
-    ...displayState(MainMenuStateNames.keyboardControls),
+    display: 'flex',
+    // flexDirection: 'column' as const,
+    // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
     paddingLeft: '161px',
@@ -103,39 +120,84 @@ const MainContent: React.FC<{}> = () => {
   })
 
   const defaultStyle = css({
-    display: stateActive ? 'none' : 'flex',
+    display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
     ...(flexGapReplacementStyle(20, false)),
   })
 
-  return (
-     <main css={{width: '100%'}} role="main">
-      <div css={cuttingStyle}>
+  const render = () => {
+    if (mainMenuState === MainMenuStateNames.cutting) {
+      return (
+        <div css={cuttingStyle}>
           <Video />
           <CuttingActions />
-          <Timeline />
-      </div>
-      <div css={metadataStyle}>
+          <CuttingTimeline />
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.metadata) {
+      return (
+        <div css={metadataStyle}>
           <Metadata />
-      </div>
-      <div css={trackSelectStyle}>
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.trackSelection) {
+      return (
+        <div css={trackSelectStyle}>
           <TrackSelection />
-      </div>
-      <div css={finishStyle}>
-        <Finish />
-      </div>
-      <div css={keyboardControlsStyle}>
-        <ThemeSwitcher/>
-        <KeyboardControls />
-      </div>
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.subtitles) {
+      return (
+        <div css={subtitleSelectStyle}>
+          <Subtitle />
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.thumbnail) {
+      return (
+        <div css={thumbnailSelectStyle}>
+          <Thumbnail />
+        </div>
+      )
+    } else if (mainMenuState === MainMenuStateNames.finish) {
+      return (
+        <div css={finishStyle}>
+          <Finish />
+        </div>
+        )
+    } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
+      return (
+        <div css={keyboardControlsStyle}>
+          <ThemeSwitcher/>
+          <KeyboardControls />
+        </div>
+        )
+    } else {
       <div css={defaultStyle}>
         <FontAwesomeIcon icon={faTools} size="10x" />
         Placeholder
       </div>
+    }
+  }
+
+  return (
+     <main css={{width: '100%'}} role="main">
+      {render()}
      </main>
   );
 };
+
+const CuttingTimeline : React.FC<{}> = () => {
+  return (
+    <Timeline
+      selectIsPlaying={selectIsPlaying}
+      selectCurrentlyAt={selectCurrentlyAt}
+      setIsPlaying={setIsPlaying}
+      setCurrentlyAt={setCurrentlyAt}
+      setClickTriggered={setClickTriggered}
+    />
+  );
+}
 
 export default MainContent;

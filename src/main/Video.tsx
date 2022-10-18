@@ -1,27 +1,26 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { css } from '@emotion/react'
 
-import { httpRequestState, MainMenuStateNames } from '../types'
+import { httpRequestState } from '../types'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faToggleOn, faToggleOff, faGears} from "@fortawesome/free-solid-svg-icons";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying, setCurrentlyAtInSeconds,
+  selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying,
   fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
-  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered
+  setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
 
 import { roundToDecimalPlace, convertMsToReadableString } from '../util/utilityFunctions'
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
 
-import { GlobalHotKeys } from 'react-hotkeys';
-import { selectMainMenuState } from "../redux/mainMenuSlice";
-import { cuttingKeyMap } from "../globalKeys";
+import { GlobalHotKeys, KeyMapOptions } from 'react-hotkeys';
+import { videoPlayerKeyMap } from "../globalKeys";
 import { SyntheticEvent } from "react";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
@@ -29,20 +28,21 @@ import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";
 
 import { sleep } from './../util/utilityFunctions'
+
+import { AppDispatch, RootState } from "../redux/store";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { selectTheme, Theme } from "../redux/themeSlice";
 
 /**
  * Container for the videos and their controls
  * TODO: Move fetching to a more central part of the app
  */
-const Video: React.FC<{}> = () => {
+export const Video: React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch()
-  const videoURLs = useSelector(selectVideoURL)
-  const videoCount = useSelector(selectVideoCount)
+  const dispatch = useDispatch<AppDispatch>()
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
   const theme = useSelector(selectTheme);
@@ -71,13 +71,6 @@ const Video: React.FC<{}> = () => {
   //   content = <div>{error}</div>
   // }
 
-  // Initialize video players
-  const videoPlayers: JSX.Element[] = [];
-  for (let i = 0; i < videoCount; i++) {
-    // videoPlayers.push(<VideoPlayer key={i} url='https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4' />);
-    videoPlayers.push(<VideoPlayer key={i} dataKey={i} url={videoURLs[i]} isPrimary={i === 0}/>);
-  }
-
   // Style
   const videoAreaStyle = css({
     display: 'flex',
@@ -89,31 +82,109 @@ const Video: React.FC<{}> = () => {
     borderBottom: `${theme.menuBorder}`,
   });
 
+  return (
+    <div css={videoAreaStyle}>
+      <VideoHeader />
+      <VideoPlayers refs={undefined}/>
+      <VideoControls
+        selectCurrentlyAt={selectCurrentlyAt}
+        selectIsPlaying={selectIsPlaying}
+        selectIsPlayPreview={selectIsPlayPreview}
+        setIsPlaying={setIsPlaying}
+        setIsPlayPreview={setIsPlayPreview}
+      />
+    </div>
+  );
+};
+
+export const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent=100}) => {
+
+  const videoURLs = useSelector(selectVideoURL)
+  const videoCount = useSelector(selectVideoCount)
+
   const videoPlayerAreaStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
+    width: widthInPercent + '%',
   });
 
+  // Initialize video players
+  const videoPlayers: JSX.Element[] = [];
+  for (let i = 0; i < videoCount; i++) {
+    videoPlayers.push(
+      <VideoPlayer
+        key={i}
+        dataKey={i}
+        url={videoURLs[i]}
+        isPrimary={i === 0}
+        subtitleUrl={""}
+        selectIsPlaying={selectIsPlaying}
+        selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
+        selectPreviewTriggered={selectPreviewTriggered}
+        selectClickTriggered={selectClickTriggered}
+        selectAspectRatio={selectAspectRatio}
+        setIsPlaying={setIsPlaying}
+        setPreviewTriggered={setPreviewTriggered}
+        setClickTriggered={setClickTriggered}
+        setCurrentlyAt={setCurrentlyAt}
+        setAspectRatio={setAspectRatio}
+        ref={(el) => {
+          if (refs === undefined) return
+          (refs.current[i] = el)
+        }}
+      />
+    );
+  }
+
   return (
-    <div css={videoAreaStyle}>
-      <VideoHeader />
-      <div css={videoPlayerAreaStyle}>
-        {videoPlayers}
-      </div>
-      <VideoControls />
+    <div css={videoPlayerAreaStyle}>
+      {videoPlayers}
     </div>
   );
-};
+}
 
 /**
  * A single video player
  * @param {string} url - URL to load video from
  * @param {boolean} isPrimary - If the player is the main control
  */
-const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> = ({dataKey, url, isPrimary}) => {
+export const VideoPlayer = React.forwardRef(
+  (props: {
+    dataKey: number,
+    url: string | undefined,
+    isPrimary: boolean,
+    subtitleUrl: string,
+    selectIsPlaying:(state: RootState) => boolean,
+    selectCurrentlyAtInSeconds: (state: RootState) => number,
+    selectPreviewTriggered:(state: RootState) => boolean,
+    selectClickTriggered:(state: RootState) => boolean,
+    selectAspectRatio: (state: RootState) => number,
+    setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+    setPreviewTriggered: ActionCreatorWithPayload<any, string>,
+    setClickTriggered: ActionCreatorWithPayload<any, string>,
+    setCurrentlyAt: any,
+    setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
+  },
+  forwardRefThing
+) => {
+  const {
+    dataKey,
+    url,
+    isPrimary,
+    selectIsPlaying,
+    subtitleUrl,
+    selectCurrentlyAtInSeconds,
+    selectPreviewTriggered,
+    selectClickTriggered,
+    selectAspectRatio,
+    setIsPlaying,
+    setPreviewTriggered,
+    setClickTriggered,
+    setCurrentlyAt,
+    setAspectRatio,
+  } = props
 
   const { t } = useTranslation();
 
@@ -131,13 +202,14 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
   const ref = useRef<ReactPlayer>(null);
   const [ready, setReady] = useState(false);
   const [errorState, setError] = useState(false);
+  const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
 
   // Callback for when the video is playing
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
     if (isPrimary) {
       // Only update redux if there was a substantial change
-      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3)) {
-        dispatch(setCurrentlyAtInSeconds(state.playedSeconds))
+      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) && state.playedSeconds !== 0) {
+        dispatch(setCurrentlyAt(state.playedSeconds * 1000))
       }
     }
   }
@@ -154,22 +226,24 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
         h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
       }
       dispatch(setAspectRatio({dataKey, width: w, height: h}))
+      setIsAspectRatioUpdated(true)
     }
   }
 
   // Callback for checking whether the video element is ready
   const onReadyCallback = () => {
     setReady(true);
-
-    // Update the store with video dimensions for rendering purposes
-    updateAspectRatio();
   }
 
   const onEndedCallback = () => {
     if (isPrimary) {
       dispatch(setIsPlaying(false));
-      dispatch(setCurrentlyAtInSeconds(duration)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+      dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
     }
+  }
+
+  const onErrorCallback = (e: any) => {
+    setError(true)
   }
 
   useEffect(() => {
@@ -185,16 +259,112 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
       ref.current.seekTo(currentlyAt, "seconds")
       dispatch(setClickTriggered(false))
     }
+    if (!isAspectRatioUpdated && ready) {     //     if (!isAspectRatioUpdated && ref.current && ready) {
+      // Update the store with video dimensions for rendering purposes
+      updateAspectRatio();
+    }
   })
 
-  const onErrorCallback = (e: any) => {
-    setError(true)
+  // Callback specifically for the subtitle editor view
+  // When changing urls while the player is playing, don't reset to 0
+  // (due to onProgressCallback resetting to 0),
+  // but keep the current currentlyAt
+  useEffect(() => {
+    if (ref.current && ready) {
+      ref.current.seekTo(currentlyAt, "seconds")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url])
+
+  // Trigger a workaround for subtitles not being displayed in the video in Firefox
+  useEffect(() => {
+    // Only trigger workaround in Firefox, as it will cause issues in Chrome
+    // @ts-ignore
+    if (typeof InstallTrigger !== 'undefined') {
+      reAddTrack()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtitleUrl])
+
+  const playerConfig: Config = {
+    file: {
+      attributes: {
+        // Skip player when navigating page with keyboard
+        tabIndex: '-1',
+        crossOrigin: "anonymous"    // allow thumbnail generation
+      },
+      tracks: [
+        {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
+      ]
+    }
   }
 
-  // Skip player when navigating page with keyboard
-  const playerConfig: Config = {
-    file: { attributes: { tabIndex: '-1' }}
+  /**
+   * Workaround for subtitles not appearing in Firefox (or only appearing on inital mount, then disappearing
+   * when changed). Removes old tracks and readds them, because letting React to it does not seem
+   * to work properly.
+   * Fairly hacky, currently only works for a page with only one video
+   * https://github.com/CookPete/react-player/issues/490
+   */
+  function reAddTrack() {
+    const video = document.querySelector('video');
+
+    if (video) {
+      const oldTracks = video.querySelectorAll('track');
+      oldTracks.forEach((oldTrack) => {
+        video.removeChild(oldTrack);
+      });
+    }
+
+    if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
+      // eslint-disable-next-line array-callback-return
+      playerConfig.file.tracks.map((t, trackIdx) => {
+        const track = document.createElement('track');
+        track.kind = t.kind!;
+        track.label = t.label!;
+        track.srclang = t.srcLang!;
+        track.default = t.default!;
+        track.src = t.src!;
+        track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
+        track.addEventListener('error', (e: Event) => {
+          console.warn(`Cannot load track ${t.src!}`)
+        });
+        track.addEventListener('load', (e: Event) => {
+          const textTrack = e.currentTarget as HTMLTrackElement;
+          if (textTrack) {
+            if (t.default === true) {
+              textTrack.track.mode = 'showing';
+              video!.textTracks[trackIdx].mode = 'showing'; // thanks Firefox
+            } else {
+              textTrack.track.mode = 'hidden';
+              video!.textTracks[trackIdx].mode = 'hidden'; // thanks Firefox
+            }
+          }
+        });
+        const video = document.querySelector('video');
+        if (video) {
+          video.appendChild(track);
+        }
+      });
+    }
   }
+
+  // External functions
+  useImperativeHandle(forwardRefThing, () => ({
+    // Renders the current frame in the video element to a canvas
+    // Returns the data url
+    captureVideo() {
+      const video = ref.current?.getInternalPlayer() as HTMLVideoElement
+      var canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      var canvasContext = canvas.getContext("2d");
+      if (canvasContext !== null) {
+        canvasContext.drawImage(video, 0, 0);
+        return canvas.toDataURL('image/png')
+      }
+    }
+  }));
 
   const errorBoxStyle = css({
     ...(!errorState) && {display: "none"},
@@ -214,6 +384,7 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
     position: 'absolute',
     top: 0,
     left: 0,
+    background: ' black',
   })
 
   const render = () => {
@@ -261,13 +432,25 @@ const VideoPlayer: React.FC<{dataKey: number, url: string, isPrimary: boolean}> 
   //     </video>
   //   </div>
   // );
-};
+});
 
 /**
  * Contains controls for manipulating multiple video players at once
  * Flexbox magic keeps the play button at the center
  */
-const VideoControls: React.FC<{}> = () => {
+export const VideoControls: React.FC<{
+  selectCurrentlyAt: (state: RootState) => number,
+  selectIsPlaying: (state: RootState) => boolean,
+  selectIsPlayPreview: (state: RootState) => boolean,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+  setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectCurrentlyAt,
+  selectIsPlaying,
+  selectIsPlayPreview,
+  setIsPlaying,
+  setIsPlayPreview
+}) => {
 
   const { t } = useTranslation();
 
@@ -296,11 +479,19 @@ const VideoControls: React.FC<{}> = () => {
   return (
     <div css={videoControlsRowStyle} title={t("video.controls-tooltip")}>
       <div css={leftSideBoxStyle}>
-        <PreviewMode />
+        <PreviewMode
+          selectIsPlayPreview={selectIsPlayPreview}
+          setIsPlayPreview={setIsPlayPreview}
+        />
       </div>
-      <PlayButton />
+        <PlayButton
+          selectIsPlaying={selectIsPlaying}
+          setIsPlaying={setIsPlaying}
+        />
       <div css={rightSideBoxStyle}>
-        <TimeDisplay />
+        <TimeDisplay
+          selectCurrentlyAt={selectCurrentlyAt}
+        />
       </div>
     </div>
   );
@@ -309,7 +500,13 @@ const VideoControls: React.FC<{}> = () => {
 /**
  * Enable/Disable Preview Mode
  */
-const PreviewMode: React.FC<{}> = () => {
+const PreviewMode: React.FC<{
+  selectIsPlayPreview: (state: RootState) => boolean,
+  setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectIsPlayPreview,
+  setIsPlayPreview
+}) => {
 
   const { t } = useTranslation();
   const ref = React.useRef<HTMLDivElement>(null)
@@ -317,7 +514,6 @@ const PreviewMode: React.FC<{}> = () => {
   // Init redux variables
   const dispatch = useDispatch();
   const isPlayPreview = useSelector(selectIsPlayPreview)
-  const mainMenuState = useSelector(selectMainMenuState)
   const theme = useSelector(selectTheme);
 
   // Change preview mode from "on" to "off" and vice versa
@@ -359,14 +555,14 @@ const PreviewMode: React.FC<{}> = () => {
   return (
     <div css={previewModeStyle}
       ref={ref}
-      title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: cuttingKeyMap[handlers.preview.name] })}
+      title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
       role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-      aria-label={t("video.previewButton-aria", { hotkeyName: cuttingKeyMap[handlers.preview.name] })}
+      aria-label={t("video.previewButton-aria", { hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
       onClick={ (event: SyntheticEvent) => switchPlayPreview(event, ref) }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
         switchPlayPreview(event, undefined)
       }}}>
-      <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
+      <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
       <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
         {t("video.previewButton")}
       </div>
@@ -378,14 +574,19 @@ const PreviewMode: React.FC<{}> = () => {
 /**
  * Start/Pause playing the videos
  */
-const PlayButton: React.FC<{}> = () => {
+const PlayButton: React.FC<{
+  selectIsPlaying:(state: RootState) => boolean,
+  setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+}> = ({
+  selectIsPlaying,
+  setIsPlaying,
+}) => {
 
   const { t } = useTranslation();
 
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
-  const mainMenuState = useSelector(selectMainMenuState)
   const theme = useSelector(selectTheme);
 
   // Change play mode from "on" to "off" and vice versa
@@ -401,16 +602,20 @@ const PlayButton: React.FC<{}> = () => {
 
   return (
     <>
-    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} />
-    <FontAwesomeIcon css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]} icon={isPlaying ? faPause : faPlay} size="2x"
-      title={t("video.playButton-tooltip")}
-      role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-      aria-label={t("video.playButton-tooltip")}
-      onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
-      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
-        switchIsPlaying(event)
-      }}}
-    />
+      <GlobalHotKeys
+        keyMap={videoPlayerKeyMap}
+        handlers={handlers}
+        allowChanges={true}
+      />
+      <FontAwesomeIcon css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]} icon={isPlaying ? faPause : faPlay} size="2x"
+        title={t("video.playButton-tooltip")}
+        role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
+        aria-label={t("video.playButton-tooltip")}
+        onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
+          switchIsPlaying(event)
+        }}}
+      />
     </>
   );
 }
@@ -418,7 +623,11 @@ const PlayButton: React.FC<{}> = () => {
 /**
  * Live update for the current time
  */
-const TimeDisplay: React.FC<{}> = () => {
+const TimeDisplay: React.FC<{
+  selectCurrentlyAt: (state: RootState) => number,
+}> = ({
+  selectCurrentlyAt,
+}) => {
 
   const { t } = useTranslation();
 
@@ -451,21 +660,6 @@ const VideoHeader: React.FC<{}> = () => {
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
   const presenters = useSelector(selectPresenters)
-
-  const titleStyle = css({
-    display: 'inline-block',
-    padding: '15px',
-    overflow: 'hidden',
-    whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    maxWidth: '500px',
-  })
-
-  const titleStyleBold = css({
-    fontWeight: 'bold',
-    fontSize: '24px',
-    verticalAlign: '-2.5px',
-  })
 
   let presenter_header;
   if (presenters && presenters.length) {
