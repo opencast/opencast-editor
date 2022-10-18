@@ -404,7 +404,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         </div>
 
         <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
-          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
             role="button" tabIndex={0}
             title={t("subtitleList.addSegmentAbove")}
             arial-label={t("subtitleList.addSegmentAbove")}
@@ -417,7 +417,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
           >
             <FontAwesomeIcon icon={faPlus} size="1x" />
           </div>
-          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
             role="button" tabIndex={0}
             title={t("subtitleList.deleteSegment")}
             arial-label={t("subtitleList.deleteSegment")}
@@ -430,7 +430,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
           >
             <FontAwesomeIcon icon={faTrash} size="1x" />
           </div>
-          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
             role="button" tabIndex={0}
             title={t("subtitleList.addSegmentBelow")}
             arial-label={t("subtitleList.addSegmentBelow")}
