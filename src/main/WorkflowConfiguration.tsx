@@ -17,6 +17,10 @@ import { setEnd } from "../redux/endSlice";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import { AppDispatch } from "../redux/store";
+import { selectSubtitles } from "../redux/subtitleSlice";
+import { serializeSubtitle } from "../util/utilityFunctions";
+import { Flavor } from "../types";
 import { selectTheme } from "../redux/themeSlice";
 
 /**
@@ -41,7 +45,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
   })
 
   return (
-    <div css={workflowConfigurationStyle} title={t("workflowConfig.area-tooltip")}>
+    <div css={workflowConfigurationStyle}>
       <h2>{t("workflowConfig.headline-text")}</h2>
       <FontAwesomeIcon icon={faTools} size="10x" />
       Placeholder
@@ -69,11 +73,12 @@ const WorkflowConfiguration : React.FC<{}> = () => {
 export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   // Initialize redux variables
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   const selectedWorkflowId = useSelector(selectSelectedWorkflowId)
   const segments = useSelector(selectSegments)
   const tracks = useSelector(selectTracks)
+  const subtitles = useSelector(selectSubtitles)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
@@ -87,6 +92,17 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
       dispatch(metadataSetHasChanges(false))
     }
   }, [dispatch, metadataStatus, workflowStatus])
+
+  const prepareSubtitles = () => {
+    const subtitlesForPosting = []
+
+    for (const identifier in subtitles) {
+      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
+
+    }
+    return subtitlesForPosting
+  }
 
   // Dispatches first save request
   // Subsequent save requests should be wrapped in useEffect hooks,
@@ -104,6 +120,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
         segments: segments,
         tracks: tracks,
         workflow: [{id: selectedWorkflowId}],
+        subtitles: prepareSubtitles()
       }))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,7 +148,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   })
 
   return (
-    <div css={[basicButtonStyle, saveButtonStyle]} title={"Start processing button"}
+    <div css={[basicButtonStyle(theme), saveButtonStyle]}
       role="button" tabIndex={0}
       onClick={ saveAndProcess }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

@@ -19,14 +19,13 @@ import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
 } from '../redux/videoSlice'
 import { GlobalHotKeys, KeySequence, KeyMapOptions } from "react-hotkeys";
-import { selectMainMenuState } from "../redux/mainMenuSlice";
-import { MainMenuStateNames } from "../types";
 import { cuttingKeyMap } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTheme, Theme } from "../redux/themeSlice";
+import { ThemedTooltip } from "./Tooltip";
 
 /**
  * Defines the different actions a user can perform while in cutting mode
@@ -37,7 +36,6 @@ const CuttingActions: React.FC<{}> = () => {
 
   // Init redux variables
   const dispatch = useDispatch();
-  const mainMenuState = useSelector(selectMainMenuState)
 
   /**
    * General action callback for cutting actions
@@ -78,7 +76,7 @@ const CuttingActions: React.FC<{}> = () => {
   })
 
   return (
-    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={mainMenuState === MainMenuStateNames.cutting ? handlers: {}} allowChanges={true} >
+    <GlobalHotKeys keyMap={cuttingKeyMap} handlers={handlers} allowChanges={true} >
       <div css={cuttingStyle}>
           <div css={blockStyle}>
             <CuttingActionsButton iconName={faCut}
@@ -142,18 +140,19 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
   const theme = useSelector(selectTheme);
 
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle(theme)]}
-      title={tooltip}
-      ref={ref}
-      role="button" tabIndex={0} aria-label={ariaLabelText}
-      onClick={ (event: SyntheticEvent) => actionHandler(event, action, ref) }
-      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-        actionHandler(event, action, undefined)
-      }}}
-      >
-      <FontAwesomeIcon icon={iconName} size="1x" />
-      <span>{actionName}</span>
-    </div>
+    <ThemedTooltip title={tooltip}>
+      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
+        ref={ref}
+        role="button" tabIndex={0} aria-label={ariaLabelText}
+        onClick={ (event: SyntheticEvent) => actionHandler(event, action, ref) }
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+          actionHandler(event, action, undefined)
+        }}}
+        >
+        <FontAwesomeIcon icon={iconName} size="1x" />
+        <span>{actionName}</span>
+      </div>
+    </ThemedTooltip>
   );
 };
 
@@ -174,19 +173,20 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
   const theme = useSelector(selectTheme);
 
   return (
-    <div css={[basicButtonStyle, cuttingActionButtonStyle(theme)]}
-      title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}
-      ref={ref}
-      role="button" tabIndex={0}
-      aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}
-      onClick={(event: SyntheticEvent) => actionHandler(event, action, ref)}
-      onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-        actionHandler(event, action, undefined)
-      }}}
-      >
-      <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
-      <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
-    </div>
+    <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName } )}>
+      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
+        ref={ref}
+        role="button" tabIndex={0}
+        aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}
+        onClick={(event: SyntheticEvent) => actionHandler(event, action, ref)}
+        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+          actionHandler(event, action, undefined)
+        }}}
+        >
+        <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
+        <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
+      </div>
+    </ThemedTooltip>
   );
 }
 

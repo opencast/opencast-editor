@@ -4,9 +4,13 @@
  * - GET parameters
  * and exports them.
  * Code was largely adapted from https://github.com/elan-ev/opencast-studio/blob/master/src/settings.js (January 11th, 2021)
+ * 
+ * Also does some global hotkey configuration
  */
 import parseToml from '@iarna/toml/parse-string';
 import deepmerge from 'deepmerge';
+import { configure } from 'react-hotkeys';
+import { Flavor } from './types';
 
 /**
  * Local constants
@@ -45,6 +49,12 @@ interface iSettings {
   thumbnail: {
     show: boolean,
     simpleMode: boolean,
+  },
+  subtitles: {
+    show: boolean,
+    mainFlavor: string,
+    languages: { [key: string]: string } | undefined,
+    defaultVideoFlavor: Flavor | undefined,
   }
 }
 
@@ -72,6 +82,12 @@ var defaultSettings: iSettings = {
   thumbnail: {
     show: false,
     simpleMode: false,
+  },
+  subtitles: {
+    show: false,
+    mainFlavor: "captions",
+    languages: undefined,
+    defaultVideoFlavor: undefined,
   }
 }
 var configFileSettings: iSettings
@@ -122,6 +138,25 @@ export const init = async () => {
 
   // Combine results
   settings = merge.all([defaultSettings, configFileSettings, urlParameterSettings]) as iSettings;
+
+  // Configure hotkeys
+  configure({
+    ignoreTags: [],   // Do not ignore hotkeys when focused on a textarea, input, select
+    ignoreEventsCondition: (e: any) => {
+      // Ignore hotkeys when focused on a textarea, input, select IF that hotkey is expected to perform
+      // a certain function in that element that is more important than any hotkey function
+      // (e.g. you need "Space" in a textarea to create whitespaces, not play/pause videos)
+      if (e.target && e.target.tagName) {
+        const tagname = e.target.tagName.toLowerCase()
+        if ((tagname === "textarea" || tagname === "input" || tagname === "select")
+          && (!e.altKey && !e.ctrlKey)
+          && (e.code === "Space" || e.code === "ArrowLeft" || e.code === "ArrowRight" || e.code === "ArrowUp" || e.code === "ArrowDown")) {
+          return true
+        }
+      }
+      return false
+    },
+  })
 };
 
 /**
@@ -262,6 +297,16 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
+  'map': (v: any, allowParse: any) => {
+    for (let key in v) {
+      if (typeof key !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+      if (typeof v[key] !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+    }
+  },
   'objectsWithinObjects': (v: any, allowParse: any) => {
     for (let catalogName in v) {
       if (typeof catalogName !== 'string') {
@@ -310,6 +355,12 @@ const SCHEMA = {
   },
   trackSelection: {
     show : types.boolean,
+  },
+  subtitles: {
+    show: types.boolean,
+    mainFlavor: types.string,
+    languages: types.map,
+    defaultVideoFlavor: types.map,
   },
   thumbnail: {
     show : types.boolean,

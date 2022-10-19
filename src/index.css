@@ -28,25 +28,65 @@ html, body, #root, .App {
   --arrow-am-pm: rgba(255, 255, 255, 0.54);
   --arrow-disabled: rgba(255, 255, 255, 0.26);
   --hover: rgba(255, 255, 255, 0.1);
+  --hover-border: none;
   --weekdays: rgba(255, 255, 255, 0.6);
   --selected: #1976D2;
   --selected-text: #fff;
   --selected-hover: #42A5F5;
   --inner-clock: rgba(255, 255, 255, 0.1);
+  --clock-border: none;
+  --font-weight: normal;
 }
 
 [data-theme = 'light'] {
-  --bg-color: 'snow';
+  --bg-color: snow;
   --color: rgba(0, 0, 0, 0.87);
   --border: none;
   --arrow-am-pm: rgba(0, 0, 0, 0.54);
   --arrow-disabled: rgba(0, 0, 0, 0.26);
   --hover: rgba(0, 0, 0, 0.04);
+  --hover-border: none;
   --weekdays: rgba(0, 0, 0, 0.6);
   --selected: #1976D2;
   --selected-text: #fff;
   --selected-hover: #42A5F5;
   --inner-clock: rgba(0,0,0,.07);
+  --clock-border: none;
+  --font-weight: normal;
+}
+
+[data-theme = 'high-contrast-dark'] {
+  --bg-color: #000; 
+  --color: #fff;
+  --border: 2px solid #FFAD00;
+  --arrow-am-pm: #fff;
+  --arrow-disabled: rgba(255, 255, 255, 0.6);
+  --hover: #000;
+  --hover-border: 2px solid #FFAD00;
+  --weekdays: #fff;
+  --selected: #FFAD00;
+  --selected-text: #000;
+  --selected-hover: #ffd67f;
+  --inner-clock: #000;
+  --clock-border: 2px solid #ffd67f;
+  --font-weight: bold;
+}
+
+[data-theme = 'high-contrast-light'] {
+  --bg-color: snow;
+  --color: #000;
+  --border: 2px solid #370662;
+  --arrow-am-pm: rgba(0, 0, 0, 0.8);
+  --arrow-disabled: rgba(0, 0, 0, 0.5);
+  --hover: #fff;
+  --hover-border: 2px solid #370662;
+  --weekdays: #000;
+  --selected: #370662;
+  --selected-text: #fff;
+  --selected-hover: #5e3781;
+  --inner-clock: snow;
+  --clock-border: 2px solid #5e3781;
+  --font-weight: bold;
 }
 
 /* Mui DatePicker modal Metadata */
@@ -63,9 +103,11 @@ html, body, #root, .App {
 }
 .MuiButtonBase-root:hover {
   background-color: var(--hover) !important;
+  outline: var(--hover-border)
 }
 .MuiTypography-root {
   color: var(--weekdays) !important;
+  font-weight: var(--font-weight) !important;
 }
 .Mui-selected {
   background-color: var(--selected) !important;
@@ -79,23 +121,38 @@ html, body, #root, .App {
 .Mui-disabled > .MuiSvgIcon-root {
   color: var(--arrow-disabled);
 }
-.css-eziifo { /* bg of the clock*/
+/* bg of the clock*/
+.css-eziifo, .css-1umqo6f {
   background-color: var(--inner-clock) !important;
+  outline: var(--clock-border);
+  text-shadow: -2px 0 var(--inner-clock), 0 2px var(--inner-clock), 2px 0 var(--inner-clock), 0 -2px var(--inner-clock);
 }
-.css-1flhz3h { /* digits on the clock */
+/* digits on the clock */
+.css-1flhz3h {
   color: var(--color) !important;
 }
-.MuiClockPicker-root .Mui-selected, .css-12ha4i7, .css-7lip4c  {
-  background-color: var(--selected);
-  color: var(--selected-text) !important;
+/* clock hands */
+.MuiClockPicker-root .Mui-selected, .css-12ha4i7, .css-7lip4c, .css-a1rc6s  {
+  background-color: var(--selected) !important;
+  color: var(--selected-text) !important; 
+  text-shadow: -2px 0 var(--selected), 0 2px var(--selected), 2px 0 var(--selected), 0 -2px var(--selected);
+}
+/* minute hand */
+.css-2ujp1m {
+  border: 16px solid var(--selected) !important;
+  background-color: var(--bg-color) !important;
+  color: #000 !important;
 }
 /* AM, PM and digits when selected */
-.css-1t8wyba-MuiButtonBase-root-MuiIconButton-root > span, 
-.css-13go44a-MuiButtonBase-root-MuiIconButton-root > span {
-  color: var(--selected-text) !important;
+.css-1t8wyba-MuiButtonBase-root-MuiIconButton-root,
+.css-13go44a-MuiButtonBase-root-MuiIconButton-root {
+  outline:2px solid var(--selected) !important;
+  background-color: transparent !important;
+  -webkit-text-fill-color: var(--color) !important;
 }
 /* AM and PM when selected on hover */
 .css-1t8wyba-MuiButtonBase-root-MuiIconButton-root:hover, 
 .css-13go44a-MuiButtonBase-root-MuiIconButton-root:hover {
   background-color: var(--selected-hover) !important;
+  -webkit-text-fill-color: var(--selected-text) !important;
 }

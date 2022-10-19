@@ -224,9 +224,11 @@
         "scrubberDecrease": "Langsamer"
     },
     "theme": {
-        "appearance": "Erscheinungsbild",
+        "appearance": "Aussehen",
         "darkmode": "Dunkles Design",
         "lightmode": "Helles Design",
-        "system": "System Design"
+        "system": "System Design",
+        "high-contrast-dark": "Hoher Kontrast (dunkles Design)",
+        "high-contrast-light": "Hoher Kontrast (helles Design)"
     }
 }

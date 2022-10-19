@@ -13,6 +13,10 @@ import { selectOriginalThumbnails, selectTracks, setHasChanges, setThumbnail, se
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import { VideoControls, VideoPlayers } from "./Video";
+import {
+  selectIsPlaying, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setCurrentlyAt
+} from '../redux/videoSlice'
+import { ThemedTooltip } from "./Tooltip";
 
 
 /**
@@ -88,8 +92,21 @@ const Thumbnail : React.FC<{}> = () => {
     <div css={thumbnailStyle}>
       <div css={[titleStyle, titleStyleBold]}>{t('thumbnail.title')}</div>
       <VideoPlayers refs={generateRefs} widthInPercent={50}/>
-      <VideoControls />
-      <Timeline timelineHeight={125}/>
+      <VideoControls
+        selectCurrentlyAt={selectCurrentlyAt}
+        selectIsPlaying={selectIsPlaying}
+        selectIsPlayPreview={selectIsPlayPreview}
+        setIsPlaying={setIsPlaying}
+        setIsPlayPreview={setIsPlayPreview}
+      />
+      <Timeline
+        timelineHeight={125}
+        selectIsPlaying={selectIsPlaying}
+        selectCurrentlyAt={selectCurrentlyAt}
+        setIsPlaying={setIsPlaying}
+        setCurrentlyAt={setCurrentlyAt}
+        setClickTriggered={setClickTriggered}
+      />
       <ThumbnailTable
         inputRefs={inputRefs}
         generate={generate}
@@ -363,17 +380,18 @@ const ThumbnailButton : React.FC<{
   };
 
   return (
-    <div
-      css={thumbnailButtonStyle(active, theme)}
-      ref={ref}
-      title={tooltipText}
-      role="button" tabIndex={0} aria-label={ariaLabel}
-      onClick={clickHandler}
-      onKeyDown={keyHandler}
-    >
-      <FontAwesomeIcon icon={icon}/>
-      {text}
-    </div>
+    <ThemedTooltip title={tooltipText}>
+      <div
+        css={thumbnailButtonStyle(active, theme)}
+        ref={ref}
+        role="button" tabIndex={0} aria-label={ariaLabel}
+        onClick={clickHandler}
+        onKeyDown={keyHandler}
+      >
+        <FontAwesomeIcon icon={icon}/>
+        {text}
+      </div>
+    </ThemedTooltip>
   )
 }
 
@@ -418,19 +436,20 @@ const AffectAllRow : React.FC<{
     <div css={rowStyle}>
       <FontAwesomeIcon icon={faInfoCircle} size="2x" />
       {t('thumbnail.explanation')}
-      <div css={[basicButtonStyle, buttonStyle]}
-        title={t('thumbnail.buttonGenerateAll-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
-        onClick={() => {
-          generateAll()
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          generateAll()
-        }}}
-      >
-        <FontAwesomeIcon icon={faCamera}/>
-        {t('thumbnail.buttonGenerateAll')}
-      </div>
+      <ThemedTooltip title={t('thumbnail.buttonGenerateAll-tooltip')}>
+        <div css={[basicButtonStyle(theme), buttonStyle]}
+          role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
+          onClick={() => {
+            generateAll()
+          }}
+          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+            generateAll()
+          }}}
+        >
+          <FontAwesomeIcon icon={faCamera}/>
+          {t('thumbnail.buttonGenerateAll')}
+        </div>
+      </ThemedTooltip>
     </div>
   )
 }
@@ -571,7 +590,7 @@ const thumbnailButtonsStyle = css({
 })
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
-  active ? basicButtonStyle : deactivatedButtonStyle,
+  active ? basicButtonStyle(theme) : deactivatedButtonStyle,
   {
     width: '100%',
     height: '100%',

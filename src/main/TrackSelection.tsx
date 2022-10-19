@@ -10,11 +10,12 @@ import ReactPlayer from 'react-player'
 
 import { Track }  from '../types'
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTracks, setTrackEnabled } from '../redux/videoSlice'
+import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
+import { ThemedTooltip } from "./Tooltip";
 
 /**
  * Creates the track selection.
@@ -22,7 +23,7 @@ import { selectTheme } from "../redux/themeSlice";
 const TrackSelection: React.FC<{}> = () => {
 
   // Generate list of tracks
-  const tracks: Track[] = useSelector(selectTracks);
+  const tracks: Track[] = useSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
     <TrackItem key={ track.id } track={ track } enabledCount={ enabledCount } />
@@ -151,7 +152,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
   const theme = useSelector(selectTheme);
   
   const buttonStyle = [
-    active ? basicButtonStyle : deactivatedButtonStyle,
+    active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
       margin: '10px 15px',
       padding: '16px',
@@ -170,17 +171,18 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
   };
   const ref = React.useRef<HTMLDivElement>(null)
   return (
-    <div css={ buttonStyle }
-         tabIndex={ 0 }
-         ref={ref}
-         role="button"
-         title={ tooltip }
-         aria-label={ tooltip }
-         onClick={ clickHandler }
-         onKeyDown={ keyHandler } >
-      <FontAwesomeIcon icon={ icon } size="1x" />
-      <div>{ text }</div>
-    </div>
+    <ThemedTooltip title={tooltip}>
+      <div css={ buttonStyle }
+          tabIndex={ 0 }
+          ref={ref}
+          role="button"
+          aria-label={ tooltip }
+          onClick={ clickHandler }
+          onKeyDown={ keyHandler } >
+        <FontAwesomeIcon icon={ icon } size="1x" />
+        <div>{ text }</div>
+      </div>
+    </ThemedTooltip>
   );
 }
 

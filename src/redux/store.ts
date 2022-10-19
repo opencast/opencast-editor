@@ -6,10 +6,11 @@ import workflowPostReducer from './workflowPostSlice'
 import workflowPostAndProcessReducer from './workflowPostAndProcessSlice'
 import endReducer from './endSlice'
 import metadataReducer from './metadataSlice'
+import subtitleReducer from './subtitleSlice'
 import errorReducer from './errorSlice'
 import themeReducer from './themeSlice'
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
     mainMenuState: mainMenuStateReducer,
     finishState: finishStateReducer,
@@ -18,7 +19,15 @@ export default configureStore({
     workflowPostAndProcessState: workflowPostAndProcessReducer,
     endState: endReducer,
     metadataState: metadataReducer,
+    subtitleState: subtitleReducer,
     errorState: errorReducer,
     themeState: themeReducer,
   }
 })
+
+export type AppDispatch = typeof store.dispatch
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>
+
+export default store;
