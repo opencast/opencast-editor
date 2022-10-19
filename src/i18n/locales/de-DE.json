@@ -3,6 +3,7 @@
         "cutting-button": "Schneiden",
         "finish-button": "Fertigstellen",
         "select-tracks-button": "Spuren",
+        "subtitles-button": "Untertitel",
         "thumbnail-button": "Vorschaubild",
         "metadata-button": "Metadaten",
         "keyboard-controls-button": "Tastatursteuerung",
@@ -28,14 +29,15 @@
         "previewButton-tooltip": "Überspringt gelöschte Segmente bei der Wiedergabe des Videos. Derzeit {{status}}. Hotkey: {{hotkeyName}}",
         "previewButton-aria": "Vorschaumodus aktivieren oder deaktivieren. Hotkey: {{hotkeyName}}.",
         "playButton-tooltip": "Video abspielen",
+        "pauseButton-tooltip": "Video anhalten",
+        "current-time-tooltip": "Aktuelle Zeit",
         "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",
         "time-aria": "Aktuelle Zeit",
         "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
         "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
         "title-tooltip": "Videotitel",
-        "presenter-tooltip": "Vortragende",
-        "controls-tooltip": "Videosteuerungen"
+        "presenter-tooltip": "Vortragende"
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
@@ -45,19 +47,17 @@
     "save": {
         "headline-text": "Aktuelles Projekt speichern",
         "confirm-button": "Ja, Änderungen speichern",
-        "confirmButton-default-tooltip": "Speichern-Button",
         "confirmButton-attempting-tooltip": "Versuche zu speichern",
         "confirmButton-success-tooltip": "Erfolgreich gespeichert",
         "confirmButton-failed-tooltip": "Speichern fehlgeschlagen",
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
-        "success-text": "Änderungen erfolgreich gespeichert!",
+        "success-text": "Änderungen erfolgreich gespeichert! Sie können den Editor nun schließen oder weiter arbeiten.",
         "success-tooltip-aria": "Erfolgreich gespeichert",
         "saveArea-tooltip": "Speicherbereich"
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
         "confirm-button": "Ja, Änderungen verwerfen",
-        "confirm-tooltip": "Änderungen verwerfen Button",
         "info-text": "Alle vorgenommenen Änderungen verwerfen? Dies kann nicht rückgängig gemacht werden!"
     },
     "theEnd": {
@@ -85,7 +85,6 @@
     },
     "workflowConfig": {
         "headline-text": "Workflow Konfiguration",
-        "area-tooltip": "Workflow-Konfigurationsbereich",
         "satisfied-text": "Sind Sie zufrieden mit Ihrer Konfiguration?",
         "confirm-button": "Ja, Verarbeitung starten"
     },
@@ -152,7 +151,9 @@
             "EVENTS-LICENSE-CCBYSA": "CC-BY-SA",
             "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
             "EVENTS-LICENSE-CCBY": "CC-BY"
-        }
+        },
+        "calendar-prev": "Vorherige",
+        "calendar-next": "Nächste"
     },
     "thumbnail": {
         "title": "Vorschaubildeditor",
@@ -209,12 +210,41 @@
         "restoreTrackTooltip": "Diesen Track verarbeiten und veröffentlichen.",
         "cannotDeleteTrackTooltip": "Dieser Track kann nicht entfernt werden."
     },
+    "subtitles": {
+        "selectSubtitleButton-tooltip": "Untertitel für {{title}} bearbeiten",
+        "selectSubtitleButton-tooltip-aria": "{{title}} zur Bearbeitung von Untertiteln auswählen",
+        "createSubtitleButton-tooltip": "Öffnet einen Dialog zum Erstellen neuer Untertitel",
+        "createSubtitleButton-clicked-tooltip-aria": "Enthält einen Dialog zum Erstellen neuer Untertitel",
+        "createSubtitleButton-createButton": "Erstellen",
+        "createSubtitleButton-createButton-tooltip": "Beginne eine neue Untertiteldatei mit dem ausgewählten Titel.",
+        "createSubtitleDropdown-label": "Wähle eine Sprache",
+        "backButton": "Zurück",
+        "backButton-tooltip": "Zurück zur Untertitelauswahl",
+        "editTitle": "Untertitel-Editor - {{title}}",
+        "editTitle-loading": "Lädt"
+    },
+    "subtitleList": {
+        "startTime-tooltip": "Beginn des Segments",
+        "startTime-tooltip-aria": "Beginnt bei",
+        "endTime-tooltip": "Ende des Segments",
+        "endTime-tooltip-aria": "Endet bei",
+        "addSegmentAbove": "Segment oberhalb hinzufügen",
+        "addSegmentBelow": "Segment unterhalb hinzufügen",
+        "jumpToSegmentAbove": "Zum Segment oberhalb springen",
+        "jumpToSegmentBelow": "Zum Segment unterhalb springen",
+        "deleteSegment": "Segment löschen"
+    },
+    "subtitleVideoArea": {
+        "selectVideoLabel": "Video Flavors"
+    },
     "keyboardControls": {
         "header": "Tastatursteuerung",
         "defaultGroupName": "Allgemein",
         "missingLabel": "Unbekannt",
-        "groupCuttingView": "Schnittansicht",
-        "groupCuttingViewScrubber": "Schnittansicht - Scrubber",
+        "groupVideoPlayer": "Videoplayer",
+        "groupCuttingView": "Schneiden",
+        "groupCuttingViewScrubber": "Scrubbing",
+        "groupSubtitleList": "Untertitel",
         "sequenceSeperator": "oder",
         "genericError": "Fehler beim Laden der Übersicht",
         "videoPlayButton": "Video abspielen/pausieren",
@@ -224,11 +254,11 @@
         "scrubberDecrease": "Langsamer"
     },
     "theme": {
-        "appearance": "Aussehen",
+        "appearance": "Erscheinungsbild",
         "darkmode": "Dunkles Design",
         "lightmode": "Helles Design",
         "system": "System Design",
-        "high-contrast-dark": "Hoher Kontrast (dunkles Design)",
-        "high-contrast-light": "Hoher Kontrast (helles Design)"
+        "high-contrast-dark": "Hoher Kontrast (Dunkles Design)",
+        "high-contrast-light": "Hoher Kontrast (Helles Design)"
     }
 }
