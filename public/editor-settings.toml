@@ -131,7 +131,7 @@ password = "opencast"
 # If the thumbnail editor appears in the main menu
 # Type: boolean
 # Default: false
-show = true
+#show = false
 
 # Whether to use "simple" or "professional" mode.
 # Professional mode allows users to edit all thumbnails that fit the subflavor
@@ -144,4 +144,5 @@ show = true
 # when there is only a single thumbnail to worry about and you want hide
 # potential fallbacks from the user. If a primary thumbnail cannot be
 # determined, this falls back to professional mode.
-simpleMode = false
+# Default: false
+#simpleMode = false
