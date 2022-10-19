@@ -17,6 +17,8 @@ export interface Theme {
   singleKey_border: String
   invert_wave: String
   inverted_text: String
+  tooltip: String
+  tooltip_text: String
   element_outline: String
   selected_text: String
   dropdown_border: String

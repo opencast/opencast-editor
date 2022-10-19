@@ -16,6 +16,7 @@ import { VideoControls, VideoPlayers } from "./Video";
 import {
   selectIsPlaying, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
+import { ThemedTooltip } from "./Tooltip";
 
 
 /**
@@ -379,17 +380,18 @@ const ThumbnailButton : React.FC<{
   };
 
   return (
-    <div
-      css={thumbnailButtonStyle(active, theme)}
-      ref={ref}
-      title={tooltipText}
-      role="button" tabIndex={0} aria-label={ariaLabel}
-      onClick={clickHandler}
-      onKeyDown={keyHandler}
-    >
-      <FontAwesomeIcon icon={icon}/>
-      {text}
-    </div>
+    <ThemedTooltip title={tooltipText}>
+      <div
+        css={thumbnailButtonStyle(active, theme)}
+        ref={ref}
+        role="button" tabIndex={0} aria-label={ariaLabel}
+        onClick={clickHandler}
+        onKeyDown={keyHandler}
+      >
+        <FontAwesomeIcon icon={icon}/>
+        {text}
+      </div>
+    </ThemedTooltip>
   )
 }
 
@@ -434,19 +436,20 @@ const AffectAllRow : React.FC<{
     <div css={rowStyle}>
       <FontAwesomeIcon icon={faInfoCircle} size="2x" />
       {t('thumbnail.explanation')}
-      <div css={[basicButtonStyle(theme), buttonStyle]}
-        title={t('thumbnail.buttonGenerateAll-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
-        onClick={() => {
-          generateAll()
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          generateAll()
-        }}}
-      >
-        <FontAwesomeIcon icon={faCamera}/>
-        {t('thumbnail.buttonGenerateAll')}
-      </div>
+      <ThemedTooltip title={t('thumbnail.buttonGenerateAll-tooltip')}>
+        <div css={[basicButtonStyle(theme), buttonStyle]}
+          role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
+          onClick={() => {
+            generateAll()
+          }}
+          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+            generateAll()
+          }}}
+        >
+          <FontAwesomeIcon icon={faCamera}/>
+          {t('thumbnail.buttonGenerateAll')}
+        </div>
+      </ThemedTooltip>
     </div>
   )
 }

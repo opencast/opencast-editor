@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
 import { selectTheme } from '../redux/themeSlice';
+import { ThemedTooltip } from './Tooltip';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -328,14 +329,14 @@ export const SegmentsList: React.FC<{
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id}
-          title={t("timeline.segment-tooltip", {segment: index})}
-          aria-label={t("timeline.segments-text-aria",
-                     {segment: index,
-                      segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
-                      start: convertMsToReadableString(segment.start),
-                      end: convertMsToReadableString(segment.end) })}
-          tabIndex={tabable ? 0 : -1}
+        <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})}>
+          <div key={segment.id}
+            aria-label={t("timeline.segments-text-aria",
+                      {segment: index,
+                        segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                        start: convertMsToReadableString(segment.start),
+                        end: convertMsToReadableString(segment.end) })}
+            tabIndex={tabable ? 0 : -1}
           css={{
             background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
             borderRadius: '5px',
@@ -347,7 +348,8 @@ export const SegmentsList: React.FC<{
             height: timelineHeight - 20 + 'px',     // CHECK IF 100%
             zIndex: 1,
           }}>
-        </div>
+          </div>
+        </ThemedTooltip>
       ))
     );
   }
@@ -360,7 +362,7 @@ export const SegmentsList: React.FC<{
   })
 
   return (
-    <div css={segmentsStyle} title="Segments">
+    <div css={segmentsStyle}>
       {renderedSegments()}
     </div>
   );

@@ -45,7 +45,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
   })
 
   return (
-    <div css={workflowConfigurationStyle} title={t("workflowConfig.area-tooltip")}>
+    <div css={workflowConfigurationStyle}>
       <h2>{t("workflowConfig.headline-text")}</h2>
       <FontAwesomeIcon icon={faTools} size="10x" />
       Placeholder
@@ -148,7 +148,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   })
 
   return (
-    <div css={[basicButtonStyle(theme), saveButtonStyle]} title={"Start processing button"}
+    <div css={[basicButtonStyle(theme), saveButtonStyle]}
       role="button" tabIndex={0}
       onClick={ saveAndProcess }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
