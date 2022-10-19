@@ -3,6 +3,7 @@
         "cutting-button": "Editer",
         "finish-button": "Terminer",
         "select-tracks-button": "Pistes",
+        "subtitles-button": "Subtitles",
         "thumbnail-button": "Image de prévisualisation",
         "metadata-button": "Metadonnées",
         "keyboard-controls-button": "Controles clavier",
@@ -27,15 +28,16 @@
         "previewButton": "Mode aperçu",
         "previewButton-tooltip": "Ignore les segments supprimés lors de la lecture de la vidéo. Actuellement {{status}}. Raccourci : {{hotkeyName}}",
         "previewButton-aria": "Activer ou désactiver le mode aperçu. Raccourci clavier : {{hotkeyName}}.",
-        "playButton-tooltip": "Bouton de lecture",
-        "time-duration-tooltip": "Temps et durée de lecture",
+        "playButton-tooltip": "Play video",
+        "pauseButton-tooltip": "Pause video",
+        "current-time-tooltip": "Temps actuel",
+        "time-duration-tooltip": "Video duration",
         "duration-aria": "Durée",
         "time-aria": "Temps actuel",
         "comError-text": "Un problème est survenu lors de la communication avec Opencast.",
         "loadError-text": "Une erreur s'est produite lors du chargement de cette vidéo.",
         "title-tooltip": "Titre de la vidéo",
-        "presenter-tooltip": "Présentateurs vidéo",
-        "controls-tooltip": "Contrôles vidéo"
+        "presenter-tooltip": "Présentateurs vidéo"
     },
     "finishMenu": {
         "save-button": "Enregistrer les modifications",
@@ -45,19 +47,17 @@
     "save": {
         "headline-text": "Enregtistrer le projet actuel",
         "confirm-button": "Oui, enregistrer les modifications",
-        "confirmButton-default-tooltip": "Bouton « Enregistrer »",
         "confirmButton-attempting-tooltip": "Tentative de sauvegarde",
         "confirmButton-success-tooltip": "Sauvegarde réussie",
         "confirmButton-failed-tooltip": "Echec de l'enregistrement",
         "info-text": "La vidéo ne sera pas traitée mais toutes les informations de coupe seront stockées dans Opencast. Vous pouvez continuer votre modification plus tard.",
-        "success-text": "Les modifications ont été enregistrées !",
+        "success-text": "Changes saved successfully! You can now close the editor or continue working.",
         "success-tooltip-aria": "Sauvegarde réussie",
         "saveArea-tooltip": "Enregistrer la zone"
     },
     "discard": {
         "headline-text": "Ignorer les modifications",
         "confirm-button": "Oui, ignorer les modifications",
-        "confirm-tooltip": "Boutton \"Ignorer les modifications\"",
         "info-text": "Ignorer toutes les modifications que vous avez apportées ? Cette action est irréversible !"
     },
     "theEnd": {
@@ -85,7 +85,6 @@
     },
     "workflowConfig": {
         "headline-text": "Configuration du workflow",
-        "area-tooltip": "Zone de configuration du workflow",
         "satisfied-text": "Satisfait de votre configuration ?",
         "confirm-button": "Oui, commencer le traitement"
     },
@@ -152,7 +151,9 @@
             "EVENTS-LICENSE-CCBYSA": "CC BY-SA",
             "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
             "EVENTS-LICENSE-CCBY": "CC BY"
-        }
+        },
+        "calendar-prev": "Previous",
+        "calendar-next": "Next"
     },
     "thumbnail": {
         "title": "Thumbnail Editor",
@@ -209,12 +210,41 @@
         "restoreTrackTooltip": "Encoder et publier cette piste.",
         "cannotDeleteTrackTooltip": "Impossible de supprimer cette piste de la publication."
     },
+    "subtitles": {
+        "selectSubtitleButton-tooltip": "Edit subtitles for {{title}}",
+        "selectSubtitleButton-tooltip-aria": "Select {{title}} for subtitle editing",
+        "createSubtitleButton-tooltip": "Opens a dialog for creating new subtitles",
+        "createSubtitleButton-clicked-tooltip-aria": "Contains a dialog for creating new subtitles",
+        "createSubtitleButton-createButton": "Create",
+        "createSubtitleButton-createButton-tooltip": "Start a new subtitle file with the chosen title.",
+        "createSubtitleDropdown-label": "Pick a language",
+        "backButton": "Back",
+        "backButton-tooltip": "Return to subtitle selection",
+        "editTitle": "Subtitle Editor - {{title}}",
+        "editTitle-loading": "Loading"
+    },
+    "subtitleList": {
+        "startTime-tooltip": "Beginning of the segment",
+        "startTime-tooltip-aria": "Beginning at",
+        "endTime-tooltip": "End of the segment",
+        "endTime-tooltip-aria": "Ending at",
+        "addSegmentAbove": "Add segment above",
+        "addSegmentBelow": "Add segment below",
+        "jumpToSegmentAbove": "Jump to segment above",
+        "jumpToSegmentBelow": "Jump to segment below",
+        "deleteSegment": "Delete segment"
+    },
+    "subtitleVideoArea": {
+        "selectVideoLabel": "Video Flavors"
+    },
     "keyboardControls": {
         "header": "Controles clavier",
         "defaultGroupName": "Général",
         "missingLabel": "Inconnu",
-        "groupCuttingView": "Vue de coupe",
-        "groupCuttingViewScrubber": "Vue de coupe - Tête de lecture",
+        "groupVideoPlayer": "Video Player",
+        "groupCuttingView": "Editer",
+        "groupCuttingViewScrubber": "Scrubbing",
+        "groupSubtitleList": "Subtitles",
         "sequenceSeperator": "ou",
         "genericError": "Impossible de charger l'aperçu",
         "videoPlayButton": "Lecture/Pause de la vidéo",
@@ -227,6 +257,8 @@
         "appearance": "Appearance",
         "darkmode": "Dark mode",
         "lightmode": "Light mode",
-        "system": "System design"
+        "system": "System design",
+        "high-contrast-dark": "High contrast (Dark mode)",
+        "high-contrast-light": "High contrast (Light mode)"
     }
 }
