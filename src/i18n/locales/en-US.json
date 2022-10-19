@@ -257,6 +257,10 @@
       "selectVideoLabel": "Video Flavors"
     },
 
+    "subtitleTimeline": {
+      "timeline-tooltip": "Mini Timeline"
+    },
+
     "keyboardControls": {
       "header": "Keyboard Controls",
       "defaultGroupName": "General",

@@ -556,7 +556,6 @@ const PreviewMode: React.FC<{
     <ThemedTooltip title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: "Control+Alt+p" })}>
       <div css={previewModeStyle}
         ref={ref}
-        title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"), hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
         aria-label={t("video.previewButton-aria", { hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
         onClick={ (event: SyntheticEvent) => switchPlayPreview(event, ref) }

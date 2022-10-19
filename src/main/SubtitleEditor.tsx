@@ -21,6 +21,7 @@ import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
 import { selectTheme } from "../redux/themeSlice";
 import { parseSubtitle } from "../util/utilityFunctions";
+import { ThemedTooltip } from "./Tooltip";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -159,17 +160,18 @@ import { parseSubtitle } from "../util/utilityFunctions";
   })
 
   return (
-    <div css={[basicButtonStyle(theme), backButtonStyle]}
-      role="button" tabIndex={0}
-      title={t("subtitles.backButton-tooltip")}
-      aria-label={t("subtitles.backButton-tooltip")}
-      onClick={ () => dispatch(setIsDisplayEditView(false)) }
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        dispatch(setIsDisplayEditView(false))
-      }}}>
-      <FontAwesomeIcon icon={faChevronLeft} size="1x" />
-      <span>{t("subtitles.backButton")}</span>
-    </div>
+    <ThemedTooltip title={t("subtitles.backButton-tooltip")}>
+      <div css={[basicButtonStyle(theme), backButtonStyle]}
+        role="button" tabIndex={0}
+        aria-label={t("subtitles.backButton-tooltip")}
+        onClick={ () => dispatch(setIsDisplayEditView(false)) }
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+          dispatch(setIsDisplayEditView(false))
+        }}}>
+        <FontAwesomeIcon icon={faChevronLeft} size="1x" />
+        <span>{t("subtitles.backButton")}</span>
+      </div>
+    </ThemedTooltip>
   );
 }
 
