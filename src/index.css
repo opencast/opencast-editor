@@ -36,6 +36,8 @@ html, body, #root, .App {
   --inner-clock: rgba(255, 255, 255, 0.1);
   --clock-border: none;
   --font-weight: normal;
+  --dropdown-color: #ccc;
+  --outline-width: 1px;
 }
 
 [data-theme = 'light'] {
@@ -53,6 +55,8 @@ html, body, #root, .App {
   --inner-clock: rgba(0,0,0,.07);
   --clock-border: none;
   --font-weight: normal;
+  --dropdown-color: #ccc;
+  --outline-width: 1px;
 }
 
 [data-theme = 'high-contrast-dark'] {
@@ -70,6 +74,8 @@ html, body, #root, .App {
   --inner-clock: #000;
   --clock-border: 2px solid #ffd67f;
   --font-weight: bold;
+  --dropdown-color: #fff;
+  --outline-width: 2px;
 }
 
 [data-theme = 'high-contrast-light'] {
@@ -87,6 +93,8 @@ html, body, #root, .App {
   --inner-clock: snow;
   --clock-border: 2px solid #5e3781;
   --font-weight: bold;
+  --dropdown-color: #000;
+  --outline-width: 2px;
 }
 
 /* Mui DatePicker modal Metadata */
@@ -155,4 +163,19 @@ html, body, #root, .App {
 .css-13go44a-MuiButtonBase-root-MuiIconButton-root:hover {
   background-color: var(--selected-hover) !important;
   -webkit-text-fill-color: var(--selected-text) !important;
+}
+/* Label: Pick a language - Subtitle Editor */
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+.css-1sumxir-MuiFormLabel-root-MuiInputLabel-root.Mui-focused,
+.css-1sumxir-MuiFormLabel-root-MuiInputLabel-root,
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color) !important;
+  border-width: var(--outline-width) !important;
+  color: var(--color) !important;
+}
+/* Dropdownlist: Pick a language - Subtitle Editor */
+.css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+  outline-color: var(--dropdown-color) !important;
+  outline-width: 2px;
 }

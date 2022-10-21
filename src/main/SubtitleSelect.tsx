@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
 import { selectTheme } from "../redux/themeSlice";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { makeStyles } from "@mui/styles";
 
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
@@ -169,7 +169,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
-  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
+
   const dispatch = useDispatch()
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true)
@@ -195,12 +195,6 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     dispatch(setSelectedSubtitleFlavor(values.languages))
   }
 
-  const muiTheme = createTheme({
-    palette: {
-      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
-    },
-  });
-
   const plusIconStyle = css({
     display: isPlusDisplay ? 'block' : 'none'
   });
@@ -223,6 +217,30 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
       cursor: 'not-allowed',
     },
   });
+
+  const muiStyle = makeStyles({
+    select: {
+      color: `${theme.text}`,
+      background: `${theme.element_bg}`,
+      '& .MuiSelect-icon':{
+        color: `${theme.indicator_color}`,
+      },
+    },
+    list: {
+      backgroundColor: `${theme.background}`,
+      color: `${theme.text}`,
+      "& li.Mui-selected":{
+        backgroundColor: `${theme.selected} !important`,
+        color: `${theme.selected_text}`,
+      },
+      "& li:hover":{
+        backgroundColor: `${theme.focused} !important`,
+        color: `${theme.focus_text} !important`,
+        outline: 'none'
+      }
+    }
+  });
+  const styles = muiStyle()
 
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
@@ -247,14 +265,14 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               {/* TODO: Fix the following warning, caused by removing items from data:
                 MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
               */}
-              <ThemeProvider theme={muiTheme}>
+
                 <Select
+                  className={`${styles.select}`}
+                  MenuProps={{ classes: { list: styles.list } }}
                   label={t("subtitles.createSubtitleDropdown-label")}
                   name="languages"
                   data={selectData()}
-                >
-                </Select>
-              </ThemeProvider>
+                />
 
               <button css={[basicButtonStyle(theme), createButtonStyle]}
                 type="submit"

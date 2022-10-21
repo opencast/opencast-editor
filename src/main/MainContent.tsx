@@ -86,6 +86,7 @@ const MainContent: React.FC<{}> = () => {
     paddingRight: '20px',
     paddingLeft: '161px',
     height: '100%',
+    background: `${theme.background}`,
   })
 
   const thumbnailSelectStyle = css({

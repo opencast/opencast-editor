@@ -29,6 +29,9 @@ export const lightMode: Theme = {
   waveform_filter: 'invert(0%)',
   waveform_bg: '#fff',
   scrubber: '1px solid transparent',
+  subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
+  subtitle_segment_border: '1px solid #363636',
+  subtitle_segment_text: '#fff',
 };
 
 export const darkMode: Theme = {
@@ -60,6 +63,9 @@ export const darkMode: Theme = {
   waveform_filter: 'invert(11%)',
   waveform_bg: '#fff',
   scrubber: '1px solid transparent',
+  subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
+  subtitle_segment_border: '1px solid #dddddd',
+  subtitle_segment_text: '#fff',
 };
 
 export const highContrastDarkMode: Theme = {
@@ -91,6 +97,9 @@ export const highContrastDarkMode: Theme = {
   waveform_filter: 'invert(100%)',
   waveform_bg: '#80B8AC',
   scrubber: '1px solid transparent',
+  subtitle_segment_bg: 'none',
+  subtitle_segment_border: '2px solid #fff',
+  subtitle_segment_text: '#fff',
 }
 
 export const highContrastLightMode: Theme = {
@@ -122,4 +131,7 @@ export const highContrastLightMode: Theme = {
   waveform_filter: 'invert(0%)',
   waveform_bg: '#fff',
   scrubber: '1px solid transparent',
+  subtitle_segment_bg: 'none',
+  subtitle_segment_border: '2px solid #000',
+  subtitle_segment_text: '#000',
 }

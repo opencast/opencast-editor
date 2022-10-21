@@ -30,6 +30,9 @@ export interface Theme {
   waveform_filter: String
   waveform_bg: String
   scrubber: String
+  subtitle_segment_bg: String
+  subtitle_segment_border: String
+  subtitle_segment_text: String
 };
 
 const getValue = () => {

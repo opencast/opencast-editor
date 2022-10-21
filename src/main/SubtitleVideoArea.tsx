@@ -25,7 +25,8 @@ import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { selectTheme } from "../redux/themeSlice";
+import { makeStyles } from "@mui/styles";
 
 
 /**
@@ -164,7 +165,7 @@ const VideoSelectDropdown : React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
+  const theme = useSelector(selectTheme)
 
   const dropdownName: string = "flavors"
 
@@ -185,11 +186,29 @@ const VideoSelectDropdown : React.FC<{
 
   const onSubmit = () => {}
 
-  const muiTheme = createTheme({
-    palette: {
-      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
+  const muiStyle = makeStyles({
+    select: {
+      color: `${theme.text}`,
+      background: `${theme.element_bg}`,
+      '& .MuiSelect-icon':{
+        color: `${theme.indicator_color}`,
+      },
     },
+    list: {
+      backgroundColor: `${theme.background}`,
+      color: `${theme.text}`,
+      "& li.Mui-selected":{
+        backgroundColor: `${theme.selected} !important`,
+        color: `${theme.selected_text}`,
+      },
+      "& li:hover":{
+        backgroundColor: `${theme.focused} !important`,
+        color: `${theme.focus_text} !important`,
+        outline: 'none'
+      }
+    }
   });
+  const styles = muiStyle()
 
   const subtitleAddFormStyle = css({
     width: '100%',
@@ -205,13 +224,13 @@ const VideoSelectDropdown : React.FC<{
         handleSubmit(event)
       }} css={subtitleAddFormStyle}>
 
-          <ThemeProvider theme={muiTheme}>
             <Select
+              className={`${styles.select}`}
+              MenuProps={{ classes: { list: styles.list } }}
               label={t("subtitleVideoArea.selectVideoLabel")}
               name={dropdownName}
               data={selectData()}
             />
-          </ThemeProvider>
 
           <OnChange name={dropdownName}>
             {(value, previous) => {

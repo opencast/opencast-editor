@@ -310,6 +310,9 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         visibility: "visible",
       }
     },
+    '& textarea, input': {
+      outline: `${theme.element_outline}`, 
+    }
   })
 
   const timeAreaStyle = css({
