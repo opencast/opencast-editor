@@ -262,5 +262,9 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       cursor: "text",
     }),
+    input: (provided: any) => ({
+      ...provided,
+      color: theme.text,
+    }),
   }
 }
