@@ -8,7 +8,7 @@ on:
 
 jobs:
   main:
-    if: steps.is_team_member.outputs.permitted == true
+    if: needs.member.outputs.is_team_member == true
     needs: member
     runs-on: ubuntu-latest
     
@@ -106,6 +106,10 @@ jobs:
     name: Check organization membership
     runs-on: ubuntu-latest
 
+    # Map a step output to a job output
+    outputs:
+      is_team_member: ${{ steps.is_team_member.outputs.permitted }}
+    
     steps:
       - name: Check if team member
         id: is_team_member
