@@ -12,8 +12,8 @@
 
     "cuttingActions": {
       "cut-button": "Cut",
-      "cut-tooltip": "Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}",
-      "cut-tooltip-aria": "Cut. Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}.",
+      "cut-tooltip": "Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}",
+      "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
       "delete-button": "Delete",
       "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}",
       "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotKeyName}}.",
@@ -88,7 +88,7 @@
     "timeline": {
       "generateWaveform-text": "Generating Waveform",
       "segment-tooltip": "Segment {{segment}}",
-      "scrubber-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the scrubber. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
+      "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
       "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. End: {{end}}.\n"
     },
 
@@ -171,8 +171,8 @@
       "noThumbnailAvailable": "No Thumbnail available",
       "previewImageAlt": "Thumbnail for track",
       "buttonGenerate": "Generate",
-      "buttonGenerate-tooltip": "Generate a new thumbnail from the current scrubber position",
-      "buttonGenerate-tooltip-aria": "Generate a new thumbnail from the current scrubber position",
+      "buttonGenerate-tooltip": "Generate a new thumbnail from the current timeline marker position",
+      "buttonGenerate-tooltip-aria": "Generate a new thumbnail from the current timeline marker position",
       "buttonUpload": "Upload",
       "buttonUpload-tooltip": "Upload an image",
       "buttonUpload-tooltip-aria": "Upload an image",
@@ -183,8 +183,8 @@
       "buttonDiscard-tooltip": "Discard the thumbnail for this track",
       "buttonDiscard-tooltip-aria": "Discard the thumbnail for this track",
       "buttonGenerateAll": "Generate All",
-      "buttonGenerateAll-tooltip": "Generate new thumbnails for all tracks from the current scrubber position",
-      "buttonGenerateAll-tooltip-aria": "Generate new thumbnails for all tracks from the current scrubber position",
+      "buttonGenerateAll-tooltip": "Generate new thumbnails for all tracks from the current timeline marker position",
+      "buttonGenerateAll-tooltip-aria": "Generate new thumbnails for all tracks from the current timeline marker position",
       "explanation": "Upload or generate a thumbnail for each track.",
       "primary": "Primary",
       "secondary": "Secondary"
@@ -263,7 +263,7 @@
       "missingLabel": "Unknown",
       "groupVideoPlayer": "Video Player",
       "groupCuttingView": "Cutting",
-      "groupCuttingViewScrubber": "Scrubbing",
+      "groupCuttingViewScrubber": "Timeline",
       "groupSubtitleList": "Subtitles",
       "sequenceSeperator": "or",
       "genericError": "Failed to load overview",
