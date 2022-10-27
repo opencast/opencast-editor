@@ -112,7 +112,7 @@ jobs:
         uses: TheModdingInquisition/actions-team-membership@v1.0
         with:
           team: developers # required. The team to check for
-          token: ${{ secrets.GITHUB_ORG_TOKEN }} # required. Personal Access Token with the `read:org` permission
+          token: ${{ secrets.ORGANIZATION_MEMBER_SECRET }} # required. Personal Access Token with the `read:org` permission
 
 
   translations:
