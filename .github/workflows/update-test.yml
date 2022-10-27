@@ -8,10 +8,10 @@ on:
 
 jobs:
   main:
-    if: needs.member.outputs.is_team_member == true
+    if: needs.member.outputs.is_team_member
     needs: member
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: generate build path
       run: echo "::set-output name=build::${{github.event.number}}/$(date +%Y-%m-%d_%H-%M-%S)/" | sed 's_build::/*_build::_'
@@ -108,15 +108,26 @@ jobs:
 
     # Map a step output to a job output
     outputs:
-      is_team_member: ${{ steps.is_team_member.outputs.permitted }}
-    
+      is_team_member: ${{ steps.is_developer.outputs.permitted == 'true' || steps.is_committer.outputs.permitted == 'true' }}
+
     steps:
-      - name: Check if team member
-        id: is_team_member
+      - name: Check if user is Opencast developer
+        id: is_developer
         uses: TheModdingInquisition/actions-team-membership@v1.0
         with:
-          team: developers # required. The team to check for
-          token: ${{ secrets.ORGANIZATION_MEMBER_SECRET }} # required. Personal Access Token with the `read:org` permission
+          team: developers
+          # Personal Access Token with the `read:org` permission
+          token: ${{ secrets.ORGANIZATION_MEMBER_SECRET }}
+          exit: false
+
+      - name: Check if user is Opencast committer
+        id: is_committer
+        uses: TheModdingInquisition/actions-team-membership@v1.0
+        with:
+          team: committers
+          # Personal Access Token with the `read:org` permission
+          token: ${{ secrets.ORGANIZATION_MEMBER_SECRET }}
+          exit: false
 
 
   translations:
