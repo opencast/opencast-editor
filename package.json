@@ -34,7 +34,7 @@
     "emotion-normalize": "^11.0.1",
     "final-form": "^4.20.7",
     "i18next": "^21.9.2",
-    "i18next-browser-languagedetector": "^6.1.5",
+    "i18next-browser-languagedetector": "^7.0.0",
     "lodash.clonedeep": "^4.5.0",
     "luxon": "^3.0.4",
     "mui-rff": "^5.3.2",
