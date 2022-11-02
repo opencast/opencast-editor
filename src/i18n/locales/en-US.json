@@ -199,7 +199,7 @@
       "generic-message": "A critical error has occurred!",
       "details": "Details: ",
       "workflowActive-errorTitle": "Temporarily unavailable",
-      "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
+      "workflowActive-errorMessage": "This event is being processed. Please wait until the process is finished."
     },
 
     "landing": {
