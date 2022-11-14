@@ -111,7 +111,7 @@ const MainContent: React.FC<{}> = () => {
 
   const keyboardControlsStyle = css({
     display: 'flex',
-    // flexDirection: 'column' as const,
+    flexDirection: 'column' as const,
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',
