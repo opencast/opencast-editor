@@ -249,7 +249,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               */}
               <ThemeProvider theme={muiTheme}>
                 <Select
-                  label={t("subtitles.createSubtitleDropdown-label")}
+                  label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
                   name="languages"
                   data={selectData()}
                 >
