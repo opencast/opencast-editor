@@ -457,8 +457,6 @@ export const VideoControls: React.FC<{
   const videoControlsRowStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
     padding: '20px',
     ...(flexGapReplacementStyle(50, false)),
@@ -539,7 +537,8 @@ const PreviewMode: React.FC<{
     display: 'flex',
     ...(flexGapReplacementStyle(10, false)),
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden',
   })
 
   const switchIconStyle = (theme: Theme) => css({
