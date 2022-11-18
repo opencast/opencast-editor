@@ -172,7 +172,7 @@ export const titleStyle = css(({
   overflow: 'hidden',
   whiteSpace: "nowrap",
   textOverflow: 'ellipsis',
-  maxWidth: '500px',
+  maxWidth: '100%',
 }))
 
 /**
