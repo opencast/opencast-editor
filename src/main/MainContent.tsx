@@ -49,88 +49,57 @@ const MainContent: React.FC<{}> = () => {
     }
   });
 
-  const cuttingStyle = css({
+  const mainContentStyle = css({
     display: 'flex',
-    flexDirection: 'column' as const,
-    justifyContent: 'space-around',
-    ...(flexGapReplacementStyle(20, false)),
+    width: '100%',
     paddingRight: '20px',
-    paddingLeft: '161px',
+    paddingLeft: '20px',
+    ...(flexGapReplacementStyle(20, false)),
     background: `${theme.background}`,
+    overflow: 'vertical',
+  })
+
+  const cuttingStyle = css({
+    flexDirection: 'column',
   })
 
   const metadataStyle = css({
-    display: 'flex',
-    // flexDirection: 'column' as const,
-    // justifyContent: 'space-around',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingRight: '20px',
-    paddingLeft: '161px',
-    background: `${theme.background}`,
   })
 
   const trackSelectStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     alignContent: 'space-around',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingRight: '20px',
-    paddingLeft: '161px',
-    background: `${theme.background}`,
   })
 
   const subtitleSelectStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     justifyContent: 'space-around',
-    paddingRight: '20px',
-    paddingLeft: '161px',
-    height: '100%',
   })
 
   const thumbnailSelectStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     alignContent: 'space-around',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingRight: '20px',
-    paddingLeft: '161px',
-    background: `${theme.background}`,
   })
 
   const finishStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     justifyContent: 'space-around',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingRight: '20px',
-    paddingLeft: '161px',
-    minHeight: '100vh',
-    background: `${theme.background}`,
   })
 
   const keyboardControlsStyle = css({
-    display: 'flex',
-    // flexDirection: 'column' as const,
-    // justifyContent: 'space-around',
-    ...(flexGapReplacementStyle(20, false)),
-    paddingRight: '20px',
-    paddingLeft: '161px',
-    background: `${theme.background}`,
+    flexDirection: 'column',
   })
 
   const defaultStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     alignItems: 'center',
     padding: '20px',
-    ...(flexGapReplacementStyle(20, false)),
   })
 
   const render = () => {
     if (mainMenuState === MainMenuStateNames.cutting) {
       return (
-        <div css={cuttingStyle}>
+        <div css={[mainContentStyle, cuttingStyle]} role="main">
           <Video />
           <CuttingActions />
           <CuttingTimeline />
@@ -138,43 +107,43 @@ const MainContent: React.FC<{}> = () => {
       )
     } else if (mainMenuState === MainMenuStateNames.metadata) {
       return (
-        <div css={metadataStyle}>
+        <div css={[mainContentStyle, metadataStyle]} role="main">
           <Metadata />
         </div>
       )
     } else if (mainMenuState === MainMenuStateNames.trackSelection) {
       return (
-        <div css={trackSelectStyle}>
+        <div css={[mainContentStyle, trackSelectStyle]} role="main">
           <TrackSelection />
         </div>
       )
     } else if (mainMenuState === MainMenuStateNames.subtitles) {
       return (
-        <div css={subtitleSelectStyle}>
+        <div css={[mainContentStyle, subtitleSelectStyle]} role="main">
           <Subtitle />
         </div>
       )
     } else if (mainMenuState === MainMenuStateNames.thumbnail) {
       return (
-        <div css={thumbnailSelectStyle}>
+        <div css={[mainContentStyle, thumbnailSelectStyle]} role="main">
           <Thumbnail />
         </div>
       )
     } else if (mainMenuState === MainMenuStateNames.finish) {
       return (
-        <div css={finishStyle}>
+        <div css={[mainContentStyle, finishStyle]} role="main">
           <Finish />
         </div>
         )
     } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
       return (
-        <div css={keyboardControlsStyle}>
+        <div css={[mainContentStyle, keyboardControlsStyle]} role="main">
           <ThemeSwitcher/>
           <KeyboardControls />
         </div>
         )
     } else {
-      <div css={defaultStyle}>
+      <div css={[mainContentStyle, defaultStyle]} role="main">
         <FontAwesomeIcon icon={faTools} size="10x" />
         Placeholder
       </div>
@@ -182,9 +151,7 @@ const MainContent: React.FC<{}> = () => {
   }
 
   return (
-     <main css={{width: '100%'}} role="main">
-      {render()}
-     </main>
+    <>{render()}</>
   );
 };
 
