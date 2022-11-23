@@ -8,38 +8,41 @@ on:
 
 jobs:
   main:
-    runs-on: ubuntu-20.04
-    if: ${{ github.event.pull_request.head.repo.full_name == 'opencast/opencast-editor'
-      || github.event.pull_request.head.repo.full_name == 'Arnei/opencast-editor'
-      || github.event.pull_request.head.repo.full_name == 'naweidner/opencast-editor'
-      || github.event.pull_request.head.repo.full_name == 'lkiesow/opencast-editor' }}
+    if: ${{ needs.member.outputs.is_team_member == 'true'
+      || github.event.pull_request.head.repo.full_name == 'opencast/opencast-editor' }}
+    needs: member
+    runs-on: ubuntu-latest
+
     steps:
     - name: generate build path
       run: echo "::set-output name=build::${{github.event.number}}/$(date +%Y-%m-%d_%H-%M-%S)/" | sed 's_build::/*_build::_'
       id: build-path
 
-    - uses: actions/checkout@v2
+    - name: Checkout Sources
+      uses: actions/checkout@v3
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
 
-    - name: use node.js 16.x
-      uses: actions/setup-node@v2
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v3
       with:
         node-version: 16
 
-    - run: npm ci
+    - name: Clean install
+      run: npm ci
 
-    - run: npm run build
+    - name: Build App
+      run: npm run build
       env:
         PUBLIC_URL: /${{ steps.build-path.outputs.build }}
 
-    - name: prepare git
+    - name: Prepare Git
       run: |
         git config --global user.name "Editor Deployment Bot"
         git config --global user.email "opencast-support@elan-ev.de"
 
-    - name: prepare github ssh key
+    - name: Prepare GitHub SSH key
       env:
         DEPLOY_KEY: ${{ secrets.DEPLOY_KEY_TEST }}
       run: |
@@ -48,27 +51,27 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: wait for previoous workflows to finish
+    - name: Wait for previous workflows to finish
       uses: softprops/turnstyle@v1
       with:
         same-branch-only: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: clone repository
+    - name: Clone repository
       run: |
         git clone "git@github.com:opencast/opencast-editor-test.git" ~/editor-test
         cd ~/editor-test
         git checkout gh-pages
 
-    - name: store build
+    - name: Store build
       env:
         DEPLOY_PATH: editor-test/${{ steps.build-path.outputs.build }}
       run: |
         mkdir -p "${HOME}/${DEPLOY_PATH}"
         cp -rv build/* "${HOME}/${DEPLOY_PATH}"
 
-    - name: generate index.html
+    - name: Generate index.html
       run: |
         cd ~/editor-test
         echo '<html><body><ul>' > index.html
@@ -77,18 +80,18 @@ jobs:
           | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
         echo '</ul></body></html>' >> index.html
 
-    - name: commit new version
+    - name: Commit new version
       run: |
         cd ~/editor-test
         git add .
         git commit -m "Build ${{ steps.build-path.outputs.build }}"
 
-    - name: push updates
+    - name: Push updates
       run: |
         cd ~/editor-test
         git push origin gh-pages
 
-    - name: add comment with deployment location
+    - name: Add comment with deployment location
       uses: thollander/actions-comment-pull-request@main
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -98,3 +101,57 @@ jobs:
           ](https://test.editor.opencast.org/${{ steps.build-path.outputs.build }}).
 
           It might take a few minutes for it to become available.
+
+
+  member:
+    name: Check organization membership
+    runs-on: ubuntu-latest
+
+    # Map a step output to a job output
+    outputs:
+      is_team_member: ${{ steps.is_developer.outputs.permitted == 'true' || steps.is_committer.outputs.permitted == 'true' }}
+
+    steps:
+      - name: Check if user is Opencast developer
+        id: is_developer
+        if: ${{ github.event.pull_request.head.repo.full_name != 'opencast/opencast-editor' }}
+        uses: TheModdingInquisition/actions-team-membership@v1.0
+        with:
+          team: developers
+          # Personal Access Token with the `read:org` permission
+          token: ${{ secrets.ORGANIZATION_MEMBER_SECRET }}
+          exit: false
+
+      - name: Check if user is Opencast committer
+        id: is_committer
+        if: ${{ github.event.pull_request.head.repo.full_name != 'opencast/opencast-editor' }}
+        uses: TheModdingInquisition/actions-team-membership@v1.0
+        with:
+          team: committers
+          # Personal Access Token with the `read:org` permission
+          token: ${{ secrets.ORGANIZATION_MEMBER_SECRET }}
+          exit: false
+
+
+  translations:
+    name: Translations only via Crowdin
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Sources
+      uses: actions/checkout@v3
+
+    - name: Get changed locale files
+      uses: dorny/paths-filter@v2
+      id: filter_locales
+      with:
+        filters: | # !(pattern) matches anything but pattern
+          locales:
+            - 'src/i18n/locales/!(en-US)*.json'
+
+    - name: Check for changes in translations
+      if: steps.filter_locales.outputs.locales == true
+      uses: actions/github-script@v6
+      with:
+        script: |
+            core.setFailed('You should not alter translations outside of Crowdin.')
