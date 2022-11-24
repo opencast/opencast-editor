@@ -18,8 +18,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
  */
- const SubtitleSelect : React.FC<{}> = () => {
+const SubtitleSelect : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
   const subtitles = useSelector(selectSubtitles)    // parsed subtitles stored in redux
 
@@ -28,39 +29,31 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
   // Update the displayFlavors and canBeAddedFlavors
   useEffect(() => {
+    let languages = { ...settings.subtitles.languages };
+
+    // Get flavors of already created tracks or existing subtitle tracks
+    let subtitleFlavors = captionTracks
+      .map(track => track.flavor.type + '/' + track.flavor.subtype)
+      .filter(flavor => !subtitles[flavor])
+      .concat(Object.keys(subtitles));
     let tempDisplayFlavors = []
-    let tempCanBeAddedFlavors = []
-
-    for (let lan in settings.subtitles.languages) {
-      let found = false
-      let subFlavor = lan // left side
-      let name = settings.subtitles.languages[lan] // right side
-
-      // Check if flavor already exists in the tracks from Opencast
-      for (const cap of captionTracks) {
-        if (cap.flavor.type+"/"+cap.flavor.subtype === subFlavor) {
-          found = true
-        }
-      }
-
-      // Need to check this in case of added/deleted subtitles
-      // (aka changes) that are not yet published to Opencast
-      for (const identifier in subtitles) {
-        if (identifier === subFlavor) {
-          found = true
-        }
-      }
-
-      if (found) {
-        tempDisplayFlavors.push({subFlavor: subFlavor, title: name})
-      } else {
-        tempCanBeAddedFlavors.push({subFlavor: subFlavor, title: name})
-      }
+    for (const flavor of subtitleFlavors) {
+      const lang = flavor.replace(/^[^+]*/, '') || t('subtitles.generic');
+      tempDisplayFlavors.push({
+        subFlavor: flavor,
+        title: languages[flavor] || lang});
+      delete languages[flavor];
     }
+    tempDisplayFlavors.sort((f1, f2) => f1.title.localeCompare(f2.title));
+
+    // List of unused languages
+    let tempCanBeAddedFlavors = Object.keys(languages)
+      .map(flavor => ({subFlavor: flavor, title: languages[flavor]}))
+      .sort((lang1, lang2) => lang1.title.localeCompare(lang2.title));
 
     setDisplayFlavors(tempDisplayFlavors)
     setCanBeAddedFlavors(tempCanBeAddedFlavors)
-  }, [captionTracks, subtitles])
+  }, [captionTracks, subtitles, t])
 
   // TODO: Make this function more robust
   const parseCountryCode = (parseString: string) => {

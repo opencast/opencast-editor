@@ -238,7 +238,8 @@
       "backButton": "Back",
       "backButton-tooltip": "Return to subtitle selection",
       "editTitle": "Subtitle Editor - {{title}}",
-      "editTitle-loading": "Loading"
+      "editTitle-loading": "Loading",
+      "generic": "Generic"
     },
 
     "subtitleList": {
