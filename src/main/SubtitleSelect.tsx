@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation, subtitleSelectStyle } from "../cssStyles";
 import { settings } from '../config'
 import { selectSubtitles, setSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
 import { selectTheme } from "../redux/themeSlice";
-import { makeStyles } from "@mui/styles";
 
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
@@ -218,29 +217,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     },
   });
 
-  const muiStyle = makeStyles({
-    select: {
-      color: `${theme.text}`,
-      background: `${theme.element_bg}`,
-      '& .MuiSelect-icon':{
-        color: `${theme.indicator_color}`,
-      },
-    },
-    list: {
-      backgroundColor: `${theme.background}`,
-      color: `${theme.text}`,
-      "& li.Mui-selected":{
-        backgroundColor: `${theme.selected} !important`,
-        color: `${theme.selected_text}`,
-      },
-      "& li:hover":{
-        backgroundColor: `${theme.focused} !important`,
-        color: `${theme.focus_text} !important`,
-        outline: 'none'
-      }
-    }
-  });
-  const styles = muiStyle()
+  const label = t("subtitles.createSubtitleDropdown-label")
 
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
@@ -267,9 +244,8 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               */}
 
                 <Select
-                  className={`${styles.select}`}
-                  MenuProps={{ classes: { list: styles.list } }}
-                  label={t("subtitles.createSubtitleDropdown-label")}
+                  css={subtitleSelectStyle(theme)}
+                  label={label}
                   name="languages"
                   data={selectData()}
                 />
@@ -288,6 +264,5 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     </div>
   );
 }
-
 
 export default SubtitleSelect;

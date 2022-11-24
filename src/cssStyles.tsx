@@ -268,3 +268,13 @@ export function selectFieldStyle(theme: Theme) {
     }),
   }
 }
+
+export const subtitleSelectStyle = (theme: Theme) => ({
+  '& .MuiSelect-select': {
+    color: `${theme.text}`,
+    background: `${theme.element_bg}`,
+  },
+  '& .MuiSelect-icon': {
+    color: `${theme.indicator_color}`,
+  }
+})

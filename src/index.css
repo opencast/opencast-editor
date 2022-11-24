@@ -36,8 +36,12 @@ html, body, #root, .App {
   --inner-clock: rgba(255, 255, 255, 0.1);
   --clock-border: none;
   --font-weight: normal;
-  --dropdown-color: #ccc;
+  --dropdown-outline: #ccc;
   --outline-width: 1px;
+  --dropdown-bg: #1c1c1c;
+  --dropdown-hover: #a1a1a1;
+  --dropdown-hover-text: #000;
+  --dropdown-selected: #4a4a4a;
 }
 
 [data-theme = 'light'] {
@@ -55,8 +59,12 @@ html, body, #root, .App {
   --inner-clock: rgba(0,0,0,.07);
   --clock-border: none;
   --font-weight: normal;
-  --dropdown-color: #ccc;
+  --dropdown-outline: #ccc;
   --outline-width: 1px;
+  --dropdown-bg: snow;
+  --dropdown-hover: #e6e6e6;
+  --dropdown-hover-text: #000;
+  --dropdown-selected: #a1a1a1;
 }
 
 [data-theme = 'high-contrast-dark'] {
@@ -74,8 +82,12 @@ html, body, #root, .App {
   --inner-clock: #000;
   --clock-border: 2px solid #ffd67f;
   --font-weight: bold;
-  --dropdown-color: #fff;
+  --dropdown-outline: #fff;
   --outline-width: 2px;
+  --dropdown-bg: none;
+  --dropdown-hover: #a6ffea;
+  --dropdown-hover-text: #000;
+  --dropdown-selected: #fff;
 }
 
 [data-theme = 'high-contrast-light'] {
@@ -93,8 +105,12 @@ html, body, #root, .App {
   --inner-clock: snow;
   --clock-border: 2px solid #5e3781;
   --font-weight: bold;
-  --dropdown-color: #000;
+  --dropdown-outline: #000;
   --outline-width: 2px;
+  --dropdown-bg: none;
+  --dropdown-hover: #000099;
+  --dropdown-hover-text: #fff;
+  --dropdown-selected: #3232ad;
 }
 
 /* Mui DatePicker modal Metadata */
@@ -169,13 +185,30 @@ html, body, #root, .App {
 .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root.Mui-focused,
 .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root,
 .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root.Mui-focused .MuiOutlinedInput-notchedOutline,
-.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root .MuiOutlinedInput-notchedOutline {
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root .MuiOutlinedInput-notchedOutline,
+.css-l7lko-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root-ReactFinalForm:hover .MuiOutlinedInput-notchedOutline {
   border-color: var(--color) !important;
   border-width: var(--outline-width) !important;
   color: var(--color) !important;
 }
+/* Labelborder: Pick a language - Subtitle Editor */
+.MuiOutlinedInput-notchedOutline,
+.MuiOutlinedInput-notchedOutline:hover {
+  border-color: var(--dropdown-outline) !important;
+}
 /* Dropdownlist: Pick a language - Subtitle Editor */
 .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
-  outline-color: var(--dropdown-color) !important;
+  outline-color: var(--dropdown-outline) !important;
   outline-width: 2px;
+  color: var(--color) !important;
+  background: var(--dropdown-bg) !important;
+}
+/* Dropdownlist: language when selected*/
+li.Mui-selected {
+  background-color: var(--dropdown-selected) !important;
+}
+/* Dropdownlist: language on hover */
+.MuiMenuItem-root:hover {
+  background-color: var(--dropdown-hover) !important;
+  color: var(--dropdown-hover-text) !important;
 }

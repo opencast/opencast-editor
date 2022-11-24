@@ -23,11 +23,9 @@ import { Select } from "mui-rff";
 import { useTranslation } from "react-i18next";
 import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
-import { flexGapReplacementStyle } from "../cssStyles";
+import { flexGapReplacementStyle, subtitleSelectStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { selectTheme } from "../redux/themeSlice";
-import { makeStyles } from "@mui/styles";
-
 
 /**
  * A part of the subtitle editor that displays a video and related controls
@@ -186,33 +184,12 @@ const VideoSelectDropdown : React.FC<{
 
   const onSubmit = () => {}
 
-  const muiStyle = makeStyles({
-    select: {
-      color: `${theme.text}`,
-      background: `${theme.element_bg}`,
-      '& .MuiSelect-icon':{
-        color: `${theme.indicator_color}`,
-      },
-    },
-    list: {
-      backgroundColor: `${theme.background}`,
-      color: `${theme.text}`,
-      "& li.Mui-selected":{
-        backgroundColor: `${theme.selected} !important`,
-        color: `${theme.selected_text}`,
-      },
-      "& li:hover":{
-        backgroundColor: `${theme.focused} !important`,
-        color: `${theme.focus_text} !important`,
-        outline: 'none'
-      }
-    }
-  });
-  const styles = muiStyle()
 
   const subtitleAddFormStyle = css({
     width: '100%',
   });
+
+  const selectVideoLabel = t("subtitleVideoArea.selectVideoLabel")
 
   return (
     <Form
@@ -225,9 +202,8 @@ const VideoSelectDropdown : React.FC<{
       }} css={subtitleAddFormStyle}>
 
             <Select
-              className={`${styles.select}`}
-              MenuProps={{ classes: { list: styles.list } }}
-              label={t("subtitleVideoArea.selectVideoLabel")}
+              css={subtitleSelectStyle(theme)}
+              label={selectVideoLabel}
               name={dropdownName}
               data={selectData()}
             />
