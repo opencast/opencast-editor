@@ -277,6 +277,7 @@
 
     "theme": {
       "appearance": "Appearance",
+      "selectThemesLabel": "Appearances",
       "darkmode": "Dark mode",
       "lightmode": "Light mode",
       "system": "System design",
