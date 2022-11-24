@@ -5,12 +5,13 @@ const config: PlaywrightTestConfig = {
   reporter: [ [process.env.CI ? 'github' : 'list',],
             ['html', { outputFolder: 'playwright-report' }]],
   testIgnore: '**/redux/**',
-  retries: 3,
+  retries: 1,
   timeout: 60 * 1000,
 
   use: {
     baseURL: 'http://localhost:3000/',
     headless: true,
+    screenshot: 'only-on-failure',
   },
 
   webServer: {
