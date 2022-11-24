@@ -55,11 +55,6 @@ const SubtitleSelect : React.FC<{}> = () => {
     setCanBeAddedFlavors(tempCanBeAddedFlavors)
   }, [captionTracks, subtitles, t])
 
-  // TODO: Make this function more robust
-  const parseCountryCode = (parseString: string) => {
-    return parseString.split("+").pop()?.slice(0, 2);
-  }
-
   const subtitleSelectStyle = css({
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(20em, 1fr))',
@@ -73,10 +68,11 @@ const SubtitleSelect : React.FC<{}> = () => {
     }
 
     for (let subFlavor of displayFlavors) {
+      const icon = ((settings.subtitles || {}).icons || {})[subFlavor.subFlavor];
       buttons.push(
         <SubtitleSelectButton
           title={subFlavor.title}
-          iconIdentifier={parseCountryCode(subFlavor.subFlavor)}
+          icon={icon}
           flavor={subFlavor.subFlavor}
           key={subFlavor.subFlavor}
         />
@@ -99,34 +95,20 @@ const SubtitleSelect : React.FC<{}> = () => {
  */
 const SubtitleSelectButton: React.FC<{
   title: string,
-  iconIdentifier: string | undefined,
+  icon: string | undefined,
   flavor: string,
 }> = ({
   title,
-  iconIdentifier,
+  icon,
   flavor
 }) => {
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
   const dispatch = useDispatch()
 
-  /**
-   * Quick and dirty function to get a flag unicode character by country code
-   * @param countryCode
-   * @returns
-   */
-  function getFlagEmoji(countryCode: string) {
-    var flag = countryCode.toUpperCase().replace(/./g, char =>
-      String.fromCodePoint(127397 + char.charCodeAt(0))
-    );
-    const regexEscape = /[\u{1F1E6}-\u{1F1FF}]/u;
-    if (regexEscape.test(flag)) {
-      return flag
-    }
-  }
-
   const flagStyle = css({
     fontSize: '2em',
+    overflow: 'hidden'
   });
 
   const titleStyle = css({
@@ -149,7 +131,7 @@ const SubtitleSelectButton: React.FC<{
         dispatch(setIsDisplayEditView(true))
         dispatch(setSelectedSubtitleFlavor(flavor))
       }}}>
-      {iconIdentifier && getFlagEmoji(iconIdentifier) && <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>}
+      {icon && <div css={flagStyle}>{icon}</div>}
       <div css={titleStyle}>{title}</div>
     </div>
   );

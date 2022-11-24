@@ -32,6 +32,12 @@ mainFlavor = "captions"
 "captions/source+de" = "Deutsch"
 "captions/source+en" = "English"
 "captions/source+es" = "Spanish"
+"captions/source" = "Generic"
+
+[subtitles.icons]
+"captions/source+de" = "🇩🇪"
+"captions/source+en" = "🇺🇸"
+"captions/source+es" = "🇪🇸"
 
 [thumbnail]
 show = true
