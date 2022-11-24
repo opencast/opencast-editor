@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
 import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
-import { selectOriginalThumbnails, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
+import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import { VideoControls, VideoPlayers } from "./Video";
@@ -129,7 +129,7 @@ const ThumbnailTable : React.FC<{
   discard: any,
 }> = ({inputRefs, generate, upload, uploadCallback, discard}) => {
 
-  const tracks = useSelector(selectTracks)
+  const videoTracks = useSelector(selectVideos)
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -140,13 +140,13 @@ const ThumbnailTable : React.FC<{
   })
 
   const renderSingleOrMultiple = () => {
-    const primaryTrack = tracks.find((e) => e.thumbnailPriority === 0)
+    const primaryTrack = videoTracks.find((e) => e.thumbnailPriority === 0)
 
     if (settings.thumbnail.simpleMode && primaryTrack !== undefined) {
       return (<>
         <ThumbnailTableSingleRow
           track={primaryTrack}
-          index={tracks.indexOf(primaryTrack)}
+          index={videoTracks.indexOf(primaryTrack)}
           inputRefs={inputRefs}
           generate={generate}
           upload={upload}
@@ -156,8 +156,8 @@ const ThumbnailTable : React.FC<{
       </>)
     } else {
       return ( <>
-        <AffectAllRow tracks={tracks} generate={generate}/>
-        {tracks.map( (track: Track, index: number) => (
+        <AffectAllRow tracks={videoTracks} generate={generate}/>
+        {videoTracks.map( (track: Track, index: number) => (
           <ThumbnailTableRow
             key={index}
             track={track}
