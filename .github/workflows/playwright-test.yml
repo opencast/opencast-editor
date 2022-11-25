@@ -2,6 +2,8 @@ name: Playwright UI-Test
 
 on:
   push:
+    branches-ignore:
+      - 'dependabot/**'
   pull_request:
     branches:
       - main
@@ -40,3 +42,9 @@ jobs:
 
     - name: Run playwright-test
       run: npx playwright test --config=playwright.config.ts
+
+    - name: Upload tests results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: test-results/

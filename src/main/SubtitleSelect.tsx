@@ -17,8 +17,9 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
  */
- const SubtitleSelect : React.FC<{}> = () => {
+const SubtitleSelect : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
   const subtitles = useSelector(selectSubtitles)    // parsed subtitles stored in redux
 
@@ -27,44 +28,31 @@ import { selectTheme } from "../redux/themeSlice";
 
   // Update the displayFlavors and canBeAddedFlavors
   useEffect(() => {
+    let languages = { ...settings.subtitles.languages };
+
+    // Get flavors of already created tracks or existing subtitle tracks
+    let subtitleFlavors = captionTracks
+      .map(track => track.flavor.type + '/' + track.flavor.subtype)
+      .filter(flavor => !subtitles[flavor])
+      .concat(Object.keys(subtitles));
     let tempDisplayFlavors = []
-    let tempCanBeAddedFlavors = []
-
-    for (let lan in settings.subtitles.languages) {
-      let found = false
-      let subFlavor = lan // left side
-      let name = settings.subtitles.languages[lan] // right side
-
-      // Check if flavor already exists in the tracks from Opencast
-      for (const cap of captionTracks) {
-        if (cap.flavor.type+"/"+cap.flavor.subtype === subFlavor) {
-          found = true
-        }
-      }
-
-      // Need to check this in case of added/deleted subtitles
-      // (aka changes) that are not yet published to Opencast
-      for (const identifier in subtitles) {
-        if (identifier === subFlavor) {
-          found = true
-        }
-      }
-
-      if (found) {
-        tempDisplayFlavors.push({subFlavor: subFlavor, title: name})
-      } else {
-        tempCanBeAddedFlavors.push({subFlavor: subFlavor, title: name})
-      }
+    for (const flavor of subtitleFlavors) {
+      const lang = flavor.replace(/^[^+]*/, '') || t('subtitles.generic');
+      tempDisplayFlavors.push({
+        subFlavor: flavor,
+        title: languages[flavor] || lang});
+      delete languages[flavor];
     }
+    tempDisplayFlavors.sort((f1, f2) => f1.title.localeCompare(f2.title));
+
+    // List of unused languages
+    let tempCanBeAddedFlavors = Object.keys(languages)
+      .map(flavor => ({subFlavor: flavor, title: languages[flavor]}))
+      .sort((lang1, lang2) => lang1.title.localeCompare(lang2.title));
 
     setDisplayFlavors(tempDisplayFlavors)
     setCanBeAddedFlavors(tempCanBeAddedFlavors)
-  }, [captionTracks, subtitles])
-
-  // TODO: Make this function more robust
-  const parseCountryCode = (parseString: string) => {
-    return parseString.split("+").pop()?.slice(0, 2);
-  }
+  }, [captionTracks, subtitles, t])
 
   const subtitleSelectStyle = css({
     display: 'grid',
@@ -79,10 +67,11 @@ import { selectTheme } from "../redux/themeSlice";
     }
 
     for (let subFlavor of displayFlavors) {
+      const icon = ((settings.subtitles || {}).icons || {})[subFlavor.subFlavor];
       buttons.push(
         <SubtitleSelectButton
           title={subFlavor.title}
-          iconIdentifier={parseCountryCode(subFlavor.subFlavor)}
+          icon={icon}
           flavor={subFlavor.subFlavor}
           key={subFlavor.subFlavor}
         />
@@ -105,34 +94,20 @@ import { selectTheme } from "../redux/themeSlice";
  */
 const SubtitleSelectButton: React.FC<{
   title: string,
-  iconIdentifier: string | undefined,
+  icon: string | undefined,
   flavor: string,
 }> = ({
   title,
-  iconIdentifier,
+  icon,
   flavor
 }) => {
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
   const dispatch = useDispatch()
 
-  /**
-   * Quick and dirty function to get a flag unicode character by country code
-   * @param countryCode
-   * @returns
-   */
-  function getFlagEmoji(countryCode: string) {
-    var flag = countryCode.toUpperCase().replace(/./g, char =>
-      String.fromCodePoint(127397 + char.charCodeAt(0))
-    );
-    const regexEscape = /[\u{1F1E6}-\u{1F1FF}]/u;
-    if (regexEscape.test(flag)) {
-      return flag
-    }
-  }
-
   const flagStyle = css({
     fontSize: '2em',
+    overflow: 'hidden'
   });
 
   const titleStyle = css({
@@ -155,7 +130,7 @@ const SubtitleSelectButton: React.FC<{
         dispatch(setIsDisplayEditView(true))
         dispatch(setSelectedSubtitleFlavor(flavor))
       }}}>
-      {iconIdentifier && getFlagEmoji(iconIdentifier) && <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>}
+      {icon && <div css={flagStyle}>{icon}</div>}
       <div css={titleStyle}>{title}</div>
     </div>
   );
@@ -245,7 +220,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
 
                 <Select
                   css={subtitleSelectStyle(theme)}
-                  label={label}
+                  label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
                   name="languages"
                   data={selectData()}
                 />

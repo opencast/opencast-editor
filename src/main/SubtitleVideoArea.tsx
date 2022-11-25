@@ -203,7 +203,7 @@ const VideoSelectDropdown : React.FC<{
 
             <Select
               css={subtitleSelectStyle(theme)}
-              label={selectVideoLabel}
+              label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
               name={dropdownName}
               data={selectData()}
             />

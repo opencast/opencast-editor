@@ -12,15 +12,7 @@ const Subtitle : React.FC<{}> = () => {
   const displayEditView = useSelector(selectIsDisplayEditView)
 
   const render = () => {
-    if (!displayEditView) {
-      return (
-        <SubtitleSelect />
-      )
-    } else {
-      return (
-        <SubtitleEditor />
-      )
-    }
+    return displayEditView ? <SubtitleEditor /> : <SubtitleSelect />;
   }
 
   return (
