@@ -100,6 +100,7 @@ import { t } from "i18next";
           ...(refTop.current) && {left: (refTop.current.getElement().clientWidth / 2)},
           top: '10px',
           background: `${theme.text}`,
+          zIndex: 100,
         }}
       />
       {/* Scrollable timeline container. Has width of parent*/}

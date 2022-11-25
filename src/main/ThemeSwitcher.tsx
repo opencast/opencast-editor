@@ -76,6 +76,7 @@ const ThemeSwitcher: React.FC<{}> = () => {
         defaultValue={themes.filter(({value}) => value === themeState)}
         options={themes}
         onChange={themes => switchTheme(themes!.value)}
+        aria-label={t('theme.selectThemesLabel')}
       />
     </div>
   )

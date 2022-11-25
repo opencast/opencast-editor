@@ -207,7 +207,7 @@ const VideoSelectDropdown : React.FC<{
 
           <ThemeProvider theme={muiTheme}>
             <Select
-              label={t("subtitleVideoArea.selectVideoLabel")}
+              label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
               name={dropdownName}
               data={selectData()}
             />
