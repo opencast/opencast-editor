@@ -189,8 +189,6 @@ const VideoSelectDropdown : React.FC<{
     width: '100%',
   });
 
-  const selectVideoLabel = t("subtitleVideoArea.selectVideoLabel")
-
   return (
     <Form
     onSubmit={(onSubmit)}

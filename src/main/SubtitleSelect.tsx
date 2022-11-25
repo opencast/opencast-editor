@@ -192,8 +192,6 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     },
   });
 
-  const label = t("subtitles.createSubtitleDropdown-label")
-
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
       role="button" tabIndex={0}
