@@ -210,7 +210,10 @@ export const VideoPlayer = React.forwardRef(
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
     if (isPrimary) {
       // Only update redux if there was a substantial change
-      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) && state.playedSeconds !== 0) {
+      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) &&
+          state.playedSeconds !== 0 &&
+          // Avoid overwriting video restarts
+          state.playedSeconds < duration) {
         dispatch(setCurrentlyAt(state.playedSeconds * 1000))
       }
     }
@@ -237,8 +240,18 @@ export const VideoPlayer = React.forwardRef(
     setReady(true);
   }
 
+  const onPlay = () => {
+    // Restart the video from the beginning when at the end
+    if (isPrimary && currentlyAt >= duration) {
+      dispatch(setCurrentlyAt(0))
+      // Flip-flop the "isPlaying" switch, or else the video won't start playing
+      dispatch(setIsPlaying(false));
+      dispatch(setIsPlaying(true));
+    }
+  }
+
   const onEndedCallback = () => {
-    if (isPrimary) {
+    if (isPrimary && currentlyAt !== 0) {
       dispatch(setIsPlaying(false));
       dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
     }
@@ -403,6 +416,7 @@ export const VideoPlayer = React.forwardRef(
             onProgress={onProgressCallback}
             progressInterval={100}
             onReady={onReadyCallback}
+            onPlay={onPlay}
             onEnded={onEndedCallback}
             onError={onErrorCallback}
             tabIndex={-1}
