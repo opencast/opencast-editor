@@ -122,7 +122,7 @@ import { t } from "i18next";
       </ScrollContainer>
       {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
       <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
-        <ThemedTooltip title={t('subtitleTimeline.timeline-tooltip')} placement={'top-start'}>
+        <ThemedTooltip title={t('subtitleTimeline.overviewTimelineTooltip')}>
           <div
             onMouseDown={e => setCurrentlyAtToClick(e)}
             css={{

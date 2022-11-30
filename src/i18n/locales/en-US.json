@@ -259,7 +259,7 @@
     },
 
     "subtitleTimeline": {
-      "timeline-tooltip": "Mini Timeline"
+      "overviewTimelineTooltip": "Timeline overview"
     },
 
     "keyboardControls": {
