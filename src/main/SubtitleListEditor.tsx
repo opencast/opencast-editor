@@ -398,7 +398,6 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         </div>
         <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
           <FunctionButton
-            style={[basicButtonStyle(theme)]}
             tooltip={t("subtitleList.addSegmentAbove")}
             tooltipAria={t("subtitleList.addSegmentAbove")}
             onClick={addCueAbove}
@@ -410,7 +409,6 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             icon={faPlus}
           />
           <FunctionButton
-            style={[basicButtonStyle(theme)]}
             tooltip={t("subtitleList.deleteSegment")}
             tooltipAria={t("subtitleList.deleteSegment")}
             onClick={deleteCue}
@@ -422,7 +420,6 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             icon={faTrash}
           />
           <FunctionButton
-            style={[basicButtonStyle(theme)]}
             tooltip={t("subtitleList.addSegmentBelow")}
             tooltipAria={t("subtitleList.addSegmentBelow")}
             onClick={addCueBelow}
@@ -444,14 +441,12 @@ const FunctionButton : React.FC<{
   tooltipAria: string,
   onClick: any,
   onKeyDown: any,
-  style: SerializedStyles[],
   icon: IconProp
 }> = ({
   tooltip,
   tooltipAria,
   onClick,
   onKeyDown,
-  style,
   icon
 }) => {
 
@@ -467,7 +462,7 @@ const FunctionButton : React.FC<{
 
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={[style, addSegmentButtonStyle]}
+      <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
         role="button" 
         tabIndex={0}
         arial-label={tooltipAria}
