@@ -84,7 +84,7 @@ html, body, #root, .App {
   --font-weight: bold;
   --dropdown-outline: #fff;
   --outline-width: 2px;
-  --dropdown-bg: none;
+  --dropdown-bg: #000;
   --dropdown-hover: #a6ffea;
   --dropdown-hover-text: #000;
   --dropdown-selected: #fff;
@@ -107,7 +107,7 @@ html, body, #root, .App {
   --font-weight: bold;
   --dropdown-outline: #000;
   --outline-width: 2px;
-  --dropdown-bg: none;
+  --dropdown-bg: snow;
   --dropdown-hover: #000099;
   --dropdown-hover-text: #fff;
   --dropdown-selected: #3232ad;
@@ -180,15 +180,11 @@ html, body, #root, .App {
   background-color: var(--selected-hover) !important;
   -webkit-text-fill-color: var(--selected-text) !important;
 }
-/* Label: Pick a language - Subtitle Editor */
+
+/* Label: Pick a language & Video Flavor - Subtitle Editor */
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
 .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root.Mui-focused,
-.css-1sumxir-MuiFormLabel-root-MuiInputLabel-root,
-.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root.Mui-focused .MuiOutlinedInput-notchedOutline,
-.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root .MuiOutlinedInput-notchedOutline,
-.css-l7lko-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root-ReactFinalForm:hover .MuiOutlinedInput-notchedOutline {
-  border-color: var(--color) !important;
-  border-width: var(--outline-width) !important;
+.css-1sumxir-MuiFormLabel-root-MuiInputLabel-root {
   color: var(--color) !important;
 }
 /* Labelborder: Pick a language - Subtitle Editor */
@@ -196,19 +192,20 @@ html, body, #root, .App {
 .MuiOutlinedInput-notchedOutline:hover {
   border-color: var(--dropdown-outline) !important;
 }
-/* Dropdownlist: Pick a language - Subtitle Editor */
+/* Dropdownlist: Pick a language & Video Flavor - Subtitle Editor */
 .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
   outline-color: var(--dropdown-outline) !important;
   outline-width: 2px;
   color: var(--color) !important;
   background: var(--dropdown-bg) !important;
 }
-/* Dropdownlist: language when selected*/
+/* Dropdownlist: option when selected - Subtitle Editor */
 li.Mui-selected {
   background-color: var(--dropdown-selected) !important;
 }
-/* Dropdownlist: language on hover */
+/* Dropdownlist: option on hover - Subtitle Editor */
 .MuiMenuItem-root:hover {
   background-color: var(--dropdown-hover) !important;
   color: var(--dropdown-hover-text) !important;
+  outline: none;
 }
