@@ -26,6 +26,7 @@ import { VideoControls, VideoPlayer } from "./Video";
 import { flexGapReplacementStyle, subtitleSelectStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { selectTheme } from "../redux/themeSlice";
+import { ThemeProvider } from "@mui/material/styles";
 
 /**
  * A part of the subtitle editor that displays a video and related controls
@@ -199,12 +200,13 @@ const VideoSelectDropdown : React.FC<{
         handleSubmit(event)
       }} css={subtitleAddFormStyle}>
 
-            <Select
-              css={subtitleSelectStyle(theme)}
-              label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
-              name={dropdownName}
-              data={selectData()}
-            />
+            <ThemeProvider theme={subtitleSelectStyle(theme)}>
+              <Select
+                label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
+                name={dropdownName}
+                data={selectData()}
+              />
+            </ThemeProvider>
 
           <OnChange name={dropdownName}>
             {(value, previous) => {

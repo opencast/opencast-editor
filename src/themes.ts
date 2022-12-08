@@ -32,6 +32,13 @@ export const lightMode: Theme = {
   subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
   subtitle_segment_border: '1px solid #363636',
   subtitle_segment_text: '#fff',
+  clock_bg: '#e6e6e6',
+  clock_border: '2px solid transparent',
+  clock_hands: '#a1a1a1',
+  clock_focus: '#000',
+  digit_selected: '#000',
+  text_shadow: '2px 0 #e6e6e6, -2px 0 #e6e6e6, 0 2px #e6e6e6, 0 -2px #e6e6e6,' +
+               '1px 1px #e6e6e6, -1px -1px #e6e6e6, 1px -1px #e6e6e6, -1px 1px #e6e6e6',
 };
 
 export const darkMode: Theme = {
@@ -66,6 +73,13 @@ export const darkMode: Theme = {
   subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
   subtitle_segment_border: '1px solid #dddddd',
   subtitle_segment_text: '#fff',
+  clock_bg: '#2b2b2b',
+  clock_border: '2px solid transparent',
+  clock_hands: '#a1a1a1',
+  clock_focus: '#fff',
+  digit_selected: '#000',
+  text_shadow: '2px 0 #2b2b2b, -2px 0 #2b2b2b, 0 2px #2b2b2b, 0 -2px #2b2b2b,' +
+               ' 1px 1px #2b2b2b, -1px -1px #2b2b2b, 1px -1px #2b2b2b, -1px 1px #2b2b2b',
 };
 
 export const highContrastDarkMode: Theme = {
@@ -77,7 +91,7 @@ export const highContrastDarkMode: Theme = {
   focused: '#a6ffea',
   focus_text: '#000',
   selected: '#fff',
-  disabled: 'rgba(255, 255, 255, 0.8)',
+  disabled: 'rgba(255, 255, 255, 0.6)',
   menuBorder: '2px solid #fff',
   boxShadow: '0 0 0 rgba(255, 255, 255, 0.3)',
   singleKey_bg: 'none',
@@ -88,7 +102,7 @@ export const highContrastDarkMode: Theme = {
   tooltip_text: '#000',
   element_outline: '2px solid #fff',
   selected_text: '#000',
-  dropdown_border: '3px solid #fff',
+  dropdown_border: '2px solid #fff',
   menuButton_outline: '2px solid transparent',
   button_outline: '2px solid #a6ffea',
   button_color: '#a6ffea',
@@ -100,6 +114,13 @@ export const highContrastDarkMode: Theme = {
   subtitle_segment_bg: 'none',
   subtitle_segment_border: '2px solid #fff',
   subtitle_segment_text: '#fff',
+  clock_bg: '#000',
+  clock_border: '2px solid #a6ffea',
+  clock_hands: '#fff',
+  clock_focus: '#000',
+  digit_selected: '#000',
+  text_shadow: '2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,' +
+               ' 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000',
 }
 
 export const highContrastLightMode: Theme = {
@@ -110,7 +131,7 @@ export const highContrastLightMode: Theme = {
   multiValue: '#2e2e2e',
   focused:'#000099',
   focus_text: '#fff',
-  selected: '#3232ad',
+  selected: '#4646b5',
   disabled: 'rgba(0, 0, 0, 0.8)',
   menuBorder: '2px solid #000',
   boxShadow: '0 0 0 rgba(0, 0, 0, 0.3)',
@@ -122,7 +143,7 @@ export const highContrastLightMode: Theme = {
   tooltip_text: '#fff',
   element_outline: '2px solid #000',
   selected_text: '#fff',
-  dropdown_border: '3px solid #000',
+  dropdown_border: '2px solid #000',
   menuButton_outline: '2px solid transparent',
   button_outline: '3px solid #000099',
   button_color: '#000099',
@@ -134,4 +155,11 @@ export const highContrastLightMode: Theme = {
   subtitle_segment_bg: 'none',
   subtitle_segment_border: '2px solid #000',
   subtitle_segment_text: '#000',
+  clock_bg: 'snow',
+  clock_border: '2px solid #000099',
+  clock_hands: '#4646b5',
+  clock_focus: '#fff',
+  digit_selected: '#fff',
+  text_shadow: '2px 0 snow, -2px 0 snow, 0 2px snow, 0 -2px snow,' +
+               ' 1px 1px snow, -1px -1px snow, 1px -1px snow, -1px 1px snow',
 }

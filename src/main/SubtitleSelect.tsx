@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
 import { selectTheme } from "../redux/themeSlice";
+import { ThemeProvider } from "@mui/material/styles";
 
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
@@ -216,12 +217,13 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                 MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
               */}
 
-                <Select
-                  css={subtitleSelectStyle(theme)}
-                  label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
-                  name="languages"
-                  data={selectData()}
-                />
+                <ThemeProvider theme={subtitleSelectStyle(theme)}>
+                  <Select
+                    label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
+                    name="languages"
+                    data={selectData()}
+                  />
+                </ThemeProvider>
 
               <button css={[basicButtonStyle(theme), createButtonStyle]}
                 type="submit"

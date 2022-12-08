@@ -33,6 +33,12 @@ export interface Theme {
   subtitle_segment_bg: String
   subtitle_segment_border: String
   subtitle_segment_text: String
+  clock_bg: String
+  clock_border: String
+  clock_hands: String
+  clock_focus: String
+  digit_selected: String
+  text_shadow: String
 };
 
 const getValue = () => {
