@@ -132,7 +132,7 @@ export const highContrastLightMode: Theme = {
   focused:'#000099',
   focus_text: '#fff',
   selected: '#4646b5',
-  disabled: 'rgba(0, 0, 0, 0.8)',
+  disabled: 'rgba(0, 0, 0, 0.6)',
   menuBorder: '2px solid #000',
   boxShadow: '0 0 0 rgba(0, 0, 0, 0.3)',
   singleKey_bg: 'none',
