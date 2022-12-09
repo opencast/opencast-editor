@@ -93,7 +93,7 @@
   "devDependencies": {
     "@playwright/test": "^1.28.1",
     "@redux-devtools/core": "^3.13.1",
-    "@types/lodash": "^4.14.188",
+    "@types/lodash": "^4.14.191",
     "@types/luxon": "^3.0.2",
     "@types/react-beforeunload": "^2.1.1",
     "@types/react-final-form-listeners": "^1.0.0",
