@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation, subtitleSelectStyle } from "../cssStyles";
 import { settings } from '../config'
 import { selectSubtitles, setSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -146,7 +146,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
-  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
+
   const dispatch = useDispatch()
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true)
@@ -171,12 +171,6 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     dispatch(setIsDisplayEditView(true))
     dispatch(setSelectedSubtitleFlavor(values.languages))
   }
-
-  const muiTheme = createTheme({
-    palette: {
-      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
-    },
-  });
 
   const plusIconStyle = css({
     display: isPlusDisplay ? 'block' : 'none'
@@ -224,7 +218,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                 {/* TODO: Fix the following warning, caused by removing items from data:
                   MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
                 */}
-                <ThemeProvider theme={muiTheme}>
+                <ThemeProvider theme={subtitleSelectStyle(theme)}>
                   <Select
                     label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
                     name="languages"
@@ -255,6 +249,5 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     </ThemedTooltip>
   );
 }
-
 
 export default SubtitleSelect;

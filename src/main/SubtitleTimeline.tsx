@@ -209,6 +209,7 @@ const TimelineSubtitleSegment: React.FC<{
   const [isGrabbed, setIsGrabbed] = useState(false)
   const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
+  const theme = useSelector(selectTheme);
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
     setControlledPosition({x: (props.cue.startTime / duration) * (props.timelineWidth), y: 0});
@@ -333,11 +334,9 @@ const TimelineSubtitleSegment: React.FC<{
     height: absoluteHeight,
     margin: `${absoluteTop}px 0px 0px ${absoluteLeft}px`,
 
-    background: 'rgba(0, 0, 0, 0.4)',
+    background: `${theme.subtitle_segment_bg}`,
+    border: `${theme.subtitle_segment_border}`,
     borderRadius: '5px',
-    borderStyle: 'solid',
-    borderColor: 'dark-grey',
-    borderWidth: '1px',
     boxSizing: 'border-box',
     zIndex: 1,
 
@@ -353,7 +352,7 @@ const TimelineSubtitleSegment: React.FC<{
     whiteSpace: "nowrap",
     textOverflow: 'ellipsis',
     padding: '8px',
-    color: 'white',
+    color: `${theme.subtitle_segment_text}`
   })
 
   return (

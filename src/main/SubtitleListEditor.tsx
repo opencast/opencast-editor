@@ -28,7 +28,7 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
 import { VariableSizeList } from "react-window"
 import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { selectTheme } from "../redux/themeSlice"
+import { selectTheme, selectThemeState } from "../redux/themeSlice"
 import { ThemedTooltip } from "./Tooltip"
 import { IconProp } from "@fortawesome/fontawesome-svg-core"
 
@@ -295,6 +295,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     dispatch(setCurrentlyAt(cue.startTime))
   }
 
+  const themeState = useSelector(selectThemeState);
+
   const segmentStyle = css({
     display: 'flex',
     flexDirection: 'row',
@@ -312,6 +314,13 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         visibility: "visible",
       }
     },
+    '& textarea, input': {
+      outline: `${theme.element_outline}`,
+    },
+    '& input': {
+      marginTop: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
+      marginBottom: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
+    }
   })
 
   const timeAreaStyle = css({
