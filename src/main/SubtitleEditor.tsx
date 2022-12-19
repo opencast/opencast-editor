@@ -34,6 +34,7 @@ import { parseSubtitle } from "../util/utilityFunctions";
   const subtitle : SubtitleCue[] = useSelector(selectSelectedSubtitleByFlavor)
   const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
   const captionTrack = useSelector(selectCaptionTrackByFlavor(selectedFlavor))
+  const theme = useSelector(selectTheme)
 
   // Prepare subtitle in redux
   useEffect(() => {
@@ -88,7 +89,7 @@ import { parseSubtitle } from "../util/utilityFunctions";
     paddingTop: '10px',
     paddingBottom: '10px',
     ...(flexGapReplacementStyle(30, true)),
-    borderBottom: '1px solid #BBB',
+    borderBottom: `${theme.menuBorder}`
   })
 
   // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx

@@ -11,8 +11,8 @@
     },
     "cuttingActions": {
         "cut-button": "Cortar",
-        "cut-tooltip": "Dividir el segmento en la posición actual del marcador. Acceso Rápido:: {{hotkeyName}}",
-        "cut-tooltip-aria": "Dividir el segmento en la posición actual del marcador. Acceso Rápido:: {{hotkeyName}}.",
+        "cut-tooltip": "Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}",
+        "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
         "delete-button": "Borrar",
         "delete-restore-tooltip": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido:: {{hotKeyName}}.",
@@ -80,7 +80,7 @@
     "timeline": {
         "generateWaveform-text": "Generando forma de onda",
         "segment-tooltip": "Segmento {{segment}}",
-        "scrubber-text-aria": "Marcador. {{currentTime}}. Segmento activo: {{segment}}. {{segmentStatus}}. Controles: {{moveLeft}} y {{moveRight}} para mover el marcador. {{increase}} y {{decrease}} para aumentar/disminuir el delta de movimiento.\n",
+        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
         "segments-text-aria": "Segmento {{index}}. {{segmentStatus}}. Inicio: {{start}}. Final: {{end}}.\n"
     },
     "workflowConfig": {
@@ -160,8 +160,8 @@
         "noThumbnailAvailable": "No Thumbnail available",
         "previewImageAlt": "Thumbnail for track",
         "buttonGenerate": "Generar",
-        "buttonGenerate-tooltip": "Generate a new thumbnail from the current scrubber position",
-        "buttonGenerate-tooltip-aria": "Generate a new thumbnail from the current scrubber position",
+        "buttonGenerate-tooltip": "Generate a new thumbnail from the current timeline marker position",
+        "buttonGenerate-tooltip-aria": "Generate a new thumbnail from the current timeline marker position",
         "buttonUpload": "Cargar",
         "buttonUpload-tooltip": "Cargar una imagen",
         "buttonUpload-tooltip-aria": "Cargar una imagen",
@@ -172,8 +172,8 @@
         "buttonDiscard-tooltip": "Discard the thumbnail for this track",
         "buttonDiscard-tooltip-aria": "Discard the thumbnail for this track",
         "buttonGenerateAll": "Generar todo",
-        "buttonGenerateAll-tooltip": "Generate new thumbnails for all tracks from the current scrubber position",
-        "buttonGenerateAll-tooltip-aria": "Generate new thumbnails for all tracks from the current scrubber position",
+        "buttonGenerateAll-tooltip": "Generate new thumbnails for all tracks from the current timeline marker position",
+        "buttonGenerateAll-tooltip-aria": "Generate new thumbnails for all tracks from the current timeline marker position",
         "explanation": "Upload or generate a thumbnail for each track.",
         "primary": "Primario",
         "secondary": "Secundario"
@@ -186,7 +186,7 @@
         "generic-message": "¡Un error critico ha ocurrido!",
         "details": "Detalles: ",
         "workflowActive-errorTitle": "No disponible temporalmente",
-        "workflowActive-errorMessage": "Un flujo de trabajo de Opencast se está ejecutando, por favor espere hasta que haya terminado."
+        "workflowActive-errorMessage": "This event is being processed. Please wait until the process is finished."
     },
     "landing": {
         "main-heading": "Bienvenido al editor de vídeos",
@@ -221,7 +221,8 @@
         "backButton": "Atras",
         "backButton-tooltip": "Volver a la selección de subtítulos",
         "editTitle": "Editor de subtítulos - {{title}}",
-        "editTitle-loading": "Cargando"
+        "editTitle-loading": "Cargando",
+        "generic": "Generic"
     },
     "subtitleList": {
         "startTime-tooltip": "Inicio del segmento",
@@ -243,7 +244,7 @@
         "missingLabel": "Desconocido",
         "groupVideoPlayer": "Reproductor de vídeo",
         "groupCuttingView": "Dividir",
-        "groupCuttingViewScrubber": "Desplazando",
+        "groupCuttingViewScrubber": "Timeline",
         "groupSubtitleList": "Subtítulos",
         "sequenceSeperator": "o",
         "genericError": "Error al cargar la vista general",
@@ -255,6 +256,7 @@
     },
     "theme": {
         "appearance": "Apariencia",
+        "selectThemesLabel": "Appearances",
         "darkmode": "Modo oscuro",
         "lightmode": "Modo claro",
         "system": "Diseño del sistema",
