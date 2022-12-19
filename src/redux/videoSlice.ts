@@ -190,25 +190,10 @@ const videoSlice = createSlice({
       fetchVideoInformation.fulfilled, (state, action) => {
         state.status = 'success'
 
-        // // Old API
-        // // eslint-disable-next-line no-sequences
-        // state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        // state.videoCount = action.payload.previews.length
-        // state.duration = action.payload.duration
-        // state.title = action.payload.title
-        // state.presenters = action.payload.presenters
-        // state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        // state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
-        //   if (n1.displayOrder > n2.displayOrder) { return 1; }
-        //   if (n1.displayOrder < n2.displayOrder) { return -1; }
-        //   return 0;
-        // });
-
-        // New API
         if (action.payload.workflow_active) {
           state.status = 'failed'
           state.errorReason = 'workflowActive'
-          state.error = "An Opencast workflow is currently running, please wait until it is finished."
+          state.error = "This event is being processed. Please wait until the process is finished."
         }
         state.tracks = action.payload.tracks.sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => a.thumbnailPriority - b.thumbnailPriority)
         const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
