@@ -28,7 +28,7 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
 import { VariableSizeList } from "react-window"
 import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { selectTheme } from "../redux/themeSlice"
+import { selectTheme, selectThemeState } from "../redux/themeSlice"
 
 /**
  * Displays everything needed to edit subtitles
@@ -293,6 +293,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     dispatch(setCurrentlyAt(cue.startTime))
   }
 
+  const themeState = useSelector(selectThemeState);
+
   const segmentStyle = css({
     display: 'flex',
     flexDirection: 'row',
@@ -310,6 +312,13 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         visibility: "visible",
       }
     },
+    '& textarea, input': {
+      outline: `${theme.element_outline}`,
+    },
+    '& input': {
+      marginTop: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
+      marginBottom: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
+    }
   })
 
   const timeAreaStyle = css({
@@ -404,7 +413,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         </div>
 
         <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
-          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
             role="button" tabIndex={0}
             title={t("subtitleList.addSegmentAbove")}
             arial-label={t("subtitleList.addSegmentAbove")}
@@ -417,7 +426,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
           >
             <FontAwesomeIcon icon={faPlus} size="1x" />
           </div>
-          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
             role="button" tabIndex={0}
             title={t("subtitleList.deleteSegment")}
             arial-label={t("subtitleList.deleteSegment")}
@@ -430,7 +439,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
           >
             <FontAwesomeIcon icon={faTrash} size="1x" />
           </div>
-          <div css={[basicButtonStyle, addSegmentButtonStyle]}
+          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
             role="button" tabIndex={0}
             title={t("subtitleList.addSegmentBelow")}
             arial-label={t("subtitleList.addSegmentBelow")}

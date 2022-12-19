@@ -23,10 +23,10 @@ import { Select } from "mui-rff";
 import { useTranslation } from "react-i18next";
 import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
-import { flexGapReplacementStyle } from "../cssStyles";
+import { flexGapReplacementStyle, subtitleSelectStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { selectTheme } from "../redux/themeSlice";
+import { ThemeProvider } from "@mui/material/styles";
 
 /**
  * A part of the subtitle editor that displays a video and related controls
@@ -164,7 +164,7 @@ const VideoSelectDropdown : React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
+  const theme = useSelector(selectTheme)
 
   const dropdownName: string = "flavors"
 
@@ -185,11 +185,6 @@ const VideoSelectDropdown : React.FC<{
 
   const onSubmit = () => {}
 
-  const muiTheme = createTheme({
-    palette: {
-      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
-    },
-  });
 
   const subtitleAddFormStyle = css({
     width: '100%',
@@ -205,13 +200,13 @@ const VideoSelectDropdown : React.FC<{
         handleSubmit(event)
       }} css={subtitleAddFormStyle}>
 
-          <ThemeProvider theme={muiTheme}>
-            <Select
-              label={t("subtitleVideoArea.selectVideoLabel")}
-              name={dropdownName}
-              data={selectData()}
-            />
-          </ThemeProvider>
+            <ThemeProvider theme={subtitleSelectStyle(theme)}>
+              <Select
+                label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
+                name={dropdownName}
+                data={selectData()}
+              />
+            </ThemeProvider>
 
           <OnChange name={dropdownName}>
             {(value, previous) => {

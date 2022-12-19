@@ -68,7 +68,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
   }
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle(theme)]}
+    <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
     role="button" tabIndex={0}
       onClick={ finish }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {

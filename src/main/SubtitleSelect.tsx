@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation, subtitleSelectStyle } from "../cssStyles";
 import { settings } from '../config'
 import { selectSubtitles, setSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,13 +13,14 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
 import { selectTheme } from "../redux/themeSlice";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/material/styles";
 
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
  */
- const SubtitleSelect : React.FC<{}> = () => {
+const SubtitleSelect : React.FC<{}> = () => {
 
+  const { t } = useTranslation();
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
   const subtitles = useSelector(selectSubtitles)    // parsed subtitles stored in redux
 
@@ -28,44 +29,31 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
   // Update the displayFlavors and canBeAddedFlavors
   useEffect(() => {
+    let languages = { ...settings.subtitles.languages };
+
+    // Get flavors of already created tracks or existing subtitle tracks
+    let subtitleFlavors = captionTracks
+      .map(track => track.flavor.type + '/' + track.flavor.subtype)
+      .filter(flavor => !subtitles[flavor])
+      .concat(Object.keys(subtitles));
     let tempDisplayFlavors = []
-    let tempCanBeAddedFlavors = []
-
-    for (let lan in settings.subtitles.languages) {
-      let found = false
-      let subFlavor = lan // left side
-      let name = settings.subtitles.languages[lan] // right side
-
-      // Check if flavor already exists in the tracks from Opencast
-      for (const cap of captionTracks) {
-        if (cap.flavor.type+"/"+cap.flavor.subtype === subFlavor) {
-          found = true
-        }
-      }
-
-      // Need to check this in case of added/deleted subtitles
-      // (aka changes) that are not yet published to Opencast
-      for (const identifier in subtitles) {
-        if (identifier === subFlavor) {
-          found = true
-        }
-      }
-
-      if (found) {
-        tempDisplayFlavors.push({subFlavor: subFlavor, title: name})
-      } else {
-        tempCanBeAddedFlavors.push({subFlavor: subFlavor, title: name})
-      }
+    for (const flavor of subtitleFlavors) {
+      const lang = flavor.replace(/^[^+]*/, '') || t('subtitles.generic');
+      tempDisplayFlavors.push({
+        subFlavor: flavor,
+        title: languages[flavor] || lang});
+      delete languages[flavor];
     }
+    tempDisplayFlavors.sort((f1, f2) => f1.title.localeCompare(f2.title));
+
+    // List of unused languages
+    let tempCanBeAddedFlavors = Object.keys(languages)
+      .map(flavor => ({subFlavor: flavor, title: languages[flavor]}))
+      .sort((lang1, lang2) => lang1.title.localeCompare(lang2.title));
 
     setDisplayFlavors(tempDisplayFlavors)
     setCanBeAddedFlavors(tempCanBeAddedFlavors)
-  }, [captionTracks, subtitles])
-
-  // TODO: Make this function more robust
-  const parseCountryCode = (parseString: string) => {
-    return parseString.split("+").pop()?.slice(0, 2);
-  }
+  }, [captionTracks, subtitles, t])
 
   const subtitleSelectStyle = css({
     display: 'grid',
@@ -80,10 +68,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
     }
 
     for (let subFlavor of displayFlavors) {
+      const icon = ((settings.subtitles || {}).icons || {})[subFlavor.subFlavor];
       buttons.push(
         <SubtitleSelectButton
           title={subFlavor.title}
-          iconIdentifier={parseCountryCode(subFlavor.subFlavor)}
+          icon={icon}
           flavor={subFlavor.subFlavor}
           key={subFlavor.subFlavor}
         />
@@ -106,34 +95,20 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
  */
 const SubtitleSelectButton: React.FC<{
   title: string,
-  iconIdentifier: string | undefined,
+  icon: string | undefined,
   flavor: string,
 }> = ({
   title,
-  iconIdentifier,
+  icon,
   flavor
 }) => {
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
   const dispatch = useDispatch()
 
-  /**
-   * Quick and dirty function to get a flag unicode character by country code
-   * @param countryCode
-   * @returns
-   */
-  function getFlagEmoji(countryCode: string) {
-    var flag = countryCode.toUpperCase().replace(/./g, char =>
-      String.fromCodePoint(127397 + char.charCodeAt(0))
-    );
-    const regexEscape = /[\u{1F1E6}-\u{1F1FF}]/u;
-    if (regexEscape.test(flag)) {
-      return flag
-    }
-  }
-
   const flagStyle = css({
     fontSize: '2em',
+    overflow: 'hidden'
   });
 
   const titleStyle = css({
@@ -144,7 +119,7 @@ const SubtitleSelectButton: React.FC<{
   })
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle(theme)]}
+    <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
       role="button" tabIndex={0}
       title={t("subtitles.selectSubtitleButton-tooltip", {title: title})}
       aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", {title: title})}
@@ -156,7 +131,7 @@ const SubtitleSelectButton: React.FC<{
         dispatch(setIsDisplayEditView(true))
         dispatch(setSelectedSubtitleFlavor(flavor))
       }}}>
-      {iconIdentifier && getFlagEmoji(iconIdentifier) && <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>}
+      {icon && <div css={flagStyle}>{icon}</div>}
       <div css={titleStyle}>{title}</div>
     </div>
   );
@@ -169,7 +144,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
-  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
+
   const dispatch = useDispatch()
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true)
@@ -195,12 +170,6 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     dispatch(setSelectedSubtitleFlavor(values.languages))
   }
 
-  const muiTheme = createTheme({
-    palette: {
-      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
-    },
-  });
-
   const plusIconStyle = css({
     display: isPlusDisplay ? 'block' : 'none'
   });
@@ -225,7 +194,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
   });
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
+    <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
       role="button" tabIndex={0}
       title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}
       aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("createSubtitleButton-clicked-tooltip-aria")}
@@ -247,16 +216,16 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               {/* TODO: Fix the following warning, caused by removing items from data:
                 MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
               */}
-              <ThemeProvider theme={muiTheme}>
-                <Select
-                  label={t("subtitles.createSubtitleDropdown-label")}
-                  name="languages"
-                  data={selectData()}
-                >
-                </Select>
-              </ThemeProvider>
 
-              <button css={[basicButtonStyle, createButtonStyle]}
+                <ThemeProvider theme={subtitleSelectStyle(theme)}>
+                  <Select
+                    label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
+                    name="languages"
+                    data={selectData()}
+                  />
+                </ThemeProvider>
+
+              <button css={[basicButtonStyle(theme), createButtonStyle]}
                 type="submit"
                 title={t("subtitles.createSubtitleButton-createButton-tooltip")}
                 aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
@@ -270,6 +239,5 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     </div>
   );
 }
-
 
 export default SubtitleSelect;

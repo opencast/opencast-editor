@@ -86,6 +86,7 @@ const MainContent: React.FC<{}> = () => {
     paddingRight: '20px',
     paddingLeft: '161px',
     height: '100%',
+    background: `${theme.background}`,
   })
 
   const thumbnailSelectStyle = css({
@@ -111,7 +112,7 @@ const MainContent: React.FC<{}> = () => {
 
   const keyboardControlsStyle = css({
     display: 'flex',
-    // flexDirection: 'column' as const,
+    flexDirection: 'column' as const,
     // justifyContent: 'space-around',
     ...(flexGapReplacementStyle(20, false)),
     paddingRight: '20px',

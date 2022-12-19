@@ -11,6 +11,10 @@
 # production
 /build
 
+# editor files
+*.swp
+.vscode/
+
 # misc
 .DS_Store
 .env.local

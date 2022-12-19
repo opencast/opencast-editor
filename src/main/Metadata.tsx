@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
-import { selectFieldStyle } from '../cssStyles'
+import { calendarStyle, selectFieldStyle } from '../cssStyles'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -21,6 +21,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 
 import './../i18n/config';
+import i18next from "./../i18n/config";
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
 import { DateTime as LuxonDateTime} from "luxon";
@@ -30,7 +31,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
-
+import { ThemeProvider } from "@mui/material/styles";
 
 /**
  * Creates a Metadata form
@@ -125,7 +126,8 @@ const Metadata: React.FC<{}> = () => {
       borderRadius: '5px',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
       ...(isReadOnly && {color: `${theme.text}`}),
-      color: `${theme.text}`
+      color: `${theme.text}`,
+      outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`
     });
   }
 
@@ -145,15 +147,19 @@ const Metadata: React.FC<{}> = () => {
         padding: '5px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
-        '.Mui-disabled': {
+        '.Mui-disabled, .Mui-disabled button > svg': {
           color: `${theme.disabled} !important`,
           'WebkitTextFillColor':`${theme.disabled}`,
+        },
+        'button > svg': {
+          color: `${theme.indicator_color}`
         },
         '.MuiInput-input, button': {
           color: `${theme.text}`,
           background: 'transparent !important',
           '&:hover': {
             background: 'transparent !important',
+            outline: 'none'
           }
         },    
       })
@@ -536,9 +542,31 @@ const Metadata: React.FC<{}> = () => {
       return (
         <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker {...input}
+            <ThemeProvider theme={calendarStyle(theme)}>
+              <DateTimePicker {...input}
+                name={field.id}
+                inputFormat="yyyy/MM/dd HH:mm"
+                disabled={field.readOnly}
+                dateFunsUtils={DateFnsUtils}
+                TextFieldProps={{
+                  variant: 'standard', // Removes default outline
+                  onBlur: (e: any) => {blurWithSubmit(e, input)},
+                  showError: showErrorOnBlur
+                }}
+                leftArrowButtonText={i18next.t('metadata.calendar-prev')}
+                rightArrowButtonText={i18next.t('metadata.calendar-next')}
+              />
+            </ThemeProvider>
+          </LocalizationProvider>
+        </div>
+      );
+    } else if (field.type === "time") {
+      return (
+        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
+          <ThemeProvider theme={calendarStyle(theme)}>
+            <TimePicker {...input}
               name={field.id}
-              inputFormat="yyyy/MM/dd HH:mm"
+              inputFormat="HH:mm"
               disabled={field.readOnly}
               dateFunsUtils={DateFnsUtils}
               TextFieldProps={{
@@ -547,23 +575,7 @@ const Metadata: React.FC<{}> = () => {
                 showError: showErrorOnBlur
               }}
             />
-          </LocalizationProvider>
-        </div>
-      );
-    } else if (field.type === "time") {
-      return (
-        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <TimePicker {...input}
-            name={field.id}
-            inputFormat="HH:mm"
-            disabled={field.readOnly}
-            dateFunsUtils={DateFnsUtils}
-            TextFieldProps={{
-              variant: 'standard', // Removes default outline
-              onBlur: (e: any) => {blurWithSubmit(e, input)},
-              showError: showErrorOnBlur
-            }}
-          />
+          </ThemeProvider>
         </div>
       );
     } else if (field.type === "text_long") {

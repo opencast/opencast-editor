@@ -80,7 +80,6 @@ const WorkflowSelection : React.FC<{}> = () => {
         { hasWorkflowButtons &&
             <RadioGroup
               css={workflowSelectionSelectionStyle}
-              title="Workflow Selection Area"
               defaultValue={workflows[0].id}
               name="Workflow Selection Area"
               onChange={handleWorkflowSelectChange}

@@ -12,6 +12,7 @@ import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
+import { ThemedTooltip } from "./Tooltip";
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -70,15 +71,17 @@ const StartOverButton: React.FC<{}> = () => {
   };
 
   return (
-    <div css={[basicButtonStyle, navigationButtonStyle(theme)]} title={t("theEnd.startOver-tooltip")}
-      role="button" tabIndex={0}
-      onClick={ reloadPage }
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        reloadPage()
-      }}}>
-      {/* <FontAwesomeIcon icon={icon} spin={spin} size="1x"/> */}
-      <span>{t("theEnd.startOver-button")}</span>
-    </div>
+    <ThemedTooltip title={t("theEnd.startOver-tooltip")}>
+      <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+        role="button" tabIndex={0}
+        onClick={ reloadPage }
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+          reloadPage()
+        }}}>
+        {/* <FontAwesomeIcon icon={icon} spin={spin} size="1x"/> */}
+        <span>{t("theEnd.startOver-button")}</span>
+      </div>
+    </ThemedTooltip>
   );
 }
 

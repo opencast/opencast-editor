@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
 import { selectTheme } from '../redux/themeSlice';
+import { ThemedTooltip } from './Tooltip';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -199,6 +200,7 @@ export const Scrubber: React.FC<{
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
+    outline: `${theme.scrubber}`,
   });
 
   const scrubberDragHandleStyle = css({
@@ -327,14 +329,14 @@ export const SegmentsList: React.FC<{
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <div key={segment.id}
-          title={t("timeline.segment-tooltip", {segment: index})}
-          aria-label={t("timeline.segments-text-aria",
-                     {segment: index,
-                      segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
-                      start: convertMsToReadableString(segment.start),
-                      end: convertMsToReadableString(segment.end) })}
-          tabIndex={tabable ? 0 : -1}
+        <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})}>
+          <div key={segment.id}
+            aria-label={t("timeline.segments-text-aria",
+                      {segment: index,
+                        segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                        start: convertMsToReadableString(segment.start),
+                        end: convertMsToReadableString(segment.end) })}
+            tabIndex={tabable ? 0 : -1}
           css={{
             background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
             borderRadius: '5px',
@@ -346,7 +348,8 @@ export const SegmentsList: React.FC<{
             height: timelineHeight - 20 + 'px',     // CHECK IF 100%
             zIndex: 1,
           }}>
-        </div>
+          </div>
+        </ThemedTooltip>
       ))
     );
   }
@@ -359,7 +362,7 @@ export const SegmentsList: React.FC<{
   })
 
   return (
-    <div css={segmentsStyle} title="Segments">
+    <div css={segmentsStyle}>
       {renderedSegments()}
     </div>
   );
@@ -392,6 +395,12 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
     paddingTop: '10px',
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,
+  });
+
+  const waveformStyle = css({
+    background: `${theme.waveform_bg}`,
+    filter: `${theme.waveform_filter}`,
+    borderRadius: '5px',
   });
 
   // When the URLs to the videos are fetched, generate waveforms
@@ -446,7 +455,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   const renderImages = () => {
     if (images.length > 0) {
       return (
-        <img alt='Waveform' src={images[0]} css={{minHeight: 0, height: '100%'}}></img>
+        <img alt='Waveform' src={images[0]} css={[waveformStyle, {minHeight: 0, height: '100%'}]}></img>
         // images.map((image, index) =>
         //   <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
         // )

@@ -9,13 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
 import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
-import { selectOriginalThumbnails, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
+import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import { VideoControls, VideoPlayers } from "./Video";
 import {
   selectIsPlaying, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
+import { ThemedTooltip } from "./Tooltip";
 
 
 /**
@@ -128,7 +129,7 @@ const ThumbnailTable : React.FC<{
   discard: any,
 }> = ({inputRefs, generate, upload, uploadCallback, discard}) => {
 
-  const tracks = useSelector(selectTracks)
+  const videoTracks = useSelector(selectVideos)
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -139,13 +140,13 @@ const ThumbnailTable : React.FC<{
   })
 
   const renderSingleOrMultiple = () => {
-    const primaryTrack = tracks.find((e) => e.thumbnailPriority === 0)
+    const primaryTrack = videoTracks.find((e) => e.thumbnailPriority === 0)
 
     if (settings.thumbnail.simpleMode && primaryTrack !== undefined) {
       return (<>
         <ThumbnailTableSingleRow
           track={primaryTrack}
-          index={tracks.indexOf(primaryTrack)}
+          index={videoTracks.indexOf(primaryTrack)}
           inputRefs={inputRefs}
           generate={generate}
           upload={upload}
@@ -155,8 +156,8 @@ const ThumbnailTable : React.FC<{
       </>)
     } else {
       return ( <>
-        <AffectAllRow tracks={tracks} generate={generate}/>
-        {tracks.map( (track: Track, index: number) => (
+        <AffectAllRow tracks={videoTracks} generate={generate}/>
+        {videoTracks.map( (track: Track, index: number) => (
           <ThumbnailTableRow
             key={index}
             track={track}
@@ -379,17 +380,18 @@ const ThumbnailButton : React.FC<{
   };
 
   return (
-    <div
-      css={thumbnailButtonStyle(active, theme)}
-      ref={ref}
-      title={tooltipText}
-      role="button" tabIndex={0} aria-label={ariaLabel}
-      onClick={clickHandler}
-      onKeyDown={keyHandler}
-    >
-      <FontAwesomeIcon icon={icon}/>
-      {text}
-    </div>
+    <ThemedTooltip title={tooltipText}>
+      <div
+        css={thumbnailButtonStyle(active, theme)}
+        ref={ref}
+        role="button" tabIndex={0} aria-label={ariaLabel}
+        onClick={clickHandler}
+        onKeyDown={keyHandler}
+      >
+        <FontAwesomeIcon icon={icon}/>
+        {text}
+      </div>
+    </ThemedTooltip>
   )
 }
 
@@ -434,19 +436,20 @@ const AffectAllRow : React.FC<{
     <div css={rowStyle}>
       <FontAwesomeIcon icon={faInfoCircle} size="2x" />
       {t('thumbnail.explanation')}
-      <div css={[basicButtonStyle, buttonStyle]}
-        title={t('thumbnail.buttonGenerateAll-tooltip')}
-        role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
-        onClick={() => {
-          generateAll()
-        }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          generateAll()
-        }}}
-      >
-        <FontAwesomeIcon icon={faCamera}/>
-        {t('thumbnail.buttonGenerateAll')}
-      </div>
+      <ThemedTooltip title={t('thumbnail.buttonGenerateAll-tooltip')}>
+        <div css={[basicButtonStyle(theme), buttonStyle]}
+          role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
+          onClick={() => {
+            generateAll()
+          }}
+          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
+            generateAll()
+          }}}
+        >
+          <FontAwesomeIcon icon={faCamera}/>
+          {t('thumbnail.buttonGenerateAll')}
+        </div>
+      </ThemedTooltip>
     </div>
   )
 }
@@ -587,7 +590,7 @@ const thumbnailButtonsStyle = css({
 })
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
-  active ? basicButtonStyle : deactivatedButtonStyle,
+  active ? basicButtonStyle(theme) : deactivatedButtonStyle,
   {
     width: '100%',
     height: '100%',

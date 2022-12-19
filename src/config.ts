@@ -54,6 +54,7 @@ interface iSettings {
     show: boolean,
     mainFlavor: string,
     languages: { [key: string]: string } | undefined,
+    icons: { [key: string]: string } | undefined,
     defaultVideoFlavor: Flavor | undefined,
   }
 }
@@ -86,7 +87,8 @@ var defaultSettings: iSettings = {
   subtitles: {
     show: false,
     mainFlavor: "captions",
-    languages: undefined,
+    languages: {},
+    icons: undefined,
     defaultVideoFlavor: undefined,
   }
 }
@@ -360,6 +362,7 @@ const SCHEMA = {
     show: types.boolean,
     mainFlavor: types.string,
     languages: types.map,
+    icons: types.map,
     defaultVideoFlavor: types.map,
   },
   thumbnail: {
