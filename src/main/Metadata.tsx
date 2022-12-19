@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
-import { errorBoxStyle, selectFieldStyle } from '../cssStyles'
+import { calendarStyle, errorBoxStyle, selectFieldStyle } from '../cssStyles'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -30,7 +30,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
-
+import { ThemeProvider } from "@mui/material/styles";
 
 /**
  * Creates a Metadata form
@@ -541,9 +541,31 @@ const Metadata: React.FC<{}> = () => {
       return (
         <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker {...input}
+            <ThemeProvider theme={calendarStyle(theme)}>
+              <DateTimePicker {...input}
+                name={field.id}
+                inputFormat="yyyy/MM/dd HH:mm"
+                disabled={field.readOnly}
+                dateFunsUtils={DateFnsUtils}
+                TextFieldProps={{
+                  variant: 'standard', // Removes default outline
+                  onBlur: (e: any) => {blurWithSubmit(e, input)},
+                  showError: showErrorOnBlur
+                }}
+                leftArrowButtonText={i18next.t('metadata.calendar-prev')}
+                rightArrowButtonText={i18next.t('metadata.calendar-next')}
+              />
+            </ThemeProvider>
+          </LocalizationProvider>
+        </div>
+      );
+    } else if (field.type === "time") {
+      return (
+        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
+          <ThemeProvider theme={calendarStyle(theme)}>
+            <TimePicker {...input}
               name={field.id}
-              inputFormat="yyyy/MM/dd HH:mm"
+              inputFormat="HH:mm"
               disabled={field.readOnly}
               dateFunsUtils={DateFnsUtils}
               TextFieldProps={{
@@ -551,26 +573,8 @@ const Metadata: React.FC<{}> = () => {
                 onBlur: (e: any) => {blurWithSubmit(e, input)},
                 showError: showErrorOnBlur
               }}
-              leftArrowButtonText={i18next.t('metadata.calendar-prev')}
-              rightArrowButtonText={i18next.t('metadata.calendar-next')}
             />
-          </LocalizationProvider>
-        </div>
-      );
-    } else if (field.type === "time") {
-      return (
-        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <TimePicker {...input}
-            name={field.id}
-            inputFormat="HH:mm"
-            disabled={field.readOnly}
-            dateFunsUtils={DateFnsUtils}
-            TextFieldProps={{
-              variant: 'standard', // Removes default outline
-              onBlur: (e: any) => {blurWithSubmit(e, input)},
-              showError: showErrorOnBlur
-            }}
-          />
+          </ThemeProvider>
         </div>
       );
     } else if (field.type === "text_long") {

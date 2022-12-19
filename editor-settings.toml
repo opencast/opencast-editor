@@ -81,6 +81,14 @@
 "captions/source+en" = "English"
 "captions/source+es" = "Spanish"
 
+[subtitles.icons]
+# A list of icons to be displayed for languages defined above.
+# Values are strings but should preferably be Unicode icons.
+# These are optional and you can also choose to have no icons.
+"captions/source+de" = "🇩🇪"
+"captions/source+en" = "🇺🇸"
+"captions/source+es" = "🇪🇸"
+
 [subtitles.defaultVideoFlavor]
 # Specify the default video in the subtitle video player by flavor
 # If not specified, the editor will decide on a default by itself
