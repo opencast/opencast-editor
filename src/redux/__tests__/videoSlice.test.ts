@@ -286,7 +286,7 @@ describe('Video reducer', () => {
   it('should set loading when fetch is pending', () => {
     // Arrange
     const action = { type: fetchVideoInformation.pending.type };
-    const resultStatus: httpRequestState = { status: 'loading', error: undefined }
+    const resultStatus: httpRequestState = { status: 'loading', error: undefined, errorReason: "unknown" }
 
     // Act
     const nextState = reducer(initialState, action);
@@ -298,7 +298,7 @@ describe('Video reducer', () => {
 
   it('should set success when fetch is successful', () => {
     // Arrange
-    const resultStatus: httpRequestState = { status: 'success', error: undefined }
+    const resultStatus: httpRequestState = { status: 'success', error: undefined, errorReason: "unknown" }
     const segments = [{ start: 0, end: 42, deleted: false }]
     const videoURLs: video["videoURLs"] = [ "video/url" ]
     const dur: video["duration"] = 42
@@ -306,8 +306,10 @@ describe('Video reducer', () => {
     // const presenters: video["presenters"] = [ "Otto Opencast" ]    // Currently missing from the API
     const tracks: video["tracks"] = [{
       id: "id", uri: videoURLs[0], flavor: { subtype: "prepared", type: "presenter"},
-      videoStream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
-      audioStream: { available: true, enabled: true}
+      video_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
+      audio_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
+      thumbnailUri: undefined,
+      thumbnailPriority: 0,
     }]
     const workflows: video["workflows"] = [{ id: "id", name: "Name", displayOrder: 0, description: "Description"}]
     const action = {
@@ -340,7 +342,7 @@ describe('Video reducer', () => {
     // Arrange
     const error = { message: "An error message" }
     const action = { type: fetchVideoInformation.rejected.type, error: error };
-    const resultStatus: httpRequestState = { status: 'failed', error: error.message }
+    const resultStatus: httpRequestState = { status: 'failed', error: error.message, errorReason: "unknown" }
 
     // Act
     const nextState = reducer(initialState, action);

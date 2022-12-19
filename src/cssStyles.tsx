@@ -7,6 +7,7 @@ import emotionNormalize from 'emotion-normalize';
 import { checkFlexGapSupport } from './util/utilityFunctions';
 import { useSelector } from 'react-redux';
 import { selectTheme, Theme } from './redux/themeSlice';
+import { createTheme } from '@mui/material/styles';
 
 /**
  * An emotion component that inserts styles globally
@@ -268,3 +269,156 @@ export function selectFieldStyle(theme: Theme) {
     }),
   }
 }
+
+export const calendarStyle = (theme: Theme) => createTheme({
+
+  components: {
+    
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          /* Modal */
+          outline: `${theme.dropdown_border} !important`,
+          background: `${theme.background}`,
+          color: `${theme.text}`,
+
+          /* Calendar-modal */
+          '.MuiYearPicker-root': {
+            '.PrivatePickersYear-yearButton:hover, .Mui-selected:hover': {
+              background: `${theme.focused}`,
+              color: `${theme.focus_text}`,
+            },
+            '.Mui-selected': {
+              background: `${theme.selected}`,
+              color: `${theme.selected_text}`,
+            }
+          },
+          
+          /* Clock-modal */
+          '& .MuiClock-clock': { // round clock
+            background: `${theme.clock_bg}`,
+            outline: `${theme.clock_border}`,
+            '-webkitTextFillColor': `${theme.text}`, // Digits on the clock
+            textShadow: `${theme.text_shadow}`
+          },
+          /* selected digit (hour/minute) */
+          '& .MuiClockPicker-root .Mui-selected': {
+            '-webkitTextFillColor': `${theme.digit_selected}`,
+            fontWeight: 'bold',
+            textShadow: 'none',
+          },
+          /* clock hands */
+          '& .MuiClock-pin, .MuiClockPointer-root': {
+            background: `${theme.clock_hands}`
+          },
+          '& .MuiClockPointer-thumb': {
+            background: `${theme.clock_hands}`,
+            border: `16px solid ${theme.clock_hands}`,
+          }
+        },
+        
+      }
+    },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          /* Calendar- and Clock-modal -> arrows, icon, days  */
+          color: `${theme.icon_color} !important`,
+          '&.MuiPickersDay-root': {
+            background: 'transparent !important',
+            color: `${theme.text} !important`,
+          },
+          '&:hover, &.Mui-selected:hover': {
+            background: `${theme.focused} !important`,
+            color: `${theme.focus_text} !important`,
+          },
+          // Selected day
+          '&.Mui-selected': {
+            background: `${theme.selected} !important`,
+            color: `${theme.selected_text} !important`,
+            
+          },
+          // Current day
+          '&:not(.Mui-selected)': {
+            borderColor: `${theme.focused} !important`,
+          },
+          '&.Mui-disabled':{
+            color: `${theme.disabled} !important`,
+          },
+          '&.MuiClock-amButton, &.MuiClock-pmButton': {
+            '-webkitTextFillColor': `${theme.text} !important`,
+            '&:hover': {
+              '-webkitTextFillColor': `${theme.clock_focus} !important`
+            }
+          },
+        }
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: { // Weekdays
+          color: `${theme.disabled} !important`,
+        },
+      }
+    },
+  }  
+})
+
+export const subtitleSelectStyle = (theme: Theme) => createTheme({
+  components: {
+    /* Label: 'Pick a language' & 'Video Flavor' */
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: `${theme.text} !important`,
+        },
+      }
+    },
+    /* Labelborder */
+    MuiOutlinedInput: {
+      styleOverrides: {
+        notchedOutline: {
+          border: `${theme.dropdown_border} !important`,
+        },
+      }
+    },
+    /* Selectfield/Inputfield with Icon */
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          background: `${theme.background}`,
+          color: `${theme.text} !important`,
+        },
+        icon: {
+          color: `${theme.indicator_color}`,
+        },
+      }
+    },
+
+    /* Dropdownlist */
+    MuiMenu: {
+      styleOverrides: {
+        list: {
+          background: `${theme.background}`,
+          color: `${theme.text}`,
+          border: `${theme.dropdown_border}`,
+        },
+      }
+    },
+    /* Dropdownlist: Single entry */
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          '&:hover, &.Mui-selected:hover': {
+            color: `${theme.focus_text}`,
+            background: `${theme.focused}`
+          },
+          '&.Mui-selected': {
+            color: `${theme.selected_text}`,
+            background: `${theme.selected}`,
+          },
+        },
+      }
+    }
+  }
+})
