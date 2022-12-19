@@ -23,6 +23,8 @@ import { GlobalHotKeys } from "react-hotkeys";
 import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
 import { selectTheme } from "../redux/themeSlice";
+import { ThemedTooltip } from "./Tooltip";
+import { t } from "i18next";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
@@ -120,22 +122,23 @@ import { selectTheme } from "../redux/themeSlice";
       </ScrollContainer>
       {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
       <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
-        <div
-          title="Mini Timeline"
-          onMouseDown={e => setCurrentlyAtToClick(e)}
-          css={{
-            position: 'relative',
-            width: '100%',
-            height: '15px',
-            background: `linear-gradient(to right, grey ${(currentlyAt / duration) * 100}%, lightgrey ${(currentlyAt / duration) * 100}%)`,
-            borderRadius: '3px',
-          }}
-          ref={refMini}
-        >
+        <ThemedTooltip title={t('subtitleTimeline.overviewTimelineTooltip')}>
           <div
-            css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
-          />
-        </div>
+            onMouseDown={e => setCurrentlyAtToClick(e)}
+            css={{
+              position: 'relative',
+              width: '100%',
+              height: '15px',
+              background: `linear-gradient(to right, grey ${(currentlyAt / duration) * 100}%, lightgrey ${(currentlyAt / duration) * 100}%)`,
+              borderRadius: '3px',
+            }}
+            ref={refMini}
+          >
+            <div
+              css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
+            />
+          </div>
+        </ThemedTooltip>
       </GlobalHotKeys>
     </div>
 

@@ -29,6 +29,8 @@ import { VariableSizeList } from "react-window"
 import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
 import { selectTheme, selectThemeState } from "../redux/themeSlice"
+import { ThemedTooltip } from "./Tooltip"
+import { IconProp } from "@fortawesome/fontawesome-svg-core"
 
 /**
  * Displays everything needed to edit subtitles
@@ -361,14 +363,6 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     resize: 'none',
   })
 
-  const addSegmentButtonStyle = css({
-    width: '32px',
-    height: '32px',
-    boxShadow: `${theme.boxShadow}`,
-    background: `${theme.element_bg}`,
-    zIndex: '1000',
-  })
-
   return (
     <HotKeys keyMap={subtitleListKeyMap} handlers={handlers}>
       <div css={segmentStyle} style={{
@@ -411,53 +405,84 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             tooltipAria={t("subtitleList.endTime-tooltip-aria")+": " + convertMsToReadableString(cue.endTime)}
           />
         </div>
-
         <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
-          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
-            role="button" tabIndex={0}
-            title={t("subtitleList.addSegmentAbove")}
-            arial-label={t("subtitleList.addSegmentAbove")}
+          <FunctionButton
+            tooltip={t("subtitleList.addSegmentAbove")}
+            tooltipAria={t("subtitleList.addSegmentAbove")}
             onClick={addCueAbove}
             onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueAbove()
             }}}
-          >
-            <FontAwesomeIcon icon={faPlus} size="1x" />
-          </div>
-          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
-            role="button" tabIndex={0}
-            title={t("subtitleList.deleteSegment")}
-            arial-label={t("subtitleList.deleteSegment")}
+            icon={faPlus}
+          />
+          <FunctionButton
+            tooltip={t("subtitleList.deleteSegment")}
+            tooltipAria={t("subtitleList.deleteSegment")}
             onClick={deleteCue}
             onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               deleteCue()
             }}}
-          >
-            <FontAwesomeIcon icon={faTrash} size="1x" />
-          </div>
-          <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
-            role="button" tabIndex={0}
-            title={t("subtitleList.addSegmentBelow")}
-            arial-label={t("subtitleList.addSegmentBelow")}
+            icon={faTrash}
+          />
+          <FunctionButton
+            tooltip={t("subtitleList.addSegmentBelow")}
+            tooltipAria={t("subtitleList.addSegmentBelow")}
             onClick={addCueBelow}
             onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueBelow()
             }}}
-          >
-            <FontAwesomeIcon icon={faPlus} size="1x" />
-          </div>
+            icon={faPlus}
+          />
         </div>
-
       </div>
     </HotKeys>
   );
 })
+
+const FunctionButton : React.FC<{
+  tooltip: string,
+  tooltipAria: string,
+  onClick: any,
+  onKeyDown: any,
+  icon: IconProp
+}> = ({
+  tooltip,
+  tooltipAria,
+  onClick,
+  onKeyDown,
+  icon
+}) => {
+
+  const theme = useSelector(selectTheme)
+
+  const addSegmentButtonStyle = css({
+    width: '32px',
+    height: '32px',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
+    zIndex: '1000',
+  })
+
+  return (
+    <ThemedTooltip title={tooltip}>
+      <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
+        role="button" 
+        tabIndex={0}
+        arial-label={tooltipAria}
+        onClick={onClick}
+        onKeyDown={onKeyDown}
+      >
+        <FontAwesomeIcon icon={icon} size="1x" />
+      </div>
+    </ThemedTooltip>
+  )
+}
 
 /**
  * Input field for the time values for a subtitle segment
@@ -517,15 +542,16 @@ const TimeInput : React.FC<{
   })
 
   return (
-    <input
-      css={[generalFieldStyle, timeFieldStyle]}
-      title={tooltip}
-      aria-label={tooltipAria}
-      type="text"
-      onChange={onChange}
-      onBlur={onBlur}
-      value={myValue}
-     />
+    <ThemedTooltip title={tooltip}>
+      <input
+        css={[generalFieldStyle, timeFieldStyle]}
+        aria-label={tooltipAria}
+        type="text"
+        onChange={onChange}
+        onBlur={onBlur}
+        value={myValue}
+      />
+     </ThemedTooltip>
   )
 }
 
