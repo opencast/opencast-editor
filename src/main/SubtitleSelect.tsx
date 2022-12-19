@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation, subtitleSelectStyle } from "../cssStyles";
 import { settings } from '../config'
 import { selectSubtitles, setSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
 import { selectTheme } from "../redux/themeSlice";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/material/styles";
 
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
@@ -144,7 +144,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
-  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
+
   const dispatch = useDispatch()
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true)
@@ -169,12 +169,6 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     dispatch(setIsDisplayEditView(true))
     dispatch(setSelectedSubtitleFlavor(values.languages))
   }
-
-  const muiTheme = createTheme({
-    palette: {
-      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
-    },
-  });
 
   const plusIconStyle = css({
     display: isPlusDisplay ? 'block' : 'none'
@@ -222,14 +216,14 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               {/* TODO: Fix the following warning, caused by removing items from data:
                 MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
               */}
-              <ThemeProvider theme={muiTheme}>
-                <Select
-                  label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
-                  name="languages"
-                  data={selectData()}
-                >
-                </Select>
-              </ThemeProvider>
+
+                <ThemeProvider theme={subtitleSelectStyle(theme)}>
+                  <Select
+                    label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
+                    name="languages"
+                    data={selectData()}
+                  />
+                </ThemeProvider>
 
               <button css={[basicButtonStyle(theme), createButtonStyle]}
                 type="submit"
@@ -245,6 +239,5 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     </div>
   );
 }
-
 
 export default SubtitleSelect;
