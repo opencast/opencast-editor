@@ -238,6 +238,9 @@
     "subtitleVideoArea": {
         "selectVideoLabel": "Video Flavors"
     },
+    "subtitleTimeline": {
+        "overviewTimelineTooltip": "Timeline overview"
+    },
     "keyboardControls": {
         "header": "Controles clavier",
         "defaultGroupName": "Général",
