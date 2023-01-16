@@ -116,7 +116,7 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
   return seri.serialize(cues)
 }
 
-export function parseSubtitle(subtitle: String) {
+export function parseSubtitle(subtitle: String): SubtitleCue[] {
   // Used parsing library: https://www.npmjs.com/package/webvtt-parser
   // - Unmaintained and does have bugs, so we will need to switch eventually
   // Other interesting vtt parsing libraries:
@@ -158,4 +158,23 @@ export function parseSubtitle(subtitle: String) {
   }
 
   return tree.cues
+}
+
+/**
+ * Parse language code to language name
+ * Returns language name in the language set in the browser
+ * Returns undefined if the input was undefined or the language code could not
+ * be parsed
+ */
+export function languageCodeToName(lang: string | undefined): string | undefined {
+  if (!lang) {
+    return undefined
+  }
+  let browserLang = window.navigator.language;
+  const languageNames = new Intl.DisplayNames(browserLang, { type: "language" });
+  try {
+    return languageNames.of(lang.trim());
+  } catch (e) {
+    return undefined
+  }
 }

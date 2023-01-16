@@ -14,8 +14,8 @@ import { addCueAtIndex,
   selectFocusSegmentId,
   selectFocusSegmentTriggered,
   selectFocusSegmentTriggered2,
-  selectSelectedSubtitleByFlavor,
-  selectSelectedSubtitleFlavor,
+  selectSelectedSubtitleById,
+  selectSelectedSubtitleId,
   setCueAtIndex,
   setCurrentlyAt,
   setFocusSegmentTriggered,
@@ -39,8 +39,8 @@ const SubtitleListEditor : React.FC<{}> = () => {
 
   const dispatch = useDispatch()
 
-  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
-  const subtitleFlavor = useSelector(selectSelectedSubtitleFlavor, shallowEqual)
+  const subtitle = useSelector(selectSelectedSubtitleById)
+  const subtitleId = useSelector(selectSelectedSubtitleId, shallowEqual)
   const focusTriggered = useSelector(selectFocusSegmentTriggered, shallowEqual)
   const focusId = useSelector(selectFocusSegmentId, shallowEqual)
   const defaultSegmentLength = 5000
@@ -51,16 +51,16 @@ const SubtitleListEditor : React.FC<{}> = () => {
 
   // Update ref array size
   useEffect(() => {
-    if (subtitle) {
-      itemsRef.current = itemsRef.current.slice(0, subtitle.length);
+    if (subtitle?.cues) {
+      itemsRef.current = itemsRef.current.slice(0, subtitle.cues.length);
     }
- }, [subtitle]);
+ }, [subtitle?.cues]);
 
   // Scroll to segment when triggered by reduxState
   useEffect(() => {
     if (focusTriggered) {
-      if (itemsRef && itemsRef.current && subtitle) {
-        const itemIndex = subtitle.findIndex(item => item.id === focusId)
+      if (itemsRef && itemsRef.current && subtitle?.cues) {
+        const itemIndex = subtitle?.cues.findIndex(item => item.id === focusId)
         if (listRef && listRef.current) {
           listRef.current.scrollToItem(itemIndex, "center");
 
@@ -68,20 +68,20 @@ const SubtitleListEditor : React.FC<{}> = () => {
       }
       dispatch(setFocusSegmentTriggered(false))
     }
-  }, [dispatch, focusId, focusTriggered, itemsRef, subtitle])
+  }, [dispatch, focusId, focusTriggered, itemsRef, subtitle?.cues])
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
-    if (subtitle && subtitle.length === 0) {
+    if (subtitle?.cues && subtitle?.cues.length === 0) {
       dispatch(addCueAtIndex({
-        identifier: subtitleFlavor,
+        identifier: subtitleId,
         cueIndex: 0,
         text: "",
         startTime: 0,
         endTime: defaultSegmentLength
       }))
     }
-  }, [dispatch, subtitle, subtitleFlavor])
+  }, [dispatch, subtitle?.cues, subtitleId])
 
   const listStyle = css({
     display: 'flex',
@@ -110,7 +110,7 @@ const SubtitleListEditor : React.FC<{}> = () => {
     return segmentHeight
   }, [])
 
-  const itemData = createItemData(subtitle, subtitleFlavor, defaultSegmentLength)
+  const itemData = createItemData(subtitle?.cues, subtitleId, defaultSegmentLength)
 
   return (
     <div css={listStyle}>
@@ -118,7 +118,7 @@ const SubtitleListEditor : React.FC<{}> = () => {
         {({ height, width }) => (
           <VariableSizeList
             height={height}
-            itemCount={subtitle !== undefined ? subtitle.length : 0}
+            itemCount={subtitle?.cues !== undefined ? subtitle?.cues.length : 0}
             itemData={itemData}
             itemSize={(index) => segmentHeight}
             itemKey={(index, data) => data.items[index].id}

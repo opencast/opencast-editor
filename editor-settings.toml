@@ -76,18 +76,21 @@
 #mainFlavor = "captions"
 
 [subtitles.languages]
-## A list of languages for which subtitles can be created
-"captions/source+de" = "Deutsch"
-"captions/source+en" = "English"
-"captions/source+es" = "Spanish"
+## A list of languages for which new subtitles can be created
+# For each language, various tags can be specified
+# A list of officially recommended tags can be found at: TODO: link to opencast documentation for subtitle tags
+# At least the "lang" tag MUST be specified
+german = { lang = "de-DE" }
+english = { lang = "en-US", type = "closed-caption" }
+spanish = { lang = "es" }
 
 [subtitles.icons]
 # A list of icons to be displayed for languages defined above.
 # Values are strings but should preferably be Unicode icons.
 # These are optional and you can also choose to have no icons.
-"captions/source+de" = "🇩🇪"
-"captions/source+en" = "🇺🇸"
-"captions/source+es" = "🇪🇸"
+"de-DE" = "🇩🇪"
+"en-US" = "🇺🇸"
+"es" = "🇪🇸"
 
 [subtitles.defaultVideoFlavor]
 # Specify the default video in the subtitle video player by flavor

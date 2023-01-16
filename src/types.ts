@@ -33,8 +33,14 @@ export interface TimelineState {
 }
 
 export interface SubtitlesFromOpencast {
-  flavor: Flavor,
+  id: string,
   subtitle: string,
+  tags: string[],
+}
+
+export interface SubtitlesInEditor {
+  cues: SubtitleCue[],
+  tags: string[],
 }
 
 export interface SubtitleCue {
@@ -59,7 +65,7 @@ export interface ExtendedSubtitleCue extends SubtitleCue {
 export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
-  subtitles: {flavor: Flavor, subtitle: string}[]
+  subtitles: SubtitlesFromOpencast[]
 }
 
 export interface PostAndProcessEditArgument extends PostEditArgument{

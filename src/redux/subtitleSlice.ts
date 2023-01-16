@@ -1,4 +1,4 @@
-import { Segment, SubtitleCue } from './../types';
+import { Segment, SubtitleCue, SubtitlesInEditor } from './../types';
 import { createSlice, Dispatch, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
@@ -12,8 +12,8 @@ export interface subtitle {
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   currentlyAt: number,            // Position in the video in milliseconds
   clickTriggered: boolean,        // Another video player callback
-  subtitles: { [identifier: string]: SubtitleCue[] },
-  selectedSubtitleFlavor: string,
+  subtitles: { [identifier: string]: SubtitlesInEditor },
+  selectedSubtitleId: string,
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   focusSegmentTriggered: boolean,   // a segment in the timeline was clicked
   focusSegmentId: string,           // which segment in the timeline was clicked
@@ -28,7 +28,7 @@ const initialState: subtitle = {
   currentlyAt: 0,
   clickTriggered: false,
   subtitles: {},
-  selectedSubtitleFlavor: "",
+  selectedSubtitleId: "",
   focusSegmentTriggered: false,
   focusSegmentId: "",
   focusSegmentTriggered2: false,
@@ -72,16 +72,16 @@ export const subtitleSlice = createSlice({
     setClickTriggered: (state, action) => {
       state.clickTriggered = action.payload
     },
-    setSubtitle: (state, action: PayloadAction<{identifier: string, subtitles: SubtitleCue[]}>) => {
+    setSubtitle: (state, action: PayloadAction<{identifier: string, subtitles: SubtitlesInEditor}>) => {
       state.subtitles[action.payload.identifier] = action.payload.subtitles
     },
     setCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, newCue: SubtitleCue}>) => {
-      if (action.payload.cueIndex < 0 || action.payload.cueIndex >= state.subtitles[action.payload.identifier].length) {
+      if (action.payload.cueIndex < 0 || action.payload.cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
         console.log("WARNING: Tried to set segment for subtitle " + action.payload.identifier + " but was out of range")
         return
       }
 
-      let cue = state.subtitles[action.payload.identifier][action.payload.cueIndex]
+      let cue = state.subtitles[action.payload.identifier].cues[action.payload.cueIndex]
       cue.id = action.payload.newCue.id
       cue.text = action.payload.newCue.text
       cue.startTime = Math.round(action.payload.newCue.startTime)
@@ -89,7 +89,7 @@ export const subtitleSlice = createSlice({
 
       cue.tree.children[0].value = action.payload.newCue.text
 
-      state.subtitles[action.payload.identifier][action.payload.cueIndex] = cue
+      state.subtitles[action.payload.identifier].cues[action.payload.cueIndex] = cue
 
       sortSubtitle(state, action.payload.identifier)
     },
@@ -109,29 +109,29 @@ export const subtitleSlice = createSlice({
       state.focusSegmentId = cue.id
 
       if (action.payload.cueIndex < 0 ) {
-        state.subtitles[action.payload.identifier].splice(0, 0, cue);
+        state.subtitles[action.payload.identifier].cues.splice(0, 0, cue);
       }
 
-      if (action.payload.cueIndex >= 0 || action.payload.cueIndex < state.subtitles[action.payload.identifier].length) {
-        state.subtitles[action.payload.identifier].splice(action.payload.cueIndex, 0, cue);
+      if (action.payload.cueIndex >= 0 || action.payload.cueIndex < state.subtitles[action.payload.identifier].cues.length) {
+        state.subtitles[action.payload.identifier].cues.splice(action.payload.cueIndex, 0, cue);
       }
 
-      if (action.payload.cueIndex >= state.subtitles[action.payload.identifier].length) {
-        state.subtitles[action.payload.identifier].push(cue)
+      if (action.payload.cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
+        state.subtitles[action.payload.identifier].cues.push(cue)
       }
 
       sortSubtitle(state, action.payload.identifier)
     },
     removeCue: (state, action: PayloadAction<{identifier: string, cue: SubtitleCue}>) => {
-      const cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.cue.id);
+      const cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.id === action.payload.cue.id);
       if (cueIndex > -1) {
-        state.subtitles[action.payload.identifier].splice(cueIndex, 1);
+        state.subtitles[action.payload.identifier].cues.splice(cueIndex, 1);
       }
 
       sortSubtitle(state, action.payload.identifier)
     },
-    setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
-      state.selectedSubtitleFlavor = action.payload
+    setSelectedSubtitleId: (state, action: PayloadAction<subtitle["selectedSubtitleId"]>) => {
+      state.selectedSubtitleId = action.payload
     },
     setFocusSegmentTriggered: (state, action: PayloadAction<subtitle["focusSegmentTriggered"]>) => {
       state.focusSegmentTriggered = action.payload
@@ -144,20 +144,20 @@ export const subtitleSlice = createSlice({
       state.focusSegmentTriggered2 = action.payload
     },
     setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
-      let cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.segmentId);
+      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.id === action.payload.segmentId);
       cueIndex = cueIndex - 1
       if (cueIndex < 0 ) {
         cueIndex = 0
       }
-      state.focusSegmentId = state.subtitles[action.payload.identifier][cueIndex].id
+      state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].id
     },
     setFocusToSegmentBelowId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
-      let cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.id === action.payload.segmentId);
+      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.id === action.payload.segmentId);
       cueIndex = cueIndex + 1
-      if (cueIndex >= state.subtitles[action.payload.identifier].length) {
-        cueIndex = state.subtitles[action.payload.identifier].length - 1
+      if (cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
+        cueIndex = state.subtitles[action.payload.identifier].cues.length - 1
       }
-      state.focusSegmentId = state.subtitles[action.payload.identifier][cueIndex].id
+      state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].id
     },
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
@@ -167,13 +167,13 @@ export const subtitleSlice = createSlice({
 
 // Sort a subtitle array by startTime
 const sortSubtitle = (state: WritableDraft<subtitle>, identifier: string) => {
-  state.subtitles[identifier].sort((a, b) => a.startTime - b.startTime)
+  state.subtitles[identifier].cues.sort((a, b) => a.startTime - b.startTime)
 }
 
 // Export Actions
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
   setCurrentlyAtInSeconds, setClickTriggered, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
-  setSelectedSubtitleFlavor, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
+  setSelectedSubtitleId, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
   setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
 
 // Export Selectors
@@ -204,11 +204,11 @@ export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtit
 
 export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"] } }) =>
   state.subtitleState.subtitles
-export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"] } }) =>
-  state.subtitleState.selectedSubtitleFlavor
-export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
-  { subtitles: subtitle["subtitles"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
-  state.subtitleState.subtitles[state.subtitleState.selectedSubtitleFlavor]
+export const selectSelectedSubtitleId = (state: { subtitleState: { selectedSubtitleId: subtitle["selectedSubtitleId"] } }) =>
+  state.subtitleState.selectedSubtitleId
+export const selectSelectedSubtitleById = (state: { subtitleState:
+  { subtitles: subtitle["subtitles"]; selectedSubtitleId: subtitle["selectedSubtitleId"]; }; }) =>
+  state.subtitleState.subtitles[state.subtitleState.selectedSubtitleId]
 
 /**
  * Alternative middleware to setCurrentlyAt.
