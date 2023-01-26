@@ -98,7 +98,7 @@ export const scrubberKeyMap: KeyMap = {
     group: groupCuttingViewScrubber,
   },
   increase: {
-    name: "keyboardControls.scubberIncrease",
+    name: "keyboardControls.scrubberIncrease",
     // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
     sequence: rewriteKeys("Control+Alt+i"),
     sequences: [rewriteKeys("Control+Alt+i"), "Up"],

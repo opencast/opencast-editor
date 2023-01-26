@@ -80,7 +80,7 @@
     "timeline": {
         "generateWaveform-text": "Generating Waveform",
         "segment-tooltip": "Segment {{segment}}",
-        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
+        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
         "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. End: {{end}}.\n"
     },
     "workflowConfig": {
@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slovenian",
-            "LANGUAGES-PORTUGESE": "Portugese",
+            "LANGUAGES-PORTUGUESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Romansh",
             "LANGUAGES-ARABIC": "Arabic",
             "LANGUAGES-POLISH": "Polish",
@@ -249,12 +249,12 @@
         "groupCuttingView": "Cutting",
         "groupCuttingViewScrubber": "Timeline",
         "groupSubtitleList": "Subtitles",
-        "sequenceSeperator": "or",
+        "sequenceSeparator": "or",
         "genericError": "Failed to load overview",
         "videoPlayButton": "Play/Pause Video",
         "scrubberLeft": "Move left",
         "scrubberRight": "Move right",
-        "scubberIncrease": "Move faster",
+        "scrubberIncrease": "Move faster",
         "scrubberDecrease": "Move slower"
     },
     "theme": {

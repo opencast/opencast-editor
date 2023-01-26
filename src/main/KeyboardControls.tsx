@@ -92,7 +92,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
           {sequence.sequence.toString().split('+').map((singleKey, index) => (
             <div css={singleKeyStyle} key={index}>{singleKey}</div>
           ))}
-          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeperator")}</Trans></div>
+          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
         </div>
       ))}
     </div>
