@@ -16,7 +16,7 @@
     "@material-ui/pickers": "^3.3.10",
     "@mui/material": "^5.10.16",
     "@mui/styles": "^5.11.0",
-    "@mui/x-date-pickers": "^5.0.11",
+    "@mui/x-date-pickers": "^5.0.16",
     "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
