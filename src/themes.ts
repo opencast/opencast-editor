@@ -1,7 +1,7 @@
 import { Theme } from "./redux/themeSlice";
 
 export const lightMode: Theme = {
-  background: 'snow',
+  background: 'whitesmoke',
   text: '#000',
   error: '#ed1741',
   element_bg: 'snow',
