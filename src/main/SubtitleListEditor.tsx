@@ -60,7 +60,7 @@ const SubtitleListEditor : React.FC<{}> = () => {
   useEffect(() => {
     if (focusTriggered) {
       if (itemsRef && itemsRef.current && subtitle) {
-        const itemIndex = subtitle.findIndex(item => item.id === focusId)
+        const itemIndex = subtitle.findIndex(item => item.idInternal === focusId)
         if (listRef && listRef.current) {
           listRef.current.scrollToItem(itemIndex, "center");
 
@@ -121,7 +121,7 @@ const SubtitleListEditor : React.FC<{}> = () => {
             itemCount={subtitle !== undefined ? subtitle.length : 0}
             itemData={itemData}
             itemSize={(index) => segmentHeight}
-            itemKey={(index, data) => data.items[index].id}
+            itemKey={(index, data) => data.items[index].idInternal}
             width={width}
             overscanCount={4}
             estimatedItemSize={calcEstimatedSize()}
@@ -196,13 +196,13 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
 
   // Set focus to textarea
   useEffect(() => {
-    if (focusTriggered2 && focusId2 === cue.id) {
+    if (focusTriggered2 && focusId2 === cue.idInternal) {
       if (textAreaRef && textAreaRef.current) {
         textAreaRef.current.focus()
       }
       dispatch(setFocusSegmentTriggered2(false))
     }
-  }, [cue.id, dispatch, focusId2, focusTriggered2])
+  }, [cue.idInternal, dispatch, focusId2, focusTriggered2])
 
   const updateCueText = (event: { target: { value: any } }) => {
     dispatch(setCueAtIndex({
@@ -210,6 +210,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       cueIndex: props.index,
       newCue: {
         id: cue.id,
+        idInternal: cue.idInternal,
         text: event.target.value,
         startTime: cue.startTime,
         endTime: cue.endTime,
@@ -224,6 +225,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       cueIndex: props.index,
       newCue: {
         id: cue.id,
+        idInternal: cue.idInternal,
         text: cue.text,
         startTime: event.target.value,
         endTime: cue.endTime,
@@ -238,6 +240,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       cueIndex: props.index,
       newCue: {
         id: cue.id,
+        idInternal: cue.idInternal,
         text: cue.text,
         startTime: cue.startTime,
         endTime: event.target.value,
@@ -278,15 +281,15 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     addBelow: () => addCueBelow(),
     jumpAbove: () => {
       dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.id}))
+      dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.idInternal}))
     },
     jumpBelow: () => {
       dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentBelowId({identifier: identifier, segmentId: cue.id}))
+      dispatch(setFocusToSegmentBelowId({identifier: identifier, segmentId: cue.idInternal}))
     },
     delete: () => {
       dispatch(setFocusSegmentTriggered(true))
-      dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.id}))
+      dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.idInternal}))
       deleteCue()
     },
   }
