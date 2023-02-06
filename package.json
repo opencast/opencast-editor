@@ -29,7 +29,7 @@
     "@types/yup": "^0.32.0",
     "buffer": "^6.0.3",
     "customize-cra": "^1.0.0",
-    "deepmerge": "^4.2.2",
+    "deepmerge": "^4.3.0",
     "emotion": "^11.0.0",
     "emotion-normalize": "^11.0.1",
     "final-form": "^4.20.9",
