@@ -42,6 +42,7 @@ export const videoPlayerKeyMap: KeyMap = {
   play: {
     name: "keyboardControls.videoPlayButton",
     sequence: rewriteKeys("Space"),
+    sequences: [rewriteKeys("Control+Alt+Space"), "Space"],
     action: "keydown",
     group: groupVideoPlayer,
   },

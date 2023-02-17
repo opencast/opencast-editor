@@ -16,7 +16,7 @@ const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name,
   const groupStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
-    width: '420px',
+    width: '460px',
     maxWidth: '50vw',
   });
 
