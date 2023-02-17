@@ -170,6 +170,11 @@ const VideoSelectDropdown : React.FC<{
 
   // Turn flavor into string
   const stringifyFlavor = (flavor: Flavor) => {
+    // Omit subtype if all flavour subtypes are equal
+    if (flavors.every((f) => f.subtype === flavors[0].subtype)) {
+      return flavor.type
+    }
+
     return flavor.type + "/" + flavor.subtype
   }
 
