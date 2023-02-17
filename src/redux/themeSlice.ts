@@ -3,6 +3,7 @@ import { darkMode, lightMode, highContrastDarkMode, highContrastLightMode } from
 
 export interface Theme {
   background: String
+  menu_background: String
   text: String
   error: String
   element_bg: String

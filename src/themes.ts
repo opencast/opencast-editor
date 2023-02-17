@@ -2,6 +2,7 @@ import { Theme } from "./redux/themeSlice";
 
 export const lightMode: Theme = {
   background: 'whitesmoke',
+  menu_background: 'snow',
   text: '#000',
   error: '#ed1741',
   element_bg: 'snow',
@@ -23,7 +24,7 @@ export const lightMode: Theme = {
   dropdown_border: '1px solid #ccc',
   menuButton_outline: '2px solid transparent',
   button_outline: 'none',
-  button_color: '#DDD',
+  button_color: '#e6e6e6',
   indicator_color: '#3d3d3d',
   icon_color: '#000',
   waveform_filter: 'invert(0%)',
@@ -43,6 +44,7 @@ export const lightMode: Theme = {
 
 export const darkMode: Theme = {
   background: '#1C1C1C',
+  menu_background: '#1C1C1C',
   text: 'rgba(255, 255, 255, 0.87)',
   error: 'rgba(237, 23, 65, 0.8)',
   element_bg: '#2b2b2b',
@@ -79,11 +81,12 @@ export const darkMode: Theme = {
   clock_focus: '#fff',
   digit_selected: '#000',
   text_shadow: '2px 0 #2b2b2b, -2px 0 #2b2b2b, 0 2px #2b2b2b, 0 -2px #2b2b2b,' +
-               ' 1px 1px #2b2b2b, -1px -1px #2b2b2b, 1px -1px #2b2b2b, -1px 1px #2b2b2b',
+               ' 1px 1px #2b2b2b, -1px -1px #2b2b2b, 1px -1px #2b2b2b, -1px 1px #2b2b2b'
 };
 
 export const highContrastDarkMode: Theme = {
   background: '#000',
+  menu_background: '#000',
   text: '#fff',
   error: '#ED1741',
   element_bg: 'none',
@@ -125,6 +128,7 @@ export const highContrastDarkMode: Theme = {
 
 export const highContrastLightMode: Theme = {
   background: 'snow',
+  menu_background: 'snow',
   text: '#000',
   error: '#a5102d',
   element_bg: 'none',
