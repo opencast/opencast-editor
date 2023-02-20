@@ -17,7 +17,7 @@
     "@mui/material": "^5.11.9",
     "@mui/styles": "^5.11.7",
     "@mui/x-date-pickers": "^5.0.17",
-    "@reduxjs/toolkit": "^1.8.5",
+    "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
