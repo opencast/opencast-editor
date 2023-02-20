@@ -207,7 +207,7 @@
         "restoreTrackText": "Spur wiederherstellen",
         "cannotDeleteTrackText": "Spur kann nicht gelöscht werden",
         "deleteTrackTooltip": "Diese Spur nicht verarbeiten und veröffentlichen.",
-        "restoreTrackTooltip": "Diesen Track verarbeiten und veröffentlichen.",
+        "restoreTrackTooltip": "Diese Spur verarbeiten und veröffentlichen.",
         "cannotDeleteTrackTooltip": "Diese Spur kann nicht entfernt werden."
     },
     "subtitles": {
