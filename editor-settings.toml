@@ -31,7 +31,7 @@ mainFlavor = "captions"
 [subtitles.languages]
 "captions/source+de" = "Deutsch"
 "captions/source+en" = "English"
-"captions/source+es" = "Spanish"
+"captions/source+es" = "Español"
 "captions/source" = "Generic"
 
 [subtitles.icons]
