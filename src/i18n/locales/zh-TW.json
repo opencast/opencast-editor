@@ -80,7 +80,7 @@
     "timeline": {
         "generateWaveform-text": "生成波形",
         "segment-tooltip": "片段{{segment}}",
-        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
+        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
         "segments-text-aria": "片段 {{index}}. {{segmentStatus}}. 開始: {{start}}. 結束: {{end}}.\n"
     },
     "workflowConfig": {
@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "斯洛文尼亞語",
-            "LANGUAGES-PORTUGESE": "葡萄牙語",
+            "LANGUAGES-PORTUGUESE": "葡萄牙語",
             "LANGUAGES-ROMANSH": "羅曼什語",
             "LANGUAGES-ARABIC": "阿拉伯語",
             "LANGUAGES-POLISH": "波蘭語",
@@ -249,12 +249,12 @@
         "groupCuttingView": "裁剪",
         "groupCuttingViewScrubber": "Timeline",
         "groupSubtitleList": "Subtitles",
-        "sequenceSeperator": "或",
+        "sequenceSeparator": "或",
         "genericError": "無法載入概觀資料",
         "videoPlayButton": "播放/暫停 影片",
         "scrubberLeft": "往左移",
         "scrubberRight": "往右移",
-        "scubberIncrease": "移動快一點",
+        "scrubberIncrease": "移動快一點",
         "scrubberDecrease": "移動慢一點"
     },
     "theme": {
