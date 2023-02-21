@@ -2,7 +2,6 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 
 /**

@@ -20,7 +20,6 @@ import { convertMsToReadableString } from '../util/utilityFunctions';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { scrubberKeyMap } from '../globalKeys';
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';

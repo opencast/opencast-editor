@@ -199,7 +199,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     <ThemedTooltip title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}>
       <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
         role="button" tabIndex={0}
-        aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("createSubtitleButton-clicked-tooltip-aria")}
+        aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
         onClick={ () => setIsPlusDisplay(false) }
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           setIsPlusDisplay(false)

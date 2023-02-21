@@ -12,6 +12,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { GlobalHotKeys } from 'react-hotkeys';
 
+import './i18n/config';
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the

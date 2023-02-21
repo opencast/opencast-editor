@@ -24,7 +24,7 @@ import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
@@ -32,6 +32,7 @@ import { t } from "i18next";
  */
  const SubtitleTimeline: React.FC<{}> = () => {
 
+  const { t } = useTranslation();
   const theme = useSelector(selectTheme)
 
   // Init redux variables
