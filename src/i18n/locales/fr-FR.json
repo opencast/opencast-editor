@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slovaque",
-            "LANGUAGES-PORTUGUESE": "Portugais",
+            "LANGUAGES-PORTUGUESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Romanche",
             "LANGUAGES-ARABIC": "Arabe",
             "LANGUAGES-POLISH": "Polonais",
@@ -249,12 +249,12 @@
         "groupCuttingView": "Editer",
         "groupCuttingViewScrubber": "Timeline",
         "groupSubtitleList": "Subtitles",
-        "sequenceSeparator": "ou",
+        "sequenceSeparator": "or",
         "genericError": "Impossible de charger l'aperçu",
         "videoPlayButton": "Lecture/Pause de la vidéo",
         "scrubberLeft": "Déplacer vers la gauche",
         "scrubberRight": "Déplacer vers la droite",
-        "scrubberIncrease": "Se déplacer plus vite",
+        "scrubberIncrease": "Move faster",
         "scrubberDecrease": "Déplacement plus lent"
     },
     "theme": {

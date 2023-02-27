@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "斯洛文尼亞語",
-            "LANGUAGES-PORTUGUESE": "葡萄牙語",
+            "LANGUAGES-PORTUGUESE": "Portuguese",
             "LANGUAGES-ROMANSH": "羅曼什語",
             "LANGUAGES-ARABIC": "阿拉伯語",
             "LANGUAGES-POLISH": "波蘭語",
@@ -249,12 +249,12 @@
         "groupCuttingView": "裁剪",
         "groupCuttingViewScrubber": "Timeline",
         "groupSubtitleList": "Subtitles",
-        "sequenceSeparator": "或",
+        "sequenceSeparator": "or",
         "genericError": "無法載入概觀資料",
         "videoPlayButton": "播放/暫停 影片",
         "scrubberLeft": "往左移",
         "scrubberRight": "往右移",
-        "scrubberIncrease": "移動快一點",
+        "scrubberIncrease": "Move faster",
         "scrubberDecrease": "移動慢一點"
     },
     "theme": {

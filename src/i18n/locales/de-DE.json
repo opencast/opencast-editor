@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slowenisch",
-            "LANGUAGES-PORTUGUESE": "Portugiesisch",
+            "LANGUAGES-PORTUGUESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Rätoromanisch",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Polnisch",
@@ -249,12 +249,12 @@
         "groupCuttingView": "Schneiden",
         "groupCuttingViewScrubber": "Zeitleiste",
         "groupSubtitleList": "Untertitel",
-        "sequenceSeparator": "oder",
+        "sequenceSeparator": "or",
         "genericError": "Fehler beim Laden der Übersicht",
         "videoPlayButton": "Video abspielen/pausieren",
         "scrubberLeft": "Nach links",
         "scrubberRight": "Nach rechts",
-        "scrubberIncrease": "Schneller",
+        "scrubberIncrease": "Move faster",
         "scrubberDecrease": "Langsamer"
     },
     "theme": {
