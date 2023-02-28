@@ -170,12 +170,16 @@ const VideoSelectDropdown : React.FC<{
 
   // Turn flavor into string
   const stringifyFlavor = (flavor: Flavor) => {
+    return flavor.type + "/" + flavor.subtype
+  }
+
+  const getFlavorLabel = (flavor: Flavor) => {
     // Omit subtype if all flavour subtypes are equal
     if (flavors.every((f) => f.subtype === flavors[0].subtype)) {
       return flavor.type
     }
 
-    return flavor.type + "/" + flavor.subtype
+    return stringifyFlavor(flavor)
   }
 
   // Data to populate the dropdown with
@@ -183,7 +187,7 @@ const VideoSelectDropdown : React.FC<{
     const data = []
     for (let flavor of flavors) {
       // We have to deconstruct the flavor object for the value as well and put it back together
-      data.push({label: stringifyFlavor(flavor), value: stringifyFlavor(flavor)})
+      data.push({label: getFlavorLabel(flavor), value: stringifyFlavor(flavor)})
     }
     return data
   }
