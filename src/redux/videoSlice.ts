@@ -28,6 +28,16 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: Workflow[],
+
+  lockingActive: boolean,
+  lockRefresh: number | 0,
+  lockState: boolean,
+  lock: LockData
+}
+
+export interface LockData {
+  uuid: string,
+  user: string
 }
 
 export const initialState: video & httpRequestState = {
@@ -52,6 +62,11 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
+
+  lockingActive: false,
+  lockRefresh: 0,
+  lockState: false,
+  lock: {uuid: '', user: ''},
 
   status: 'idle',
   error: undefined,
@@ -142,6 +157,9 @@ const videoSlice = createSlice({
       const index = state.tracks.findIndex(t => t.id === action.payload)
       state.tracks[index].thumbnailUri = undefined
     },
+    setLock: (state, action: PayloadAction<video["lockState"]>) => {
+      state.lockState = action.payload;
+    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -212,6 +230,11 @@ const videoSlice = createSlice({
         state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
+        state.lockingActive = action.payload.locking_active
+        state.lockRefresh = action.payload.lock_refresh
+        state.lockState = action.payload.lock_state;
+        state.lock.uuid = action.payload.lock_uuid;
+        state.lock.user = action.payload.lock_user;
     })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -329,11 +352,13 @@ const setThumbnailHelper = (state:  WritableDraft<video>, id: Track["id"], uri: 
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
+export const getLockState = (state: { videoState: { lockState: video["lockState"] }; }) => state.videoState.lockState
+export const getLock = (state: { videoState: { lock: video["lock"] }; }) => state.videoState.lock
 export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"] }; }) =>
   state.videoState.isPlaying
 export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>
