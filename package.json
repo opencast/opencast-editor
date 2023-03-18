@@ -58,7 +58,7 @@
     "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.8",
     "redux": "^4.2.1",
-    "standardized-audio-context": "^25.3.37",
+    "standardized-audio-context": "^25.3.41",
     "stream": "0.0.2",
     "subtitle": "^4.1.2",
     "typescript": "^4.9.5",
