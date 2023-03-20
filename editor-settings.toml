@@ -79,7 +79,7 @@
 ## A list of languages for which subtitles can be created
 "captions/source+de" = "Deutsch"
 "captions/source+en" = "English"
-"captions/source+es" = "Spanish"
+"captions/source+es" = "Español"
 
 [subtitles.icons]
 # A list of icons to be displayed for languages defined above.

@@ -386,7 +386,7 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
     MuiSelect: {
       styleOverrides: {
         select: {
-          background: `${theme.background}`,
+          background: `${theme.element_bg}`,
           color: `${theme.text} !important`,
         },
         icon: {

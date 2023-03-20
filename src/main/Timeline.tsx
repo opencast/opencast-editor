@@ -35,6 +35,7 @@ import { ThemedTooltip } from './Tooltip';
  */
 const Timeline: React.FC<{
   timelineHeight?: number,
+  styleByActiveSegment?: boolean,
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying:(state: RootState) => boolean,
   setClickTriggered: ActionCreatorWithPayload<any, string>,
@@ -42,6 +43,7 @@ const Timeline: React.FC<{
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   timelineHeight = 250,
+  styleByActiveSegment = true,
   selectCurrentlyAt,
   selectIsPlaying,
   setClickTriggered,
@@ -81,7 +83,7 @@ const Timeline: React.FC<{
     />
     <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
       <Waveforms timelineHeight={timelineHeight}/>
-      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={true} tabable={true}/>
+      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
     </div>
   </div>
   );
@@ -283,8 +285,8 @@ export const Scrubber: React.FC<{
 export const SegmentsList: React.FC<{
   timelineWidth: number,
   timelineHeight: number,
-  styleByActiveSegment: boolean,
-  tabable: boolean,
+  styleByActiveSegment?: boolean,
+  tabable?: boolean,
 }> = ({
   timelineWidth,
   timelineHeight,
