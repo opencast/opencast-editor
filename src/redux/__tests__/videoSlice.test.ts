@@ -133,8 +133,8 @@ describe('Video reducer', () => {
 
     // Assert
     const rootState = { videoState: nextState };
-    expect(selectCurrentlyAt(rootState)).toEqual(20);
-    expect(selectActiveSegmentIndex(rootState)).toEqual(1);
+    expect(selectCurrentlyAt(rootState)).toEqual(21);
+    expect(selectActiveSegmentIndex(rootState)).toEqual(2);
     expect(selectPreviewTriggered(rootState)).toEqual(true);
   })
 

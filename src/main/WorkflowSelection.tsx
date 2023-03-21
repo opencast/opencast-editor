@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
 import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice'
+import { selectSelectedWorkflowId, selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice'
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
 import { PageButton } from './Finish'
@@ -19,7 +19,7 @@ import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
-import { FormControlLabel, Radio, RadioGroup, withStyles } from "@material-ui/core";
+import { FormControlLabel, NativeSelect, Radio, RadioGroup, withStyles } from "@material-ui/core";
 import { selectTheme } from "../redux/themeSlice";
 
 /**
@@ -60,14 +60,33 @@ const WorkflowSelection : React.FC<{}> = () => {
     maxHeight: '50vh',
   })
 
-  useEffect(() => {
-    if (workflows.length >= 1) {
-      dispatch(setSelectedWorkflowIndex(workflows[0].id))
-    }
-  }, [dispatch, workflows])
+  let [filteredWorkflows, setFilteredWorkflows] = useState(workflows);
 
-  const handleWorkflowSelectChange = (event: { target: { value: string}; }) => {
-    dispatch(setSelectedWorkflowIndex(event.target.value))
+  useEffect(() => {
+    if (filteredWorkflows.length >= 1) {
+      dispatch(setSelectedWorkflowIndex(filteredWorkflows[0].id));
+    }
+
+  }, [dispatch, filteredWorkflows, workflows])
+
+  const handleWorkflowSelectChange = (event: ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+    const index: number = parseInt(event.target.value as string);
+    filteredWorkflows = workflows.filter((workflow: Workflow) => {
+      switch (index) {
+        case 0:
+          return workflow.displayOrder >= 200 && workflow.displayOrder <= 400;
+        case 1:
+          return workflow.displayOrder >= 1000;
+        case 2:
+          return workflow.displayOrder <= 2000;
+        default:
+          break;
+      }
+
+      return true;
+    });
+
+    setFilteredWorkflows(filteredWorkflows);
   };
 
   // Layout template
@@ -78,17 +97,33 @@ const WorkflowSelection : React.FC<{}> = () => {
       <div css={workflowSelectionStyle}>
         <h2>{topTitle}</h2>
         {topText}
-        { hasWorkflowButtons &&
-            <RadioGroup
-              css={workflowSelectionSelectionStyle}
-              defaultValue={workflows[0].id}
-              name="Workflow Selection Area"
-              onChange={handleWorkflowSelectChange}
-            >
-              {workflows.map( (workflow: Workflow, index: number) => (
-                <WorkflowButton key={workflow.id} stateName={workflow.name} workflowId={workflow.id} workflowDescription={workflow.description}/>
-              ))}
-            </RadioGroup>
+        { (hasWorkflowButtons || filteredWorkflows.length === 0) &&
+            <>
+              <NativeSelect
+                defaultValue={selectSelectedWorkflowId}
+                inputProps={{
+                  name: 'workflow',
+                  id: 'workflow',
+                  onChange: handleWorkflowSelectChange,
+                  placeholder: 'Select range to filter workflows'
+                }}
+              >
+                <option value=""></option>
+                <option value={0}>200:400</option>
+                <option value={1}>1000:</option>
+                <option value={2}>:2000</option>
+              </NativeSelect>
+              <RadioGroup
+                css={workflowSelectionSelectionStyle}
+                defaultValue={workflows[0].id}
+                name="Workflow Selection Area"
+                onChange={handleWorkflowSelectChange}
+              >
+                {filteredWorkflows.map( (workflow: Workflow, index: number) => (
+                  <WorkflowButton key={workflow.id} stateName={workflow.name} workflowId={workflow.id} workflowDescription={workflow.description}/>
+                ))}
+              </RadioGroup>
+            </>
         }
         <div css={backOrContinueStyle}>
           <PageButton pageNumber={0} label={t("workflowSelection.back-button")} iconName={faChevronLeft}/>
@@ -105,7 +140,7 @@ const WorkflowSelection : React.FC<{}> = () => {
 
   // Fills the layout template with values based on how many workflows are available
   const renderSelection = () => {
-    if (workflows.length <= 0) {
+    if (filteredWorkflows.length <= 0) {
       return(
         render(
           t("workflowSelection.saveAndProcess-text"),
@@ -119,7 +154,7 @@ const WorkflowSelection : React.FC<{}> = () => {
           saveError
         )
       );
-    } else if (workflows.length === 1) {
+    } else if (filteredWorkflows.length === 1) {
       return (
         render(
           t("workflowSelection.saveAndProcess-text"),
@@ -127,8 +162,8 @@ const WorkflowSelection : React.FC<{}> = () => {
             The video will be cut and processed with the workflow "{{workflow: workflows[0].name}}".<br/>
             This will take some time.
           </Trans>,
-          false,
-          <SaveAndProcessButton text={t("workflowSelection.startProcessing-button")}/>,
+          true,
+          <SaveAndProcessButton text={t("workflowSelection.startProcessing-button")} disable={false} />,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )
@@ -141,7 +176,7 @@ const WorkflowSelection : React.FC<{}> = () => {
             {t("workflowSelection.manyWorkflows-text")}
           </div>,
           true,
-          <SaveAndProcessButton text= {t("workflowSelection.startProcessing-button")}/>,
+          <SaveAndProcessButton text= {t("workflowSelection.startProcessing-button")} disable={filteredWorkflows.length === 0} />,
           postAndProcessWorkflowStatus,
           postAndProcessError
         )

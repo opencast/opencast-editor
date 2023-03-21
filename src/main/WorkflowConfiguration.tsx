@@ -52,7 +52,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
       <div>{t("workflowConfig.satisfied-text")}</div>
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={1} label={t("various.goBack-button")} iconName={faChevronLeft}/>
-        <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
+        <SaveAndProcessButton text={t("workflowConfig.confirm-button")} disable={false}/>
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
@@ -70,7 +70,7 @@ const WorkflowConfiguration : React.FC<{}> = () => {
  * Button that sends a post request to save current changes
  * and starts the selected workflow
  */
-export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
+export const SaveAndProcessButton: React.FC<{text: string, disable: boolean}> = ({text, disable}) => {
 
   // Initialize redux variables
   const dispatch = useDispatch<AppDispatch>()
@@ -108,6 +108,10 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   // Subsequent save requests should be wrapped in useEffect hooks,
   // so they are only sent after the previous one has finished
   const saveAndProcess = () => {
+    if (disable) {
+      return;
+    }
+
     setMetadataSaveStarted(true)
     dispatch(postMetadata())
   }

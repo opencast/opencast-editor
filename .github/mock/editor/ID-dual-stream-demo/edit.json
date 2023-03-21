@@ -5,7 +5,13 @@
       "id": "publish",
       "name": "Publish",
       "displayOrder": 1000,
-      "description": ""
+      "description": "Process media files and publish them."
+    },
+    {
+      "id":"manchester-after-editing",
+      "name":"Publish to Video Portal",
+      "displayOrder":9060,
+      "description":"Restore workflow properties, compose and publish"
     }
   ],
   "tracks": [
