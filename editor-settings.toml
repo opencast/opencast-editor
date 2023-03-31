@@ -157,3 +157,11 @@
 # Type: string | undefined
 # Default: undefined
 #password =
+
+# Replace media package URLs with local URLs if possible.
+# This is done only if:
+# - Opencast indicates that the files are available locally
+# - Opencast URL has not been overwritten
+# Type: boolean
+# Default: true
+#local =

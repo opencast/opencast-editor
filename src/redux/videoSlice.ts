@@ -195,7 +195,16 @@ const videoSlice = createSlice({
           state.errorReason = 'workflowActive'
           state.error = "This event is being processed. Please wait until the process is finished."
         }
-        state.tracks = action.payload.tracks.sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => a.thumbnailPriority - b.thumbnailPriority)
+        state.tracks = action.payload.tracks
+          .sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => {
+            return a.thumbnailPriority - b.thumbnailPriority
+          }).map((track: Track) => {
+            if (action.payload.local && settings.opencast.local) {
+              console.debug('Replacing track URL')
+              track.uri = track.uri.replace(/https?:\/\/[^/]*/g, window.location.origin )
+            }
+            return track
+          })
         const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
