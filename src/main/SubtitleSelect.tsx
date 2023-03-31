@@ -226,12 +226,12 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                   >
                   </Select>
                 </ThemeProvider>
-                
-                {/* "By default disabled elements like <button> do not trigger user interactions 
-                 * so a Tooltip will not activate on normal events like hover. To accommodate 
+
+                {/* "By default disabled elements like <button> do not trigger user interactions
+                 * so a Tooltip will not activate on normal events like hover. To accommodate
                  * disabled elements, add a simple wrapper element, such as a span."
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
-                <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}> 
+                <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
                   <span>
                     <button css={[basicButtonStyle(theme), createButtonStyle, { width:"100%" } ]}
                       type="submit"
@@ -241,7 +241,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                     </button>
                   </span>
                 </ThemedTooltip>
-                
+
             </form>
           )}
         />

@@ -203,7 +203,6 @@ const videoSlice = createSlice({
         state.captions = action.payload.subtitles ? state.captions = action.payload.subtitles : []
         state.duration = action.payload.duration
         state.title = action.payload.title
-        state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
@@ -371,7 +370,6 @@ export const selectVideoCount = (state: { videoState: { videoCount: video["video
 export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
 export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
-export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
 export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>

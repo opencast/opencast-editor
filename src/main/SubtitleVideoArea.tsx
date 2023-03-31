@@ -209,13 +209,13 @@ const VideoSelectDropdown : React.FC<{
         handleSubmit(event)
       }} css={subtitleAddFormStyle}>
 
-            <ThemeProvider theme={subtitleSelectStyle(theme)}>
-              <Select
-                label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
-                name={dropdownName}
-                data={selectData()}
-              />
-            </ThemeProvider>
+          <ThemeProvider theme={subtitleSelectStyle(theme)}>
+            <Select
+              label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
+              name={dropdownName}
+              data={selectData()}
+            />
+          </ThemeProvider>
 
           <OnChange name={dropdownName}>
             {(value, previous) => {
