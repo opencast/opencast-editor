@@ -33,7 +33,7 @@
     "emotion": "^11.0.0",
     "emotion-normalize": "^11.0.1",
     "final-form": "^4.20.9",
-    "i18next": "^22.0.4",
+    "i18next": "^22.4.13",
     "i18next-browser-languagedetector": "^7.0.1",
     "lodash.clonedeep": "^4.5.0",
     "luxon": "^3.2.1",
