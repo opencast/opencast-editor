@@ -11,13 +11,11 @@ for (const lang of locales) {
   const code = lang.replace(/\..*$/, '');
   const short = code.replace(/-.*$/, '');
   const main = locales.filter(l => l.indexOf(short) === 0).length === 1
-  import('./locales/' + lang)
-  .then(translations => {
-    if (!main) {
-      resources[code] = { translation: translations };
-    }
-    resources[short] = { translation: translations };
-  })
+  const translations = require('./locales/' + lang);
+  if (!main) {
+    resources[code] = { translation: translations };
+  }
+  resources[short] = { translation: translations };
 }
 
 i18next

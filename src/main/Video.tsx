@@ -10,7 +10,7 @@ import { faPlay, faPause, faToggleOn, faToggleOff, faGears} from "@fortawesome/f
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying,
-  fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
+  fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle,
   setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
 
@@ -673,22 +673,12 @@ const TimeDisplay: React.FC<{
  */
 const VideoHeader: React.FC<{}> = () => {
 
-  const { t } = useTranslation();
-
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
-  const presenters = useSelector(selectPresenters)
 
-  let presenter_header;
-  if (presenters && presenters.length) {
-      presenter_header = <div css={titleStyle} title={t("video.presenter-tooltip")}>by {presenters.join(", ")}</div>
-  }
   return (
-    <div css={{fontSize: '16px'}}>
-      <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>
+    <div css={[titleStyle, titleStyleBold]}>
         {metadataTitle ? metadataTitle : title}
-      </div>
-      {presenter_header}
     </div>
   );
 }
