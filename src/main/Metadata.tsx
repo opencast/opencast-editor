@@ -362,7 +362,8 @@ const Metadata: React.FC<{}> = () => {
       if (catalogs[catalogIndex].fields[fieldIndex].id === fieldName) {
         // Update the field in the redux catalog
         dispatch(setFieldValue({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
-          value: parseValue(catalogs[catalogIndex].fields[fieldIndex], value)}))
+          value: parseValue(catalogs[catalogIndex].fields[fieldIndex], value)
+        }))
         break
       }
     }
@@ -441,7 +442,8 @@ const Metadata: React.FC<{}> = () => {
           if (catalogs[catalogIndex].fields[fieldIndex].id === formFieldName) {
             // Update the field in the redux catalog
             dispatch(setFieldValue({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
-              value: parseValue(catalogs[catalogIndex].fields[fieldIndex], values[formCatalogName][formFieldName])}))
+              value: parseValue(catalogs[catalogIndex].fields[fieldIndex], values[formCatalogName][formFieldName])
+            }))
             break
           }
         }
