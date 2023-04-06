@@ -83,6 +83,7 @@ export const subtitleSlice = createSlice({
 
       let cue = state.subtitles[action.payload.identifier].cues[action.payload.cueIndex]
       cue.id = action.payload.newCue.id
+      cue.idInternal = action.payload.newCue.idInternal
       cue.text = action.payload.newCue.text
       cue.startTime = Math.round(action.payload.newCue.startTime)
       cue.endTime = Math.round(action.payload.newCue.endTime)
@@ -96,7 +97,8 @@ export const subtitleSlice = createSlice({
     addCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0
       const cue: SubtitleCue = {
-        id: nanoid(),
+        id: undefined,
+        idInternal: nanoid(),
         text: action.payload.text,
         startTime: Math.round(startTime),
         endTime: Math.round(action.payload.endTime),
@@ -106,7 +108,7 @@ export const subtitleSlice = createSlice({
       // Trigger a callback in the list component that focuses the newly added element
       state.focusSegmentTriggered = true
       state.focusSegmentTriggered2 = true
-      state.focusSegmentId = cue.id
+      state.focusSegmentId = cue.idInternal
 
       if (action.payload.cueIndex < 0 ) {
         state.subtitles[action.payload.identifier].cues.splice(0, 0, cue);
@@ -123,7 +125,7 @@ export const subtitleSlice = createSlice({
       sortSubtitle(state, action.payload.identifier)
     },
     removeCue: (state, action: PayloadAction<{identifier: string, cue: SubtitleCue}>) => {
-      const cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.id === action.payload.cue.id);
+      const cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.idInternal === action.payload.cue.idInternal);
       if (cueIndex > -1) {
         state.subtitles[action.payload.identifier].cues.splice(cueIndex, 1);
       }
@@ -144,20 +146,20 @@ export const subtitleSlice = createSlice({
       state.focusSegmentTriggered2 = action.payload
     },
     setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
-      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.id === action.payload.segmentId);
+      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.idInternal === action.payload.segmentId);
       cueIndex = cueIndex - 1
       if (cueIndex < 0 ) {
         cueIndex = 0
       }
-      state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].id
+      state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].idInternal
     },
     setFocusToSegmentBelowId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
-      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.id === action.payload.segmentId);
+      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.idInternal === action.payload.segmentId);
       cueIndex = cueIndex + 1
       if (cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
         cueIndex = state.subtitles[action.payload.identifier].cues.length - 1
       }
-      state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].id
+      state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].idInternal
     },
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}

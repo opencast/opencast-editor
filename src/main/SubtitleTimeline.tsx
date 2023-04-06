@@ -177,7 +177,7 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
     <div css={segmentsListStyle}>
       {subtitle?.cues?.map((item, i) => {
         return (
-          <TimelineSubtitleSegment timelineWidth={timelineWidth} cue={item} height={arbitraryHeight} key={item.id} index={i}/>
+          <TimelineSubtitleSegment timelineWidth={timelineWidth} cue={item} height={arbitraryHeight} key={item.idInternal} index={i}/>
         )
       })}
     </div>
@@ -237,6 +237,7 @@ const TimelineSubtitleSegment: React.FC<{
       cueIndex: props.index,
       newCue: {
         id: props.cue.id,
+        idInternal: props.cue.idInternal,
         text: props.cue.text,
         startTime: newStartTime,
         endTime: newEndTime,
@@ -322,7 +323,7 @@ const TimelineSubtitleSegment: React.FC<{
 
     // Inform list view which segment was clicked
     dispatch(setFocusSegmentTriggered(true))
-    dispatch(setFocusSegmentId(props.cue.id))
+    dispatch(setFocusSegmentId(props.cue.idInternal))
     dispatch(setFocusSegmentTriggered2(true))
   }
 

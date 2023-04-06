@@ -45,6 +45,7 @@ interface iSettings {
     url: string,
     name: string | undefined,
     password: string | undefined,
+    local: boolean,
   },
   metadata: {
     show: boolean,
@@ -79,6 +80,7 @@ var defaultSettings: iSettings = {
     url: window.location.origin,
     name: undefined,
     password: undefined,
+    local: true,
   },
   metadata: {
     show: true,
@@ -147,6 +149,9 @@ export const init = async () => {
 
   // Combine results
   settings = merge.all([defaultSettings, configFileSettings, urlParameterSettings]) as iSettings;
+
+  // Prepare local setting to avoid complicated checks later
+  settings.opencast.local = settings.opencast.local && settings.opencast.url === window.location.origin;
 
   // Configure hotkeys
   configure({

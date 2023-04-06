@@ -90,7 +90,8 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
     cue.endTime = cue.endTime / 1000
 
     const extendedCue : ExtendedSubtitleCue = {
-      id: cue.id,
+      id: cue.id ? cue.id : undefined,
+      idInternal: cue.idInternal,
       text: cue.text,
       startTime: cue.startTime,
       endTime: cue.endTime,
@@ -145,7 +146,7 @@ export function parseSubtitle(subtitle: String): SubtitleCue[] {
   let index = 0
   for (let cue of tree.cues) {
     if (!cue.id) {
-      cue.id = nanoid()
+      cue.idInternal = nanoid()
       tree.cues[index] = cue
     }
 
