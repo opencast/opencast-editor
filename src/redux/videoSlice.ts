@@ -19,6 +19,7 @@ export interface video {
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   hasChanges: boolean,             // Did user make changes in cutting view since last save
+  timelineZoom: number,           // Zoom multiplicator for the timeline,
   waveformImages: string[]
   originalThumbnails: {id: Track["id"], uri: Track["thumbnailUri"]}[]
 
@@ -43,6 +44,7 @@ export const initialState: video & httpRequestState = {
   clickTriggered: false,
   aspectRatios: [],
   hasChanges: false,
+  timelineZoom: 1,
   waveformImages: [],
   originalThumbnails: [],
 
@@ -126,6 +128,9 @@ const videoSlice = createSlice({
     },
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
       state.hasChanges = action.payload
+    },
+    setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
+      state.timelineZoom = action.payload
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload
@@ -336,8 +341,8 @@ const setThumbnailHelper = (state:  WritableDraft<video>, id: Track["id"], uri: 
 }
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  addSegment, setAspectRatio, setHasChanges, setTimelineZoom, setWaveformImages, setThumbnails, setThumbnail,
+  removeThumbnail, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
@@ -366,6 +371,8 @@ export const selectSelectedWorkflowId = (state: { videoState:
     state.videoState.selectedWorkflowId
 export const selectHasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
+export const selectTimelineZoom = (state: { videoState: { timelineZoom: video["timelineZoom"]; }; }) =>
+  state.videoState.timelineZoom
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
   state.videoState.waveformImages
 export const selectOriginalThumbnails = (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
