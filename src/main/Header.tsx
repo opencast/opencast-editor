@@ -1,11 +1,15 @@
 import React from 'react';
 
+import { useSelector } from "react-redux"
+import { selectThemeState } from "../redux/themeSlice"
 import { css } from '@emotion/react'
 
 function Header() {
+  const themeState = useSelector(selectThemeState);
+
   const header = css({
     height: '48px',
-    backgroundColor: '#333333',
+    backgroundColor: themeState.startsWith('high-contrast-') ? '#000' : '#333333',
   });
 
   const logo = css({
