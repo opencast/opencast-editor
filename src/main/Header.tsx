@@ -7,10 +7,16 @@ import { css } from '@emotion/react'
 function Header() {
   const themeState = useSelector(selectThemeState);
 
-  const header = css({
+  const header = themeState.startsWith('high-contrast-')
+  ? css({
+    height: '46px',
+    backgroundColor: '#000',
+    borderBottom: '2px solid white'
+  })
+  : css({
     height: '48px',
-    backgroundColor: themeState.startsWith('high-contrast-') ? '#000' : '#333333',
-  });
+    backgroundColor: '#333333',
+  })
 
   const logo = css({
     height: '48px',
