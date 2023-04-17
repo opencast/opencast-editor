@@ -69,7 +69,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "Enregistrer et traiter",
         "selectWF-text": "Sélectionnez workflow",
-        "noWorkflows-text": "Un problème est survenu, il n'y a pas de workflows pour traiter vos modifications avec.<3/> Veuillez enregistrer vos modifications et contacter un administrateur Opencast.\n",
+        "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
         "oneWorkflow-text": "La vidéo sera coupée et traitée avec le workflow \"{{workflow}}\". <3/> Cela prendra un certain temps.\n",
         "manyWorkflows-text": "Sélectionnez quel workflow Opencast doit utiliser pour le traitement.",
         "startProcessing-button": "Démarrer le traitement",

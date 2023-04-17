@@ -69,7 +69,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "儲存和處理",
         "selectWF-text": "選擇工作流程",
-        "noWorkflows-text": "出現問題，沒有用於處理您的更改的工作流程。<3/> 請儲存您的更改並聯繫 Opencast 管理員。\n",
+        "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
         "oneWorkflow-text": "影片將使用工作流程“{{workflow}}”進行裁剪和處理。 <3/> 這需要一些時間。\n",
         "manyWorkflows-text": "選擇 Opencast 應該使用哪個工作流程進行處理。",
         "startProcessing-button": "開始處理",
