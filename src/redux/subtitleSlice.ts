@@ -18,6 +18,8 @@ export interface subtitle {
   focusSegmentTriggered: boolean,   // a segment in the timeline was clicked
   focusSegmentId: string,           // which segment in the timeline was clicked
   focusSegmentTriggered2: boolean,   // a different trigger for a child component, to avoid additional rerenders from the parent
+
+  hasChanges: boolean         // Did user make changes to metadata view since last save
 }
 
 const initialState: subtitle = {
@@ -34,6 +36,7 @@ const initialState: subtitle = {
   focusSegmentTriggered2: false,
 
   aspectRatios: [],
+  hasChanges: false,
 }
 
 const updateCurrentlyAt = (state: subtitle, milliseconds: number) => {
@@ -93,6 +96,7 @@ export const subtitleSlice = createSlice({
       state.subtitles[action.payload.identifier][action.payload.cueIndex] = cue
 
       sortSubtitle(state, action.payload.identifier)
+      state.hasChanges = true
     },
     addCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0
@@ -123,6 +127,7 @@ export const subtitleSlice = createSlice({
       }
 
       sortSubtitle(state, action.payload.identifier)
+      state.hasChanges = true
     },
     removeCue: (state, action: PayloadAction<{identifier: string, cue: SubtitleCue}>) => {
       const cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.idInternal === action.payload.cue.idInternal);
@@ -131,6 +136,7 @@ export const subtitleSlice = createSlice({
       }
 
       sortSubtitle(state, action.payload.identifier)
+      state.hasChanges = true
     },
     setSelectedSubtitleFlavor: (state, action: PayloadAction<subtitle["selectedSubtitleFlavor"]>) => {
       state.selectedSubtitleFlavor = action.payload
@@ -164,6 +170,9 @@ export const subtitleSlice = createSlice({
     setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
+    setHasChanges: (state, action: PayloadAction<subtitle["hasChanges"]>) => {
+      state.hasChanges = action.payload
+    },
   },
 })
 
@@ -176,7 +185,7 @@ const sortSubtitle = (state: WritableDraft<subtitle>, identifier: string) => {
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
   setCurrentlyAtInSeconds, setClickTriggered, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
   setSelectedSubtitleFlavor, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
-  setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio } = subtitleSlice.actions
+  setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio, setHasChanges } = subtitleSlice.actions
 
 // Export Selectors
 export const selectIsDisplayEditView = (state: RootState) =>
@@ -211,6 +220,8 @@ export const selectSelectedSubtitleFlavor = (state: { subtitleState: { selectedS
 export const selectSelectedSubtitleByFlavor = (state: { subtitleState:
   { subtitles: subtitle["subtitles"]; selectedSubtitleFlavor: subtitle["selectedSubtitleFlavor"]; }; }) =>
   state.subtitleState.subtitles[state.subtitleState.selectedSubtitleFlavor]
+export const selectHasChanges = (state: { subtitleState: { hasChanges: subtitle["hasChanges"] } }) =>
+  state.subtitleState.hasChanges
 
 /**
  * Alternative middleware to setCurrentlyAt.

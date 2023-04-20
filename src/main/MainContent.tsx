@@ -27,6 +27,7 @@ import {
   selectIsPlaying, selectCurrentlyAt,
   setIsPlaying, setCurrentlyAt, setClickTriggered,
 } from '../redux/videoSlice'
+import { selectHasChanges as selectSubtitleHasChanges } from "../redux/subtitleSlice";
 import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
 import Thumbnail from "./Thumbnail";
@@ -40,11 +41,12 @@ const MainContent: React.FC<{}> = () => {
   const mainMenuState = useSelector(selectMainMenuState)
   const videoChanged = useSelector(videoSelectHasChanges)
   const metadataChanged = useSelector(metadataSelectHasChanges)
+  const subtitleChanged = useSelector(selectSubtitleHasChanges)
   const theme = useSelector(selectTheme)
 
   // Display warning when leaving the page if there are unsaved changes
   useBeforeunload((event: { preventDefault: () => void; }) => {
-    if (videoChanged || metadataChanged) {
+    if (videoChanged || metadataChanged || subtitleChanged) {
       event.preventDefault();
     }
   });
