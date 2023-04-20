@@ -331,8 +331,8 @@ export const SegmentsList: React.FC<{
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})}>
-          <div key={segment.id}
+        <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})} key={segment.id}>
+          <div
             aria-label={t("timeline.segments-text-aria",
                       {segment: index,
                         segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
