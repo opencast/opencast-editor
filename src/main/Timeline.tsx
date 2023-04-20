@@ -42,7 +42,7 @@ const Timeline: React.FC<{
   setCurrentlyAt: ActionCreatorWithPayload<number, string>,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
-  timelineHeight = 250,
+  timelineHeight = 200,
   styleByActiveSegment = true,
   selectCurrentlyAt,
   selectIsPlaying,
