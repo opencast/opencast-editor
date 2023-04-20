@@ -69,7 +69,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "Enregistrer et traiter",
         "selectWF-text": "Sélectionnez workflow",
-        "noWorkflows-text": "Un problème est survenu, il n'y a pas de workflows pour traiter vos modifications avec.<3/> Veuillez enregistrer vos modifications et contacter un administrateur Opencast.\n",
+        "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
         "oneWorkflow-text": "La vidéo sera coupée et traitée avec le workflow \"{{workflow}}\". <3/> Cela prendra un certain temps.\n",
         "manyWorkflows-text": "Sélectionnez quel workflow Opencast doit utiliser pour le traitement.",
         "startProcessing-button": "Démarrer le traitement",
@@ -80,7 +80,7 @@
     "timeline": {
         "generateWaveform-text": "Génaration du Waveform",
         "segment-tooltip": "Segment {{segment}}",
-        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
+        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
         "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Début : {{start}}. Fin : {{end}}.\n"
     },
     "workflowConfig": {
@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slovaque",
-            "LANGUAGES-PORTUGESE": "Portugais",
+            "LANGUAGES-PORTUGUESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Romanche",
             "LANGUAGES-ARABIC": "Arabe",
             "LANGUAGES-POLISH": "Polonais",
@@ -238,6 +238,9 @@
     "subtitleVideoArea": {
         "selectVideoLabel": "Video Flavors"
     },
+    "subtitleTimeline": {
+        "overviewTimelineTooltip": "Timeline overview"
+    },
     "keyboardControls": {
         "header": "Controles clavier",
         "defaultGroupName": "Général",
@@ -246,12 +249,12 @@
         "groupCuttingView": "Editer",
         "groupCuttingViewScrubber": "Timeline",
         "groupSubtitleList": "Subtitles",
-        "sequenceSeperator": "ou",
+        "sequenceSeparator": "or",
         "genericError": "Impossible de charger l'aperçu",
         "videoPlayButton": "Lecture/Pause de la vidéo",
         "scrubberLeft": "Déplacer vers la gauche",
         "scrubberRight": "Déplacer vers la droite",
-        "scubberIncrease": "Se déplacer plus vite",
+        "scrubberIncrease": "Move faster",
         "scrubberDecrease": "Déplacement plus lent"
     },
     "theme": {

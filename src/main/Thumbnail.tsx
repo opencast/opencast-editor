@@ -101,6 +101,7 @@ const Thumbnail : React.FC<{}> = () => {
       />
       <Timeline
         timelineHeight={125}
+        styleByActiveSegment={false}
         selectIsPlaying={selectIsPlaying}
         selectCurrentlyAt={selectCurrentlyAt}
         setIsPlaying={setIsPlaying}
