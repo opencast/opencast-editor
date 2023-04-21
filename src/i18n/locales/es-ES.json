@@ -69,7 +69,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "Guardar y procesar",
         "selectWF-text": "Seleccione un flujo de trabajo",
-        "noWorkflows-text": "Ocurrió un problema, no hay flujos de trabajo con los que procesar sus cambios.<3/> Por favor, guarde sus cambios y póngase en contacto con su administrador de Opencast.\n",
+        "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
         "oneWorkflow-text": "El vídeo se cortará y procesará con el flujo de trabajo \"{{workflow}}\". <3/> Esto tomará algún tiempo.\n",
         "manyWorkflows-text": "Seleccione qué flujo de trabajo debe usar Opencast para procesar.",
         "startProcessing-button": "Iniciar proceso",
