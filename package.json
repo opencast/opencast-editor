@@ -91,7 +91,7 @@
     ]
   },
   "devDependencies": {
-    "@playwright/test": "^1.32.1",
+    "@playwright/test": "^1.33.0",
     "@redux-devtools/core": "^3.13.1",
     "@types/lodash": "^4.14.194",
     "@types/luxon": "^3.3.0",
