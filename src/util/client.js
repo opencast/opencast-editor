@@ -36,8 +36,6 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
     }
   }
 
-    console.log(config, body);
-
   let data
   let text
   let response
