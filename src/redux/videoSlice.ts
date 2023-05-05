@@ -30,7 +30,7 @@ export interface video {
   workflows: Workflow[],
 
   lockingActive: boolean,
-  lockRefresh: number | 0,
+  lockRefresh: number,
   lockState: boolean,
   lock: LockData
 }
