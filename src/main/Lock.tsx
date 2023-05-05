@@ -8,12 +8,6 @@ import { setLock, video } from "../redux/videoSlice";
 import { client } from "../util/client";
 
 const Lock: React.FC<{}> = () => {
-  const [state, setState] = useState({
-    lockingActive: false,
-    lockRefresh: 6000,
-    lockState: false,
-    lock: {uuid: '', user: ''}
-  });
   const dispatch = useDispatch();
   const lockDispatch = useCallback(() => dispatch({
     type: 'SET_LOCK',
@@ -27,11 +21,17 @@ const Lock: React.FC<{}> = () => {
   const lockRefresh = useSelector((state: { videoState: { lockRefresh: video["lockRefresh"] } }) => state.videoState.lockRefresh);
   const lockState = useSelector((state: { videoState: { lockState: video["lockState"] } }) => state.videoState.lockState);
   const lock = useSelector((state: { videoState: { lock: video["lock"] } }) => state.videoState.lock);
+  const [state, setState] = useState({
+    lockingActive: lockingActive,
+    lockRefresh: lockRefresh,
+    lockState: lockState,
+    lock: lock
+  });
 
   let endpoint = `${settings.opencast.url}/editor/${settings.id}/lock`
 
-  function requestLock() {
-    const form: string = `user=${lock.user}&uuid=${lock.uuid}`;
+  const requestLock = useCallback(() => {
+    const form: string = `user=${state.lock.user}&uuid=${state.lock.uuid}`;
     client.post(endpoint, form, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
@@ -43,10 +43,10 @@ const Lock: React.FC<{}> = () => {
     .catch((error: string) => {
       if (error.includes("409")) {
         setState({
-          lockingActive: lockingActive,
-          lockState: lockState,
-          lock: lock,
-          lockRefresh: lockRefresh
+          lockingActive: state.lockingActive,
+          lockState: state.lockState,
+          lock: state.lock,
+          lockRefresh: state.lockRefresh
         });
         errorDispatch(setError({
           error: true,
@@ -57,36 +57,46 @@ const Lock: React.FC<{}> = () => {
         }));
       }
     });
-  };
+  }, [endpoint, errorDispatch, state.lock, lockDispatch, state.lockRefresh, state.lockState, state.lockingActive, setState]);
 
-  function releaseLock() {
-    client.delete(`${endpoint}/${lock.uuid}`, {
+  const releaseLock = useCallback(() => {
+    client.delete(`${endpoint}/${state.lock.uuid}`, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       }
     })
     .then(() => {
       dispatch(setLock(false));
-    })
+      setState({
+        lockingActive: false,
+        lockRefresh: state.lockRefresh,
+        lockState: false,
+        lock: {user: '', uuid: ''}
+      });
+  })
     .catch((error: Error) => {
       console.error(error);
     });
-  };
+  }, [dispatch, endpoint, state.lock.uuid, state.lockRefresh]);
 
   useEffect(() => {
     const releaseLockState = () => {
-      if (lock.user && lock.uuid) {
+      if (state.lock && state.lock.user && state.lock.uuid) {
         releaseLock();
-        setState({
-          lockingActive: false,
-          lockRefresh: lockRefresh,
-          lockState: false,
-          lock: {user: '', uuid: ''}
-        });
       }
     };
 
-    if (lock.user && lock.uuid && !lockingActive) {
+    if (state.lock && !state.lock.user && !state.lock.uuid
+        && lock.user && lock.uuid) {
+          setState({
+            lock: lock,
+            lockingActive: lockingActive,
+            lockRefresh: lockRefresh,
+            lockState: lockState
+          });
+    }
+
+    if (state.lock && state.lock.user && state.lock.uuid) {
       requestLock();
     }
 
@@ -95,7 +105,7 @@ const Lock: React.FC<{}> = () => {
       releaseLockState();
       window.removeEventListener('beforeunload', releaseLockState);
     }
-  }, [lock, lockingActive, lockRefresh]);
+  }, [state, lockRefresh, requestLock, releaseLock, lock, lockState, lockingActive]);
 
   return (<></>);
 }
