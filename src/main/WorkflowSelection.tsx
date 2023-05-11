@@ -19,7 +19,8 @@ import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
-import { FormControlLabel, Radio, RadioGroup, withStyles } from "@material-ui/core";
+import { withStyles } from "@mui/styles";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { selectTheme } from "../redux/themeSlice";
 
 /**

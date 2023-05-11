@@ -8,8 +8,8 @@ import store from './redux/store'
 import { init } from './config'
 import { sleep } from './util/utilityFunctions'
 
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { GlobalHotKeys } from 'react-hotkeys';
 
 
@@ -31,12 +31,12 @@ initialize.then(
     ReactDOM.render(
       <React.StrictMode>
           <Provider store={store}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
               {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
               <GlobalHotKeys>
                 <App />
               </GlobalHotKeys>
-            </MuiPickersUtilsProvider>
+            </LocalizationProvider>
           </Provider>
       </React.StrictMode>,
       document.getElementById('root')
