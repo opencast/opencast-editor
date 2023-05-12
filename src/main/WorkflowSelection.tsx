@@ -19,7 +19,6 @@ import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
-import { withStyles } from "@mui/styles";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { selectTheme } from "../redux/themeSlice";
 
@@ -78,7 +77,7 @@ const WorkflowSelection : React.FC<{}> = () => {
     return (
       <div css={workflowSelectionStyle}>
         <h2>{topTitle}</h2>
-        {topText}
+        {!!topText}
         { hasWorkflowButtons &&
             <RadioGroup
               css={workflowSelectionSelectionStyle}
@@ -183,15 +182,26 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   );
 }
 
-const WorkflowSelectRadio = withStyles({
-  root: {
-    alignSelf: 'start',
-    color: 'grey',
-    "&$checked": {
-      color: 'grey'
-    }
-  },
-  checked: {}
-})((props) => <Radio color="default" {...props} />);
+const WorkflowSelectRadio: React.FC = () => {
+
+  const style = css({
+    root: {
+      alignSelf: 'start',
+      color: 'grey',
+      "&$checked": {
+        color: 'grey'
+      }
+    },
+  })
+
+  return (
+    <Radio
+      color="default"
+      css={style}
+      checked={false}
+    />
+  )
+}
+
 
 export default WorkflowSelection;

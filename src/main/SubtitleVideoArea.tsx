@@ -18,15 +18,13 @@ import { selectCurrentlyAt,
 import { selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
-import { Form } from "react-final-form";
-import { Select } from "mui-rff";
 import { useTranslation } from "react-i18next";
-import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
-import { flexGapReplacementStyle, subtitleSelectStyle } from "../cssStyles";
+import { flexGapReplacementStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { selectTheme } from "../redux/themeSlice";
-import { ThemeProvider } from "@mui/material/styles";
+import Select from "react-select";
+import { selectFieldStyle } from "../cssStyles";
 
 /**
  * A part of the subtitle editor that displays a video and related controls
@@ -108,12 +106,12 @@ const SubtitleVideoArea : React.FC<{}> = () => {
     return(
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>
-          <VideoSelectDropdown
+          {selectedFlavor && <VideoSelectDropdown
             // eslint-disable-next-line no-sequences
             flavors={tracks.reduce((a: Flavor[], o: { flavor: Flavor }) => (a.push(o.flavor), a), [])}
             changeFlavorcallback={setSelectedFlavor}
             defaultFlavor={selectedFlavor}
-          />
+          />}
           {/* TODO: Make preview mode work or remove it */}
           <VideoPlayer
             dataKey={0}
@@ -156,7 +154,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 const VideoSelectDropdown : React.FC<{
   flavors: Flavor[],
   changeFlavorcallback: React.Dispatch<React.SetStateAction<Flavor | undefined>>,
-  defaultFlavor: Flavor | undefined
+  defaultFlavor: Flavor
 }> = ({
   flavors,
   changeFlavorcallback,
@@ -183,50 +181,37 @@ const VideoSelectDropdown : React.FC<{
   }
 
   // Data to populate the dropdown with
-  const selectData = () => {
-    const data = []
-    for (let flavor of flavors) {
-      // We have to deconstruct the flavor object for the value as well and put it back together
-      data.push({label: getFlavorLabel(flavor), value: stringifyFlavor(flavor)})
-    }
-    return data
+  const data: {label: string, value: string}[] = []
+  for (let flavor of flavors) {
+    // We have to deconstruct the flavor object for the value as well and put it back together
+    data.push({label: getFlavorLabel(flavor), value: stringifyFlavor(flavor)})
   }
-
-  const onSubmit = () => {}
-
 
   const subtitleAddFormStyle = css({
     width: '100%',
   });
 
   return (
-    <Form
-    onSubmit={(onSubmit)}
-    // TODO: Find out why "dropdownName" does not work with initialValues
-    initialValues={{"flavors": defaultFlavor ? stringifyFlavor(defaultFlavor) : ""}}
-    render={({ handleSubmit, form, submitting, pristine, values}) => (
-      <form onSubmit={event => {
-        handleSubmit(event)
-      }} css={subtitleAddFormStyle}>
-
-          <ThemeProvider theme={subtitleSelectStyle(theme)}>
-            <Select
-              label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
-              name={dropdownName}
-              data={selectData()}
-            />
-          </ThemeProvider>
-
-          <OnChange name={dropdownName}>
-            {(value, previous) => {
+    <>
+      <div>{t("subtitleVideoArea.selectVideoLabel") ?? undefined}</div>
+      <Select
+        name={dropdownName}
+        styles={selectFieldStyle(theme)}
+        css={subtitleAddFormStyle}
+        options={data}
+        defaultValue={data.filter(({value}) => value === stringifyFlavor(defaultFlavor))}
+        onChange={
+          (newValue) => {
+            if (newValue) {
+              console.log(newValue)
               // Put flavor back together
-              const newFlavor: Flavor = {type: value.split("/")[0], subtype: value.split("/")[1]}
+              const newFlavor: Flavor = {type: newValue.value.split("/")[0], subtype: newValue.value.split("/")[1]}
               changeFlavorcallback(newFlavor)
-            }}
-          </OnChange>
-      </form>
-    )}
-  />
+            }
+          }
+        }
+      />
+    </>
   )
 }
 
