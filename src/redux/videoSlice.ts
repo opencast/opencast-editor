@@ -29,15 +29,15 @@ export interface video {
   presenters: string[],
   workflows: Workflow[],
 
-  lockingActive: boolean,
-  lockRefresh: number,
-  lockState: boolean,
   lock: LockData
 }
 
 export interface LockData {
   uuid: string,
   user: string
+  active: boolean,
+  refresh: number,
+  state: string,
 }
 
 export const initialState: video & httpRequestState = {
@@ -63,10 +63,7 @@ export const initialState: video & httpRequestState = {
   presenters: [],
   workflows: [],
 
-  lockingActive: false,
-  lockRefresh: 0,
-  lockState: false,
-  lock: {uuid: '', user: ''},
+  lock: {uuid: '', user: '', active: false, refresh: 6000, state: ''},
 
   status: 'idle',
   error: undefined,
@@ -157,9 +154,6 @@ const videoSlice = createSlice({
       const index = state.tracks.findIndex(t => t.id === action.payload)
       state.tracks[index].thumbnailUri = undefined
     },
-    setLock: (state, action: PayloadAction<video["lockState"]>) => {
-      state.lockState = action.payload;
-    },
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -230,9 +224,9 @@ const videoSlice = createSlice({
         state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
-        state.lockingActive = action.payload.locking_active
-        state.lockRefresh = action.payload.lock_refresh
-        state.lockState = action.payload.lock_state;
+        state.lock.active = action.payload.locking_active
+        state.lock.refresh = action.payload.lock_refresh
+        state.lock.state = action.payload.lock_state;
         state.lock.uuid = action.payload.lock_uuid;
         state.lock.user = action.payload.lock_user;
     })
@@ -352,13 +346,11 @@ const setThumbnailHelper = (state:  WritableDraft<video>, id: Track["id"], uri: 
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
-export const getLockState = (state: { videoState: { lockState: video["lockState"] }; }) => state.videoState.lockState
-export const getLock = (state: { videoState: { lock: video["lock"] }; }) => state.videoState.lock
 export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"] }; }) =>
   state.videoState.isPlaying
 export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>

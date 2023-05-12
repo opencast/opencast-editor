@@ -4,50 +4,62 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { settings } from "../config";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../redux/errorSlice";
-import { setLock, video } from "../redux/videoSlice";
+import { LockData, video } from "../redux/videoSlice";
 import { client } from "../util/client";
 
 const Lock: React.FC<{}> = () => {
-  const dispatch = useDispatch();
-  const lockDispatch = useCallback(() => dispatch({
-    type: 'SET_LOCK',
-    lockingActive: true,
-    lockRefresh: 6000,
-    lockState: false,
-    lock: {uuid: '', user: ''}
-  }), [dispatch]);
   const errorDispatch = useDispatch();
-  const lockingActive = useSelector((state: { videoState: { lockingActive: video["lockingActive"] } }) => state.videoState.lockingActive);
-  const lockRefresh = useSelector((state: { videoState: { lockRefresh: video["lockRefresh"] } }) => state.videoState.lockRefresh);
-  const lockState = useSelector((state: { videoState: { lockState: video["lockState"] } }) => state.videoState.lockState);
-  const lock = useSelector((state: { videoState: { lock: video["lock"] } }) => state.videoState.lock);
+  const lock: LockData = useSelector((state: { videoState: { lock: video["lock"] } }) => state.videoState.lock);
   const [state, setState] = useState({
-    lockingActive: lockingActive,
-    lockRefresh: lockRefresh,
-    lockState: lockState,
-    lock: lock
+    active: lock.active,
+    refresh: lock.refresh,
+    state: lock.state,
+    user: lock.user,
+    uuid: lock.uuid
   });
 
   let endpoint = `${settings.opencast.url}/editor/${settings.id}/lock`
 
+  const isInitialState = useCallback((): boolean => {
+    return state.user === '' && state.uuid === '' && lock.user !== '' && lock.uuid !== '' && state.state === '';
+  }, [lock.user, lock.uuid, state.state, state.user, state.uuid]);
+
+  const canRequestLock = useCallback((): boolean => {
+    return state.user !== '' && state.uuid !== '' && !state.active && !state.state;
+  }, [state.user, state.uuid, state.active, state.state]);
+
+  const canReleaseLock = useCallback((): boolean => {
+    return state.user !== '' && state.uuid !== '' && state.active;
+  }, [state.user, state.uuid, state.active]);
+
+  const initialLockState = useCallback(() => {
+    setState({
+      active: lock.active,
+      refresh: lock.refresh,
+      state: lock.state,
+      user: lock.user,
+      uuid: lock.uuid
+    });
+  }, [lock.active, lock.refresh, lock.state, lock.user, lock.uuid]);
+
   const requestLock = useCallback(() => {
-    const form: string = `user=${state.lock.user}&uuid=${state.lock.uuid}`;
+    const form: string = `user=${state.user}&uuid=${state.uuid}`;
     client.post(endpoint, form, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
       }
     })
     .then(() => {
-      lockDispatch();
+      setState({
+        active: true,
+        state: 'locked',
+        refresh: state.refresh,
+        user: state.user,
+        uuid: state.uuid
+    });
     })
     .catch((error: string) => {
       if (error.includes("409")) {
-        setState({
-          lockingActive: state.lockingActive,
-          lockState: state.lockState,
-          lock: state.lock,
-          lockRefresh: state.lockRefresh
-        });
         errorDispatch(setError({
           error: true,
           errorDetails: error,
@@ -57,55 +69,73 @@ const Lock: React.FC<{}> = () => {
         }));
       }
     });
-  }, [endpoint, errorDispatch, state.lock, lockDispatch, state.lockRefresh, state.lockState, state.lockingActive, setState]);
+  }, [endpoint, errorDispatch, state.refresh, state.user, state.uuid]);
 
   const releaseLock = useCallback(() => {
-    client.delete(`${endpoint}/${state.lock.uuid}`, {
+    client.delete(`${endpoint}/${state.uuid}`, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       }
     })
     .then(() => {
-      dispatch(setLock(false));
       setState({
-        lockingActive: false,
-        lockRefresh: state.lockRefresh,
-        lockState: false,
-        lock: {user: '', uuid: ''}
+        active: false,
+        refresh: state.refresh,
+        state: '',
+        user: state.user,
+        uuid: state.uuid
       });
   })
     .catch((error: Error) => {
       console.error(error);
     });
-  }, [dispatch, endpoint, state.lock.uuid, state.lockRefresh]);
+  }, [endpoint, state.refresh, state.user, state.uuid]);
+
+  const refreshLock = useCallback(() => {
+    requestLock();
+  }, [requestLock]);
 
   useEffect(() => {
-    const releaseLockState = () => {
-      if (state.lock && state.lock.user && state.lock.uuid) {
-        releaseLock();
-      }
-    };
+    let refresh: ReturnType<typeof setTimeout>;
 
-    if (state.lock && !state.lock.user && !state.lock.uuid
-        && lock.user && lock.uuid) {
-          setState({
-            lock: lock,
-            lockingActive: lockingActive,
-            lockRefresh: lockRefresh,
-            lockState: lockState
-          });
+    if (isInitialState()) {
+      initialLockState();
     }
 
-    if (state.lock && state.lock.user && state.lock.uuid) {
+    return () => {
+      clearInterval(refresh);
+    }
+  }, [initialLockState, isInitialState, state]);
+
+  useEffect(() => {
+    if (canRequestLock()) {
       requestLock();
     }
 
-    window.addEventListener('beforeunload', releaseLockState);
     return () => {
-      releaseLockState();
-      window.removeEventListener('beforeunload', releaseLockState);
     }
-  }, [state, lockRefresh, requestLock, releaseLock, lock, lockState, lockingActive]);
+  }, [canRequestLock, requestLock]);
+
+  useEffect(() => {
+    let refresh: ReturnType<typeof setTimeout>;
+
+    if (state.active && state.state === 'locked') {
+      refresh = setInterval(() => {
+        refreshLock();
+      }, state.refresh);
+    }
+
+    return () => {
+      clearInterval(refresh);
+    }
+  }, [refreshLock, state.active, state.refresh, state.state]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', releaseLock);
+    return () => {
+      window.removeEventListener('beforeunload', releaseLock);
+    }
+  }, [canReleaseLock, state, releaseLock]);
 
   return (<></>);
 }
