@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux'
@@ -10,8 +10,11 @@ import { sleep } from './util/utilityFunctions'
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { GlobalHotKeys } from 'react-hotkeys';
 
+
+const container = document.getElementById('root')
+if (!container) throw new Error('Failed to find the root element');
+const root = ReactDOMClient.createRoot(container);
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the
@@ -22,24 +25,20 @@ const initialize = Promise.race([
 ]);
 
 const render = (body: JSX.Element) => {
-  ReactDOM.render(body, document.getElementById('root'));
+  root.render(body);
 };
 
 initialize.then(
 
   () => {
-    ReactDOM.render(
+    root.render(
       <React.StrictMode>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
-              <GlobalHotKeys>
                 <App />
-              </GlobalHotKeys>
             </LocalizationProvider>
           </Provider>
-      </React.StrictMode>,
-      document.getElementById('root')
+      </React.StrictMode>
     );
   },
 
