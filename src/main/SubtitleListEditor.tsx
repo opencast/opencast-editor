@@ -117,12 +117,12 @@ const SubtitleListEditor : React.FC<{}> = () => {
       <AutoSizer>
         {({ height, width }) => (
           <VariableSizeList
-            height={height}
+            height={height ? height : 0}
             itemCount={subtitle?.cues !== undefined ? subtitle?.cues.length : 0}
             itemData={itemData}
             itemSize={(index) => segmentHeight}
             itemKey={(index, data) => data.items[index].idInternal}
-            width={width}
+            width={width ? width : 0}
             overscanCount={4}
             estimatedItemSize={calcEstimatedSize()}
             innerElementType={innerElementType}
