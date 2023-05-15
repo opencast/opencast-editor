@@ -2,7 +2,6 @@ import { Segment, SubtitleCue } from './../types';
 import { createSlice, Dispatch, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
 import type { RootState } from '../redux/store'
-import { WritableDraft } from 'immer/dist/internal';
 import { video } from './videoSlice';
 
 export interface subtitle {
@@ -177,7 +176,7 @@ export const subtitleSlice = createSlice({
 })
 
 // Sort a subtitle array by startTime
-const sortSubtitle = (state: WritableDraft<subtitle>, identifier: string) => {
+const sortSubtitle = (state: subtitle, identifier: string) => {
   state.subtitles[identifier].sort((a, b) => a.startTime - b.startTime)
 }
 
