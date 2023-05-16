@@ -20,7 +20,8 @@ import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import ErrorBox from "./ErrorBox";
-import { FormControlLabel, Radio, RadioGroup, withStyles } from "@material-ui/core";
+import { withStyles } from "@mui/styles";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
 /**
  * Allows the user to select a workflow

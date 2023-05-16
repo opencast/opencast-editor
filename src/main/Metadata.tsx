@@ -27,8 +27,6 @@ import ErrorBox from "./ErrorBox";
 import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemeProvider } from "@mui/material/styles";
@@ -543,7 +541,6 @@ const Metadata: React.FC<{}> = () => {
     } else if (field.type === "date") {
       return (
         <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ThemeProvider theme={calendarStyle(theme)}>
               <DateTimePicker {...input}
                 name={field.id}
@@ -559,7 +556,6 @@ const Metadata: React.FC<{}> = () => {
                 rightArrowButtonText={i18next.t('metadata.calendar-next')}
               />
             </ThemeProvider>
-          </LocalizationProvider>
         </div>
       );
     } else if (field.type === "time") {

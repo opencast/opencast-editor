@@ -3,7 +3,6 @@ import { client } from '../util/client'
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast }  from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
-import { WritableDraft } from 'immer/dist/internal';
 import { settings } from '../config';
 
 export interface video {
@@ -233,7 +232,7 @@ const videoSlice = createSlice({
  * Helper function to update the activeSegmentIndex
  * @param state
  */
-const updateActiveSegment = (state: WritableDraft<video>) => {
+const updateActiveSegment = (state: video) => {
   state.activeSegmentIndex = state.segments.findIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt)
   // If there is an error, assume the first (the starting) segment
@@ -261,7 +260,7 @@ export const parseSegments = (segments: Segment[], duration: number) => {
 /**
  * Helper function for merging two segments
  */
-const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, mergeSegmentIndex: number) => {
+const mergeSegments = (state: video, activeSegmentIndex: number, mergeSegmentIndex: number) => {
   // Check if mergeSegmentIndex is valid
   if (mergeSegmentIndex < 0 || mergeSegmentIndex > state.segments.length - 1) {
     return
@@ -280,7 +279,7 @@ const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, 
   updateActiveSegment(state)
 }
 
-const skipDeletedSegments = (state: WritableDraft<video>) => {
+const skipDeletedSegments = (state: video) => {
   if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
       let endTime = state.segments[state.activeSegmentIndex].end
 
@@ -328,7 +327,7 @@ export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) =
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
-const setThumbnailHelper = (state:  WritableDraft<video>, id: Track["id"], uri: Track["thumbnailUri"]) => {
+const setThumbnailHelper = (state:  video, id: Track["id"], uri: Track["thumbnailUri"]) => {
   const index = state.tracks.findIndex(t => t.id === id)
   if (index >= 0) {
     state.tracks[index].thumbnailUri = uri
