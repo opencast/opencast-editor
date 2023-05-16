@@ -38,7 +38,8 @@ export interface SubtitlesFromOpencast {
 }
 
 export interface SubtitleCue {
-  id: string,
+  id?: string,              // Actually not useful as an identifier, as it is not guaranteed to exist
+  idInternal: string,       // Identifier for internal use. Has nothing to do with the webvtt parser.
   text: string,
   startTime: number,
   endTime: number,

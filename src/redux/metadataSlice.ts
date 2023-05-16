@@ -99,11 +99,11 @@ const metadataSlice = createSlice({
   name: 'metadataState',
   initialState,
   reducers: {
-    setFieldValue: (state, action: any) => {
+    setFieldValue: (state, action: PayloadAction<{catalogIndex: number, fieldIndex: number, value: string}>) => {
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value
       state.hasChanges = true
     },
-    setFieldReadonly: (state, action: any) => {
+    setFieldReadonly: (state, action: PayloadAction<{catalogIndex: number, fieldIndex: number, value: boolean}>) => {
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].readOnly = action.payload.value
     },
     setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {

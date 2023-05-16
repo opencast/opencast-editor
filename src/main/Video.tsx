@@ -10,7 +10,7 @@ import { faPlay, faPause, faToggleOn, faToggleOff, faGears} from "@fortawesome/f
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectIsPlaying, selectCurrentlyAt, selectCurrentlyAtInSeconds, setIsPlaying,
-  fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle, selectPresenters,
+  fetchVideoInformation, selectVideoURL, selectVideoCount, selectDurationInSeconds, selectTitle,
   setPreviewTriggered, selectPreviewTriggered, selectIsPlayPreview, setIsPlayPreview, setAspectRatio, selectAspectRatio, selectDuration, setClickTriggered, selectClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
 
@@ -210,7 +210,10 @@ export const VideoPlayer = React.forwardRef(
   const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
     if (isPrimary) {
       // Only update redux if there was a substantial change
-      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) && state.playedSeconds !== 0) {
+      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) &&
+          state.playedSeconds !== 0 &&
+          // Avoid overwriting video restarts
+          state.playedSeconds < duration) {
         dispatch(setCurrentlyAt(state.playedSeconds * 1000))
       }
     }
@@ -237,8 +240,18 @@ export const VideoPlayer = React.forwardRef(
     setReady(true);
   }
 
+  const onPlay = () => {
+    // Restart the video from the beginning when at the end
+    if (isPrimary && currentlyAt >= duration) {
+      dispatch(setCurrentlyAt(0))
+      // Flip-flop the "isPlaying" switch, or else the video won't start playing
+      dispatch(setIsPlaying(false));
+      dispatch(setIsPlaying(true));
+    }
+  }
+
   const onEndedCallback = () => {
-    if (isPrimary) {
+    if (isPrimary && currentlyAt !== 0) {
       dispatch(setIsPlaying(false));
       dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
     }
@@ -395,6 +408,7 @@ export const VideoPlayer = React.forwardRef(
             onProgress={onProgressCallback}
             progressInterval={100}
             onReady={onReadyCallback}
+            onPlay={onPlay}
             onEnded={onEndedCallback}
             onError={onErrorCallback}
             tabIndex={-1}
@@ -649,22 +663,12 @@ const TimeDisplay: React.FC<{
  */
 const VideoHeader: React.FC<{}> = () => {
 
-  const { t } = useTranslation();
-
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
-  const presenters = useSelector(selectPresenters)
 
-  let presenter_header;
-  if (presenters && presenters.length) {
-      presenter_header = <div css={titleStyle} title={t("video.presenter-tooltip")}>by {presenters.join(", ")}</div>
-  }
   return (
-    <div css={{fontSize: '16px'}}>
-      <div css={[titleStyle, titleStyleBold]} title={t("video.title-tooltip")}>
+    <div css={[titleStyle, titleStyleBold]}>
         {metadataTitle ? metadataTitle : title}
-      </div>
-      {presenter_header}
     </div>
   );
 }

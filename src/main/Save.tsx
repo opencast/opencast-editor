@@ -22,7 +22,8 @@ import ErrorBox from "./ErrorBox";
 import { AppDispatch } from "../redux/store";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
   selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
-import { selectSubtitles } from "../redux/subtitleSlice";
+import { selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
+  setHasChanges as subtitleSetHasChanges } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { Flavor } from "../types";
 import { selectTheme } from "../redux/themeSlice";
@@ -44,6 +45,7 @@ const Save : React.FC<{}> = () => {
   const postMetadataError = useSelector(selectPostError);
   const metadataHasChanges = useSelector(metadataSelectHasChanges)
   const hasChanges = useSelector(selectHasChanges)
+  const subtitleHasChanges = useSelector(selectSubtitleHasChanges)
 
   const saveStyle = css({
     height: '100%',
@@ -56,7 +58,7 @@ const Save : React.FC<{}> = () => {
   const render = () => {
     // Post (successful) save
     if (postWorkflowStatus === 'success' && postMetadataStatus === 'success'
-      && !hasChanges && !metadataHasChanges) {
+      && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
       return(
         <>
           <FontAwesomeIcon icon={faCheckCircle} size="10x" />
@@ -169,6 +171,7 @@ export const SaveButton: React.FC<{}> = () => {
     if (workflowStatus === 'success' && metadataStatus === 'success') {
       dispatch(videoSetHasChanges(false))
       dispatch(metadataSetHasChanges(false))
+      dispatch(subtitleSetHasChanges(false))
     }
   }, [dispatch, metadataStatus, workflowStatus])
 

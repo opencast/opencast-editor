@@ -106,8 +106,8 @@ const WorkflowSelection : React.FC<{}> = () => {
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.noWorkflows-text">
-            A problem occurred, there are no workflows to process your changes with.<br />
-            Please save your changes and contact an Opencast Administrator.
+            There are no workflows to process your changes with.<br />
+            Please save your changes and contact an administrator.
           </Trans>,
           false,
           <SaveButton />,

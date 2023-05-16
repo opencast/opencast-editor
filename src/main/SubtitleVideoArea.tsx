@@ -173,12 +173,21 @@ const VideoSelectDropdown : React.FC<{
     return flavor.type + "/" + flavor.subtype
   }
 
+  const getFlavorLabel = (flavor: Flavor) => {
+    // Omit subtype if all flavour subtypes are equal
+    if (flavors.every((f) => f.subtype === flavors[0].subtype)) {
+      return flavor.type
+    }
+
+    return stringifyFlavor(flavor)
+  }
+
   // Data to populate the dropdown with
   const selectData = () => {
     const data = []
     for (let flavor of flavors) {
       // We have to deconstruct the flavor object for the value as well and put it back together
-      data.push({label: stringifyFlavor(flavor), value: stringifyFlavor(flavor)})
+      data.push({label: getFlavorLabel(flavor), value: stringifyFlavor(flavor)})
     }
     return data
   }
@@ -200,13 +209,13 @@ const VideoSelectDropdown : React.FC<{
         handleSubmit(event)
       }} css={subtitleAddFormStyle}>
 
-            <ThemeProvider theme={subtitleSelectStyle(theme)}>
-              <Select
-                label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
-                name={dropdownName}
-                data={selectData()}
-              />
-            </ThemeProvider>
+          <ThemeProvider theme={subtitleSelectStyle(theme)}>
+            <Select
+              label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
+              name={dropdownName}
+              data={selectData()}
+            />
+          </ThemeProvider>
 
           <OnChange name={dropdownName}>
             {(value, previous) => {

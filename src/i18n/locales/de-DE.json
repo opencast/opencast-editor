@@ -69,7 +69,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "Speichern & verarbeiten",
         "selectWF-text": "Workflow wählen",
-        "noWorkflows-text": "Ein Problem ist aufgetreten, es gibt keine Workflows für die Verarbeitung Ihrer Änderungen mit.<3/> Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Opencast Administrator.\n",
+        "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
         "oneWorkflow-text": "Das Video wird mit dem Workflow \"{{workflow}}\" geschnitten und verarbeitet. <3/> Dies wird einige Zeit dauern.\n",
         "manyWorkflows-text": "Wählen Sie aus, welchen Workflow Opencast für die Verarbeitung verwenden soll.",
         "startProcessing-button": "Verarbeitung starten",
@@ -80,7 +80,7 @@
     "timeline": {
         "generateWaveform-text": "Waveform wird generiert",
         "segment-tooltip": "Segment {{segment}}",
-        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
+        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
         "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. Ende: {{end}}.\n"
     },
     "workflowConfig": {
@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slowenisch",
-            "LANGUAGES-PORTUGESE": "Portugiesisch",
+            "LANGUAGES-PORTUGUESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Rätoromanisch",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Polnisch",
@@ -207,7 +207,7 @@
         "restoreTrackText": "Spur wiederherstellen",
         "cannotDeleteTrackText": "Spur kann nicht gelöscht werden",
         "deleteTrackTooltip": "Diese Spur nicht verarbeiten und veröffentlichen.",
-        "restoreTrackTooltip": "Diesen Track verarbeiten und veröffentlichen.",
+        "restoreTrackTooltip": "Diese Spur verarbeiten und veröffentlichen.",
         "cannotDeleteTrackTooltip": "Diese Spur kann nicht entfernt werden."
     },
     "subtitles": {
@@ -238,6 +238,9 @@
     "subtitleVideoArea": {
         "selectVideoLabel": "Video Flavors"
     },
+    "subtitleTimeline": {
+        "overviewTimelineTooltip": "Timeline overview"
+    },
     "keyboardControls": {
         "header": "Tastatursteuerung",
         "defaultGroupName": "Allgemein",
@@ -246,12 +249,12 @@
         "groupCuttingView": "Schneiden",
         "groupCuttingViewScrubber": "Zeitleiste",
         "groupSubtitleList": "Untertitel",
-        "sequenceSeperator": "oder",
+        "sequenceSeparator": "or",
         "genericError": "Fehler beim Laden der Übersicht",
         "videoPlayButton": "Video abspielen/pausieren",
         "scrubberLeft": "Nach links",
         "scrubberRight": "Nach rechts",
-        "scubberIncrease": "Schneller",
+        "scrubberIncrease": "Move faster",
         "scrubberDecrease": "Langsamer"
     },
     "theme": {

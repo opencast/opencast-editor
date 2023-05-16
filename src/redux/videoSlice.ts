@@ -195,7 +195,16 @@ const videoSlice = createSlice({
           state.errorReason = 'workflowActive'
           state.error = "This event is being processed. Please wait until the process is finished."
         }
-        state.tracks = action.payload.tracks.sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => a.thumbnailPriority - b.thumbnailPriority)
+        state.tracks = action.payload.tracks
+          .sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => {
+            return a.thumbnailPriority - b.thumbnailPriority
+          }).map((track: Track) => {
+            if (action.payload.local && settings.opencast.local) {
+              console.debug('Replacing track URL')
+              track.uri = track.uri.replace(/https?:\/\/[^/]*/g, window.location.origin )
+            }
+            return track
+          })
         const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
@@ -203,7 +212,6 @@ const videoSlice = createSlice({
         state.captions = action.payload.subtitles ? state.captions = action.payload.subtitles : []
         state.duration = action.payload.duration
         state.title = action.payload.title
-        state.presenters = []
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
         state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
@@ -371,7 +379,6 @@ export const selectVideoCount = (state: { videoState: { videoCount: video["video
 export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
 export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
 export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
-export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
 export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>

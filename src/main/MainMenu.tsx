@@ -33,15 +33,13 @@ const MainMenu: React.FC<{}> = () => {
 
   const mainMenuStyle = css({
     borderRight: `${theme.menuBorder}`,
-    width: '100px',
+    minWidth: '100px',
     display: 'flex',
-    flexDirection: 'column' as const,
-    flexShrink: 0,
+    flexDirection: 'column',
     alignItems: 'center',
     padding: '20px',
-    height: '100%',
-    position: 'fixed',
-    overflow: 'auto',
+    overflow: 'vertical',
+    background: `${theme.menu_background}`,
     ...(flexGapReplacementStyle(30, false)),
   });
 
@@ -151,13 +149,12 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
     },
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
   });
 
   const miniMenuButtonStyle = css({
     width: '75px',
     height: '67px',
-    marginBottom: '35px',
     outline: `${theme.menuButton_outline}`,
     ...(activeState === stateName) && {
       backgroundColor: `${theme.button_color}`,
@@ -167,7 +164,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
     },
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
   });
 
   return (
