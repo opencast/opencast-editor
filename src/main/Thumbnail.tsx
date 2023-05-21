@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faCamera, faCopy, faInfoCircle, faTimesCircle, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { t } from "i18next";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -472,6 +471,7 @@ const ThumbnailTableSingleRow: React.FC<{
   uploadCallback: any,
   discard: any,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
+  const { t } = useTranslation();
 
   return (
     <div key={index} css={thumbnailTableRowStyle}>

@@ -15,7 +15,6 @@ import { settings } from '../config'
 import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 import { setIsPlaying } from "../redux/videoSlice";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
