@@ -14,7 +14,6 @@ import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../
 import { PageButton } from './Finish'
 import { setEnd } from "../redux/endSlice";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";

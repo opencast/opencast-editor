@@ -11,7 +11,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
 

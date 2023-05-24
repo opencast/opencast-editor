@@ -16,7 +16,6 @@ import { postVideoInformation, selectStatus, selectError } from '../redux/workfl
 
 import { PageButton } from './Finish'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import ErrorBox from "./ErrorBox";
 import { AppDispatch } from "../redux/store";

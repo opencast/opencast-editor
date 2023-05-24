@@ -22,7 +22,6 @@ import { basicButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold }
 import { GlobalHotKeys, KeyMapOptions } from 'react-hotkeys';
 import { videoPlayerKeyMap } from "../globalKeys";
 import { SyntheticEvent } from "react";
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { setError } from "../redux/errorSlice";

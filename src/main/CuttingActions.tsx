@@ -22,7 +22,6 @@ import { GlobalHotKeys, KeySequence, KeyMapOptions } from "react-hotkeys";
 import { cuttingKeyMap } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTheme, Theme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";
