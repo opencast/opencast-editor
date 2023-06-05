@@ -13,7 +13,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@iarna/toml": "^2.2.5",
     "@mui/material": "^5.13.3",
-    "@mui/styles": "^5.12.0",
+    "@mui/styles": "^5.13.2",
     "@mui/x-date-pickers": "^5.0.20",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
