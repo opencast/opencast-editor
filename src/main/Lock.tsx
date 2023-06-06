@@ -25,7 +25,7 @@ const Lock: React.FC<{}> = () => {
   }, [lock.user, lock.uuid, state.state, state.user, state.uuid]);
 
   const canRequestLock = useCallback((): boolean => {
-    return state.user !== '' && state.uuid !== '' && !state.active && !state.state;
+    return state.user !== '' && state.uuid !== '' && state.active && !state.state;
   }, [state.user, state.uuid, state.active, state.state]);
 
   const canReleaseLock = useCallback((): boolean => {
@@ -92,8 +92,10 @@ const Lock: React.FC<{}> = () => {
   }, [endpoint, state.refresh, state.user, state.uuid]);
 
   const refreshLock = useCallback(() => {
-    requestLock();
-  }, [requestLock]);
+    if (canRequestLock()) {
+      requestLock();
+    }
+  }, [canRequestLock, requestLock]);
 
   useEffect(() => {
     let refresh: ReturnType<typeof setTimeout>;
