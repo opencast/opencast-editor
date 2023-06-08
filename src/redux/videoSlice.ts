@@ -321,8 +321,8 @@ const skipDeletedSegments = (state: video) => {
  * TODO: Improve calculation to handle multiple rows of videos
  */
 export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
-  let minHeight = Math.min.apply(Math, aspectRatios.map(function(o) { return o.height; }))
-  let minWidth = Math.min.apply(Math, aspectRatios.map(function(o) { return o.width; }))
+  let minHeight = Math.min.apply(Math, aspectRatios.map(o => o.height))
+  let minWidth = Math.min.apply(Math, aspectRatios.map(o => o.width))
   minWidth *= aspectRatios.length
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }

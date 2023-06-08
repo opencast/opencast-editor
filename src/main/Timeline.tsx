@@ -423,21 +423,20 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
         var xhr = new XMLHttpRequest()
         xhr.open("GET", videoURL)
         xhr.responseType = "blob"
-        xhr.onload = function()
-        {
+        xhr.onload = () => {
           blob = xhr.response
           var file = new File([blob], blob)
 
           // Start waveform worker with blob
           const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})
 
-          waveformWorker.onerror = function(error: string) {
+          waveformWorker.onerror = (error: string) => {
             setWaveformWorkerError(true)
             console.log("Waveform could not be generated:" + error)
           }
 
           // When done, save path to generated waveform img
-          waveformWorker.oncomplete = function(image: any, numSamples: any) {
+          waveformWorker.oncomplete = (image: any, numSamples: any) => {
             newImages.push(image)
             waveformsProcessed++
             // If all images are generated, rerender

@@ -578,7 +578,7 @@ const fillInMilliseconds = (val: number) => {
  * Utility function for TimeInpit
  * Converts a number in milliseoncsd to a string of the format HH:MM:SS:MSS
  */
-function toHHMMSSMS (ms: number)  {
+function toHHMMSSMS(ms: number)  {
   const milliseconds = (ms % 1000)
     , seconds = Math.floor((ms/1000)%60)
     , minutes = Math.floor((ms/(1000*60))%60)

@@ -64,7 +64,7 @@ const Thumbnail : React.FC<{}> = () => {
     }
 
     var reader  = new FileReader();
-    reader.onload = function(e)  {
+    reader.onload = e => {
       // the result image data
       if (e.target && e.target.result) {
         const uri = e.target.result.toString();
