@@ -578,7 +578,7 @@ const PreviewMode: React.FC<{
         ref={ref}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
         aria-label={t("video.previewButton-aria", { hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
-        onClick={ (event: SyntheticEvent) => switchPlayPreview(event, ref) }
+        onClick={(event: SyntheticEvent) => switchPlayPreview(event, ref)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
           switchPlayPreview(event, undefined)
         }}}>

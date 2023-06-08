@@ -79,7 +79,7 @@ export const PageButton : React.FC<{pageNumber: number, label: string, iconName:
   return (
     <div css={[basicButtonStyle(theme), pageButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ onPageChange }
+      onClick={onPageChange}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         onPageChange()
       }}}>

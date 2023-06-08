@@ -149,7 +149,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   return (
     <div css={[basicButtonStyle(theme), saveButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ saveAndProcess }
+      onClick={saveAndProcess}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         saveAndProcess()
       }}}>

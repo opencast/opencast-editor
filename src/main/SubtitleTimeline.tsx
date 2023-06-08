@@ -379,7 +379,7 @@ const TimelineSubtitleSegment: React.FC<{
         //  Fix most likely requires changes in one of those modules
         resizeHandles={['w']}
       >
-        <div css={ segmentStyle } ref={nodeRef} onClick={onClick} id="no-scrolling">
+        <div css={segmentStyle} ref={nodeRef} onClick={onClick} id="no-scrolling">
           <span css={textStyle}>{props.cue.text}</span>
         </div>
       </Resizable>

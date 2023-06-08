@@ -165,7 +165,7 @@ export const BackButton : React.FC = () => {
       <div css={[basicButtonStyle(theme), backButtonStyle]}
         role="button" tabIndex={0}
         aria-label={t("subtitles.backButton-tooltip")}
-        onClick={ () => dispatch(setIsDisplayEditView(false)) }
+        onClick={() => dispatch(setIsDisplayEditView(false))}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(false))
         }}}>

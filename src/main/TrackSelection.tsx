@@ -26,7 +26,7 @@ const TrackSelection: React.FC = () => {
   const tracks: Track[] = useSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
-    <TrackItem key={ track.id } track={ track } enabledCount={ enabledCount } />
+    <TrackItem key={track.id} track={track} enabledCount={enabledCount} />
   );
 
   return (
@@ -53,7 +53,7 @@ const Description: React.FC = () => {
   });
 
   return (
-    <aside css={ descriptionStyle }>
+    <aside css={descriptionStyle}>
       <FontAwesomeIcon css={{margin: '10px'}} icon={faInfoCircle} size="2x" />
       { description }
     </aside>
@@ -124,17 +124,17 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   }
 
   return (
-    <div css={ trackItemStyle }>
-      <div css={ headerStyle }>{ header }</div>
+    <div css={trackItemStyle}>
+      <div css={headerStyle}>{ header }</div>
       <div css={{ width: '95%', textAlign: 'center', opacity: track.video_stream.enabled ? '1' : '0.5' }}>
-        <ReactPlayer css={ playerStyle } url={ track.uri } width="90%" />
+        <ReactPlayer css={playerStyle} url={track.uri} width="90%" />
       </div>
       <SelectButton
-        text={ deleteText }
-        tooltip={ deleteTooltip }
-        handler={ trackEnabledChange }
-        icon={ deleteIcon }
-        active={ deleteEnabled } />
+        text={deleteText}
+        tooltip={deleteTooltip}
+        handler={trackEnabledChange}
+        icon={deleteIcon}
+        active={deleteEnabled} />
     </div>
   );
 }
@@ -172,14 +172,14 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
   const ref = React.useRef<HTMLDivElement>(null)
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={ buttonStyle }
-        tabIndex={ 0 }
+      <div css={buttonStyle}
+        tabIndex={0}
         ref={ref}
         role="button"
-        aria-label={ tooltip }
-        onClick={ clickHandler }
-        onKeyDown={ keyHandler } >
-        <FontAwesomeIcon icon={ icon } size="1x" />
+        aria-label={tooltip}
+        onClick={clickHandler}
+        onKeyDown={keyHandler} >
+        <FontAwesomeIcon icon={icon} size="1x" />
         <div>{ text }</div>
       </div>
     </ThemedTooltip>

@@ -170,7 +170,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     <li css={[basicButtonStyle(theme), buttonStyle()]}
       role="menuitem" tabIndex={0}
       aria-label={ariaLabelText}
-      onClick={ onMenuItemClicked }
+      onClick={onMenuItemClicked}
       onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
         onMenuItemClicked()
       }}}

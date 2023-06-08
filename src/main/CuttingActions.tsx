@@ -143,7 +143,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
       <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
         ref={ref}
         role="button" tabIndex={0} aria-label={ariaLabelText}
-        onClick={ (event: SyntheticEvent) => actionHandler(event, action, ref) }
+        onClick={(event: SyntheticEvent) => actionHandler(event, action, ref)}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
           actionHandler(event, action, undefined)
         }}}
