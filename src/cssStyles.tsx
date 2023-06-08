@@ -42,8 +42,8 @@ export const globalStyle = (theme: Theme) => css({
  */
 export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow: boolean) => {
 
-  let half = flexGapValue / 2
-  let quarter = flexGapValue / 4
+  const half = flexGapValue / 2
+  const quarter = flexGapValue / 4
 
   return (
     {

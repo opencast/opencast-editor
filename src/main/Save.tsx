@@ -142,7 +142,7 @@ export const SaveButton: React.FC<{}> = () => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
       subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
 
     }

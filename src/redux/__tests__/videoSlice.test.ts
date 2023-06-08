@@ -145,7 +145,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 5, deleted: false},
       {start: 5, end: 10, deleted: false}
     ]
@@ -165,7 +165,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -184,7 +184,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -204,7 +204,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 5, deleted: false},
       {start: 5, end: 10, deleted: false}
     ]
@@ -218,7 +218,7 @@ describe('Video reducer', () => {
   })
 
   it('should mark a segment as deleted if alive', () => {
-    let resultSegments = [
+    const resultSegments = [
       {deleted: true},
     ]
 
@@ -235,7 +235,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -253,7 +253,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
@@ -271,7 +271,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: true},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: true},
     ]
 

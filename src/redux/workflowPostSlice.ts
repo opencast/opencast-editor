@@ -59,7 +59,7 @@ interface segmentAPI {
 // Convert a segment from how it is stored in redux into
 // a segment that can be send to Opencast
 export const convertSegments = (segments: Segment[]) => {
-  let newSegments: segmentAPI[] = []
+  const newSegments: segmentAPI[] = []
 
   segments.forEach(segment => {
     newSegments.push({

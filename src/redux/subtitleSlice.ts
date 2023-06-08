@@ -83,7 +83,7 @@ export const subtitleSlice = createSlice({
         return
       }
 
-      let cue = state.subtitles[action.payload.identifier][action.payload.cueIndex]
+      const cue = state.subtitles[action.payload.identifier][action.payload.cueIndex]
       cue.id = action.payload.newCue.id
       cue.idInternal = action.payload.newCue.idInternal
       cue.text = action.payload.newCue.text

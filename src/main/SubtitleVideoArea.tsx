@@ -38,7 +38,7 @@ import { selectFieldStyle } from "../cssStyles";
 const SubtitleVideoArea : React.FC<{}> = () => {
 
   const tracks = useSelector(selectVideos)
-  let subtitle = useSelector(selectSelectedSubtitleByFlavor)
+  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
 

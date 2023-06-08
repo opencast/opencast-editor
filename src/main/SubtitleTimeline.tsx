@@ -54,8 +54,8 @@ const SubtitleTimeline: React.FC<{}> = () => {
   });
 
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    let rect = e.currentTarget.getBoundingClientRect()
-    let offsetX = e.clientX - rect.left
+    const rect = e.currentTarget.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / widthMiniTimeline) * (duration)))
   }

@@ -30,14 +30,14 @@ const SubtitleSelect : React.FC<{}> = () => {
 
   // Update the displayFlavors and canBeAddedFlavors
   useEffect(() => {
-    let languages = { ...settings.subtitles.languages };
+    const languages = { ...settings.subtitles.languages };
 
     // Get flavors of already created tracks or existing subtitle tracks
-    let subtitleFlavors = captionTracks
+    const subtitleFlavors = captionTracks
       .map(track => track.flavor.type + '/' + track.flavor.subtype)
       .filter(flavor => !subtitles[flavor])
       .concat(Object.keys(subtitles));
-    let tempDisplayFlavors = []
+    const tempDisplayFlavors = []
     for (const flavor of subtitleFlavors) {
       const lang = flavor.replace(/^[^+]*/, '') || t('subtitles.generic');
       tempDisplayFlavors.push({
@@ -48,7 +48,7 @@ const SubtitleSelect : React.FC<{}> = () => {
     tempDisplayFlavors.sort((f1, f2) => f1.title.localeCompare(f2.title));
 
     // List of unused languages
-    let tempCanBeAddedFlavors = Object.keys(languages)
+    const tempCanBeAddedFlavors = Object.keys(languages)
       .map(flavor => ({subFlavor: flavor, title: languages[flavor]}))
       .sort((lang1, lang2) => lang1.title.localeCompare(lang2.title));
 
@@ -63,12 +63,12 @@ const SubtitleSelect : React.FC<{}> = () => {
   })
 
   const renderButtons = () => {
-    let buttons : JSX.Element[] = []
+    const buttons : JSX.Element[] = []
     if (settings.subtitles.languages === undefined) {
       return buttons
     }
 
-    for (let subFlavor of displayFlavors) {
+    for (const subFlavor of displayFlavors) {
       const icon = ((settings.subtitles || {}).icons || {})[subFlavor.subFlavor];
       buttons.push(
         <SubtitleSelectButton

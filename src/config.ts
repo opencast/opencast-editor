@@ -114,7 +114,7 @@ export const init = async () => {
   // Get settings from URL query.
   var urlParams = new URLSearchParams(window.location.search);
 
-  let rawUrlSettings = {};
+  const rawUrlSettings = {};
   urlParams.forEach((value, key) => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
@@ -255,7 +255,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
   const validateObj = (schema: any, obj: Record<string, any> | null, path: string) => {
     // We iterate through all keys of the given settings object, checking if
     // each key is valid and recursively validating the value of that key.
-    let out : {[k: string]: any} = {};
+    const out : {[k: string]: any} = {};
     for (const key in obj) {
       const newPath = path ? `${path}.${key}` : key;
       if (key in schema) {
@@ -305,7 +305,7 @@ const types = {
     }
   },
   'map': (v: any, allowParse: any) => {
-    for (let key in v) {
+    for (const key in v) {
       if (typeof key !== 'string') {
         throw new Error("is not a string, but should be");
       }
@@ -315,15 +315,15 @@ const types = {
     }
   },
   'objectsWithinObjects': (v: any, allowParse: any) => {
-    for (let catalogName in v) {
+    for (const catalogName in v) {
       if (typeof catalogName !== 'string') {
         throw new Error("is not a string, but should be");
       }
-      for (let fieldName in v[catalogName]) {
+      for (const fieldName in v[catalogName]) {
         if (typeof fieldName !== 'string') {
           throw new Error("is not a string, but should be");
         }
-        for (let attributeName in v[catalogName][fieldName]) {
+        for (const attributeName in v[catalogName][fieldName]) {
           if (typeof attributeName !== 'string') {
             throw new Error("is not a string, but should be");
           }

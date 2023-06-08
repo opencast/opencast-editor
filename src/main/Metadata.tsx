@@ -63,12 +63,12 @@ const Metadata: React.FC<{}> = () => {
     if (getStatus === 'success') {
       for(let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
         if (settings.metadata.configureFields) {
-          let configureFields = settings.metadata.configureFields
-          let catalog = catalogs[catalogIndex]
+          const configureFields = settings.metadata.configureFields
+          const catalog = catalogs[catalogIndex]
 
           if (catalog.title in configureFields) {
             if (Object.keys(configureFields[catalog.title]).length > 0) {
-              let configureFieldsCatalog = configureFields[catalog.title]
+              const configureFieldsCatalog = configureFields[catalog.title]
 
               for (let fieldIndex = 0; fieldIndex < catalog.fields.length; fieldIndex++) {
                 if (catalog.fields[fieldIndex].id in configureFieldsCatalog) {
@@ -253,7 +253,7 @@ const Metadata: React.FC<{}> = () => {
           let searchValue : any = field.value
 
           if (Array.isArray(searchValue)) {
-            let result: any[] = [];
+            const result: any[] = [];
             helperHandleArrays(library, field.value, result)
             searchValue = result
           } else {
@@ -283,7 +283,7 @@ const Metadata: React.FC<{}> = () => {
    * @param value
    */
   const duration = (value: any) => {
-    let re: RegExp = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
+    const re: RegExp = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
     return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
@@ -430,7 +430,7 @@ const Metadata: React.FC<{}> = () => {
   const onSubmit = (values: { [x: string]: { [x: string]: any; }; }) => {
     // For each submitted value, get the catalog it belongs to
     Object.keys(values).forEach((formCatalogName: string) => {
-      let catalogIndex = parseInt(formCatalogName.replace("catalog", ""))
+      const catalogIndex = parseInt(formCatalogName.replace("catalog", ""))
 
       // For each field in the submitted values
       Object.keys(values[formCatalogName]).forEach((formFieldName: any) => {

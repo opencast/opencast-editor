@@ -64,8 +64,8 @@ const Timeline: React.FC<{
 
   // Update the current time based on the position clicked on the timeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    let rect = e.currentTarget.getBoundingClientRect()
-    let offsetX = e.clientX - rect.left
+    const rect = e.currentTarget.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / width) * (duration)))
   }

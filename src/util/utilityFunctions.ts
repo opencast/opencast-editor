@@ -3,7 +3,7 @@ import { WebVTTParser, WebVTTSerializer } from 'webvtt-parser';
 import { ExtendedSubtitleCue, SubtitleCue } from '../types';
 
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
-  let decimalFactor = Math.pow(10, decimalPlace)
+  const decimalFactor = Math.pow(10, decimalPlace)
   return Math.round((num + Number.EPSILON) * decimalFactor) / decimalFactor
 }
 
@@ -14,11 +14,11 @@ export const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout
 
 // Get an understandable time string for ARIA
 export const convertMsToReadableString = (ms: number): string => {
-  let hours = new Date((ms ? ms : 0)).toISOString().substr(11, 2)
-  let minutes = new Date((ms ? ms : 0)).toISOString().substr(14, 2)
-  let seconds = new Date((ms ? ms : 0)).toISOString().substr(17, 2)
+  const hours = new Date((ms ? ms : 0)).toISOString().substr(11, 2)
+  const minutes = new Date((ms ? ms : 0)).toISOString().substr(14, 2)
+  const seconds = new Date((ms ? ms : 0)).toISOString().substr(17, 2)
 
-  let result = []
+  const result = []
   if (parseInt(hours) > 0) { result.push(hours + " hours, ")}
   if (parseInt(minutes) > 0 || parseInt(hours) > 0) { result.push(minutes + " minutes, ")}
   result.push(seconds + " seconds")
@@ -144,7 +144,7 @@ export function parseSubtitle(subtitle: String) {
   // Attach a unique id to each segment/cue
   // This is used by React to keep track of cues between changes (e.g. addition, deletion)
   let index = 0
-  for (let cue of tree.cues) {
+  for (const cue of tree.cues) {
     if (!cue.id) {
       cue.idInternal = nanoid()
       tree.cues[index] = cue

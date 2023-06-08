@@ -91,7 +91,7 @@ const videoSlice = createSlice({
   initialState,
   reducers: {
     setTrackEnabled: (state, action) => {
-      for (let track of state.tracks) {
+      for (const track of state.tracks) {
         if (track.id === action.payload.id) {
           track.audio_stream.enabled = action.payload.enabled;
           track.video_stream.enabled = action.payload.enabled;
@@ -149,11 +149,11 @@ const videoSlice = createSlice({
       }
 
       // Make two (new) segments out of it
-      let segmentA : Segment =  {id: nanoid(),
+      const segmentA : Segment =  {id: nanoid(),
         start: state.segments[state.activeSegmentIndex].start,
         end: state.currentlyAt,
         deleted: state.segments[state.activeSegmentIndex].deleted}
-      let segmentB : Segment =  {id: nanoid(),
+      const segmentB : Segment =  {id: nanoid(),
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
         deleted: state.segments[state.activeSegmentIndex].deleted}
@@ -245,7 +245,7 @@ const updateActiveSegment = (state: video) => {
  * Helper Function for testing with current/old editor API
  */
 export const parseSegments = (segments: Segment[], duration: number) => {
-  let newSegments : Segment[] = []
+  const newSegments : Segment[] = []
 
   if (segments.length === 0) {
     newSegments.push({id: nanoid(), start: 0, end: duration, deleted: false})
@@ -321,7 +321,7 @@ const skipDeletedSegments = (state: video) => {
  * TODO: Improve calculation to handle multiple rows of videos
  */
 export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
-  let minHeight = Math.min.apply(Math, aspectRatios.map(o => o.height))
+  const minHeight = Math.min.apply(Math, aspectRatios.map(o => o.height))
   let minWidth = Math.min.apply(Math, aspectRatios.map(o => o.width))
   minWidth *= aspectRatios.length
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
