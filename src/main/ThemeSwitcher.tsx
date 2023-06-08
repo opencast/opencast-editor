@@ -5,7 +5,7 @@ import { selectTheme, selectThemeState, toggleTheme, setState } from "../redux/t
 import Select from "react-select";
 import { selectFieldStyle } from "../cssStyles";
 
-const ThemeSwitcher: React.FC<{}> = () => {
+const ThemeSwitcher: React.FC = () => {
 
   const { t } = useTranslation();
 

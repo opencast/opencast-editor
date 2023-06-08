@@ -29,7 +29,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Defines the different actions a user can perform while in cutting mode
  */
-const CuttingActions: React.FC<{}> = () => {
+const CuttingActions: React.FC = () => {
 
   const { t } = useTranslation();
 

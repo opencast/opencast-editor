@@ -35,7 +35,7 @@ import { selectFieldStyle } from "../cssStyles";
  * coming up with a proper fix appears to be rather difficult
  * TODO: Come up with a proper fix and create a PR
  */
-const SubtitleVideoArea : React.FC<{}> = () => {
+const SubtitleVideoArea : React.FC = () => {
 
   const tracks = useSelector(selectVideos)
   const subtitle = useSelector(selectSelectedSubtitleByFlavor)

@@ -21,7 +21,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
-const Finish : React.FC<{}> = () => {
+const Finish : React.FC = () => {
 
   const pageNumber = useSelector(selectPageNumber)
 

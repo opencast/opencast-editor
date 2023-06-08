@@ -25,7 +25,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Will eventually display settings based on the selected workflow index
  */
-const WorkflowConfiguration : React.FC<{}> = () => {
+const WorkflowConfiguration : React.FC = () => {
 
   const { t } = useTranslation();
 

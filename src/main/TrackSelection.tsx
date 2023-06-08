@@ -20,7 +20,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Creates the track selection.
  */
-const TrackSelection: React.FC<{}> = () => {
+const TrackSelection: React.FC = () => {
 
   // Generate list of tracks
   const tracks: Track[] = useSelector(selectVideos);
@@ -38,7 +38,7 @@ const TrackSelection: React.FC<{}> = () => {
 }
 
 
-const Description: React.FC<{}> = () => {
+const Description: React.FC = () => {
 
   const { t } = useTranslation();
 

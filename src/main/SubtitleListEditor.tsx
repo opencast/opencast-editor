@@ -35,7 +35,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core"
 /**
  * Displays everything needed to edit subtitles
  */
-const SubtitleListEditor : React.FC<{}> = () => {
+const SubtitleListEditor : React.FC = () => {
 
   const dispatch = useDispatch()
 

@@ -17,7 +17,7 @@ import { ThemedTooltip } from "./Tooltip";
  * This page is to be displayed when the user is "done" with the editor
  * and should not be able to perfom any actions anymore
  */
-const TheEnd : React.FC<{}> = () => {
+const TheEnd : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -60,7 +60,7 @@ const TheEnd : React.FC<{}> = () => {
 }
 
 
-const StartOverButton: React.FC<{}> = () => {
+const StartOverButton: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);

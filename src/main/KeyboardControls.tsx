@@ -101,7 +101,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 }
 
 
-const KeyboardControls: React.FC<{}> = () => {
+const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
 

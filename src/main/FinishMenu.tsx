@@ -17,7 +17,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
-const FinishMenu : React.FC<{}> = () => {
+const FinishMenu : React.FC = () => {
 
   const finishMenuStyle = css({
     display: 'flex',

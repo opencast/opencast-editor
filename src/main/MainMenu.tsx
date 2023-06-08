@@ -25,7 +25,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * A container for selecting the functionality shown in the main part of the app
  */
-const MainMenu: React.FC<{}> = () => {
+const MainMenu: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);

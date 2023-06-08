@@ -38,7 +38,7 @@ import { selectTheme, Theme } from "../redux/themeSlice";
  * Container for the videos and their controls
  * TODO: Move fetching to a more central part of the app
  */
-export const Video: React.FC<{}> = () => {
+export const Video: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -674,7 +674,7 @@ const TimeDisplay: React.FC<{
 /**
  * Displays elements above the video, e.g. title
  */
-const VideoHeader: React.FC<{}> = () => {
+const VideoHeader: React.FC = () => {
 
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)

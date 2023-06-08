@@ -24,7 +24,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Allows the user to select a workflow
  */
-const WorkflowSelection : React.FC<{}> = () => {
+const WorkflowSelection : React.FC = () => {
 
   const { t } = useTranslation();
 

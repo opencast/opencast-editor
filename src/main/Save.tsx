@@ -31,7 +31,7 @@ import { ThemedTooltip } from "./Tooltip";
  * Shown if the user wishes to save.
  * Informs the user about saving and displays a save button
  */
-const Save : React.FC<{}> = () => {
+const Save : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -99,7 +99,7 @@ const Save : React.FC<{}> = () => {
 /**
  * Button that sends a post request to save current changes
  */
-export const SaveButton: React.FC<{}> = () => {
+export const SaveButton: React.FC = () => {
 
   const { t } = useTranslation();
 

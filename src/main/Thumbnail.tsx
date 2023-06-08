@@ -21,7 +21,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * User interface for handling thumbnails
  */
-const Thumbnail : React.FC<{}> = () => {
+const Thumbnail : React.FC = () => {
 
   const { t } = useTranslation()
   const dispatch = useDispatch()

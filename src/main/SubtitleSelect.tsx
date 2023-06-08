@@ -19,7 +19,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
  */
-const SubtitleSelect : React.FC<{}> = () => {
+const SubtitleSelect : React.FC = () => {
 
   const { t } = useTranslation();
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast

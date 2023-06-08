@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
  */
-const SubtitleTimeline: React.FC<{}> = () => {
+const SubtitleTimeline: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
@@ -391,7 +391,7 @@ const TimelineSubtitleSegment: React.FC<{
 //  * For debugging
 //  * Minimal example: Resizable
 //  */
-//  const Example: React.FC<{}> = () => {
+//  const Example: React.FC = () => {
 
 //   const [absoluteWidth, setAbsoluteWidth] = useState(200)
 //   const [absoluteHeight, setAbsoluteHeight] = useState(200)
@@ -448,7 +448,7 @@ const TimelineSubtitleSegment: React.FC<{
 //  * Minimal example: Draggable + Resizable
 //  * Erratic behaviour when resizing the east handle for smallish widths
 //  */
-// const Example2: React.FC<{}> = () => {
+// const Example2: React.FC = () => {
 
 //   const [absoluteWidth, setAbsoluteWidth] = useState(200)
 //   const [absoluteHeight, setAbsoluteHeight] = useState(200)

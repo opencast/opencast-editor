@@ -38,7 +38,7 @@ import { TFuncKey } from "i18next";
  * If something doesn't work, main places of interest are the submit function
  * and the initialValues function
  */
-const Metadata: React.FC<{}> = () => {
+const Metadata: React.FC = () => {
 
   const { t, i18n } = useTranslation();
 
