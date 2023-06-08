@@ -32,9 +32,9 @@ export const convertMsToReadableString = (ms: number): string => {
  */
 export function safeJsonParse(str : string) {
   try {
-      return [null, JSON.parse(str)];
+    return [null, JSON.parse(str)];
   } catch (err) {
-      return [err];
+    return [err];
   }
 }
 
@@ -46,23 +46,23 @@ export function safeJsonParse(str : string) {
 var flexGapIsSupported: boolean | undefined;
 export function checkFlexGapSupport() {
   // Use the cached value if it has been defined
-	if (flexGapIsSupported !== undefined) {
-		return flexGapIsSupported
-	}
+  if (flexGapIsSupported !== undefined) {
+    return flexGapIsSupported
+  }
 
-	// Create a flex container with row-gap set
-	const flex = document.createElement('div')
-	flex.style.display = 'flex'
-	flex.style.flexDirection = 'column'
-	flex.style.rowGap = '1px'
-	flex.style.position = 'absolute'
+  // Create a flex container with row-gap set
+  const flex = document.createElement('div')
+  flex.style.display = 'flex'
+  flex.style.flexDirection = 'column'
+  flex.style.rowGap = '1px'
+  flex.style.position = 'absolute'
 
-	// Create two, elements inside it
-	flex.appendChild(document.createElement('div'))
-	flex.appendChild(document.createElement('div'))
+  // Create two, elements inside it
+  flex.appendChild(document.createElement('div'))
+  flex.appendChild(document.createElement('div'))
 
-	// Append to the DOM (needed to obtain scrollHeight)
-	document.body.appendChild(flex)
+  // Append to the DOM (needed to obtain scrollHeight)
+  document.body.appendChild(flex)
 
   // Flex container should be 1px high due to the row-gap
   flexGapIsSupported = flex.scrollHeight === 1
@@ -72,7 +72,7 @@ export function checkFlexGapSupport() {
     flex.parentNode.removeChild(flex)
   }
 
-	return flexGapIsSupported
+  return flexGapIsSupported
 }
 
 /**
