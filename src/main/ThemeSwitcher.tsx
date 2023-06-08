@@ -29,7 +29,7 @@ const ThemeSwitcher: React.FC<{}> = () => {
 
   isDarkPrefered.addEventListener('change', systemPreferenceHasChanged)
 
-  const switchTheme = (themeState: String) => {
+  const switchTheme = (themeState: string) => {
     if(themeState === 'system'){
       dispatch(setState('system'))
     } 
