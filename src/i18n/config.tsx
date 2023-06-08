@@ -19,13 +19,13 @@ for (const lang of locales) {
 }
 
 i18next
-    .use(initReactI18next)
-    .use(LanguageDetector)
-    .init({
-        resources,
-        fallbackLng: ['en-US', 'en'],
-        nonExplicitSupportedLngs: true,
-        debug: debug,
+  .use(initReactI18next)
+  .use(LanguageDetector)
+  .init({
+    resources,
+    fallbackLng: ['en-US', 'en'],
+    nonExplicitSupportedLngs: true,
+    debug: debug,
   });
 
 if (debug) {

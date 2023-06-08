@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
  */
- const SubtitleTimeline: React.FC<{}> = () => {
+const SubtitleTimeline: React.FC<{}> = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
@@ -145,16 +145,16 @@ import { useTranslation } from "react-i18next";
 
 
 
-    // <div className="layoutRoot absoluteLayout">
-    //   {/* <Example /> */}
-    //   <Example2 />
-    //   {/* <TimelineSubtitleSegment
-    //   timelineWidth={width}
-    //   cue={{id: '42', text:"HI", startTime: 1000, endTime: 5000, tree:{children: [{type: "", value: ""}]}}}
-    //   index={0}
-    //   height={80}
-    //   /> */}
-    // </div>
+  // <div className="layoutRoot absoluteLayout">
+  //   {/* <Example /> */}
+  //   <Example2 />
+  //   {/* <TimelineSubtitleSegment
+  //   timelineWidth={width}
+  //   cue={{id: '42', text:"HI", startTime: 1000, endTime: 5000, tree:{children: [{type: "", value: ""}]}}}
+  //   index={0}
+  //   height={80}
+  //   /> */}
+  // </div>
   );
 };
 
@@ -358,32 +358,32 @@ const TimelineSubtitleSegment: React.FC<{
   })
 
   return (
-      <Draggable
-        onStart={onStartDrag}
-        onStop={onStopDrag}
-        defaultPosition={{ x: 10, y: 10 }}
-        position={controlledPosition}
-        axis="x"
-        bounds="parent"
-        nodeRef={nodeRef}
-        cancel={".react-resizable-handle"}
+    <Draggable
+      onStart={onStartDrag}
+      onStop={onStopDrag}
+      defaultPosition={{ x: 10, y: 10 }}
+      position={controlledPosition}
+      axis="x"
+      bounds="parent"
+      nodeRef={nodeRef}
+      cancel={".react-resizable-handle"}
+    >
+      <Resizable
+        height={absoluteHeight}
+        width={absoluteWidth}
+        onResize={onResizeAbsolute}
+        onResizeStop={onResizeStop}
+        // TODO: The 'e' handle is currently NOT WORKING CORRECTLY!
+        //  The errounous behaviour can already be seens with a minimal
+        //  draggable + resizable example.
+        //  Fix most likely requires changes in one of those modules
+        resizeHandles={['w']}
       >
-        <Resizable
-          height={absoluteHeight}
-          width={absoluteWidth}
-          onResize={onResizeAbsolute}
-          onResizeStop={onResizeStop}
-          // TODO: The 'e' handle is currently NOT WORKING CORRECTLY!
-          //  The errounous behaviour can already be seens with a minimal
-          //  draggable + resizable example.
-          //  Fix most likely requires changes in one of those modules
-          resizeHandles={['w']}
-        >
-          <div css={ segmentStyle } ref={nodeRef} onClick={onClick} id="no-scrolling">
-            <span css={textStyle}>{props.cue.text}</span>
-          </div>
-        </Resizable>
-      </Draggable>
+        <div css={ segmentStyle } ref={nodeRef} onClick={onClick} id="no-scrolling">
+          <span css={textStyle}>{props.cue.text}</span>
+        </div>
+      </Resizable>
+    </Draggable>
   )
 })
 

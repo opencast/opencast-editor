@@ -136,14 +136,14 @@ const MainContent: React.FC<{}> = () => {
         <div css={[mainContentStyle, finishStyle]} role="main">
           <Finish />
         </div>
-        )
+      )
     } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
       return (
         <div css={[mainContentStyle, keyboardControlsStyle]} role="main">
           <ThemeSwitcher/>
           <KeyboardControls />
         </div>
-        )
+      )
     } else {
       <div css={[mainContentStyle, defaultStyle]} role="main">
         <FontAwesomeIcon icon={faTools} size="10x" />

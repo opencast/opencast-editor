@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
  * This page is to be displayed when the application has run into a critical error
  * from which it cannot recover.
  */
- const Landing : React.FC<{}> = () => {
+const Landing : React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
@@ -37,7 +37,7 @@ import { useTranslation } from 'react-i18next';
       <h1>{t("landing.main-heading")}</h1>
       <div>
         <li>
-        {t("landing.contact-admin")}
+          {t("landing.contact-admin")}
         </li>
         <li>
           {t("landing.start-editing-1")}

@@ -117,31 +117,31 @@ const metadataSlice = createSlice({
     builder.addCase(
       fetchMetadata.pending, (state, action) => {
         state.status = 'loading'
-    })
+      })
     builder.addCase(
       fetchMetadata.fulfilled, (state, action) => {
         state.catalogs = action.payload
 
         state.status = 'success'
-    })
+      })
     builder.addCase(
       fetchMetadata.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
-    })
+      })
     builder.addCase(
       postMetadata.pending, (state, action) => {
         state.postStatus = 'loading'
-    })
+      })
     builder.addCase(
       postMetadata.fulfilled, (state, action) => {
         state.postStatus = 'success'
-    })
+      })
     builder.addCase(
       postMetadata.rejected, (state, action) => {
         state.postStatus = 'failed'
         state.postError = action.error.message
-    })
+      })
   }
 })
 

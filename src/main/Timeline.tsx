@@ -71,20 +71,20 @@ const Timeline: React.FC<{
   }
 
   return (
-  <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber
-      timelineWidth={width}
-      timelineHeight={timelineHeight}
-      selectCurrentlyAt={selectCurrentlyAt}
-      selectIsPlaying={selectIsPlaying}
-      setCurrentlyAt={setCurrentlyAt}
-      setIsPlaying={setIsPlaying}
-    />
-    <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
-      <Waveforms timelineHeight={timelineHeight}/>
-      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
+    <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
+      <Scrubber
+        timelineWidth={width}
+        timelineHeight={timelineHeight}
+        selectCurrentlyAt={selectCurrentlyAt}
+        selectIsPlaying={selectIsPlaying}
+        setCurrentlyAt={setCurrentlyAt}
+        setIsPlaying={setIsPlaying}
+      />
+      <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
+        <Waveforms timelineHeight={timelineHeight}/>
+        <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
+      </div>
     </div>
-  </div>
   );
 };
 
@@ -258,21 +258,21 @@ export const Scrubber: React.FC<{
         bounds="parent"
         position={controlledPosition}
         nodeRef={nodeRef}
-        >
-          <div ref={nodeRef} css={scrubberStyle}>
+      >
+        <div ref={nodeRef} css={scrubberStyle}>
 
-            <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
-              aria-label={t("timeline.scrubber-text-aria",
-                         {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
-                          segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
-                          moveLeft: scrubberKeyMap[handlers.left.name],
-                          moveRight: scrubberKeyMap[handlers.right.name],
-                          increase: scrubberKeyMap[handlers.increase.name],
-                          decrease: scrubberKeyMap[handlers.decrease.name] })}
-              tabIndex={0}>
-              <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
-            </div>
+          <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
+            aria-label={t("timeline.scrubber-text-aria",
+              {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
+                segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
+                moveLeft: scrubberKeyMap[handlers.left.name],
+                moveRight: scrubberKeyMap[handlers.right.name],
+                increase: scrubberKeyMap[handlers.increase.name],
+                decrease: scrubberKeyMap[handlers.decrease.name] })}
+            tabIndex={0}>
+            <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
           </div>
+        </div>
       </Draggable>
     </GlobalHotKeys>
   );
@@ -333,22 +333,22 @@ export const SegmentsList: React.FC<{
         <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})} key={segment.id}>
           <div
             aria-label={t("timeline.segments-text-aria",
-                      {segment: index,
-                        segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
-                        start: convertMsToReadableString(segment.start),
-                        end: convertMsToReadableString(segment.end) })}
+              {segment: index,
+                segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                start: convertMsToReadableString(segment.start),
+                end: convertMsToReadableString(segment.end) })}
             tabIndex={tabable ? 0 : -1}
-          css={{
-            background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
-            borderRadius: '5px',
-            borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
-            borderColor: 'white',
-            borderWidth: '1px',
-            boxSizing: 'border-box',
-            width: ((segment.end - segment.start) / duration) * 100 + '%',
-            height: timelineHeight - 20 + 'px',     // CHECK IF 100%
-            zIndex: 1,
-          }}>
+            css={{
+              background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
+              borderRadius: '5px',
+              borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
+              borderColor: 'white',
+              borderWidth: '1px',
+              boxSizing: 'border-box',
+              width: ((segment.end - segment.start) / duration) * 100 + '%',
+              height: timelineHeight - 20 + 'px',     // CHECK IF 100%
+              zIndex: 1,
+            }}>
           </div>
         </ThemedTooltip>
       ))
@@ -478,9 +478,9 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   }
 
   return (
-  <div css={waveformDisplayTestStyle}>
-    {renderImages()}
-  </div>
+    <div css={waveformDisplayTestStyle}>
+      {renderImages()}
+    </div>
   );
 }
 

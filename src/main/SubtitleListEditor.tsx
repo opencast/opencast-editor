@@ -54,7 +54,7 @@ const SubtitleListEditor : React.FC<{}> = () => {
     if (subtitle) {
       itemsRef.current = itemsRef.current.slice(0, subtitle.length);
     }
- }, [subtitle]);
+  }, [subtitle]);
 
   // Scroll to segment when triggered by reduxState
   useEffect(() => {
@@ -554,14 +554,14 @@ const TimeInput : React.FC<{
         onBlur={onBlur}
         value={myValue}
       />
-     </ThemedTooltip>
+    </ThemedTooltip>
   )
 }
 
 /**
  * Converts a number into a string with leading zeros
  */
- const fillIn = (val: number) => {
+const fillIn = (val: number) => {
   return val < 10 ? `0${val}` : val
 }
 const fillInMilliseconds = (val: number) => {
@@ -578,11 +578,11 @@ const fillInMilliseconds = (val: number) => {
  * Utility function for TimeInpit
  * Converts a number in milliseoncsd to a string of the format HH:MM:SS:MSS
  */
-  function toHHMMSSMS (ms: number)  {
+function toHHMMSSMS (ms: number)  {
   const milliseconds = (ms % 1000)
-  , seconds = Math.floor((ms/1000)%60)
-  , minutes = Math.floor((ms/(1000*60))%60)
-  , hours = Math.floor((ms/(1000*60*60)))
+    , seconds = Math.floor((ms/1000)%60)
+    , minutes = Math.floor((ms/(1000*60))%60)
+    , hours = Math.floor((ms/(1000*60*60)))
 
   const millisecondsString = fillInMilliseconds(milliseconds)
   const secondsString = fillIn(seconds)
@@ -596,7 +596,7 @@ const fillInMilliseconds = (val: number) => {
   Utility function for TimeInpit
  * Converts a string of the format HH:MM:SS:MSS to a millisecond number
  */
-  function getMillisecondsFromHHMMSSMS(value: string) {
+function getMillisecondsFromHHMMSSMS(value: string) {
   const [str1, str2, str3, str4] = value.split(":");
 
   const val1 = Number(str1);

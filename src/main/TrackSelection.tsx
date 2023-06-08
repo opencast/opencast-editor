@@ -69,7 +69,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   const dispatch = useDispatch();
   const header = track.flavor.type + ' '
     + (track.video_stream.enabled ? ''
-       :  `(${t('trackSelection.trackInactive', 'inactive')})`);
+      :  `(${t('trackSelection.trackInactive', 'inactive')})`);
 
   const trackItemStyle = css({
     display: 'flex',
@@ -109,12 +109,12 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     t('trackSelection.deleteTrackText', 'Delete Track'),
     t('trackSelection.cannotDeleteTrackText', 'Cannot Delete Track'),
     t('trackSelection.restoreTrackText', 'Restore Track')
-    ][deleteStatus];
+  ][deleteStatus];
   const deleteTooltip = [
     t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.'),
     t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
     t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
-    ][deleteStatus];
+  ][deleteStatus];
   const deleteIcon = [faTrash, faTrash, faTrashRestore][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
@@ -173,12 +173,12 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
   return (
     <ThemedTooltip title={tooltip}>
       <div css={ buttonStyle }
-          tabIndex={ 0 }
-          ref={ref}
-          role="button"
-          aria-label={ tooltip }
-          onClick={ clickHandler }
-          onKeyDown={ keyHandler } >
+        tabIndex={ 0 }
+        ref={ref}
+        role="button"
+        aria-label={ tooltip }
+        onClick={ clickHandler }
+        onKeyDown={ keyHandler } >
         <FontAwesomeIcon icon={ icon } size="1x" />
         <div>{ text }</div>
       </div>

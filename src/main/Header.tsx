@@ -8,15 +8,15 @@ function Header() {
   const themeState = useSelector(selectThemeState);
 
   const header = themeState.startsWith('high-contrast-')
-  ? css({
-    height: '46px',
-    backgroundColor: '#000',
-    borderBottom: '2px solid white'
-  })
-  : css({
-    height: '48px',
-    backgroundColor: '#333333',
-  })
+    ? css({
+      height: '46px',
+      backgroundColor: '#000',
+      borderBottom: '2px solid white'
+    })
+    : css({
+      height: '48px',
+      backgroundColor: '#333333',
+    })
 
   const logo = css({
     height: '48px',

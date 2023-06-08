@@ -216,7 +216,7 @@ const Metadata: React.FC<{}> = () => {
    * Form Callbacks - Other
    */
 
-   /**
+  /**
     * Recursively recreates nested array structures for form initalValues
     * @param library
     * @param input
@@ -336,7 +336,7 @@ const Metadata: React.FC<{}> = () => {
    * Form Callbacks - Submitting
    */
 
-   /**
+  /**
     * Sends a single value to the corresponding field in redux.
     * This kinda breaks the form workflow, since we do not use the submit callback
     * of the form class anymore.
@@ -372,8 +372,8 @@ const Metadata: React.FC<{}> = () => {
    * @param input
    */
   const blurWithSubmit = (e: any, input: any) => {
-      input.onBlur(e);
-      submitSingleField(input.value, input.name)
+    input.onBlur(e);
+    submitSingleField(input.value, input.name)
   }
 
   /**
@@ -520,7 +520,7 @@ const Metadata: React.FC<{}> = () => {
             styles={selectFieldStyle(theme)}
             css={fieldTypeStyle(field.readOnly)}>
           </CreatableSelect>
-          );
+        );
       } else {
         return (
           <Select {...input}
@@ -533,27 +533,27 @@ const Metadata: React.FC<{}> = () => {
             styles={selectFieldStyle(theme)}
             css={fieldTypeStyle(field.readOnly)}>
           </Select>
-          );
+        );
       }
 
     } else if (field.type === "date") {
       return (
         <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-            <ThemeProvider theme={calendarStyle(theme)}>
-              <DateTimePicker {...input}
-                name={field.id}
-                inputFormat="yyyy/MM/dd HH:mm"
-                disabled={field.readOnly}
-                dateFunsUtils={DateFnsUtils}
-                TextFieldProps={{
-                  variant: 'standard', // Removes default outline
-                  onBlur: (e: any) => {blurWithSubmit(e, input)},
-                  showError: showErrorOnBlur
-                }}
-                leftArrowButtonText={t('metadata.calendar-prev')}
-                rightArrowButtonText={t('metadata.calendar-next')}
-              />
-            </ThemeProvider>
+          <ThemeProvider theme={calendarStyle(theme)}>
+            <DateTimePicker {...input}
+              name={field.id}
+              inputFormat="yyyy/MM/dd HH:mm"
+              disabled={field.readOnly}
+              dateFunsUtils={DateFnsUtils}
+              TextFieldProps={{
+                variant: 'standard', // Removes default outline
+                onBlur: (e: any) => {blurWithSubmit(e, input)},
+                showError: showErrorOnBlur
+              }}
+              leftArrowButtonText={t('metadata.calendar-prev')}
+              rightArrowButtonText={t('metadata.calendar-next')}
+            />
+          </ThemeProvider>
         </div>
       );
     } else if (field.type === "time") {
@@ -618,21 +618,21 @@ const Metadata: React.FC<{}> = () => {
 
     return (
         <Field key={fieldIndex}
-                name={"catalog" + catalogIndex + "." + field.id}
-                validate={getValidators(field)}
-                type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
-                >
-                {({ input, meta }) => (
-                  <div css={fieldStyle} data-testid={field.id}>
-                    <label css={fieldLabelStyle} htmlFor={input.name}>{
-                      i18n.exists(`metadata.labels.${field.id}`) ?
-                      t(`metadata.labels.${field.id}` as TFuncKey) as string: field.id
-                    }</label>
+          name={"catalog" + catalogIndex + "." + field.id}
+          validate={getValidators(field)}
+          type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
+          >
+          {({ input, meta }) => (
+            <div css={fieldStyle} data-testid={field.id}>
+              <label css={fieldLabelStyle} htmlFor={input.name}>{
+                i18n.exists(`metadata.labels.${field.id}`) ?
+                t(`metadata.labels.${field.id}` as TFuncKey) as string: field.id
+              }</label>
 
-                    {generateComponentWithModifiedInput(field, input)}
-                    {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
-                  </div>
-                )}
+              {generateComponentWithModifiedInput(field, input)}
+              {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
+            </div>
+          )}
         </Field>
     );
   }
@@ -671,38 +671,38 @@ const Metadata: React.FC<{}> = () => {
    */
   const render = () => {
     return (
-        <Form
-          onSubmit={onSubmit}
-          subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
-          initialValues={getInitialValues(catalogs)}
-          render={({ handleSubmit, form, submitting, pristine, values}) => (
-            <form onSubmit={event => {
-              handleSubmit(event)
-              // Ugly fix for form not getting updated after submit. TODO: Find a better fix
-              form.reset()
-            }} css={metadataStyle}>
+      <Form
+        onSubmit={onSubmit}
+        subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
+        initialValues={getInitialValues(catalogs)}
+        render={({ handleSubmit, form, submitting, pristine, values}) => (
+          <form onSubmit={event => {
+            handleSubmit(event)
+            // Ugly fix for form not getting updated after submit. TODO: Find a better fix
+            form.reset()
+          }} css={metadataStyle}>
 
-              <div css={errorBoxStyle(getStatus === "failed", theme)} role="alert">
-                <span>A problem occurred during communication with Opencast.</span><br />
-                {getError ? "Details: " + getError : "No error details are available."}<br />
-              </div>
+            <div css={errorBoxStyle(getStatus === "failed", theme)} role="alert">
+              <span>A problem occurred during communication with Opencast.</span><br />
+              {getError ? "Details: " + getError : "No error details are available."}<br />
+            </div>
 
-              {catalogs.map((catalog, i) => {
-                if (settings.metadata.configureFields) {
-                  if (catalog.title in settings.metadata.configureFields) {
-                    // If there are no fields for a given catalog, do not render
-                    if (Object.keys(settings.metadata.configureFields[catalog.title]).length > 0) {
-                      return renderCatalog(catalog, i, settings.metadata.configureFields[catalog.title])
-                    } else {
-                      return undefined
-                    }
+            {catalogs.map((catalog, i) => {
+              if (settings.metadata.configureFields) {
+                if (catalog.title in settings.metadata.configureFields) {
+                  // If there are no fields for a given catalog, do not render
+                  if (Object.keys(settings.metadata.configureFields[catalog.title]).length > 0) {
+                    return renderCatalog(catalog, i, settings.metadata.configureFields[catalog.title])
+                  } else {
+                    return undefined
                   }
                 }
-                // If there are no settings for a given catalog, just render it completely
-                return renderCatalog(catalog, i, {})
-              })}
+              }
+              // If there are no settings for a given catalog, just render it completely
+              return renderCatalog(catalog, i, {})
+            })}
 
-{/*
+            {/*
                 <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>{t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}</div>
 
 
@@ -724,21 +724,21 @@ const Metadata: React.FC<{}> = () => {
                 </button>
               </div> */}
 
-              <div css={errorBoxStyle(postStatus === "failed", theme)} role="alert">
-                <span>A problem occurred during communication with Opencast. <br />
+            <div css={errorBoxStyle(postStatus === "failed", theme)} role="alert">
+              <span>A problem occurred during communication with Opencast. <br />
                       Changes could not be saved to Opencast.</span><br />
-                {postError ? "Details: " + postError : "No error details are available."}<br />
-              </div>
+              {postError ? "Details: " + postError : "No error details are available."}<br />
+            </div>
 
-              {/* For debugging the forms current values*/}
-              {/* <FormSpy subscription={{ values: true }}>
+            {/* For debugging the forms current values*/}
+            {/* <FormSpy subscription={{ values: true }}>
                 {({ values }) => (
                   <pre>{JSON.stringify(values, null, 2)}</pre>
                 )}
               </FormSpy> */}
-            </form>
-          )}
-        />
+          </form>
+        )}
+      />
     );
   }
 

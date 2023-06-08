@@ -35,16 +35,16 @@ const workflowPostAndProcessSlice = createSlice({
     builder.addCase(
       postVideoInformationWithWorkflow.pending, (state, action) => {
         state.status = 'loading'
-    })
+      })
     builder.addCase(
       postVideoInformationWithWorkflow.fulfilled, (state, action) => {
         state.status = 'success'
-    })
+      })
     builder.addCase(
       postVideoInformationWithWorkflow.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
-    })
+      })
   }
 })
 

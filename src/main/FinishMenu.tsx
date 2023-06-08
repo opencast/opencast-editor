@@ -29,9 +29,9 @@ const FinishMenu : React.FC<{}> = () => {
 
   return (
     <div css={finishMenuStyle}>
-        <FinishMenuButton iconName={faSave} stateName="Save changes"/>
-        <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
-        <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
+      <FinishMenuButton iconName={faSave} stateName="Save changes"/>
+      <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
+      <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
     </div>
   );
 }
@@ -68,7 +68,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
 
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-    role="button" tabIndex={0}
+      role="button" tabIndex={0}
       onClick={ finish }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         finish()

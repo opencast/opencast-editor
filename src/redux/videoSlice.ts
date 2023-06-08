@@ -184,7 +184,7 @@ const videoSlice = createSlice({
     builder.addCase(
       fetchVideoInformation.pending, (state, action) => {
         state.status = 'loading'
-    })
+      })
     builder.addCase(
       fetchVideoInformation.fulfilled, (state, action) => {
         state.status = 'success'
@@ -219,12 +219,12 @@ const videoSlice = createSlice({
         state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
-    })
+      })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
-    })
+      })
   }
 })
 
@@ -281,35 +281,35 @@ const mergeSegments = (state: video, activeSegmentIndex: number, mergeSegmentInd
 
 const skipDeletedSegments = (state: video) => {
   if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
-      let endTime = state.segments[state.activeSegmentIndex].end
+    let endTime = state.segments[state.activeSegmentIndex].end
 
-      for (let index = state.activeSegmentIndex; index < state.segments.length; index++) {
-        endTime = state.segments[index].end
+    for (let index = state.activeSegmentIndex; index < state.segments.length; index++) {
+      endTime = state.segments[index].end
 
-        if (!state.segments[index].deleted) {
-          // Need to at +1 as start and end of neighbouring segments are identical
-          endTime = state.segments[index].start + 1
-          break
-        }
+      if (!state.segments[index].deleted) {
+        // Need to at +1 as start and end of neighbouring segments are identical
+        endTime = state.segments[index].start + 1
+        break
+      }
 
-        // If this is the last segment and it is deleted
-        if (index + 1 === state.segments.length) {
-          // Properly pause the player
-          state.isPlaying = false
-          // Jump to start of first non-deleted segment
-          for (let j = 0; j < state.segments.length; j++) {
-            if (!state.segments[j].deleted) {
-              endTime = state.segments[j].start
-              break
-            }
+      // If this is the last segment and it is deleted
+      if (index + 1 === state.segments.length) {
+        // Properly pause the player
+        state.isPlaying = false
+        // Jump to start of first non-deleted segment
+        for (let j = 0; j < state.segments.length; j++) {
+          if (!state.segments[j].deleted) {
+            endTime = state.segments[j].start
+            break
           }
         }
       }
-
-      state.currentlyAt = endTime
-      state.previewTriggered = true
-      updateActiveSegment(state);
     }
+
+    state.currentlyAt = endTime
+    state.previewTriggered = true
+    updateActiveSegment(state);
+  }
 }
 
 /**
@@ -362,7 +362,7 @@ export const selectIsCurrentSegmentAlive = (state: { videoState:
   !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
 export const selectSelectedWorkflowId = (state: { videoState:
     { selectedWorkflowId: video["selectedWorkflowId"]; }; }) =>
-    state.videoState.selectedWorkflowId
+  state.videoState.selectedWorkflowId
 export const selectHasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
   state.videoState.hasChanges
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>

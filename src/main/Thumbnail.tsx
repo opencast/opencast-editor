@@ -65,14 +65,14 @@ const Thumbnail : React.FC<{}> = () => {
 
     var reader  = new FileReader();
     reader.onload = function(e)  {
-        // the result image data
-        if (e.target && e.target.result) {
-          const uri = e.target.result.toString();
-          dispatch(setThumbnail({id: track.id, uri: uri}))
-          dispatch(setHasChanges(true))
-        }
+      // the result image data
+      if (e.target && e.target.result) {
+        const uri = e.target.result.toString();
+        dispatch(setThumbnail({id: track.id, uri: uri}))
+        dispatch(setHasChanges(true))
       }
-      reader.readAsDataURL(fileObj);
+    }
+    reader.readAsDataURL(fileObj);
   };
 
   const discardThumbnail = (id: string) => {
@@ -328,16 +328,16 @@ const ThumbnailButtons : React.FC<{
         active={true}
       />
       {/* Hidden input field for upload */}
-        <input
-          style={{display: 'none'}}
-          ref={(el) => {
-            inputRefs.current[index] = el;
-          }}
-          type="file"
-          accept="image/*"
-          onChange={(event) => uploadCallback(event, track)}
-          aria-hidden="true"
-        />
+      <input
+        style={{display: 'none'}}
+        ref={(el) => {
+          inputRefs.current[index] = el;
+        }}
+        type="file"
+        accept="image/*"
+        onChange={(event) => uploadCallback(event, track)}
+        aria-hidden="true"
+      />
       <ThumbnailButton
         handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
         text={t('thumbnail.buttonUseForOtherThumbnails')}
@@ -532,16 +532,16 @@ const ThumbnailButtonsSimple : React.FC<{
         active={true}
       />
       {/* Hidden input field for upload */}
-        <input
-          style={{display: 'none'}}
-          ref={(el) => {
-            inputRefs.current[index] = el;
-          }}
-          type="file"
-          accept="image/*"
-          onChange={(event) => uploadCallback(event, track)}
-          aria-hidden="true"
-        />
+      <input
+        style={{display: 'none'}}
+        ref={(el) => {
+          inputRefs.current[index] = el;
+        }}
+        type="file"
+        accept="image/*"
+        onChange={(event) => uploadCallback(event, track)}
+        aria-hidden="true"
+      />
       <ThumbnailButton
         handler={() => { discard(track.id) }}
         text={t('thumbnail.buttonDiscard')}

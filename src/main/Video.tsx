@@ -174,275 +174,275 @@ export const VideoPlayer = React.forwardRef(
     setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
   },
   forwardRefThing
-) => {
-  const {
-    dataKey,
-    url,
-    isPrimary,
-    selectIsPlaying,
-    subtitleUrl,
-    selectCurrentlyAtInSeconds,
-    selectPreviewTriggered,
-    selectClickTriggered,
-    selectAspectRatio,
-    setIsPlaying,
-    setPreviewTriggered,
-    setClickTriggered,
-    setCurrentlyAt,
-    setAspectRatio,
-  } = props
+  ) => {
+    const {
+      dataKey,
+      url,
+      isPrimary,
+      selectIsPlaying,
+      subtitleUrl,
+      selectCurrentlyAtInSeconds,
+      selectPreviewTriggered,
+      selectClickTriggered,
+      selectAspectRatio,
+      setIsPlaying,
+      setPreviewTriggered,
+      setClickTriggered,
+      setCurrentlyAt,
+      setAspectRatio,
+    } = props
 
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  // Init redux variables
-  const dispatch = useDispatch();
-  const isPlaying = useSelector(selectIsPlaying)
-  const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
-  const duration  = useSelector(selectDurationInSeconds)
-  const previewTriggered = useSelector(selectPreviewTriggered)
-  const clickTriggered = useSelector(selectClickTriggered)
-  const aspectRatio = useSelector(selectAspectRatio)
-  const theme = useSelector(selectTheme)
+    // Init redux variables
+    const dispatch = useDispatch();
+    const isPlaying = useSelector(selectIsPlaying)
+    const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
+    const duration  = useSelector(selectDurationInSeconds)
+    const previewTriggered = useSelector(selectPreviewTriggered)
+    const clickTriggered = useSelector(selectClickTriggered)
+    const aspectRatio = useSelector(selectAspectRatio)
+    const theme = useSelector(selectTheme)
 
-  // Init state variables
-  const ref = useRef<ReactPlayer>(null);
-  const [ready, setReady] = useState(false);
-  const [errorState, setError] = useState(false);
-  const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
+    // Init state variables
+    const ref = useRef<ReactPlayer>(null);
+    const [ready, setReady] = useState(false);
+    const [errorState, setError] = useState(false);
+    const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
 
-  // Callback for when the video is playing
-  const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
-    if (isPrimary) {
+    // Callback for when the video is playing
+    const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
+      if (isPrimary) {
       // Only update redux if there was a substantial change
-      if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) &&
+        if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) &&
           state.playedSeconds !== 0 &&
           // Avoid overwriting video restarts
           state.playedSeconds < duration) {
-        dispatch(setCurrentlyAt(state.playedSeconds * 1000))
+          dispatch(setCurrentlyAt(state.playedSeconds * 1000))
+        }
       }
     }
-  }
 
-  // Tries to get video dimensions from the HTML5 elements until they are not 0,
-  // then updates the store
-  async function updateAspectRatio() {
-    if (ref.current && ref.current.getInternalPlayer()) {
-      let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
-      let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
-      while (w === 0 || h === 0) {
-        await sleep(100);
-        w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
-        h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+    // Tries to get video dimensions from the HTML5 elements until they are not 0,
+    // then updates the store
+    async function updateAspectRatio() {
+      if (ref.current && ref.current.getInternalPlayer()) {
+        let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
+        let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+        while (w === 0 || h === 0) {
+          await sleep(100);
+          w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
+          h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+        }
+        dispatch(setAspectRatio({dataKey, width: w, height: h}))
+        setIsAspectRatioUpdated(true)
       }
-      dispatch(setAspectRatio({dataKey, width: w, height: h}))
-      setIsAspectRatioUpdated(true)
     }
-  }
 
-  // Callback for checking whether the video element is ready
-  const onReadyCallback = () => {
-    setReady(true);
-  }
+    // Callback for checking whether the video element is ready
+    const onReadyCallback = () => {
+      setReady(true);
+    }
 
-  const onPlay = () => {
+    const onPlay = () => {
     // Restart the video from the beginning when at the end
-    if (isPrimary && currentlyAt >= duration) {
-      dispatch(setCurrentlyAt(0))
-      // Flip-flop the "isPlaying" switch, or else the video won't start playing
-      dispatch(setIsPlaying(false));
-      dispatch(setIsPlaying(true));
+      if (isPrimary && currentlyAt >= duration) {
+        dispatch(setCurrentlyAt(0))
+        // Flip-flop the "isPlaying" switch, or else the video won't start playing
+        dispatch(setIsPlaying(false));
+        dispatch(setIsPlaying(true));
+      }
     }
-  }
 
-  const onEndedCallback = () => {
-    if (isPrimary && currentlyAt !== 0) {
-      dispatch(setIsPlaying(false));
-      dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+    const onEndedCallback = () => {
+      if (isPrimary && currentlyAt !== 0) {
+        dispatch(setIsPlaying(false));
+        dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+      }
     }
-  }
 
-  const onErrorCallback = (e: any) => {
-    setError(true)
-  }
+    const onErrorCallback = (e: any) => {
+      setError(true)
+    }
 
-  useEffect(() => {
+    useEffect(() => {
     // Seek if the position in the video got changed externally
-    if (!isPlaying && ref.current && ready) {
-      ref.current.seekTo(currentlyAt, "seconds")
-    }
-    if (previewTriggered && ref.current && ready) {
-      ref.current.seekTo(currentlyAt, "seconds")
-      dispatch(setPreviewTriggered(false))
-    }
-    if (clickTriggered && ref.current && ready) {
-      ref.current.seekTo(currentlyAt, "seconds")
-      dispatch(setClickTriggered(false))
-    }
-    if (!isAspectRatioUpdated && ready) {     //     if (!isAspectRatioUpdated && ref.current && ready) {
+      if (!isPlaying && ref.current && ready) {
+        ref.current.seekTo(currentlyAt, "seconds")
+      }
+      if (previewTriggered && ref.current && ready) {
+        ref.current.seekTo(currentlyAt, "seconds")
+        dispatch(setPreviewTriggered(false))
+      }
+      if (clickTriggered && ref.current && ready) {
+        ref.current.seekTo(currentlyAt, "seconds")
+        dispatch(setClickTriggered(false))
+      }
+      if (!isAspectRatioUpdated && ready) {     //     if (!isAspectRatioUpdated && ref.current && ready) {
       // Update the store with video dimensions for rendering purposes
-      updateAspectRatio();
-    }
-  })
+        updateAspectRatio();
+      }
+    })
 
-  // Callback specifically for the subtitle editor view
-  // When changing urls while the player is playing, don't reset to 0
-  // (due to onProgressCallback resetting to 0),
-  // but keep the current currentlyAt
-  useEffect(() => {
-    if (ref.current && ready) {
-      ref.current.seekTo(currentlyAt, "seconds")
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url])
+    // Callback specifically for the subtitle editor view
+    // When changing urls while the player is playing, don't reset to 0
+    // (due to onProgressCallback resetting to 0),
+    // but keep the current currentlyAt
+    useEffect(() => {
+      if (ref.current && ready) {
+        ref.current.seekTo(currentlyAt, "seconds")
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [url])
 
-  // Trigger a workaround for subtitles not being displayed in the video in Firefox
-  useEffect(() => {
+    // Trigger a workaround for subtitles not being displayed in the video in Firefox
+    useEffect(() => {
     // Only trigger workaround in Firefox, as it will cause issues in Chrome
     // @ts-ignore
-    if (typeof InstallTrigger !== 'undefined') {
-      reAddTrack()
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subtitleUrl])
+      if (typeof InstallTrigger !== 'undefined') {
+        reAddTrack()
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [subtitleUrl])
 
-  const playerConfig: Config = {
-    file: {
-      attributes: {
+    const playerConfig: Config = {
+      file: {
+        attributes: {
         // Skip player when navigating page with keyboard
-        tabIndex: '-1',
-        crossOrigin: "anonymous"    // allow thumbnail generation
-      },
-      tracks: [
-        {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
-      ]
+          tabIndex: '-1',
+          crossOrigin: "anonymous"    // allow thumbnail generation
+        },
+        tracks: [
+          {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
+        ]
+      }
     }
-  }
 
-  /**
+    /**
    * Workaround for subtitles not appearing in Firefox (or only appearing on inital mount, then disappearing
    * when changed). Removes old tracks and readds them, because letting React to it does not seem
    * to work properly.
    * Fairly hacky, currently only works for a page with only one video
    * https://github.com/CookPete/react-player/issues/490
    */
-  function reAddTrack() {
-    const video = document.querySelector('video');
+    function reAddTrack() {
+      const video = document.querySelector('video');
 
-    if (video) {
-      const oldTracks = video.querySelectorAll('track');
-      oldTracks.forEach((oldTrack) => {
-        video.removeChild(oldTrack);
-      });
-    }
-
-    if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
-      // eslint-disable-next-line array-callback-return
-      playerConfig.file.tracks.map((t, trackIdx) => {
-        const track = document.createElement('track');
-        track.kind = t.kind!;
-        track.label = t.label!;
-        track.srclang = t.srcLang!;
-        track.default = t.default!;
-        track.src = t.src!;
-        track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
-        track.addEventListener('error', (e: Event) => {
-          console.warn(`Cannot load track ${t.src!}`)
+      if (video) {
+        const oldTracks = video.querySelectorAll('track');
+        oldTracks.forEach((oldTrack) => {
+          video.removeChild(oldTrack);
         });
-        track.addEventListener('load', (e: Event) => {
-          const textTrack = e.currentTarget as HTMLTrackElement;
-          if (textTrack) {
-            if (t.default === true) {
-              textTrack.track.mode = 'showing';
+      }
+
+      if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
+      // eslint-disable-next-line array-callback-return
+        playerConfig.file.tracks.map((t, trackIdx) => {
+          const track = document.createElement('track');
+          track.kind = t.kind!;
+          track.label = t.label!;
+          track.srclang = t.srcLang!;
+          track.default = t.default!;
+          track.src = t.src!;
+          track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
+          track.addEventListener('error', (e: Event) => {
+            console.warn(`Cannot load track ${t.src!}`)
+          });
+          track.addEventListener('load', (e: Event) => {
+            const textTrack = e.currentTarget as HTMLTrackElement;
+            if (textTrack) {
+              if (t.default === true) {
+                textTrack.track.mode = 'showing';
               video!.textTracks[trackIdx].mode = 'showing'; // thanks Firefox
-            } else {
-              textTrack.track.mode = 'hidden';
+              } else {
+                textTrack.track.mode = 'hidden';
               video!.textTracks[trackIdx].mode = 'hidden'; // thanks Firefox
+              }
             }
+          });
+          const video = document.querySelector('video');
+          if (video) {
+            video.appendChild(track);
           }
         });
-        const video = document.querySelector('video');
-        if (video) {
-          video.appendChild(track);
-        }
-      });
-    }
-  }
-
-  // External functions
-  useImperativeHandle(forwardRefThing, () => ({
-    // Renders the current frame in the video element to a canvas
-    // Returns the data url
-    captureVideo() {
-      const video = ref.current?.getInternalPlayer() as HTMLVideoElement
-      var canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      var canvasContext = canvas.getContext("2d");
-      if (canvasContext !== null) {
-        canvasContext.drawImage(video, 0, 0);
-        return canvas.toDataURL('image/png')
       }
     }
-  }));
 
-  const errorBoxStyle = css({
-    ...(!errorState) && {display: "none"},
-    borderColor: `${theme.error}`,
-    borderStyle: 'dashed',
-    fontWeight: 'bold',
-    padding: '10px',
-  })
+    // External functions
+    useImperativeHandle(forwardRefThing, () => ({
+    // Renders the current frame in the video element to a canvas
+    // Returns the data url
+      captureVideo() {
+        const video = ref.current?.getInternalPlayer() as HTMLVideoElement
+        var canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        var canvasContext = canvas.getContext("2d");
+        if (canvasContext !== null) {
+          canvasContext.drawImage(video, 0, 0);
+          return canvas.toDataURL('image/png')
+        }
+      }
+    }));
 
-  const playerWrapper = css({
-    position: 'relative',
-    width: '100%',
-    paddingTop: aspectRatio + '%',
-  });
+    const errorBoxStyle = css({
+      ...(!errorState) && {display: "none"},
+      borderColor: `${theme.error}`,
+      borderStyle: 'dashed',
+      fontWeight: 'bold',
+      padding: '10px',
+    })
 
-  const reactPlayerStyle = css({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    background: ' black',
-  })
+    const playerWrapper = css({
+      position: 'relative',
+      width: '100%',
+      paddingTop: aspectRatio + '%',
+    });
 
-  const render = () => {
-    if (!errorState) {
-      return(
-        <div css={playerWrapper}>
-          <ReactPlayer url={url}
-            css={reactPlayerStyle}
-            ref={ref}
-            width='100%'
-            height='100%'
-            playing={isPlaying}
-            muted={!isPrimary}
-            onProgress={onProgressCallback}
-            progressInterval={100}
-            onReady={onReadyCallback}
-            onPlay={onPlay}
-            onEnded={onEndedCallback}
-            onError={onErrorCallback}
-            tabIndex={-1}
-            config={playerConfig}
-            disablePictureInPicture
-          />
-        </div>
-      );
-    } else {
-      return (
-        <div css={errorBoxStyle} role="alert">
-          <span>{t("video.loadError-text")} </span>
-        </div>
-      );
+    const reactPlayerStyle = css({
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      background: ' black',
+    })
+
+    const render = () => {
+      if (!errorState) {
+        return(
+          <div css={playerWrapper}>
+            <ReactPlayer url={url}
+              css={reactPlayerStyle}
+              ref={ref}
+              width='100%'
+              height='100%'
+              playing={isPlaying}
+              muted={!isPrimary}
+              onProgress={onProgressCallback}
+              progressInterval={100}
+              onReady={onReadyCallback}
+              onPlay={onPlay}
+              onEnded={onEndedCallback}
+              onError={onErrorCallback}
+              tabIndex={-1}
+              config={playerConfig}
+              disablePictureInPicture
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div css={errorBoxStyle} role="alert">
+            <span>{t("video.loadError-text")} </span>
+          </div>
+        );
+      }
     }
-  }
 
-  return (
-    <>
-      {render()}
-    </>
-  );
+    return (
+      <>
+        {render()}
+      </>
+    );
 
   // return (
   //   <div title="Video Player">
@@ -452,7 +452,7 @@ export const VideoPlayer = React.forwardRef(
   //     </video>
   //   </div>
   // );
-});
+  });
 
 /**
  * Contains controls for manipulating multiple video players at once
@@ -500,10 +500,10 @@ export const VideoControls: React.FC<{
           setIsPlayPreview={setIsPlayPreview}
         />
       </div>
-        <PlayButton
-          selectIsPlaying={selectIsPlaying}
-          setIsPlaying={setIsPlaying}
-        />
+      <PlayButton
+        selectIsPlaying={selectIsPlaying}
+        setIsPlaying={setIsPlaying}
+      />
       <div css={rightSideBoxStyle}>
         <TimeDisplay
           selectCurrentlyAt={selectCurrentlyAt}
@@ -572,8 +572,8 @@ const PreviewMode: React.FC<{
   return (
     <ThemedTooltip
       title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"),
-      hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
-      >
+        hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
+    >
       <div css={previewModeStyle}
         ref={ref}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
@@ -624,15 +624,15 @@ const PlayButton: React.FC<{
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
-      <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
-      <FontAwesomeIcon css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]} icon={isPlaying ? faPause : faPlay} size="2x"
-        role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-        aria-label={t("video.playButton-tooltip")}
-        onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
-          switchIsPlaying(event)
-        }}}
-      />
+        <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
+        <FontAwesomeIcon css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]} icon={isPlaying ? faPause : faPlay} size="2x"
+          role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
+          aria-label={t("video.playButton-tooltip")}
+          onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
+            switchIsPlaying(event)
+          }}}
+        />
       </div>
     </ThemedTooltip>
   );
@@ -681,7 +681,7 @@ const VideoHeader: React.FC<{}> = () => {
 
   return (
     <div css={[titleStyle, titleStyleBold]}>
-        {metadataTitle ? metadataTitle : title}
+      {metadataTitle ? metadataTitle : title}
     </div>
   );
 }

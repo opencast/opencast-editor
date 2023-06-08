@@ -153,7 +153,7 @@ export const subtitleListKeyMap: KeyMap = {
  * Combines all keyMaps into a single list of keys for KeyboardControls to display
  * Placing this under the keyMaps is important, else the translation hooks won't happen
  */
- export const getAllHotkeys = () => {
+export const getAllHotkeys = () => {
   const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap, subtitleListKeyMap]
   const allKeys : ApplicationKeyMap = {}
 

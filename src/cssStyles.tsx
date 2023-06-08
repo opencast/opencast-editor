@@ -48,9 +48,9 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
   return (
     {
     // Use gap if supported
-    ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
-    // Else use margins
-    ...(!checkFlexGapSupport()) &&
+      ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
+      // Else use margins
+      ...(!checkFlexGapSupport()) &&
       {
         ">*": { // For each child
           marginTop: `${quarter}px`,
@@ -122,7 +122,7 @@ export const navigationButtonStyle = (theme: Theme) => css({
   justifyContent: 'space-around',
   boxShadow: `${theme.boxShadow}`,
   background: `${theme.element_bg}`,
- })
+})
 
 /**
  * CSS for a container that holds back/forward buttons
@@ -136,7 +136,7 @@ export const backOrContinueStyle = css(({
 /**
  * CSS for big buttons in a dynamic grid
  */
- export const tileButtonStyle = (theme: Theme) => css({
+export const tileButtonStyle = (theme: Theme) => css({
   width: '250px',
   height: '220px',
   display: 'flex',

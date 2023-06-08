@@ -26,7 +26,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Displays an editor view for a selected subtitle file
  */
- const SubtitleEditor : React.FC<{}> = () => {
+const SubtitleEditor : React.FC<{}> = () => {
 
   const { t } = useTranslation();
 
@@ -145,7 +145,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Takes you to a different page
  */
- export const BackButton : React.FC<{}> = () => {
+export const BackButton : React.FC<{}> = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)

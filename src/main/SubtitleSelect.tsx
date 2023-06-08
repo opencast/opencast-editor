@@ -204,7 +204,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           setIsPlusDisplay(false)
         }}}
-        >
+      >
         <FontAwesomeIcon icon={faPlus} size="2x" css={plusIconStyle}/>
         <Form
           onSubmit={onSubmit}
@@ -215,31 +215,31 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
               // // Ugly fix for form not getting updated after submit. TODO: Find a better fix
               // form.reset()
             }} css={subtitleAddFormStyle}>
-                {/* TODO: Fix the following warning, caused by removing items from data:
+              {/* TODO: Fix the following warning, caused by removing items from data:
                   MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
                 */}
-                <ThemeProvider theme={subtitleSelectStyle(theme)}>
-                  <Select
-                    label={t("subtitles.createSubtitleDropdown-label")}
-                    name="languages"
-                    data={selectData()}
-                  />
-                </ThemeProvider>
+              <ThemeProvider theme={subtitleSelectStyle(theme)}>
+                <Select
+                  label={t("subtitles.createSubtitleDropdown-label")}
+                  name="languages"
+                  data={selectData()}
+                />
+              </ThemeProvider>
 
                 {/* "By default disabled elements like <button> do not trigger user interactions
                  * so a Tooltip will not activate on normal events like hover. To accommodate
                  * disabled elements, add a simple wrapper element, such as a span."
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
-                <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
-                  <span>
-                    <button css={[basicButtonStyle(theme), createButtonStyle, { width:"100%" } ]}
-                      type="submit"
-                      aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                      disabled={submitting || pristine}>
-                        {t("subtitles.createSubtitleButton-createButton")}
-                    </button>
-                  </span>
-                </ThemedTooltip>
+              <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
+                <span>
+                  <button css={[basicButtonStyle(theme), createButtonStyle, { width:"100%" } ]}
+                    type="submit"
+                    aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                    disabled={submitting || pristine}>
+                    {t("subtitles.createSubtitleButton-createButton")}
+                  </button>
+                </span>
+              </ThemedTooltip>
 
             </form>
           )}
