@@ -195,7 +195,7 @@ const videoSlice = createSlice({
           state.error = "This event is being processed. Please wait until the process is finished."
         }
         state.tracks = action.payload.tracks
-          .sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => {
+          .sort((a: { thumbnailPriority: number; }, b: { thumbnailPriority: number; }) => {
             return a.thumbnailPriority - b.thumbnailPriority
           }).map((track: Track) => {
             if (action.payload.local && settings.opencast.local) {
@@ -212,7 +212,7 @@ const videoSlice = createSlice({
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
+        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; }, n2: { displayOrder: number; }) => {
           return n1.displayOrder - n2.displayOrder;
         });
         state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
@@ -321,8 +321,8 @@ const skipDeletedSegments = (state: video) => {
  * TODO: Improve calculation to handle multiple rows of videos
  */
 export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
-  const minHeight = Math.min.apply(Math, aspectRatios.map(o => o.height))
-  let minWidth = Math.min.apply(Math, aspectRatios.map(o => o.width))
+  const minHeight = Math.min(...aspectRatios.map(o => o.height))
+  let minWidth = Math.min(...aspectRatios.map(o => o.width))
   minWidth *= aspectRatios.length
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }

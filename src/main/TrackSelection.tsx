@@ -161,7 +161,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
       background: `${theme.element_bg}`,
     }];
   const clickHandler = () => {
-    active && handler();
+    if (active) { handler() }
     ref.current?.blur();
   };
   const keyHandler = (event: React.KeyboardEvent) => {

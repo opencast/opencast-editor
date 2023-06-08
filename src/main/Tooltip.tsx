@@ -17,7 +17,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
       enterDelay={500}
       enterNextDelay={500}
       leaveDelay={150}
-      placement='top'
+      placement="top"
       ref={areaRef}
 
       /** onMouseOut: Workaround to hide tooltip after the mouse leaves the element.

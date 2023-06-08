@@ -137,7 +137,7 @@ export const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({re
         setCurrentlyAt={setCurrentlyAt}
         setAspectRatio={setAspectRatio}
         ref={(el) => {
-          if (refs === undefined) return
+          if (refs === undefined) { return }
           (refs.current[i] = el)
         }}
       />
@@ -413,8 +413,8 @@ export const VideoPlayer = React.forwardRef(
             <ReactPlayer url={url}
               css={reactPlayerStyle}
               ref={ref}
-              width='100%'
-              height='100%'
+              width="100%"
+              height="100%"
               playing={isPlaying}
               muted={!isPrimary}
               onProgress={onProgressCallback}

@@ -24,7 +24,7 @@ export const endSlice = createSlice({
   }
 })
 
-export const { setEnd, } = endSlice.actions
+export const { setEnd } = endSlice.actions
 
 // Export Selectors
 export const selectIsEnd = (state: { endState: { end: end["end"] }; }) => state.endState.end

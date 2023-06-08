@@ -54,7 +54,7 @@ const Timeline: React.FC<{
   const dispatch = useDispatch();
   const duration = useSelector(selectDuration)
 
-  const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
+  const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
@@ -120,7 +120,7 @@ export const Scrubber: React.FC<{
   const theme = useSelector(selectTheme)
 
   // Init state variables
-  const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
+  const [controlledPosition, setControlledPosition] = useState({ x: 0, y: 0 });
   const [isGrabbed, setIsGrabbed] = useState(false)
   const [wasPlayingWhenGrabbed, setWasPlayingWhenGrabbed] = useState(false)
   const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000)  // In milliseconds. For keyboard navigation
@@ -388,7 +388,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   const waveformDisplayTestStyle = css({
     display: 'flex',
     flexDirection: 'column',
-    position: "absolute" as "absolute",
+    position: "absolute" as const,
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
@@ -412,7 +412,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
       }
 
       const newImages: string[] = []    // Store local paths to image files
-      let waveformsProcessed : number = 0  // Counter for checking if all workers are done
+      let waveformsProcessed = 0  // Counter for checking if all workers are done
 
       // Only display the waveform of the first video we get
       const onlyOneURL = [videoURLs[0]]
@@ -455,7 +455,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   const renderImages = () => {
     if (images.length > 0) {
       return (
-        <img alt='Waveform' src={images[0]} css={[waveformStyle, {minHeight: 0, height: '100%'}]}></img>
+        <img alt="Waveform" src={images[0]} css={[waveformStyle, {minHeight: 0, height: '100%'}]}></img>
         // images.map((image, index) =>
         //   <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
         // )

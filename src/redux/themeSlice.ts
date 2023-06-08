@@ -40,7 +40,7 @@ export interface Theme {
   clock_focus: string
   digit_selected: string
   text_shadow: string
-};
+}
 
 const getValue = () => {
   const value = localStorage.getItem('theme');

@@ -477,7 +477,7 @@ const FunctionButton : React.FC<{
       <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
         role="button" 
         tabIndex={0}
-        arial-label={tooltipAria}
+        aria-label={tooltipAria}
         onClick={onClick}
         onKeyDown={onKeyDown}
       >
@@ -580,9 +580,9 @@ const fillInMilliseconds = (val: number) => {
  */
 function toHHMMSSMS(ms: number)  {
   const milliseconds = (ms % 1000)
-    , seconds = Math.floor((ms/1000)%60)
-    , minutes = Math.floor((ms/(1000*60))%60)
-    , hours = Math.floor((ms/(1000*60*60)))
+  const seconds = Math.floor((ms / 1000) % 60)
+  const minutes = Math.floor((ms / (1000 * 60)) % 60)
+  const hours = Math.floor(ms / (1000 * 60 * 60))
 
   const millisecondsString = fillInMilliseconds(milliseconds)
   const secondsString = fillIn(seconds)
@@ -590,7 +590,7 @@ function toHHMMSSMS(ms: number)  {
   const hoursString = fillIn(hours)
 
   return [hoursString, minutesString, secondsString, millisecondsString].join(":")
-};
+}
 
 /**
   Utility function for TimeInpit
@@ -625,6 +625,6 @@ function getMillisecondsFromHHMMSSMS(value: string) {
   }
 
   return undefined
-};
+}
 
 export default SubtitleListEditor

@@ -145,7 +145,7 @@ const metadataSlice = createSlice({
   }
 })
 
-export const { setFieldValue, setHasChanges, setFieldReadonly,resetPostRequestState } = metadataSlice.actions
+export const { setFieldValue, setHasChanges, setFieldReadonly, resetPostRequestState } = metadataSlice.actions
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs

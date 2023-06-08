@@ -40,9 +40,9 @@ const SubtitleTimeline: React.FC = () => {
   const duration = useSelector(selectDuration)
   const currentlyAt = useSelector(selectCurrentlyAt)
 
-  const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
+  const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLElement>(null);
-  const { ref: refMini, width: widthMiniTimeline = 1, } = useResizeObserver<HTMLDivElement>();
+  const { ref: refMini, width: widthMiniTimeline = 1 } = useResizeObserver<HTMLDivElement>();
 
   const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
 
@@ -214,7 +214,7 @@ const TimelineSubtitleSegment: React.FC<{
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
     setControlledPosition({x: (props.cue.startTime / duration) * (props.timelineWidth), y: 0});
-  },[props.cue.startTime, duration, props.timelineWidth])
+  }, [props.cue.startTime, duration, props.timelineWidth])
 
   // Set width and reset any resizing that may have happened meanwhile
   useEffect(() => {
@@ -222,7 +222,7 @@ const TimelineSubtitleSegment: React.FC<{
     setAbsoluteHeight(props.height)
     setAbsoluteLeft(0)
     setAbsoluteTop(0)
-  },[duration, props.cue.endTime, props.cue.startTime, props.height, props.timelineWidth])
+  }, [duration, props.cue.endTime, props.cue.startTime, props.height, props.timelineWidth])
 
   // Check for impossible timestamps and update state in redux
   const dispatchNewTimes = (newStartTime: number, newEndTime: number) => {

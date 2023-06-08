@@ -139,7 +139,7 @@ const Metadata: React.FC = () => {
 
   const dateTimeTypeStyle = (isReadOnly: boolean) => {
     return (
-      css ({
+      css({
         padding: '5px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
@@ -243,7 +243,7 @@ const Metadata: React.FC = () => {
 
     catalogs.forEach((catalog: Catalog, catalogIndex: number) => {
       initValues["catalog" + catalogIndex] = {}
-      catalog.fields.forEach((field: MetadataField) =>{
+      catalog.fields.forEach((field: MetadataField) => {
         initValues["catalog" + catalogIndex][field.id] = field.value
 
         // Handle initial values for select fields differently
@@ -283,7 +283,7 @@ const Metadata: React.FC = () => {
    * @param value
    */
   const duration = (value: any) => {
-    const re: RegExp = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
+    const re = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
     return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
@@ -394,7 +394,7 @@ const Metadata: React.FC = () => {
     }
 
     // If the value is hidden an object due to react-select, extract it
-    if (typeof value === 'object' && value !== null && value.hasOwnProperty("submitValue")) {
+    if (typeof value === 'object' && value !== null && Object.prototype.hasOwnProperty.call(value, "submitValue")) {
       returnValue = value.submitValue
     } else if (typeof value === 'object' && value !== null && value.__isNew__) {
       returnValue = value.value

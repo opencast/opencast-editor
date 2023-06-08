@@ -229,13 +229,13 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       color: theme.text,
     }),
-    multiValue: (provided: any) =>({
+    multiValue: (provided: any) => ({
       ...provided,
       color: theme.selected_text,
       background: theme.multiValue,
       cursor: 'default',
     }),
-    multiValueLabel: (provided: any) =>({
+    multiValueLabel: (provided: any) => ({
       ...provided,
       color: theme.selected_text,
     }),

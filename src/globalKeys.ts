@@ -167,7 +167,7 @@ export const getAllHotkeys = () => {
           sequences.push({sequence: sequence as MouseTrapKeySequence, action: (value as ExtendedKeyMapOptions).action})
         }
       } else {
-        sequences = [ {sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action } ]
+        sequences = [{sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action }]
       }
 
       // Create new key

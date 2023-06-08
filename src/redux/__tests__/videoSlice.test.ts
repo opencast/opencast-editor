@@ -300,7 +300,7 @@ describe('Video reducer', () => {
     // Arrange
     const resultStatus: httpRequestState = { status: 'success', error: undefined, errorReason: "unknown" }
     const segments = [{ start: 0, end: 42, deleted: false }]
-    const videoURLs: video["videoURLs"] = [ "video/url" ]
+    const videoURLs: video["videoURLs"] = ["video/url"]
     const dur: video["duration"] = 42
     const title: video["title"] = "Video Title"
     // const presenters: video["presenters"] = [ "Otto Opencast" ]    // Currently missing from the API

@@ -164,7 +164,7 @@ const VideoSelectDropdown : React.FC<{
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
 
-  const dropdownName: string = "flavors"
+  const dropdownName = "flavors"
 
   // Turn flavor into string
   const stringifyFlavor = (flavor: Flavor) => {

@@ -370,7 +370,7 @@ const ThumbnailButton : React.FC<{
   const ref = React.useRef<HTMLDivElement>(null)
 
   const clickHandler = () => {
-    active && handler();
+    if (active) { handler() }
     ref.current?.blur();
   };
   const keyHandler = (event: React.KeyboardEvent) => {

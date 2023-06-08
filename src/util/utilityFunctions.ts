@@ -117,7 +117,7 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
   return seri.serialize(cues)
 }
 
-export function parseSubtitle(subtitle: String) {
+export function parseSubtitle(subtitle: string) {
   // Used parsing library: https://www.npmjs.com/package/webvtt-parser
   // - Unmaintained and does have bugs, so we will need to switch eventually
   // Other interesting vtt parsing libraries:

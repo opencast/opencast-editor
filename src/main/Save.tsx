@@ -118,7 +118,7 @@ export const SaveButton: React.FC = () => {
   let icon = faSave
   let spin = false
   let tooltip = null
-  if (workflowStatus === 'failed' || metadataStatus === 'failed'){
+  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
     icon = faExclamationCircle
     spin = false
     tooltip = t("save.confirmButton-failed-tooltip")
