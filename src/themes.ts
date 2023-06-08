@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { Theme } from "./redux/themeSlice";
 
 export const lightMode: Theme = {
