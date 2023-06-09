@@ -565,6 +565,12 @@ const PreviewMode: React.FC<{
     color: `${theme.icon_color}`,
   })
 
+  const previewModeTextStyle = (theme: Theme) => css({
+    display: 'inline-block',
+    flexWrap: 'nowrap',
+    color: `${theme.text_black}`
+  })
+
   return (
     <ThemedTooltip
       title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"),
@@ -579,7 +585,7 @@ const PreviewMode: React.FC<{
           switchPlayPreview(event, undefined)
         }}}>
         <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
-        <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
+        <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
         </div>
         <FontAwesomeIcon css={switchIconStyle(theme)} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
@@ -648,18 +654,26 @@ const TimeDisplay: React.FC<{
   // Init redux variables
   const currentlyAt = useSelector(selectCurrentlyAt)
   const duration = useSelector(selectDuration)
+  const theme = useSelector(selectTheme)
+
+  const timeTextStyle = (theme: Theme) => css({
+    display: 'inline-block',
+    width: '100px',
+    color: `${theme.text_black}`
+  })
 
   return (
     <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
       <ThemedTooltip title={t("video.current-time-tooltip")}>
-        <time css={{display: 'inline-block', width: '100px'}}
+        <time css={timeTextStyle(theme)}
           tabIndex={0} role="timer" aria-label={t("video.time-aria")+": " + convertMsToReadableString(currentlyAt)}>
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
         </time>
       </ThemedTooltip>
       {" / "}
       <ThemedTooltip title={t("video.time-duration-tooltip")}>
-        <div tabIndex={0} aria-label={t("video.duration-aria")+": " + convertMsToReadableString(duration)}>
+        <div css={timeTextStyle(theme)}
+          tabIndex={0} aria-label={t("video.duration-aria")+": " + convertMsToReadableString(duration)}>
           {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
         </div>
       </ThemedTooltip>
@@ -674,9 +688,10 @@ const VideoHeader: React.FC<{}> = () => {
 
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
+  const theme = useSelector(selectTheme);
 
   return (
-    <div css={[titleStyle, titleStyleBold]}>
+    <div css={[titleStyle(theme), titleStyleBold(theme)]}>
         {metadataTitle ? metadataTitle : title}
     </div>
   );

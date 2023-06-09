@@ -26,6 +26,7 @@ const Thumbnail : React.FC<{}> = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
 
+  const theme = useSelector(selectTheme);
   const originalThumbnails = useSelector(selectOriginalThumbnails)
 
   // Generate Refs
@@ -89,7 +90,7 @@ const Thumbnail : React.FC<{}> = () => {
 
   return (
     <div css={thumbnailStyle}>
-      <div css={[titleStyle, titleStyleBold]}>{t('thumbnail.title')}</div>
+      <div css={[titleStyle(theme), titleStyleBold(theme)]}>{t('thumbnail.title')}</div>
       <VideoPlayers refs={generateRefs} widthInPercent={50}/>
       <VideoControls
         selectCurrentlyAt={selectCurrentlyAt}

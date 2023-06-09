@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
-import { calendarStyle, errorBoxStyle, selectFieldStyle } from '../cssStyles'
+import { calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -642,13 +642,15 @@ const Metadata: React.FC<{}> = () => {
     catalogIndex: number,
     configureFields: { [key: string]: configureFieldsAttributes }
   ) => {
+
+
     return (
       <div key={catalogIndex}>
-        <h2>
+        <div css={[titleStyle(theme), titleStyleBold(theme)]}>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
             t(`metadata.${catalog.title.replaceAll(".", "-")}` as TFuncKey) : catalog.title
           }
-        </h2>
+        </div>
 
         {catalog.fields.map((field, i) => {
           // Render fields based on given array (usually parsed from config settings)

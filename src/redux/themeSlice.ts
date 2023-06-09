@@ -5,6 +5,7 @@ export interface Theme {
   background: String
   menu_background: String
   text: String
+  text_black: String,
   error: String
   element_bg: String
   multiValue: String

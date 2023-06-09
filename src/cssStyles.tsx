@@ -95,7 +95,8 @@ export const basicButtonStyle = (theme: Theme) => css({
   alignItems: 'center',
   ...(flexGapReplacementStyle(10, false)),
   textAlign: 'center' as const,
-  outline: `${theme.button_outline}`
+  outline: `${theme.button_outline}`,
+  fontWeight: 'bold',
 });
 
 /**
@@ -167,23 +168,25 @@ export const disableButtonAnimation = css({
 /**
  * CSS for a title
  */
-export const titleStyle = css(({
+export const titleStyle = (theme: Theme) => css(({
   display: 'inline-block',
   padding: '15px',
   overflow: 'hidden',
   whiteSpace: "nowrap",
   textOverflow: 'ellipsis',
   maxWidth: '100%',
+  color: `${theme.text_black}`,
 }))
 
 /**
  * Addendum for the titleStyle
  * Used for page titles
  */
-export const titleStyleBold = css({
+export const titleStyleBold = (theme: Theme) => css({
   fontWeight: 'bold',
   fontSize: '24px',
   verticalAlign: '-2.5px',
+  color: `${theme.text_black}`,
 })
 
 /**
