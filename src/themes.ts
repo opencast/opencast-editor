@@ -7,13 +7,13 @@ export const lightMode: Theme = {
   text_black: '#000',
   error: '#ed1741',
   element_bg: 'snow',
-  multiValue: '#e6e6e6',
-  focused:'#e6e6e6',
+  multiValue: '#edf6fe',
+  focused:'#edf6fe',
   focus_text: '#3e8ad8',
   selected: '#a1a1a1',
   disabled: 'rgba(0, 0, 0, 0.55)',
   menuBorder: '1px solid #BBB',
-  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  boxShadow: '0 0 2px 2px rgb(195, 218, 238)',
   singleKey_bg: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
   singleKey_border: 'Gainsboro',
   invert_wave: 'invert(0%)',
@@ -25,7 +25,7 @@ export const lightMode: Theme = {
   dropdown_border: '1px solid #ccc',
   menuButton_outline: '2px solid transparent',
   button_outline: 'none',
-  button_color: '#e6e6e6',
+  button_color: '#edf6fe',
   indicator_color: '#3d3d3d',
   icon_color: '#000',
   waveform_filter: 'invert(0%)',
@@ -34,13 +34,13 @@ export const lightMode: Theme = {
   subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
   subtitle_segment_border: '1px solid #363636',
   subtitle_segment_text: '#fff',
-  clock_bg: '#e6e6e6',
+  clock_bg: '#edf6fe',
   clock_border: '2px solid transparent',
   clock_hands: '#a1a1a1',
   clock_focus: '#000',
   digit_selected: '#000',
-  text_shadow: '2px 0 #e6e6e6, -2px 0 #e6e6e6, 0 2px #e6e6e6, 0 -2px #e6e6e6,' +
-               '1px 1px #e6e6e6, -1px -1px #e6e6e6, 1px -1px #e6e6e6, -1px 1px #e6e6e6',
+  text_shadow: '2px 0 #edf6fe, -2px 0 #edf6fe, 0 2px #edf6fe, 0 -2px #edf6fe,' +
+               '1px 1px #edf6fe, -1px -1px #edf6fe, 1px -1px #edf6fe, -1px 1px #edf6fe',
 };
 
 export const darkMode: Theme = {

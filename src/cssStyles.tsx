@@ -75,7 +75,7 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
  * CSS for buttons
  */
 export const basicButtonStyle = (theme: Theme) => css({
-  borderRadius: '10px',
+  borderRadius: '5px',
   cursor: "pointer",
   // Animation
   transitionDuration: "0.3s",

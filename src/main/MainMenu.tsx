@@ -32,7 +32,7 @@ const MainMenu: React.FC<{}> = () => {
 
   const mainMenuStyle = css({
     borderRight: `${theme.menuBorder}`,
-    minWidth: '100px',
+    minWidth: '120px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -143,10 +143,12 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     ...(activeState === stateName) && {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
+      boxShadow: `${theme.boxShadow}`,
     },
     '&:hover': {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
+      boxShadow: `${theme.boxShadow}`,
     },
     flexDirection: 'column',
   });
@@ -158,10 +160,12 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     ...(activeState === stateName) && {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
+      boxShadow: `${theme.boxShadow}`,
     },
     '&:hover': {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.selected_text}`,
+      boxShadow: `${theme.boxShadow}`,
     },
     flexDirection: 'column',
   });
