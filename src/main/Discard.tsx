@@ -14,7 +14,6 @@ import { setEnd } from '../redux/endSlice'
 
 import { PageButton } from './Finish'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
 

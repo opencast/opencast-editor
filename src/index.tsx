@@ -12,6 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { GlobalHotKeys } from 'react-hotkeys';
 
+import './i18n/config';
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the

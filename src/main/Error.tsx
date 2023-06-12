@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice'
 import { flexGapReplacementStyle } from "../cssStyles";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 
 /**
