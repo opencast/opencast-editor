@@ -27,7 +27,7 @@ const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({nam
 
   return (
     <div css={groupStyle}>
-      <h3 css={headingStyle}>{t(name)}</h3>
+      <h3 css={headingStyle}>{t(name) as TFuncKey}</h3>
       {entries.map((entry: KeyMapDisplayOptions, index: number) => (
         <Entry params={entry} key={index}></Entry>
       ))}
