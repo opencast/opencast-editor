@@ -181,11 +181,10 @@ const VideoSelectDropdown : React.FC<{
   }
 
   // Data to populate the dropdown with
-  const data: {label: string, value: string}[] = []
-  for (let flavor of flavors) {
-    // We have to deconstruct the flavor object for the value as well and put it back together
-    data.push({label: getFlavorLabel(flavor), value: stringifyFlavor(flavor)})
-  }
+  const data = flavors.map(flavor => ({
+    label: getFlavorLabel(flavor),
+    value: stringifyFlavor(flavor),
+  }));
 
   const subtitleAddFormStyle = css({
     width: '100%',
@@ -193,7 +192,7 @@ const VideoSelectDropdown : React.FC<{
 
   return (
     <>
-      <div>{t("subtitleVideoArea.selectVideoLabel") ?? undefined}</div>
+      <div>{t("subtitleVideoArea.selectVideoLabel")}</div>
       <Select
         name={dropdownName}
         styles={selectFieldStyle(theme)}
@@ -203,9 +202,9 @@ const VideoSelectDropdown : React.FC<{
         onChange={
           (newValue) => {
             if (newValue) {
-              console.log(newValue)
               // Put flavor back together
-              const newFlavor: Flavor = {type: newValue.value.split("/")[0], subtype: newValue.value.split("/")[1]}
+              const [type, subtype] = newValue.value.split("/")
+              const newFlavor: Flavor = { type, subtype }
               changeFlavorcallback(newFlavor)
             }
           }

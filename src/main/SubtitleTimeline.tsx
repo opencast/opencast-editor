@@ -105,7 +105,7 @@ import { useTranslation } from "react-i18next";
         }}
       />
       {/* Scrollable timeline container. Has width of parent*/}
-      <ScrollContainer innerRef={refTop}  css={{overflow: 'hidden', width: '100%', height: '215px'}}
+      <ScrollContainer innerRef={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
         vertical={false}
         horizontal={true}
         onEndScroll={onEndScroll}
