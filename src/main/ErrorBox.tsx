@@ -24,7 +24,7 @@ import { selectTheme } from "../redux/themeSlice";
       case 500:
         return t("various.error-500")
       default:
-        return t("various.error-unknow-code", { code: status } )
+        return t("various.error-unknown-code", { code: status } )
     }
   }
 
