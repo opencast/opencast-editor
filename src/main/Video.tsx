@@ -61,7 +61,7 @@ const Video: React.FC<{}> = () => {
       }
     } else if (videoURLStatus === 'success') {
       if (duration === null) {
-        dispatch(setError({error: true, errorMessage: t("durationError-text"), errorDetails: error}))
+        dispatch(setError({error: true, errorMessage: t("video.durationError-text"), errorDetails: error}))
       }
     }
   }, [videoURLStatus, dispatch, error, t, errorReason, duration])
