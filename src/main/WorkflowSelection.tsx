@@ -181,23 +181,21 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   );
 }
 
-const WorkflowSelectRadio: React.FC = () => {
+const WorkflowSelectRadio: React.FC = (props) => {
 
   const style = css({
-    root: {
-      alignSelf: 'start',
-      color: 'grey',
-      "&$checked": {
-        color: 'grey'
-      }
-    },
+    alignSelf: 'start',
+    color: 'grey',
+    "&$checked": {
+      color: 'grey'
+    }
   })
 
   return (
     <Radio
       color="default"
       css={style}
-      checked={false}
+      {...props}
     />
   )
 }
