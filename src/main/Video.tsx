@@ -55,13 +55,13 @@ const Video: React.FC<{}> = () => {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
       if (errorReason === 'workflowActive') {
-        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorDetails: undefined, errorIcon: faGears}))
+        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorIcon: faGears}))
       } else {
-        dispatch(setError({error: true, errorTitle: undefined, errorMessage: t("video.comError-text"), errorDetails: error, errorIcon: undefined}))
+        dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
       }
     } else if (videoURLStatus === 'success') {
-      if (!duration) {
-        dispatch(setError({error: true, errorTitle: undefined, errorMessage: t("durationError-text"), errorDetails: error, errorIcon: undefined}))
+      if (duration === null) {
+        dispatch(setError({error: true, errorMessage: t("durationError-text"), errorDetails: error}))
       }
     }
   }, [videoURLStatus, dispatch, error, t, errorReason, duration])

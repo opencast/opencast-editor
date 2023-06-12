@@ -22,7 +22,7 @@ export interface video {
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
-  duration: number,     // Video duration in milliseconds
+  duration: number | null,     // Video duration in milliseconds. Can be null due to Opencast internal error
   title: string,
   presenters: string[],
   workflows: Workflow[],
