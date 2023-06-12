@@ -70,13 +70,13 @@ const WorkflowSelection : React.FC<{}> = () => {
   };
 
   // Layout template
-  const render = (topTitle: string, topText: {} | null | undefined, hasWorkflowButtons: boolean,
+  const render = (topTitle: string, topText: JSX.Element | null | undefined, hasWorkflowButtons: boolean,
     nextButton: EmotionJSX.Element, errorStatus: httpRequestState["status"],
     errorMessage: httpRequestState["error"]) => {
     return (
       <div css={workflowSelectionStyle}>
         <h2>{topTitle}</h2>
-        {!!topText}
+        {topText}
         { hasWorkflowButtons &&
             <RadioGroup
               css={workflowSelectionSelectionStyle}
