@@ -70,7 +70,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   };
 
   // Layout template
-  const render = (topTitle: string, topText: JSX.Element | null | undefined, hasWorkflowButtons: boolean,
+  const render = (topTitle: string, topText: JSX.Element, hasWorkflowButtons: boolean,
     nextButton: EmotionJSX.Element, errorStatus: httpRequestState["status"],
     errorMessage: httpRequestState["error"]) => {
     return (
