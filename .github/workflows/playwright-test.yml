@@ -40,6 +40,14 @@ jobs:
     - name: Prepare mock files
       run: cp -r .github/mock/editor public/
 
+    - name: Build editor
+      run: |
+        npm run build
+        cp public/editor-settings.toml build/
+
+    - name: Use production build for testing
+      run: sed -i 's/npm run start/python -m http.server --bind 127.0.0.1 --directory build 3000/' playwright.config.ts
+
     - name: Run playwright-test
       run: npx playwright test --config=playwright.config.ts
 

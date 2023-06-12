@@ -6,6 +6,8 @@ import TheEnd from './TheEnd';
 import Error from './Error';
 import Landing from "./Landing";
 
+import { css } from '@emotion/react'
+
 import { useSelector } from 'react-redux';
 import { selectIsEnd } from '../redux/endSlice'
 import { selectIsError } from "../redux/errorSlice";
@@ -42,11 +44,11 @@ const Body: React.FC<{}> = () => {
     }
   }
 
-  const bodyStyle = {
+  const bodyStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
-    height: '100%',
-  };
+    flexDirection: 'row',
+    height: 'calc(100% - 48px)',
+  });
 
   return (
     <React.Fragment>

@@ -1,7 +1,7 @@
 import reducer, { initialState, setIsPlaying, selectIsPlaying, setCurrentlyAt,
   selectCurrentlyAt, selectActiveSegmentIndex, selectPreviewTriggered,
   selectDuration, video, cut, selectSegments, markAsDeletedOrAlive, mergeRight,
-  fetchVideoInformation, selectVideoURL, selectTitle, selectPresenters,
+  fetchVideoInformation, selectVideoURL, selectTitle,
   selectTracks, selectWorkflows } from '../videoSlice'
 import cloneDeep from 'lodash/cloneDeep';
 import { httpRequestState } from '../../types';
@@ -133,8 +133,8 @@ describe('Video reducer', () => {
 
     // Assert
     const rootState = { videoState: nextState };
-    expect(selectCurrentlyAt(rootState)).toEqual(20);
-    expect(selectActiveSegmentIndex(rootState)).toEqual(1);
+    expect(selectCurrentlyAt(rootState)).toEqual(21);
+    expect(selectActiveSegmentIndex(rootState)).toEqual(2);
     expect(selectPreviewTriggered(rootState)).toEqual(true);
   })
 
@@ -334,7 +334,6 @@ describe('Video reducer', () => {
     expect(selectVideoURL(rootState)).toMatchObject(videoURLs);
     expect(selectDuration(rootState)).toEqual(dur);
     expect(selectTitle(rootState)).toEqual(title);
-    expect(selectPresenters(rootState)).toEqual([]);
     expect(selectTracks(rootState)).toMatchObject(tracks);
     expect(selectWorkflows(rootState)).toMatchObject(workflows);
   })

@@ -14,7 +14,6 @@ import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../
 import { PageButton } from './Finish'
 import { setEnd } from "../redux/endSlice";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
 import { AppDispatch } from "../redux/store";
@@ -56,11 +55,11 @@ const WorkflowConfiguration : React.FC<{}> = () => {
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
+        {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-text")}<br/>
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
+        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-text")}<br />
       </div>
     </div>
   );

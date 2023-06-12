@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import { selectEndState } from '../redux/endSlice'
 import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";

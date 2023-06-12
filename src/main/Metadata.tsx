@@ -20,17 +20,14 @@ import {
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
 
-import './../i18n/config';
-import i18next from "./../i18n/config";
 import { useTranslation } from 'react-i18next';
 import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemeProvider } from "@mui/material/styles";
+import { TFuncKey } from "i18next";
 
 /**
  * Creates a Metadata form
@@ -362,7 +359,8 @@ const Metadata: React.FC<{}> = () => {
       if (catalogs[catalogIndex].fields[fieldIndex].id === fieldName) {
         // Update the field in the redux catalog
         dispatch(setFieldValue({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
-          value: parseValue(catalogs[catalogIndex].fields[fieldIndex], value)}))
+          value: parseValue(catalogs[catalogIndex].fields[fieldIndex], value)
+        }))
         break
       }
     }
@@ -441,7 +439,8 @@ const Metadata: React.FC<{}> = () => {
           if (catalogs[catalogIndex].fields[fieldIndex].id === formFieldName) {
             // Update the field in the redux catalog
             dispatch(setFieldValue({catalogIndex: catalogIndex, fieldIndex: fieldIndex,
-              value: parseValue(catalogs[catalogIndex].fields[fieldIndex], values[formCatalogName][formFieldName])}))
+              value: parseValue(catalogs[catalogIndex].fields[fieldIndex], values[formCatalogName][formFieldName])
+            }))
             break
           }
         }
@@ -475,10 +474,10 @@ const Metadata: React.FC<{}> = () => {
         // Parse Label
         let descLabel = null
         if (i18n.exists(`metadata.${field.id}`)) {
-          descLabel = t(`metadata.${field.id}.${key.replaceAll(".", "-")}`)
+          descLabel = t(`metadata.${field.id}.${key.replaceAll(".", "-")}` as TFuncKey)
 
           if (field.id === "license") {
-            descLabel = t(`metadata.${field.id}.${JSON.parse(key).label.replaceAll(".", "-")}`)
+            descLabel = t(`metadata.${field.id}.${JSON.parse(key).label.replaceAll(".", "-")}` as TFuncKey)
           }
         }
 
@@ -540,7 +539,6 @@ const Metadata: React.FC<{}> = () => {
     } else if (field.type === "date") {
       return (
         <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ThemeProvider theme={calendarStyle(theme)}>
               <DateTimePicker {...input}
                 name={field.id}
@@ -552,11 +550,10 @@ const Metadata: React.FC<{}> = () => {
                   onBlur: (e: any) => {blurWithSubmit(e, input)},
                   showError: showErrorOnBlur
                 }}
-                leftArrowButtonText={i18next.t('metadata.calendar-prev')}
-                rightArrowButtonText={i18next.t('metadata.calendar-next')}
+                leftArrowButtonText={t('metadata.calendar-prev')}
+                rightArrowButtonText={t('metadata.calendar-next')}
               />
             </ThemeProvider>
-          </LocalizationProvider>
         </div>
       );
     } else if (field.type === "time") {
@@ -629,7 +626,7 @@ const Metadata: React.FC<{}> = () => {
                   <div css={fieldStyle} data-testid={field.id}>
                     <label css={fieldLabelStyle} htmlFor={input.name}>{
                       i18n.exists(`metadata.labels.${field.id}`) ?
-                      t(`metadata.labels.${field.id}`) : field.id
+                      t(`metadata.labels.${field.id}` as TFuncKey) : field.id
                     }</label>
 
                     {generateComponentWithModifiedInput(field, input)}
@@ -649,7 +646,7 @@ const Metadata: React.FC<{}> = () => {
       <div key={catalogIndex}>
         <h2>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
-            t(`metadata.${catalog.title.replaceAll(".", "-")}`) : catalog.title
+            t(`metadata.${catalog.title.replaceAll(".", "-")}` as TFuncKey) : catalog.title
           }
         </h2>
 

@@ -173,7 +173,7 @@ export const titleStyle = css(({
   overflow: 'hidden',
   whiteSpace: "nowrap",
   textOverflow: 'ellipsis',
-  maxWidth: '500px',
+  maxWidth: '100%',
 }))
 
 /**
@@ -386,7 +386,7 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
     MuiSelect: {
       styleOverrides: {
         select: {
-          background: `${theme.background}`,
+          background: `${theme.element_bg}`,
           color: `${theme.text} !important`,
         },
         icon: {

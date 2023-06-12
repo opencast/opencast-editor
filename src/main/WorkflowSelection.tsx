@@ -16,10 +16,10 @@ import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
-import { FormControlLabel, Radio, RadioGroup, withStyles } from "@material-ui/core";
+import { withStyles } from "@mui/styles";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { selectTheme } from "../redux/themeSlice";
 
 /**
@@ -97,7 +97,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         </div>
         <div css={errorBoxStyle(errorStatus === "failed", theme)} role="alert">
           <span>{t("various.error-text")}</span><br />
-          {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
+          {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-text")}<br/>
         </div>
       </div>
     );
@@ -110,8 +110,8 @@ const WorkflowSelection : React.FC<{}> = () => {
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.noWorkflows-text">
-            A problem occurred, there are no workflows to process your changes with.<br />
-            Please save your changes and contact an Opencast Administrator.
+            There are no workflows to process your changes with.<br />
+            Please save your changes and contact an administrator.
           </Trans>,
           false,
           <SaveButton />,

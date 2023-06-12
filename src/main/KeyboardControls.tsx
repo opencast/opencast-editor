@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { TFuncKey } from "i18next";
 import React from "react";
 
 import { KeyMapDisplayOptions } from 'react-hotkeys';
@@ -7,16 +8,16 @@ import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { getAllHotkeys } from "../globalKeys";
 import { selectTheme } from "../redux/themeSlice";
-import i18next from "./../i18n/config";
 
-const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
+const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
+  const { t } = useTranslation();
   const theme = useSelector(selectTheme);
 
   const groupStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
-    width: '420px',
+    width: '460px',
     maxWidth: '50vw',
   });
 
@@ -26,7 +27,7 @@ const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name,
 
   return (
     <div css={groupStyle}>
-      <h3 css={headingStyle}>{i18next.t(name)}</h3>
+      <h3 css={headingStyle}>{t(name)}</h3>
       {entries.map((entry: KeyMapDisplayOptions, index: number) => (
         <Entry params={entry} key={index}></Entry>
       ))}
@@ -92,7 +93,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
           {sequence.sequence.toString().split('+').map((singleKey, index) => (
             <div css={singleKeyStyle} key={index}>{singleKey}</div>
           ))}
-          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeperator")}</Trans></div>
+          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
         </div>
       ))}
     </div>
@@ -117,7 +118,7 @@ const KeyboardControls: React.FC<{}> = () => {
   const render = () => {
     if (keyMap && Object.keys(keyMap).length > 0) {
 
-      var obj: Record<string,Array<KeyMapDisplayOptions>> = {}
+      var obj: Record<string, Array<KeyMapDisplayOptions>> = {}
       obj[t("keyboardControls.defaultGroupName")] = []    // For keys without a group
 
       // Sort by group
@@ -136,7 +137,7 @@ const KeyboardControls: React.FC<{}> = () => {
       const groups: JSX.Element[] = [];
       for (const key in obj) {
         if (obj[key].length > 0) {
-          groups.push(<Group name={key} entries={obj[key]} key={key}/>);
+          groups.push(<Group name={key as TFuncKey} entries={obj[key]} key={key}/>);
         }
       }
 

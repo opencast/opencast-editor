@@ -20,7 +20,6 @@ import { convertMsToReadableString } from '../util/utilityFunctions';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { scrubberKeyMap } from '../globalKeys';
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
@@ -35,13 +34,15 @@ import { ThemedTooltip } from './Tooltip';
  */
 const Timeline: React.FC<{
   timelineHeight?: number,
+  styleByActiveSegment?: boolean,
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying:(state: RootState) => boolean,
   setClickTriggered: ActionCreatorWithPayload<any, string>,
   setCurrentlyAt: ActionCreatorWithPayload<number, string>,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
-  timelineHeight = 250,
+  timelineHeight = 200,
+  styleByActiveSegment = true,
   selectCurrentlyAt,
   selectIsPlaying,
   setClickTriggered,
@@ -81,7 +82,7 @@ const Timeline: React.FC<{
     />
     <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
       <Waveforms timelineHeight={timelineHeight}/>
-      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={true} tabable={true}/>
+      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
     </div>
   </div>
   );
@@ -283,8 +284,8 @@ export const Scrubber: React.FC<{
 export const SegmentsList: React.FC<{
   timelineWidth: number,
   timelineHeight: number,
-  styleByActiveSegment: boolean,
-  tabable: boolean,
+  styleByActiveSegment?: boolean,
+  tabable?: boolean,
 }> = ({
   timelineWidth,
   timelineHeight,
@@ -329,8 +330,8 @@ export const SegmentsList: React.FC<{
   const renderedSegments = () => {
     return (
       segments.map( (segment: Segment, index: number) => (
-        <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})}>
-          <div key={segment.id}
+        <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})} key={segment.id}>
+          <div
             aria-label={t("timeline.segments-text-aria",
                       {segment: index,
                         segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
