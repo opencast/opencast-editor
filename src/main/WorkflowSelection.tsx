@@ -8,7 +8,7 @@ import { selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice'
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
 import { PageButton } from './Finish'
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { FiChevronLeft } from "react-icons/fi";
 import { SaveAndProcessButton } from "./WorkflowConfiguration";
 import { selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
 import { selectStatus as saveSelectStatus, selectError as saveSelectError } from "../redux/workflowPostSlice";
@@ -91,7 +91,7 @@ const WorkflowSelection : React.FC<{}> = () => {
             </RadioGroup>
         }
         <div css={backOrContinueStyle}>
-          <PageButton pageNumber={0} label={t("workflowSelection.back-button")} iconName={faChevronLeft}/>
+          <PageButton pageNumber={0} label={t("workflowSelection.back-button")} Icon={FiChevronLeft}/>
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>

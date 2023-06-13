@@ -1,11 +1,9 @@
 import React from "react";
 import { css } from '@emotion/react'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faInfoCircle,
-  faTrash,
-  faTrashRestore,
-} from "@fortawesome/free-solid-svg-icons";
+
+import { IconType } from "react-icons";
+import { FiInfo } from "react-icons/fi";
+import { FaTrash, FaTrashRestore } from "react-icons/fa";
 import ReactPlayer from 'react-player'
 
 import { Track }  from '../types'
@@ -54,7 +52,7 @@ const Description: React.FC<{}> = () => {
 
   return (
     <aside css={ descriptionStyle }>
-      <FontAwesomeIcon css={{margin: '10px'}} icon={faInfoCircle} size="2x" />
+      <FiInfo css={{margin: '10px', fontSize: 32}} />
       { description }
     </aside>
   );
@@ -115,7 +113,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
     t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
     ][deleteStatus];
-  const deleteIcon = [faTrash, faTrash, faTrashRestore][deleteStatus];
+  const deleteIcon = [FaTrash, FaTrash, FaTrashRestore][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
       id: track.id,
@@ -133,7 +131,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
         text={ deleteText }
         tooltip={ deleteTooltip }
         handler={ trackEnabledChange }
-        icon={ deleteIcon }
+        Icon={ deleteIcon }
         active={ deleteEnabled } />
     </div>
   );
@@ -142,15 +140,15 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
 interface selectButtonInterface {
   handler: any,
   text: string,
-  icon: any,
+  Icon: IconType,
   tooltip: string,
   active: boolean,
 }
 
-const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, tooltip, active}) => {
+const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, tooltip, active}) => {
 
   const theme = useSelector(selectTheme);
-  
+
   const buttonStyle = [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
@@ -179,7 +177,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, to
           aria-label={ tooltip }
           onClick={ clickHandler }
           onKeyDown={ keyHandler } >
-        <FontAwesomeIcon icon={ icon } size="1x" />
+        <Icon />
         <div>{ text }</div>
       </div>
     </ThemedTooltip>

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
+import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle, spinningStyle } from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTools} from "@fortawesome/free-solid-svg-icons";
-import { faSpinner, faCheck, faExclamationCircle, faChevronLeft, faFileExport } from "@fortawesome/free-solid-svg-icons";
+import { FiLoader, FiCheck, FiAlertCircle, FiChevronLeft, FiDatabase, FiMoreHorizontal} from "react-icons/fi";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectSelectedWorkflowId } from '../redux/videoSlice'
@@ -46,11 +44,11 @@ const WorkflowConfiguration : React.FC<{}> = () => {
   return (
     <div css={workflowConfigurationStyle}>
       <h2>{t("workflowConfig.headline-text")}</h2>
-      <FontAwesomeIcon icon={faTools} size="10x" />
+      <FiMoreHorizontal css={{fontSize: 80}} />
       Placeholder
       <div>{t("workflowConfig.satisfied-text")}</div>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={1} label={t("various.goBack-button")} iconName={faChevronLeft}/>
+        <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={FiChevronLeft}/>
         <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
@@ -126,16 +124,16 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   }, [metadataStatus])
 
   // Update based on current fetching status
-  let icon = faFileExport
+  let Icon = FiDatabase
   let spin = false
   if (workflowStatus === 'failed' || metadataStatus === 'failed') {
-    icon = faExclamationCircle
+    Icon = FiAlertCircle
     spin = false
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
-    icon = faCheck
+    Icon = FiCheck
     spin = false
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
-    icon = faSpinner
+    Icon = FiLoader
     spin = true
 
   }
@@ -153,7 +151,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         saveAndProcess()
       }}}>
-      <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
+      <Icon css={spin ? spinningStyle : undefined}/>
       <span>{text}</span>
     </div>
   );

@@ -1,6 +1,7 @@
 import { css, SerializedStyles } from "@emotion/react"
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { IconType } from "react-icons";
+import { FiPlus} from "react-icons/fi";
+import { FaTrash} from "react-icons/fa";
 import { memoize } from "lodash"
 import React, { useRef } from "react"
 import { useEffect, useState } from "react"
@@ -30,7 +31,6 @@ import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
 import { selectTheme, selectThemeState } from "../redux/themeSlice"
 import { ThemedTooltip } from "./Tooltip"
-import { IconProp } from "@fortawesome/fontawesome-svg-core"
 
 /**
  * Displays everything needed to edit subtitles
@@ -418,7 +418,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueAbove()
             }}}
-            icon={faPlus}
+            Icon={FiPlus}
           />
           <FunctionButton
             tooltip={t("subtitleList.deleteSegment")}
@@ -429,7 +429,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               deleteCue()
             }}}
-            icon={faTrash}
+            Icon={FaTrash}
           />
           <FunctionButton
             tooltip={t("subtitleList.addSegmentBelow")}
@@ -440,7 +440,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueBelow()
             }}}
-            icon={faPlus}
+            Icon={FiPlus}
           />
         </div>
       </div>
@@ -453,13 +453,13 @@ const FunctionButton : React.FC<{
   tooltipAria: string,
   onClick: any,
   onKeyDown: any,
-  icon: IconProp
+  Icon: IconType
 }> = ({
   tooltip,
   tooltipAria,
   onClick,
   onKeyDown,
-  icon
+  Icon
 }) => {
 
   const theme = useSelector(selectTheme)
@@ -475,13 +475,13 @@ const FunctionButton : React.FC<{
   return (
     <ThemedTooltip title={tooltip}>
       <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
-        role="button" 
+        role="button"
         tabIndex={0}
         arial-label={tooltipAria}
         onClick={onClick}
         onKeyDown={onKeyDown}
       >
-        <FontAwesomeIcon icon={icon} size="1x" />
+        <Icon />
       </div>
     </ThemedTooltip>
   )

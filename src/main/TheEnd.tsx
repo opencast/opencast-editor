@@ -2,8 +2,7 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { FiCheckCircle, FiXCircle} from "react-icons/fi";
 
 import { useSelector } from 'react-redux';
 import { selectEndState } from '../redux/endSlice'
@@ -23,14 +22,6 @@ const TheEnd : React.FC<{}> = () => {
 
   // Init redux variables
   const endState = useSelector(selectEndState)
-
-  const icon = () => {
-    if (endState === 'discarded') {
-      return faTimesCircle
-    } else {
-      return faCheckCircle
-    }
-  }
 
   const text = () => {
     if (endState === 'discarded') {
@@ -52,7 +43,7 @@ const TheEnd : React.FC<{}> = () => {
 
   return (
     <div css={theEndStyle}>
-      <FontAwesomeIcon icon={icon()} size="10x" />
+      {endState === 'discarded' ? <FiXCircle css={{fontSize: 80}}/> : <FiCheckCircle css={{fontSize: 80}}/> }
       <div>{text()}</div>
       {(endState === 'discarded') && <StartOverButton />}
     </div>
@@ -77,7 +68,6 @@ const StartOverButton: React.FC<{}> = () => {
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           reloadPage()
         }}}>
-        {/* <FontAwesomeIcon icon={icon} spin={spin} size="1x"/> */}
         <span>{t("theEnd.startOver-button")}</span>
       </div>
     </ThemedTooltip>

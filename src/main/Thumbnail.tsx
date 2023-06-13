@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCamera, faCopy, faInfoCircle, faTimesCircle, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconType } from "react-icons";
+import { FiCamera, FiCopy, FiInfo, FiXCircle, FiUpload} from "react-icons/fi";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -317,7 +316,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonGenerate')}
         tooltipText={t('thumbnail.buttonGenerate-tooltip')}
         ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
-        icon={faCamera}
+        Icon={FiCamera}
         active={true}
       />
       <ThumbnailButton
@@ -325,7 +324,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
-        icon={faUpload}
+        Icon={FiUpload}
         active={true}
       />
       {/* Hidden input field for upload */}
@@ -344,7 +343,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonUseForOtherThumbnails')}
         tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
         ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
-        icon={faCopy}
+        Icon={FiCopy}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
       />
       <ThumbnailButton
@@ -352,7 +351,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
-        icon={faTimesCircle}
+        Icon={FiXCircle}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
       />
     </div>
@@ -364,9 +363,9 @@ const ThumbnailButton : React.FC<{
   text: string
   tooltipText: string,
   ariaLabel: string,
-  icon: IconProp,
+  Icon: IconType,
   active: boolean,
-}> = ({handler, text, tooltipText, ariaLabel, icon, active}) => {
+}> = ({handler, text, tooltipText, ariaLabel, Icon, active}) => {
   const theme = useSelector(selectTheme);
   const ref = React.useRef<HTMLDivElement>(null)
 
@@ -389,7 +388,7 @@ const ThumbnailButton : React.FC<{
         onClick={clickHandler}
         onKeyDown={keyHandler}
       >
-        <FontAwesomeIcon icon={icon}/>
+        <Icon />
         {text}
       </div>
     </ThemedTooltip>
@@ -435,7 +434,7 @@ const AffectAllRow : React.FC<{
 
   return (
     <div css={rowStyle}>
-      <FontAwesomeIcon icon={faInfoCircle} size="2x" />
+      <FiInfo css={{fontSize: 32}} />
       {t('thumbnail.explanation')}
       <ThemedTooltip title={t('thumbnail.buttonGenerateAll-tooltip')}>
         <div css={[basicButtonStyle(theme), buttonStyle]}
@@ -447,7 +446,7 @@ const AffectAllRow : React.FC<{
             generateAll()
           }}}
         >
-          <FontAwesomeIcon icon={faCamera}/>
+          <FiCamera />
           {t('thumbnail.buttonGenerateAll')}
         </div>
       </ThemedTooltip>
@@ -519,7 +518,7 @@ const ThumbnailButtonsSimple : React.FC<{
           text={t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
           tooltipText={t('thumbnail.buttonGenerate-tooltip')}
           ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
-          icon={faCamera}
+          Icon={FiCamera}
           active={true}
           key={generateIndex}
         />
@@ -529,7 +528,7 @@ const ThumbnailButtonsSimple : React.FC<{
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
-        icon={faUpload}
+        Icon={FiUpload}
         active={true}
       />
       {/* Hidden input field for upload */}
@@ -548,7 +547,7 @@ const ThumbnailButtonsSimple : React.FC<{
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
-        icon={faTimesCircle}
+        Icon={FiXCircle}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
       />
     </div>

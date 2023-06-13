@@ -3,10 +3,8 @@ import React from "react";
 import { css } from '@emotion/react'
 import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSave, faFileExport, faTimesCircle, IconDefinition
-} from "@fortawesome/free-solid-svg-icons";
+import { IconType } from "react-icons";
+import { FiSave, FiDatabase, FiXCircle } from "react-icons/fi";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
@@ -29,9 +27,9 @@ const FinishMenu : React.FC<{}> = () => {
 
   return (
     <div css={finishMenuStyle}>
-        <FinishMenuButton iconName={faSave} stateName="Save changes"/>
-        <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
-        <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
+        <FinishMenuButton Icon={FiSave} stateName="Save changes"/>
+        <FinishMenuButton Icon={FiDatabase} stateName="Start processing"/>
+        <FinishMenuButton Icon={FiXCircle} stateName="Discard changes"/>
     </div>
   );
 }
@@ -39,7 +37,7 @@ const FinishMenu : React.FC<{}> = () => {
 /**
  * Buttons for the finish menu
  */
-const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["value"]}> = ({iconName, stateName}) => {
+const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> = ({Icon, stateName}) => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
@@ -68,12 +66,12 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
 
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-    role="button" tabIndex={0}
+      role="button" tabIndex={0}
       onClick={ finish }
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         finish()
       }}}>
-      <FontAwesomeIcon  icon={iconName} size="2x"/>
+      <Icon css={{fontSize: 42}}/>
       <div style={{padding: '0px 20px'}}>{buttonString}</div>
     </div>
   );

@@ -2,8 +2,7 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFrown } from "@fortawesome/free-solid-svg-icons";
+import { FiFrown } from "react-icons/fi";
 
 import { useSelector } from 'react-redux';
 import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice'
@@ -23,7 +22,7 @@ import { useTranslation } from 'react-i18next';
   const errorTitle = useSelector(selectErrorTitle)
   const errorMessage = useSelector(selectErrorMessage)
   const errorDetails = useSelector(selectErrorDetails)
-  const errorIcon = useSelector(selectErrorIcon)
+  const ErrorIcon = useSelector(selectErrorIcon)
 
   const detailsStyle = css({
     display: 'flex',
@@ -43,7 +42,7 @@ import { useTranslation } from 'react-i18next';
   return (
     <div css={theEndStyle} >
       <div>{errorTitle ? errorTitle : t("error.generic-message")}</div>
-      <FontAwesomeIcon icon={errorIcon ? errorIcon : faFrown} size="10x" />
+      {ErrorIcon ? <ErrorIcon css={{ fontSize: 80 }}/> : <FiFrown css={{ fontSize: 80 }}/>}
       <span>{errorMessage}</span><br />
       {errorDetails &&
         <div css={detailsStyle}>

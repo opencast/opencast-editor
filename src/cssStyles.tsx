@@ -1,7 +1,7 @@
 /**
  * This file contains general css stylings
  */
-import { css, Global } from '@emotion/react'
+import { css, Global, keyframes } from '@emotion/react'
 import React from "react";
 import emotionNormalize from 'emotion-normalize';
 import { checkFlexGapSupport } from './util/utilityFunctions';
@@ -146,7 +146,6 @@ export const backOrContinueStyle = css(({
   ...(flexGapReplacementStyle(30, false)),
   boxShadow: `${theme.boxShadow}`,
   background: `${theme.element_bg}`,
-  alignItems: 'unset',  // overwrite from basicButtonStyle to allow for textOverflow to work
   placeSelf: 'center',
 });
 
@@ -424,4 +423,11 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
       }
     }
   }
+})
+
+export const spinningStyle = css({
+  animation: `2s linear infinite none ${keyframes({
+    "0%": { transform: "rotate(0)" },
+    "100%": { transform: "rotate(360deg)" },
+})}`,
 })

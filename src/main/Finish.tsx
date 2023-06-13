@@ -9,10 +9,7 @@ import WorkflowConfiguration from "./WorkflowConfiguration";
 import { css } from '@emotion/react'
 import { basicButtonStyle } from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  IconDefinition
-} from "@fortawesome/free-solid-svg-icons";
+import { IconType } from "react-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPageNumber, setPageNumber } from '../redux/finishSlice';
@@ -57,7 +54,7 @@ const Finish : React.FC<{}> = () => {
 /**
  * Takes you to a different page
  */
-export const PageButton : React.FC<{pageNumber: number, label: string, iconName: IconDefinition}> = ({pageNumber, label, iconName}) => {
+export const PageButton : React.FC<{pageNumber: number, label: string, Icon: IconType}> = ({pageNumber, label, Icon}) => {
 
   const theme = useSelector(selectTheme);
   
@@ -83,7 +80,7 @@ export const PageButton : React.FC<{pageNumber: number, label: string, iconName:
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         onPageChange()
       }}}>
-      <FontAwesomeIcon icon={iconName} size="1x" />
+      <Icon />
       <span>{label}</span>
     </div>
   );

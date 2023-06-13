@@ -2,15 +2,9 @@ import React, { SyntheticEvent } from "react";
 
 import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCut,
-  faStepBackward,
-  faStepForward,
-  faTrash,
-  faTrashRestore,
-  } from "@fortawesome/free-solid-svg-icons";
+import { IconType } from "react-icons";
+import { FiScissors, FiChevronLeft, FiChevronRight} from "react-icons/fi";
+import { FaTrash, FaTrashRestore, } from "react-icons/fa";
 
 import { css } from '@emotion/react'
 
@@ -78,7 +72,7 @@ const CuttingActions: React.FC<{}> = () => {
     <GlobalHotKeys keyMap={cuttingKeyMap} handlers={handlers} allowChanges={true} >
       <div css={cuttingStyle}>
           <div css={blockStyle}>
-            <CuttingActionsButton iconName={faCut}
+            <CuttingActionsButton Icon={FiScissors}
               actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut}
               tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
               ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
@@ -86,23 +80,23 @@ const CuttingActions: React.FC<{}> = () => {
             <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
               hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
             />
-            <CuttingActionsButton iconName={faStepBackward}
+            <CuttingActionsButton Icon={FiChevronLeft}
               actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
               tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
               ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
             />
-            <CuttingActionsButton iconName={faStepForward}
+            <CuttingActionsButton Icon={FiChevronRight}
               actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
               tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
               ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
             />
           </div>
           <div css={blockStyle}>
-            {/* <CuttingActionsButton iconName={faQuestion} actionName="Reset changes" action={null}
+            {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
               tooltip="Not implemented"
               ariaLabelText="Reset changes. Not implemented"
             />
-            <CuttingActionsButton iconName={faQuestion} actionName="Undo" action={null}
+            <CuttingActionsButton Icon={faQuestion} actionName="Undo" action={null}
               tooltip="Not implemented"
               ariaLabelText="Undo. Not implemented"
             /> */}
@@ -122,7 +116,7 @@ const cuttingActionButtonStyle = (theme: Theme) => css({
 });
 
 interface cuttingActionsButtonInterface {
-  iconName: IconProp,
+  Icon: IconType,
   actionName: string,
   actionHandler: (event: KeyboardEvent | SyntheticEvent, action: ActionCreatorWithoutPayload<string>, ref: React.RefObject<HTMLDivElement> | undefined) => void,
   action: ActionCreatorWithoutPayload<string>,
@@ -134,7 +128,7 @@ interface cuttingActionsButtonInterface {
  * A button representing a single action a user can take while cutting
  * @param param0
  */
-const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName, actionName, actionHandler, action, tooltip, ariaLabelText}) => {
+const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, actionName, actionHandler, action, tooltip, ariaLabelText}) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const theme = useSelector(selectTheme);
 
@@ -148,7 +142,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
           actionHandler(event, action, undefined)
         }}}
         >
-        <FontAwesomeIcon icon={iconName} size="1x" />
+        <Icon />
         <span>{actionName}</span>
       </div>
     </ThemedTooltip>
@@ -182,7 +176,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
           actionHandler(event, action, undefined)
         }}}
         >
-        <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
+        {isCurrentSegmentAlive ? <FaTrash /> : <FaTrashRestore />}
         <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>

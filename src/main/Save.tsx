@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
-  navigationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+  navigationButtonStyle, flexGapReplacementStyle, spinningStyle } from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave, faCheckCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { FiLoader, FiCheckCircle, FiAlertCircle, FiChevronLeft, FiSave, FiCheck} from "react-icons/fi";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
@@ -60,7 +57,7 @@ const Save : React.FC<{}> = () => {
       && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
       return(
         <>
-          <FontAwesomeIcon icon={faCheckCircle} size="10x" />
+          <FiCheckCircle css={{fontSize: 80}}/>
           <div>{t("save.success-text")}</div>
         </>
       )
@@ -72,7 +69,7 @@ const Save : React.FC<{}> = () => {
             {t("save.info-text")}
           </span>
           <div css={backOrContinueStyle}>
-            <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
+            <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={FiChevronLeft}/>
             <SaveButton />
           </div>
         </>
@@ -115,19 +112,19 @@ export const SaveButton: React.FC<{}> = () => {
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status
-  let icon = faSave
+  let Icon = FiSave
   let spin = false
   let tooltip = null
   if (workflowStatus === 'failed' || metadataStatus === 'failed'){
-    icon = faExclamationCircle
+    Icon = FiAlertCircle
     spin = false
     tooltip = t("save.confirmButton-failed-tooltip")
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
-    icon = faCheck
+    Icon = FiCheck
     spin = false
     tooltip = t("save.confirmButton-success-tooltip")
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading')  {
-    icon = faSpinner
+    Icon = FiLoader
     spin = true
     tooltip = t("save.confirmButton-attempting-tooltip")
   }
@@ -188,7 +185,7 @@ export const SaveButton: React.FC<{}> = () => {
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           save()
         }}}>
-        <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
+        <Icon css={spin ? spinningStyle : undefined}/>
         <span>{t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
       </div>

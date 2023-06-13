@@ -9,8 +9,7 @@ import Subtitle from "./Subtitle";
 import Finish from "./Finish"
 import KeyboardControls from "./KeyboardControls";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTools} from "@fortawesome/free-solid-svg-icons";
+import { FaTools } from "react-icons/fa";
 
 import { css } from '@emotion/react'
 
@@ -146,7 +145,7 @@ const MainContent: React.FC<{}> = () => {
         )
     } else {
       <div css={[mainContentStyle, defaultStyle]} role="main">
-        <FontAwesomeIcon icon={faTools} size="10x" />
+        <FaTools css={{fontSize: 80}} />
         Placeholder
       </div>
     }

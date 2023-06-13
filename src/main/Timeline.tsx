@@ -10,8 +10,7 @@ import {
   selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL,  selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FiMenu, FiLoader} from "react-icons/fi";
 
 import useResizeObserver from "use-resize-observer";
 
@@ -25,6 +24,7 @@ import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
 import { selectTheme } from '../redux/themeSlice';
 import { ThemedTooltip } from './Tooltip';
+import { spinningStyle } from '../cssStyles';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -270,7 +270,7 @@ export const Scrubber: React.FC<{
                           increase: scrubberKeyMap[handlers.increase.name],
                           decrease: scrubberKeyMap[handlers.decrease.name] })}
               tabIndex={0}>
-              <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
+              <FiMenu css={scrubberDragHandleIconStyle}/>
             </div>
           </div>
       </Draggable>
@@ -470,7 +470,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
     else {
       return (
         <>
-          <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
+          <FiLoader css={[spinningStyle, {fontSize: 40}]}/>
           <div>{t("timeline.generateWaveform-text")}</div>
         </>
       );

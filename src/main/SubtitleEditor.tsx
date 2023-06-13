@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FiChevronLeft} from "react-icons/fi";
 import {
   selectCaptionTrackByFlavor,
 } from '../redux/videoSlice'
@@ -152,7 +151,6 @@ import { ThemedTooltip } from "./Tooltip";
   const dispatch = useDispatch();
 
   const backButtonStyle = css({
-    width: '50px',
     height: '10px',
     padding: '16px',
     boxShadow: `${theme.boxShadow}`,
@@ -169,7 +167,7 @@ import { ThemedTooltip } from "./Tooltip";
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(false))
         }}}>
-        <FontAwesomeIcon icon={faChevronLeft} size="1x" />
+        <FiChevronLeft css={{fontSize: 24 }}/>
         <span>{t("subtitles.backButton")}</span>
       </div>
     </ThemedTooltip>

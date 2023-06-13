@@ -4,8 +4,8 @@ import { css } from '@emotion/react'
 
 import { httpRequestState } from '../types'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faToggleOn, faToggleOff, faGears} from "@fortawesome/free-solid-svg-icons";
+import { FaPlay, FaPause, FaToggleOn, FaToggleOff, } from "react-icons/fa";
+import { FiMoreHorizontal } from "react-icons/fi";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -55,7 +55,7 @@ export const Video: React.FC<{}> = () => {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
       if (errorReason === 'workflowActive') {
-        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorDetails: undefined, errorIcon: faGears}))
+        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorDetails: undefined, errorIcon: FiMoreHorizontal}))
       } else {
         dispatch(setError({error: true, errorTitle: undefined, errorMessage: t("video.comError-text"), errorDetails: error, errorIcon: undefined}))
       }
@@ -588,7 +588,7 @@ const PreviewMode: React.FC<{
         <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
         </div>
-        <FontAwesomeIcon css={switchIconStyle(theme)} icon={isPlayPreview ? faToggleOn : faToggleOff} size="1x"/>
+        {isPlayPreview ? <FaToggleOn css={switchIconStyle(theme)} /> : <FaToggleOff css={switchIconStyle(theme)} />}
       </div>
     </ThemedTooltip>
   );
@@ -626,15 +626,16 @@ const PlayButton: React.FC<{
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
-      <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
-      <FontAwesomeIcon css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]} icon={isPlaying ? faPause : faPlay} size="2x"
-        role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-        aria-label={t("video.playButton-tooltip")}
-        onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
-          switchIsPlaying(event)
-        }}}
-      />
+        <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
+        <div css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]}
+          role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
+          aria-label={t("video.playButton-tooltip")}
+          onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
+            switchIsPlaying(event)
+          }}}>
+          {isPlaying ? <FaPause css={{fontSize: 24}} /> : <FaPlay css={{fontSize: 24}} />}
+        </div>
       </div>
     </ThemedTooltip>
   );

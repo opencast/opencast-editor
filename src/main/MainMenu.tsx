@@ -2,9 +2,10 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faGear } from "@fortawesome/free-solid-svg-icons";
-import { faClosedCaptioning } from "@fortawesome/free-regular-svg-icons";
+import { IconType } from "react-icons";
+import { FiScissors, FiFilm, FiFileText, FiCheckSquare, FiSettings} from "react-icons/fi";
+import { FaPhotoVideo } from "react-icons/fa";
+import { MdOutlineSubtitles } from "react-icons/md";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
@@ -33,6 +34,7 @@ const MainMenu: React.FC<{}> = () => {
   const mainMenuStyle = css({
     borderRight: `${theme.menuBorder}`,
     minWidth: '120px',
+    maxWidth: '140px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -45,37 +47,37 @@ const MainMenu: React.FC<{}> = () => {
   return (
     <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton
-        iconName={faCut}
+        Icon={FiScissors}
         stateName={MainMenuStateNames.cutting}
         bottomText={t(MainMenuStateNames.cutting)}
         ariaLabelText={t(MainMenuStateNames.cutting)}
       />
       {settings.metadata.show && <MainMenuButton
-        iconName={faListUl}
+        Icon={FiFileText}
         stateName={MainMenuStateNames.metadata}
         bottomText={t(MainMenuStateNames.metadata)}
         ariaLabelText={t(MainMenuStateNames.metadata)}
       />}
       {settings.trackSelection.show && <MainMenuButton
-        iconName={faFilm}
+        Icon={FiFilm}
         stateName={MainMenuStateNames.trackSelection}
         bottomText={t(MainMenuStateNames.trackSelection)}
         ariaLabelText={t(MainMenuStateNames.trackSelection)}
       />}
       {settings.subtitles.show && <MainMenuButton
-        iconName={faClosedCaptioning}
+        Icon={MdOutlineSubtitles}
         stateName={MainMenuStateNames.subtitles}
         bottomText={t(MainMenuStateNames.subtitles)}
         ariaLabelText={t(MainMenuStateNames.subtitles)}
       />}
       {settings.thumbnail.show && <MainMenuButton
-        iconName={faPhotoVideo}
+        Icon={FaPhotoVideo}
         stateName={MainMenuStateNames.thumbnail}
         bottomText={t(MainMenuStateNames.thumbnail)}
         ariaLabelText={t(MainMenuStateNames.thumbnail)}
       />}
       <MainMenuButton
-        iconName={faSignOutAlt}
+        Icon={FiCheckSquare}
         stateName={MainMenuStateNames.finish}
         bottomText={t(MainMenuStateNames.finish)}
         ariaLabelText={t(MainMenuStateNames.finish)}
@@ -83,7 +85,7 @@ const MainMenu: React.FC<{}> = () => {
       {/* A space for buttons that would normally go in a header or footer */}
       <div css={{flexGrow: 99, display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
         <MainMenuButton
-          iconName={faGear}
+          Icon={FiSettings}
           stateName={MainMenuStateNames.keyboardControls}
           bottomText={""}
           ariaLabelText={t("keyboardControls.header")}
@@ -95,7 +97,7 @@ const MainMenu: React.FC<{}> = () => {
 };
 
 interface mainMenuButtonInterface {
-  iconName: any, // Unfortunately, icons from different packages don't share the same IconDefinition type. Works anyway.
+  Icon: IconType, // Unfortunately, icons from different packages don't share the same IconDefinition type. Works anyway.
   stateName: mainMenu["value"],
   bottomText: string,
   ariaLabelText: string;
@@ -106,7 +108,7 @@ interface mainMenuButtonInterface {
  * A button to set the state of the app
  * @param param0
  */
-const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName, bottomText, ariaLabelText, miniButton = false}) => {
+const MainMenuButton: React.FC<mainMenuButtonInterface> = ({Icon, stateName, bottomText, ariaLabelText, miniButton = false}) => {
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
@@ -179,7 +181,9 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
         onMenuItemClicked()
       }}}
       >
-      <FontAwesomeIcon icon={iconName} size={miniButton ? "1x" : "2x"}/>
+      <Icon css={{
+        fontSize: miniButton ? 24 : 36
+        }}/>
       {bottomText && <div>{bottomText}</div>}
     </li>
   );

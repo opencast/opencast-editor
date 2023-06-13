@@ -3,10 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle} from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft, faTimesCircle
-} from "@fortawesome/free-solid-svg-icons";
+import { FiChevronLeft, FiXCircle } from "react-icons/fi";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
@@ -41,7 +38,7 @@ const Discard : React.FC<{}> = () => {
         {t("discard.info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft} />
+        <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={FiChevronLeft} />
         <DiscardButton />
       </div>
     </div>
@@ -70,7 +67,7 @@ const DiscardButton : React.FC<{}> = () => {
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         discard()
       }}}>
-      <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
+      <FiXCircle />
       <span>{t("discard.confirm-button")}</span>
     </div>
   );
