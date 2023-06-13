@@ -297,8 +297,9 @@ export const VideoPlayer = React.forwardRef(
 
     // Trigger a workaround for subtitles not being displayed in the video in Firefox
     useEffect(() => {
-    // Only trigger workaround in Firefox, as it will cause issues in Chrome
-    // @ts-ignore
+      // Only trigger workaround in Firefox, as it will cause issues in Chrome
+      /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+      // @ts-ignore
       if (typeof InstallTrigger !== 'undefined') {
         reAddTrack()
       }
