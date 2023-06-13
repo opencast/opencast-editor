@@ -84,7 +84,7 @@ const WorkflowSelection : React.FC = () => {
               name="Workflow Selection Area"
               onChange={handleWorkflowSelectChange}
             >
-              {workflows.map((workflow: Workflow, index: number) => (
+              {workflows.map((workflow: Workflow, _index: number) => (
                 <WorkflowButton key={workflow.id} stateName={workflow.name} workflowId={workflow.id} workflowDescription={workflow.description}/>
               ))}
             </RadioGroup>

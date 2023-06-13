@@ -261,7 +261,7 @@ export const VideoPlayer = React.forwardRef(
       }
     }
 
-    const onErrorCallback = (e: any) => {
+    const onErrorCallback = (_e: any) => {
       setError(true)
     }
 
@@ -345,7 +345,7 @@ export const VideoPlayer = React.forwardRef(
           track.default = t.default!;
           track.src = t.src!;
           track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
-          track.addEventListener('error', (e: Event) => {
+          track.addEventListener('error', (_e: Event) => {
             console.warn(`Cannot load track ${t.src!}`)
           });
           track.addEventListener('load', (e: Event) => {

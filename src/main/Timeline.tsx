@@ -144,7 +144,7 @@ export const Scrubber: React.FC<{
   }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
-  const onControlledDrag = (e: any, position: any) => {
+  const onControlledDrag = (_e: any, position: any) => {
     // Update position
     const {x} = position
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)))
@@ -167,7 +167,7 @@ export const Scrubber: React.FC<{
     }
   }
 
-  const onStopDrag = (e: any, position: any) => {
+  const onStopDrag = (_e: any, position: any) => {
     // Update position
     const {x} = position;
     setControlledPosition({x, y: 0});
@@ -287,7 +287,6 @@ export const SegmentsList: React.FC<{
   styleByActiveSegment?: boolean,
   tabable?: boolean,
 }> = ({
-  timelineWidth,
   timelineHeight,
   styleByActiveSegment = true,
   tabable = true,
@@ -436,7 +435,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
           }
 
           // When done, save path to generated waveform img
-          waveformWorker.oncomplete = (image: any, numSamples: any) => {
+          waveformWorker.oncomplete = (image: any, _numSamples: any) => {
             newImages.push(image)
             waveformsProcessed++
             // If all images are generated, rerender

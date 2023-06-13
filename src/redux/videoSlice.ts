@@ -182,7 +182,7 @@ const videoSlice = createSlice({
   // For Async Requests
   extraReducers: builder => {
     builder.addCase(
-      fetchVideoInformation.pending, (state, action) => {
+      fetchVideoInformation.pending, (state, _action) => {
         state.status = 'loading'
       })
     builder.addCase(

@@ -282,7 +282,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
 
 // Validation functions for different types.
 const types = {
-  'string': (v: any, allowParse: any) => {
+  'string': (v: any, _allowParse: any) => {
     if (typeof v !== 'string') {
       throw new Error("is not a string, but should be");
     }
@@ -304,7 +304,7 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
-  'map': (v: any, allowParse: any) => {
+  'map': (v: any, _allowParse: any) => {
     for (const key in v) {
       if (typeof key !== 'string') {
         throw new Error("is not a string, but should be");
@@ -314,7 +314,7 @@ const types = {
       }
     }
   },
-  'objectsWithinObjects': (v: any, allowParse: any) => {
+  'objectsWithinObjects': (v: any, _allowParse: any) => {
     for (const catalogName in v) {
       if (typeof catalogName !== 'string') {
         throw new Error("is not a string, but should be");
@@ -380,4 +380,4 @@ const merge = (a: iSettings, b: iSettings) => {
   return deepmerge(a, b, { arrayMerge });
 };
 merge.all = (array: object[]) => deepmerge.all(array, { arrayMerge })
-const arrayMerge = (destinationArray: any, sourceArray: any, options: any) => sourceArray;
+const arrayMerge = (_destinationArray: any, sourceArray: any, _options: any) => sourceArray;

@@ -33,11 +33,11 @@ const workflowPostAndProcessSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(
-      postVideoInformationWithWorkflow.pending, (state, action) => {
+      postVideoInformationWithWorkflow.pending, (state, _action) => {
         state.status = 'loading'
       })
     builder.addCase(
-      postVideoInformationWithWorkflow.fulfilled, (state, action) => {
+      postVideoInformationWithWorkflow.fulfilled, (state, _action) => {
         state.status = 'success'
       })
     builder.addCase(

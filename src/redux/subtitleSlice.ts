@@ -209,7 +209,7 @@ export const selectFocusSegmentTriggered2 = (state: { subtitleState: { focusSegm
   state.subtitleState.focusSegmentTriggered2
 // Hardcoding this value to achieve a desired size for the video player
 // TODO: Don't hardcode this value, instead make the video player component more flexible
-export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
+export const selectAspectRatio = (_state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
   50
 
 export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"] } }) =>

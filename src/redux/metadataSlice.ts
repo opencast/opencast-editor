@@ -115,7 +115,7 @@ const metadataSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(
-      fetchMetadata.pending, (state, action) => {
+      fetchMetadata.pending, (state, _action) => {
         state.status = 'loading'
       })
     builder.addCase(
@@ -130,11 +130,11 @@ const metadataSlice = createSlice({
         state.error = action.error.message
       })
     builder.addCase(
-      postMetadata.pending, (state, action) => {
+      postMetadata.pending, (state, _action) => {
         state.postStatus = 'loading'
       })
     builder.addCase(
-      postMetadata.fulfilled, (state, action) => {
+      postMetadata.fulfilled, (state, _action) => {
         state.postStatus = 'success'
       })
     builder.addCase(

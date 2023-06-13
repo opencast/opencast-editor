@@ -209,7 +209,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
         <Form
           onSubmit={onSubmit}
           subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
-          render={({ handleSubmit, form, submitting, pristine, values}) => (
+          render={({ handleSubmit, submitting, pristine }) => (
             <form onSubmit={event => {
               handleSubmit(event)
               // // Ugly fix for form not getting updated after submit. TODO: Find a better fix

@@ -9,7 +9,7 @@ export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
 
 
 // Returns a promise that resolves after `ms` milliseconds.
-export const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+export const sleep = (ms: number) => new Promise((resolve, _reject) => setTimeout(resolve, ms));
 
 
 // Get an understandable time string for ARIA

@@ -250,7 +250,7 @@ const TimelineSubtitleSegment: React.FC<{
   // Resizable does not support resizing in the west/north directions out of the box,
   // so additional calculations are necessary.
   // Adapted from Resizable example code
-  const onResizeAbsolute = (event: any, {element, size, handle}: any) => {
+  const onResizeAbsolute = (_event: any, {size, handle}: any) => {
     // Possible TODO: Find a way to stop resizing a segment beyond 0ms here instead of later
     let newLeft = absoluteLeft;
     let newTop = absoluteTop;
@@ -274,7 +274,7 @@ const TimelineSubtitleSegment: React.FC<{
   };
 
   // Update redux state based on the resize
-  const onResizeStop = (event: any, {element, size, handle}: any) => {
+  const onResizeStop = (_event: any, {handle}: any) => {
     // Calc new width, factoring in offset
     const newWidth = absoluteWidth
 
@@ -303,11 +303,11 @@ const TimelineSubtitleSegment: React.FC<{
     setAbsoluteTop(0)
   }
 
-  const onStartDrag = (e: DraggableEvent) => {
+  const onStartDrag = (_e: DraggableEvent) => {
     setIsGrabbed(true)
   }
 
-  const onStopDrag = (e: DraggableEvent, position: any) => {
+  const onStopDrag = (_e: DraggableEvent, position: any) => {
     // Update position and thereby start/end times in redux
     const {x} = position
     dispatchNewTimes(

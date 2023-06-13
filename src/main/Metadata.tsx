@@ -675,7 +675,7 @@ const Metadata: React.FC = () => {
         onSubmit={onSubmit}
         subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
         initialValues={getInitialValues(catalogs)}
-        render={({ handleSubmit, form, submitting, pristine, values}) => (
+        render={({ handleSubmit, form }) => (
           <form onSubmit={event => {
             handleSubmit(event)
             // Ugly fix for form not getting updated after submit. TODO: Find a better fix
