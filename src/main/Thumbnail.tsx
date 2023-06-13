@@ -173,7 +173,7 @@ const ThumbnailTable : React.FC<{
     }
   }
 
-  return(
+  return (
     <div css={thumbnailTableStyle}>
       {renderSingleOrMultiple()}
     </div>

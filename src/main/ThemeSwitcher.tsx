@@ -21,7 +21,7 @@ const ThemeSwitcher: React.FC = () => {
   const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
   // Listen to system preference changes
   const systemPreferenceHasChanged = () => {
-    if(themeState === 'system') {
+    if (themeState === 'system') {
       dispatch(toggleTheme())
     }
     isDarkPrefered.removeEventListener('change', systemPreferenceHasChanged)
@@ -30,16 +30,16 @@ const ThemeSwitcher: React.FC = () => {
   isDarkPrefered.addEventListener('change', systemPreferenceHasChanged)
 
   const switchTheme = (themeState: string) => {
-    if(themeState === 'system') {
+    if (themeState === 'system') {
       dispatch(setState('system'))
     }
-    else if(themeState === 'high-contrast-dark') {
+    else if (themeState === 'high-contrast-dark') {
       dispatch(setState('high-contrast-dark'))
     }
-    else if(themeState === 'high-contrast-light') {
+    else if (themeState === 'high-contrast-light') {
       dispatch(setState('high-contrast-light'))
     }
-    else if(themeState === 'dark') {
+    else if (themeState === 'dark') {
       dispatch(setState('dark'))
     }
     else {

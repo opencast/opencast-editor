@@ -51,7 +51,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
   }
 
   var buttonString;
-  switch(stateName) {
+  switch (stateName) {
     case "Save changes":
       buttonString = t("finishMenu.save-button");
       break;

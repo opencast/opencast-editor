@@ -68,7 +68,7 @@ export function checkFlexGapSupport() {
   flexGapIsSupported = flex.scrollHeight === 1
 
   // Remove element from the DOM after you are done with it
-  if(flex.parentNode) {
+  if (flex.parentNode) {
     flex.parentNode.removeChild(flex)
   }
 

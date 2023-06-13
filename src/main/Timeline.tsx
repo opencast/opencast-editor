@@ -129,7 +129,7 @@ export const Scrubber: React.FC<{
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
-    if(currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
+    if (currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
       updateXPos();
       wasCurrentlyAtRef.current = currentlyAt;
     }
@@ -137,7 +137,7 @@ export const Scrubber: React.FC<{
 
   // Reposition scrubber when the timeline width changes
   useEffect(() => {
-    if(currentlyAt && duration) {
+    if (currentlyAt && duration) {
       setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

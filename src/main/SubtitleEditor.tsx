@@ -115,7 +115,7 @@ const SubtitleEditor : React.FC = () => {
         <span>{"Subtitle Parsing Error(s): " + getError}</span>
       )
     } else {
-      return(
+      return (
         <>
           <div css={headerRowStyle}>
             <BackButton />

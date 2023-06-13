@@ -105,7 +105,7 @@ const WorkflowSelection : React.FC = () => {
   // Fills the layout template with values based on how many workflows are available
   const renderSelection = () => {
     if (workflows.length <= 0) {
-      return(
+      return (
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.noWorkflows-text">

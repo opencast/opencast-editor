@@ -45,16 +45,16 @@ export interface Theme {
 const getValue = () => {
   const value = localStorage.getItem('theme');
 
-  if(value === 'system' || value === null) {
+  if (value === 'system' || value === null) {
     return 'system'
   }
-  else if(value === 'high-contrast-dark') {
+  else if (value === 'high-contrast-dark') {
     return 'high-contrast-dark'
   }
-  else if(value === 'high-contrast-light') {
+  else if (value === 'high-contrast-light') {
     return 'high-contrast-light'
   }
-  else if(value === 'dark') {
+  else if (value === 'dark') {
     return 'dark'
   }
   return 'light'
@@ -64,35 +64,35 @@ const getTheme = () => {
   const themeId = getValue();
   document.documentElement.setAttribute('data-theme', 'light');
 
-  if(themeId === 'system' || themeId === undefined) {
+  if (themeId === 'system' || themeId === undefined) {
     const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
     const isContrastPrefered = window.matchMedia('(prefers-contrast: more)');
     console.log('isContrastPrefered', isContrastPrefered)
 
-    if(isDarkPrefered.matches && !isContrastPrefered.matches) {
+    if (isDarkPrefered.matches && !isContrastPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'dark');
       return darkMode
     }
-    else if(isContrastPrefered.matches && isDarkPrefered.matches) {
+    else if (isContrastPrefered.matches && isDarkPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'high-contrast-dark');
       return highContrastDarkMode
     }
-    else if(isContrastPrefered.matches && !isDarkPrefered.matches) {
+    else if (isContrastPrefered.matches && !isDarkPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'high-contrast-light');
       return highContrastLightMode
     }
     return lightMode
   }
 
-  if(themeId === 'high-contrast-dark') {
+  if (themeId === 'high-contrast-dark') {
     document.documentElement.setAttribute('data-theme', 'high-contrast-dark');
     return highContrastDarkMode
   }
-  if(themeId === 'high-contrast-light') {
+  if (themeId === 'high-contrast-light') {
     document.documentElement.setAttribute('data-theme', 'high-contrast-light');
     return highContrastLightMode
   }
-  if(themeId === 'dark') {
+  if (themeId === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     return darkMode
   }

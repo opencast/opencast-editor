@@ -79,7 +79,7 @@ const SubtitleVideoArea : React.FC = () => {
 
   // Parse subtitles to something the video player understands
   useEffect(() => {
-    if(subtitle) {
+    if (subtitle) {
       const serializedSubtitle = serializeSubtitle(subtitle)
       setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type: 'text/vtt'})))
     }
@@ -103,7 +103,7 @@ const SubtitleVideoArea : React.FC = () => {
   });
 
   const render = () => {
-    return(
+    return (
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>
           {selectedFlavor && <VideoSelectDropdown

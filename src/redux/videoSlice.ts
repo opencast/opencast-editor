@@ -236,7 +236,7 @@ const updateActiveSegment = (state: video) => {
   state.activeSegmentIndex = state.segments.findIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt)
   // If there is an error, assume the first (the starting) segment
-  if(state.activeSegmentIndex < 0) {
+  if (state.activeSegmentIndex < 0) {
     state.activeSegmentIndex = 0
   }
 }
@@ -280,7 +280,7 @@ const mergeSegments = (state: video, activeSegmentIndex: number, mergeSegmentInd
 }
 
 const skipDeletedSegments = (state: video) => {
-  if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
+  if (state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
     let endTime = state.segments[state.activeSegmentIndex].end
 
     for (let index = state.activeSegmentIndex; index < state.segments.length; index++) {

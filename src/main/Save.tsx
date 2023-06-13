@@ -58,7 +58,7 @@ const Save : React.FC = () => {
     // Post (successful) save
     if (postWorkflowStatus === 'success' && postMetadataStatus === 'success'
       && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
-      return(
+      return (
         <>
           <FontAwesomeIcon icon={faCheckCircle} size="10x" />
           <div>{t("save.success-text")}</div>
@@ -133,7 +133,7 @@ export const SaveButton: React.FC = () => {
   }
 
   const ariaSaveUpdate = () => {
-    if(workflowStatus === 'success') {
+    if (workflowStatus === 'success') {
       return t("save.success-tooltip-aria")
     }
   }

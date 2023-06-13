@@ -408,7 +408,7 @@ export const VideoPlayer = React.forwardRef(
 
     const render = () => {
       if (!errorState) {
-        return(
+        return (
           <div css={playerWrapper}>
             <ReactPlayer url={url}
               css={reactPlayerStyle}
@@ -547,7 +547,7 @@ const PreviewMode: React.FC<{
   // Maps functions to hotkeys
   const handlers = {
     // preview: switchPlayPreview,
-    preview: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchPlayPreview(keyEvent, undefined) } }
+    preview: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchPlayPreview(keyEvent, undefined) } }
   }
 
   const previewModeStyle = css({
@@ -618,7 +618,7 @@ const PlayButton: React.FC<{
 
   // Maps functions to hotkeys
   const handlers = {
-    play: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchIsPlaying(keyEvent) } }
+    play: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchIsPlaying(keyEvent) } }
   }
 
   return (

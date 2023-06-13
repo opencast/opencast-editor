@@ -61,7 +61,7 @@ const Metadata: React.FC = () => {
   // Overwrite readonly property of fields based on config settings
   useEffect(() => {
     if (getStatus === 'success') {
-      for(let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
+      for (let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
         if (settings.metadata.configureFields) {
           const configureFields = settings.metadata.configureFields
           const catalog = catalogs[catalogIndex]
@@ -386,7 +386,7 @@ const Metadata: React.FC = () => {
     let returnValue : any = value
 
     // Parse values out react-multi-select and put them in an array
-    if(Array.isArray(value)) {
+    if (Array.isArray(value)) {
       returnValue = []
       value.forEach((subValue : any) => {
         returnValue.push(parseValue(null, subValue))  // Pass field as null to avoid each value into an array later on
@@ -583,7 +583,7 @@ const Metadata: React.FC = () => {
         />
       );
     } else {
-      return(
+      return (
         <input {...input}
           onBlur={e => { blurWithSubmit(e, input) }}
           readOnly={field.readOnly}
