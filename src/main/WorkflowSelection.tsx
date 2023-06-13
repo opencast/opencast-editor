@@ -19,7 +19,6 @@ import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import ErrorBox from "./ErrorBox";
-import { withStyles } from "@mui/styles";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
 /**
@@ -70,7 +69,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   };
 
   // Layout template
-  const render = (topTitle: string, topText: {} | null | undefined, hasWorkflowButtons: boolean,
+  const render = (topTitle: string, topText: JSX.Element, hasWorkflowButtons: boolean,
     nextButton: EmotionJSX.Element, errorStatus: httpRequestState["status"],
     errorMessage: httpRequestState["error"]) => {
     return (
@@ -178,15 +177,24 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   );
 }
 
-const WorkflowSelectRadio = withStyles({
-  root: {
+const WorkflowSelectRadio: React.FC = (props) => {
+
+  const style = css({
     alignSelf: 'start',
     color: 'grey',
     "&$checked": {
       color: 'grey'
     }
-  },
-  checked: {}
-})((props) => <Radio color="default" {...props} />);
+  })
+
+  return (
+    <Radio
+      color="default"
+      css={style}
+      {...props}
+    />
+  )
+}
+
 
 export default WorkflowSelection;

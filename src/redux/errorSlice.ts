@@ -4,11 +4,10 @@ import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 interface error {
   error: boolean,
-  errorTitle: string | undefined,
+  errorTitle?: string,
   errorMessage: string,
-  errorDetails: httpRequestState["error"]
-  // errorDetails: string | undefined,
-  errorIcon: IconDefinition | undefined,
+  errorDetails?: httpRequestState["error"]
+  errorIcon?: IconDefinition,
 }
 
 const initialState: error = {
@@ -28,10 +27,10 @@ export const errorSlice = createSlice({
   reducers: {
     setError: (state, action: PayloadAction<{
       error: error["error"],
-      errorTitle: error["errorTitle"],
+      errorTitle?: error["errorTitle"],
       errorMessage: error["errorMessage"],
-      errorDetails: error["errorDetails"],
-      errorIcon: error["errorIcon"]
+      errorDetails?: error["errorDetails"],
+      errorIcon?: error["errorIcon"]
     }>) => {
       state.error = action.payload.error;
       state.errorTitle = action.payload.errorTitle;

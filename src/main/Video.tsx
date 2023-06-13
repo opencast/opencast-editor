@@ -47,6 +47,7 @@ export const Video: React.FC<{}> = () => {
   const dispatch = useDispatch<AppDispatch>()
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
+  const duration = useSelector(selectDuration)
   const theme = useSelector(selectTheme);
   const errorReason = useSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
 
@@ -56,12 +57,16 @@ export const Video: React.FC<{}> = () => {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
       if (errorReason === 'workflowActive') {
-        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorDetails: undefined, errorIcon: faGears}))
+        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorIcon: faGears}))
       } else {
-        dispatch(setError({error: true, errorTitle: undefined, errorMessage: t("video.comError-text"), errorDetails: error, errorIcon: undefined}))
+        dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+      }
+    } else if (videoURLStatus === 'success') {
+      if (duration === null) {
+        dispatch(setError({error: true, errorMessage: t("video.durationError-text"), errorDetails: error}))
       }
     }
-  }, [videoURLStatus, dispatch, error, t, errorReason])
+  }, [videoURLStatus, dispatch, error, t, errorReason, duration])
 
   // Update based on current fetching status
   // let content
@@ -460,8 +465,6 @@ export const VideoControls: React.FC<{
   const videoControlsRowStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
     padding: '20px',
     ...(flexGapReplacementStyle(50, false)),
@@ -542,7 +545,8 @@ const PreviewMode: React.FC<{
     display: 'flex',
     ...(flexGapReplacementStyle(10, false)),
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden',
   })
 
   const switchIconStyle = (theme: Theme) => css({

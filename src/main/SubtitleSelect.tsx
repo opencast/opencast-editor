@@ -220,11 +220,10 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                 */}
                 <ThemeProvider theme={subtitleSelectStyle(theme)}>
                   <Select
-                    label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
+                    label={t("subtitles.createSubtitleDropdown-label")}
                     name="languages"
                     data={selectData()}
-                  >
-                  </Select>
+                  />
                 </ThemeProvider>
 
                 {/* "By default disabled elements like <button> do not trigger user interactions
