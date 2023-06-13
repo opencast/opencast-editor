@@ -44,7 +44,7 @@ export interface Theme {
 
 const getValue = () => {
   const value = localStorage.getItem('theme');
-  
+
   if(value === 'system' || value === null) {
     return 'system'
   }
@@ -96,7 +96,7 @@ const getTheme = () => {
     document.documentElement.setAttribute('data-theme', 'dark');
     return darkMode
   }
-  return lightMode   
+  return lightMode
 }
 
 export interface theme {

@@ -60,7 +60,7 @@ const Finish : React.FC = () => {
 export const PageButton : React.FC<{pageNumber: number, label: string, iconName: IconDefinition}> = ({pageNumber, label, iconName}) => {
 
   const theme = useSelector(selectTheme);
-  
+
   // Initialize redux variables
   const dispatch = useDispatch()
 

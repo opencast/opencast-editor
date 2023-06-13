@@ -475,7 +475,7 @@ const FunctionButton : React.FC<{
   return (
     <ThemedTooltip title={tooltip}>
       <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
-        role="button" 
+        role="button"
         tabIndex={0}
         aria-label={tooltipAria}
         onClick={onClick}

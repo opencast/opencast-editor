@@ -4,7 +4,7 @@
  * - GET parameters
  * and exports them.
  * Code was largely adapted from https://github.com/elan-ev/opencast-studio/blob/master/src/settings.js (January 11th, 2021)
- * 
+ *
  * Also does some global hotkey configuration
  */
 import parseToml from '@iarna/toml/parse-string';

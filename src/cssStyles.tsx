@@ -273,7 +273,7 @@ export function selectFieldStyle(theme: Theme) {
 export const calendarStyle = (theme: Theme) => createTheme({
 
   components: {
-    
+
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -293,7 +293,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
               color: `${theme.selected_text}`,
             }
           },
-          
+
           /* Clock-modal */
           '& .MuiClock-clock': { // round clock
             background: `${theme.clock_bg}`,
@@ -316,7 +316,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
             border: `16px solid ${theme.clock_hands}`,
           }
         },
-        
+
       }
     },
     MuiButtonBase: {
@@ -336,7 +336,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
           '&.Mui-selected': {
             background: `${theme.selected} !important`,
             color: `${theme.selected_text} !important`,
-            
+
           },
           // Current day
           '&:not(.Mui-selected)': {
@@ -361,7 +361,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
         },
       }
     },
-  }  
+  }
 })
 
 export const subtitleSelectStyle = (theme: Theme) => createTheme({

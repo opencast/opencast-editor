@@ -32,7 +32,7 @@ const ThemeSwitcher: React.FC = () => {
   const switchTheme = (themeState: string) => {
     if(themeState === 'system') {
       dispatch(setState('system'))
-    } 
+    }
     else if(themeState === 'high-contrast-dark') {
       dispatch(setState('high-contrast-dark'))
     }
@@ -55,7 +55,7 @@ const ThemeSwitcher: React.FC = () => {
   }
 
   const headerStyle = {
-    display: 'flex', 
+    display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
   }
@@ -67,7 +67,7 @@ const ThemeSwitcher: React.FC = () => {
     { value: 'high-contrast-light', label: t('theme.high-contrast-light') },
     { value: 'high-contrast-dark', label: t('theme.high-contrast-dark') },
   ]
-  
+
   return (
     <div css={baseStyle}>
       <h2 css={headerStyle}>{t('theme.appearance')}</h2>

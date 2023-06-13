@@ -157,7 +157,7 @@ const Metadata: React.FC = () => {
             background: 'transparent !important',
             outline: 'none'
           }
-        },    
+        },
       })
     );
   }

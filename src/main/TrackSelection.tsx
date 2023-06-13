@@ -150,7 +150,7 @@ interface selectButtonInterface {
 const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, tooltip, active}) => {
 
   const theme = useSelector(selectTheme);
-  
+
   const buttonStyle = [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {

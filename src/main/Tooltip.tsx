@@ -9,9 +9,9 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
   const positionRef = React.useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const areaRef = React.useRef<HTMLDivElement>(null);
-  
+
   return (
-    <Tooltip {...props} 
+    <Tooltip {...props}
       classes={{ popper: className }}
       arrow
       enterDelay={500}
@@ -24,7 +24,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
         * Else the tooltip would appear for a second where the mousepointer leaves. */
       onMouseOut={() => positionRef.current = { x: -9999, y: -9999 }}
       onMouseMove={event => positionRef.current = { x: event.clientX, y: event.clientY }}
-      
+
       PopperProps={{
         anchorEl: {
           getBoundingClientRect: () => {
