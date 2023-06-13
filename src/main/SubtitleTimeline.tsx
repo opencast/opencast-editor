@@ -41,7 +41,7 @@ import { useTranslation } from "react-i18next";
   const currentlyAt = useSelector(selectCurrentlyAt)
 
   const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
-  const refTop = useRef<ScrollContainer>(null);
+  const refTop = useRef<HTMLElement>(null);
   const { ref: refMini, width: widthMiniTimeline = 1, } = useResizeObserver<HTMLDivElement>();
 
   const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
@@ -63,8 +63,8 @@ import { useTranslation } from "react-i18next";
   // Apply horizonal scrolling when scrolled from somewhere else
   useEffect(() => {
     if (currentlyAt !== undefined && refTop.current) {
-      const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
-      refTop.current.getElement().scrollTo(Math.round((currentlyAt / duration) * scrollLeftMax), 0)
+      const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth)
+      refTop.current.scrollTo(Math.round((currentlyAt / duration) * scrollLeftMax), 0)
     }
   }, [currentlyAt, duration, width]);
 
@@ -84,8 +84,8 @@ import { useTranslation } from "react-i18next";
   const onEndScroll = (e: ScrollEvent) => {
     // If scrolled by user
     if (!e.external && refTop && refTop.current) {
-      const offsetX = refTop.current.getElement().scrollLeft
-      const scrollLeftMax = (refTop.current.getElement().scrollWidth - refTop.current.getElement().clientWidth)
+      const offsetX = refTop.current.scrollLeft
+      const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth)
       dispatch(setCurrentlyAt((offsetX / scrollLeftMax) * (duration)))
     }
   }
@@ -98,14 +98,14 @@ import { useTranslation } from "react-i18next";
           position: 'absolute',
           width: '2px',
           height: '190px',
-          ...(refTop.current) && {left: (refTop.current.getElement().clientWidth / 2)},
+          ...(refTop.current) && {left: (refTop.current.clientWidth / 2)},
           top: '10px',
           background: `${theme.text}`,
           zIndex: 100,
         }}
       />
       {/* Scrollable timeline container. Has width of parent*/}
-      <ScrollContainer ref={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
+      <ScrollContainer innerRef={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
         vertical={false}
         horizontal={true}
         onEndScroll={onEndScroll}
