@@ -146,7 +146,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({iconName
         onClick={(event: SyntheticEvent) => actionHandler(event, action, ref)}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
           actionHandler(event, action, undefined)
-        }}}
+        } }}
       >
         <FontAwesomeIcon icon={iconName} size="1x" />
         <span>{actionName}</span>
@@ -180,7 +180,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
         onClick={(event: SyntheticEvent) => actionHandler(event, action, ref)}
         onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
           actionHandler(event, action, undefined)
-        }}}
+        } }}
       >
         <FontAwesomeIcon icon={isCurrentSegmentAlive ? faTrash : faTrashRestore} size="1x" />
         <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>

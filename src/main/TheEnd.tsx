@@ -76,7 +76,7 @@ const StartOverButton: React.FC = () => {
         onClick={reloadPage}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           reloadPage()
-        }}}>
+        } }}>
         {/* <FontAwesomeIcon icon={icon} spin={spin} size="1x"/> */}
         <span>{t("theEnd.startOver-button")}</span>
       </div>

@@ -173,7 +173,7 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
       onClick={onMenuItemClicked}
       onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
         onMenuItemClicked()
-      }}}
+      } }}
     >
       <FontAwesomeIcon icon={iconName} size={miniButton ? "1x" : "2x"}/>
       {bottomText && <div>{bottomText}</div>}

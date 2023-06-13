@@ -69,7 +69,7 @@ const DiscardButton : React.FC = () => {
       onClick={discard}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         discard()
-      }}}>
+      } }}>
       <FontAwesomeIcon icon={faTimesCircle} size="1x" />
       <span>{t("discard.confirm-button")}</span>
     </div>

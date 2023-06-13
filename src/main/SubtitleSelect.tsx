@@ -131,7 +131,7 @@ const SubtitleSelectButton: React.FC<{
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(true))
           dispatch(setSelectedSubtitleFlavor(flavor))
-        }}}>
+        } }}>
         {icon && <div css={flagStyle}>{icon}</div>}
         <div css={titleStyle}>{title}</div>
       </div>
@@ -203,7 +203,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
         onClick={() => setIsPlusDisplay(false)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           setIsPlusDisplay(false)
-        }}}
+        } }}
       >
         <FontAwesomeIcon icon={faPlus} size="2x" css={plusIconStyle}/>
         <Form

@@ -168,7 +168,7 @@ export const BackButton : React.FC = () => {
         onClick={() => dispatch(setIsDisplayEditView(false))}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(false))
-        }}}>
+        } }}>
         <FontAwesomeIcon icon={faChevronLeft} size="1x" />
         <span>{t("subtitles.backButton")}</span>
       </div>

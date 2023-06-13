@@ -510,7 +510,7 @@ const Metadata: React.FC = () => {
       if (Array.isArray(field.value)) {
         return (
           <CreatableSelect {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+            onBlur={e => { blurWithSubmit(e, input) }}
             isMulti
             isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
             isSearchable={!field.readOnly}    // by setting other settings
@@ -524,7 +524,7 @@ const Metadata: React.FC = () => {
       } else {
         return (
           <Select {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+            onBlur={e => { blurWithSubmit(e, input) }}
             isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
             isSearchable={!field.readOnly}    // by setting other settings
             openMenuOnClick={!field.readOnly}
@@ -547,7 +547,7 @@ const Metadata: React.FC = () => {
               dateFunsUtils={DateFnsUtils}
               TextFieldProps={{
                 variant: 'standard', // Removes default outline
-                onBlur: (e: any) => {blurWithSubmit(e, input)},
+                onBlur: (e: any) => { blurWithSubmit(e, input) },
                 showError: showErrorOnBlur
               }}
               leftArrowButtonText={t('metadata.calendar-prev')}
@@ -567,7 +567,7 @@ const Metadata: React.FC = () => {
               dateFunsUtils={DateFnsUtils}
               TextFieldProps={{
                 variant: 'standard', // Removes default outline
-                onBlur: (e: any) => {blurWithSubmit(e, input)},
+                onBlur: (e: any) => { blurWithSubmit(e, input) },
                 showError: showErrorOnBlur
               }}
             />
@@ -577,7 +577,7 @@ const Metadata: React.FC = () => {
     } else if (field.type === "text_long") {
       return (
         <textarea {...input}
-          onBlur={e => {blurWithSubmit(e, input)}}
+          onBlur={e => { blurWithSubmit(e, input) }}
           readOnly={field.readOnly}
           css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
         />
@@ -585,7 +585,7 @@ const Metadata: React.FC = () => {
     } else {
       return(
         <input {...input}
-          onBlur={e => {blurWithSubmit(e, input)}}
+          onBlur={e => { blurWithSubmit(e, input) }}
           readOnly={field.readOnly}
           css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
         />

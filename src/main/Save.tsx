@@ -187,7 +187,7 @@ export const SaveButton: React.FC = () => {
         onClick={save}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           save()
-        }}}>
+        } }}>
         <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
         <span>{t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>

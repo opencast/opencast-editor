@@ -581,7 +581,7 @@ const PreviewMode: React.FC<{
         onClick={(event: SyntheticEvent) => switchPlayPreview(event, ref)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
           switchPlayPreview(event, undefined)
-        }}}>
+        } }}>
         <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
         <div css={{display: 'inline-block', flexWrap: 'nowrap'}}>
           {t("video.previewButton")}
@@ -631,7 +631,7 @@ const PlayButton: React.FC<{
           onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
             switchIsPlaying(event)
-          }}}
+          } }}
         />
       </div>
     </ThemedTooltip>

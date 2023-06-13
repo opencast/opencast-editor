@@ -417,7 +417,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueAbove()
-            }}}
+            } }}
             icon={faPlus}
           />
           <FunctionButton
@@ -428,7 +428,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               deleteCue()
-            }}}
+            } }}
             icon={faTrash}
           />
           <FunctionButton
@@ -439,7 +439,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueBelow()
-            }}}
+            } }}
             icon={faPlus}
           />
         </div>

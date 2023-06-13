@@ -82,7 +82,7 @@ export const PageButton : React.FC<{pageNumber: number, label: string, iconName:
       onClick={onPageChange}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         onPageChange()
-      }}}>
+      } }}>
       <FontAwesomeIcon icon={iconName} size="1x" />
       <span>{label}</span>
     </div>

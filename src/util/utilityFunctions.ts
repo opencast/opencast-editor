@@ -19,8 +19,8 @@ export const convertMsToReadableString = (ms: number): string => {
   const seconds = new Date((ms ? ms : 0)).toISOString().substr(17, 2)
 
   const result = []
-  if (parseInt(hours) > 0) { result.push(hours + " hours, ")}
-  if (parseInt(minutes) > 0 || parseInt(hours) > 0) { result.push(minutes + " minutes, ")}
+  if (parseInt(hours) > 0) { result.push(hours + " hours, ") }
+  if (parseInt(minutes) > 0 || parseInt(hours) > 0) { result.push(minutes + " minutes, ") }
   result.push(seconds + " seconds")
 
   return result.join("")

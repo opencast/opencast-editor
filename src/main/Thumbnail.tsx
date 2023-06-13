@@ -444,7 +444,7 @@ const AffectAllRow : React.FC<{
           }}
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
             generateAll()
-          }}}
+          } }}
         >
           <FontAwesomeIcon icon={faCamera}/>
           {t('thumbnail.buttonGenerateAll')}
