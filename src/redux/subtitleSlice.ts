@@ -113,7 +113,7 @@ export const subtitleSlice = createSlice({
       state.focusSegmentTriggered2 = true
       state.focusSegmentId = cue.idInternal
 
-      if (action.payload.cueIndex < 0 ) {
+      if (action.payload.cueIndex < 0) {
         state.subtitles[action.payload.identifier].splice(0, 0, cue);
       }
 
@@ -153,7 +153,7 @@ export const subtitleSlice = createSlice({
     setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
       let cueIndex = state.subtitles[action.payload.identifier].findIndex(i => i.idInternal === action.payload.segmentId);
       cueIndex = cueIndex - 1
-      if (cueIndex < 0 ) {
+      if (cueIndex < 0) {
         cueIndex = 0
       }
       state.focusSegmentId = state.subtitles[action.payload.identifier][cueIndex].idInternal
@@ -166,7 +166,7 @@ export const subtitleSlice = createSlice({
       }
       state.focusSegmentId = state.subtitles[action.payload.identifier][cueIndex].idInternal
     },
-    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
+    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}>) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
     setHasChanges: (state, action: PayloadAction<subtitle["hasChanges"]>) => {

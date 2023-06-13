@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { httpRequestState }  from '../types'
+import { httpRequestState } from '../types'
 import { settings } from '../config';
 
 export interface Catalog {

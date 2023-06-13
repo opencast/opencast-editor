@@ -73,7 +73,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         finish()
       }}}>
-      <FontAwesomeIcon  icon={iconName} size="2x"/>
+      <FontAwesomeIcon icon={iconName} size="2x"/>
       <div style={{padding: '0px 20px'}}>{buttonString}</div>
     </div>
   );

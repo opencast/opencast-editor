@@ -153,7 +153,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         saveAndProcess()
       }}}>
-      <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
+      <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
       <span>{text}</span>
     </div>
   );

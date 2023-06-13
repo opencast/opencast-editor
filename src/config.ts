@@ -42,7 +42,7 @@ interface iSettings {
   },
   metadata: {
     show: boolean,
-    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } }  | undefined,
+    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } } | undefined,
   },
   trackSelection: {
     show: boolean,
@@ -148,7 +148,7 @@ export const init = async () => {
 
   // Configure hotkeys
   configure({
-    ignoreTags: [],   // Do not ignore hotkeys when focused on a textarea, input, select
+    ignoreTags: [], // Do not ignore hotkeys when focused on a textarea, input, select
     ignoreEventsCondition: (e: any) => {
       // Ignore hotkeys when focused on a textarea, input, select IF that hotkey is expected to perform
       // a certain function in that element that is more important than any hotkey function

@@ -63,7 +63,7 @@ const Thumbnail : React.FC = () => {
       return
     }
 
-    var reader  = new FileReader();
+    var reader = new FileReader();
     reader.onload = e => {
       // the result image data
       if (e.target && e.target.result) {
@@ -155,9 +155,9 @@ const ThumbnailTable : React.FC<{
         />
       </>)
     } else {
-      return ( <>
+      return (<>
         <AffectAllRow tracks={videoTracks} generate={generate}/>
-        {videoTracks.map( (track: Track, index: number) => (
+        {videoTracks.map((track: Track, index: number) => (
           <ThumbnailTableRow
             key={index}
             track={track}
@@ -512,7 +512,7 @@ const ThumbnailButtonsSimple : React.FC<{
 
   return (
     <div css={thumbnailButtonsStyle}>
-      {tracks.map( (generateTrack: Track, generateIndex: number) => (
+      {tracks.map((generateTrack: Track, generateIndex: number) => (
         <ThumbnailButton
           handler={() => { generate(track, generateIndex) }}
           text={t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}

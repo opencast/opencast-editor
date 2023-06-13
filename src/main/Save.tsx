@@ -126,7 +126,7 @@ export const SaveButton: React.FC = () => {
     icon = faCheck
     spin = false
     tooltip = t("save.confirmButton-success-tooltip")
-  } else if (workflowStatus === 'loading' || metadataStatus === 'loading')  {
+  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
     icon = faSpinner
     spin = true
     tooltip = t("save.confirmButton-attempting-tooltip")

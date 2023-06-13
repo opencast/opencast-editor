@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
 import {
-  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL,  selectWaveformImages, setWaveformImages
+  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -329,7 +329,7 @@ export const SegmentsList: React.FC<{
   // Render the individual segments
   const renderedSegments = () => {
     return (
-      segments.map( (segment: Segment, index: number) => (
+      segments.map((segment: Segment, index: number) => (
         <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})} key={segment.id}>
           <div
             aria-label={t("timeline.segments-text-aria",
@@ -405,7 +405,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   });
 
   // When the URLs to the videos are fetched, generate waveforms
-  useEffect( () => {
+  useEffect(() => {
     if (videoURLStatus === 'success') {
       if (images.length > 0) {
         return

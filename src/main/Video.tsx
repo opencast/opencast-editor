@@ -198,7 +198,7 @@ export const VideoPlayer = React.forwardRef(
     const dispatch = useDispatch();
     const isPlaying = useSelector(selectIsPlaying)
     const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
-    const duration  = useSelector(selectDurationInSeconds)
+    const duration = useSelector(selectDurationInSeconds)
     const previewTriggered = useSelector(selectPreviewTriggered)
     const clickTriggered = useSelector(selectClickTriggered)
     const aspectRatio = useSelector(selectAspectRatio)
@@ -211,7 +211,7 @@ export const VideoPlayer = React.forwardRef(
     const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
 
     // Callback for when the video is playing
-    const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds:  number }) => {
+    const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds: number }) => {
       if (isPrimary) {
       // Only update redux if there was a substantial change
         if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) &&

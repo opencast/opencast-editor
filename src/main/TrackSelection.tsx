@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from 'react-player'
 
-import { Track }  from '../types'
+import { Track } from '../types'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
@@ -69,7 +69,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   const dispatch = useDispatch();
   const header = track.flavor.type + ' '
     + (track.video_stream.enabled ? ''
-      :  `(${t('trackSelection.trackInactive', 'inactive')})`);
+      : `(${t('trackSelection.trackInactive', 'inactive')})`);
 
   const trackItemStyle = css({
     display: 'flex',

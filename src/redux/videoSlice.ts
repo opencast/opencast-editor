@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast }  from '../types'
+import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from '../types'
 import { roundToDecimalPlace } from '../util/utilityFunctions'
 import { settings } from '../config';
 
@@ -120,7 +120,7 @@ const videoSlice = createSlice({
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload)
     },
-    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
+    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}>) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
@@ -144,16 +144,16 @@ const videoSlice = createSlice({
     cut: (state) => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
-          state.segments[state.activeSegmentIndex].end === state.currentlyAt ) {
+          state.segments[state.activeSegmentIndex].end === state.currentlyAt) {
         return
       }
 
       // Make two (new) segments out of it
-      const segmentA : Segment =  {id: nanoid(),
+      const segmentA : Segment = {id: nanoid(),
         start: state.segments[state.activeSegmentIndex].start,
         end: state.currentlyAt,
         deleted: state.segments[state.activeSegmentIndex].deleted}
-      const segmentB : Segment =  {id: nanoid(),
+      const segmentB : Segment = {id: nanoid(),
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
         deleted: state.segments[state.activeSegmentIndex].deleted}
@@ -200,7 +200,7 @@ const videoSlice = createSlice({
           }).map((track: Track) => {
             if (action.payload.local && settings.opencast.local) {
               console.debug('Replacing track URL')
-              track.uri = track.uri.replace(/https?:\/\/[^/]*/g, window.location.origin )
+              track.uri = track.uri.replace(/https?:\/\/[^/]*/g, window.location.origin)
             }
             return track
           })
@@ -327,7 +327,7 @@ export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) =
   return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
 }
 
-const setThumbnailHelper = (state:  video, id: Track["id"], uri: Track["thumbnailUri"]) => {
+const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnailUri"]) => {
   const index = state.tracks.findIndex(t => t.id === id)
   if (index >= 0) {
     state.tracks[index].thumbnailUri = uri

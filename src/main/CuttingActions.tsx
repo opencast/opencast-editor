@@ -61,7 +61,7 @@ const CuttingActions: React.FC = () => {
     mergeRight: (keyEvent?: KeyboardEvent | SyntheticEvent) => { if(keyEvent) { dispatchAction(keyEvent, mergeRight, undefined) } },
   }
 
-  const cuttingStyle =  css({
+  const cuttingStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
     justifyContent: 'space-between',
@@ -172,7 +172,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
   const theme = useSelector(selectTheme);
 
   return (
-    <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName } )}>
+    <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}>
       <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
         ref={ref}
         role="button" tabIndex={0}
