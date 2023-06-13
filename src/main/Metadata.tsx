@@ -301,7 +301,7 @@ const Metadata: React.FC = () => {
     if (Object.prototype.toString.call(date) === '[object Date]') {
       dt = LuxonDateTime.fromJSDate(date);
     }
-    if (typeof(date) === 'string') {
+    if (typeof date === 'string') {
       dt = LuxonDateTime.fromISO(date);
     }
 
