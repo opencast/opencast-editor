@@ -109,7 +109,7 @@ const metadataSlice = createSlice({
     setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
       state.hasChanges = action.payload
     },
-    resetPostRequestState: (state) => {
+    resetPostRequestState: state => {
       state.postStatus = 'idle'
     }
   },

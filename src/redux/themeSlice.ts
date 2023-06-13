@@ -116,7 +116,7 @@ export const themeSlice = createSlice({
     setState: (state, action: PayloadAction<theme["value"]>) => {
       state.value = action.payload;
     },
-    toggleTheme: (state) => {
+    toggleTheme: state => {
       state.theme = getTheme()
     },
   }

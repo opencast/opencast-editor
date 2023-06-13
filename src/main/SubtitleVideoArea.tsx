@@ -173,7 +173,7 @@ const VideoSelectDropdown : React.FC<{
 
   const getFlavorLabel = (flavor: Flavor) => {
     // Omit subtype if all flavour subtypes are equal
-    if (flavors.every((f) => f.subtype === flavors[0].subtype)) {
+    if (flavors.every(f => f.subtype === flavors[0].subtype)) {
       return flavor.type
     }
 
@@ -200,7 +200,7 @@ const VideoSelectDropdown : React.FC<{
         options={data}
         defaultValue={data.filter(({value}) => value === stringifyFlavor(defaultFlavor))}
         onChange={
-          (newValue) => {
+          newValue => {
             if (newValue) {
               // Put flavor back together
               const [type, subtype] = newValue.value.split("/")

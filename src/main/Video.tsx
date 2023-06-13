@@ -136,7 +136,7 @@ export const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({re
         setClickTriggered={setClickTriggered}
         setCurrentlyAt={setCurrentlyAt}
         setAspectRatio={setAspectRatio}
-        ref={(el) => {
+        ref={el => {
           if (refs === undefined) { return }
           (refs.current[i] = el)
         }}
@@ -330,7 +330,7 @@ export const VideoPlayer = React.forwardRef(
 
       if (video) {
         const oldTracks = video.querySelectorAll('track');
-        oldTracks.forEach((oldTrack) => {
+        oldTracks.forEach(oldTrack => {
           video.removeChild(oldTrack);
         });
       }

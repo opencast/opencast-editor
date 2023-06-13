@@ -181,7 +181,7 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   );
 }
 
-const WorkflowSelectRadio: React.FC = (props) => {
+const WorkflowSelectRadio: React.FC = props => {
 
   const style = css({
     alignSelf: 'start',

@@ -120,7 +120,7 @@ const SubtitleListEditor : React.FC = () => {
             height={height ? height : 0}
             itemCount={subtitle !== undefined ? subtitle.length : 0}
             itemData={itemData}
-            itemSize={(index) => segmentHeight}
+            itemSize={index => segmentHeight}
             itemKey={(index, data) => data.items[index].idInternal}
             width={width ? width : 0}
             overscanCount={4}

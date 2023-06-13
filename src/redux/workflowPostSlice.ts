@@ -28,7 +28,7 @@ const workflowPostSlice = createSlice({
   name: 'workflowPostState',
   initialState,
   reducers: {
-    resetPostRequestState: (state) => {
+    resetPostRequestState: state => {
       state.status = 'idle'
     }
   },

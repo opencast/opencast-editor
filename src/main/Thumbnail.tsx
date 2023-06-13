@@ -140,7 +140,7 @@ const ThumbnailTable : React.FC<{
   })
 
   const renderSingleOrMultiple = () => {
-    const primaryTrack = videoTracks.find((e) => e.thumbnailPriority === 0)
+    const primaryTrack = videoTracks.find(e => e.thumbnailPriority === 0)
 
     if (settings.thumbnail.simpleMode && primaryTrack !== undefined) {
       return (<>
@@ -330,12 +330,12 @@ const ThumbnailButtons : React.FC<{
       {/* Hidden input field for upload */}
       <input
         style={{display: 'none'}}
-        ref={(el) => {
+        ref={el => {
           inputRefs.current[index] = el;
         }}
         type="file"
         accept="image/*"
-        onChange={(event) => uploadCallback(event, track)}
+        onChange={event => uploadCallback(event, track)}
         aria-hidden="true"
       />
       <ThumbnailButton
@@ -534,12 +534,12 @@ const ThumbnailButtonsSimple : React.FC<{
       {/* Hidden input field for upload */}
       <input
         style={{display: 'none'}}
-        ref={(el) => {
+        ref={el => {
           inputRefs.current[index] = el;
         }}
         type="file"
         accept="image/*"
-        onChange={(event) => uploadCallback(event, track)}
+        onChange={event => uploadCallback(event, track)}
         aria-hidden="true"
       />
       <ThumbnailButton

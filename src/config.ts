@@ -107,7 +107,7 @@ export var settings: iSettings
  */
 export const init = async () => {
   // Get settings from config file
-  await loadContextSettings().then((result) => {
+  await loadContextSettings().then(result => {
     configFileSettings = validate(result, false, SRC_SERVER, "from server settings file")
   })
 
@@ -129,7 +129,7 @@ export const init = async () => {
     }
 
     const segments = key.split('.');
-    segments.slice(0, -1).forEach((segment) => {
+    segments.slice(0, -1).forEach(segment => {
       if (!(segment in obj)) {
         obj[segment] = {};
       }

@@ -141,7 +141,7 @@ const videoSlice = createSlice({
       const index = state.tracks.findIndex(t => t.id === action.payload)
       state.tracks[index].thumbnailUri = undefined
     },
-    cut: (state) => {
+    cut: state => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
           state.segments[state.activeSegmentIndex].end === state.currentlyAt) {
@@ -163,18 +163,18 @@ const videoSlice = createSlice({
 
       state.hasChanges = true
     },
-    markAsDeletedOrAlive: (state) => {
+    markAsDeletedOrAlive: state => {
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
       state.hasChanges = true
     },
     setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowId"]>) => {
       state.selectedWorkflowId = action.payload
     },
-    mergeLeft: (state) => {
+    mergeLeft: state => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex - 1)
       state.hasChanges = true
     },
-    mergeRight: (state) => {
+    mergeRight: state => {
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
       state.hasChanges = true
     },
