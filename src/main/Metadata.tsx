@@ -609,7 +609,7 @@ const Metadata: React.FC = () => {
      */
     const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
       if ((field.type === "date" || field.type === "time") && input.value === "") {
-        var {value, ...other} = input
+        const {value, ...other} = input
         return generateComponent(field, other)
       } else {
         return generateComponent(field, input)

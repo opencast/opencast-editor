@@ -418,13 +418,13 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
 
       onlyOneURL.forEach((videoURL, _index, array) => {
         // Set up blob request
-        var blob = null
-        var xhr = new XMLHttpRequest()
+        let blob = null
+        const xhr = new XMLHttpRequest()
         xhr.open("GET", videoURL)
         xhr.responseType = "blob"
         xhr.onload = () => {
           blob = xhr.response
-          var file = new File([blob], blob)
+          const file = new File([blob], blob)
 
           // Start waveform worker with blob
           const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})

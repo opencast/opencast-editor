@@ -50,7 +50,7 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     dispatch(setPageNumber(1))
   }
 
-  var buttonString;
+  let buttonString;
   switch (stateName) {
     case "Save changes":
       buttonString = t("finishMenu.save-button");

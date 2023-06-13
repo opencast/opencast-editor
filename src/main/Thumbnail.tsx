@@ -63,7 +63,7 @@ const Thumbnail : React.FC = () => {
       return
     }
 
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = e => {
       // the result image data
       if (e.target && e.target.result) {

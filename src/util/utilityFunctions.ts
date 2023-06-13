@@ -43,7 +43,7 @@ export function safeJsonParse(str : string) {
  * Currently, this cannot be checked with "@support", so we use this workaround
  * instead.
  */
-var flexGapIsSupported: boolean | undefined;
+let flexGapIsSupported: boolean | undefined;
 export function checkFlexGapSupport() {
   // Use the cached value if it has been defined
   if (flexGapIsSupported !== undefined) {

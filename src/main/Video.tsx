@@ -374,10 +374,10 @@ export const VideoPlayer = React.forwardRef(
     // Returns the data url
       captureVideo() {
         const video = ref.current?.getInternalPlayer() as HTMLVideoElement
-        var canvas = document.createElement("canvas");
+        const canvas = document.createElement("canvas");
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        var canvasContext = canvas.getContext("2d");
+        const canvasContext = canvas.getContext("2d");
         if (canvasContext !== null) {
           canvasContext.drawImage(video, 0, 0);
           return canvas.toDataURL('image/png')

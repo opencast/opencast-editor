@@ -67,7 +67,7 @@ interface iSettings {
  * urlParameterSettings: contains values from GET parameters
  * settings: contains the combined values from all other setting objects
  */
-var defaultSettings: iSettings = {
+const defaultSettings: iSettings = {
   id: undefined,
   opencast: {
     url: window.location.origin,
@@ -94,9 +94,9 @@ var defaultSettings: iSettings = {
     defaultVideoFlavor: undefined,
   }
 }
-var configFileSettings: iSettings
-var urlParameterSettings: iSettings
-export var settings: iSettings
+let configFileSettings: iSettings
+let urlParameterSettings: iSettings
+export let settings: iSettings
 
 /**
  * Entry point. Loads values from settings into the exported variables
@@ -112,7 +112,7 @@ export const init = async () => {
   })
 
   // Get settings from URL query.
-  var urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(window.location.search);
 
   const rawUrlSettings = {};
   urlParams.forEach((value, key) => {
