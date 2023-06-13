@@ -617,23 +617,23 @@ const Metadata: React.FC = () => {
     }
 
     return (
-        <Field key={fieldIndex}
-          name={"catalog" + catalogIndex + "." + field.id}
-          validate={getValidators(field)}
-          type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
-          >
-          {({ input, meta }) => (
-            <div css={fieldStyle} data-testid={field.id}>
-              <label css={fieldLabelStyle} htmlFor={input.name}>{
-                i18n.exists(`metadata.labels.${field.id}`) ?
+      <Field key={fieldIndex}
+        name={"catalog" + catalogIndex + "." + field.id}
+        validate={getValidators(field)}
+        type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
+      >
+        {({ input, meta }) => (
+          <div css={fieldStyle} data-testid={field.id}>
+            <label css={fieldLabelStyle} htmlFor={input.name}>{
+              i18n.exists(`metadata.labels.${field.id}`) ?
                 t(`metadata.labels.${field.id}` as TFuncKey) as string: field.id
-              }</label>
+            }</label>
 
-              {generateComponentWithModifiedInput(field, input)}
-              {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
-            </div>
-          )}
-        </Field>
+            {generateComponentWithModifiedInput(field, input)}
+            {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
+          </div>
+        )}
+      </Field>
     );
   }
 

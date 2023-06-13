@@ -226,7 +226,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                 />
               </ThemeProvider>
 
-                {/* "By default disabled elements like <button> do not trigger user interactions
+              {/* "By default disabled elements like <button> do not trigger user interactions
                  * so a Tooltip will not activate on normal events like hover. To accommodate
                  * disabled elements, add a simple wrapper element, such as a span."
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
