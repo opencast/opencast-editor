@@ -81,7 +81,7 @@ const SubtitleVideoArea : React.FC = () => {
   useEffect(() => {
     if(subtitle) {
       const serializedSubtitle = serializeSubtitle(subtitle)
-      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type : 'text/vtt'})))
+      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type: 'text/vtt'})))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtitle])

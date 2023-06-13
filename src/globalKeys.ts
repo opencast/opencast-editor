@@ -141,7 +141,7 @@ export const subtitleListKeyMap: KeyMap = {
     action: "keydown",
     group: groupSubtitleList,
   },
-  delete : {
+  delete: {
     name: "subtitleList.deleteSegment",
     sequence: rewriteKeys("Control+Alt+d"),
     action: "keydown",

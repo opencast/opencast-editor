@@ -232,7 +232,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
               <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
                 <span>
-                  <button css={[basicButtonStyle(theme), createButtonStyle, { width:"100%" }]}
+                  <button css={[basicButtonStyle(theme), createButtonStyle, { width: "100%" }]}
                     type="submit"
                     aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
                     disabled={submitting || pristine}>

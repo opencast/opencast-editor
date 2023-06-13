@@ -342,7 +342,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
           '&:not(.Mui-selected)': {
             borderColor: `${theme.focused} !important`,
           },
-          '&.Mui-disabled':{
+          '&.Mui-disabled': {
             color: `${theme.disabled} !important`,
           },
           '&.MuiClock-amButton, &.MuiClock-pmButton': {

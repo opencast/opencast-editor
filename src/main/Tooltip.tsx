@@ -40,7 +40,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
       componentsProps={{
         tooltip: {
-          sx:{
+          sx: {
             backgroundColor: `${theme.tooltip}`,
             outline: '2px solid transparent',
             color: `${theme.tooltip_text}`,
@@ -50,7 +50,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
           }
         },
         arrow: {
-          sx:{
+          sx: {
             color: `${theme.tooltip}`,
           }
         }

@@ -94,8 +94,8 @@ const Metadata: React.FC = () => {
 
   const metadataStyle = css({
     padding: '20px',
-    marginLeft:'auto',
-    marginRight:'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     minWidth: '50%',
     display: 'grid',
   })
@@ -145,7 +145,7 @@ const Metadata: React.FC = () => {
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
         '.Mui-disabled, .Mui-disabled button > svg': {
           color: `${theme.disabled} !important`,
-          'WebkitTextFillColor':`${theme.disabled}`,
+          'WebkitTextFillColor': `${theme.disabled}`,
         },
         'button > svg': {
           color: `${theme.indicator_color}`

@@ -357,11 +357,11 @@ const SCHEMA = {
     password: types.string,
   },
   metadata: {
-    show : types.boolean,
+    show: types.boolean,
     configureFields: types.objectsWithinObjects,
   },
   trackSelection: {
-    show : types.boolean,
+    show: types.boolean,
   },
   subtitles: {
     show: types.boolean,
@@ -371,7 +371,7 @@ const SCHEMA = {
     defaultVideoFlavor: types.map,
   },
   thumbnail: {
-    show : types.boolean,
+    show: types.boolean,
     simpleMode: types.boolean,
   }
 }
