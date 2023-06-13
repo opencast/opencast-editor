@@ -306,8 +306,10 @@ describe('Video reducer', () => {
     // const presenters: video["presenters"] = [ "Otto Opencast" ]    // Currently missing from the API
     const tracks: video["tracks"] = [{
       id: "id", uri: videoURLs[0], flavor: { subtype: "prepared", type: "presenter"},
+      /* eslint-disable camelcase */
       video_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
       audio_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
+      /* eslint-enable camelcase */
       thumbnailUri: undefined,
       thumbnailPriority: 0,
     }]
