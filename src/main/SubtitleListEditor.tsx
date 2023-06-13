@@ -397,7 +397,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             value={cue.startTime}
             changeCallback={updateCueStart}
             tooltip={t("subtitleList.startTime-tooltip")}
-            tooltipAria={t("subtitleList.startTime-tooltip-aria")+": " + convertMsToReadableString(cue.startTime)}
+            tooltipAria={t("subtitleList.startTime-tooltip-aria") + ": " + convertMsToReadableString(cue.startTime)}
           />
           <TimeInput
             generalFieldStyle={[fieldStyle,
@@ -405,7 +405,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             value={cue.endTime}
             changeCallback={updateCueEnd}
             tooltip={t("subtitleList.endTime-tooltip")}
-            tooltipAria={t("subtitleList.endTime-tooltip-aria")+": " + convertMsToReadableString(cue.endTime)}
+            tooltipAria={t("subtitleList.endTime-tooltip-aria") + ": " + convertMsToReadableString(cue.endTime)}
           />
         </div>
         <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
@@ -496,7 +496,7 @@ const TimeInput : React.FC<{
   generalFieldStyle: SerializedStyles[],
   tooltip: string,
   tooltipAria: string,
-}>= ({
+}> = ({
   value,
   changeCallback,
   generalFieldStyle,

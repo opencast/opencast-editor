@@ -324,7 +324,7 @@ export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) =
   const minHeight = Math.min(...aspectRatios.map(o => o.height))
   let minWidth = Math.min(...aspectRatios.map(o => o.width))
   minWidth *= aspectRatios.length
-  return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
+  return Math.min((minHeight / minWidth) * 100, (9 / 32) * 100)
 }
 
 const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnailUri"]) => {
@@ -386,7 +386,7 @@ export const selectCaptions = (state: { videoState: { captions: video["captions"
   state.videoState.captions
 export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { captions: video["captions"]; }; }) => {
   for (const cap of state.videoState.captions) {
-    if (cap.flavor.type+"/"+cap.flavor.subtype === flavor) {
+    if (cap.flavor.type + "/" + cap.flavor.subtype === flavor) {
       return cap
     }
   }

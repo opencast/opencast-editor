@@ -26,15 +26,15 @@ const Finish : React.FC = () => {
   const pageNumber = useSelector(selectPageNumber)
 
   const pageZeroStyle = css({
-    display: pageNumber !== 0 ? 'none' :'block',
+    display: pageNumber !== 0 ? 'none' : 'block',
   })
 
   const pageOneStyle = css({
-    display: pageNumber !== 1 ? 'none' :'block',
+    display: pageNumber !== 1 ? 'none' : 'block',
   })
 
   const pageTwoStyle = css({
-    display: pageNumber !== 2 ? 'none' :'block',
+    display: pageNumber !== 2 ? 'none' : 'block',
   })
 
   return (

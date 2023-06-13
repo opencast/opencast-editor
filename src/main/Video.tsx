@@ -103,7 +103,7 @@ export const Video: React.FC = () => {
   );
 };
 
-export const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent=100}) => {
+export const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
 
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
@@ -657,13 +657,13 @@ const TimeDisplay: React.FC<{
     <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
       <ThemedTooltip title={t("video.current-time-tooltip")}>
         <time css={{display: 'inline-block', width: '100px'}}
-          tabIndex={0} role="timer" aria-label={t("video.time-aria")+": " + convertMsToReadableString(currentlyAt)}>
+          tabIndex={0} role="timer" aria-label={t("video.time-aria") + ": " + convertMsToReadableString(currentlyAt)}>
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
         </time>
       </ThemedTooltip>
       {" / "}
       <ThemedTooltip title={t("video.time-duration-tooltip")}>
-        <div tabIndex={0} aria-label={t("video.duration-aria")+": " + convertMsToReadableString(duration)}>
+        <div tabIndex={0} aria-label={t("video.duration-aria") + ": " + convertMsToReadableString(duration)}>
           {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
         </div>
       </ThemedTooltip>

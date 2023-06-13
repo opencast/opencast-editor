@@ -344,7 +344,7 @@ const ThumbnailButtons : React.FC<{
         tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
         ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
         icon={faCopy}
-        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
       <ThumbnailButton
         handler={() => { discard(track.id) }}
@@ -352,7 +352,7 @@ const ThumbnailButtons : React.FC<{
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
         icon={faTimesCircle}
-        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
   )
@@ -548,7 +548,7 @@ const ThumbnailButtonsSimple : React.FC<{
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
         icon={faTimesCircle}
-        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
   )
