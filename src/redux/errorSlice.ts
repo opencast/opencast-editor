@@ -3,10 +3,10 @@ import { IconType } from "react-icons";
 
 interface error {
   error: boolean,
-  errorTitle: string | undefined,
+  errorTitle?: string,
   errorMessage: string,
-  errorDetails: string | undefined,
-  errorIcon: IconType | undefined,
+  errorDetails?: string,
+  errorIcon?: IconType,
 }
 
 const initialState: error = {
@@ -26,10 +26,10 @@ export const errorSlice = createSlice({
   reducers: {
     setError: (state, action: PayloadAction<{
       error: error["error"],
-      errorTitle: error["errorTitle"],
+      errorTitle?: error["errorTitle"],
       errorMessage: error["errorMessage"],
-      errorDetails: error["errorDetails"],
-      errorIcon: error["errorIcon"]
+      errorDetails?: error["errorDetails"],
+      errorIcon?: error["errorIcon"]
     }>) => {
       state.error = action.payload.error;
       state.errorTitle = action.payload.errorTitle;

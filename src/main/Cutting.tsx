@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import CuttingActions from "./CuttingActions"
 import Timeline from './Timeline';
-import { fetchVideoInformation, selectCurrentlyAt, selectIsPlaying, selectIsPlayPreview, selectTitle, setClickTriggered, setCurrentlyAt, setIsPlaying, setIsPlayPreview } from '../redux/videoSlice';
+import { fetchVideoInformation, selectCurrentlyAt, selectDuration, selectIsPlaying, selectIsPlayPreview, selectTitle, setClickTriggered, setCurrentlyAt, setIsPlaying, setIsPlayPreview } from '../redux/videoSlice';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../redux/store';
@@ -23,6 +23,7 @@ const Cutting: React.FC<{}> = () => {
   const dispatch = useDispatch<AppDispatch>()
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
+  const duration = useSelector(selectDuration)
   const theme = useSelector(selectTheme);
   const errorReason = useSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
 
@@ -32,12 +33,16 @@ const Cutting: React.FC<{}> = () => {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
       if (errorReason === 'workflowActive') {
-        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorDetails: undefined, errorIcon: FiMoreHorizontal}))
+        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorIcon: FiMoreHorizontal}))
       } else {
-        dispatch(setError({error: true, errorTitle: undefined, errorMessage: t("video.comError-text"), errorDetails: error, errorIcon: undefined}))
+        dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+      }
+    } else if (videoURLStatus === 'success') {
+      if (duration === null) {
+        dispatch(setError({error: true, errorMessage: t("video.durationError-text"), errorDetails: error}))
       }
     }
-  }, [videoURLStatus, dispatch, error, t, errorReason])
+  }, [videoURLStatus, dispatch, error, t, errorReason, duration])
 
   // Style
   const cuttingStyle = css({

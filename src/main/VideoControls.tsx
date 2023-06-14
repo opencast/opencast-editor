@@ -46,6 +46,7 @@ const VideoControls: React.FC<{
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden',
     width: '100%',
     padding: '20px',
     ...(flexGapReplacementStyle(50, false)),

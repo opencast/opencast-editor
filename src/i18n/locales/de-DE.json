@@ -120,7 +120,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slowenisch",
-            "LANGUAGES-PORTUGUESE": "Portuguese",
+            "LANGUAGES-PORTUGUESE": "Portugiesisch",
             "LANGUAGES-ROMANSH": "Rätoromanisch",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Polnisch",
@@ -249,7 +249,7 @@
         "groupCuttingView": "Schneiden",
         "groupCuttingViewScrubber": "Zeitleiste",
         "groupSubtitleList": "Untertitel",
-        "sequenceSeparator": "or",
+        "sequenceSeparator": "oder",
         "genericError": "Fehler beim Laden der Übersicht",
         "videoPlayButton": "Video abspielen/pausieren",
         "scrubberLeft": "Nach links",
