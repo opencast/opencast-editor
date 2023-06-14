@@ -19,7 +19,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Displays buttons that allow the user to select the flavor/language they want to edit
  */
-const SubtitleSelect : React.FC<{}> = () => {
+const SubtitleSelect : React.FC = () => {
 
   const { t } = useTranslation();
   const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
@@ -30,14 +30,14 @@ const SubtitleSelect : React.FC<{}> = () => {
 
   // Update the displayFlavors and canBeAddedFlavors
   useEffect(() => {
-    let languages = { ...settings.subtitles.languages };
+    const languages = { ...settings.subtitles.languages };
 
     // Get flavors of already created tracks or existing subtitle tracks
-    let subtitleFlavors = captionTracks
+    const subtitleFlavors = captionTracks
       .map(track => track.flavor.type + '/' + track.flavor.subtype)
       .filter(flavor => !subtitles[flavor])
       .concat(Object.keys(subtitles));
-    let tempDisplayFlavors = []
+    const tempDisplayFlavors = []
     for (const flavor of subtitleFlavors) {
       const lang = flavor.replace(/^[^+]*/, '') || t('subtitles.generic');
       tempDisplayFlavors.push({
@@ -48,7 +48,7 @@ const SubtitleSelect : React.FC<{}> = () => {
     tempDisplayFlavors.sort((f1, f2) => f1.title.localeCompare(f2.title));
 
     // List of unused languages
-    let tempCanBeAddedFlavors = Object.keys(languages)
+    const tempCanBeAddedFlavors = Object.keys(languages)
       .map(flavor => ({subFlavor: flavor, title: languages[flavor]}))
       .sort((lang1, lang2) => lang1.title.localeCompare(lang2.title));
 
@@ -63,12 +63,12 @@ const SubtitleSelect : React.FC<{}> = () => {
   })
 
   const renderButtons = () => {
-    let buttons : JSX.Element[] = []
+    const buttons : JSX.Element[] = []
     if (settings.subtitles.languages === undefined) {
       return buttons
     }
 
-    for (let subFlavor of displayFlavors) {
+    for (const subFlavor of displayFlavors) {
       const icon = ((settings.subtitles || {}).icons || {})[subFlavor.subFlavor];
       buttons.push(
         <SubtitleSelectButton
@@ -124,14 +124,14 @@ const SubtitleSelectButton: React.FC<{
       <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
         role="button" tabIndex={0}
         aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", {title: title})}
-        onClick={ () => {
+        onClick={() => {
           dispatch(setIsDisplayEditView(true))
           dispatch(setSelectedSubtitleFlavor(flavor))
         }}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(true))
           dispatch(setSelectedSubtitleFlavor(flavor))
-        }}}>
+        } }}>
         {icon && <div css={flagStyle}>{icon}</div>}
         <div css={titleStyle}>{title}</div>
       </div>
@@ -200,46 +200,46 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
       <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
         role="button" tabIndex={0}
         aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
-        onClick={ () => setIsPlusDisplay(false) }
+        onClick={() => setIsPlusDisplay(false)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           setIsPlusDisplay(false)
-        }}}
-        >
+        } }}
+      >
         <FontAwesomeIcon icon={faPlus} size="2x" css={plusIconStyle}/>
         <Form
           onSubmit={onSubmit}
           subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
-          render={({ handleSubmit, form, submitting, pristine, values}) => (
+          render={({ handleSubmit, submitting, pristine }) => (
             <form onSubmit={event => {
               handleSubmit(event)
               // // Ugly fix for form not getting updated after submit. TODO: Find a better fix
               // form.reset()
             }} css={subtitleAddFormStyle}>
-                {/* TODO: Fix the following warning, caused by removing items from data:
+              {/* TODO: Fix the following warning, caused by removing items from data:
                   MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
                 */}
-                <ThemeProvider theme={subtitleSelectStyle(theme)}>
-                  <Select
-                    label={t("subtitles.createSubtitleDropdown-label")}
-                    name="languages"
-                    data={selectData()}
-                  />
-                </ThemeProvider>
+              <ThemeProvider theme={subtitleSelectStyle(theme)}>
+                <Select
+                  label={t("subtitles.createSubtitleDropdown-label")}
+                  name="languages"
+                  data={selectData()}
+                />
+              </ThemeProvider>
 
-                {/* "By default disabled elements like <button> do not trigger user interactions
+              {/* "By default disabled elements like <button> do not trigger user interactions
                  * so a Tooltip will not activate on normal events like hover. To accommodate
                  * disabled elements, add a simple wrapper element, such as a span."
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
-                <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
-                  <span>
-                    <button css={[basicButtonStyle(theme), createButtonStyle, { width:"100%" } ]}
-                      type="submit"
-                      aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                      disabled={submitting || pristine}>
-                        {t("subtitles.createSubtitleButton-createButton")}
-                    </button>
-                  </span>
-                </ThemedTooltip>
+              <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
+                <span>
+                  <button css={[basicButtonStyle(theme), createButtonStyle, { width: "100%" }]}
+                    type="submit"
+                    aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                    disabled={submitting || pristine}>
+                    {t("subtitles.createSubtitleButton-createButton")}
+                  </button>
+                </span>
+              </ThemedTooltip>
 
             </form>
           )}

@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { Theme } from "./redux/themeSlice";
 
 export const lightMode: Theme = {
@@ -7,7 +9,7 @@ export const lightMode: Theme = {
   error: '#ed1741',
   element_bg: 'snow',
   multiValue: '#e6e6e6',
-  focused:'#e6e6e6',
+  focused: '#e6e6e6',
   focus_text: '#000',
   selected: '#a1a1a1',
   disabled: 'rgba(0, 0, 0, 0.55)',
@@ -133,7 +135,7 @@ export const highContrastLightMode: Theme = {
   error: '#a5102d',
   element_bg: 'none',
   multiValue: '#2e2e2e',
-  focused:'#000099',
+  focused: '#000099',
   focus_text: '#fff',
   selected: '#4646b5',
   disabled: 'rgba(0, 0, 0, 0.6)',

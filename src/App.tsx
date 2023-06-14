@@ -1,4 +1,3 @@
-import React from 'react';
 import Body from './main/Body';
 import Header from './main/Header';
 import { GlobalStyle } from './cssStyles';

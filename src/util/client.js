@@ -44,15 +44,15 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
     }
 
     if (response.ok) {
-      text.length ? data = text : data = ''
+      data = text.length ? text : ''
       return data
     }
     throw new Error(response.statusText)
   } catch (err) {
     return Promise.reject(response.status ?
-        "Status " + response.status + ": " + text :
-        err.message
-      )
+      "Status " + response.status + ": " + text :
+      err.message
+    )
   }
 }
 

@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
 import {
-  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL,  selectWaveformImages, setWaveformImages
+  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -54,7 +54,7 @@ const Timeline: React.FC<{
   const dispatch = useDispatch();
   const duration = useSelector(selectDuration)
 
-  const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
+  const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
@@ -64,27 +64,27 @@ const Timeline: React.FC<{
 
   // Update the current time based on the position clicked on the timeline
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    let rect = e.currentTarget.getBoundingClientRect()
-    let offsetX = e.clientX - rect.left
+    const rect = e.currentTarget.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / width) * (duration)))
   }
 
   return (
-  <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
-    <Scrubber
-      timelineWidth={width}
-      timelineHeight={timelineHeight}
-      selectCurrentlyAt={selectCurrentlyAt}
-      selectIsPlaying={selectIsPlaying}
-      setCurrentlyAt={setCurrentlyAt}
-      setIsPlaying={setIsPlaying}
-    />
-    <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
-      <Waveforms timelineHeight={timelineHeight}/>
-      <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
+    <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
+      <Scrubber
+        timelineWidth={width}
+        timelineHeight={timelineHeight}
+        selectCurrentlyAt={selectCurrentlyAt}
+        selectIsPlaying={selectIsPlaying}
+        setCurrentlyAt={setCurrentlyAt}
+        setIsPlaying={setIsPlaying}
+      />
+      <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
+        <Waveforms timelineHeight={timelineHeight}/>
+        <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
+      </div>
     </div>
-  </div>
   );
 };
 
@@ -120,7 +120,7 @@ export const Scrubber: React.FC<{
   const theme = useSelector(selectTheme)
 
   // Init state variables
-  const [controlledPosition, setControlledPosition] = useState({x: 0,y: 0,});
+  const [controlledPosition, setControlledPosition] = useState({ x: 0, y: 0 });
   const [isGrabbed, setIsGrabbed] = useState(false)
   const [wasPlayingWhenGrabbed, setWasPlayingWhenGrabbed] = useState(false)
   const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000)  // In milliseconds. For keyboard navigation
@@ -129,7 +129,7 @@ export const Scrubber: React.FC<{
 
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
-    if(currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
+    if (currentlyAt !== wasCurrentlyAtRef.current && !isGrabbed) {
       updateXPos();
       wasCurrentlyAtRef.current = currentlyAt;
     }
@@ -137,14 +137,14 @@ export const Scrubber: React.FC<{
 
   // Reposition scrubber when the timeline width changes
   useEffect(() => {
-    if(currentlyAt && duration) {
+    if (currentlyAt && duration) {
       setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
-  const onControlledDrag = (e: any, position: any) => {
+  const onControlledDrag = (_e: any, position: any) => {
     // Update position
     const {x} = position
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)))
@@ -167,7 +167,7 @@ export const Scrubber: React.FC<{
     }
   }
 
-  const onStopDrag = (e: any, position: any) => {
+  const onStopDrag = (_e: any, position: any) => {
     // Update position
     const {x} = position;
     setControlledPosition({x, y: 0});
@@ -258,21 +258,21 @@ export const Scrubber: React.FC<{
         bounds="parent"
         position={controlledPosition}
         nodeRef={nodeRef}
-        >
-          <div ref={nodeRef} css={scrubberStyle}>
+      >
+        <div ref={nodeRef} css={scrubberStyle}>
 
-            <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
-              aria-label={t("timeline.scrubber-text-aria",
-                         {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
-                          segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
-                          moveLeft: scrubberKeyMap[handlers.left.name],
-                          moveRight: scrubberKeyMap[handlers.right.name],
-                          increase: scrubberKeyMap[handlers.increase.name],
-                          decrease: scrubberKeyMap[handlers.decrease.name] })}
-              tabIndex={0}>
-              <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
-            </div>
+          <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
+            aria-label={t("timeline.scrubber-text-aria",
+              {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
+                segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
+                moveLeft: scrubberKeyMap[handlers.left.name],
+                moveRight: scrubberKeyMap[handlers.right.name],
+                increase: scrubberKeyMap[handlers.increase.name],
+                decrease: scrubberKeyMap[handlers.decrease.name] })}
+            tabIndex={0}>
+            <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
           </div>
+        </div>
       </Draggable>
     </GlobalHotKeys>
   );
@@ -287,7 +287,6 @@ export const SegmentsList: React.FC<{
   styleByActiveSegment?: boolean,
   tabable?: boolean,
 }> = ({
-  timelineWidth,
   timelineHeight,
   styleByActiveSegment = true,
   tabable = true,
@@ -329,26 +328,26 @@ export const SegmentsList: React.FC<{
   // Render the individual segments
   const renderedSegments = () => {
     return (
-      segments.map( (segment: Segment, index: number) => (
+      segments.map((segment: Segment, index: number) => (
         <ThemedTooltip title={t("timeline.segment-tooltip", {segment: index})} key={segment.id}>
           <div
             aria-label={t("timeline.segments-text-aria",
-                      {segment: index,
-                        segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
-                        start: convertMsToReadableString(segment.start),
-                        end: convertMsToReadableString(segment.end) })}
+              {segment: index,
+                segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                start: convertMsToReadableString(segment.start),
+                end: convertMsToReadableString(segment.end) })}
             tabIndex={tabable ? 0 : -1}
-          css={{
-            background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
-            borderRadius: '5px',
-            borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
-            borderColor: 'white',
-            borderWidth: '1px',
-            boxSizing: 'border-box',
-            width: ((segment.end - segment.start) / duration) * 100 + '%',
-            height: timelineHeight - 20 + 'px',     // CHECK IF 100%
-            zIndex: 1,
-          }}>
+            css={{
+              background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
+              borderRadius: '5px',
+              borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
+              borderColor: 'white',
+              borderWidth: '1px',
+              boxSizing: 'border-box',
+              width: ((segment.end - segment.start) / duration) * 100 + '%',
+              height: timelineHeight - 20 + 'px',     // CHECK IF 100%
+              zIndex: 1,
+            }}>
           </div>
         </ThemedTooltip>
       ))
@@ -388,7 +387,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   const waveformDisplayTestStyle = css({
     display: 'flex',
     flexDirection: 'column',
-    position: "absolute" as "absolute",
+    position: "absolute" as const,
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
@@ -405,39 +404,38 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   });
 
   // When the URLs to the videos are fetched, generate waveforms
-  useEffect( () => {
+  useEffect(() => {
     if (videoURLStatus === 'success') {
       if (images.length > 0) {
         return
       }
 
       const newImages: string[] = []    // Store local paths to image files
-      let waveformsProcessed : number = 0  // Counter for checking if all workers are done
+      let waveformsProcessed = 0  // Counter for checking if all workers are done
 
       // Only display the waveform of the first video we get
       const onlyOneURL = [videoURLs[0]]
 
       onlyOneURL.forEach((videoURL, _index, array) => {
         // Set up blob request
-        var blob = null
-        var xhr = new XMLHttpRequest()
+        let blob = null
+        const xhr = new XMLHttpRequest()
         xhr.open("GET", videoURL)
         xhr.responseType = "blob"
-        xhr.onload = function()
-        {
+        xhr.onload = () => {
           blob = xhr.response
-          var file = new File([blob], blob)
+          const file = new File([blob], blob)
 
           // Start waveform worker with blob
           const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})
 
-          waveformWorker.onerror = function(error: string) {
+          waveformWorker.onerror = (error: string) => {
             setWaveformWorkerError(true)
             console.log("Waveform could not be generated:" + error)
           }
 
           // When done, save path to generated waveform img
-          waveformWorker.oncomplete = function(image: any, numSamples: any) {
+          waveformWorker.oncomplete = (image: any, _numSamples: any) => {
             newImages.push(image)
             waveformsProcessed++
             // If all images are generated, rerender
@@ -456,7 +454,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   const renderImages = () => {
     if (images.length > 0) {
       return (
-        <img alt='Waveform' src={images[0]} css={[waveformStyle, {minHeight: 0, height: '100%'}]}></img>
+        <img alt="Waveform" src={images[0]} css={[waveformStyle, {minHeight: 0, height: '100%'}]}></img>
         // images.map((image, index) =>
         //   <img key={index} alt='Waveform' src={image ? image : ""} css={{minHeight: 0}}></img>
         // )
@@ -478,9 +476,9 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   }
 
   return (
-  <div css={waveformDisplayTestStyle}>
-    {renderImages()}
-  </div>
+    <div css={waveformDisplayTestStyle}>
+      {renderImages()}
+    </div>
   );
 }
 

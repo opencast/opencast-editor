@@ -9,22 +9,22 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
   const positionRef = React.useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const areaRef = React.useRef<HTMLDivElement>(null);
-  
+
   return (
-    <Tooltip {...props} 
+    <Tooltip {...props}
       classes={{ popper: className }}
       arrow
       enterDelay={500}
       enterNextDelay={500}
       leaveDelay={150}
-      placement='top'
+      placement="top"
       ref={areaRef}
 
       /** onMouseOut: Workaround to hide tooltip after the mouse leaves the element.
         * Else the tooltip would appear for a second where the mousepointer leaves. */
       onMouseOut={() => positionRef.current = { x: -9999, y: -9999 }}
       onMouseMove={event => positionRef.current = { x: event.clientX, y: event.clientY }}
-      
+
       PopperProps={{
         anchorEl: {
           getBoundingClientRect: () => {
@@ -40,7 +40,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
       componentsProps={{
         tooltip: {
-          sx:{
+          sx: {
             backgroundColor: `${theme.tooltip}`,
             outline: '2px solid transparent',
             color: `${theme.tooltip_text}`,
@@ -50,7 +50,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
           }
         },
         arrow: {
-          sx:{
+          sx: {
             color: `${theme.tooltip}`,
           }
         }

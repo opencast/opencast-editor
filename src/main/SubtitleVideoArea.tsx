@@ -35,10 +35,10 @@ import { selectFieldStyle } from "../cssStyles";
  * coming up with a proper fix appears to be rather difficult
  * TODO: Come up with a proper fix and create a PR
  */
-const SubtitleVideoArea : React.FC<{}> = () => {
+const SubtitleVideoArea : React.FC = () => {
 
   const tracks = useSelector(selectVideos)
-  let subtitle = useSelector(selectSelectedSubtitleByFlavor)
+  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
 
@@ -79,9 +79,9 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
   // Parse subtitles to something the video player understands
   useEffect(() => {
-    if(subtitle) {
+    if (subtitle) {
       const serializedSubtitle = serializeSubtitle(subtitle)
-      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type : 'text/vtt'})))
+      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type: 'text/vtt'})))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtitle])
@@ -103,7 +103,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   });
 
   const render = () => {
-    return(
+    return (
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>
           {selectedFlavor && <VideoSelectDropdown
@@ -164,7 +164,7 @@ const VideoSelectDropdown : React.FC<{
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
 
-  const dropdownName: string = "flavors"
+  const dropdownName = "flavors"
 
   // Turn flavor into string
   const stringifyFlavor = (flavor: Flavor) => {
@@ -173,7 +173,7 @@ const VideoSelectDropdown : React.FC<{
 
   const getFlavorLabel = (flavor: Flavor) => {
     // Omit subtype if all flavour subtypes are equal
-    if (flavors.every((f) => f.subtype === flavors[0].subtype)) {
+    if (flavors.every(f => f.subtype === flavors[0].subtype)) {
       return flavor.type
     }
 
@@ -200,7 +200,7 @@ const VideoSelectDropdown : React.FC<{
         options={data}
         defaultValue={data.filter(({value}) => value === stringifyFlavor(defaultFlavor))}
         onChange={
-          (newValue) => {
+          newValue => {
             if (newValue) {
               // Put flavor back together
               const [type, subtype] = newValue.value.split("/")

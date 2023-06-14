@@ -14,7 +14,7 @@ import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
 
 
-const Body: React.FC<{}> = () => {
+const Body: React.FC = () => {
 
   const isEnd = useSelector(selectIsEnd)
   const isError = useSelector(selectIsError)

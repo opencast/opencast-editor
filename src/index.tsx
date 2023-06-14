@@ -31,14 +31,14 @@ initialize.then(
   () => {
     ReactDOM.render(
       <React.StrictMode>
-          <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
-              <GlobalHotKeys>
-                <App />
-              </GlobalHotKeys>
-            </LocalizationProvider>
-          </Provider>
+        <Provider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
+            <GlobalHotKeys>
+              <App />
+            </GlobalHotKeys>
+          </LocalizationProvider>
+        </Provider>
       </React.StrictMode>,
       document.getElementById('root')
     );

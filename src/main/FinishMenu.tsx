@@ -17,7 +17,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
-const FinishMenu : React.FC<{}> = () => {
+const FinishMenu : React.FC = () => {
 
   const finishMenuStyle = css({
     display: 'flex',
@@ -29,9 +29,9 @@ const FinishMenu : React.FC<{}> = () => {
 
   return (
     <div css={finishMenuStyle}>
-        <FinishMenuButton iconName={faSave} stateName="Save changes"/>
-        <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
-        <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
+      <FinishMenuButton iconName={faSave} stateName="Save changes"/>
+      <FinishMenuButton iconName={faFileExport} stateName="Start processing"/>
+      <FinishMenuButton iconName={faTimesCircle} stateName="Discard changes"/>
     </div>
   );
 }
@@ -50,8 +50,8 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
     dispatch(setPageNumber(1))
   }
 
-  var buttonString;
-  switch(stateName) {
+  let buttonString;
+  switch (stateName) {
     case "Save changes":
       buttonString = t("finishMenu.save-button");
       break;
@@ -68,12 +68,12 @@ const FinishMenuButton: React.FC<{iconName: IconDefinition, stateName: finish["v
 
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-    role="button" tabIndex={0}
-      onClick={ finish }
+      role="button" tabIndex={0}
+      onClick={finish}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         finish()
-      }}}>
-      <FontAwesomeIcon  icon={iconName} size="2x"/>
+      } }}>
+      <FontAwesomeIcon icon={iconName} size="2x"/>
       <div style={{padding: '0px 20px'}}>{buttonString}</div>
     </div>
   );
