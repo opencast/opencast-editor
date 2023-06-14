@@ -22,11 +22,12 @@ import { Form } from "react-final-form";
 import { Select } from "mui-rff";
 import { useTranslation } from "react-i18next";
 import { OnChange } from 'react-final-form-listeners'
-import { VideoControls, VideoPlayer } from "./Video";
 import { flexGapReplacementStyle, subtitleSelectStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemeProvider } from "@mui/material/styles";
+import { VideoPlayer } from "./VideoPlayers";
+import VideoControls from "./VideoControls";
 
 /**
  * A part of the subtitle editor that displays a video and related controls

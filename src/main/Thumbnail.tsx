@@ -10,11 +10,12 @@ import { selectTheme, Theme } from "../redux/themeSlice";
 import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
-import { VideoControls, VideoPlayers } from "./Video";
 import {
   selectIsPlaying, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
 import { ThemedTooltip } from "./Tooltip";
+import VideoPlayers from "./VideoPlayers";
+import VideoControls from "./VideoControls";
 
 
 /**

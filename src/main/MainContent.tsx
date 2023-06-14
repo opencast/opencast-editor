@@ -1,8 +1,5 @@
 import React from "react";
 
-import Video from './Video';
-import Timeline from './Timeline';
-import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
 import TrackSelection from './TrackSelection';
 import Subtitle from "./Subtitle";
@@ -22,14 +19,11 @@ import { flexGapReplacementStyle } from "../cssStyles";
 import { useBeforeunload } from 'react-beforeunload';
 import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
 import { selectHasChanges as metadataSelectHasChanges} from "../redux/metadataSlice";
-import {
-  selectIsPlaying, selectCurrentlyAt,
-  setIsPlaying, setCurrentlyAt, setClickTriggered,
-} from '../redux/videoSlice'
 import { selectHasChanges as selectSubtitleHasChanges } from "../redux/subtitleSlice";
 import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
 import Thumbnail from "./Thumbnail";
+import Cutting from "./Cutting";
 
 /**
  * A container for the main functionality
@@ -101,9 +95,7 @@ const MainContent: React.FC<{}> = () => {
     if (mainMenuState === MainMenuStateNames.cutting) {
       return (
         <div css={[mainContentStyle, cuttingStyle]} role="main">
-          <Video />
-          <CuttingActions />
-          <CuttingTimeline />
+          <Cutting />
         </div>
       )
     } else if (mainMenuState === MainMenuStateNames.metadata) {
@@ -156,16 +148,5 @@ const MainContent: React.FC<{}> = () => {
   );
 };
 
-const CuttingTimeline : React.FC<{}> = () => {
-  return (
-    <Timeline
-      selectIsPlaying={selectIsPlaying}
-      selectCurrentlyAt={selectCurrentlyAt}
-      setIsPlaying={setIsPlaying}
-      setCurrentlyAt={setCurrentlyAt}
-      setClickTriggered={setClickTriggered}
-    />
-  );
-}
 
 export default MainContent;
