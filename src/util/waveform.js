@@ -4,6 +4,8 @@
  * duncan83@gmail.com
  */
 
+/* eslint-disable space-before-function-paren */
+
 import { AudioContext } from 'standardized-audio-context';
 
 export function Waveform(opts) {
@@ -45,7 +47,7 @@ export function Waveform(opts) {
           });
         }
       })
-      .catch((e) => {
+      .catch(e => {
         console.log("Waveform Worker: " + e);
         this._error = e.toString()
         this.onerror.forEach(fn => fn(e.toString()));
@@ -57,7 +59,7 @@ export function Waveform(opts) {
     get: function() {
       return _completeFuncs;
     },
-    set: function(fn, opt) {
+    set: function(fn, _opt) {
       if (typeof fn == 'function') {
         if (this.waveformImage || this.svgPath) {
           fn(this.waveformImage || this.svgPath, this.svgLength);
@@ -75,7 +77,7 @@ export function Waveform(opts) {
     get: function() {
       return _errorFuncs;
     },
-    set: function(fn, opt) {
+    set: function(fn, _opt) {
       if (typeof fn == 'function') {
         if (this._error && this._error !== "") {
           fn(_error);
@@ -99,11 +101,10 @@ Waveform.prototype = {
   },
   decodeAudioData: function(arraybuffer) {
     return new Promise((resolve, reject) => {
-      new Promise((res, rej) => {
+      new Promise((res, _rej) => {
         if (arraybuffer instanceof ArrayBuffer) {
           res(arraybuffer);
-        }
-        else if (arraybuffer instanceof Blob) {
+        } else if (arraybuffer instanceof Blob) {
           let reader = new FileReader();
           reader.onload = function() {
             res(reader.result);
@@ -132,10 +133,10 @@ Waveform.prototype = {
   },
   drawCanvasWaveform: function(amp) {
     amp = amp || 1;
-    this.ocCtx.fillStyle = '#FFFFFF00'; //'#b7d8f9';
+    this.ocCtx.fillStyle = '#FFFFFF00'; // '#b7d8f9';
     this.ocCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
     this.ocCtx.lineWidth = 1;
-    this.ocCtx.strokeStyle = 'black'; //'#38597a';
+    this.ocCtx.strokeStyle = 'black'; // '#38597a';
     let sliceWidth = this.WIDTH * 1.0 / this.channelData.length;
     let x = 0;
 
@@ -150,7 +151,7 @@ Waveform.prototype = {
       this.peakRMS = Math.max(sample * sample, this.peakRMS);
       x += sliceWidth;
     });
-    this.ocCtx.lineTo(this.WIDTH, this.HEIGHT/2);
+    this.ocCtx.lineTo(this.WIDTH, this.HEIGHT / 2);
     this.ocCtx.stroke();
     this.aveRMS = Math.sqrt(this.aveRMS / this.channelData.length);
     this.aveDBs = 20 * Math.log(this.aveRMS) / Math.log(10);
@@ -158,7 +159,7 @@ Waveform.prototype = {
   },
   dropSamples: function(data, requestedLength) {
     let divider = Math.max(parseInt(data.length / requestedLength), 1);
-    return data.filter((sample, i) => i % divider === 0);
+    return data.filter((_sample, i) => i % divider === 0);
   },
   generateWaveform: function(arraybuffer) {
     return this.decodeAudioData(arraybuffer);
@@ -171,7 +172,7 @@ Waveform.prototype = {
     }
   },
   workerCommunication: function(e) {
-    switch(e.data.type) {
+    switch (e.data.type) {
       case 'path':
         this.setSVGpath(e.data.path, e.data.length);
         this.worker.removeEventListener('message', this.workerCommunication.bind(this), false);

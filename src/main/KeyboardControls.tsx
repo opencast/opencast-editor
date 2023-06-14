@@ -101,7 +101,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 }
 
 
-const KeyboardControls: React.FC<{}> = () => {
+const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -118,7 +118,7 @@ const KeyboardControls: React.FC<{}> = () => {
   const render = () => {
     if (keyMap && Object.keys(keyMap).length > 0) {
 
-      var obj: Record<string, Array<KeyMapDisplayOptions>> = {}
+      const obj: Record<string, Array<KeyMapDisplayOptions>> = {}
       obj[t("keyboardControls.defaultGroupName")] = []    // For keys without a group
 
       // Sort by group

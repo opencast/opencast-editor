@@ -24,7 +24,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Allows the user to select a workflow
  */
-const WorkflowSelection : React.FC<{}> = () => {
+const WorkflowSelection : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -84,7 +84,7 @@ const WorkflowSelection : React.FC<{}> = () => {
               name="Workflow Selection Area"
               onChange={handleWorkflowSelectChange}
             >
-              {workflows.map( (workflow: Workflow, index: number) => (
+              {workflows.map((workflow: Workflow, _index: number) => (
                 <WorkflowButton key={workflow.id} stateName={workflow.name} workflowId={workflow.id} workflowDescription={workflow.description}/>
               ))}
             </RadioGroup>
@@ -105,7 +105,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   // Fills the layout template with values based on how many workflows are available
   const renderSelection = () => {
     if (workflows.length <= 0) {
-      return(
+      return (
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.noWorkflows-text">
@@ -123,7 +123,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.oneWorkflow-text">
-            The video will be cut and processed with the workflow "{{workflow: workflows[0].name}}".<br/>
+            The video will be cut and processed with the workflow {{workflow: workflows[0].name}}.<br/>
             This will take some time.
           </Trans>,
           false,
@@ -181,7 +181,7 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   );
 }
 
-const WorkflowSelectRadio: React.FC = (props) => {
+const WorkflowSelectRadio: React.FC = props => {
 
   const style = css({
     alignSelf: 'start',

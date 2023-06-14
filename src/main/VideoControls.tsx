@@ -2,7 +2,7 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FaPlay, FaPause, FaToggleOn, FaToggleOff, } from "react-icons/fa";
+import { FaPlay, FaPause, FaToggleOn, FaToggleOff } from "react-icons/fa";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -72,10 +72,10 @@ const VideoControls: React.FC<{
           setIsPlayPreview={setIsPlayPreview}
         />
       </div>
-        <PlayButton
-          selectIsPlaying={selectIsPlaying}
-          setIsPlaying={setIsPlaying}
-        />
+      <PlayButton
+        selectIsPlaying={selectIsPlaying}
+        setIsPlaying={setIsPlaying}
+      />
       <div css={rightSideBoxStyle}>
         <TimeDisplay
           selectCurrentlyAt={selectCurrentlyAt}
@@ -119,7 +119,7 @@ const PreviewMode: React.FC<{
   // Maps functions to hotkeys
   const handlers = {
     // preview: switchPlayPreview,
-    preview: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchPlayPreview(keyEvent, undefined) } }
+    preview: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchPlayPreview(keyEvent, undefined) } }
   }
 
   const previewModeStyle = css({
@@ -149,16 +149,16 @@ const PreviewMode: React.FC<{
   return (
     <ThemedTooltip
       title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"),
-      hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
-      >
+        hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
+    >
       <div css={previewModeStyle}
         ref={ref}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
         aria-label={t("video.previewButton-aria", { hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
-        onClick={ (event: SyntheticEvent) => switchPlayPreview(event, ref) }
+        onClick={(event: SyntheticEvent) => switchPlayPreview(event, ref)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
           switchPlayPreview(event, undefined)
-        }}}>
+        } }}>
         <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
         <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
@@ -195,7 +195,7 @@ const PlayButton: React.FC<{
 
   // Maps functions to hotkeys
   const handlers = {
-    play: (keyEvent?: KeyboardEvent) => { if(keyEvent) { switchIsPlaying(keyEvent) } }
+    play: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchIsPlaying(keyEvent) } }
   }
 
   return (
@@ -208,7 +208,7 @@ const PlayButton: React.FC<{
           onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
             switchIsPlaying(event)
-          }}}>
+          } }}>
           {isPlaying ? <FaPause css={{fontSize: 24}} /> : <FaPlay css={{fontSize: 24}} />}
         </div>
       </div>
@@ -242,14 +242,14 @@ const TimeDisplay: React.FC<{
     <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
       <ThemedTooltip title={t("video.current-time-tooltip")}>
         <time css={timeTextStyle(theme)}
-          tabIndex={0} role="timer" aria-label={t("video.time-aria")+": " + convertMsToReadableString(currentlyAt)}>
+          tabIndex={0} role="timer" aria-label={t("video.time-aria") + ": " + convertMsToReadableString(currentlyAt)}>
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
         </time>
       </ThemedTooltip>
       {" / "}
       <ThemedTooltip title={t("video.time-duration-tooltip")}>
         <div css={timeTextStyle(theme)}
-          tabIndex={0} aria-label={t("video.duration-aria")+": " + convertMsToReadableString(duration)}>
+          tabIndex={0} aria-label={t("video.duration-aria") + ": " + convertMsToReadableString(duration)}>
           {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
         </div>
       </ThemedTooltip>

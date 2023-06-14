@@ -6,7 +6,7 @@ import { FiInfo } from "react-icons/fi";
 import { FaTrash, FaTrashRestore } from "react-icons/fa";
 import ReactPlayer from 'react-player'
 
-import { Track }  from '../types'
+import { Track } from '../types'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
 import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
@@ -18,13 +18,13 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Creates the track selection.
  */
-const TrackSelection: React.FC<{}> = () => {
+const TrackSelection: React.FC = () => {
 
   // Generate list of tracks
   const tracks: Track[] = useSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
-    <TrackItem key={ track.id } track={ track } enabledCount={ enabledCount } />
+    <TrackItem key={track.id} track={track} enabledCount={enabledCount} />
   );
 
   return (
@@ -36,7 +36,7 @@ const TrackSelection: React.FC<{}> = () => {
 }
 
 
-const Description: React.FC<{}> = () => {
+const Description: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -51,7 +51,7 @@ const Description: React.FC<{}> = () => {
   });
 
   return (
-    <aside css={ descriptionStyle }>
+    <aside css={descriptionStyle}>
       <FiInfo css={{margin: '10px', fontSize: 32}} />
       { description }
     </aside>
@@ -67,7 +67,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   const dispatch = useDispatch();
   const header = track.flavor.type + ' '
     + (track.video_stream.enabled ? ''
-       :  `(${t('trackSelection.trackInactive', 'inactive')})`);
+      : `(${t('trackSelection.trackInactive', 'inactive')})`);
 
   const trackItemStyle = css({
     display: 'flex',
@@ -107,12 +107,12 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     t('trackSelection.deleteTrackText', 'Delete Track'),
     t('trackSelection.cannotDeleteTrackText', 'Cannot Delete Track'),
     t('trackSelection.restoreTrackText', 'Restore Track')
-    ][deleteStatus];
+  ][deleteStatus];
   const deleteTooltip = [
     t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.'),
     t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
     t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
-    ][deleteStatus];
+  ][deleteStatus];
   const deleteIcon = [FaTrash, FaTrash, FaTrashRestore][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
@@ -122,17 +122,17 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   }
 
   return (
-    <div css={ trackItemStyle }>
-      <div css={ headerStyle }>{ header }</div>
+    <div css={trackItemStyle}>
+      <div css={headerStyle}>{ header }</div>
       <div css={{ width: '95%', textAlign: 'center', opacity: track.video_stream.enabled ? '1' : '0.5' }}>
-        <ReactPlayer css={ playerStyle } url={ track.uri } width="90%" />
+        <ReactPlayer css={playerStyle} url={track.uri} width="90%" />
       </div>
       <SelectButton
-        text={ deleteText }
-        tooltip={ deleteTooltip }
-        handler={ trackEnabledChange }
-        Icon={ deleteIcon }
-        active={ deleteEnabled } />
+        text={deleteText}
+        tooltip={deleteTooltip}
+        handler={trackEnabledChange}
+        Icon={deleteIcon}
+        active={deleteEnabled} />
     </div>
   );
 }
@@ -159,7 +159,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
       background: `${theme.element_bg}`,
     }];
   const clickHandler = () => {
-    active && handler();
+    if (active) { handler() }
     ref.current?.blur();
   };
   const keyHandler = (event: React.KeyboardEvent) => {
@@ -170,13 +170,13 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
   const ref = React.useRef<HTMLDivElement>(null)
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={ buttonStyle }
-          tabIndex={ 0 }
-          ref={ref}
-          role="button"
-          aria-label={ tooltip }
-          onClick={ clickHandler }
-          onKeyDown={ keyHandler } >
+      <div css={buttonStyle}
+        tabIndex={0}
+        ref={ref}
+        role="button"
+        aria-label={tooltip}
+        onClick={clickHandler}
+        onKeyDown={keyHandler} >
         <Icon />
         <div>{ text }</div>
       </div>

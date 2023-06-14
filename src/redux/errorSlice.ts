@@ -40,7 +40,7 @@ export const errorSlice = createSlice({
   }
 })
 
-export const { setError, } = errorSlice.actions
+export const { setError } = errorSlice.actions
 
 // Export Selectors
 export const selectIsError = (state: { errorState: { error: error["error"] }; }) => state.errorState.error

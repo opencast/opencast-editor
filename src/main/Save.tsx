@@ -28,7 +28,7 @@ import { ThemedTooltip } from "./Tooltip";
  * Shown if the user wishes to save.
  * Informs the user about saving and displays a save button
  */
-const Save : React.FC<{}> = () => {
+const Save : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -55,7 +55,7 @@ const Save : React.FC<{}> = () => {
     // Post (successful) save
     if (postWorkflowStatus === 'success' && postMetadataStatus === 'success'
       && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
-      return(
+      return (
         <>
           <FiCheckCircle css={{fontSize: 80}}/>
           <div>{t("save.success-text")}</div>
@@ -96,7 +96,7 @@ const Save : React.FC<{}> = () => {
 /**
  * Button that sends a post request to save current changes
  */
-export const SaveButton: React.FC<{}> = () => {
+export const SaveButton: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -115,7 +115,7 @@ export const SaveButton: React.FC<{}> = () => {
   let Icon = FiSave
   let spin = false
   let tooltip = null
-  if (workflowStatus === 'failed' || metadataStatus === 'failed'){
+  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
     Icon = FiAlertCircle
     spin = false
     tooltip = t("save.confirmButton-failed-tooltip")
@@ -123,14 +123,14 @@ export const SaveButton: React.FC<{}> = () => {
     Icon = FiCheck
     spin = false
     tooltip = t("save.confirmButton-success-tooltip")
-  } else if (workflowStatus === 'loading' || metadataStatus === 'loading')  {
+  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
     Icon = FiLoader
     spin = true
     tooltip = t("save.confirmButton-attempting-tooltip")
   }
 
   const ariaSaveUpdate = () => {
-    if(workflowStatus === 'success') {
+    if (workflowStatus === 'success') {
       return t("save.success-tooltip-aria")
     }
   }
@@ -139,7 +139,7 @@ export const SaveButton: React.FC<{}> = () => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
       subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
 
     }
@@ -181,10 +181,10 @@ export const SaveButton: React.FC<{}> = () => {
     <ThemedTooltip title={tooltip == null ? tooltip = "" : tooltip}>
       <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
         role="button" tabIndex={0}
-        onClick={ save }
+        onClick={save}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           save()
-        }}}>
+        } }}>
         <Icon css={spin ? spinningStyle : undefined}/>
         <span>{t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>

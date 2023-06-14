@@ -15,7 +15,7 @@ import { css } from "@emotion/react";
 import VideoPlayers from "./VideoPlayers";
 import VideoControls from "./VideoControls";
 
-const Cutting: React.FC<{}> = () => {
+const Cutting: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -79,7 +79,7 @@ const Cutting: React.FC<{}> = () => {
 }
 
 
-const CuttingHeader: React.FC<{}> = () => {
+const CuttingHeader: React.FC = () => {
 
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
@@ -87,7 +87,7 @@ const CuttingHeader: React.FC<{}> = () => {
 
   return (
     <div css={[titleStyle(theme), titleStyleBold(theme)]}>
-        {metadataTitle ? metadataTitle : title}
+      {metadataTitle ? metadataTitle : title}
     </div>
   );
 }

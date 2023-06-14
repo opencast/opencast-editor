@@ -18,20 +18,20 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Displays a menu for selecting what should be done with the current changes
  */
-const Finish : React.FC<{}> = () => {
+const Finish : React.FC = () => {
 
   const pageNumber = useSelector(selectPageNumber)
 
   const pageZeroStyle = css({
-    display: pageNumber !== 0 ? 'none' :'block',
+    display: pageNumber !== 0 ? 'none' : 'block',
   })
 
   const pageOneStyle = css({
-    display: pageNumber !== 1 ? 'none' :'block',
+    display: pageNumber !== 1 ? 'none' : 'block',
   })
 
   const pageTwoStyle = css({
-    display: pageNumber !== 2 ? 'none' :'block',
+    display: pageNumber !== 2 ? 'none' : 'block',
   })
 
   return (
@@ -57,7 +57,7 @@ const Finish : React.FC<{}> = () => {
 export const PageButton : React.FC<{pageNumber: number, label: string, Icon: IconType}> = ({pageNumber, label, Icon}) => {
 
   const theme = useSelector(selectTheme);
-  
+
   // Initialize redux variables
   const dispatch = useDispatch()
 
@@ -76,10 +76,10 @@ export const PageButton : React.FC<{pageNumber: number, label: string, Icon: Ico
   return (
     <div css={[basicButtonStyle(theme), pageButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ onPageChange }
+      onClick={onPageChange}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         onPageChange()
-      }}}>
+      } }}>
       <Icon />
       <span>{label}</span>
     </div>

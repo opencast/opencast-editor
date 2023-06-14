@@ -23,7 +23,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Will eventually display settings based on the selected workflow index
  */
-const WorkflowConfiguration : React.FC<{}> = () => {
+const WorkflowConfiguration : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -94,7 +94,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
       subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
 
     }
@@ -147,10 +147,10 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   return (
     <div css={[basicButtonStyle(theme), saveButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ saveAndProcess }
+      onClick={saveAndProcess}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         saveAndProcess()
-      }}}>
+      } }}>
       <Icon css={spin ? spinningStyle : undefined}/>
       <span>{text}</span>
     </div>

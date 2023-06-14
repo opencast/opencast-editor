@@ -26,7 +26,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * A container for selecting the functionality shown in the main part of the app
  */
-const MainMenu: React.FC<{}> = () => {
+const MainMenu: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);
@@ -176,14 +176,14 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({Icon, stateName, bot
     <li css={[basicButtonStyle(theme), buttonStyle()]}
       role="menuitem" tabIndex={0}
       aria-label={ariaLabelText}
-      onClick={ onMenuItemClicked }
+      onClick={onMenuItemClicked}
       onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
         onMenuItemClicked()
-      }}}
-      >
+      } }}
+    >
       <Icon css={{
         fontSize: miniButton ? 24 : 36
-        }}/>
+      }}/>
       {bottomText && <div>{bottomText}</div>}
     </li>
   );

@@ -16,7 +16,7 @@ import { ThemedTooltip } from "./Tooltip";
  * This page is to be displayed when the user is "done" with the editor
  * and should not be able to perfom any actions anymore
  */
-const TheEnd : React.FC<{}> = () => {
+const TheEnd : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -51,7 +51,7 @@ const TheEnd : React.FC<{}> = () => {
 }
 
 
-const StartOverButton: React.FC<{}> = () => {
+const StartOverButton: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);
@@ -64,10 +64,10 @@ const StartOverButton: React.FC<{}> = () => {
     <ThemedTooltip title={t("theEnd.startOver-tooltip")}>
       <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
         role="button" tabIndex={0}
-        onClick={ reloadPage }
+        onClick={reloadPage}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           reloadPage()
-        }}}>
+        } }}>
         <span>{t("theEnd.startOver-button")}</span>
       </div>
     </ThemedTooltip>

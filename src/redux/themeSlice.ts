@@ -2,60 +2,60 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { darkMode, lightMode, highContrastDarkMode, highContrastLightMode } from "../themes";
 
 export interface Theme {
-  background: String
-  menu_background: String
-  text: String
-  text_black: String,
-  error: String
-  element_bg: String
-  multiValue: String
-  focused: String
-  focus_text: String
-  selected: String
-  disabled: String
-  menuBorder: String
-  boxShadow: String
-  singleKey_bg: String
-  singleKey_border: String
-  invert_wave: String
-  inverted_text: String
-  tooltip: String
-  tooltip_text: String
-  element_outline: String
-  selected_text: String
-  dropdown_border: String
-  menuButton_outline: String
-  button_outline: String
-  button_color: String
-  indicator_color: String
-  icon_color: String
-  waveform_filter: String
-  waveform_bg: String
-  scrubber: String
-  subtitle_segment_bg: String
-  subtitle_segment_border: String
-  subtitle_segment_text: String
-  clock_bg: String
-  clock_border: String
-  clock_hands: String
-  clock_focus: String
-  digit_selected: String
-  text_shadow: String
-};
+  background: string
+  menu_background: string
+  text: string
+  text_black: string
+  error: string
+  element_bg: string
+  multiValue: string
+  focused: string
+  focus_text: string
+  selected: string
+  disabled: string
+  menuBorder: string
+  boxShadow: string
+  singleKey_bg: string
+  singleKey_border: string
+  invert_wave: string
+  inverted_text: string
+  tooltip: string
+  tooltip_text: string
+  element_outline: string
+  selected_text: string
+  dropdown_border: string
+  menuButton_outline: string
+  button_outline: string
+  button_color: string
+  indicator_color: string
+  icon_color: string
+  waveform_filter: string
+  waveform_bg: string
+  scrubber: string
+  subtitle_segment_bg: string
+  subtitle_segment_border: string
+  subtitle_segment_text: string
+  clock_bg: string
+  clock_border: string
+  clock_hands: string
+  clock_focus: string
+  digit_selected: string
+  text_shadow: string
+}
 
 const getValue = () => {
   const value = localStorage.getItem('theme');
-  
-  if(value === 'system' || value === null) {
+
+  if (value === 'system' || value === null) {
     return 'system'
   }
-  else if(value === 'high-contrast-dark') {
+  else if (value === 'high-contrast-dark') {
     return 'high-contrast-dark'
   }
-  else if(value === 'high-contrast-light') {
+  else if (value === 'high-contrast-light') {
     return 'high-contrast-light'
   }
-  else if(value === 'dark') {
+  else if (value === 'dark') {
     return 'dark'
   }
   return 'light'
@@ -65,39 +65,39 @@ const getTheme = () => {
   const themeId = getValue();
   document.documentElement.setAttribute('data-theme', 'light');
 
-  if(themeId === 'system' || themeId === undefined) {
+  if (themeId === 'system' || themeId === undefined) {
     const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
     const isContrastPrefered = window.matchMedia('(prefers-contrast: more)');
     console.log('isContrastPrefered', isContrastPrefered)
 
-    if(isDarkPrefered.matches && !isContrastPrefered.matches) {
+    if (isDarkPrefered.matches && !isContrastPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'dark');
       return darkMode
     }
-    else if(isContrastPrefered.matches && isDarkPrefered.matches) {
+    else if (isContrastPrefered.matches && isDarkPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'high-contrast-dark');
       return highContrastDarkMode
     }
-    else if(isContrastPrefered.matches && !isDarkPrefered.matches) {
+    else if (isContrastPrefered.matches && !isDarkPrefered.matches) {
       document.documentElement.setAttribute('data-theme', 'high-contrast-light');
       return highContrastLightMode
     }
     return lightMode
   }
 
-  if(themeId === 'high-contrast-dark') {
+  if (themeId === 'high-contrast-dark') {
     document.documentElement.setAttribute('data-theme', 'high-contrast-dark');
     return highContrastDarkMode
   }
-  if(themeId === 'high-contrast-light') {
+  if (themeId === 'high-contrast-light') {
     document.documentElement.setAttribute('data-theme', 'high-contrast-light');
     return highContrastLightMode
   }
-  if(themeId === 'dark') {
+  if (themeId === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     return darkMode
   }
-    return lightMode   
+  return lightMode
 }
 
 export interface theme {
@@ -117,7 +117,7 @@ export const themeSlice = createSlice({
     setState: (state, action: PayloadAction<theme["value"]>) => {
       state.value = action.payload;
     },
-    toggleTheme: (state) => {
+    toggleTheme: state => {
       state.theme = getTheme()
     },
   }

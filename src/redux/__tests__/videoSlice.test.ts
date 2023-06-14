@@ -145,7 +145,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 5, deleted: false},
       {start: 5, end: 10, deleted: false}
     ]
@@ -165,7 +165,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -184,7 +184,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -204,7 +204,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 5, deleted: false},
       {start: 5, end: 10, deleted: false}
     ]
@@ -218,7 +218,7 @@ describe('Video reducer', () => {
   })
 
   it('should mark a segment as deleted if alive', () => {
-    let resultSegments = [
+    const resultSegments = [
       {deleted: true},
     ]
 
@@ -235,7 +235,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -253,7 +253,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
@@ -271,7 +271,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: true},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: true},
     ]
 
@@ -300,14 +300,16 @@ describe('Video reducer', () => {
     // Arrange
     const resultStatus: httpRequestState = { status: 'success', error: undefined, errorReason: "unknown" }
     const segments = [{ start: 0, end: 42, deleted: false }]
-    const videoURLs: video["videoURLs"] = [ "video/url" ]
+    const videoURLs: video["videoURLs"] = ["video/url"]
     const dur: video["duration"] = 42
     const title: video["title"] = "Video Title"
     // const presenters: video["presenters"] = [ "Otto Opencast" ]    // Currently missing from the API
     const tracks: video["tracks"] = [{
       id: "id", uri: videoURLs[0], flavor: { subtype: "prepared", type: "presenter"},
+      /* eslint-disable camelcase */
       video_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
       audio_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
+      /* eslint-enable camelcase */
       thumbnailUri: undefined,
       thumbnailPriority: 0,
     }]
