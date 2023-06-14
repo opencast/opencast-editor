@@ -15,6 +15,7 @@ export interface Theme {
   disabled: string
   menuBorder: string
   boxShadow: string
+  boxShadow_tiles: string
   singleKey_bg: string
   singleKey_border: string
   invert_wave: string

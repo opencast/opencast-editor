@@ -52,28 +52,40 @@ const Cutting: React.FC = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px',
-    borderBottom: `${theme.menuBorder}`,
   });
+
+  const bottomStyle = css({
+    width: '100%',
+    background: `${theme.menu_background}`,
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    marginTop: '10px',
+    boxSizing: "border-box",
+    padding: '10px',
+  })
 
   return (
     <div css={cuttingStyle}>
       <CuttingHeader />
       <VideoPlayers refs={undefined}/>
-      <Timeline
-        selectIsPlaying={selectIsPlaying}
-        selectCurrentlyAt={selectCurrentlyAt}
-        setIsPlaying={setIsPlaying}
-        setCurrentlyAt={setCurrentlyAt}
-        setClickTriggered={setClickTriggered}
-      />
-      <CuttingActions />
-      <VideoControls
-        selectCurrentlyAt={selectCurrentlyAt}
-        selectIsPlaying={selectIsPlaying}
-        selectIsPlayPreview={selectIsPlayPreview}
-        setIsPlaying={setIsPlaying}
-        setIsPlayPreview={setIsPlayPreview}
-      />
+      <div css={bottomStyle}>
+        <Timeline
+          timelineHeight={300}
+          selectIsPlaying={selectIsPlaying}
+          selectCurrentlyAt={selectCurrentlyAt}
+          setIsPlaying={setIsPlaying}
+          setCurrentlyAt={setCurrentlyAt}
+          setClickTriggered={setClickTriggered}
+        />
+        <CuttingActions />
+        <VideoControls
+          selectCurrentlyAt={selectCurrentlyAt}
+          selectIsPlaying={selectIsPlaying}
+          selectIsPlayPreview={selectIsPlayPreview}
+          setIsPlaying={setIsPlaying}
+          setIsPlayPreview={setIsPlayPreview}
+        />
+      </div>
     </div>
   )
 }
