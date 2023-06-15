@@ -24,8 +24,6 @@ import { selectTheme } from "../redux/themeSlice";
 
 const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
 
-  const theme = useSelector(selectTheme);
-
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
 
@@ -35,7 +33,6 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
     justifyContent: 'center',
     alignItems: 'center',
     width: widthInPercent + '%',
-    boxShadow: `${theme.boxShadow_tiles}`,
   });
 
   // Initialize video players
@@ -48,6 +45,8 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
         url={videoURLs[i]}
         isPrimary={i === 0}
         subtitleUrl={""}
+        first={i === 0}
+        last={i === videoCount - 1}
         selectIsPlaying={selectIsPlaying}
         selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
         selectPreviewTriggered={selectPreviewTriggered}
@@ -84,6 +83,8 @@ export const VideoPlayer = React.forwardRef(
     url: string | undefined,
     isPrimary: boolean,
     subtitleUrl: string,
+    first: boolean,
+    last: boolean,
     selectIsPlaying:(state: RootState) => boolean,
     selectCurrentlyAtInSeconds: (state: RootState) => number,
     selectPreviewTriggered:(state: RootState) => boolean,
@@ -103,6 +104,8 @@ export const VideoPlayer = React.forwardRef(
       isPrimary,
       selectIsPlaying,
       subtitleUrl,
+      first,
+      last,
       selectCurrentlyAtInSeconds,
       selectPreviewTriggered,
       selectClickTriggered,
@@ -320,7 +323,12 @@ export const VideoPlayer = React.forwardRef(
       position: 'relative',
       width: '100%',
       paddingTop: `min(${aspectRatio + '%'}, ${'30vh'})`,
+      boxShadow: `${theme.boxShadow_tiles}`,
       overflow: 'hidden',
+      ...(first) && {borderTopLeftRadius: '5px'},
+      ...(first) && {borderBottomLeftRadius: '5px'},
+      ...(last) && {borderTopRightRadius: '5px'},
+      ...(last) && {borderBottomRightRadius: '5px'},
     });
 
     const reactPlayerStyle = css({

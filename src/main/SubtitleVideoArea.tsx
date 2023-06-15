@@ -119,6 +119,8 @@ const SubtitleVideoArea : React.FC = () => {
             url={getTrackURI()}
             isPrimary={true}
             subtitleUrl={subtitleUrl}
+            first={true}
+            last={true}
             selectIsPlaying={selectIsPlaying}
             selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
             selectPreviewTriggered={selectPreviewTriggered}
