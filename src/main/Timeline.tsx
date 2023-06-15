@@ -80,7 +80,7 @@ const Timeline: React.FC<{
         setCurrentlyAt={setCurrentlyAt}
         setIsPlaying={setIsPlaying}
       />
-      <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
+      <div css={{position: 'relative', height: timelineHeight + 'px'}} >
         <Waveforms timelineHeight={timelineHeight}/>
         <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
       </div>
@@ -192,7 +192,7 @@ export const Scrubber: React.FC<{
 
   const scrubberStyle = css({
     backgroundColor: `${theme.scrubber}`,
-    height: timelineHeight - 10 + 'px', //    TODO: CHECK IF height: '100%',
+    height: timelineHeight + 20 + 'px', //    TODO: CHECK IF height: '100%',
     width: '1px',
     position: 'absolute',
     zIndex: 2,
@@ -200,6 +200,7 @@ export const Scrubber: React.FC<{
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
+    top: '-20px',
   });
 
   const scrubberDragHandleStyle = css({
@@ -343,7 +344,7 @@ export const SegmentsList: React.FC<{
               borderWidth: '1px',
               boxSizing: 'border-box',
               width: ((segment.end - segment.start) / duration) * 100 + '%',
-              height: timelineHeight - 20 + 'px',     // CHECK IF 100%
+              height: timelineHeight + 'px',     // CHECK IF 100%
               zIndex: 1,
             }}>
           </div>
@@ -355,7 +356,7 @@ export const SegmentsList: React.FC<{
   const segmentsStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: '10px',
+    // paddingTop: '10px',
     height: '100%',
   })
 
@@ -389,8 +390,8 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
-    height: timelineHeight - 20 + 'px',   // CHECK IF     height: '100%',
-    paddingTop: '10px',
+    height: timelineHeight + 'px',   // CHECK IF     height: '100%',
+    // paddingTop: '10px',
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,
   });

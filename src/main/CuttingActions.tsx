@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
 
-import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+import { basicButtonStyle } from '../cssStyles'
 
 import { IconType } from "react-icons";
 import { FiScissors, FiChevronLeft, FiChevronRight} from "react-icons/fi";
@@ -17,7 +17,7 @@ import { cuttingKeyMap } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 import { useTranslation } from 'react-i18next';
-import { selectTheme, Theme } from "../redux/themeSlice";
+import { selectTheme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";
 
 /**
@@ -60,6 +60,7 @@ const CuttingActions: React.FC = () => {
     flexDirection: 'row' as const,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: '10px',
     // ...(flexGapReplacementStyle(30, true)),
   })
 
@@ -108,7 +109,7 @@ const CuttingActions: React.FC = () => {
 /**
  * CSS for cutting buttons
  */
-const cuttingActionButtonStyle = (theme: Theme) => css({
+const cuttingActionButtonStyle = css({
   padding: '16px',
   // boxShadow: `${theme.boxShadow}`,
   // background: `${theme.element_bg}`
@@ -133,7 +134,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, ac
 
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
+      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
         ref={ref}
         role="button" tabIndex={0} aria-label={ariaLabelText}
         onClick={(event: SyntheticEvent) => actionHandler(event, action, ref)}
@@ -166,7 +167,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
 
   return (
     <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}>
-      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle(theme)]}
+      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
         ref={ref}
         role="button" tabIndex={0}
         aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}

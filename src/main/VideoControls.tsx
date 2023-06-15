@@ -2,7 +2,8 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FaPlay, FaPause, FaToggleOn, FaToggleOff } from "react-icons/fa";
+import { FaToggleOn, FaToggleOff } from "react-icons/fa";
+import { FiPlay, FiPause } from "react-icons/fi";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -41,15 +42,20 @@ const VideoControls: React.FC<{
   setIsPlayPreview
 }) => {
 
+  const theme = useSelector(selectTheme);
+
   const videoControlsRowStyle = css({
+    background: `${theme.background}`,
+    outline: `5px solid ${theme.background}`, // Fake the box bigger than it actually is
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
     width: '100%',
-    padding: '20px',
-    ...(flexGapReplacementStyle(50, false)),
+    paddingTop: '10px',
+    paddingBottom: '10px',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   const leftSideBoxStyle = css({
@@ -67,9 +73,8 @@ const VideoControls: React.FC<{
   return (
     <div css={videoControlsRowStyle}>
       <div css={leftSideBoxStyle}>
-        <PreviewMode
-          selectIsPlayPreview={selectIsPlayPreview}
-          setIsPlayPreview={setIsPlayPreview}
+        <TimeDisplay
+          selectCurrentlyAt={selectCurrentlyAt}
         />
       </div>
       <PlayButton
@@ -77,8 +82,9 @@ const VideoControls: React.FC<{
         setIsPlaying={setIsPlaying}
       />
       <div css={rightSideBoxStyle}>
-        <TimeDisplay
-          selectCurrentlyAt={selectCurrentlyAt}
+        <PreviewMode
+          selectIsPlayPreview={selectIsPlayPreview}
+          setIsPlayPreview={setIsPlayPreview}
         />
       </div>
     </div>
@@ -130,14 +136,15 @@ const PreviewMode: React.FC<{
     alignItems: 'center'
   })
 
-  const switchIconStyle = (theme: Theme) => css({
+  const switchIconStyle = css({
     cursor: "pointer",
     transitionDuration: "0.3s",
     transitionProperty: "transform",
     "&:hover": {
       transform: 'scale(1.05)',
     },
-    color: `${theme.icon_color}`,
+    color: `#3073b8`,
+    fontSize: '28px',
   })
 
   const previewModeTextStyle = (theme: Theme) => css({
@@ -163,7 +170,7 @@ const PreviewMode: React.FC<{
         <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
         </div>
-        {isPlayPreview ? <FaToggleOn css={switchIconStyle(theme)} /> : <FaToggleOff css={switchIconStyle(theme)} />}
+        {isPlayPreview ? <FaToggleOn css={switchIconStyle} /> : <FaToggleOff css={switchIconStyle} />}
       </div>
     </ThemedTooltip>
   );
@@ -198,18 +205,30 @@ const PlayButton: React.FC<{
     play: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchIsPlaying(keyEvent) } }
   }
 
+  const playButtonStyle = css({
+    justifySelf: 'center',
+    outline: 'none',
+    color: `${theme.icon_color}`,
+
+    background: '#3073b8',
+    borderRadius: '50%',
+    width: '50px',
+    height: '50px',
+    boxShadow: `${theme.boxShadow_tiles}`
+  })
+
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
         <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
-        <div css={[basicButtonStyle(theme), {justifySelf: 'center', outline: 'none', color: `${theme.icon_color}`}]}
+        <div css={[basicButtonStyle(theme), playButtonStyle]}
           role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
           aria-label={t("video.playButton-tooltip")}
           onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
             switchIsPlaying(event)
           } }}>
-          {isPlaying ? <FaPause css={{fontSize: 24}} /> : <FaPlay css={{fontSize: 24}} />}
+          {isPlaying ? <FiPause css={{fontSize: 24}} /> : <FiPlay css={{fontSize: 24}} />}
         </div>
       </div>
     </ThemedTooltip>

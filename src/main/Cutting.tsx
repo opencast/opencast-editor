@@ -59,7 +59,7 @@ const Cutting: React.FC = () => {
     background: `${theme.menu_background}`,
     borderRadius: '5px',
     boxShadow: `${theme.boxShadow_tiles}`,
-    marginTop: '10px',
+    marginTop: '24px',
     boxSizing: "border-box",
     padding: '10px',
   })
