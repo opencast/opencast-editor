@@ -58,49 +58,48 @@ const CuttingActions: React.FC = () => {
   const cuttingStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
-    justifyContent: 'space-between',
-    ...(flexGapReplacementStyle(30, true)),
+    justifyContent: 'center',
+    alignItems: 'center',
+    // ...(flexGapReplacementStyle(30, true)),
   })
 
-  const blockStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    ...(flexGapReplacementStyle(30, true)),
+  const verticalLineStyle = css({
+    borderLeft: '2px solid #DDD;',
+    height: '32px',
   })
 
   return (
     <GlobalHotKeys keyMap={cuttingKeyMap} handlers={handlers} allowChanges={true} >
       <div css={cuttingStyle}>
-        <div css={blockStyle}>
-          <CuttingActionsButton Icon={FiScissors}
-            actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut}
-            tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
-            ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
-          />
-          <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
-            hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
-          />
-          <CuttingActionsButton Icon={FiChevronLeft}
-            actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
-            tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
-            ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
-          />
-          <CuttingActionsButton Icon={FiChevronRight}
-            actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
-            tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
-            ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
-          />
-        </div>
-        <div css={blockStyle}>
-          {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
-            tooltip="Not implemented"
-            ariaLabelText="Reset changes. Not implemented"
-          />
-          <CuttingActionsButton Icon={faQuestion} actionName="Undo" action={null}
-            tooltip="Not implemented"
-            ariaLabelText="Undo. Not implemented"
-          /> */}
-        </div>
+        <CuttingActionsButton Icon={FiScissors}
+          actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut}
+          tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
+          ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
+        />
+        <div css={verticalLineStyle} />
+        <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
+          hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
+        />
+        <div css={verticalLineStyle} />
+        <CuttingActionsButton Icon={FiChevronLeft}
+          actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
+          tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
+          ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
+        />
+        <div css={verticalLineStyle} />
+        <CuttingActionsButton Icon={FiChevronRight}
+          actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
+          tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
+          ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
+        />
+        {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
+          tooltip="Not implemented"
+          ariaLabelText="Reset changes. Not implemented"
+        />
+        <CuttingActionsButton Icon={faQuestion} actionName="Undo" action={null}
+          tooltip="Not implemented"
+          ariaLabelText="Undo. Not implemented"
+        /> */}
       </div>
     </GlobalHotKeys>
   );
@@ -111,8 +110,8 @@ const CuttingActions: React.FC = () => {
  */
 const cuttingActionButtonStyle = (theme: Theme) => css({
   padding: '16px',
-  boxShadow: `${theme.boxShadow}`,
-  background: `${theme.element_bg}`
+  // boxShadow: `${theme.boxShadow}`,
+  // background: `${theme.element_bg}`
 });
 
 interface cuttingActionsButtonInterface {
