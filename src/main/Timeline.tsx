@@ -191,35 +191,35 @@ export const Scrubber: React.FC<{
   }
 
   const scrubberStyle = css({
-    backgroundColor: `${theme.text}`,
+    backgroundColor: `${theme.scrubber}`,
     height: timelineHeight - 10 + 'px', //    TODO: CHECK IF height: '100%',
     width: '1px',
     position: 'absolute',
     zIndex: 2,
-    boxShadow: `${theme.boxShadow}`,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    outline: `${theme.scrubber}`,
   });
 
   const scrubberDragHandleStyle = css({
     // Base style
-    background: `${theme.text}`,
+    background: `${theme.menu_background}`,
     display: "inline-block",
-    height: "10px",
+    height: "20px",
     position: "relative",
     width: "20px",
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
     "&:after": {
-      borderTop: `10px solid ${theme.text}`,
+      borderTop: `10px solid ${theme.menu_background}`,
       borderLeft: '10px solid transparent',
       borderRight: '10px solid transparent',
       content: '""',
       height: 0,
       left: 0,
       position: "absolute",
-      top: "10px",
+      top: "17px",
       width: 0,
     },
     // Animation
@@ -238,9 +238,9 @@ export const Scrubber: React.FC<{
   })
 
   const scrubberDragHandleIconStyle = css({
-    transform: 'scaleY(0.7) rotate(90deg)',
-    paddingRight: '5px',
-    color: `${theme.background}`,
+    paddingLeft: '2px',
+    paddingTop: '2px',
+    color: `${theme.text}`,
   })
 
   // // Possible TODO: Find a way to use ariaLive in a way that only the latest change is announced
