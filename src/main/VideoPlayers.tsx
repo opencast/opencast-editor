@@ -24,6 +24,7 @@ import { selectTheme } from "../redux/themeSlice";
 
 const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
 
+  const theme = useSelector(selectTheme)
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
 
@@ -33,6 +34,8 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
     justifyContent: 'center',
     alignItems: 'center',
     width: widthInPercent + '%',
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
   });
 
   // Initialize video players
@@ -323,7 +326,6 @@ export const VideoPlayer = React.forwardRef(
       position: 'relative',
       width: '100%',
       paddingTop: `min(${aspectRatio + '%'}, ${'30vh'})`,
-      boxShadow: `${theme.boxShadow_tiles}`,
       overflow: 'hidden',
       ...(first) && {borderTopLeftRadius: '5px'},
       ...(first) && {borderBottomLeftRadius: '5px'},
