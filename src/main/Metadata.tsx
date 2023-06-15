@@ -100,17 +100,26 @@ const Metadata: React.FC = () => {
     display: 'grid',
   })
 
+  const catalogStyle = css({
+    background: `${theme.menu_background}`,
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    marginTop: '24px',
+    boxSizing: "border-box",
+    padding: '10px',
+  })
+
   const fieldStyle = css({
     display: 'flex',
-    flexFlow: 'row nowrap',
+    flexFlow: 'column nowrap',
     lineHeight: '2em',
     margin: '10px',
   })
 
   const fieldLabelStyle = css({
-    alignSelf: 'center',
     width: '110px',
     fontSize: '1em',
+    fontWeight: 'bold',
     lineHeight: '32px',
   })
 
@@ -118,11 +127,10 @@ const Metadata: React.FC = () => {
     return css({
       flex: '1',
       fontSize: '1em',
-      marginLeft: '15px',
       borderRadius: '5px',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-      ...(isReadOnly && {color: `${theme.text}`}),
-      color: `${theme.text}`,
+      ...(isReadOnly && {color: `${theme.text_black}`}),
+      color: `${theme.text_black}`,
       outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`
     });
   }
@@ -645,7 +653,7 @@ const Metadata: React.FC = () => {
 
 
     return (
-      <div key={catalogIndex}>
+      <div key={catalogIndex} css={catalogStyle}>
         <div css={[titleStyle(theme), titleStyleBold(theme)]}>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
             t(`metadata.${catalog.title.replaceAll(".", "-")}` as TFuncKey) as string : catalog.title
