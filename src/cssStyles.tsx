@@ -229,29 +229,29 @@ export function selectFieldStyle(theme: Theme) {
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: theme.text,
+      color: theme.text_black,
     }),
     multiValue: (provided: any) => ({
       ...provided,
-      color: theme.selected_text,
+      color: theme.text_black,
       background: theme.multiValue,
       cursor: 'default',
     }),
     multiValueLabel: (provided: any) => ({
       ...provided,
-      color: theme.selected_text,
+      color: theme.text_black,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       background: state.isFocused ? theme.focused : theme.background
         && state.isSelected ? theme.selected : theme.background,
       ...(state.isFocused && {color: theme.focus_text}),
-      color: state.isFocused ? theme.focus_text : theme.text
-        && state.isSelected ? theme.selected_text : theme.text,
+      color: state.isFocused ? theme.focus_text : theme.text_black
+        && state.isSelected ? theme.selected_text : theme.text_black,
     }),
     placeholder: (provided: any) => ({
       ...provided,
-      color: theme.text,
+      color: theme.text_black,
     }),
     clearIndicator: (provided: any) => ({
       ...provided,
@@ -267,7 +267,7 @@ export function selectFieldStyle(theme: Theme) {
     }),
     input: (provided: any) => ({
       ...provided,
-      color: theme.text,
+      color: theme.text_black,
     }),
   }
 }

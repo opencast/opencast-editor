@@ -159,7 +159,7 @@ const Metadata: React.FC = () => {
           color: `${theme.indicator_color}`
         },
         '.MuiInput-input, button': {
-          color: `${theme.text}`,
+          color: `${theme.text_black}`,
           background: 'transparent !important',
           '&:hover': {
             background: 'transparent !important',
