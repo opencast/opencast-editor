@@ -304,23 +304,23 @@ export const SegmentsList: React.FC<{
    */
   const bgColor = (deleted: boolean, active: boolean) => {
     if (!deleted && !active) {
-      return 'rgba(0, 0, 255, 0.4)'
+      return 'rgba(137, 195, 252, 0.4)'
     } else if (deleted && !active) {
       return `repeating-linear-gradient(
-                -45deg,
-                rgba(255, 45, 45, 0.4),
-                rgba(255, 45, 45, 0.4) 10px,
-                rgba(255, 0, 0, 0.4) 10px,
-                rgba(255, 0, 0, 0.4) 20px);`
+                -35deg,
+                rgba(255, 95, 95, 0.4),
+                rgba(255, 95, 95, 0.4) 5px,
+                rgba(200, 0, 0, 0.4) 5px,
+                rgba(200, 0, 0, 0.4) 10px);`
     } else if (!deleted && active) {
-      return 'rgba(0, 0, 200, 0.4)'
+      return 'rgba(78, 163, 252, 0.4)'
     } else if (deleted && active) {
       return `repeating-linear-gradient(
-                -45deg,
-                rgba(200, 45, 45, 0.4),
-                rgba(200, 45, 45, 0.4) 10px,
-                rgba(200, 0, 0, 0.4) 10px,
-                rgba(200, 0, 0, 0.4) 20px);`
+                -35deg,
+                rgba(255, 65, 65, 0.4),
+                rgba(255, 65, 65, 0.4) 5px,
+                rgba(180, 0, 0, 0.4) 5px,
+                rgba(180, 0, 0, 0.4) 10px);`
     }
   }
 
@@ -338,7 +338,6 @@ export const SegmentsList: React.FC<{
             tabIndex={tabable ? 0 : -1}
             css={{
               background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
-              borderRadius: '5px',
               borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
               borderColor: 'white',
               borderWidth: '1px',
