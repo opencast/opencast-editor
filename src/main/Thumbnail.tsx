@@ -238,6 +238,7 @@ const ThumbnailTableRow: React.FC<{
 const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 
   const { t } = useTranslation()
+  const theme = useSelector(selectTheme)
 
   const generalStyle = css({
     height: '280px',
@@ -259,6 +260,7 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    color: `${theme.text_black}`,
   })
 
   return (

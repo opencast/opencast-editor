@@ -179,14 +179,17 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
     display: !isPlusDisplay ? 'flex' : 'none',
     flexDirection: 'column' as const,
     ...(flexGapReplacementStyle(30, false)),
+    width: '80%',
     padding: '20px',
   });
 
   const createButtonStyle = css({
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    fontSize: '0.75em',
-    background: 'snow',
-    border: '1px solid #ccc',
+    padding: '10px 5px',
+    width: '100%',
+    boxShadow: '',
+    border: `1px solid ${theme.text}`,
+    background: `${theme.element_bg}`,
+    color: `${theme.text}`,
 
     "&[disabled]": {
       opacity: '0.6',
@@ -231,7 +234,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
               <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
                 <span>
-                  <button css={[basicButtonStyle(theme), createButtonStyle, { width: "100%" }]}
+                  <button css={[basicButtonStyle(theme), createButtonStyle]}
                     type="submit"
                     aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
                     disabled={submitting || pristine}>

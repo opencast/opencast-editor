@@ -12,7 +12,7 @@ export const lightMode: Theme = {
   multiValue: '#edf6fe',
   focused: '#edf6fe',
   focus_text: '#3e8ad8',
-  selected: '#a1a1a1',
+  selected: '#d5ebfe',
   disabled: 'rgba(0, 0, 0, 0.55)',
   menuBorder: '1px solid #BBB',
   boxShadow: '0 0 2px 2px rgb(195, 218, 238)',

@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { selectTheme } from "../redux/themeSlice";
 import { parseSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
+import { titleStyle, titleStyleBold } from "../cssStyles";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -92,21 +93,6 @@ const SubtitleEditor : React.FC = () => {
     borderBottom: `${theme.menuBorder}`
   })
 
-  // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx
-  const titleStyle = css({
-    display: 'inline-block',
-    padding: '15px',
-    overflow: 'hidden',
-    whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    maxWidth: '500px',
-  })
-
-  const titleStyleBold = css({
-    fontWeight: 'bold',
-    fontSize: '24px',
-    verticalAlign: '-2.5px',
-  })
 
   const render = () => {
     if (getError !== undefined) {
@@ -118,7 +104,7 @@ const SubtitleEditor : React.FC = () => {
         <>
           <div css={headerRowStyle}>
             <BackButton />
-            <div css={[titleStyle, titleStyleBold]}>
+            <div css={[titleStyle(theme), titleStyleBold(theme)]}>
               {t("subtitles.editTitle", {title: getTitle()})}
             </div>
             <div css={{width: '50px'}}></div>

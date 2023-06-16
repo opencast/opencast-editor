@@ -97,7 +97,7 @@ const SubtitleTimeline: React.FC = () => {
         css={{
           position: 'absolute',
           width: '2px',
-          height: '190px',
+          height: '200px',
           ...(refTop.current) && {left: (refTop.current.clientWidth / 2)},
           top: '10px',
           background: `${theme.text}`,
