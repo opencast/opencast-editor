@@ -17,8 +17,8 @@ export const lightMode: Theme = {
   menuBorder: '1px solid #BBB',
   boxShadow: '0 0 2px 2px rgb(195, 218, 238)',
   boxShadow_tiles: '0 5px 10px 0px rgba(150, 150, 150, 0.5)',
-  singleKey_bg: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
-  singleKey_border: 'Gainsboro',
+  singleKey_bg: '#f3f4f6',
+  singleKey_border: '#d1d5db',
   invert_wave: 'invert(0%)',
   inverted_text: '#000', // for "Generating waveform" text: in lightMode it's not inverted, so it has to be black
   tooltip: '#363636',

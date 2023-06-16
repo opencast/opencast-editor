@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux"
 import { selectTheme, selectThemeState, toggleTheme, setState } from "../redux/themeSlice";
 import Select from "react-select";
-import { selectFieldStyle } from "../cssStyles";
+import { selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
+import { css } from '@emotion/react'
 
 const ThemeSwitcher: React.FC = () => {
 
@@ -47,18 +48,18 @@ const ThemeSwitcher: React.FC = () => {
     }
   }
 
-  const baseStyle = {
-    maxWidth: '50vw',
-    width: '870px',
-    alignSelf: 'center',
-    padding: '20px',
-  }
-
-  const headerStyle = {
+  const baseStyle = css({
     display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     alignItems: 'center',
-  }
+    width: '100%',
+  })
+
+  const dropdownStyle = css({
+    outline: `${theme.element_outline}`,
+    borderRadius: '5px',
+    minWidth: '50vw',
+  })
 
   const themes = [
     { value: 'system', label: t('theme.system') },
@@ -70,9 +71,9 @@ const ThemeSwitcher: React.FC = () => {
 
   return (
     <div css={baseStyle}>
-      <h2 css={headerStyle}>{t('theme.appearance')}</h2>
+      <div css={[titleStyle(theme), titleStyleBold(theme)]}>{t('theme.appearance')}</div>
       <Select styles={selectFieldStyle(theme)}
-        css={{outline: `${theme.element_outline}`, borderRadius: '5px'}}
+        css={dropdownStyle}
         defaultValue={themes.filter(({value}) => value === themeState)}
         options={themes}
         onChange={themes => switchTheme(themes!.value)}

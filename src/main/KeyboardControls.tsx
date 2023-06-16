@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { getAllHotkeys } from "../globalKeys";
 import { selectTheme } from "../redux/themeSlice";
+import { titleStyle, titleStyleBold } from '../cssStyles'
 
 const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
@@ -19,10 +20,15 @@ const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({nam
     flexDirection: 'column' as const,
     width: '460px',
     maxWidth: '50vw',
+
+    background: `${theme.menu_background}`,
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    boxSizing: "border-box",
+    padding: '0px 20px 20px 20px',
   });
 
   const headingStyle = css({
-    borderBottom: `${theme.menuBorder}`
   })
 
   return (
@@ -42,60 +48,65 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   const entryStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexFlow: 'column nowrap',
+    justifyContent: 'left',
     width: '100%',
-    paddingBottom: '5px',
-    paddingTop: '5px',
+    padding: '10px 0px',
+    ...(flexGapReplacementStyle(10, true))
   });
 
   const labelStyle = css({
-    alignSelf: 'center',
-    minWidth: '130px',
-    height: '5em',
+    fontWeight: 'bold',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     wordWrap: 'break-word',
+  })
 
-    // Center text vertically
+  const sequencesStyle = css({
     display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    ...(flexGapReplacementStyle(10, true))
   })
 
   const sequenceStyle = css({
-    alignSelf: 'center',
-    marginLeft: '15px',
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     ...(flexGapReplacementStyle(10, true))
   })
 
   const singleKeyStyle = css({
-    borderRadius: '5px',
+    borderRadius: '4px',
     borderWidth: '2px',
     borderStyle: 'solid',
     borderColor: `${theme.singleKey_border}`,
     background: `${theme.singleKey_bg}`,
+    boxShadow: `0 2px 2px 0px rgba(150, 150, 150, 0.5)`,
     padding: '10px',
+    color: `${theme.text_black}`,
   })
 
   const orStyle = css({
     alignSelf: 'center',
-    lineHeight: '32px',
+    fontSize: '20px',
+    fontWeight: 'bold',
   })
 
   return (
     <div css={entryStyle}>
       <div css={labelStyle}><Trans>{params.name || t("keyboardControls.missingLabel")}</Trans></div>
-      {params.sequences.map((sequence, index, arr) => (
-        <div css={sequenceStyle} key={index}>
-          {sequence.sequence.toString().split('+').map((singleKey, index) => (
-            <div css={singleKeyStyle} key={index}>{singleKey}</div>
-          ))}
-          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
-        </div>
-      ))}
+      <div css={sequencesStyle}>
+        {params.sequences.map((sequence, index, arr) => (
+          <div css={sequenceStyle} key={index}>
+            {sequence.sequence.toString().split('+').map((singleKey, index, {length}) => (
+              <>
+                <div css={singleKeyStyle} key={index}>{singleKey}</div>
+                {length - 1 !== index ? <div css={orStyle}>+</div> : ''}
+              </>
+            ))}
+            <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -104,6 +115,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
 
   const keyMap = getAllHotkeys()
 
@@ -161,9 +173,9 @@ const KeyboardControls: React.FC = () => {
 
   return (
     <div css={keyboardControlsStyle}>
-      <h2>
+      <div css={[titleStyle(theme), titleStyleBold(theme)]}>
         {t("keyboardControls.header")}
-      </h2>
+      </div>
 
       {render()}
     </div>
