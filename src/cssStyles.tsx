@@ -138,13 +138,13 @@ export const backOrContinueStyle = css(({
  * CSS for big buttons in a dynamic grid
  */
 export const tileButtonStyle = (theme: Theme) => css({
-  width: '250px',
+  width: '290px',
   height: '220px',
   display: 'flex',
   flexDirection: 'column' as const,
-  fontSize: "x-large",
+  fontSize: "large",
   ...(flexGapReplacementStyle(30, false)),
-  boxShadow: `${theme.boxShadow}`,
+  boxShadow: `${theme.boxShadow_tiles}`,
   background: `${theme.element_bg}`,
   placeSelf: 'center',
 });

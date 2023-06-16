@@ -19,8 +19,8 @@ const FinishMenu : React.FC = () => {
 
   const finishMenuStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'space-around',
+    flexDirection: 'row',
+    justifyContent: 'center',
     flexWrap: 'wrap',
     ...(flexGapReplacementStyle(30, false)),
   })
@@ -64,6 +64,17 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
       break;
   }
 
+  const iconStyle = css({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    background: `${theme.button_color}`,
+    borderRadius: '50%',
+    width: '90px',
+    height: '90px',
+  })
+
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
       role="button" tabIndex={0}
@@ -71,7 +82,9 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         finish()
       } }}>
-      <Icon css={{fontSize: 42}}/>
+      <div css={iconStyle}>
+        <Icon css={{fontSize: 36}}/>
+      </div>
       <div style={{padding: '0px 20px'}}>{buttonString}</div>
     </div>
   );
