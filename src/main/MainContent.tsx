@@ -51,7 +51,7 @@ const MainContent: React.FC = () => {
     paddingLeft: '20px',
     ...(flexGapReplacementStyle(20, false)),
     background: `${theme.background}`,
-    overflow: 'vertical',
+    overflow: 'auto',
   })
 
   const cuttingStyle = css({
