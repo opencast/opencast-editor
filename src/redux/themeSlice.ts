@@ -6,6 +6,7 @@ export interface Theme {
   menu_background: string
   text: string
   text_black: string
+  text_darkblue: string
   error: string
   element_bg: string
   multiValue: string

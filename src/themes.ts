@@ -7,6 +7,7 @@ export const lightMode: Theme = {
   menu_background: 'snow',
   text: '#3e8ad8',
   text_black: '#000',
+  text_darkblue: '#3073b8',
   error: '#ed1741',
   element_bg: 'snow',
   multiValue: '#edf6fe',
@@ -47,10 +48,11 @@ export const lightMode: Theme = {
 };
 
 export const darkMode: Theme = {
-  background: '#1C1C1C',
+  background: '#121212',
   menu_background: '#1C1C1C',
   text: 'rgba(255, 255, 255, 0.87)',
   text_black: '#fff',
+  text_darkblue: '#2b2b2b',
   error: 'rgba(237, 23, 65, 0.8)',
   element_bg: '#2b2b2b',
   multiValue: '#4a4a4a',
@@ -95,6 +97,7 @@ export const highContrastDarkMode: Theme = {
   menu_background: '#000',
   text: '#fff',
   text_black: '#fff',
+  text_darkblue: '#fff',
   error: '#ED1741',
   element_bg: 'none',
   multiValue: '#c4c4c4',
@@ -139,6 +142,7 @@ export const highContrastLightMode: Theme = {
   menu_background: 'snow',
   text: '#000',
   text_black: '#000',
+  text_darkblue: '#000',
   error: '#a5102d',
   element_bg: 'none',
   multiValue: '#2e2e2e',
