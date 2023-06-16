@@ -40,7 +40,7 @@ const TrackSelection: React.FC = () => {
     width: '100%',
     height: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
     ...(flexGapReplacementStyle(40, false)),
