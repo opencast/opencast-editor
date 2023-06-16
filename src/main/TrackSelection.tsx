@@ -2,14 +2,13 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { IconType } from "react-icons";
-import { FiInfo } from "react-icons/fi";
 import { FaTrash, FaTrashRestore } from "react-icons/fa";
 import ReactPlayer from 'react-player'
 
 import { Track } from '../types'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
-import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
+import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
@@ -27,34 +26,48 @@ const TrackSelection: React.FC = () => {
     <TrackItem key={track.id} track={track} enabledCount={enabledCount} />
   );
 
+  const trackSelectionStyle = css({
+    display: 'flex',
+    width: 'auto',
+    height: '100%',
+    flexDirection: 'column',
+    // justifyContent: 'center',
+    alignItems: 'center',
+  })
+
+  const trackAreaStyle = css({
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    ...(flexGapReplacementStyle(40, false)),
+  })
+
   return (
-    <div>
-      { trackItems }
-      <Description />
+    <div css={trackSelectionStyle}>
+      <Header />
+      <div css={trackAreaStyle}>
+        { trackItems }
+      </div>
     </div>
   );
 }
 
 
-const Description: React.FC = () => {
+const Header: React.FC = () => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
 
-  const description: string = t('trackSelection.description',
-    'Select or deselect which tracks are used for processing and publication.');
-
-  const descriptionStyle = css({
-    display: 'flex',
-    alignItems: 'center',
-    margin: '20px',
-    padding: '10px',
-  });
+  const description: string = t('trackSelection.title');
 
   return (
-    <aside css={descriptionStyle}>
-      <FiInfo css={{margin: '10px', fontSize: 32}} />
+    <div css={[titleStyle(theme), titleStyleBold(theme)]}>
       { description }
-    </aside>
+    </div>
   );
 }
 
@@ -71,27 +84,25 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
 
   const trackItemStyle = css({
     display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: '20px',
-    paddingBottom: '10px',
-    verticalAlign: 'middle',
+    flexDirection: 'column',
+    alignItems: 'left',
+
+    background: `${theme.menu_background}`,
+    borderRadius: '7px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    boxSizing: "border-box",
+    padding: '20px',
+    ...(flexGapReplacementStyle(25, false)),
   });
 
   const playerStyle = css({
     display: 'inline-block',
-    width: '80%',
-    maxHeight: '200px',
-    margin: '10px',
   });
 
   const headerStyle = css({
     display: 'inline-block',
     width: '100%',
     fontWeight: 'bold',
-    padding: '5px 25px',
-    borderBottom: `${theme.menuBorder}`,
     textTransform: 'capitalize',
     fontSize: 'larger',
   });
@@ -124,8 +135,8 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   return (
     <div css={trackItemStyle}>
       <div css={headerStyle}>{ header }</div>
-      <div css={{ width: '95%', textAlign: 'center', opacity: track.video_stream.enabled ? '1' : '0.5' }}>
-        <ReactPlayer css={playerStyle} url={track.uri} width="90%" />
+      <div css={{ opacity: track.video_stream.enabled ? '1' : '0.5' }}>
+        <ReactPlayer css={playerStyle} url={track.uri} />
       </div>
       <SelectButton
         text={deleteText}
@@ -152,10 +163,10 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
   const buttonStyle = [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
-      margin: '10px 15px',
-      padding: '16px',
+      padding: '10px 5px',
       width: '25%',
-      boxShadow: `${theme.boxShadow}`,
+      boxShadow: '',
+      border: `1px solid ${theme.text}`,
       background: `${theme.element_bg}`,
     }];
   const clickHandler = () => {
