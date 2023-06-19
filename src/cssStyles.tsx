@@ -170,7 +170,6 @@ export const disableButtonAnimation = css({
 export const titleStyle = (theme: Theme) => css(({
   display: 'inline-block',
   padding: '15px',
-  overflow: 'hidden',
   whiteSpace: "nowrap",
   textOverflow: 'ellipsis',
   maxWidth: '100%',
