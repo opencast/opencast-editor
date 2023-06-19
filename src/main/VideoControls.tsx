@@ -253,7 +253,6 @@ const TimeDisplay: React.FC<{
 
   const timeTextStyle = (theme: Theme) => css({
     display: 'inline-block',
-    width: '100px',
     color: `${theme.text_black}`
   })
 
@@ -262,14 +261,14 @@ const TimeDisplay: React.FC<{
       <ThemedTooltip title={t("video.current-time-tooltip")}>
         <time css={timeTextStyle(theme)}
           tabIndex={0} role="timer" aria-label={t("video.time-aria") + ": " + convertMsToReadableString(currentlyAt)}>
-          {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 12)}
+          {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 10)}
         </time>
       </ThemedTooltip>
       {" / "}
       <ThemedTooltip title={t("video.time-duration-tooltip")}>
         <div css={timeTextStyle(theme)}
           tabIndex={0} aria-label={t("video.duration-aria") + ": " + convertMsToReadableString(duration)}>
-          {new Date((duration ? duration : 0)).toISOString().substr(11, 12)}
+          {new Date((duration ? duration : 0)).toISOString().substr(11, 10)}
         </div>
       </ThemedTooltip>
     </div>
