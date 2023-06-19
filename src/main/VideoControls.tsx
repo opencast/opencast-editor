@@ -143,7 +143,7 @@ const PreviewMode: React.FC<{
     "&:hover": {
       transform: 'scale(1.05)',
     },
-    color: `${theme.text_darkblue}`,
+    color: `${theme.background_preview_icon}`,
     fontSize: '28px',
   })
 
@@ -210,7 +210,7 @@ const PlayButton: React.FC<{
     outline: 'none',
     color: `${theme.icon_color}`,
 
-    background: `${theme.text_darkblue}`,
+    background: `${theme.background_play_icon}`,
     borderRadius: '50%',
     width: '50px',
     height: '50px',

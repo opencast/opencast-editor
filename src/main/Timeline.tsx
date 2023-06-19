@@ -205,7 +205,7 @@ export const Scrubber: React.FC<{
 
   const scrubberDragHandleStyle = css({
     // Base style
-    background: `${theme.menu_background}`,
+    background: `${theme.scrubber_handle}`,
     display: "inline-block",
     height: "20px",
     position: "relative",
@@ -213,7 +213,7 @@ export const Scrubber: React.FC<{
     borderRadius: '5px',
     boxShadow: `${theme.boxShadow_tiles}`,
     "&:after": {
-      borderTop: `10px solid ${theme.menu_background}`,
+      borderTop: `10px solid ${theme.scrubber_handle}`,
       borderLeft: '10px solid transparent',
       borderRight: '10px solid transparent',
       content: '""',
@@ -241,7 +241,7 @@ export const Scrubber: React.FC<{
   const scrubberDragHandleIconStyle = css({
     paddingLeft: '2px',
     paddingTop: '2px',
-    color: `${theme.text}`,
+    color: `${theme.focus_text}`,
   })
 
   // // Possible TODO: Find a way to use ariaLive in a way that only the latest change is announced

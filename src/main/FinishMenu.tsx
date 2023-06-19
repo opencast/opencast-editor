@@ -69,7 +69,8 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
     justifyContent: 'center',
     alignItems: 'center',
 
-    background: `${theme.button_color}`,
+    background: `${theme.background_finish_menu_icon}`,
+    color: `${theme.text}`,
     borderRadius: '50%',
     width: '90px',
     height: '90px',

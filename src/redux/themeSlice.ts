@@ -31,9 +31,13 @@ export interface Theme {
   button_color: string
   indicator_color: string
   icon_color: string
+  background_finish_menu_icon: string
+  background_play_icon: string
+  background_preview_icon: string
   waveform_filter: string
   waveform_bg: string
   scrubber: string
+  scrubber_handle: string
   subtitle_segment_bg: string
   subtitle_segment_border: string
   subtitle_segment_text: string
