@@ -280,6 +280,10 @@
       "scrubberDecrease": "Move slower"
     },
 
+    "settings": {
+      "settings": "Settings"
+    },
+
     "theme": {
       "appearance": "Appearance",
       "selectThemesLabel": "Appearances",

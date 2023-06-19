@@ -1,13 +1,21 @@
 import { useSelector } from "react-redux"
-import { selectThemeState } from "../redux/themeSlice"
+import { selectTheme, selectThemeState } from "../redux/themeSlice"
+
 import { css } from '@emotion/react'
+import { useTranslation } from "react-i18next";
+import { MainMenuButton } from "./MainMenu";
+import { FiSettings } from "react-icons/fi";
+import { MainMenuStateNames } from "../types";
 
 function Header() {
+  const theme = useSelector(selectTheme)
   const themeState = useSelector(selectThemeState);
+  const { t } = useTranslation()
 
   const headerStyle = css({
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
   })
 
   const headerStyleThemed = themeState.startsWith('high-contrast-')
@@ -27,9 +35,24 @@ function Header() {
     marginLeft: '6px',
   })
 
+  const settingsButtonCSS = css({
+    display: 'flex',
+    flexDirection: 'row',
+    color: `${theme.icon_color}`,
+    marginRight: '20px',
+  })
+
   return (
     <div css={[headerStyle, headerStyleThemed]}>
       <img src="opencast-editor.svg" css={logo} alt="Opencast Editor" />
+      <MainMenuButton
+        Icon={FiSettings}
+        stateName={MainMenuStateNames.keyboardControls}
+        bottomText={t("settings.settings")}
+        ariaLabelText={t("settings.settings")}
+        customCSS={settingsButtonCSS}
+        iconCustomCSS={css({fontSize: 24})}
+      />
     </div>
   );
 }

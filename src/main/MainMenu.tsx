@@ -1,9 +1,9 @@
 import React from "react";
 
-import { css } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react'
 
 import { IconType } from "react-icons";
-import { FiScissors, FiFilm, FiFileText, FiCheckSquare, FiSettings} from "react-icons/fi";
+import { FiScissors, FiFilm, FiFileText, FiCheckSquare } from "react-icons/fi";
 import { FaPhotoVideo } from "react-icons/fa";
 import { MdOutlineSubtitles } from "react-icons/md";
 
@@ -82,16 +82,6 @@ const MainMenu: React.FC = () => {
         bottomText={t(MainMenuStateNames.finish)}
         ariaLabelText={t(MainMenuStateNames.finish)}
       />
-      {/* A space for buttons that would normally go in a header or footer */}
-      <div css={{flexGrow: 99, display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
-        <MainMenuButton
-          Icon={FiSettings}
-          stateName={MainMenuStateNames.keyboardControls}
-          bottomText={""}
-          ariaLabelText={t("keyboardControls.header")}
-          miniButton={true}
-        />
-      </div>
     </nav>
   );
 };
@@ -101,14 +91,22 @@ interface mainMenuButtonInterface {
   stateName: mainMenu["value"],
   bottomText: string,
   ariaLabelText: string;
-  miniButton?: boolean,
+  customCSS?: SerializedStyles,
+  iconCustomCSS?: SerializedStyles,
 }
 
 /**
  * A button to set the state of the app
  * @param param0
  */
-const MainMenuButton: React.FC<mainMenuButtonInterface> = ({Icon, stateName, bottomText, ariaLabelText, miniButton = false}) => {
+export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
+  Icon,
+  stateName,
+  bottomText,
+  ariaLabelText,
+  customCSS,
+  iconCustomCSS,
+}) => {
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
@@ -130,14 +128,6 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({Icon, stateName, bot
     dispatch(metadataResetPostRequestState())
   }
 
-  const buttonStyle = () => {
-    if (!miniButton) {
-      return mainMenuButtonStyle
-    } else {
-      return miniMenuButtonStyle
-    }
-  }
-
   const mainMenuButtonStyle = css({
     width: '100%',
     height: '100px',
@@ -155,25 +145,8 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({Icon, stateName, bot
     flexDirection: 'column',
   });
 
-  const miniMenuButtonStyle = css({
-    width: '75px',
-    height: '67px',
-    outline: `${theme.menuButton_outline}`,
-    ...(activeState === stateName) && {
-      backgroundColor: `${theme.button_color}`,
-      color: `${theme.selected_text}`,
-      boxShadow: `${theme.boxShadow}`,
-    },
-    '&:hover': {
-      backgroundColor: `${theme.button_color}`,
-      color: `${theme.selected_text}`,
-      boxShadow: `${theme.boxShadow}`,
-    },
-    flexDirection: 'column',
-  });
-
   return (
-    <li css={[basicButtonStyle(theme), buttonStyle()]}
+    <li css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
       role="menuitem" tabIndex={0}
       aria-label={ariaLabelText}
       onClick={onMenuItemClicked}
@@ -181,8 +154,8 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({Icon, stateName, bot
         onMenuItemClicked()
       } }}
     >
-      <Icon css={{
-        fontSize: miniButton ? 24 : 36
+      <Icon css={iconCustomCSS ? iconCustomCSS : {
+        fontSize: 36
       }}/>
       {bottomText && <div>{bottomText}</div>}
     </li>
