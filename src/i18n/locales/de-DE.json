@@ -36,6 +36,7 @@
         "time-aria": "Aktuelle Zeit",
         "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
         "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
+        "durationError-text": "Opencast failed to provide the video duration.",
         "title-tooltip": "Videotitel",
         "presenter-tooltip": "Vortragende"
     },
