@@ -76,6 +76,11 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
     height: '90px',
   })
 
+  const labelStyle = css({
+    padding: '0px 20px',
+    color: `${theme.text_darkblue}`
+  })
+
   return (
     <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
       role="button" tabIndex={0}
@@ -86,7 +91,7 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
       <div css={iconStyle}>
         <Icon css={{fontSize: 36}}/>
       </div>
-      <div style={{padding: '0px 20px'}}>{buttonString}</div>
+      <div css={labelStyle}>{buttonString}</div>
     </div>
   );
 };

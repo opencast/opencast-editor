@@ -29,6 +29,7 @@ const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({nam
   });
 
   const headingStyle = css({
+    color: `${theme.text_darkblue}`,
   })
 
   return (
@@ -60,6 +61,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     wordWrap: 'break-word',
+    color: `${theme.text_darkblue}`,
   })
 
   const sequencesStyle = css({

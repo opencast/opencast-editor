@@ -56,7 +56,7 @@ export const darkMode: Theme = {
   menu_background: '#1C1C1C',
   text: 'rgba(255, 255, 255, 0.87)',
   text_black: '#fff',
-  text_darkblue: '#2b2b2b',
+  text_darkblue: 'rgba(255, 255, 255, 0.87)',
   error: 'rgba(237, 23, 65, 0.8)',
   element_bg: '#2b2b2b',
   multiValue: '#4a4a4a',

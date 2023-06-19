@@ -120,6 +120,7 @@ const Metadata: React.FC = () => {
     width: '110px',
     fontSize: '1em',
     fontWeight: 'bold',
+    color: `${theme.text_darkblue}`,
     lineHeight: '32px',
   })
 
