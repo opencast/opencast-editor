@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from '../cssStyles'
@@ -11,6 +11,7 @@ import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
+import { DialogSave } from "./Save";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -43,9 +44,21 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
   const theme = useSelector(selectTheme)
   const dispatch = useDispatch();
 
-  const finish = () => {
-    dispatch(setState(stateName));
-    dispatch(setPageNumber(1))
+  const [renderDialog, setRenderDialog] = useState(false)
+  const handleRenderDialogClose = () => {
+    setRenderDialog(false)
+  }
+
+  function finish(stateName: finish["value"]) {
+    switch (stateName) {
+      case "Save changes":
+        setRenderDialog(true);
+        break
+      default:
+        dispatch(setState(stateName));
+        dispatch(setPageNumber(1))
+        break
+    }
   }
 
   let buttonString;
@@ -82,16 +95,19 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
   })
 
   return (
-    <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-      role="button" tabIndex={0}
-      onClick={finish}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        finish()
-      } }}>
-      <div css={iconStyle}>
-        <Icon css={{fontSize: 36}}/>
+    <div>
+      <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
+        role="button" tabIndex={0}
+        onClick={() => finish(stateName)}
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+          finish(stateName)
+        } }}>
+        <div css={iconStyle}>
+          <Icon css={{fontSize: 36}}/>
+        </div>
+        <div css={labelStyle}>{buttonString}</div>
       </div>
-      <div css={labelStyle}>{buttonString}</div>
+      {renderDialog ? <DialogSave isRender={renderDialog} stopRender={handleRenderDialogClose} /> : ""}
     </div>
   );
 };

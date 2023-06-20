@@ -21,8 +21,9 @@ import { selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
   setHasChanges as subtitleSetHasChanges } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { Flavor } from "../types";
-import { selectTheme } from "../redux/themeSlice";
+import { selectTheme, Theme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 /**
  * Shown if the user wishes to save.
@@ -193,5 +194,249 @@ export const SaveButton: React.FC = () => {
   );
 }
 
+export const DialogSave: React.FC<{
+  isRender: boolean,
+  stopRender: () => void,
+}> = ({
+  isRender,
+  stopRender
+}) => {
+
+  // Initialize redux variables
+  const dispatch = useDispatch<AppDispatch>()
+  const { t } = useTranslation()
+
+  const segments = useSelector(selectSegments)
+  const tracks = useSelector(selectTracks)
+  const subtitles = useSelector(selectSubtitles)
+  const workflowStatus = useSelector(selectStatus);
+  const metadataStatus = useSelector(selectPostStatus);
+  const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
+
+  // Dialog
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [saveAttemptStarted, setSaveAttemptStarted] = useState(false);
+  const [resultOpen, setResultOpen] = useState(false);
+
+  const handleSaveOpen = () => {
+    setSaveOpen(true);
+  };
+
+  const handleSaveClose = () => {
+    setSaveOpen(false);
+    stopRender()
+  };
+
+  const handleResultOpen = () => {
+    setResultOpen(true)
+  }
+
+  const handleResultClose = () => {
+    setResultOpen(false)
+    stopRender()
+  }
+
+  useEffect(() => {
+    if (isRender) {
+      handleSaveOpen()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRender])
+
+  const prepareSubtitles = () => {
+    const subtitlesForPosting = []
+
+    for (const identifier in subtitles) {
+      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
+
+    }
+    return subtitlesForPosting
+  }
+
+  // Dispatches first save request
+  // Subsequent save requests should be wrapped in useEffect hooks,
+  // so they are only sent after the previous one has finished
+  const save = () => {
+    setMetadataSaveStarted(true)
+    dispatch(postMetadata())
+    setSaveAttemptStarted(true)
+  }
+
+  // Subsequent save request
+  useEffect(() => {
+    if (metadataStatus === 'success' && metadataSaveStarted) {
+      setMetadataSaveStarted(false)
+      dispatch(postVideoInformation({
+        segments: segments,
+        tracks: tracks,
+        subtitles: prepareSubtitles()
+      }))
+
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadataStatus])
+
+  // Let users leave the page without warning after a successful save
+  useEffect(() => {
+    if (workflowStatus === 'success' && metadataStatus === 'success') {
+      dispatch(videoSetHasChanges(false))
+      dispatch(metadataSetHasChanges(false))
+      dispatch(subtitleSetHasChanges(false))
+
+      if (saveAttemptStarted) {
+        setSaveOpen(false)
+        handleResultOpen()
+        setSaveAttemptStarted(false)
+      }
+    }
+  }, [dispatch, metadataStatus, workflowStatus])
+
+  let title = ""
+  let content = ""
+  const confirmation = "Okay"
+  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
+    title = t("save.confirmButton-failed-tooltip")
+    content = t("various.error-text")
+  } else if (workflowStatus === 'success' && metadataStatus === 'success') {
+    title = t("save.confirmButton-success-tooltip")
+    content = t("save.success-text")
+  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
+    title = t("save.confirmButton-attempting-tooltip")
+    content = t("save.confirmButton-attempting-tooltip")
+  }
+
+  return (
+    <>
+      <SaveDialog
+        open={saveOpen}
+        onConfirm={save}
+        onClose={handleSaveClose}
+      />
+      <ResultDialog
+        open={resultOpen}
+        onClose={handleResultClose}
+        title={title}
+        content={content}
+        confirmation={confirmation}
+      />
+    </>
+  )
+}
+
+const dialogTitleStyle = (theme: Theme) => css({
+  color: `${theme.text}`,
+  fontWeight: 'bold'
+})
+
+const dialogContentStyle = (theme: Theme) => css({
+  color: `${theme.text_black}`,
+})
+
+const dialogConfirmationButtonStyle = (theme: Theme) => css({
+  color: `${theme.icon_color}`,
+  fontWeight: 'bold',
+  border: `1px solid ${theme.text}`,
+  background: `${theme.background_play_icon}`,
+  "&:hover": {
+    background: `${theme.background_play_icon}`,
+  },
+})
+
+const dialogCancelButtonStyle = (theme: Theme) => css({
+  color: `${theme.text}`,
+  fontWeight: 'bold',
+  border: `1px solid ${theme.text}`,
+  background: `${theme.element_bg}`,
+})
+
+export const SaveDialog: React.FC<{
+  open: boolean,
+  onConfirm: () => void,
+  onClose: () => void,
+}> = ({
+  open,
+  onConfirm,
+  onClose,
+}) => {
+
+  const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title" css={dialogTitleStyle(theme)}>
+        {t("save.headline-text")}
+      </DialogTitle>
+      <DialogContent css={dialogContentStyle(theme)}>
+        <DialogContentText id="alert-dialog-description">
+          {t("save.info-text")}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions css={{overflow: 'hidden'}}>
+        <Button
+          css={[basicButtonStyle(theme), dialogCancelButtonStyle(theme)]}
+          onClick={onClose}
+        >
+          Dont save
+        </Button>
+        <Button
+          css={[basicButtonStyle(theme), dialogConfirmationButtonStyle(theme)]}
+          onClick={onConfirm}
+        >
+          {t("save.confirm-button")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+export const ResultDialog: React.FC<{
+  open: boolean,
+  onClose: () => void,
+  title: string,
+  content: string,
+  confirmation: string
+}> = ({
+  open,
+  onClose,
+  title,
+  content,
+  confirmation,
+}) => {
+
+  const theme = useSelector(selectTheme)
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title" css={dialogTitleStyle(theme)}>
+        {title}
+      </DialogTitle>
+      <DialogContent css={dialogContentStyle(theme)}>
+        <DialogContentText id="alert-dialog-description">
+          {content}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          css={[basicButtonStyle(theme), dialogConfirmationButtonStyle(theme)]}
+          onClick={onClose}
+        >
+          {confirmation}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
 
 export default Save;

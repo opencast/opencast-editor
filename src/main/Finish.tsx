@@ -1,7 +1,6 @@
 import React from "react";
 
 import FinishMenu from "./FinishMenu";
-import Save from "./Save"
 import Discard from "./Discard"
 import WorkflowSelection from "./WorkflowSelection";
 import WorkflowConfiguration from "./WorkflowConfiguration";
@@ -40,7 +39,6 @@ const Finish : React.FC = () => {
         <FinishMenu />
       </div>
       <div css={pageOneStyle} >
-        <Save />
         <WorkflowSelection />
         <Discard />
       </div>
