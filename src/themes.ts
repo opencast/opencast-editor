@@ -32,7 +32,7 @@ export const lightMode: Theme = {
   button_color: '#edf6fe',
   indicator_color: '#3e8ad8',
   icon_color: '#fff',
-  background_finish_menu_icon: 'edf6fe',
+  background_finish_menu_icon: '#edf6fe',
   background_play_icon: '#3073b8',
   background_preview_icon: '#3073b8',
   waveform_filter: 'invert(44%) sepia(8%) saturate(3893%) hue-rotate(169deg) brightness(99%) contrast(90%)', // All this just to turn the black part of the waveform image blue. Generated with: https://isotropic.co/tool/hex-color-to-css-filter/
