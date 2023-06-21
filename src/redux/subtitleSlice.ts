@@ -83,7 +83,7 @@ export const subtitleSlice = createSlice({
         return
       }
 
-      let cue = state.subtitles[action.payload.identifier].cues[action.payload.cueIndex]
+      const cue = state.subtitles[action.payload.identifier].cues[action.payload.cueIndex]
       cue.id = action.payload.newCue.id
       cue.idInternal = action.payload.newCue.idInternal
       cue.text = action.payload.newCue.text
@@ -113,7 +113,7 @@ export const subtitleSlice = createSlice({
       state.focusSegmentTriggered2 = true
       state.focusSegmentId = cue.idInternal
 
-      if (action.payload.cueIndex < 0 ) {
+      if (action.payload.cueIndex < 0) {
         state.subtitles[action.payload.identifier].cues.splice(0, 0, cue);
       }
 
@@ -153,7 +153,7 @@ export const subtitleSlice = createSlice({
     setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
       let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.idInternal === action.payload.segmentId);
       cueIndex = cueIndex - 1
-      if (cueIndex < 0 ) {
+      if (cueIndex < 0) {
         cueIndex = 0
       }
       state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].idInternal
@@ -166,7 +166,7 @@ export const subtitleSlice = createSlice({
       }
       state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].idInternal
     },
-    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
+    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}>) => {
       state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
     },
     setHasChanges: (state, action: PayloadAction<subtitle["hasChanges"]>) => {
@@ -209,7 +209,7 @@ export const selectFocusSegmentTriggered2 = (state: { subtitleState: { focusSegm
   state.subtitleState.focusSegmentTriggered2
 // Hardcoding this value to achieve a desired size for the video player
 // TODO: Don't hardcode this value, instead make the video player component more flexible
-export const selectAspectRatio = (state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
+export const selectAspectRatio = (_state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
   50
 
 export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"] } }) =>

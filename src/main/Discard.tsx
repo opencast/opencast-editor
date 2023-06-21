@@ -14,7 +14,6 @@ import { setEnd } from '../redux/endSlice'
 
 import { PageButton } from './Finish'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
 
@@ -22,7 +21,7 @@ import { selectTheme } from "../redux/themeSlice";
  * Shown if the user wishes to abort.
  * Informs the user about aborting and displays abort button.
  */
-const Discard : React.FC<{}> = () => {
+const Discard : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -52,7 +51,7 @@ const Discard : React.FC<{}> = () => {
 /**
  * Button that sets the app into an aborted state
  */
-const DiscardButton : React.FC<{}> = () => {
+const DiscardButton : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -67,11 +66,11 @@ const DiscardButton : React.FC<{}> = () => {
   return (
     <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
       role="button" tabIndex={0}
-      onClick={ discard }
+      onClick={discard}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         discard()
-      }}}>
-      <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
+      } }}>
+      <FontAwesomeIcon icon={faTimesCircle} size="1x" />
       <span>{t("discard.confirm-button")}</span>
     </div>
   );

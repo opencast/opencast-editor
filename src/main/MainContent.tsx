@@ -36,7 +36,7 @@ import Thumbnail from "./Thumbnail";
  * A container for the main functionality
  * Shows different components depending on the state off the app
  */
-const MainContent: React.FC<{}> = () => {
+const MainContent: React.FC = () => {
 
   const mainMenuState = useSelector(selectMainMenuState)
   const videoChanged = useSelector(videoSelectHasChanges)
@@ -136,14 +136,14 @@ const MainContent: React.FC<{}> = () => {
         <div css={[mainContentStyle, finishStyle]} role="main">
           <Finish />
         </div>
-        )
+      )
     } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
       return (
         <div css={[mainContentStyle, keyboardControlsStyle]} role="main">
           <ThemeSwitcher/>
           <KeyboardControls />
         </div>
-        )
+      )
     } else {
       <div css={[mainContentStyle, defaultStyle]} role="main">
         <FontAwesomeIcon icon={faTools} size="10x" />
@@ -157,7 +157,7 @@ const MainContent: React.FC<{}> = () => {
   );
 };
 
-const CuttingTimeline : React.FC<{}> = () => {
+const CuttingTimeline : React.FC = () => {
   return (
     <Timeline
       selectIsPlaying={selectIsPlaying}

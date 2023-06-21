@@ -12,6 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { GlobalHotKeys } from 'react-hotkeys';
 
+import './i18n/config';
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the
@@ -30,14 +31,14 @@ initialize.then(
   () => {
     ReactDOM.render(
       <React.StrictMode>
-          <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
-              <GlobalHotKeys>
-                <App />
-              </GlobalHotKeys>
-            </LocalizationProvider>
-          </Provider>
+        <Provider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
+            <GlobalHotKeys>
+              <App />
+            </GlobalHotKeys>
+          </LocalizationProvider>
+        </Provider>
       </React.StrictMode>,
       document.getElementById('root')
     );

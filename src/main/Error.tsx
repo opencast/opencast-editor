@@ -9,14 +9,13 @@ import { useSelector } from 'react-redux';
 import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice'
 import { flexGapReplacementStyle } from "../cssStyles";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 
 /**
  * This page is to be displayed when the application has run into a critical error
  * from which it cannot recover.
  */
- const Error : React.FC<{}> = () => {
+const Error : React.FC = () => {
 
   const { t } = useTranslation();
 

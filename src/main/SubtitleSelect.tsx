@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Displays buttons that allow the user to select the subtitle they want to edit
  */
-const SubtitleSelect : React.FC<{}> = () => {
+const SubtitleSelect : React.FC = () => {
 
   const { t } = useTranslation();
   const subtitlesFromOpencast = useSelector(selectSubtitlesFromOpencast) // track objects received from Opencast
@@ -32,7 +32,7 @@ const SubtitleSelect : React.FC<{}> = () => {
 
   // Update the collections for the select and add buttons
   useEffect(() => {
-    let languages = { ...settings.subtitles.languages };
+    const languages = { ...settings.subtitles.languages };
 
     // Get ids of already created tracks or exisiting subtitle tracks
     let existingSubtitles = subtitlesFromOpencast
@@ -49,28 +49,28 @@ const SubtitleSelect : React.FC<{}> = () => {
 
     // Looks for languages in existing subtitles
     // so that those languages don't show in the addSubtitles dropdown
-    let subtitlesFromOpencastLangs = subtitlesFromOpencast
+    const subtitlesFromOpencastLangs = subtitlesFromOpencast
       .reduce((result: {id: string, lang: string}[], track) => {
-        let lang = track.tags.find(e => e.startsWith('lang:'))
+        const lang = track.tags.find(e => e.startsWith('lang:'))
         if (lang) {
           result.push({id: track.id, lang: lang.split(':')[1].trim()})
         }
         return result;
       }, []);
 
-    let subtitlesLangs = Object.entries(subtitles)
+    const subtitlesLangs = Object.entries(subtitles)
       .reduce((result: {id: string, lang: string}[], track) => {
-        let lang = track[1].tags.find(e => e.startsWith('lang:'))
+        const lang = track[1].tags.find(e => e.startsWith('lang:'))
         if (lang) {
           result.push({id: track[0], lang: lang.split(':')[1].trim()})
         }
         return result;
       }, []);
 
-    let existingLangs = subtitlesFromOpencastLangs.concat(subtitlesLangs);
+    const existingLangs = subtitlesFromOpencastLangs.concat(subtitlesLangs);
 
     // Create list of subtitles that can be added
-    let canBeAddedSubtitles = Object.entries(languages)
+    const canBeAddedSubtitles = Object.entries(languages)
       .reduce((result: string[][], language) => {
         if (!existingLangs.find(e => e.lang === language[1]["lang"])) {
           result.push(convertTags(language[1]))
@@ -99,14 +99,14 @@ const SubtitleSelect : React.FC<{}> = () => {
   })
 
   const renderButtons = () => {
-    let buttons : JSX.Element[] = []
+    const buttons : JSX.Element[] = []
     if (settings.subtitles.languages === undefined) {
       return buttons
     }
 
-    for (let subtitle of displaySubtitles) {
+    for (const subtitle of displaySubtitles) {
       let lang = subtitle.tags.find(e => e.startsWith('lang:'))
-      lang = lang ? lang.split(':')[1].trim(): undefined
+      lang = lang ? lang.split(':')[1].trim() : undefined
       const icon = lang ? ((settings.subtitles || {}).icons || {})[lang] : undefined
 
       buttons.push(
@@ -162,14 +162,14 @@ const SubtitleSelectButton: React.FC<{
       <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
         role="button" tabIndex={0}
         aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", {title: title})}
-        onClick={ () => {
+        onClick={() => {
           dispatch(setIsDisplayEditView(true))
           dispatch(setSelectedSubtitleId(id))
         }}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(true))
           dispatch(setSelectedSubtitleId(id))
-        }}}>
+        } }}>
         {icon && <div css={flagStyle}>{icon}</div>}
         <div css={titleStyle}>{title ?? t('subtitles.generic') + " " + id}</div>
       </div>
@@ -197,7 +197,7 @@ const SubtitleAddButton: React.FC<{
   const selectData = () => {
     const data = []
     for (const subtitle of subtitlesForDropdown) {
-      let lang = generateButtonTitle(subtitle.tags, t)
+      const lang = generateButtonTitle(subtitle.tags, t)
       data.push({label: lang ?? t('subtitles.generic') + " " + subtitle.id, value: subtitle.id})
     }
     data.sort((dat1, dat2) => dat1.label.localeCompare(dat2.label))
@@ -246,48 +246,48 @@ const SubtitleAddButton: React.FC<{
     <ThemedTooltip title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}>
       <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
         role="button" tabIndex={0}
-        aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("createSubtitleButton-clicked-tooltip-aria")}
-        onClick={ () => setIsPlusDisplay(false) }
+        aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
+        onClick={() => setIsPlusDisplay(false)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           setIsPlusDisplay(false)
-        }}}
-        >
+        } }}
+      >
         <FontAwesomeIcon icon={faPlus} size="2x" css={plusIconStyle}/>
         <Form
           onSubmit={onSubmit}
           subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
-          render={({ handleSubmit, form, submitting, pristine, values}) => (
+          render={({ handleSubmit, submitting, pristine }) => (
             <form onSubmit={event => {
               handleSubmit(event)
               // // Ugly fix for form not getting updated after submit. TODO: Find a better fix
               // form.reset()
             }} css={subtitleAddFormStyle}>
-                {/* TODO: Fix the following warning, caused by removing items from data:
+              {/* TODO: Fix the following warning, caused by removing items from data:
                   MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
                 */}
-                <ThemeProvider theme={subtitleSelectStyle(theme)}>
-                  <Select
-                    label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
-                    name="selectedSubtitle"
-                    data={selectData()}
-                  >
-                  </Select>
-                </ThemeProvider>
+              <ThemeProvider theme={subtitleSelectStyle(theme)}>
+                <Select
+                  label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
+                  name="selectedSubtitle"
+                  data={selectData()}
+                >
+                </Select>
+              </ThemeProvider>
 
-                {/* "By default disabled elements like <button> do not trigger user interactions
+              {/* "By default disabled elements like <button> do not trigger user interactions
                  * so a Tooltip will not activate on normal events like hover. To accommodate
                  * disabled elements, add a simple wrapper element, such as a span."
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
-                <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
-                  <span>
-                    <button css={[basicButtonStyle(theme), createButtonStyle, { width:"100%" } ]}
-                      type="submit"
-                      aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                      disabled={submitting || pristine}>
-                        {t("subtitles.createSubtitleButton-createButton")}
-                    </button>
-                  </span>
-                </ThemedTooltip>
+              <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
+                <span>
+                  <button css={[basicButtonStyle(theme), createButtonStyle, { width: "100%" }]}
+                    type="submit"
+                    aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                    disabled={submitting || pristine}>
+                    {t("subtitles.createSubtitleButton-createButton")}
+                  </button>
+                </span>
+              </ThemedTooltip>
 
             </form>
           )}
@@ -302,19 +302,19 @@ const SubtitleAddButton: React.FC<{
  */
 export function generateButtonTitle(tags: string[], t: any) {
   let lang = tags.find(e => e.startsWith('lang:'))
-  lang = lang ? lang.split(':')[1].trim(): undefined
+  lang = lang ? lang.split(':')[1].trim() : undefined
   lang = languageCodeToName(lang?.trim()) ?? lang
 
   let cc = ''
-  let type = tags.find(e => e.startsWith('type:'))
-  let isCC = type ? type.split(':')[1].trim() === 'closed-caption' : undefined
+  const type = tags.find(e => e.startsWith('type:'))
+  const isCC = type ? type.split(':')[1].trim() === 'closed-caption' : undefined
   if (isCC) {
     cc = '[CC]'
   }
 
   let autoGen = ''
-  let genType = tags.find(e => e.startsWith('generator-type:'))
-  let isAutoGen = genType ? genType.split(':')[1].trim() === 'auto' : undefined
+  const genType = tags.find(e => e.startsWith('generator-type:'))
+  const isAutoGen = genType ? genType.split(':')[1].trim() === 'auto' : undefined
   if (isAutoGen) {
     autoGen = "(" + t('subtitles.autoGenerated') + ")"
   }

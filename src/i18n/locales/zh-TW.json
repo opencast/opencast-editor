@@ -36,6 +36,7 @@
         "time-aria": "目前時間",
         "comError-text": "與 Opencast 通訊時出現問題。",
         "loadError-text": "載入此影片時出現錯誤。",
+        "durationError-text": "Opencast failed to provide the video duration.",
         "title-tooltip": "影片標題",
         "presenter-tooltip": "影片簡報者"
     },

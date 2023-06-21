@@ -16,7 +16,6 @@ import { postVideoInformation, selectStatus, selectError } from '../redux/workfl
 
 import { PageButton } from './Finish'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { AppDispatch } from "../redux/store";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
@@ -31,7 +30,7 @@ import { ThemedTooltip } from "./Tooltip";
  * Shown if the user wishes to save.
  * Informs the user about saving and displays a save button
  */
-const Save : React.FC<{}> = () => {
+const Save : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -58,7 +57,7 @@ const Save : React.FC<{}> = () => {
     // Post (successful) save
     if (postWorkflowStatus === 'success' && postMetadataStatus === 'success'
       && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
-      return(
+      return (
         <>
           <FontAwesomeIcon icon={faCheckCircle} size="10x" />
           <div>{t("save.success-text")}</div>
@@ -86,11 +85,11 @@ const Save : React.FC<{}> = () => {
       {render()}
       <div css={errorBoxStyle(postWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
+        {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-text")}<br />
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
+        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-text")}<br />
       </div>
     </div>
   );
@@ -99,7 +98,7 @@ const Save : React.FC<{}> = () => {
 /**
  * Button that sends a post request to save current changes
  */
-export const SaveButton: React.FC<{}> = () => {
+export const SaveButton: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -118,7 +117,7 @@ export const SaveButton: React.FC<{}> = () => {
   let icon = faSave
   let spin = false
   let tooltip = null
-  if (workflowStatus === 'failed' || metadataStatus === 'failed'){
+  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
     icon = faExclamationCircle
     spin = false
     tooltip = t("save.confirmButton-failed-tooltip")
@@ -126,14 +125,14 @@ export const SaveButton: React.FC<{}> = () => {
     icon = faCheck
     spin = false
     tooltip = t("save.confirmButton-success-tooltip")
-  } else if (workflowStatus === 'loading' || metadataStatus === 'loading')  {
+  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
     icon = faSpinner
     spin = true
     tooltip = t("save.confirmButton-attempting-tooltip")
   }
 
   const ariaSaveUpdate = () => {
-    if(workflowStatus === 'success') {
+    if (workflowStatus === 'success') {
       return t("save.success-tooltip-aria")
     }
   }
@@ -186,10 +185,10 @@ export const SaveButton: React.FC<{}> = () => {
     <ThemedTooltip title={tooltip == null ? tooltip = "" : tooltip}>
       <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
         role="button" tabIndex={0}
-        onClick={ save }
+        onClick={save}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           save()
-        }}}>
+        } }}>
         <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
         <span>{t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>

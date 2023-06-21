@@ -36,6 +36,7 @@
         "time-aria": "Aktuelle Zeit",
         "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
         "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
+        "durationError-text": "Opencast failed to provide the video duration.",
         "title-tooltip": "Videotitel",
         "presenter-tooltip": "Vortragende"
     },
@@ -120,7 +121,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slowenisch",
-            "LANGUAGES-PORTUGUESE": "Portuguese",
+            "LANGUAGES-PORTUGUESE": "Portugiesisch",
             "LANGUAGES-ROMANSH": "Rätoromanisch",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Polnisch",
@@ -249,7 +250,7 @@
         "groupCuttingView": "Schneiden",
         "groupCuttingViewScrubber": "Zeitleiste",
         "groupSubtitleList": "Untertitel",
-        "sequenceSeparator": "or",
+        "sequenceSeparator": "oder",
         "genericError": "Fehler beim Laden der Übersicht",
         "videoPlayButton": "Video abspielen/pausieren",
         "scrubberLeft": "Nach links",

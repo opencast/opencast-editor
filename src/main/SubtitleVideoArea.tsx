@@ -18,15 +18,13 @@ import { selectCurrentlyAt,
 import { selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
-import { Form } from "react-final-form";
-import { Select } from "mui-rff";
 import { useTranslation } from "react-i18next";
-import { OnChange } from 'react-final-form-listeners'
 import { VideoControls, VideoPlayer } from "./Video";
-import { flexGapReplacementStyle, subtitleSelectStyle } from "../cssStyles";
+import { flexGapReplacementStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { selectTheme } from "../redux/themeSlice";
-import { ThemeProvider } from "@mui/material/styles";
+import Select from "react-select";
+import { selectFieldStyle } from "../cssStyles";
 
 /**
  * A part of the subtitle editor that displays a video and related controls
@@ -37,10 +35,10 @@ import { ThemeProvider } from "@mui/material/styles";
  * coming up with a proper fix appears to be rather difficult
  * TODO: Come up with a proper fix and create a PR
  */
-const SubtitleVideoArea : React.FC<{}> = () => {
+const SubtitleVideoArea : React.FC = () => {
 
   const tracks = useSelector(selectVideos)
-  let subtitle = useSelector(selectSelectedSubtitleById)
+  const subtitle = useSelector(selectSelectedSubtitleById)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
 
@@ -81,9 +79,9 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 
   // Parse subtitles to something the video player understands
   useEffect(() => {
-    if(subtitle?.cues) {
+    if (subtitle?.cues) {
       const serializedSubtitle = serializeSubtitle(subtitle?.cues)
-      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type : 'text/vtt'})))
+      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type: 'text/vtt'})))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtitle?.cues])
@@ -105,15 +103,15 @@ const SubtitleVideoArea : React.FC<{}> = () => {
   });
 
   const render = () => {
-    return(
+    return (
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>
-          <VideoSelectDropdown
+          {selectedFlavor && <VideoSelectDropdown
             // eslint-disable-next-line no-sequences
             flavors={tracks.reduce((a: Flavor[], o: { flavor: Flavor }) => (a.push(o.flavor), a), [])}
             changeFlavorcallback={setSelectedFlavor}
             defaultFlavor={selectedFlavor}
-          />
+          />}
           {/* TODO: Make preview mode work or remove it */}
           <VideoPlayer
             dataKey={0}
@@ -156,7 +154,7 @@ const SubtitleVideoArea : React.FC<{}> = () => {
 const VideoSelectDropdown : React.FC<{
   flavors: Flavor[],
   changeFlavorcallback: React.Dispatch<React.SetStateAction<Flavor | undefined>>,
-  defaultFlavor: Flavor | undefined
+  defaultFlavor: Flavor
 }> = ({
   flavors,
   changeFlavorcallback,
@@ -166,7 +164,7 @@ const VideoSelectDropdown : React.FC<{
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
 
-  const dropdownName: string = "flavors"
+  const dropdownName = "flavors"
 
   // Turn flavor into string
   const stringifyFlavor = (flavor: Flavor) => {
@@ -175,7 +173,7 @@ const VideoSelectDropdown : React.FC<{
 
   const getFlavorLabel = (flavor: Flavor) => {
     // Omit subtype if all flavour subtypes are equal
-    if (flavors.every((f) => f.subtype === flavors[0].subtype)) {
+    if (flavors.every(f => f.subtype === flavors[0].subtype)) {
       return flavor.type
     }
 
@@ -183,50 +181,36 @@ const VideoSelectDropdown : React.FC<{
   }
 
   // Data to populate the dropdown with
-  const selectData = () => {
-    const data = []
-    for (let flavor of flavors) {
-      // We have to deconstruct the flavor object for the value as well and put it back together
-      data.push({label: getFlavorLabel(flavor), value: stringifyFlavor(flavor)})
-    }
-    return data
-  }
-
-  const onSubmit = () => {}
-
+  const data = flavors.map(flavor => ({
+    label: getFlavorLabel(flavor),
+    value: stringifyFlavor(flavor),
+  }));
 
   const subtitleAddFormStyle = css({
     width: '100%',
   });
 
   return (
-    <Form
-    onSubmit={(onSubmit)}
-    // TODO: Find out why "dropdownName" does not work with initialValues
-    initialValues={{"flavors": defaultFlavor ? stringifyFlavor(defaultFlavor) : ""}}
-    render={({ handleSubmit, form, submitting, pristine, values}) => (
-      <form onSubmit={event => {
-        handleSubmit(event)
-      }} css={subtitleAddFormStyle}>
-
-          <ThemeProvider theme={subtitleSelectStyle(theme)}>
-            <Select
-              label={t("subtitleVideoArea.selectVideoLabel") ?? undefined}
-              name={dropdownName}
-              data={selectData()}
-            />
-          </ThemeProvider>
-
-          <OnChange name={dropdownName}>
-            {(value, previous) => {
+    <>
+      <div>{t("subtitleVideoArea.selectVideoLabel")}</div>
+      <Select
+        name={dropdownName}
+        styles={selectFieldStyle(theme)}
+        css={subtitleAddFormStyle}
+        options={data}
+        defaultValue={data.filter(({value}) => value === stringifyFlavor(defaultFlavor))}
+        onChange={
+          newValue => {
+            if (newValue) {
               // Put flavor back together
-              const newFlavor: Flavor = {type: value.split("/")[0], subtype: value.split("/")[1]}
+              const [type, subtype] = newValue.value.split("/")
+              const newFlavor: Flavor = { type, subtype }
               changeFlavorcallback(newFlavor)
-            }}
-          </OnChange>
-      </form>
-    )}
-  />
+            }
+          }
+        }
+      />
+    </>
   )
 }
 
