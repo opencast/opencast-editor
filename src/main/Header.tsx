@@ -38,8 +38,9 @@ function Header() {
   const settingsButtonCSS = css({
     display: 'flex',
     flexDirection: 'row',
-    color: `${theme.icon_color}`,
+    color: `#fff`,
     marginRight: '20px',
+    outline: `${theme.menuButton_outline}`,
   })
 
   return (
