@@ -12,6 +12,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { GlobalHotKeys } from 'react-hotkeys';
 
+import "@fontsource-variable/roboto-flex";
+
 import './i18n/config';
 
 // Load config here

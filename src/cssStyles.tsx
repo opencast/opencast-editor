@@ -96,7 +96,6 @@ export const basicButtonStyle = (theme: Theme) => css({
   ...(flexGapReplacementStyle(10, false)),
   textAlign: 'center' as const,
   outline: `${theme.button_outline}`,
-  fontWeight: 'bold',
 });
 
 /**
@@ -142,7 +141,7 @@ export const tileButtonStyle = (theme: Theme) => css({
   height: '220px',
   display: 'flex',
   flexDirection: 'column' as const,
-  fontSize: "large",
+  fontWeight: "bold",
   ...(flexGapReplacementStyle(30, false)),
   boxShadow: `${theme.boxShadow_tiles}`,
   background: `${theme.element_bg}`,
