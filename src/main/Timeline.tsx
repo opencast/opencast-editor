@@ -369,13 +369,13 @@ export const SegmentsList: React.FC<{
             }}>
             <ThemedTooltip title={segment.deleted ? t("timeline.segment-restore-tooltip") : t("timeline.segment-delete-tooltip")}>
               <div css={[basicButtonStyle(theme), markAsDeletedButtonStyle(theme)]}
-                role='button' tabIndex={0}
+                role="button" tabIndex={0}
                 aria-label={segment.deleted ? t("timeline.segment-restore-tooltip-aria") : t("timeline.segment-delete-tooltip-aria")}
                 onClick={(event: SyntheticEvent) => markAsDeletedOrAlive(event, index)}
                 onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
                   markAsDeletedOrAlive(event, index)
-                }}}
-                onMouseDown={(event) => event.stopPropagation() }  // Prevent timeline jump
+                } }}
+                onMouseDown={event => event.stopPropagation()}  // Prevent timeline jump
               >
                 <FontAwesomeIcon icon={segment.deleted ? faTrashRestore : faTrash} size="1x" />
               </div>

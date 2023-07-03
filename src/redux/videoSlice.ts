@@ -346,7 +346,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, markAsDeletedOrAliveByIndex,  markAllAsDeleted, setSelectedWorkflowIndex, mergeLeft,
+  cut, markAsDeletedOrAlive, markAsDeletedOrAliveByIndex, markAllAsDeleted, setSelectedWorkflowIndex, mergeLeft,
   mergeRight, setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
