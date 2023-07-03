@@ -12,7 +12,7 @@
     "cuttingActions": {
         "cut-button": "Schneiden",
         "cut-tooltip": "Segment an der aktuellen Position der Zeitleiste teilen. Hotkey: {{hotkeyName}}",
-        "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
+        "cut-tooltip-aria": "Schneiden. Teilt das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}.",
         "delete-button": "Löschen",
         "delete-restore-tooltip": "Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
@@ -36,7 +36,7 @@
         "time-aria": "Aktuelle Zeit",
         "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
         "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
-        "durationError-text": "Opencast failed to provide the video duration.",
+        "durationError-text": "Opencast konnte die Video-Dauer nicht angeben.",
         "title-tooltip": "Videotitel",
         "presenter-tooltip": "Vortragende"
     },
@@ -70,7 +70,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "Speichern & verarbeiten",
         "selectWF-text": "Workflow wählen",
-        "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
+        "noWorkflows-text": "Es gibt keine Workflows zum Verarbeiten Ihrer Änderungen. Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Administrator.\n",
         "oneWorkflow-text": "Das Video wird mit dem Workflow \"{{workflow}}\" geschnitten und verarbeitet. <3/> Dies wird einige Zeit dauern.\n",
         "manyWorkflows-text": "Wählen Sie aus, welchen Workflow Opencast für die Verarbeitung verwenden soll.",
         "startProcessing-button": "Verarbeitung starten",
@@ -81,7 +81,7 @@
     "timeline": {
         "generateWaveform-text": "Waveform wird generiert",
         "segment-tooltip": "Segment {{segment}}",
-        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
+        "scrubber-text-aria": "Zeitmarker. {{currentTime}}. Aktives Segment: {{segment}}. {{segmentStatus}}. Steuerung: {{moveLeft}} und {{moveRight}}, um den Zeitmarker zu bewegen. {{increase}} und {{decrease}}, um das Verschiebungdelta zu erhöhen/verringern.\n",
         "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. Ende: {{end}}.\n"
     },
     "workflowConfig": {
@@ -161,8 +161,8 @@
         "noThumbnailAvailable": "Kein Vorschaubild verfügbar",
         "previewImageAlt": "Vorschaubild für Spur",
         "buttonGenerate": "Generieren",
-        "buttonGenerate-tooltip": "Generate a new thumbnail from the current timeline marker position",
-        "buttonGenerate-tooltip-aria": "Generate a new thumbnail from the current timeline marker position",
+        "buttonGenerate-tooltip": "Erstelle ein neues Vorschaubild aus der aktuellen Position des Zeitmarkers",
+        "buttonGenerate-tooltip-aria": "Erstelle ein neues Vorschaubild aus der aktuellen Position des Zeitmarkers",
         "buttonUpload": "Hochladen",
         "buttonUpload-tooltip": "Ein Bild hochladen",
         "buttonUpload-tooltip-aria": "Ein Bild hochladen",
@@ -173,8 +173,8 @@
         "buttonDiscard-tooltip": "Verwerfe Vorschaubild für diese Spur",
         "buttonDiscard-tooltip-aria": "Verwerfe Vorschaubild für diese Spur",
         "buttonGenerateAll": "Alle generieren",
-        "buttonGenerateAll-tooltip": "Generate new thumbnails for all tracks from the current timeline marker position",
-        "buttonGenerateAll-tooltip-aria": "Generate new thumbnails for all tracks from the current timeline marker position",
+        "buttonGenerateAll-tooltip": "Erstelle ein neues Vorschaubild für alle Spuren aus der aktuellen Position des Zeitmarkers",
+        "buttonGenerateAll-tooltip-aria": "Erstelle ein neues Vorschaubild für alle Spuren aus der aktuellen Position des Zeitmarkers",
         "explanation": "Erstelle oder lade ein Vorschaubild für jede Spur hoch.",
         "primary": "Primär",
         "secondary": "Sekundär"
@@ -240,7 +240,7 @@
         "selectVideoLabel": "Video Flavors"
     },
     "subtitleTimeline": {
-        "overviewTimelineTooltip": "Timeline overview"
+        "overviewTimelineTooltip": "Zeitleiste-Übersicht"
     },
     "keyboardControls": {
         "header": "Tastatursteuerung",
@@ -255,7 +255,7 @@
         "videoPlayButton": "Video abspielen/pausieren",
         "scrubberLeft": "Nach links",
         "scrubberRight": "Nach rechts",
-        "scrubberIncrease": "Move faster",
+        "scrubberIncrease": "Schneller bewegen",
         "scrubberDecrease": "Langsamer"
     },
     "theme": {
