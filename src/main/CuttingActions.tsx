@@ -16,7 +16,7 @@ import { css } from '@emotion/react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, markAllAsDeleted
 } from '../redux/videoSlice'
 import { GlobalHotKeys, KeySequence, KeyMapOptions } from "react-hotkeys";
 import { cuttingKeyMap } from "../globalKeys";
@@ -85,6 +85,11 @@ const CuttingActions: React.FC = () => {
           />
           <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
             hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
+          />
+          <CuttingActionsButton iconName={faTrash}
+            actionName={t("cuttingActions.delete-all-button")} actionHandler={dispatchAction} action={markAllAsDeleted}
+            tooltip={t('cuttingActions.delete-all-tooltip')}
+            ariaLabelText={t('cuttingActions.delete-all-tooltip-aria')}
           />
           <CuttingActionsButton iconName={faStepBackward}
             actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}

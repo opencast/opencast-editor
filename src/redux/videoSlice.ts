@@ -167,6 +167,12 @@ const videoSlice = createSlice({
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
       state.hasChanges = true
     },
+    markAllAsDeleted: state => {
+      state.segments.forEach((segment: Segment) => {
+        segment.deleted = true;
+      });
+      state.hasChanges = true
+    },
     setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowId"]>) => {
       state.selectedWorkflowId = action.payload
     },
@@ -336,7 +342,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  cut, markAsDeletedOrAlive, markAllAsDeleted, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
