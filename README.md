@@ -65,19 +65,20 @@ If an option can be specified both ways, the URL parameter will always take prec
 
 Options which are usually specified in the configuration file are documented in there as well. Metadata configuration options are only documented in the configuration file.
 
-| Option              | URL | File | Description
-| --------------------|-----|------|------------
-| id                  | ✓   | ✓    | Id of the event that the editor should open by default.
-| mediaPackageId      | ✓   | ✓    | Deprecated. Use `id` instead.
-| opencast.url        | ✗   | ✓    | URL of the opencast server to connect to.
-| opencast.name       | ✗   | ✓    | Opencast user to use. For demo purposes only.
-| opencast.password   | ✗   | ✓    | Password to use for authentication. For demo purposes only.
-| metadata.show       | ✓   | ✓    | Show metadata tab.
-| trackSelection.show | ✓   | ✓    | Show track selection tab.
-| thumbnail.show      | ✓   | ✓    | Show thumbnail tab. Demo only.
-| debug               | ✓   | ✗    | Enable internationalization debugging.
-| lng                 | ✓   | ✗    | Select a specific language. Use language codes like `de` or `en-US`.
-
+| Option                  | URL | File | Description                                                          |
+|-------------------------|-----|------|----------------------------------------------------------------------|
+| id                      | ✓   | ✓    | Id of the event that the editor should open by default.              |
+| mediaPackageId          | ✓   | ✓    | Deprecated. Use `id` instead.                                        |
+| allowedCallbackPrefixes | ✗   | ✓    | Allowed callback prefixes in callback url.                           |
+| callbackUrl             | ✓   | ✓    | Callback url to go back after finish.                                |
+| opencast.url            | ✗   | ✓    | URL of the opencast server to connect to.                            |
+| opencast.name           | ✗   | ✓    | Opencast user to use. For demo purposes only.                        |
+| opencast.password       | ✗   | ✓    | Password to use for authentication. For demo purposes only.          |
+| metadata.show           | ✓   | ✓    | Show metadata tab.                                                   |
+| trackSelection.show     | ✓   | ✓    | Show track selection tab.                                            |
+| thumbnail.show          | ✓   | ✓    | Show thumbnail tab. Demo only.                                       |
+| debug                   | ✓   | ✗    | Enable internationalization debugging.                               |
+| lng                     | ✓   | ✗    | Select a specific language. Use language codes like `de` or `en-US`. |
 
 How to cut a release for Opencast
 ---------------------------------

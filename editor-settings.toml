@@ -9,6 +9,23 @@
 
 
 ####
+# General Settings
+##
+
+# Allowed prefixes in callback urls to prevent malicious urls
+# If empty, no callback url is allowed
+# Type: string[]
+# Default: []
+#allowedCallbackDomains = []
+
+# Url to go back after finishing editing
+# If undefined, no return link will be shown on the end pages
+# Type: string | undefined
+# Default: undefined
+#callbackUrl =
+
+
+####
 # Metadata
 ##
 

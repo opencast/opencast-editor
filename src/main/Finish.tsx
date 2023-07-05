@@ -7,13 +7,15 @@ import WorkflowSelection from "./WorkflowSelection";
 import WorkflowConfiguration from "./WorkflowConfiguration";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, navigationButtonStyle } from '../cssStyles'
 
 import { IconType } from "react-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPageNumber, setPageNumber } from '../redux/finishSlice';
 import { useTheme } from "../themes";
+import { settings } from "../config";
+import { useTranslation } from "react-i18next";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -83,6 +85,36 @@ export const PageButton : React.FC<{pageNumber: number, label: string, Icon: Ico
       <Icon />
       <span>{label}</span>
     </div>
+  );
+}
+
+/**
+ * Takes you back to the callback url resource
+ */
+export const CallbackButton : React.FC = () => {
+
+  const { t } = useTranslation();
+
+  const theme = useSelector(selectTheme);
+
+  const openCallbackUrl = () => {
+    window.open(settings.callbackUrl, "_self");
+  }
+
+  return (
+    <>
+      {settings.callbackUrl !== undefined &&
+        <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+          role="button" tabIndex={0}
+          onClick={openCallbackUrl}
+          onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
+            openCallbackUrl()
+          } }}>
+          <FontAwesomeIcon icon={faRightFromBracket} size="1x" />
+          <span>{t("various.callback-button")}</span>
+        </div>
+      }
+    </>
   );
 }
 

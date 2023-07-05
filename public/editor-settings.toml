@@ -11,6 +11,10 @@
 # Pick a default event identifier which should be on develop.opencast.org
 id = 'ID-dual-stream-demo'
 
+# Callback to develop.opencast.org
+allowedCallbackPrefixes = ["https://develop.opencast.org"]
+callbackUrl = "https://develop.opencast.org"
+
 [opencast]
 # Connect to develop.opencast.org and use the default demo user
 url = 'https://develop.opencast.org'
