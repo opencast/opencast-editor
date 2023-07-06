@@ -140,7 +140,7 @@ export const init = async () => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
     let obj : {[k: string]: any} = rawUrlSettings;
-    if (key.startsWith('opencast.') || key === 'allowedCallbackDomains') {
+    if (key.startsWith('opencast.') || key === 'allowedCallbackPrefixes') {
       return;
     }
 

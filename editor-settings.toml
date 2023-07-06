@@ -16,7 +16,7 @@
 # If empty, no callback url is allowed
 # Type: string[]
 # Default: []
-#allowedCallbackDomains = []
+#allowedCallbackPrefixes = []
 
 # Url to go back after finishing editing
 # If undefined, no return link will be shown on the end pages
