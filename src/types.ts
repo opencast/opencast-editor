@@ -83,3 +83,8 @@ export interface httpRequestState {
   error: string | undefined,
   errorReason: 'unknown' | 'workflowActive'
 }
+
+export interface IWorkflowConfiguration {
+    min: number | undefined;
+    max: number | undefined;
+}

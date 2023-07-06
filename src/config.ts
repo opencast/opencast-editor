@@ -57,6 +57,10 @@ interface iSettings {
     languages: { [key: string]: string } | undefined,
     icons: { [key: string]: string } | undefined,
     defaultVideoFlavor: Flavor | undefined,
+  },
+  workflow: {
+    min: number | undefined,
+    max: number | undefined,
   }
 }
 
@@ -92,6 +96,10 @@ const defaultSettings: iSettings = {
     languages: {},
     icons: undefined,
     defaultVideoFlavor: undefined,
+  },
+  workflow: {
+    min: undefined,
+    max: undefined
   }
 }
 let configFileSettings: iSettings
@@ -287,6 +295,11 @@ const types = {
       throw new Error("is not a string, but should be");
     }
   },
+  'number': (v: any, _allowParse: any) => {
+    if (isNaN(v)) {
+      throw new Error('is not a number, but should be');
+    }
+  },
   'boolean': (v: string, allowParse: any) => {
     if (typeof v === 'boolean') {
       return;
@@ -373,6 +386,10 @@ const SCHEMA = {
   thumbnail: {
     show: types.boolean,
     simpleMode: types.boolean,
+  },
+  workflow: {
+    min: types.number,
+    max: types.number
   }
 }
 

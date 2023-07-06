@@ -12,7 +12,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { SaveAndProcessButton } from "./WorkflowConfiguration";
 import { selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
 import { selectStatus as saveSelectStatus, selectError as saveSelectError } from "../redux/workflowPostSlice";
-import { httpRequestState, Workflow } from "../types";
+import { httpRequestState, IWorkflowConfiguration, Workflow } from "../types";
 import { SaveButton } from "./Save";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 
@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { selectTheme } from "../redux/themeSlice";
+import { settings } from "../config";
 
 /**
  * Allows the user to select a workflow
@@ -30,8 +31,34 @@ const WorkflowSelection : React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const filterWorkflows = (workflowFilter: IWorkflowConfiguration | undefined, workflows: Workflow[]) => {
+    if (workflowFilter) {
+      let filterWorkflows : Workflow[] = []
+
+      workflows.forEach((workflow: Workflow) => {
+        if ((!workflowFilter.min || workflow.displayOrder >= workflowFilter.min) &&
+            (!workflowFilter.max || workflow.displayOrder <= workflowFilter.max)) {
+          filterWorkflows.push(workflow)
+        }
+      })
+
+      if (filterWorkflows.length === 0) {
+        console.warn('Filtering removed all workflows, ignoring')
+        filterWorkflows = workflows
+      }
+
+      return (filterWorkflows)
+    }
+
+    return (workflows)
+  }
+
   // Initialite redux states
-  const workflows = useSelector(selectWorkflows)
+  const workflowFilter: IWorkflowConfiguration | undefined = settings.workflow;
+  const workflows = filterWorkflows(workflowFilter, useSelector(selectWorkflows)).sort((a, b) => {
+    return (b.displayOrder - a.displayOrder)
+  })
+
   const finishState = useSelector(selectFinishState)
   const pageNumber = useSelector(selectPageNumber)
   const theme = useSelector(selectTheme)

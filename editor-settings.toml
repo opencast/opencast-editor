@@ -165,3 +165,12 @@
 # Type: boolean
 # Default: true
 #local =
+
+[workflow]
+
+# Filter the publishing workflows by their displayOrder value
+# min <= displayOrder <= max
+# Type: number
+# Default: undefined (unbound)
+#min =
+#max =
