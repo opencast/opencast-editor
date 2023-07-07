@@ -1,7 +1,6 @@
 import { css, SerializedStyles } from "@emotion/react"
 import { IconType } from "react-icons";
-import { FiPlus} from "react-icons/fi";
-import { FaTrash} from "react-icons/fa";
+import { FiPlus, FiTrash} from "react-icons/fi";
 import { memoize } from "lodash"
 import React, { useRef } from "react"
 import { useEffect, useState } from "react"
@@ -429,7 +428,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               deleteCue()
             } }}
-            Icon={FaTrash}
+            Icon={FiTrash}
           />
           <FunctionButton
             tooltip={t("subtitleList.addSegmentBelow")}

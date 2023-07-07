@@ -2,13 +2,14 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { IconType } from "react-icons";
-import { FaTrash, FaTrashRestore } from "react-icons/fa";
+import { FiTrash } from "react-icons/fi";
+import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 import ReactPlayer from 'react-player'
 
 import { Track } from '../types'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
-import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
+import { basicButtonStyle, customIconStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
@@ -125,7 +126,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
     t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
   ][deleteStatus];
-  const deleteIcon = [FaTrash, FaTrash, FaTrashRestore][deleteStatus];
+  const deleteIcon = [FiTrash, FiTrash, TrashRestore][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
       id: track.id,
@@ -152,7 +153,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
 interface selectButtonInterface {
   handler: any,
   text: string,
-  Icon: IconType,
+  Icon: IconType | React.FunctionComponent,
   tooltip: string,
   active: boolean,
 }
@@ -189,7 +190,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
         aria-label={tooltip}
         onClick={clickHandler}
         onKeyDown={keyHandler} >
-        <Icon />
+        <Icon css={customIconStyle(theme)}/>
         <div>{ text }</div>
       </div>
     </ThemedTooltip>

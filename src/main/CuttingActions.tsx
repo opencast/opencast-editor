@@ -1,10 +1,10 @@
 import React, { SyntheticEvent } from "react";
 
-import { basicButtonStyle } from '../cssStyles'
+import { basicButtonStyle, customIconStyle } from '../cssStyles'
 
 import { IconType } from "react-icons";
-import { FiScissors, FiChevronLeft, FiChevronRight} from "react-icons/fi";
-import { FaTrash, FaTrashRestore } from "react-icons/fa";
+import { FiScissors, FiChevronLeft, FiChevronRight, FiTrash} from "react-icons/fi";
+import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 
 import { css } from '@emotion/react'
 
@@ -176,7 +176,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
           actionHandler(event, action, undefined)
         } }}
       >
-        {isCurrentSegmentAlive ? <FaTrash /> : <FaTrashRestore />}
+        {isCurrentSegmentAlive ? <FiTrash /> : <TrashRestore css={customIconStyle(theme)} /> }
         <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>

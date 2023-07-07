@@ -434,3 +434,9 @@ export const spinningStyle = css({
     "100%": { transform: "rotate(360deg)" },
   })}`,
 })
+
+export const customIconStyle = (theme: Theme) => css(({
+  width: '16px',
+  height: 'auto',
+  color: theme.text,
+}))

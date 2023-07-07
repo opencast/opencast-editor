@@ -4,8 +4,8 @@ import { css, SerializedStyles } from '@emotion/react'
 
 import { IconType } from "react-icons";
 import { FiScissors, FiFilm, FiFileText, FiCheckSquare } from "react-icons/fi";
-import { FaPhotoVideo } from "react-icons/fa";
-import { MdOutlineSubtitles } from "react-icons/md";
+import { FiImage } from "react-icons/fi";
+import { ReactComponent as SubtitleIcon } from '../img/subtitle.svg';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
@@ -65,13 +65,13 @@ const MainMenu: React.FC = () => {
         ariaLabelText={t(MainMenuStateNames.trackSelection)}
       />}
       {settings.subtitles.show && <MainMenuButton
-        Icon={MdOutlineSubtitles}
+        Icon={SubtitleIcon}
         stateName={MainMenuStateNames.subtitles}
         bottomText={t(MainMenuStateNames.subtitles)}
         ariaLabelText={t(MainMenuStateNames.subtitles)}
       />}
       {settings.thumbnail.show && <MainMenuButton
-        Icon={FaPhotoVideo}
+        Icon={FiImage}
         stateName={MainMenuStateNames.thumbnail}
         bottomText={t(MainMenuStateNames.thumbnail)}
         ariaLabelText={t(MainMenuStateNames.thumbnail)}
@@ -87,7 +87,7 @@ const MainMenu: React.FC = () => {
 };
 
 interface mainMenuButtonInterface {
-  Icon: IconType, // Unfortunately, icons from different packages don't share the same IconDefinition type. Works anyway.
+  Icon: IconType | React.FunctionComponent,
   stateName: mainMenu["value"],
   bottomText: string,
   ariaLabelText: string;
@@ -155,7 +155,9 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
       } }}
     >
       <Icon css={iconCustomCSS ? iconCustomCSS : {
-        fontSize: 36
+        fontSize: 36,
+        width: '36px',
+        height: 'auto'
       }}/>
       {bottomText && <div>{bottomText}</div>}
     </li>
