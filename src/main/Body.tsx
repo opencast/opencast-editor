@@ -23,7 +23,9 @@ const Body: React.FC = () => {
 
   // Set attribute used by appkit to select the correct colors
   useEffect(() => {
-    document.documentElement.dataset.colorScheme = themeState
+    document.documentElement.dataset.colorScheme = themeState !== "system" ?
+      themeState :
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
   }, [themeState])
 
   // If we're in a special state, display a special page
