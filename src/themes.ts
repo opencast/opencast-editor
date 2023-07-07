@@ -54,7 +54,7 @@ export const lightMode: Theme = {
 export const darkMode: Theme = {
   background: COLORS.neutral15,
   menu_background: COLORS.neutral05,
-  text: COLORS.neutral90, //'rgba(255, 255, 255, 0.87)',
+  text: COLORS.neutral90,
   error: 'rgba(237, 23, 65, 0.8)',
   element_bg: COLORS.neutral05,
   multiValue: COLORS.neutral15,
