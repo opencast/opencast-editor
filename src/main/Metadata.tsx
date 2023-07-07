@@ -132,7 +132,13 @@ const Metadata: React.FC = () => {
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
       ...(isReadOnly && {color: `${theme.text}`}),
       color: `${theme.text}`,
-      outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`
+      outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`,
+      "&:hover": {
+        borderColor: theme.metadata_highlight,
+      },
+      "&:focus": {
+        borderColor: theme.metadata_highlight,
+      },
     });
   }
 

@@ -40,6 +40,7 @@ export interface Theme {
   subtitle_segment_border: string
   subtitle_segment_text: string
   header_bg: string
+  metadata_highlight: string
   clock_bg: string
   clock_border: string
   clock_hands: string

@@ -217,10 +217,11 @@ export function selectFieldStyle(theme: Theme) {
     control: (provided: any, state: any) => ({
       ...provided,
       background: theme.element_bg,
-      ...(state.isFocused && {borderColor: theme.text}),
-      ...(state.isFocused && {boxShadow: theme.selected}),
+      ...(state.isFocused && {borderColor: theme.metadata_highlight}),
+      ...(state.isFocused && {boxShadow: `0 0 0 1px ${theme.metadata_highlight}`}),
       "&:hover": {
-        borderColor: theme.text,
+        borderColor: theme.menu_background,
+        boxShadow: `0 0 0 1px ${theme.metadata_highlight}`
       },
     }),
     menu: (provided: any) => ({
