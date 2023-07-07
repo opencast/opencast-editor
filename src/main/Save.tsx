@@ -330,7 +330,7 @@ const dialogTitleStyle = (theme: Theme) => css({
 })
 
 const dialogContentStyle = (theme: Theme) => css({
-  color: `${theme.text_black}`,
+  color: `${theme.text}`,
 })
 
 const dialogConfirmationButtonStyle = (theme: Theme) => css({

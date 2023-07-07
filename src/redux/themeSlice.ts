@@ -5,8 +5,6 @@ export interface Theme {
   background: string
   menu_background: string
   text: string
-  text_black: string
-  text_darkblue: string
   error: string
   element_bg: string
   multiValue: string
@@ -41,6 +39,7 @@ export interface Theme {
   subtitle_segment_bg: string
   subtitle_segment_border: string
   subtitle_segment_text: string
+  header_bg: string
   clock_bg: string
   clock_border: string
   clock_hands: string

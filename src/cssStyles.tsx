@@ -172,7 +172,7 @@ export const titleStyle = (theme: Theme) => css(({
   whiteSpace: "nowrap",
   textOverflow: 'ellipsis',
   maxWidth: '100%',
-  color: `${theme.text_black}`,
+  color: `${theme.text}`,
 }))
 
 /**
@@ -183,7 +183,7 @@ export const titleStyleBold = (theme: Theme) => css({
   fontWeight: 'bold',
   fontSize: '24px',
   verticalAlign: '-2.5px',
-  color: `${theme.text_black}`,
+  color: `${theme.text}`,
 })
 
 /**
@@ -214,9 +214,14 @@ export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
 
 export function selectFieldStyle(theme: Theme) {
   return {
-    control: (provided: any) => ({
+    control: (provided: any, state: any) => ({
       ...provided,
       background: theme.element_bg,
+      ...(state.isFocused && {borderColor: theme.text}),
+      ...(state.isFocused && {boxShadow: theme.selected}),
+      "&:hover": {
+        borderColor: theme.text,
+      },
     }),
     menu: (provided: any) => ({
       ...provided,
@@ -227,29 +232,29 @@ export function selectFieldStyle(theme: Theme) {
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: theme.text_black,
+      color: theme.text,
     }),
     multiValue: (provided: any) => ({
       ...provided,
-      color: theme.text_black,
+      color: theme.text,
       background: theme.multiValue,
       cursor: 'default',
     }),
     multiValueLabel: (provided: any) => ({
       ...provided,
-      color: theme.text_black,
+      color: theme.text,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       background: state.isFocused ? theme.focused : theme.background
         && state.isSelected ? theme.selected : theme.background,
       ...(state.isFocused && {color: theme.focus_text}),
-      color: state.isFocused ? theme.focus_text : theme.text_black
-        && state.isSelected ? theme.selected_text : theme.text_black,
+      color: state.isFocused ? theme.focus_text : theme.text
+        && state.isSelected ? theme.selected_text : theme.text,
     }),
     placeholder: (provided: any) => ({
       ...provided,
-      color: theme.text_black,
+      color: theme.text,
     }),
     clearIndicator: (provided: any) => ({
       ...provided,
@@ -265,7 +270,7 @@ export function selectFieldStyle(theme: Theme) {
     }),
     input: (provided: any) => ({
       ...provided,
-      color: theme.text_black,
+      color: theme.text,
     }),
   }
 }

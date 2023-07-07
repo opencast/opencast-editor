@@ -16,18 +16,16 @@ function Header() {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: `${theme.header_bg}`,
   })
 
   const headerStyleThemed = themeState.startsWith('high-contrast-')
     ? css({
       height: '58px',
-      backgroundColor: '#000',
       borderBottom: '2px solid white'
     })
     : css({
-
       height: '60px',
-      backgroundColor: '#4b5563',
     })
 
   const logo = css({

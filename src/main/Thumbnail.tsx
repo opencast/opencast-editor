@@ -260,7 +260,7 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    color: `${theme.text_black}`,
+    color: `${theme.text}`,
   })
 
   return (

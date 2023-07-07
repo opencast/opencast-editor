@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import MainMenu from './MainMenu';
 import MainContent from './MainContent';
@@ -12,12 +12,19 @@ import { useSelector } from 'react-redux';
 import { selectIsEnd } from '../redux/endSlice'
 import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
+import { selectThemeState } from "../redux/themeSlice";
 
 
 const Body: React.FC = () => {
 
   const isEnd = useSelector(selectIsEnd)
   const isError = useSelector(selectIsError)
+  const themeState = useSelector(selectThemeState);
+
+  // Set attribute used by appkit to select the correct colors
+  useEffect(() => {
+    document.documentElement.dataset.colorScheme = themeState
+  }, [themeState])
 
   // If we're in a special state, display a special page
   // Otherwise display the normal page

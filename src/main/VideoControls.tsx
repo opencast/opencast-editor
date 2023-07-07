@@ -150,7 +150,7 @@ const PreviewMode: React.FC<{
   const previewModeTextStyle = (theme: Theme) => css({
     display: 'inline-block',
     flexWrap: 'nowrap',
-    color: `${theme.text_black}`
+    color: `${theme.text}`
   })
 
   return (
@@ -253,7 +253,7 @@ const TimeDisplay: React.FC<{
 
   const timeTextStyle = (theme: Theme) => css({
     display: 'inline-block',
-    color: `${theme.text_black}`
+    color: `${theme.text}`
   })
 
   return (

@@ -16,6 +16,8 @@ import "@fontsource-variable/roboto-flex";
 
 import './i18n/config';
 
+import '@opencast/appkit/dist/colors.css'
+
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the
 // server.

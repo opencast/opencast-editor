@@ -11,6 +11,7 @@
     "@iarna/toml": "^2.2.5",
     "@mui/material": "^5.13.3",
     "@mui/x-date-pickers": "^5.0.20",
+    "@opencast/appkit": "^0.1.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@types/iarna__toml": "^2.0.2",

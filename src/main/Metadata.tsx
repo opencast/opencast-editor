@@ -120,7 +120,7 @@ const Metadata: React.FC = () => {
     width: '110px',
     fontSize: '1em',
     fontWeight: 'bold',
-    color: `${theme.text_darkblue}`,
+    color: `${theme.text}`,
     lineHeight: '32px',
   })
 
@@ -130,8 +130,8 @@ const Metadata: React.FC = () => {
       fontSize: '1em',
       borderRadius: '5px',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
-      ...(isReadOnly && {color: `${theme.text_black}`}),
-      color: `${theme.text_black}`,
+      ...(isReadOnly && {color: `${theme.text}`}),
+      color: `${theme.text}`,
       outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`
     });
   }
@@ -160,7 +160,7 @@ const Metadata: React.FC = () => {
           color: `${theme.indicator_color}`
         },
         '.MuiInput-input, button': {
-          color: `${theme.text_black}`,
+          color: `${theme.text}`,
           background: 'transparent !important',
           '&:hover': {
             background: 'transparent !important',
