@@ -134,12 +134,12 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
     outline: `${theme.menuButton_outline}`,
     ...(activeState === stateName) && {
       backgroundColor: `${theme.button_color}`,
-      color: `${theme.text}`,
+      color: `${theme.inverted_text}`,
       boxShadow: `${theme.boxShadow}`,
     },
     '&:hover': {
       backgroundColor: `${theme.button_color}`,
-      color: `${theme.text}`,
+      color: `${theme.inverted_text}`,
       boxShadow: `${theme.boxShadow}`,
     },
     flexDirection: 'column',
