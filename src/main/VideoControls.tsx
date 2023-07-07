@@ -217,6 +217,11 @@ const PlayButton: React.FC<{
     boxShadow: `${theme.boxShadow_tiles}`
   })
 
+  const playIconStyle = css({
+    fontSize: 24,
+    paddingLeft: '3px',
+  })
+
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
@@ -228,7 +233,7 @@ const PlayButton: React.FC<{
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
             switchIsPlaying(event)
           } }}>
-          {isPlaying ? <FiPause css={{fontSize: 24}} /> : <FiPlay css={{fontSize: 24}} />}
+          {isPlaying ? <FiPause css={playIconStyle} /> : <FiPlay css={playIconStyle} />}
         </div>
       </div>
     </ThemedTooltip>
