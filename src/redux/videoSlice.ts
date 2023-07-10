@@ -212,9 +212,7 @@ const videoSlice = createSlice({
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; }, n2: { displayOrder: number; }) => {
-          return n1.displayOrder - n2.displayOrder;
-        });
+        state.workflows = action.payload.workflows
         state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
         state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 

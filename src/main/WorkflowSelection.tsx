@@ -55,7 +55,9 @@ const WorkflowSelection : React.FC = () => {
 
   // Initialite redux states
   const workflowFilter: IWorkflowConfiguration | undefined = settings.workflow;
-  const workflows = filterWorkflows(workflowFilter, useSelector(selectWorkflows)).sort((a, b) => {
+  let workflows = filterWorkflows(workflowFilter, useSelector(selectWorkflows))
+  // Need to make copy to handle undefined displayOrder values
+  workflows = [...workflows].sort((a, b) => {
     return (b.displayOrder - a.displayOrder)
   })
 
