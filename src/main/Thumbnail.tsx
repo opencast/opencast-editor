@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { IconType } from "react-icons";
-import { FiCamera, FiCopy, FiInfo, FiXCircle, FiUpload} from "react-icons/fi";
+import { FiCamera, FiCopy, FiXCircle, FiUpload} from "react-icons/fi";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";

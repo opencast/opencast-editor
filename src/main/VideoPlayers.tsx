@@ -24,7 +24,6 @@ import { selectTheme } from "../redux/themeSlice";
 
 const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
 
-  const theme = useSelector(selectTheme)
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
 
