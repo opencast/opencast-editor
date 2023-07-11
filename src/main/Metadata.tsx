@@ -171,8 +171,19 @@ const Metadata: React.FC = () => {
           '&:hover': {
             background: 'transparent !important',
             outline: 'none'
-          }
+          },
         },
+        // Stop the underline from changing
+        '.MuiInput-root': {
+          '&:before, &:after': {
+            transition: 'unset',
+            transform: 'unset',
+            borderBottom: '1px solid black',
+          },
+          '&:hover:not::before': {
+            borderBottom: '0px solid black',
+          }
+        }
       })
     );
   }
