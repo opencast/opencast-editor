@@ -109,8 +109,17 @@ const SubtitleSelectButton: React.FC<{
   const dispatch = useDispatch()
 
   const flagStyle = css({
-    fontSize: '2em',
-    overflow: 'hidden'
+    fontSize: '2.5em',
+    overflow: 'hidden',
+
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: `${theme.background_finish_menu_icon}`,
+    color: `${theme.text}`,
+    borderRadius: '50%',
+    width: '90px',
+    height: '90px',
   });
 
   const titleStyle = css({
