@@ -126,7 +126,6 @@ const Metadata: React.FC = () => {
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
     return css({
-      flex: '1',
       fontSize: '1em',
       borderRadius: '5px',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
@@ -148,6 +147,7 @@ const Metadata: React.FC = () => {
         padding: '10px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
+        resize: 'vertical',
       })
     );
   }
