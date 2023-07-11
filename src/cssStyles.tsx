@@ -247,8 +247,8 @@ export function selectFieldStyle(theme: Theme) {
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      background: state.isFocused ? theme.focused : theme.background
-        && state.isSelected ? theme.selected : theme.background,
+      background: state.isFocused ? theme.focused : theme.element_bg
+        && state.isSelected ? theme.selected : theme.element_bg,
       ...(state.isFocused && {color: theme.focus_text}),
       color: state.isFocused ? theme.focus_text : theme.text
         && state.isSelected ? theme.selected_text : theme.text,
