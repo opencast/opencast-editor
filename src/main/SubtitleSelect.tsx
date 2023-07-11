@@ -56,9 +56,11 @@ const SubtitleSelect : React.FC = () => {
   }, [captionTracks, subtitles, t])
 
   const subtitleSelectStyle = css({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(20em, 1fr))',
-    gridRowGap: '30px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   const renderButtons = () => {
