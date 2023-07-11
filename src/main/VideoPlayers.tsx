@@ -35,7 +35,7 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
     alignItems: 'center',
     width: widthInPercent + '%',
     borderRadius: '5px',
-    boxShadow: `${theme.boxShadow_tiles}`,
+    // boxShadow: `${theme.boxShadow_tiles}`,
   });
 
   // Initialize video players
@@ -337,7 +337,7 @@ export const VideoPlayer = React.forwardRef(
       position: 'absolute',
       top: 0,
       left: 0,
-      background: ' black',
+      background: `${theme.background}`,
     })
 
     const render = () => {
