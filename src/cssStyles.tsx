@@ -285,7 +285,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
         root: {
           /* Modal */
           outline: `${theme.dropdown_border} !important`,
-          background: `${theme.background}`,
+          background: `${theme.menu_background}`,
           color: `${theme.text}`,
 
           /* Calendar-modal */
@@ -329,7 +329,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
       styleOverrides: {
         root: {
           /* Calendar- and Clock-modal -> arrows, icon, days  */
-          color: `${theme.icon_color} !important`,
+          color: `${theme.text} !important`,
           '&.MuiPickersDay-root': {
             background: 'transparent !important',
             color: `${theme.text} !important`,
