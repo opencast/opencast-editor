@@ -36,6 +36,7 @@ export interface Theme {
   waveform_bg: string
   scrubber: string
   scrubber_handle: string
+  scrubber_icon: string
   subtitle_segment_bg: string
   subtitle_segment_border: string
   subtitle_segment_text: string

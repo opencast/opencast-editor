@@ -216,7 +216,7 @@ export function selectFieldStyle(theme: Theme) {
   return {
     control: (provided: any, state: any) => ({
       ...provided,
-      background: theme.element_bg,
+      background: theme.menu_background,
       ...(state.isFocused && {borderColor: theme.metadata_highlight}),
       ...(state.isFocused && {boxShadow: `0 0 0 1px ${theme.metadata_highlight}`}),
       "&:hover": {
@@ -226,7 +226,7 @@ export function selectFieldStyle(theme: Theme) {
     }),
     menu: (provided: any) => ({
       ...provided,
-      background: theme.element_bg,
+      background: theme.menu_background,
       outline: theme.dropdown_border,
       // kill the gap
       marginTop: 0,
@@ -237,18 +237,18 @@ export function selectFieldStyle(theme: Theme) {
     }),
     multiValue: (provided: any) => ({
       ...provided,
-      color: theme.text,
+      color: theme.inverted_text,
       background: theme.multiValue,
       cursor: 'default',
     }),
     multiValueLabel: (provided: any) => ({
       ...provided,
-      color: theme.text,
+      color: theme.inverted_text,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      background: state.isFocused ? theme.focused : theme.element_bg
-        && state.isSelected ? theme.selected : theme.element_bg,
+      background: state.isFocused ? theme.focused : theme.menu_background
+        && state.isSelected ? theme.selected : theme.menu_background,
       ...(state.isFocused && {color: theme.focus_text}),
       color: state.isFocused ? theme.focus_text : theme.text
         && state.isSelected ? theme.selected_text : theme.text,

@@ -241,7 +241,7 @@ export const Scrubber: React.FC<{
   const scrubberDragHandleIconStyle = css({
     paddingLeft: '2px',
     paddingTop: '2px',
-    color: `${theme.scrubber}`,
+    color: `${theme.scrubber_icon}`,
   })
 
   // // Possible TODO: Find a way to use ariaLive in a way that only the latest change is announced

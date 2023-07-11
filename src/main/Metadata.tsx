@@ -178,10 +178,10 @@ const Metadata: React.FC = () => {
           '&:before, &:after': {
             transition: 'unset',
             transform: 'unset',
-            borderBottom: '1px solid black',
+            borderBottom: `1px solid ${theme.text}`,
           },
           '&:hover:not::before': {
-            borderBottom: '0px solid black',
+            borderBottom: `0px solid ${theme.text}`,
           }
         }
       })
