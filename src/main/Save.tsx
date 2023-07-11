@@ -294,7 +294,7 @@ export const DialogSave: React.FC<{
 
   let title = ""
   let content = ""
-  const confirmation = "Okay"
+  const confirmation = t("save.confirm-success")
   if (workflowStatus === 'failed' || metadataStatus === 'failed') {
     title = t("save.confirmButton-failed-tooltip")
     content = t("various.error-text")
@@ -383,7 +383,7 @@ export const SaveDialog: React.FC<{
           css={[basicButtonStyle(theme), dialogCancelButtonStyle(theme)]}
           onClick={onClose}
         >
-          Dont save
+          {t("save.cancel-save")}
         </Button>
         <Button
           css={[basicButtonStyle(theme), dialogConfirmationButtonStyle(theme)]}
