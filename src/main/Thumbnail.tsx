@@ -437,8 +437,6 @@ const AffectAllRow : React.FC<{
 
   return (
     <div css={rowStyle}>
-      <FiInfo css={{fontSize: 32}} />
-      {t('thumbnail.explanation')}
       <ThemedTooltip title={t('thumbnail.buttonGenerateAll-tooltip')}>
         <div css={[basicButtonStyle(theme), buttonStyle]}
           role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
