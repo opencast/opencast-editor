@@ -137,6 +137,7 @@ const PreviewMode: React.FC<{
   })
 
   const switchIconStyle = css({
+    color: `${theme.background_preview_icon}`,
     fontSize: '28px',
   })
 
