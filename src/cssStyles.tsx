@@ -77,17 +77,13 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
 export const basicButtonStyle = (theme: Theme) => css({
   borderRadius: '5px',
   cursor: "pointer",
-  // Animation
-  transitionDuration: "0.3s",
-  transitionProperty: "transform",
   "&:hover": {
-    transform: 'scale(1.1)',
+    backgroundColor: `${theme.button_color}`,
+    color: `${theme.inverted_text}`,
   },
   "&:focus": {
-    transform: 'scale(1.1)',
-  },
-  "&:active": {
-    transform: 'scale(0.9)',
+    backgroundColor: `${theme.button_color}`,
+    color: `${theme.inverted_text}`,
   },
   // Flex position child elements
   display: 'flex',

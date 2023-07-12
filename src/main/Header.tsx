@@ -38,6 +38,7 @@ function Header() {
     flexDirection: 'row',
     color: `#fff`,
     marginRight: '20px',
+    padding: '10px',
     outline: `${theme.menuButton_outline}`,
   })
 

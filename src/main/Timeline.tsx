@@ -225,17 +225,6 @@ export const Scrubber: React.FC<{
     },
     // Animation
     cursor: isGrabbed ? "grabbing" : "grab",
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:focus": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
   })
 
   const scrubberDragHandleIconStyle = css({

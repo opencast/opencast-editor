@@ -133,17 +133,10 @@ const PreviewMode: React.FC<{
     display: 'flex',
     ...(flexGapReplacementStyle(10, false)),
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   })
 
   const switchIconStyle = css({
-    cursor: "pointer",
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.05)',
-    },
-    color: `${theme.background_preview_icon}`,
     fontSize: '28px',
   })
 
@@ -170,7 +163,8 @@ const PreviewMode: React.FC<{
         <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
         </div>
-        {isPlayPreview ? <FaToggleOn css={switchIconStyle} /> : <FaToggleOff css={switchIconStyle} />}
+        {isPlayPreview ? <FaToggleOn css={[basicButtonStyle(theme), switchIconStyle]} />
+          : <FaToggleOff css={[basicButtonStyle(theme), switchIconStyle]} />}
       </div>
     </ThemedTooltip>
   );
@@ -214,7 +208,7 @@ const PlayButton: React.FC<{
     borderRadius: '50%',
     width: '50px',
     height: '50px',
-    boxShadow: `${theme.boxShadow_tiles}`
+    boxShadow: `${theme.boxShadow_tiles}`,
   })
 
   const playIconStyle = css({

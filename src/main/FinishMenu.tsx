@@ -91,7 +91,6 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
 
   const labelStyle = css({
     padding: '0px 20px',
-    color: `${theme.text}`
   })
 
   return (
