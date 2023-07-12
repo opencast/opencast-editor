@@ -119,3 +119,14 @@ Options which are usually specified in the configuration file are documented in 
 | thumbnail.show      | ✓   | ✓    | Show thumbnail tab. Demo only.
 | debug               | ✓   | ✗    | Enable internationalization debugging.
 | lng                 | ✓   | ✗    | Select a specific language. Use language codes like `de` or `en-US`.
+
+
+Notes on Waveform Generation
+----------------------------
+
+The editor displays a waveform image on the timeline in the cutting view. This waveform image is generated at runtime
+from one of the videos of the event. However, to properly generate the image, the video it is generated from needs to be
+loaded completely once, which takes time and bandwidth. If this poses a problem for your use case, you can instead have
+Opencast provide an image in the internal publication. Provided images will always take precedence and prevent the
+generation algorithm form running. The provided image should have the same flavor that is specified in the Opencast
+configuration file `etc/org.opencastproject.editor.EditorServiceImpl.cfg`.
