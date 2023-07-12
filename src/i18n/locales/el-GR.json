@@ -36,6 +36,7 @@
         "time-aria": "Τρέχουσα ώρα",
         "comError-text": "Προέκυψε πρόβλημα κατά την επικοινωνία με το Opencast.",
         "loadError-text": "Παρουσιάστηκε σφάλμα κατά τηn φόρτωση του βίντεο.",
+        "durationError-text": "Opencast failed to provide the video duration.",
         "title-tooltip": "Τίτλος Βίντεο",
         "presenter-tooltip": "Παρουσιαστές Βίντεο"
     },
