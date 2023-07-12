@@ -7,6 +7,8 @@ import { MainMenuButton } from "./MainMenu";
 import { FiSettings } from "react-icons/fi";
 import { MainMenuStateNames } from "../types";
 
+import { ReactComponent as Logo } from '../img/opencast-editor.svg';
+
 function Header() {
   const theme = useSelector(selectTheme)
   const themeState = useSelector(selectThemeState);
@@ -29,8 +31,16 @@ function Header() {
     })
 
   const logo = css({
-    height: '48px',
     marginLeft: '6px',
+
+    // Unset a bunch of CSS to keep the logo clean
+    outline: 'unset',
+    "&:hover": {
+      backgroundColor: `unset`,
+    },
+    "&:focus": {
+      backgroundColor: `unset`,
+    },
   })
 
   const settingsButtonCSS = css({
@@ -44,7 +54,14 @@ function Header() {
 
   return (
     <div css={[headerStyle, headerStyleThemed]}>
-      <img src="opencast-editor.svg" css={logo} alt="Opencast Editor" />
+      <MainMenuButton
+        Icon={Logo}
+        stateName={MainMenuStateNames.cutting}
+        bottomText={""}
+        ariaLabelText={t("mainMenu.cutting-button")}
+        customCSS={logo}
+        iconCustomCSS={css({width: 'auto', height: '60px'})}
+      />
       <MainMenuButton
         Icon={FiSettings}
         stateName={MainMenuStateNames.keyboardControls}
