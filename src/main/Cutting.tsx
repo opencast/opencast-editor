@@ -48,7 +48,7 @@ const Cutting: React.FC = () => {
   const cuttingStyle = css({
     display: 'flex',
     width: 'auto',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px',

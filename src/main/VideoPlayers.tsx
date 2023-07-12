@@ -29,12 +29,13 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
 
   const videoPlayerAreaStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
     width: widthInPercent + '%',
     borderRadius: '5px',
     // boxShadow: `${theme.boxShadow_tiles}`,
+
+    maxHeight: '300px',
   });
 
   // Initialize video players
@@ -128,6 +129,7 @@ export const VideoPlayer = React.forwardRef(
     const duration = useSelector(selectDurationInSeconds)
     const previewTriggered = useSelector(selectPreviewTriggered)
     const clickTriggered = useSelector(selectClickTriggered)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const aspectRatio = useSelector(selectAspectRatio)
     const theme = useSelector(selectTheme)
 
@@ -321,46 +323,36 @@ export const VideoPlayer = React.forwardRef(
       padding: '10px',
     })
 
-    const playerWrapper = css({
-      position: 'relative',
-      width: '100%',
-      paddingTop: `min(${aspectRatio + '%'}, ${'30vh'})`,
-      overflow: 'hidden',
+    const reactPlayerStyle = css({
+      aspectRatio: '16 / 9',    // Hard-coded for now because there are problems with updating this value at runtime
+
+      overflow: 'hidden', // Required for borderRadius to show
       ...(first) && {borderTopLeftRadius: '5px'},
       ...(first) && {borderBottomLeftRadius: '5px'},
       ...(last) && {borderTopRightRadius: '5px'},
       ...(last) && {borderBottomRightRadius: '5px'},
-    });
-
-    const reactPlayerStyle = css({
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      background: `${theme.background}`,
     })
 
     const render = () => {
       if (!errorState) {
         return (
-          <div css={playerWrapper}>
-            <ReactPlayer url={url}
-              css={reactPlayerStyle}
-              ref={ref}
-              width="100%"
-              height="100%"
-              playing={isPlaying}
-              muted={!isPrimary}
-              onProgress={onProgressCallback}
-              progressInterval={100}
-              onReady={onReadyCallback}
-              onPlay={onPlay}
-              onEnded={onEndedCallback}
-              onError={onErrorCallback}
-              tabIndex={-1}
-              config={playerConfig}
-              disablePictureInPicture
-            />
-          </div>
+          <ReactPlayer url={url}
+            css={reactPlayerStyle}
+            ref={ref}
+            width="unset"
+            height="unset"
+            playing={isPlaying}
+            muted={!isPrimary}
+            onProgress={onProgressCallback}
+            progressInterval={100}
+            onReady={onReadyCallback}
+            onPlay={onPlay}
+            onEnded={onEndedCallback}
+            onError={onErrorCallback}
+            tabIndex={-1}
+            config={playerConfig}
+            disablePictureInPicture
+          />
         );
       } else {
         return (
