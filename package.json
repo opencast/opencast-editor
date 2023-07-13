@@ -26,7 +26,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "final-form": "^4.20.9",
     "i18next": "^22.5.0",
-    "i18next-browser-languagedetector": "^7.0.2",
+    "i18next-browser-languagedetector": "^7.1.0",
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",
     "mui-rff": "^6.1.4",
