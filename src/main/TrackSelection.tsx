@@ -166,7 +166,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
       padding: '10px 5px',
-      width: '25%',
+      width: '30%',
       boxShadow: '',
       border: `1px solid ${theme.text}`,
       background: `${theme.element_bg}`,
