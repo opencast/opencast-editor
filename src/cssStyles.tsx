@@ -125,7 +125,7 @@ export const navigationButtonStyle = (theme: Theme) => css({
  */
 export const backOrContinueStyle = css(({
   display: 'flex',
-  flexDirection: 'row' as const,
+  flexDirection: 'row',
   ...(flexGapReplacementStyle(20, false)),
 }))
 
@@ -136,7 +136,7 @@ export const tileButtonStyle = (theme: Theme) => css({
   width: '290px',
   height: '220px',
   display: 'flex',
-  flexDirection: 'column' as const,
+  flexDirection: 'column',
   fontWeight: "bold",
   ...(flexGapReplacementStyle(30, false)),
   boxShadow: `${theme.boxShadow_tiles}`,

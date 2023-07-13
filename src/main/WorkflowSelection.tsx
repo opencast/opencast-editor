@@ -44,7 +44,7 @@ const WorkflowSelection : React.FC = () => {
   const workflowSelectionStyle = css({
     padding: '20px',
     display: (finishState === "Start processing" && pageNumber === 1) ? 'flex' : 'none',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     ...(flexGapReplacementStyle(30, false)),
@@ -52,7 +52,7 @@ const WorkflowSelection : React.FC = () => {
 
   const workflowSelectionSelectionStyle = css({
     display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     alignItems: 'left',
     ...(flexGapReplacementStyle(20, false)),
     flexWrap: 'wrap',
@@ -160,12 +160,12 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   const labelStyle = css({
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: '500px'
+    maxWidth: '500px',
   })
 
   const headerStyle = css({
     width: '100%',
-    padding: '5px',
+    padding: '5px 0px',
     fontSize: 'larger',
   });
 

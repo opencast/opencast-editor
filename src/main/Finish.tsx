@@ -64,9 +64,9 @@ export const PageButton : React.FC<{pageNumber: number, label: string, Icon: Ico
   }
 
   const pageButtonStyle = css({
-    width: '200px',
+    minWidth: '100px',
     padding: '16px',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
   })
