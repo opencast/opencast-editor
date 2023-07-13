@@ -27,7 +27,7 @@ import { configureFieldsAttributes, settings } from '../config'
 import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemeProvider } from "@mui/material/styles";
-import { TFuncKey } from "i18next";
+import { ParseKeys } from "i18next";
 
 /**
  * Creates a Metadata form
@@ -474,10 +474,10 @@ const Metadata: React.FC = () => {
         // Parse Label
         let descLabel = null
         if (i18n.exists(`metadata.${field.id}`)) {
-          descLabel = t(`metadata.${field.id}.${key.replaceAll(".", "-")}` as TFuncKey)
+          descLabel = t(`metadata.${field.id}.${key.replaceAll(".", "-")}` as ParseKeys)
 
           if (field.id === "license") {
-            descLabel = t(`metadata.${field.id}.${JSON.parse(key).label.replaceAll(".", "-")}` as TFuncKey)
+            descLabel = t(`metadata.${field.id}.${JSON.parse(key).label.replaceAll(".", "-")}` as ParseKeys)
           }
         }
 
@@ -626,7 +626,7 @@ const Metadata: React.FC = () => {
           <div css={fieldStyle} data-testid={field.id}>
             <label css={fieldLabelStyle} htmlFor={input.name}>{
               i18n.exists(`metadata.labels.${field.id}`) ?
-                t(`metadata.labels.${field.id}` as TFuncKey) as string : field.id
+                t(`metadata.labels.${field.id}` as ParseKeys) as string : field.id
             }</label>
 
             {generateComponentWithModifiedInput(field, input)}
@@ -646,7 +646,7 @@ const Metadata: React.FC = () => {
       <div key={catalogIndex}>
         <h2>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
-            t(`metadata.${catalog.title.replaceAll(".", "-")}` as TFuncKey) as string : catalog.title
+            t(`metadata.${catalog.title.replaceAll(".", "-")}` as ParseKeys) as string : catalog.title
           }
         </h2>
 
