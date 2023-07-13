@@ -5,7 +5,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
-import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
+import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
 import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
@@ -88,26 +88,21 @@ const Thumbnail : React.FC = () => {
     alignItems: 'center',
   })
 
+  const bottomStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+
+    background: `${theme.menu_background}`,
+    borderRadius: '7px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    boxSizing: "border-box",
+    padding: '20px',
+  })
+
   return (
     <div css={thumbnailStyle}>
       <div css={[titleStyle(theme), titleStyleBold(theme)]}>{t('thumbnail.title')}</div>
-      <VideoPlayers refs={generateRefs} widthInPercent={50}/>
-      <VideoControls
-        selectCurrentlyAt={selectCurrentlyAt}
-        selectIsPlaying={selectIsPlaying}
-        selectIsPlayPreview={selectIsPlayPreview}
-        setIsPlaying={setIsPlaying}
-        setIsPlayPreview={setIsPlayPreview}
-      />
-      <Timeline
-        timelineHeight={125}
-        styleByActiveSegment={false}
-        selectIsPlaying={selectIsPlaying}
-        selectCurrentlyAt={selectCurrentlyAt}
-        setIsPlaying={setIsPlaying}
-        setCurrentlyAt={setCurrentlyAt}
-        setClickTriggered={setClickTriggered}
-      />
       <ThumbnailTable
         inputRefs={inputRefs}
         generate={generate}
@@ -115,6 +110,27 @@ const Thumbnail : React.FC = () => {
         uploadCallback={uploadCallback}
         discard={discardThumbnail}
       />
+      <div css={bottomStyle}>
+        <VideoPlayers refs={generateRefs} widthInPercent={50}/>
+        <div css={videosStyle(theme)}>
+          <Timeline
+            timelineHeight={125}
+            styleByActiveSegment={false}
+            selectIsPlaying={selectIsPlaying}
+            selectCurrentlyAt={selectCurrentlyAt}
+            setIsPlaying={setIsPlaying}
+            setCurrentlyAt={setCurrentlyAt}
+            setClickTriggered={setClickTriggered}
+          />
+          <VideoControls
+            selectCurrentlyAt={selectCurrentlyAt}
+            selectIsPlaying={selectIsPlaying}
+            selectIsPlayPreview={selectIsPlayPreview}
+            setIsPlaying={setIsPlaying}
+            setIsPlayPreview={setIsPlayPreview}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -135,9 +151,10 @@ const ThumbnailTable : React.FC<{
   const thumbnailTableStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     flexWrap: 'wrap',
     ...(flexGapReplacementStyle(10, false)),
+    paddingBottom: '20px',
   })
 
   const renderSingleOrMultiple = () => {
@@ -195,6 +212,7 @@ const ThumbnailTableRow: React.FC<{
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
+  const theme = useSelector(selectTheme);
 
   const renderPriority = (thumbnailPriority: number) => {
     if (isNaN(thumbnailPriority)) {
@@ -211,11 +229,10 @@ const ThumbnailTableRow: React.FC<{
   }
 
   return (
-    <div key={index} css={thumbnailTableRowStyle}>
+    <div key={index} css={thumbnailTableRowStyle(theme)}>
       <div css={thumbnailTableRowTitleStyle}>
         {track.flavor.type + renderPriority(track.thumbnailPriority)}
       </div>
-      <hr css={{width: '100%'}}></hr>
       <div css={thumbnailTableRowRowStyle} key={index}>
         <ThumbnailDisplayer track={track} />
         <ThumbnailButtons
@@ -425,7 +442,6 @@ const AffectAllRow : React.FC<{
     gap: '20px',
     justifyContent: 'center',
     alignItems: 'center',
-    borderTop: `${theme.menuBorder}`,
   })
 
   const buttonStyle = css({
@@ -473,9 +489,10 @@ const ThumbnailTableSingleRow: React.FC<{
   discard: any,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme);
 
   return (
-    <div key={index} css={thumbnailTableRowStyle}>
+    <div key={index} css={thumbnailTableRowStyle(theme)}>
       <div css={thumbnailTableRowTitleStyle}>
         {t("thumbnailSimple.rowTitle")}
       </div>
@@ -558,11 +575,18 @@ const ThumbnailButtonsSimple : React.FC<{
 /**
  * CSS shared between multi and simple display mode
  */
-const thumbnailTableRowStyle = css({
+const thumbnailTableRowStyle = (theme: Theme) => css(({
   display: 'flex',
   flexDirection: 'column',
-  padding: '6px 12px',
-})
+  // padding: '6px 12px',
+
+  background: `${theme.menu_background}`,
+  borderRadius: '7px',
+  boxShadow: `${theme.boxShadow_tiles}`,
+  boxSizing: "border-box",
+  padding: '20px',
+  ...(flexGapReplacementStyle(25, false)),
+}))
 
 const thumbnailTableRowTitleStyle = css({
   textAlign: 'left',
@@ -600,7 +624,7 @@ const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
     background: `${theme.element_bg}`,
     justifySelf: 'center',
     alignSelf: 'center',
-    padding: '0px 2px'
+    padding: '0px 4px'
   }
 ];
 

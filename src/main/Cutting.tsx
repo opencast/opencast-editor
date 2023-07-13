@@ -9,7 +9,7 @@ import { httpRequestState } from '../types';
 import { selectTheme } from '../redux/themeSlice';
 import { setError } from '../redux/errorSlice';
 import { selectTitleFromEpisodeDc } from '../redux/metadataSlice';
-import { titleStyle, titleStyleBold } from "../cssStyles";
+import { titleStyle, titleStyleBold, videosStyle } from "../cssStyles";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { css } from "@emotion/react";
 import VideoPlayers from "./VideoPlayers";
@@ -51,24 +51,14 @@ const Cutting: React.FC = () => {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '0px',
   });
 
-  const bottomStyle = css({
-    width: '100%',
-    background: `${theme.menu_background}`,
-    borderRadius: '5px',
-    boxShadow: `${theme.boxShadow_tiles}`,
-    marginTop: '24px',
-    boxSizing: "border-box",
-    padding: '10px',
-  })
 
   return (
     <div css={cuttingStyle}>
       <CuttingHeader />
       <VideoPlayers refs={undefined}/>
-      <div css={bottomStyle}>
+      <div css={videosStyle(theme)}>
         <Timeline
           timelineHeight={300}
           selectIsPlaying={selectIsPlaying}

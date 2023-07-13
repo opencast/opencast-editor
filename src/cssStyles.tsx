@@ -437,3 +437,17 @@ export const customIconStyle = (theme: Theme) => css(({
   height: 'auto',
   color: theme.text,
 }))
+
+export const videosStyle = (theme: Theme) => css(({
+  display: 'flex',
+  flexDirection: 'column',
+
+  width: '100%',
+  background: `${theme.menu_background}`,
+  borderRadius: '5px',
+  boxShadow: `${theme.boxShadow_tiles}`,
+  marginTop: '24px',
+  boxSizing: "border-box",
+  padding: '10px',
+  ...(flexGapReplacementStyle(10, false)),
+}))

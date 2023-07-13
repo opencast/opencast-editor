@@ -60,8 +60,6 @@ const CuttingActions: React.FC = () => {
     flexDirection: 'row' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '10px',
-    // ...(flexGapReplacementStyle(30, true)),
   })
 
   const verticalLineStyle = css({
