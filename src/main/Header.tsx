@@ -8,11 +8,14 @@ import { FiSettings } from "react-icons/fi";
 import { MainMenuStateNames } from "../types";
 
 import { ReactComponent as Logo } from '../img/opencast-editor.svg';
+import { selectIsEnd } from "../redux/endSlice";
 
 function Header() {
   const theme = useSelector(selectTheme)
   const themeState = useSelector(selectThemeState);
   const { t } = useTranslation()
+
+  const isEnd = useSelector(selectIsEnd)
 
   const headerStyle = css({
     display: 'flex',
@@ -62,14 +65,16 @@ function Header() {
         customCSS={logo}
         iconCustomCSS={css({width: 'auto', height: '60px'})}
       />
-      <MainMenuButton
-        Icon={FiSettings}
-        stateName={MainMenuStateNames.keyboardControls}
-        bottomText={t("settings.settings")}
-        ariaLabelText={t("settings.settings")}
-        customCSS={settingsButtonCSS}
-        iconCustomCSS={css({fontSize: 24})}
-      />
+      { !isEnd &&
+        <MainMenuButton
+          Icon={FiSettings}
+          stateName={MainMenuStateNames.keyboardControls}
+          bottomText={t("settings.settings")}
+          ariaLabelText={t("settings.settings")}
+          customCSS={settingsButtonCSS}
+          iconCustomCSS={css({fontSize: 24})}
+        />
+      }
     </div>
   );
 }
