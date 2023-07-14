@@ -8,8 +8,6 @@ import store from './redux/store'
 import { init } from './config'
 import { sleep } from './util/utilityFunctions'
 
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { GlobalHotKeys } from 'react-hotkeys';
 
 import "@fontsource-variable/roboto-flex";
@@ -36,12 +34,10 @@ initialize.then(
     ReactDOM.render(
       <React.StrictMode>
         <Provider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
-            <GlobalHotKeys>
-              <App />
-            </GlobalHotKeys>
-          </LocalizationProvider>
+          {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
+          <GlobalHotKeys>
+            <App />
+          </GlobalHotKeys>
         </Provider>
       </React.StrictMode>,
       document.getElementById('root')

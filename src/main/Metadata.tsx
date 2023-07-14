@@ -13,13 +13,6 @@ import { Form, Field, FieldInputProps } from 'react-final-form'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
-import {
-  DateTimePicker,
-  TimePicker,
-  showErrorOnBlur,
-} from 'mui-rff';
-import DateFnsUtils from "@date-io/date-fns";
-
 import { useTranslation } from 'react-i18next';
 import { DateTime as LuxonDateTime} from "luxon";
 
@@ -28,6 +21,7 @@ import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemeProvider } from "@mui/material/styles";
 import { TFuncKey } from "i18next";
+import { cloneDeep } from "lodash";
 
 /**
  * Creates a Metadata form
@@ -148,42 +142,6 @@ const Metadata: React.FC = () => {
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
         resize: 'vertical',
-      })
-    );
-  }
-
-  const dateTimeTypeStyle = (isReadOnly: boolean) => {
-    return (
-      css({
-        padding: '5px 10px',
-        border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
-        background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
-        '.Mui-disabled, .Mui-disabled button > svg': {
-          color: `${theme.disabled} !important`,
-          'WebkitTextFillColor': `${theme.disabled}`,
-        },
-        'button > svg': {
-          color: `${theme.indicator_color}`
-        },
-        '.MuiInput-input, button': {
-          color: `${theme.text}`,
-          background: 'transparent !important',
-          '&:hover': {
-            background: 'transparent !important',
-            outline: 'none'
-          },
-        },
-        // Stop the underline from changing
-        '.MuiInput-root': {
-          '&:before, &:after': {
-            transition: 'unset',
-            transform: 'unset',
-            borderBottom: `1px solid ${theme.text}`,
-          },
-          '&:hover:not::before': {
-            borderBottom: `0px solid ${theme.text}`,
-          }
-        }
       })
     );
   }
@@ -564,41 +522,38 @@ const Metadata: React.FC = () => {
 
     } else if (field.type === "date") {
       return (
-        <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <ThemeProvider theme={calendarStyle(theme)}>
-            <DateTimePicker {...input}
-              name={field.id}
-              inputFormat="yyyy/MM/dd HH:mm"
-              disabled={field.readOnly}
-              dateFunsUtils={DateFnsUtils}
-              TextFieldProps={{
-                variant: 'standard', // Removes default outline
-                onBlur: (e: any) => { blurWithSubmit(e, input) },
-                showError: showErrorOnBlur
-              }}
-              leftArrowButtonText={t('metadata.calendar-prev')}
-              rightArrowButtonText={t('metadata.calendar-next')}
-            />
-          </ThemeProvider>
-        </div>
+        <ThemeProvider theme={calendarStyle(theme)}>
+          <input {...input}
+            type="datetime-local"
+            name={field.id}
+            // inputFormat="yyyy/MM/dd HH:mm"
+            onBlur={e => { blurWithSubmit(e, input) }}
+            readOnly={field.readOnly}
+            css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
+              {
+                resize: 'none',
+              }
+            ]}
+            data-testid="dateTimePicker"
+          />
+        </ThemeProvider>
       );
     } else if (field.type === "time") {
       return (
-        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <ThemeProvider theme={calendarStyle(theme)}>
-            <TimePicker {...input}
-              name={field.id}
-              inputFormat="HH:mm"
-              disabled={field.readOnly}
-              dateFunsUtils={DateFnsUtils}
-              TextFieldProps={{
-                variant: 'standard', // Removes default outline
-                onBlur: (e: any) => { blurWithSubmit(e, input) },
-                showError: showErrorOnBlur
-              }}
-            />
-          </ThemeProvider>
-        </div>
+        <ThemeProvider theme={calendarStyle(theme)}>
+          <input {...input}
+            type="time"
+            name={field.id}
+            // inputFormat="HH:mm"
+            onBlur={e => { blurWithSubmit(e, input) }}
+            readOnly={field.readOnly}
+            css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
+              {
+                resize: 'none',
+              }
+            ]}
+          />
+        </ThemeProvider>
       );
     } else if (field.type === "text_long") {
       return (
@@ -637,6 +592,18 @@ const Metadata: React.FC = () => {
       if ((field.type === "date" || field.type === "time") && input.value === "") {
         const {value, ...other} = input
         return generateComponent(field, other)
+      }
+      // <input type="datetime-local"> is picky about its value and won't accept
+      // global datetime strings, so we have to convert them to local ourselves.
+      // TODO: Also we really should not be modifying the input element like that
+      // so ideally the conversion happens somewhere else in the code
+      // (see error in the console for further details)
+      if ((field.type === "date" || field.type === "time")) {
+        input = cloneDeep(input)
+        const leDate = new Date(input.value)
+        leDate.setMinutes(leDate.getMinutes() - leDate.getTimezoneOffset());
+        input.value = leDate.toISOString().slice(0, 16);
+        return generateComponent(field, input)
       } else {
         return generateComponent(field, input)
       }
