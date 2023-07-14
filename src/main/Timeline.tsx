@@ -282,6 +282,7 @@ export const SegmentsList: React.FC<{
 }) => {
 
   const { t } = useTranslation();
+  const theme = useSelector(selectTheme)
 
   // Init redux variables
   const segments = useSelector(selectSegments)
@@ -294,7 +295,7 @@ export const SegmentsList: React.FC<{
    */
   const bgColor = (deleted: boolean, active: boolean) => {
     if (!deleted && !active) {
-      return 'rgba(137, 195, 252, 0.4)'
+      return 'rgba(137, 137, 137, 0.4)'
     } else if (deleted && !active) {
       return `repeating-linear-gradient(
                 -35deg,
@@ -303,7 +304,7 @@ export const SegmentsList: React.FC<{
                 rgba(255, 95, 95, 0.4) 2px,
                 rgba(255, 95, 95, 0.4) 50px);`
     } else if (!deleted && active) {
-      return 'rgba(78, 163, 252, 0.4)'
+      return 'rgba(78, 78, 78, 0.4)'
     } else if (deleted && active) {
       return `repeating-linear-gradient(
                 -35deg,
@@ -387,7 +388,6 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
 
   const waveformStyle = css({
     background: `${theme.waveform_bg}`,
-    filter: `${theme.waveform_filter}`,
     borderRadius: '5px',
   });
 
