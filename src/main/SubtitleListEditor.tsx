@@ -114,7 +114,7 @@ const SubtitleListEditor : React.FC = () => {
   return (
     <div css={listStyle}>
       <AutoSizer>
-        {({ height, width }) => (
+        {({ height, width }: {height: string | number, width: string | number}) => (
           <VariableSizeList
             height={height ? height : 0}
             itemCount={subtitle !== undefined ? subtitle.length : 0}
