@@ -298,19 +298,19 @@ export const SegmentsList: React.FC<{
     } else if (deleted && !active) {
       return `repeating-linear-gradient(
                 -35deg,
-                rgba(255, 95, 95, 0.4),
-                rgba(255, 95, 95, 0.4) 5px,
-                rgba(200, 0, 0, 0.4) 5px,
-                rgba(200, 0, 0, 0.4) 10px);`
+                rgba(200, 0, 0, 0.4),
+                rgba(200, 0, 0, 0.4) 2px,
+                rgba(255, 95, 95, 0.4) 2px,
+                rgba(255, 95, 95, 0.4) 50px);`
     } else if (!deleted && active) {
       return 'rgba(78, 163, 252, 0.4)'
     } else if (deleted && active) {
       return `repeating-linear-gradient(
                 -35deg,
-                rgba(255, 65, 65, 0.4),
-                rgba(255, 65, 65, 0.4) 5px,
-                rgba(180, 0, 0, 0.4) 5px,
-                rgba(180, 0, 0, 0.4) 10px);`
+                rgba(180, 0, 0, 0.4),
+                rgba(180, 0, 0, 0.4) 2px,
+                rgba(255, 65, 65, 0.4) 2px,
+                rgba(255, 65, 65, 0.4) 50px);`
     }
   }
 
