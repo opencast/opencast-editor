@@ -451,3 +451,12 @@ export const videosStyle = (theme: Theme) => css(({
   padding: '10px',
   ...(flexGapReplacementStyle(10, false)),
 }))
+
+export const backgroundBoxStyle = (theme: Theme) => css(({
+  background: `${theme.menu_background}`,
+  borderRadius: '7px',
+  boxShadow: `${theme.boxShadow_tiles}`,
+  boxSizing: "border-box",
+  padding: '20px',
+  ...(flexGapReplacementStyle(25, false)),
+}))

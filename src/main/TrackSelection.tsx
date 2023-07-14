@@ -9,7 +9,7 @@ import ReactPlayer from 'react-player'
 import { Track } from '../types'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
-import { basicButtonStyle, customIconStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
+import { backgroundBoxStyle, basicButtonStyle, customIconStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 import { selectTheme } from "../redux/themeSlice";
@@ -87,13 +87,6 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'left',
-
-    background: `${theme.menu_background}`,
-    borderRadius: '7px',
-    boxShadow: `${theme.boxShadow_tiles}`,
-    boxSizing: "border-box",
-    padding: '20px',
-    ...(flexGapReplacementStyle(25, false)),
   });
 
   const playerStyle = css({
@@ -135,7 +128,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   }
 
   return (
-    <div css={trackItemStyle}>
+    <div css={[backgroundBoxStyle(theme), trackItemStyle]}>
       <div css={headerStyle}>{ header }</div>
       <div css={{ opacity: track.video_stream.enabled ? '1' : '0.5' }}>
         <ReactPlayer css={playerStyle} url={track.uri} />

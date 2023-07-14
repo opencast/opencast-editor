@@ -5,7 +5,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
-import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle } from "../cssStyles";
+import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
+  backgroundBoxStyle } from "../cssStyles";
 import { selectTheme, Theme } from "../redux/themeSlice";
 import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
@@ -229,7 +230,7 @@ const ThumbnailTableRow: React.FC<{
   }
 
   return (
-    <div key={index} css={thumbnailTableRowStyle(theme)}>
+    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle]}>
       <div css={thumbnailTableRowTitleStyle}>
         {track.flavor.type + renderPriority(track.thumbnailPriority)}
       </div>
@@ -492,7 +493,7 @@ const ThumbnailTableSingleRow: React.FC<{
   const theme = useSelector(selectTheme);
 
   return (
-    <div key={index} css={thumbnailTableRowStyle(theme)}>
+    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle]}>
       <div css={thumbnailTableRowTitleStyle}>
         {t("thumbnailSimple.rowTitle")}
       </div>
@@ -575,18 +576,10 @@ const ThumbnailButtonsSimple : React.FC<{
 /**
  * CSS shared between multi and simple display mode
  */
-const thumbnailTableRowStyle = (theme: Theme) => css(({
+const thumbnailTableRowStyle = css({
   display: 'flex',
   flexDirection: 'column',
-  // padding: '6px 12px',
-
-  background: `${theme.menu_background}`,
-  borderRadius: '7px',
-  boxShadow: `${theme.boxShadow_tiles}`,
-  boxSizing: "border-box",
-  padding: '20px',
-  ...(flexGapReplacementStyle(25, false)),
-}))
+})
 
 const thumbnailTableRowTitleStyle = css({
   textAlign: 'left',
