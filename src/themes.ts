@@ -78,7 +78,7 @@ export const darkMode: Theme = {
   dropdown_border: `1px solid ${COLORS.neutral40}`,
   menuButton_outline: '2px solid transparent',
   button_outline: '0px solid transparent',
-  button_color: COLORS.neutral10,
+  button_color: COLORS.neutral20,
   indicator_color: COLORS.neutral60,
   icon_color: 'rgba(255, 255, 255, 0.87)',
   background_finish_menu_icon: COLORS.neutral15,

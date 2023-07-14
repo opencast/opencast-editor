@@ -282,7 +282,6 @@ export const SegmentsList: React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
 
   // Init redux variables
   const segments = useSelector(selectSegments)

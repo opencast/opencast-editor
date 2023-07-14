@@ -100,7 +100,7 @@ export const basicButtonStyle = (theme: Theme) => css({
 export const deactivatedButtonStyle = css({
   borderRadius: '10px',
   cursor: "pointer",
-  opacity: "0.4",
+  opacity: "0.6",
   // Flex position child elements
   display: 'flex',
   justifyContent: 'center',
