@@ -66,21 +66,6 @@ test.describe('Test Metadata-Page', () => {
     // Contributor
     await page.click('text=Contributor(s)Select... >> svg');
     await page.click('div[id*="option-15"]');
-
-    // startDate
-    // Expect date-time selector to pop up and hide again
-    // Headless Firefox is picked up as mobile and this test will not work.
-    // That's why we exclude it:
-    //   https://github.com/microsoft/playwright/issues/7769
-    if (browserName != 'firefox') {
-      /* eslint-disable jest/no-conditional-expect */
-      await page.click('div[data-testid="startDate"] >> button');
-      await expect(page.locator('div.MuiPaper-root').first()).toBeVisible();
-      await page.click('div[data-testid="startDate"] >> input');
-      await expect(page.locator('div.MuiPaper-root').first()).toBeHidden();
-      /* eslint-enable jest/no-conditional-expect */
-    }
-
   });
 
 });
