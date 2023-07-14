@@ -60,7 +60,7 @@ const Cutting: React.FC = () => {
       <VideoPlayers refs={undefined}/>
       <div css={videosStyle(theme)}>
         <Timeline
-          timelineHeight={300}
+          timelineHeight={260}
           selectIsPlaying={selectIsPlaying}
           selectCurrentlyAt={selectCurrentlyAt}
           setIsPlaying={setIsPlaying}
