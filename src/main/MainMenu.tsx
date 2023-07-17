@@ -39,7 +39,8 @@ const MainMenu: React.FC = () => {
     flexDirection: 'column',
     alignItems: 'center',
     padding: '20px',
-    overflow: 'vertical',
+    overflowX: 'hidden',
+    overflowY: 'auto',
     background: `${theme.menu_background}`,
     ...(flexGapReplacementStyle(30, false)),
   });
