@@ -17,6 +17,7 @@ export interface Theme {
   boxShadow_tiles: string
   singleKey_bg: string
   singleKey_border: string
+  singleKey_boxShadow: string
   invert_wave: string
   inverted_text: string
   tooltip: string

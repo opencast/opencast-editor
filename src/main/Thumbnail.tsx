@@ -330,6 +330,11 @@ const ThumbnailButtons : React.FC<{
     dispatch(setHasChanges(true))
   }
 
+  const verticalLineStyle = css({
+    borderTop: '1px solid #DDD;',
+    width: '100%',
+  })
+
   return (
     <div css={thumbnailButtonsStyle}>
       <ThumbnailButton
@@ -340,6 +345,7 @@ const ThumbnailButtons : React.FC<{
         Icon={FiCamera}
         active={true}
       />
+      <div css={verticalLineStyle} />
       <ThumbnailButton
         handler={() => { upload(index) }}
         text={t('thumbnail.buttonUpload')}
@@ -359,6 +365,7 @@ const ThumbnailButtons : React.FC<{
         onChange={event => uploadCallback(event, track)}
         aria-hidden="true"
       />
+      <div css={verticalLineStyle} />
       <ThumbnailButton
         handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
         text={t('thumbnail.buttonUseForOtherThumbnails')}
@@ -367,6 +374,7 @@ const ThumbnailButtons : React.FC<{
         Icon={FiCopy}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
+      <div css={verticalLineStyle} />
       <ThumbnailButton
         handler={() => { discard(track.id) }}
         text={t('thumbnail.buttonDiscard')}
@@ -605,7 +613,6 @@ const thumbnailButtonsStyle = css({
   },
   display: 'flex',
   flexDirection: 'column',
-  ...(flexGapReplacementStyle(20, true)),
 })
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
@@ -613,7 +620,6 @@ const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
   {
     width: '100%',
     height: '100%',
-    boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
     justifySelf: 'center',
     alignSelf: 'center',
