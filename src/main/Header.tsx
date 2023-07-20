@@ -35,6 +35,7 @@ function Header() {
 
   const logo = css({
     marginLeft: '6px',
+    opacity: '0.8',
 
     // Unset a bunch of CSS to keep the logo clean
     outline: 'unset',

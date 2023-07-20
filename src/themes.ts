@@ -4,7 +4,7 @@ import { Theme } from "./redux/themeSlice";
 import { COLORS } from "./util/appkit";
 
 export const lightMode: Theme = {
-  background: COLORS.neutral15,
+  background: COLORS.neutral10,
   menu_background: COLORS.neutral05,
   text: COLORS.neutral90,
   error: '#ed1741',
@@ -43,7 +43,7 @@ export const lightMode: Theme = {
   subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
   subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
   subtitle_segment_text: COLORS.neutral05,
-  header_bg: COLORS.neutral80,
+  header_bg: COLORS.neutral60,
   metadata_highlight: COLORS.neutral50,
   clock_bg: COLORS.neutral15,
   clock_border: '2px solid transparent',
@@ -55,7 +55,7 @@ export const lightMode: Theme = {
 };
 
 export const darkMode: Theme = {
-  background: COLORS.neutral15,
+  background: COLORS.neutral10,
   menu_background: COLORS.neutral05,
   text: COLORS.neutral90,
   error: 'rgba(237, 23, 65, 0.8)',
@@ -94,7 +94,7 @@ export const darkMode: Theme = {
   subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
   subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
   subtitle_segment_text: COLORS.neutral90,
-  header_bg: COLORS.neutral30,
+  header_bg: COLORS.neutral20,
   metadata_highlight: COLORS.neutral50,
   clock_bg: COLORS.neutral15,
   clock_border: '2px solid transparent',
