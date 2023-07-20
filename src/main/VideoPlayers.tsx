@@ -22,6 +22,8 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { selectTheme } from "../redux/themeSlice";
 
+import { backgroundBoxStyle, flexGapReplacementStyle } from '../cssStyles'
+
 const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
 
   const videoURLs = useSelector(selectVideoURL)
@@ -33,7 +35,7 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
     justifyContent: 'center',
     width: widthInPercent + '%',
     borderRadius: '5px',
-    // boxShadow: `${theme.boxShadow_tiles}`,
+    ...(flexGapReplacementStyle(10, false)),
 
     maxHeight: '300px',
   });
@@ -337,7 +339,7 @@ export const VideoPlayer = React.forwardRef(
       if (!errorState) {
         return (
           <ReactPlayer url={url}
-            css={reactPlayerStyle}
+            css={[backgroundBoxStyle(theme), reactPlayerStyle]}
             ref={ref}
             width="unset"
             height="unset"
