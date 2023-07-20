@@ -93,12 +93,6 @@ const Thumbnail : React.FC = () => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-
-    background: `${theme.menu_background}`,
-    borderRadius: '7px',
-    boxShadow: `${theme.boxShadow_tiles}`,
-    boxSizing: "border-box",
-    padding: '20px',
   })
 
   return (
