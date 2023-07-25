@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
-import { TFuncKey } from "i18next";
+import { ParseKeys } from "i18next";
+
 import React from "react";
 
 import { KeyMapDisplayOptions } from 'react-hotkeys';
@@ -10,7 +11,7 @@ import { getAllHotkeys } from "../globalKeys";
 import { selectTheme } from "../redux/themeSlice";
 import { titleStyle, titleStyleBold } from '../cssStyles'
 
-const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
+const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);
@@ -34,7 +35,7 @@ const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({nam
 
   return (
     <div css={groupStyle}>
-      <h3 css={headingStyle}>{t(name) as string}</h3>
+      <h3 css={headingStyle}>{t(name)}</h3>
       {entries.map((entry: KeyMapDisplayOptions, index: number) => (
         <Entry params={entry} key={index}></Entry>
       ))}
@@ -151,7 +152,7 @@ const KeyboardControls: React.FC = () => {
       const groups: JSX.Element[] = [];
       for (const key in obj) {
         if (obj[key].length > 0) {
-          groups.push(<Group name={key as TFuncKey} entries={obj[key]} key={key}/>);
+          groups.push(<Group name={key as ParseKeys} entries={obj[key]} key={key}/>);
         }
       }
 
