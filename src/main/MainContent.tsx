@@ -24,6 +24,7 @@ import { selectTheme } from "../redux/themeSlice";
 import ThemeSwitcher from "./ThemeSwitcher";
 import Thumbnail from "./Thumbnail";
 import Cutting from "./Cutting";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 /**
  * A container for the main functionality
@@ -132,6 +133,7 @@ const MainContent: React.FC = () => {
       return (
         <div css={[mainContentStyle, keyboardControlsStyle]} role="main">
           <ThemeSwitcher/>
+          <LanguageSwitcher />
           <KeyboardControls />
         </div>
       )

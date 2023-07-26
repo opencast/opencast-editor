@@ -294,5 +294,9 @@
       "system": "System design",
       "high-contrast-dark": "High contrast (Dark mode)",
       "high-contrast-light": "High contrast (Light mode)"
+    },
+
+    "language": {
+      "language": "Language"
     }
   }
