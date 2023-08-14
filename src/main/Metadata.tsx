@@ -127,10 +127,10 @@ const Metadata: React.FC = () => {
       color: `${theme.text}`,
       outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`,
       "&:hover": {
-        borderColor: theme.metadata_highlight,
+        borderColor: isReadOnly ? undefined : theme.metadata_highlight,
       },
       "&:focus": {
-        borderColor: theme.metadata_highlight,
+        borderColor: isReadOnly ? undefined : theme.metadata_highlight,
       },
     });
   }
@@ -139,8 +139,9 @@ const Metadata: React.FC = () => {
     return (
       css({
         padding: '10px 10px',
-        border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
+        border: '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
+        opacity: isReadOnly ? "0.6" : "1",
         resize: 'vertical',
       })
     );
