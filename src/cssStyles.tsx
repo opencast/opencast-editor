@@ -433,7 +433,7 @@ export const spinningStyle = css({
 })
 
 export const customIconStyle = (theme: Theme) => css(({
-  minWidth: '16px',
+  maxWidth: '16px',
   height: 'auto',
   color: theme.text,
 }))
