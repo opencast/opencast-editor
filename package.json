@@ -44,7 +44,7 @@
     "react-redux": "^8.1.2",
     "react-resizable": "^3.0.5",
     "react-scripts": "5.0.1",
-    "react-select": "^5.7.3",
+    "react-select": "^5.7.4",
     "react-virtualized-auto-sizer": "^1.0.20",
     "react-window": "^1.8.9",
     "redux": "^4.2.1",
