@@ -106,7 +106,7 @@ const Thumbnail : React.FC = () => {
         discard={discardThumbnail}
       />
       <div css={bottomStyle}>
-        <VideoPlayers refs={generateRefs} widthInPercent={50}/>
+        <VideoPlayers refs={generateRefs} widthInPercent={100}/>
         <div css={videosStyle(theme)}>
           <Timeline
             timelineHeight={125}
@@ -145,9 +145,8 @@ const ThumbnailTable : React.FC<{
 
   const thumbnailTableStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     justifyContent: 'center',
-    flexWrap: 'wrap',
     ...(flexGapReplacementStyle(10, false)),
     paddingBottom: '20px',
   })
@@ -156,40 +155,44 @@ const ThumbnailTable : React.FC<{
     const primaryTrack = videoTracks.find(e => e.thumbnailPriority === 0)
 
     if (settings.thumbnail.simpleMode && primaryTrack !== undefined) {
-      return (<>
-        <ThumbnailTableSingleRow
-          track={primaryTrack}
-          index={videoTracks.indexOf(primaryTrack)}
-          inputRefs={inputRefs}
-          generate={generate}
-          upload={upload}
-          uploadCallback={uploadCallback}
-          discard={discard}
-        />
-      </>)
-    } else {
-      return (<>
-        <AffectAllRow tracks={videoTracks} generate={generate}/>
-        {videoTracks.map((track: Track, index: number) => (
-          <ThumbnailTableRow
-            key={index}
-            track={track}
-            index={index}
+      return (
+        <div css={thumbnailTableStyle}>
+          <ThumbnailTableSingleRow
+            track={primaryTrack}
+            index={videoTracks.indexOf(primaryTrack)}
             inputRefs={inputRefs}
             generate={generate}
             upload={upload}
             uploadCallback={uploadCallback}
             discard={discard}
           />
-        ))}
+        </div>
+      )
+    } else {
+      return (<>
+        <AffectAllRow tracks={videoTracks} generate={generate}/>
+        <div css={thumbnailTableStyle}>
+          {videoTracks.map((track: Track, index: number) => (
+            <ThumbnailTableRow
+              key={index}
+              track={track}
+              index={index}
+              inputRefs={inputRefs}
+              generate={generate}
+              upload={upload}
+              uploadCallback={uploadCallback}
+              discard={discard}
+            />
+          ))}
+        </div>
       </>)
     }
   }
 
   return (
-    <div css={thumbnailTableStyle}>
+    <>
       {renderSingleOrMultiple()}
-    </div>
+    </>
   )
 }
 
@@ -253,22 +256,17 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
   const theme = useSelector(selectTheme)
 
   const generalStyle = css({
-    height: '280px',
+    width: '100%',
+    maxWidth: '457px',
+    aspectRatio: '16/9',
   })
 
   const imageStyle = css({
-    maxHeight: '100%',
   })
 
   const placeholderStyle = css({
+    width: '100vw', // TODO: This is necessary to make the placeholder large enough, but prevents it from shrinking
     backgroundColor: 'grey',
-    // For whatever reason, setting the width relative to height is way to difficult,
-    // so we hardcode the box size here
-    width: '497px',
-    // Support for aspectRatio is still spotty and implementations across browsers
-    // differ too much
-    // aspectRatio: '16/9',
-
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -601,8 +599,7 @@ const thumbnailTableRowRowStyle = css({
 
 const thumbnailButtonsStyle = css({
   // TODO: Avoid hard-coding max-width
-  "@media (max-width: 1000px)": {
-    flexDirection: 'row',
+  "@media (max-width: 1550px)": {
     width: '100%',
   },
   display: 'flex',
