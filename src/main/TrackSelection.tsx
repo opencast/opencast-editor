@@ -32,7 +32,6 @@ const TrackSelection: React.FC = () => {
     width: 'auto',
     height: '100%',
     flexDirection: 'column',
-    // justifyContent: 'center',
     alignItems: 'center',
   })
 
@@ -43,8 +42,7 @@ const TrackSelection: React.FC = () => {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    flexWrap: 'wrap',
-    ...(flexGapReplacementStyle(40, false)),
+    ...(flexGapReplacementStyle(10, false)),
   })
 
   return (
@@ -87,15 +85,16 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'left',
+
+    width: '100%',
+    maxWidth: '500px',
   });
 
   const playerStyle = css({
-    display: 'inline-block',
+    aspectRatio: '16 / 9',
   });
 
   const headerStyle = css({
-    display: 'inline-block',
-    width: '100%',
     fontWeight: 'bold',
     textTransform: 'capitalize',
     fontSize: 'larger',
@@ -130,9 +129,13 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   return (
     <div css={[backgroundBoxStyle(theme), trackItemStyle]}>
       <div css={headerStyle}>{ header }</div>
-      <div css={{ opacity: track.video_stream.enabled ? '1' : '0.5' }}>
-        <ReactPlayer css={playerStyle} url={track.uri} />
-      </div>
+      <ReactPlayer
+        width="unset"
+        height="unset"
+        css={playerStyle}
+        style={{opacity: track.video_stream.enabled ? '1' : '0.5'}}
+        url={track.uri}
+      />
       <SelectButton
         text={deleteText}
         tooltip={deleteTooltip}
