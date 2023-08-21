@@ -96,9 +96,11 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
 
   const headerStyle = css({
     fontWeight: 'bold',
-    textTransform: 'capitalize',
     fontSize: 'larger',
     color: `${theme.text}`,
+    '&:first-letter': {
+      textTransform: 'capitalize',
+    },
   });
 
   // What state is the track in and can it be deactivated?

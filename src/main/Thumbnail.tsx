@@ -583,9 +583,11 @@ const thumbnailTableRowStyle = css({
 
 const thumbnailTableRowTitleStyle = css({
   textAlign: 'left',
-  textTransform: 'capitalize',
   fontSize: 'larger',
   fontWeight: 'bold',
+  '&:first-letter': {
+    textTransform: 'capitalize',
+  },
 })
 
 const thumbnailTableRowRowStyle = css({
