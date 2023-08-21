@@ -35,9 +35,9 @@ mainFlavor = "captions"
 "captions/source" = "Generic"
 
 [subtitles.icons]
-"captions/source+de" = "🇩🇪"
-"captions/source+en" = "🇺🇸"
-"captions/source+es" = "🇪🇸"
+"captions/source+de" = "DE"
+"captions/source+en" = "EN"
+"captions/source+es" = "ES"
 
 [thumbnail]
 show = true
