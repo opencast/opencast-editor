@@ -22,7 +22,7 @@ import { scrubberKeyMap } from '../globalKeys';
 import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
-import { selectTheme } from '../redux/themeSlice';
+import { useTheme } from "../themes";
 import { ThemedTooltip } from './Tooltip';
 import { spinningStyle } from '../cssStyles';
 
@@ -117,7 +117,7 @@ export const Scrubber: React.FC<{
   const duration = useSelector(selectDuration)
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
   const segments = useSelector(selectSegments)                      // For ARIA information display
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({ x: 0, y: 0 });
@@ -366,7 +366,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   const dispatch = useDispatch();
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Update based on current fetching status
   const images = useSelector(selectWaveformImages)

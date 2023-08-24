@@ -5,16 +5,15 @@ import { css, Global, keyframes } from '@emotion/react'
 import React from "react";
 import emotionNormalize from 'emotion-normalize';
 import { checkFlexGapSupport } from './util/utilityFunctions';
-import { useSelector } from 'react-redux';
-import { selectTheme, Theme } from './redux/themeSlice';
 import { createTheme } from '@mui/material/styles';
+import { Theme, useTheme } from './themes';
 
 /**
  * An emotion component that inserts styles globally
  * Is removed when the styles change or when the Global component unmounts.
  */
 export const GlobalStyle: React.FC = () => {
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   return (
     <Global styles={globalStyle(theme)} />
   );
@@ -33,6 +32,11 @@ export const globalStyle = (theme: Theme) => css({
     minHeight: "100vh",
   },
 });
+
+
+// When to switch behaviour based on screen width
+export const BREAKPOINT_SMALL = 450;
+export const BREAKPOINT_MEDIUM = 650;
 
 
 /**

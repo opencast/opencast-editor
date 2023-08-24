@@ -18,7 +18,7 @@ import { AppDispatch } from "../redux/store";
 import { selectSubtitles } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { Flavor } from "../types";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -31,7 +31,7 @@ const WorkflowConfiguration : React.FC = () => {
   const postAndProcessError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const workflowConfigurationStyle = css({
     display: 'flex',
@@ -79,7 +79,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {

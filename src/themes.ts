@@ -1,7 +1,68 @@
 /* eslint-disable camelcase */
 
-import { Theme } from "./redux/themeSlice";
+import { match, useColorScheme } from "@opencast/appkit";
 import { COLORS } from "./util/appkit";
+
+export const useTheme = () : Theme => {
+  const scheme = useColorScheme()
+  return match(scheme.scheme, {
+    "light": () => lightMode,
+    "dark": () => darkMode,
+    "light-high-contrast": () => highContrastLightMode,
+    "dark-high-contrast": () => highContrastDarkMode,
+  })
+}
+
+export interface Theme {
+  background: string
+  menu_background: string
+  text: string
+  error: string
+  element_bg: string
+  multiValue: string
+  focused: string
+  focus_text: string
+  selected: string
+  disabled: string
+  menuBorder: string
+  boxShadow: string
+  boxShadow_tiles: string
+  singleKey_bg: string
+  singleKey_border: string
+  singleKey_boxShadow: string
+  invert_wave: string
+  inverted_text: string
+  tooltip: string
+  tooltip_text: string
+  element_outline: string
+  selected_text: string
+  dropdown_border: string
+  menuButton_outline: string
+  button_outline: string
+  button_color: string
+  indicator_color: string
+  icon_color: string
+  background_finish_menu_icon: string
+  background_play_icon: string
+  background_preview_icon: string
+  waveform_filter: string
+  waveform_bg: string
+  scrubber: string
+  scrubber_handle: string
+  scrubber_icon: string
+  subtitle_segment_bg: string
+  subtitle_segment_border: string
+  subtitle_segment_text: string
+  header_bg: string
+  header_button_hover_bg: string
+  metadata_highlight: string
+  clock_bg: string
+  clock_border: string
+  clock_hands: string
+  clock_focus: string
+  digit_selected: string
+  text_shadow: string
+}
 
 export const lightMode: Theme = {
   background: COLORS.neutral10,
@@ -44,6 +105,7 @@ export const lightMode: Theme = {
   subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
   subtitle_segment_text: COLORS.neutral05,
   header_bg: COLORS.neutral60,
+  header_button_hover_bg: COLORS.neutral70,
   metadata_highlight: COLORS.neutral50,
   clock_bg: COLORS.neutral15,
   clock_border: '2px solid transparent',
@@ -95,6 +157,7 @@ export const darkMode: Theme = {
   subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
   subtitle_segment_text: COLORS.neutral90,
   header_bg: COLORS.neutral20,
+  header_button_hover_bg: COLORS.neutral10,
   metadata_highlight: COLORS.neutral50,
   clock_bg: COLORS.neutral15,
   clock_border: '2px solid transparent',
@@ -146,6 +209,7 @@ export const highContrastDarkMode: Theme = {
   subtitle_segment_border: '2px solid #fff',
   subtitle_segment_text: '#fff',
   header_bg: '#000',
+  header_button_hover_bg: '#000',
   metadata_highlight: 'rgb(38, 132, 255)',
   clock_bg: '#000',
   clock_border: '2px solid #a6ffea',
@@ -197,6 +261,7 @@ export const highContrastLightMode: Theme = {
   subtitle_segment_border: '2px solid #000',
   subtitle_segment_text: '#000',
   header_bg: '#000',
+  header_button_hover_bg: '#000',
   metadata_highlight: 'rgb(38, 132, 255)',
   clock_bg: 'snow',
   clock_border: '2px solid #000099',

@@ -20,8 +20,7 @@ import { useBeforeunload } from 'react-beforeunload';
 import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
 import { selectHasChanges as metadataSelectHasChanges} from "../redux/metadataSlice";
 import { selectHasChanges as selectSubtitleHasChanges } from "../redux/subtitleSlice";
-import { selectTheme } from "../redux/themeSlice";
-import ThemeSwitcher from "./ThemeSwitcher";
+import { useTheme } from "../themes";
 import Thumbnail from "./Thumbnail";
 import Cutting from "./Cutting";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -36,7 +35,7 @@ const MainContent: React.FC = () => {
   const videoChanged = useSelector(videoSelectHasChanges)
   const metadataChanged = useSelector(metadataSelectHasChanges)
   const subtitleChanged = useSelector(selectSubtitleHasChanges)
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Display warning when leaving the page if there are unsaved changes
   useBeforeunload((event: { preventDefault: () => void; }) => {
@@ -132,7 +131,6 @@ const MainContent: React.FC = () => {
     } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
       return (
         <div css={[mainContentStyle, keyboardControlsStyle]} role="main">
-          <ThemeSwitcher/>
           <LanguageSwitcher />
           <KeyboardControls />
         </div>

@@ -22,7 +22,7 @@ import "react-resizable/css/styles.css";
 import { GlobalHotKeys } from "react-hotkeys";
 import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { useTranslation } from "react-i18next";
 
@@ -33,7 +33,7 @@ import { useTranslation } from "react-i18next";
 const SubtitleTimeline: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -210,7 +210,7 @@ const TimelineSubtitleSegment: React.FC<{
   const [isGrabbed, setIsGrabbed] = useState(false)
   const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
     setControlledPosition({x: (props.cue.startTime / duration) * (props.timelineWidth), y: 0});

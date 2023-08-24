@@ -21,7 +21,7 @@ import { selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
   setHasChanges as subtitleSetHasChanges } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { Flavor } from "../types";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 
 /**
@@ -38,7 +38,7 @@ const Save : React.FC = () => {
   const postError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   const metadataHasChanges = useSelector(metadataSelectHasChanges)
   const hasChanges = useSelector(selectHasChanges)
   const subtitleHasChanges = useSelector(selectSubtitleHasChanges)
@@ -108,7 +108,7 @@ export const SaveButton: React.FC = () => {
   const subtitles = useSelector(selectSubtitles)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status

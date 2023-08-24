@@ -13,7 +13,7 @@ import { IconType } from "react-icons";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPageNumber, setPageNumber } from '../redux/finishSlice';
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -56,7 +56,7 @@ const Finish : React.FC = () => {
  */
 export const PageButton : React.FC<{pageNumber: number, label: string, Icon: IconType}> = ({pageNumber, label, Icon}) => {
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Initialize redux variables
   const dispatch = useDispatch()

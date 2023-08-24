@@ -1,11 +1,10 @@
 import React from 'react';
-import { selectTheme } from '../redux/themeSlice';
-import { useSelector } from 'react-redux';
+import { useTheme } from "../themes";
 import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
 
 export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const positionRef = React.useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const areaRef = React.useRef<HTMLDivElement>(null);

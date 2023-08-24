@@ -19,7 +19,7 @@ import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * Allows the user to select a workflow
@@ -34,7 +34,7 @@ const WorkflowSelection : React.FC = () => {
   const workflows = useSelector(selectWorkflows)
   const finishState = useSelector(selectFinishState)
   const pageNumber = useSelector(selectPageNumber)
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const postAndProcessWorkflowStatus = useSelector(selectStatus);
   const postAndProcessError = useSelector(selectError)
@@ -183,7 +183,7 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
 
 const WorkflowSelectRadio: React.FC = props => {
 
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const style = css({
     alignSelf: 'start',

@@ -11,7 +11,7 @@ import { Select } from "mui-rff";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectCaptions } from "../redux/videoSlice";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemeProvider } from '@mui/material/styles';
 import { ThemedTooltip } from "./Tooltip";
 
@@ -105,7 +105,7 @@ const SubtitleSelectButton: React.FC<{
   flavor
 }) => {
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch()
 
   const flagStyle = css({
@@ -155,7 +155,7 @@ const SubtitleSelectButton: React.FC<{
 const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}[]}> = ({languages}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const dispatch = useDispatch()
 

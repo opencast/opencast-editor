@@ -28,8 +28,9 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
 import { VariableSizeList } from "react-window"
 import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { selectTheme, selectThemeState } from "../redux/themeSlice"
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip"
+import { useColorScheme } from "@opencast/appkit";
 
 /**
  * Displays everything needed to edit subtitles
@@ -182,7 +183,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   const cue = items[props.index]
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch()
 
   // Unfortunately, the focus selectors will cause every element to rerender,
@@ -297,7 +298,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     dispatch(setCurrentlyAt(cue.startTime))
   }
 
-  const themeState = useSelector(selectThemeState);
+  const { scheme } = useColorScheme();
 
   const segmentStyle = css({
     display: 'flex',
@@ -320,8 +321,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       outline: `${theme.element_outline}`,
     },
     '& input': {
-      marginTop: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
-      marginBottom: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
+      marginTop: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
+      marginBottom: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
     }
   })
 
@@ -461,7 +462,7 @@ const FunctionButton : React.FC<{
   Icon
 }) => {
 
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const addSegmentButtonStyle = css({
     width: '32px',

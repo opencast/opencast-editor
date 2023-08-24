@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux"
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import Select from "react-select";
 import { selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
 import { css } from '@emotion/react'
@@ -10,7 +9,7 @@ import i18next from "i18next";
 const LanguageSwitcher: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const changeLanguage = (lng: string | undefined) => {
     i18next.changeLanguage(lng);

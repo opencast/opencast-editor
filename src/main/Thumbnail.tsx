@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
 import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
   backgroundBoxStyle } from "../cssStyles";
-import { selectTheme, Theme } from "../redux/themeSlice";
+import { Theme, useTheme } from "../themes";
 import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
@@ -27,7 +27,7 @@ const Thumbnail : React.FC = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   const originalThumbnails = useSelector(selectOriginalThumbnails)
 
   // Generate Refs
@@ -210,7 +210,7 @@ const ThumbnailTableRow: React.FC<{
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const renderPriority = (thumbnailPriority: number) => {
     if (isNaN(thumbnailPriority)) {
@@ -253,7 +253,7 @@ const ThumbnailTableRow: React.FC<{
 const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 
   const { t } = useTranslation()
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const generalStyle = css({
     width: '100%',
@@ -387,7 +387,7 @@ const ThumbnailButton : React.FC<{
   Icon: IconType,
   active: boolean,
 }> = ({handler, text, tooltipText, ariaLabel, Icon, active}) => {
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   const ref = React.useRef<HTMLDivElement>(null)
 
   const clickHandler = () => {
@@ -426,7 +426,7 @@ const AffectAllRow : React.FC<{
 }> = ({generate, tracks}) => {
 
   const { t } = useTranslation()
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const generateAll = () => {
     for (let i = 0; i < tracks.length; i++) {
@@ -490,7 +490,7 @@ const ThumbnailTableSingleRow: React.FC<{
   discard: any,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   return (
     <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle]}>

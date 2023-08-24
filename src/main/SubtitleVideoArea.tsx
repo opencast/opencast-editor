@@ -21,7 +21,7 @@ import { settings } from "../config";
 import { useTranslation } from "react-i18next";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { VideoPlayer } from "./VideoPlayers";
 import VideoControls from "./VideoControls";
 import Select from "react-select";
@@ -165,7 +165,7 @@ const VideoSelectDropdown : React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const dropdownName = "flavors"
 

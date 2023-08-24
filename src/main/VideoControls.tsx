@@ -22,7 +22,7 @@ import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { ThemedTooltip } from "./Tooltip";
-import { selectTheme, Theme } from "../redux/themeSlice";
+import { Theme, useTheme } from "../themes";
 
 /**
  * Contains controls for manipulating multiple video players at once
@@ -42,7 +42,7 @@ const VideoControls: React.FC<{
   setIsPlayPreview
 }) => {
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const videoControlsRowStyle = css({
     background: `${theme.background}`,
@@ -108,7 +108,7 @@ const PreviewMode: React.FC<{
   // Init redux variables
   const dispatch = useDispatch();
   const isPlayPreview = useSelector(selectIsPlayPreview)
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Change preview mode from "on" to "off" and vice versa
   const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent, ref: React.RefObject<HTMLDivElement> | undefined) => {
@@ -187,7 +187,7 @@ const PlayButton: React.FC<{
   // Init redux variables
   const dispatch = useDispatch();
   const isPlaying = useSelector(selectIsPlaying)
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Change play mode from "on" to "off" and vice versa
   const switchIsPlaying = (event: KeyboardEvent | SyntheticEvent) => {
@@ -249,7 +249,7 @@ const TimeDisplay: React.FC<{
   // Init redux variables
   const currentlyAt = useSelector(selectCurrentlyAt)
   const duration = useSelector(selectDuration)
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const timeTextStyle = (theme: Theme) => css({
     display: 'inline-block',

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../redux/store';
 import { httpRequestState } from '../types';
-import { selectTheme } from '../redux/themeSlice';
+import { useTheme } from "../themes";
 import { setError } from '../redux/errorSlice';
 import { selectTitleFromEpisodeDc } from '../redux/metadataSlice';
 import { titleStyle, titleStyleBold, videosStyle } from "../cssStyles";
@@ -24,7 +24,7 @@ const Cutting: React.FC = () => {
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
   const duration = useSelector(selectDuration)
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   const errorReason = useSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
 
   // Try to fetch URL from external API
@@ -85,7 +85,7 @@ const CuttingHeader: React.FC = () => {
 
   const title = useSelector(selectTitle)
   const metadataTitle = useSelector(selectTitleFromEpisodeDc)
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   return (
     <div css={[titleStyle(theme), titleStyleBold(theme)]}>

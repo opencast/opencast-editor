@@ -18,7 +18,7 @@ import { settings } from "../config";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { parseSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
@@ -35,7 +35,7 @@ const SubtitleEditor : React.FC = () => {
   const subtitle : SubtitleCue[] = useSelector(selectSelectedSubtitleByFlavor)
   const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
   const captionTrack = useSelector(selectCaptionTrackByFlavor(selectedFlavor))
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Prepare subtitle in redux
   useEffect(() => {
@@ -133,7 +133,7 @@ const SubtitleEditor : React.FC = () => {
 export const BackButton : React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch();
 
   const backButtonStyle = css({

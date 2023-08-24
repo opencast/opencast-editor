@@ -6,11 +6,11 @@ import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from '../c
 import { IconType } from "react-icons";
 import { FiSave, FiDatabase, FiXCircle } from "react-icons/fi";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 import { useTranslation } from 'react-i18next';
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -40,7 +40,7 @@ const FinishMenu : React.FC = () => {
 const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> = ({Icon, stateName}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch();
 
   const finish = () => {

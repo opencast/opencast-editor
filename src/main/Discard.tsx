@@ -12,7 +12,7 @@ import { setEnd } from '../redux/endSlice'
 import { PageButton } from './Finish'
 
 import { useTranslation } from 'react-i18next';
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * Shown if the user wishes to abort.
@@ -54,7 +54,7 @@ const DiscardButton : React.FC = () => {
 
   // Initialize redux variables
   const dispatch = useDispatch()
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const discard = () => {
     dispatch(setEnd({hasEnded: true, value: 'discarded'}))

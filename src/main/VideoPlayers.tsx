@@ -20,7 +20,7 @@ import { sleep } from './../util/utilityFunctions'
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 import { backgroundBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
@@ -133,7 +133,7 @@ export const VideoPlayer = React.forwardRef(
     const clickTriggered = useSelector(selectClickTriggered)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const aspectRatio = useSelector(selectAspectRatio)
-    const theme = useSelector(selectTheme)
+    const theme = useTheme()
 
     // Init state variables
     const ref = useRef<ReactPlayer>(null);

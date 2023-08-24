@@ -15,6 +15,7 @@ import "@fontsource-variable/roboto-flex";
 import './i18n/config';
 
 import '@opencast/appkit/dist/colors.css'
+import { ColorSchemeProvider } from '@opencast/appkit';
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the
@@ -36,7 +37,9 @@ initialize.then(
         <Provider store={store}>
           {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
           <GlobalHotKeys>
-            <App />
+            <ColorSchemeProvider>
+              <App />
+            </ColorSchemeProvider>
           </GlobalHotKeys>
         </Provider>
       </React.StrictMode>,

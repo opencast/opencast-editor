@@ -9,7 +9,7 @@ import { selectEndState } from '../redux/endSlice'
 import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
 
 import { useTranslation } from 'react-i18next';
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 
 /**
@@ -54,7 +54,7 @@ const TheEnd : React.FC = () => {
 const StartOverButton: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const reloadPage = () => {
     window.location.reload();

@@ -17,7 +17,7 @@ import { cuttingKeyMap } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 import { useTranslation } from 'react-i18next';
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 
 /**
@@ -128,7 +128,7 @@ interface cuttingActionsButtonInterface {
  */
 const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, actionName, actionHandler, action, tooltip, ariaLabelText}) => {
   const ref = React.useRef<HTMLDivElement>(null)
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   return (
     <ThemedTooltip title={tooltip}>
@@ -161,7 +161,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
   const ref = React.useRef<HTMLDivElement>(null)
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   return (
     <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}>

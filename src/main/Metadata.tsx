@@ -18,7 +18,7 @@ import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
 import { AppDispatch } from "../redux/store";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemeProvider } from "@mui/material/styles";
 import { cloneDeep } from "lodash";
 import { ParseKeys } from "i18next";
@@ -43,7 +43,7 @@ const Metadata: React.FC = () => {
   const getError = useSelector(selectGetError);
   const postStatus = useSelector(selectPostStatus);
   const postError = useSelector(selectPostError);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Try to fetch URL from external API
   useEffect(() => {

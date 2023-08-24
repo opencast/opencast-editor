@@ -5,16 +5,15 @@ import React from "react";
 
 import { KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation, Trans} from "react-i18next";
-import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { getAllHotkeys } from "../globalKeys";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { titleStyle, titleStyleBold } from '../cssStyles'
 
 const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const groupStyle = css({
     display: 'flex',
@@ -46,7 +45,7 @@ const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({na
 const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const entryStyle = css({
     display: 'flex',
@@ -118,7 +117,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const keyMap = getAllHotkeys()
 

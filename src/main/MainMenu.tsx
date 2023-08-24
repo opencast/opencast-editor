@@ -21,7 +21,7 @@ import { resetPostRequestState as metadataResetPostRequestState } from "../redux
 import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -29,7 +29,7 @@ import { selectTheme } from "../redux/themeSlice";
 const MainMenu: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const mainMenuStyle = css({
     borderRight: `${theme.menuBorder}`,
@@ -111,7 +111,7 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
 
   const dispatch = useDispatch();
   const activeState = useSelector(selectMainMenuState)
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const onMenuItemClicked = () => {
     dispatch(setState(stateName));

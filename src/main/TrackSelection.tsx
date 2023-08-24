@@ -12,7 +12,7 @@ import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
 import { backgroundBoxStyle, basicButtonStyle, customIconStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 
 /**
@@ -59,7 +59,7 @@ const TrackSelection: React.FC = () => {
 const Header: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const description: string = t('trackSelection.title');
 
@@ -73,7 +73,7 @@ const Header: React.FC = () => {
 
 const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme()
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -158,7 +158,7 @@ interface selectButtonInterface {
 
 const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, tooltip, active}) => {
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const buttonStyle = [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
