@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle, spinningStyle } from '../cssStyles'
 
-import { FiLoader, FiCheck, FiAlertCircle, FiChevronLeft, FiDatabase, FiMoreHorizontal} from "react-icons/fi";
+import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal} from "react-icons/lu";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectSelectedWorkflowId } from '../redux/videoSlice'
@@ -44,11 +44,11 @@ const WorkflowConfiguration : React.FC = () => {
   return (
     <div css={workflowConfigurationStyle}>
       <h2>{t("workflowConfig.headline-text")}</h2>
-      <FiMoreHorizontal css={{fontSize: 80}} />
+      <LuMoreHorizontal css={{fontSize: 80}} />
       Placeholder
       <div>{t("workflowConfig.satisfied-text")}</div>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={FiChevronLeft}/>
+        <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={LuChevronLeft}/>
         <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
@@ -124,16 +124,16 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   }, [metadataStatus])
 
   // Update based on current fetching status
-  let Icon = FiDatabase
+  let Icon = LuDatabase
   let spin = false
   if (workflowStatus === 'failed' || metadataStatus === 'failed') {
-    Icon = FiAlertCircle
+    Icon = LuAlertCircle
     spin = false
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
-    Icon = FiCheck
+    Icon = LuCheck
     spin = false
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
-    Icon = FiLoader
+    Icon = LuLoader
     spin = true
 
   }

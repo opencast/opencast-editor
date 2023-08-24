@@ -10,7 +10,7 @@ import { useTheme } from "../themes";
 import { setError } from '../redux/errorSlice';
 import { selectTitleFromEpisodeDc } from '../redux/metadataSlice';
 import { titleStyle, titleStyleBold, videosStyle } from "../cssStyles";
-import { FiMoreHorizontal } from "react-icons/fi";
+import { LuMoreHorizontal } from "react-icons/lu";
 import { css } from "@emotion/react";
 import VideoPlayers from "./VideoPlayers";
 import VideoControls from "./VideoControls";
@@ -33,7 +33,7 @@ const Cutting: React.FC = () => {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
       if (errorReason === 'workflowActive') {
-        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorIcon: FiMoreHorizontal}))
+        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorIcon: LuMoreHorizontal}))
       } else {
         dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
       }

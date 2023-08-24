@@ -2,7 +2,7 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FiFrown } from "react-icons/fi";
+import { LuFrown } from "react-icons/lu";
 
 import { useSelector } from 'react-redux';
 import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice'
@@ -42,7 +42,7 @@ const Error : React.FC = () => {
   return (
     <div css={theEndStyle} >
       <div>{errorTitle ? errorTitle : t("error.generic-message")}</div>
-      {ErrorIcon ? <ErrorIcon css={{ fontSize: 80 }}/> : <FiFrown css={{ fontSize: 80 }}/>}
+      {ErrorIcon ? <ErrorIcon css={{ fontSize: 80 }}/> : <LuFrown css={{ fontSize: 80 }}/>}
       <span>{errorMessage}</span><br />
       {errorDetails &&
         <div css={detailsStyle}>

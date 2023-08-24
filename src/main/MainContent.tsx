@@ -6,7 +6,7 @@ import Subtitle from "./Subtitle";
 import Finish from "./Finish"
 import KeyboardControls from "./KeyboardControls";
 
-import { FiTool } from "react-icons/fi";
+import { LuWrench } from "react-icons/lu";
 
 import { css } from '@emotion/react'
 
@@ -135,7 +135,7 @@ const MainContent: React.FC = () => {
       )
     } else {
       <div css={[mainContentStyle, defaultStyle]} role="main">
-        <FiTool css={{fontSize: 80}} />
+        <LuWrench css={{fontSize: 80}} />
         Placeholder
       </div>
     }

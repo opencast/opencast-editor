@@ -10,7 +10,7 @@ import {
   selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
-import { FiMenu, FiLoader} from "react-icons/fi";
+import { LuMenu, LuLoader} from "react-icons/lu";
 
 import useResizeObserver from "use-resize-observer";
 
@@ -259,7 +259,7 @@ export const Scrubber: React.FC<{
                 increase: scrubberKeyMap[handlers.increase.name],
                 decrease: scrubberKeyMap[handlers.decrease.name] })}
             tabIndex={0}>
-            <FiMenu css={scrubberDragHandleIconStyle}/>
+            <LuMenu css={scrubberDragHandleIconStyle}/>
           </div>
         </div>
       </Draggable>
@@ -455,7 +455,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
     else {
       return (
         <>
-          <FiLoader css={[spinningStyle, {fontSize: 40}]}/>
+          <LuLoader css={[spinningStyle, {fontSize: 40}]}/>
           <div>{t("timeline.generateWaveform-text")}</div>
         </>
       );

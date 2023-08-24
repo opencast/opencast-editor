@@ -2,7 +2,7 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { IconType } from "react-icons";
-import { FiTrash } from "react-icons/fi";
+import { LuTrash } from "react-icons/lu";
 import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 import ReactPlayer from 'react-player'
 
@@ -120,7 +120,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
     t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
   ][deleteStatus];
-  const deleteIcon = [FiTrash, FiTrash, TrashRestore][deleteStatus];
+  const deleteIcon = [LuTrash, LuTrash, TrashRestore][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
       id: track.id,

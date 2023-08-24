@@ -3,7 +3,7 @@ import React, { SyntheticEvent } from "react";
 import { basicButtonStyle, customIconStyle } from '../cssStyles'
 
 import { IconType } from "react-icons";
-import { FiScissors, FiChevronLeft, FiChevronRight, FiTrash} from "react-icons/fi";
+import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash} from "react-icons/lu";
 import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 
 import { css } from '@emotion/react'
@@ -70,7 +70,7 @@ const CuttingActions: React.FC = () => {
   return (
     <GlobalHotKeys keyMap={cuttingKeyMap} handlers={handlers} allowChanges={true} >
       <div css={cuttingStyle}>
-        <CuttingActionsButton Icon={FiScissors}
+        <CuttingActionsButton Icon={LuScissors}
           actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut}
           tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
           ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.cut.name] as KeyMapOptions).sequence })}
@@ -80,13 +80,13 @@ const CuttingActions: React.FC = () => {
           hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
         />
         <div css={verticalLineStyle} />
-        <CuttingActionsButton Icon={FiChevronLeft}
+        <CuttingActionsButton Icon={LuChevronLeft}
           actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
           tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
           ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
         />
         <div css={verticalLineStyle} />
-        <CuttingActionsButton Icon={FiChevronRight}
+        <CuttingActionsButton Icon={LuChevronRight}
           actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
           tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
           ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
@@ -174,7 +174,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
           actionHandler(event, action, undefined)
         } }}
       >
-        {isCurrentSegmentAlive ? <FiTrash /> : <TrashRestore css={customIconStyle(theme)} /> }
+        {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle(theme)} /> }
         <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>

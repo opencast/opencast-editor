@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
   navigationButtonStyle, flexGapReplacementStyle, spinningStyle } from '../cssStyles'
 
-import { FiLoader, FiCheckCircle, FiAlertCircle, FiChevronLeft, FiSave, FiCheck} from "react-icons/fi";
+import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck} from "react-icons/lu";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
@@ -57,7 +57,7 @@ const Save : React.FC = () => {
       && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
       return (
         <>
-          <FiCheckCircle css={{fontSize: 80}}/>
+          <LuCheckCircle css={{fontSize: 80}}/>
           <div>{t("save.success-text")}</div>
         </>
       )
@@ -69,7 +69,7 @@ const Save : React.FC = () => {
             {t("save.info-text")}
           </span>
           <div css={backOrContinueStyle}>
-            <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={FiChevronLeft}/>
+            <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={LuChevronLeft}/>
             <SaveButton />
           </div>
         </>
@@ -112,19 +112,19 @@ export const SaveButton: React.FC = () => {
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status
-  let Icon = FiSave
+  let Icon = LuSave
   let spin = false
   let tooltip = null
   if (workflowStatus === 'failed' || metadataStatus === 'failed') {
-    Icon = FiAlertCircle
+    Icon = LuAlertCircle
     spin = false
     tooltip = t("save.confirmButton-failed-tooltip")
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
-    Icon = FiCheck
+    Icon = LuCheck
     spin = false
     tooltip = t("save.confirmButton-success-tooltip")
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
-    Icon = FiLoader
+    Icon = LuLoader
     spin = true
     tooltip = t("save.confirmButton-attempting-tooltip")
   }

@@ -3,7 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
-import { FiPlay, FiPause } from "react-icons/fi";
+import { LuPlay, LuPause } from "react-icons/lu";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -228,7 +228,7 @@ const PlayButton: React.FC<{
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
             switchIsPlaying(event)
           } }}>
-          {isPlaying ? <FiPause css={playIconStyle} /> : <FiPlay css={playIconStyle} />}
+          {isPlaying ? <LuPause css={playIconStyle} /> : <LuPlay css={playIconStyle} />}
         </div>
       </div>
     </ThemedTooltip>

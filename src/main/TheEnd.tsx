@@ -2,7 +2,7 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FiCheckCircle, FiXCircle} from "react-icons/fi";
+import { LuCheckCircle, LuXCircle} from "react-icons/lu";
 
 import { useSelector } from 'react-redux';
 import { selectEndState } from '../redux/endSlice'
@@ -43,7 +43,7 @@ const TheEnd : React.FC = () => {
 
   return (
     <div css={theEndStyle}>
-      {endState === 'discarded' ? <FiXCircle css={{fontSize: 80}}/> : <FiCheckCircle css={{fontSize: 80}}/> }
+      {endState === 'discarded' ? <LuXCircle css={{fontSize: 80}}/> : <LuCheckCircle css={{fontSize: 80}}/> }
       <div>{text()}</div>
       {(endState === 'discarded') && <StartOverButton />}
     </div>

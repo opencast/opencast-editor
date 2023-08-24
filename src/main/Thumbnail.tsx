@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { IconType } from "react-icons";
-import { FiCamera, FiCopy, FiXCircle, FiUpload} from "react-icons/fi";
+import { LuCamera, LuCopy, LuXCircle, LuUpload} from "react-icons/lu";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -334,7 +334,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonGenerate')}
         tooltipText={t('thumbnail.buttonGenerate-tooltip')}
         ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
-        Icon={FiCamera}
+        Icon={LuCamera}
         active={true}
       />
       <div css={verticalLineStyle} />
@@ -343,7 +343,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
-        Icon={FiUpload}
+        Icon={LuUpload}
         active={true}
       />
       {/* Hidden input field for upload */}
@@ -363,7 +363,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonUseForOtherThumbnails')}
         tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
         ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
-        Icon={FiCopy}
+        Icon={LuCopy}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
       <div css={verticalLineStyle} />
@@ -372,7 +372,7 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
-        Icon={FiXCircle}
+        Icon={LuXCircle}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
@@ -464,7 +464,7 @@ const AffectAllRow : React.FC<{
             generateAll()
           } }}
         >
-          <FiCamera />
+          <LuCamera />
           {t('thumbnail.buttonGenerateAll')}
         </div>
       </ThemedTooltip>
@@ -537,7 +537,7 @@ const ThumbnailButtonsSimple : React.FC<{
           text={t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
           tooltipText={t('thumbnail.buttonGenerate-tooltip')}
           ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
-          Icon={FiCamera}
+          Icon={LuCamera}
           active={true}
           key={generateIndex}
         />
@@ -547,7 +547,7 @@ const ThumbnailButtonsSimple : React.FC<{
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
-        Icon={FiUpload}
+        Icon={LuUpload}
         active={true}
       />
       {/* Hidden input field for upload */}
@@ -566,7 +566,7 @@ const ThumbnailButtonsSimple : React.FC<{
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
-        Icon={FiXCircle}
+        Icon={LuXCircle}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>

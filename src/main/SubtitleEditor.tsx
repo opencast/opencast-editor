@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
-import { FiChevronLeft} from "react-icons/fi";
+import { LuChevronLeft} from "react-icons/lu";
 import {
   selectCaptionTrackByFlavor,
 } from '../redux/videoSlice'
@@ -153,7 +153,7 @@ export const BackButton : React.FC = () => {
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(false))
         } }}>
-        <FiChevronLeft css={{fontSize: 24 }}/>
+        <LuChevronLeft css={{fontSize: 24 }}/>
         <span>{t("subtitles.backButton")}</span>
       </div>
     </ThemedTooltip>

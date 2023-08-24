@@ -5,7 +5,7 @@ import { useTheme } from "../themes";
 import { css } from '@emotion/react'
 import { useTranslation } from "react-i18next";
 import { MainMenuButton } from "./MainMenu";
-import { FiMoon, FiSun } from "react-icons/fi";
+import { LuMoon, LuSun } from "react-icons/lu";
 import { HiOutlineTranslate } from "react-icons/hi";
 import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
@@ -188,7 +188,7 @@ const ThemeButton: React.FC = () => {
         breakpoint: BREAKPOINT_MEDIUM,
       }}>
       <HeaderButton
-        Icon={scheme === "light" || scheme === "light-high-contrast" ? FiMoon : FiSun}
+        Icon={scheme === "light" || scheme === "light-high-contrast" ? LuMoon : LuSun}
         label={t("theme.appearances")}
       />
     </WithHeaderMenu>

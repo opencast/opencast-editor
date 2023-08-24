@@ -1,6 +1,6 @@
 import { css, SerializedStyles } from "@emotion/react"
 import { IconType } from "react-icons";
-import { FiPlus, FiTrash} from "react-icons/fi";
+import { LuPlus, LuTrash} from "react-icons/lu";
 import { memoize } from "lodash"
 import React, { useRef } from "react"
 import { useEffect, useState } from "react"
@@ -418,7 +418,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueAbove()
             } }}
-            Icon={FiPlus}
+            Icon={LuPlus}
           />
           <FunctionButton
             tooltip={t("subtitleList.deleteSegment")}
@@ -429,7 +429,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               deleteCue()
             } }}
-            Icon={FiTrash}
+            Icon={LuTrash}
           />
           <FunctionButton
             tooltip={t("subtitleList.addSegmentBelow")}
@@ -440,7 +440,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueBelow()
             } }}
-            Icon={FiPlus}
+            Icon={LuPlus}
           />
         </div>
       </div>

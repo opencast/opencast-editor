@@ -5,7 +5,7 @@ import { settings } from '../config'
 import { selectSubtitles, setSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
-import { FiPlus} from "react-icons/fi";
+import { LuPlus} from "react-icons/lu";
 import { Form } from "react-final-form";
 import { Select } from "mui-rff";
 import { useState } from "react";
@@ -218,7 +218,7 @@ const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}
           setIsPlusDisplay(false)
         } }}
       >
-        <FiPlus css={[plusIconStyle, {fontSize: 42}]}/>
+        <LuPlus css={[plusIconStyle, {fontSize: 42}]}/>
         <Form
           onSubmit={onSubmit}
           subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders

@@ -3,8 +3,8 @@ import React from "react";
 import { css, SerializedStyles } from '@emotion/react'
 
 import { IconType } from "react-icons";
-import { FiScissors, FiFilm, FiFileText, FiCheckSquare } from "react-icons/fi";
-import { FiImage } from "react-icons/fi";
+import { LuScissors, LuFilm, LuFileText, LuCheckSquare } from "react-icons/lu";
+import { LuImage } from "react-icons/lu";
 import { ReactComponent as SubtitleIcon } from '../img/subtitle.svg';
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -48,19 +48,19 @@ const MainMenu: React.FC = () => {
   return (
     <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton
-        Icon={FiScissors}
+        Icon={LuScissors}
         stateName={MainMenuStateNames.cutting}
         bottomText={t(MainMenuStateNames.cutting)}
         ariaLabelText={t(MainMenuStateNames.cutting)}
       />
       {settings.metadata.show && <MainMenuButton
-        Icon={FiFileText}
+        Icon={LuFileText}
         stateName={MainMenuStateNames.metadata}
         bottomText={t(MainMenuStateNames.metadata)}
         ariaLabelText={t(MainMenuStateNames.metadata)}
       />}
       {settings.trackSelection.show && <MainMenuButton
-        Icon={FiFilm}
+        Icon={LuFilm}
         stateName={MainMenuStateNames.trackSelection}
         bottomText={t(MainMenuStateNames.trackSelection)}
         ariaLabelText={t(MainMenuStateNames.trackSelection)}
@@ -72,13 +72,13 @@ const MainMenu: React.FC = () => {
         ariaLabelText={t(MainMenuStateNames.subtitles)}
       />}
       {settings.thumbnail.show && <MainMenuButton
-        Icon={FiImage}
+        Icon={LuImage}
         stateName={MainMenuStateNames.thumbnail}
         bottomText={t(MainMenuStateNames.thumbnail)}
         ariaLabelText={t(MainMenuStateNames.thumbnail)}
       />}
       <MainMenuButton
-        Icon={FiCheckSquare}
+        Icon={LuCheckSquare}
         stateName={MainMenuStateNames.finish}
         bottomText={t(MainMenuStateNames.finish)}
         ariaLabelText={t(MainMenuStateNames.finish)}
