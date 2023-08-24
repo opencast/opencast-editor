@@ -5,9 +5,9 @@ import { useTheme } from "../themes";
 import { css } from '@emotion/react'
 import { useTranslation } from "react-i18next";
 import { MainMenuButton } from "./MainMenu";
-import { FiMoon, FiSettings, FiSun } from "react-icons/fi";
+import { FiMoon, FiSun } from "react-icons/fi";
 import { HiOutlineTranslate } from "react-icons/hi";
-import { FaKeyboard } from "react-icons/fa";
+import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from '../cssStyles'
 
@@ -75,7 +75,7 @@ function Header() {
         <ThemeButton />
         { !isEnd &&
           <MainMenuButton
-            Icon={FaKeyboard}
+            Icon={LuKeyboard}
             stateName={MainMenuStateNames.keyboardControls}
             bottomText={t("keyboardControls.header")}
             ariaLabelText={t("keyboardControls.header")}
