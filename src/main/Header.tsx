@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { MainMenuButton } from "./MainMenu";
 import { FiMoon, FiSettings, FiSun } from "react-icons/fi";
 import { HiOutlineTranslate } from "react-icons/hi";
+import { FaKeyboard } from "react-icons/fa";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from '../cssStyles'
 
@@ -74,10 +75,10 @@ function Header() {
         <ThemeButton />
         { !isEnd &&
           <MainMenuButton
-            Icon={FiSettings}
+            Icon={FaKeyboard}
             stateName={MainMenuStateNames.keyboardControls}
-            bottomText={t("settings.settings")}
-            ariaLabelText={t("settings.settings")}
+            bottomText={t("keyboardControls.header")}
+            ariaLabelText={t("keyboardControls.header")}
             customCSS={settingsButtonCSS}
             iconCustomCSS={css({fontSize: 24})}
           />
