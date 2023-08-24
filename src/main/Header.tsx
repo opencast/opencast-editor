@@ -6,13 +6,15 @@ import { css } from '@emotion/react'
 import { useTranslation } from "react-i18next";
 import { MainMenuButton } from "./MainMenu";
 import { FiMoon, FiSettings, FiSun } from "react-icons/fi";
+import { HiOutlineTranslate } from "react-icons/hi";
 import { MainMenuStateNames } from "../types";
-import { basicButtonStyle, BREAKPOINT_MEDIUM, flexGapReplacementStyle } from '../cssStyles'
+import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from '../cssStyles'
 
 import { ReactComponent as LogoSvg } from '../img/opencast-editor.svg';
 import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
+import i18next from "i18next";
 
 function Header() {
   const theme = useTheme()
@@ -68,6 +70,7 @@ function Header() {
     <div css={[headerStyle, headerStyleThemed]}>
       <Logo />
       <div css={rightSideButtonsStyle}>
+        <LanguageButton />
         <ThemeButton />
         { !isEnd &&
           <MainMenuButton
@@ -113,6 +116,55 @@ const Logo: React.FC = () => {
     />
   )
 }
+
+const LanguageButton: React.FC = () => {
+  const { t } = useTranslation();
+
+  const isCurrentLanguage = (language: string) => language === i18next.resolvedLanguage;
+
+  const changeLanguage = (lng: string | undefined) => {
+    i18next.changeLanguage(lng);
+  }
+
+  const languageNames = (language: string) => {
+    return new Intl.DisplayNames([language], {
+      type: 'language'
+    }).of(language);
+  }
+
+  const resourcesArray: string[] | undefined = i18next.options.resources && Object.keys(i18next.options.resources);
+
+  const languages = resourcesArray?.map(entry => {
+    return { value: entry, label: languageNames(entry) }
+  })
+
+  // menuItems can't deal with languages being undefined, so we return early
+  // until we reach a rerender with actual information
+  if (languages === undefined) {
+    return (<></>)
+  }
+
+  const menuItems = Object.values(languages).map(lng => checkboxMenuItem({
+    checked: isCurrentLanguage(lng.value),
+    children: <>{lng.label}</>,
+    onClick: () => {
+      changeLanguage(lng!.value);
+    },
+  }));
+
+  const label = t("language.language");
+  return (
+    <WithHeaderMenu
+      menu={{
+        label,
+        items: menuItems,
+        breakpoint: BREAKPOINT_SMALL,
+      }}
+    >
+      <HeaderButton Icon={HiOutlineTranslate} label={label} />
+    </WithHeaderMenu>
+  );
+};
 
 const ThemeButton: React.FC = () => {
 
