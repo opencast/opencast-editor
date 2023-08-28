@@ -266,7 +266,7 @@
     },
 
     "keyboardControls": {
-      "header": "Keyboard Controls",
+      "header": "Shortcuts",
       "defaultGroupName": "General",
       "missingLabel": "Unknown",
       "groupVideoPlayer": "Video Player",
@@ -283,7 +283,7 @@
     },
 
     "theme": {
-      "appearances": "Appearances",
+      "appearance": "Appearance",
       "dark": "Dark",
       "light": "Light",
       "auto": "Auto",

@@ -54,6 +54,7 @@ export interface Theme {
   subtitle_segment_border: string
   subtitle_segment_text: string
   header_bg: string
+  header_text: string
   header_button_hover_bg: string
   metadata_highlight: string
   clock_bg: string
@@ -105,6 +106,7 @@ export const lightMode: Theme = {
   subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
   subtitle_segment_text: COLORS.neutral05,
   header_bg: COLORS.neutral60,
+  header_text: COLORS.neutral05,
   header_button_hover_bg: COLORS.neutral70,
   metadata_highlight: COLORS.neutral50,
   clock_bg: COLORS.neutral15,
@@ -157,6 +159,7 @@ export const darkMode: Theme = {
   subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
   subtitle_segment_text: COLORS.neutral90,
   header_bg: COLORS.neutral20,
+  header_text: COLORS.neutral90,
   header_button_hover_bg: COLORS.neutral10,
   metadata_highlight: COLORS.neutral50,
   clock_bg: COLORS.neutral15,
@@ -209,6 +212,7 @@ export const highContrastDarkMode: Theme = {
   subtitle_segment_border: '2px solid #fff',
   subtitle_segment_text: '#fff',
   header_bg: '#000',
+  header_text: '#fff',
   header_button_hover_bg: '#000',
   metadata_highlight: 'rgb(38, 132, 255)',
   clock_bg: '#000',
@@ -261,6 +265,7 @@ export const highContrastLightMode: Theme = {
   subtitle_segment_border: '2px solid #000',
   subtitle_segment_text: '#000',
   header_bg: '#000',
+  header_text: '#fff',
   header_button_hover_bg: '#000',
   metadata_highlight: 'rgb(38, 132, 255)',
   clock_bg: 'snow',

@@ -33,11 +33,11 @@ function Header() {
 
   const headerStyleThemed = scheme.includes('high-contrast-')
     ? css({
-      height: '58px',
+      height: '62px',
       borderBottom: '2px solid white'
     })
     : css({
-      height: '60px',
+      height: '64px',
     })
 
   const rightSideButtonsStyle = css({
@@ -45,25 +45,27 @@ function Header() {
     flexDirection: 'row',
     height: '100%',
     alignItems: 'center',
-    marginRight: '20px',
-    ...(flexGapReplacementStyle(20, false)),
+    paddingRight: '24px',
+    ...(flexGapReplacementStyle(16, false)),
   })
 
   const settingsButtonCSS = css({
     display: 'flex',
     flexDirection: 'row',
-    color: `#fff`,
-    outline: `${theme.menuButton_outline}`,
+    alignItems: "center",
+    ...(flexGapReplacementStyle(8, false)),
 
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "inherit",
     fontWeight: 500,
+    color: `${theme.header_text}`,
+    outline: `${theme.menuButton_outline}`,
     padding: "6px 8px",
 
     ":hover, :active": {
       outline: `2px solid ${theme.metadata_highlight}`,
       backgroundColor: theme.header_button_hover_bg,
-      color: `#fff`
+      color: `${theme.header_text}`
     },
   })
 
@@ -80,7 +82,7 @@ function Header() {
             bottomText={t("keyboardControls.header")}
             ariaLabelText={t("keyboardControls.header")}
             customCSS={settingsButtonCSS}
-            iconCustomCSS={css({fontSize: 24})}
+            iconCustomCSS={css({fontSize: 22})}
           />
         }
       </div>
@@ -91,10 +93,16 @@ function Header() {
 const Logo: React.FC = () => {
 
   const { t } = useTranslation()
+  const { scheme } = useColorScheme();
 
   const logo = css({
-    marginLeft: '6px',
-    opacity: '0.8',
+    paddingLeft: '8px',
+    opacity: scheme === 'dark' ? '0.8' : '1',
+
+    height: "100%",
+    "> *": {
+      height: "calc(100% - 12px)",
+    },
 
     // Unset a bunch of CSS to keep the logo clean
     outline: 'unset',
@@ -183,13 +191,13 @@ const ThemeButton: React.FC = () => {
   return (
     <WithHeaderMenu
       menu={{
-        label: t("theme.appearances"),
+        label: t("theme.appearance"),
         items: menuItems,
         breakpoint: BREAKPOINT_MEDIUM,
       }}>
       <HeaderButton
         Icon={scheme === "light" || scheme === "light-high-contrast" ? LuMoon : LuSun}
-        label={t("theme.appearances")}
+        label={t("theme.appearance")}
       />
     </WithHeaderMenu>
   )
@@ -207,19 +215,28 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
     const themeSelectorButtonStyle = css({
       display: "flex",
       alignItems: "center",
+      ...(flexGapReplacementStyle(8, false)),
 
-      fontSize: 18,
+      fontSize: 16,
       fontFamily: "inherit",
       fontWeight: 500,
-      color: `#fff`,
+      color: `${theme.header_text}`,
       outline: `${theme.menuButton_outline}`,
       padding: "6px 8px",
 
       ":hover, :active": {
         outline: `2px solid ${theme.metadata_highlight}`,
         backgroundColor: theme.header_button_hover_bg,
-        color: `#fff`
+        color: `${theme.header_text}`
       },
+      ":focus": {
+        backgroundColor: 'inherit',
+        color: `${theme.header_text}`
+      },
+      ":focus:hover": {
+        backgroundColor: theme.header_button_hover_bg,
+        color: `${theme.header_text}`
+      }
     })
 
     const iconStyle = css({
