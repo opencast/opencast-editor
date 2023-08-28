@@ -107,18 +107,14 @@ export let settings: iSettings
  */
 export const init = async () => {
 
+  // Get color scheme from local storage, otherwise set auto scheme based on preference
   let scheme = window.localStorage.getItem("colorScheme");
-  scheme = scheme ? scheme : "light";
-  const isValid = ["light", "dark", "light-high-contrast", "dark-high-contrast"].includes(scheme);
-  if (!isValid) {
+  if (scheme === null || !["light", "dark", "light-high-contrast", "dark-high-contrast"].includes(scheme)) {
     const lightness = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     const contrast = window.matchMedia("(prefers-contrast: more)").matches ? "-high-contrast" : "";
     scheme = `${lightness}${contrast}`;
   }
   document.documentElement.dataset.colorScheme = scheme;
-
-
-
 
   // Get settings from config file
   await loadContextSettings().then(result => {
