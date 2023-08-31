@@ -17,7 +17,6 @@ import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metad
 import { AppDispatch } from "../redux/store";
 import { selectSubtitles } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
-import { Flavor } from "../types";
 import { useTheme } from "../themes";
 
 /**
@@ -94,9 +93,11 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
-      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
-
+      subtitlesForPosting.push({
+        id: identifier,
+        subtitle: serializeSubtitle(subtitles[identifier].cues),
+        tags: subtitles[identifier].tags
+      })
     }
     return subtitlesForPosting
   }
