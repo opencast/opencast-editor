@@ -59,7 +59,7 @@
     "discard": {
         "headline-text": "Änderungen verwerfen",
         "confirm-button": "Ja, Änderungen verwerfen",
-        "info-text": "Bist du sicher, dass du diese Änderung verwerfen möchtest? Dies kann nicht rückgängig gemacht werden!"
+        "info-text": "Sind Sie sicher, dass Sie diese Änderung verwerfen möchten? Dies kann nicht rückgängig gemacht werden!"
     },
     "theEnd": {
         "discarded-text": "Ihre Änderungen wurden verworfen. Sie können den Editor nun schließen.",
