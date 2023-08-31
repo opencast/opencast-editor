@@ -20,8 +20,6 @@ import {
 } from 'mui-rff';
 import DateFnsUtils from "@date-io/date-fns";
 
-import './../i18n/config';
-import i18next from "./../i18n/config";
 import { useTranslation } from 'react-i18next';
 import { DateTime as LuxonDateTime} from "luxon";
 
@@ -29,6 +27,7 @@ import { configureFieldsAttributes, settings } from '../config'
 import { AppDispatch } from "../redux/store";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemeProvider } from "@mui/material/styles";
+import { ParseKeys } from "i18next";
 
 /**
  * Creates a Metadata form
@@ -39,7 +38,7 @@ import { ThemeProvider } from "@mui/material/styles";
  * If something doesn't work, main places of interest are the submit function
  * and the initialValues function
  */
-const Metadata: React.FC<{}> = () => {
+const Metadata: React.FC = () => {
 
   const { t, i18n } = useTranslation();
 
@@ -62,14 +61,14 @@ const Metadata: React.FC<{}> = () => {
   // Overwrite readonly property of fields based on config settings
   useEffect(() => {
     if (getStatus === 'success') {
-      for(let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
+      for (let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
         if (settings.metadata.configureFields) {
-          let configureFields = settings.metadata.configureFields
-          let catalog = catalogs[catalogIndex]
+          const configureFields = settings.metadata.configureFields
+          const catalog = catalogs[catalogIndex]
 
           if (catalog.title in configureFields) {
             if (Object.keys(configureFields[catalog.title]).length > 0) {
-              let configureFieldsCatalog = configureFields[catalog.title]
+              const configureFieldsCatalog = configureFields[catalog.title]
 
               for (let fieldIndex = 0; fieldIndex < catalog.fields.length; fieldIndex++) {
                 if (catalog.fields[fieldIndex].id in configureFieldsCatalog) {
@@ -95,8 +94,8 @@ const Metadata: React.FC<{}> = () => {
 
   const metadataStyle = css({
     padding: '20px',
-    marginLeft:'auto',
-    marginRight:'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     minWidth: '50%',
     display: 'grid',
   })
@@ -140,13 +139,13 @@ const Metadata: React.FC<{}> = () => {
 
   const dateTimeTypeStyle = (isReadOnly: boolean) => {
     return (
-      css ({
+      css({
         padding: '5px 10px',
         border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
         '.Mui-disabled, .Mui-disabled button > svg': {
           color: `${theme.disabled} !important`,
-          'WebkitTextFillColor':`${theme.disabled}`,
+          'WebkitTextFillColor': `${theme.disabled}`,
         },
         'button > svg': {
           color: `${theme.indicator_color}`
@@ -158,7 +157,7 @@ const Metadata: React.FC<{}> = () => {
             background: 'transparent !important',
             outline: 'none'
           }
-        },    
+        },
       })
     );
   }
@@ -217,7 +216,7 @@ const Metadata: React.FC<{}> = () => {
    * Form Callbacks - Other
    */
 
-   /**
+  /**
     * Recursively recreates nested array structures for form initalValues
     * @param library
     * @param input
@@ -244,7 +243,7 @@ const Metadata: React.FC<{}> = () => {
 
     catalogs.forEach((catalog: Catalog, catalogIndex: number) => {
       initValues["catalog" + catalogIndex] = {}
-      catalog.fields.forEach((field: MetadataField) =>{
+      catalog.fields.forEach((field: MetadataField) => {
         initValues["catalog" + catalogIndex][field.id] = field.value
 
         // Handle initial values for select fields differently
@@ -254,7 +253,7 @@ const Metadata: React.FC<{}> = () => {
           let searchValue : any = field.value
 
           if (Array.isArray(searchValue)) {
-            let result: any[] = [];
+            const result: any[] = [];
             helperHandleArrays(library, field.value, result)
             searchValue = result
           } else {
@@ -284,7 +283,7 @@ const Metadata: React.FC<{}> = () => {
    * @param value
    */
   const duration = (value: any) => {
-    let re: RegExp = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
+    const re = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/
     return re.test(value) ? undefined : t("metadata.validation.duration-format")
   }
 
@@ -302,7 +301,7 @@ const Metadata: React.FC<{}> = () => {
     if (Object.prototype.toString.call(date) === '[object Date]') {
       dt = LuxonDateTime.fromJSDate(date);
     }
-    if (typeof(date) === 'string') {
+    if (typeof date === 'string') {
       dt = LuxonDateTime.fromISO(date);
     }
 
@@ -337,7 +336,7 @@ const Metadata: React.FC<{}> = () => {
    * Form Callbacks - Submitting
    */
 
-   /**
+  /**
     * Sends a single value to the corresponding field in redux.
     * This kinda breaks the form workflow, since we do not use the submit callback
     * of the form class anymore.
@@ -373,8 +372,8 @@ const Metadata: React.FC<{}> = () => {
    * @param input
    */
   const blurWithSubmit = (e: any, input: any) => {
-      input.onBlur(e);
-      submitSingleField(input.value, input.name)
+    input.onBlur(e);
+    submitSingleField(input.value, input.name)
   }
 
   /**
@@ -387,7 +386,7 @@ const Metadata: React.FC<{}> = () => {
     let returnValue : any = value
 
     // Parse values out react-multi-select and put them in an array
-    if(Array.isArray(value)) {
+    if (Array.isArray(value)) {
       returnValue = []
       value.forEach((subValue : any) => {
         returnValue.push(parseValue(null, subValue))  // Pass field as null to avoid each value into an array later on
@@ -395,14 +394,14 @@ const Metadata: React.FC<{}> = () => {
     }
 
     // If the value is hidden an object due to react-select, extract it
-    if (typeof value === 'object' && value !== null && value.hasOwnProperty("submitValue")) {
+    if (typeof value === 'object' && value !== null && Object.prototype.hasOwnProperty.call(value, "submitValue")) {
       returnValue = value.submitValue
     } else if (typeof value === 'object' && value !== null && value.__isNew__) {
       returnValue = value.value
     }
 
     // For these fields, the value needs to be inside an array
-    if (field && !Array.isArray(value) &&(field.id === "creator" || field.id === "contributor")) {
+    if (field && !Array.isArray(value) && (field.id === "creator" || field.id === "contributor")) {
       returnValue = [returnValue]
     }
 
@@ -431,7 +430,7 @@ const Metadata: React.FC<{}> = () => {
   const onSubmit = (values: { [x: string]: { [x: string]: any; }; }) => {
     // For each submitted value, get the catalog it belongs to
     Object.keys(values).forEach((formCatalogName: string) => {
-      let catalogIndex = parseInt(formCatalogName.replace("catalog", ""))
+      const catalogIndex = parseInt(formCatalogName.replace("catalog", ""))
 
       // For each field in the submitted values
       Object.keys(values[formCatalogName]).forEach((formFieldName: any) => {
@@ -475,10 +474,10 @@ const Metadata: React.FC<{}> = () => {
         // Parse Label
         let descLabel = null
         if (i18n.exists(`metadata.${field.id}`)) {
-          descLabel = t(`metadata.${field.id}.${key.replaceAll(".", "-")}`)
+          descLabel = t(`metadata.${field.id}.${key.replaceAll(".", "-")}` as ParseKeys)
 
           if (field.id === "license") {
-            descLabel = t(`metadata.${field.id}.${JSON.parse(key).label.replaceAll(".", "-")}`)
+            descLabel = t(`metadata.${field.id}.${JSON.parse(key).label.replaceAll(".", "-")}` as ParseKeys)
           }
         }
 
@@ -511,7 +510,7 @@ const Metadata: React.FC<{}> = () => {
       if (Array.isArray(field.value)) {
         return (
           <CreatableSelect {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+            onBlur={e => { blurWithSubmit(e, input) }}
             isMulti
             isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
             isSearchable={!field.readOnly}    // by setting other settings
@@ -521,11 +520,11 @@ const Metadata: React.FC<{}> = () => {
             styles={selectFieldStyle(theme)}
             css={fieldTypeStyle(field.readOnly)}>
           </CreatableSelect>
-          );
+        );
       } else {
         return (
           <Select {...input}
-            onBlur={e => {blurWithSubmit(e, input)}}
+            onBlur={e => { blurWithSubmit(e, input) }}
             isClearable={!field.readOnly}     // The component does not support readOnly, so we have to work around
             isSearchable={!field.readOnly}    // by setting other settings
             openMenuOnClick={!field.readOnly}
@@ -534,27 +533,27 @@ const Metadata: React.FC<{}> = () => {
             styles={selectFieldStyle(theme)}
             css={fieldTypeStyle(field.readOnly)}>
           </Select>
-          );
+        );
       }
 
     } else if (field.type === "date") {
       return (
         <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-            <ThemeProvider theme={calendarStyle(theme)}>
-              <DateTimePicker {...input}
-                name={field.id}
-                inputFormat="yyyy/MM/dd HH:mm"
-                disabled={field.readOnly}
-                dateFunsUtils={DateFnsUtils}
-                TextFieldProps={{
-                  variant: 'standard', // Removes default outline
-                  onBlur: (e: any) => {blurWithSubmit(e, input)},
-                  showError: showErrorOnBlur
-                }}
-                leftArrowButtonText={i18next.t('metadata.calendar-prev')}
-                rightArrowButtonText={i18next.t('metadata.calendar-next')}
-              />
-            </ThemeProvider>
+          <ThemeProvider theme={calendarStyle(theme)}>
+            <DateTimePicker {...input}
+              name={field.id}
+              inputFormat="yyyy/MM/dd HH:mm"
+              disabled={field.readOnly}
+              dateFunsUtils={DateFnsUtils}
+              TextFieldProps={{
+                variant: 'standard', // Removes default outline
+                onBlur: (e: any) => { blurWithSubmit(e, input) },
+                showError: showErrorOnBlur
+              }}
+              leftArrowButtonText={t('metadata.calendar-prev')}
+              rightArrowButtonText={t('metadata.calendar-next')}
+            />
+          </ThemeProvider>
         </div>
       );
     } else if (field.type === "time") {
@@ -568,7 +567,7 @@ const Metadata: React.FC<{}> = () => {
               dateFunsUtils={DateFnsUtils}
               TextFieldProps={{
                 variant: 'standard', // Removes default outline
-                onBlur: (e: any) => {blurWithSubmit(e, input)},
+                onBlur: (e: any) => { blurWithSubmit(e, input) },
                 showError: showErrorOnBlur
               }}
             />
@@ -578,15 +577,15 @@ const Metadata: React.FC<{}> = () => {
     } else if (field.type === "text_long") {
       return (
         <textarea {...input}
-          onBlur={e => {blurWithSubmit(e, input)}}
+          onBlur={e => { blurWithSubmit(e, input) }}
           readOnly={field.readOnly}
           css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
         />
       );
     } else {
-      return(
+      return (
         <input {...input}
-          onBlur={e => {blurWithSubmit(e, input)}}
+          onBlur={e => { blurWithSubmit(e, input) }}
           readOnly={field.readOnly}
           css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly)]}
         />
@@ -610,7 +609,7 @@ const Metadata: React.FC<{}> = () => {
      */
     const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
       if ((field.type === "date" || field.type === "time") && input.value === "") {
-        var {value, ...other} = input
+        const {value, ...other} = input
         return generateComponent(field, other)
       } else {
         return generateComponent(field, input)
@@ -618,23 +617,23 @@ const Metadata: React.FC<{}> = () => {
     }
 
     return (
-        <Field key={fieldIndex}
-                name={"catalog" + catalogIndex + "." + field.id}
-                validate={getValidators(field)}
-                type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
-                >
-                {({ input, meta }) => (
-                  <div css={fieldStyle} data-testid={field.id}>
-                    <label css={fieldLabelStyle} htmlFor={input.name}>{
-                      i18n.exists(`metadata.labels.${field.id}`) ?
-                      t(`metadata.labels.${field.id}`) : field.id
-                    }</label>
+      <Field key={fieldIndex}
+        name={"catalog" + catalogIndex + "." + field.id}
+        validate={getValidators(field)}
+        type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
+      >
+        {({ input, meta }) => (
+          <div css={fieldStyle} data-testid={field.id}>
+            <label css={fieldLabelStyle} htmlFor={input.name}>{
+              i18n.exists(`metadata.labels.${field.id}`) ?
+                t(`metadata.labels.${field.id}` as ParseKeys) as string : field.id
+            }</label>
 
-                    {generateComponentWithModifiedInput(field, input)}
-                    {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
-                  </div>
-                )}
-        </Field>
+            {generateComponentWithModifiedInput(field, input)}
+            {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
+          </div>
+        )}
+      </Field>
     );
   }
 
@@ -647,7 +646,7 @@ const Metadata: React.FC<{}> = () => {
       <div key={catalogIndex}>
         <h2>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
-            t(`metadata.${catalog.title.replaceAll(".", "-")}`) : catalog.title
+            t(`metadata.${catalog.title.replaceAll(".", "-")}` as ParseKeys) as string : catalog.title
           }
         </h2>
 
@@ -672,38 +671,38 @@ const Metadata: React.FC<{}> = () => {
    */
   const render = () => {
     return (
-        <Form
-          onSubmit={onSubmit}
-          subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
-          initialValues={getInitialValues(catalogs)}
-          render={({ handleSubmit, form, submitting, pristine, values}) => (
-            <form onSubmit={event => {
-              handleSubmit(event)
-              // Ugly fix for form not getting updated after submit. TODO: Find a better fix
-              form.reset()
-            }} css={metadataStyle}>
+      <Form
+        onSubmit={onSubmit}
+        subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
+        initialValues={getInitialValues(catalogs)}
+        render={({ handleSubmit, form }) => (
+          <form onSubmit={event => {
+            handleSubmit(event)
+            // Ugly fix for form not getting updated after submit. TODO: Find a better fix
+            form.reset()
+          }} css={metadataStyle}>
 
-              <div css={errorBoxStyle(getStatus === "failed", theme)} role="alert">
-                <span>A problem occurred during communication with Opencast.</span><br />
-                {getError ? "Details: " + getError : "No error details are available."}<br />
-              </div>
+            <div css={errorBoxStyle(getStatus === "failed", theme)} role="alert">
+              <span>A problem occurred during communication with Opencast.</span><br />
+              {getError ? "Details: " + getError : "No error details are available."}<br />
+            </div>
 
-              {catalogs.map((catalog, i) => {
-                if (settings.metadata.configureFields) {
-                  if (catalog.title in settings.metadata.configureFields) {
-                    // If there are no fields for a given catalog, do not render
-                    if (Object.keys(settings.metadata.configureFields[catalog.title]).length > 0) {
-                      return renderCatalog(catalog, i, settings.metadata.configureFields[catalog.title])
-                    } else {
-                      return undefined
-                    }
+            {catalogs.map((catalog, i) => {
+              if (settings.metadata.configureFields) {
+                if (catalog.title in settings.metadata.configureFields) {
+                  // If there are no fields for a given catalog, do not render
+                  if (Object.keys(settings.metadata.configureFields[catalog.title]).length > 0) {
+                    return renderCatalog(catalog, i, settings.metadata.configureFields[catalog.title])
+                  } else {
+                    return undefined
                   }
                 }
-                // If there are no settings for a given catalog, just render it completely
-                return renderCatalog(catalog, i, {})
-              })}
+              }
+              // If there are no settings for a given catalog, just render it completely
+              return renderCatalog(catalog, i, {})
+            })}
 
-{/*
+            {/*
                 <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>{t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}</div>
 
 
@@ -725,21 +724,21 @@ const Metadata: React.FC<{}> = () => {
                 </button>
               </div> */}
 
-              <div css={errorBoxStyle(postStatus === "failed", theme)} role="alert">
-                <span>A problem occurred during communication with Opencast. <br />
+            <div css={errorBoxStyle(postStatus === "failed", theme)} role="alert">
+              <span>A problem occurred during communication with Opencast. <br />
                       Changes could not be saved to Opencast.</span><br />
-                {postError ? "Details: " + postError : "No error details are available."}<br />
-              </div>
+              {postError ? "Details: " + postError : "No error details are available."}<br />
+            </div>
 
-              {/* For debugging the forms current values*/}
-              {/* <FormSpy subscription={{ values: true }}>
+            {/* For debugging the forms current values*/}
+            {/* <FormSpy subscription={{ values: true }}>
                 {({ values }) => (
                   <pre>{JSON.stringify(values, null, 2)}</pre>
                 )}
               </FormSpy> */}
-            </form>
-          )}
-        />
+          </form>
+        )}
+      />
     );
   }
 

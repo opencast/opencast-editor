@@ -26,7 +26,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Displays an editor view for a selected subtitle file
  */
- const SubtitleEditor : React.FC<{}> = () => {
+const SubtitleEditor : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -115,7 +115,7 @@ import { ThemedTooltip } from "./Tooltip";
         <span>{"Subtitle Parsing Error(s): " + getError}</span>
       )
     } else {
-      return(
+      return (
         <>
           <div css={headerRowStyle}>
             <BackButton />
@@ -145,7 +145,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * Takes you to a different page
  */
- export const BackButton : React.FC<{}> = () => {
+export const BackButton : React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme)
@@ -165,10 +165,10 @@ import { ThemedTooltip } from "./Tooltip";
       <div css={[basicButtonStyle(theme), backButtonStyle]}
         role="button" tabIndex={0}
         aria-label={t("subtitles.backButton-tooltip")}
-        onClick={ () => dispatch(setIsDisplayEditView(false)) }
+        onClick={() => dispatch(setIsDisplayEditView(false))}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(false))
-        }}}>
+        } }}>
         <FontAwesomeIcon icon={faChevronLeft} size="1x" />
         <span>{t("subtitles.backButton")}</span>
       </div>

@@ -11,9 +11,12 @@ import { sleep } from './util/utilityFunctions'
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
+import './i18n/config';
 
 const container = document.getElementById('root')
-if (!container) throw new Error('Failed to find the root element');
+if (!container) {
+  throw new Error('Failed to find the root element');
+}
 const root = ReactDOMClient.createRoot(container);
 
 // Load config here
@@ -33,12 +36,15 @@ initialize.then(
   () => {
     root.render(
       <React.StrictMode>
-          <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <App />
-            </LocalizationProvider>
-          </Provider>
-      </React.StrictMode>
+        <Provider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
+            {/* <GlobalHotKeys> */}
+            <App />
+            {/* </GlobalHotKeys> */}
+          </LocalizationProvider>
+        </Provider>
+      </React.StrictMode>,
     );
   },
 

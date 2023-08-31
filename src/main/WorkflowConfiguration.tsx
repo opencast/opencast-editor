@@ -14,7 +14,6 @@ import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../
 import { PageButton } from './Finish'
 import { setEnd } from "../redux/endSlice";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
 import { AppDispatch } from "../redux/store";
@@ -26,7 +25,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Will eventually display settings based on the selected workflow index
  */
-const WorkflowConfiguration : React.FC<{}> = () => {
+const WorkflowConfiguration : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -56,11 +55,11 @@ const WorkflowConfiguration : React.FC<{}> = () => {
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
+        {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-text")}<br/>
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
+        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-text")}<br />
       </div>
     </div>
   );
@@ -97,7 +96,7 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
       subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
 
     }
@@ -150,11 +149,11 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   return (
     <div css={[basicButtonStyle(theme), saveButtonStyle]}
       role="button" tabIndex={0}
-      onClick={ saveAndProcess }
+      onClick={saveAndProcess}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         saveAndProcess()
-      }}}>
-      <FontAwesomeIcon  icon={icon} spin={spin} size="1x"/>
+      } }}>
+      <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
       <span>{text}</span>
     </div>
   );

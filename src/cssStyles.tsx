@@ -42,15 +42,15 @@ export const globalStyle = (theme: Theme) => css({
  */
 export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow: boolean) => {
 
-  let half = flexGapValue / 2
-  let quarter = flexGapValue / 4
+  const half = flexGapValue / 2
+  const quarter = flexGapValue / 4
 
   return (
     {
     // Use gap if supported
-    ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
-    // Else use margins
-    ...(!checkFlexGapSupport()) &&
+      ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
+      // Else use margins
+      ...(!checkFlexGapSupport()) &&
       {
         ">*": { // For each child
           marginTop: `${quarter}px`,
@@ -122,7 +122,7 @@ export const navigationButtonStyle = (theme: Theme) => css({
   justifyContent: 'space-around',
   boxShadow: `${theme.boxShadow}`,
   background: `${theme.element_bg}`,
- })
+})
 
 /**
  * CSS for a container that holds back/forward buttons
@@ -136,7 +136,7 @@ export const backOrContinueStyle = css(({
 /**
  * CSS for big buttons in a dynamic grid
  */
- export const tileButtonStyle = (theme: Theme) => css({
+export const tileButtonStyle = (theme: Theme) => css({
   width: '250px',
   height: '220px',
   display: 'flex',
@@ -229,13 +229,13 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       color: theme.text,
     }),
-    multiValue: (provided: any) =>({
+    multiValue: (provided: any) => ({
       ...provided,
       color: theme.selected_text,
       background: theme.multiValue,
       cursor: 'default',
     }),
-    multiValueLabel: (provided: any) =>({
+    multiValueLabel: (provided: any) => ({
       ...provided,
       color: theme.selected_text,
     }),
@@ -273,7 +273,7 @@ export function selectFieldStyle(theme: Theme) {
 export const calendarStyle = (theme: Theme) => createTheme({
 
   components: {
-    
+
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -293,7 +293,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
               color: `${theme.selected_text}`,
             }
           },
-          
+
           /* Clock-modal */
           '& .MuiClock-clock': { // round clock
             background: `${theme.clock_bg}`,
@@ -316,7 +316,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
             border: `16px solid ${theme.clock_hands}`,
           }
         },
-        
+
       }
     },
     MuiButtonBase: {
@@ -336,13 +336,13 @@ export const calendarStyle = (theme: Theme) => createTheme({
           '&.Mui-selected': {
             background: `${theme.selected} !important`,
             color: `${theme.selected_text} !important`,
-            
+
           },
           // Current day
           '&:not(.Mui-selected)': {
             borderColor: `${theme.focused} !important`,
           },
-          '&.Mui-disabled':{
+          '&.Mui-disabled': {
             color: `${theme.disabled} !important`,
           },
           '&.MuiClock-amButton, &.MuiClock-pmButton': {
@@ -361,7 +361,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
         },
       }
     },
-  }  
+  }
 })
 
 export const subtitleSelectStyle = (theme: Theme) => createTheme({

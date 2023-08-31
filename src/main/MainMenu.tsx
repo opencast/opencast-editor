@@ -15,7 +15,6 @@ import { settings } from '../config'
 import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 import { setIsPlaying } from "../redux/videoSlice";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
@@ -26,7 +25,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * A container for selecting the functionality shown in the main part of the app
  */
-const MainMenu: React.FC<{}> = () => {
+const MainMenu: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);
@@ -171,11 +170,11 @@ const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName,
     <li css={[basicButtonStyle(theme), buttonStyle()]}
       role="menuitem" tabIndex={0}
       aria-label={ariaLabelText}
-      onClick={ onMenuItemClicked }
+      onClick={onMenuItemClicked}
       onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
         onMenuItemClicked()
-      }}}
-      >
+      } }}
+    >
       <FontAwesomeIcon icon={iconName} size={miniButton ? "1x" : "2x"}/>
       {bottomText && <div>{bottomText}</div>}
     </li>

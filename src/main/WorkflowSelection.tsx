@@ -16,7 +16,6 @@ import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
@@ -25,7 +24,7 @@ import { selectTheme } from "../redux/themeSlice";
 /**
  * Allows the user to select a workflow
  */
-const WorkflowSelection : React.FC<{}> = () => {
+const WorkflowSelection : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -71,7 +70,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   };
 
   // Layout template
-  const render = (topTitle: string, topText: {} | null | undefined, hasWorkflowButtons: boolean,
+  const render = (topTitle: string, topText: JSX.Element, hasWorkflowButtons: boolean,
     nextButton: EmotionJSX.Element, errorStatus: httpRequestState["status"],
     errorMessage: httpRequestState["error"]) => {
     return (
@@ -85,7 +84,7 @@ const WorkflowSelection : React.FC<{}> = () => {
               name="Workflow Selection Area"
               onChange={handleWorkflowSelectChange}
             >
-              {workflows.map( (workflow: Workflow, index: number) => (
+              {workflows.map((workflow: Workflow, _index: number) => (
                 <WorkflowButton key={workflow.id} stateName={workflow.name} workflowId={workflow.id} workflowDescription={workflow.description}/>
               ))}
             </RadioGroup>
@@ -97,7 +96,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         </div>
         <div css={errorBoxStyle(errorStatus === "failed", theme)} role="alert">
           <span>{t("various.error-text")}</span><br />
-          {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-noDetails-text")}<br/>
+          {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-text")}<br/>
         </div>
       </div>
     );
@@ -106,7 +105,7 @@ const WorkflowSelection : React.FC<{}> = () => {
   // Fills the layout template with values based on how many workflows are available
   const renderSelection = () => {
     if (workflows.length <= 0) {
-      return(
+      return (
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.noWorkflows-text">
@@ -124,7 +123,7 @@ const WorkflowSelection : React.FC<{}> = () => {
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.oneWorkflow-text">
-            The video will be cut and processed with the workflow "{{workflow: workflows[0].name}}".<br/>
+            The video will be cut and processed with the workflow {{workflow: workflows[0].name}}.<br/>
             This will take some time.
           </Trans>,
           false,
@@ -182,23 +181,21 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   );
 }
 
-const WorkflowSelectRadio: React.FC = () => {
+const WorkflowSelectRadio: React.FC = props => {
 
   const style = css({
-    root: {
-      alignSelf: 'start',
-      color: 'grey',
-      "&$checked": {
-        color: 'grey'
-      }
-    },
+    alignSelf: 'start',
+    color: 'grey',
+    "&$checked": {
+      color: 'grey'
+    }
   })
 
   return (
     <Radio
       color="default"
       css={style}
-      checked={false}
+      {...props}
     />
   )
 }

@@ -24,14 +24,15 @@ import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
  * like adding in a list of subtitle segments
  */
- const SubtitleTimeline: React.FC<{}> = () => {
+const SubtitleTimeline: React.FC = () => {
 
+  const { t } = useTranslation();
   const theme = useSelector(selectTheme)
 
   // Init redux variables
@@ -39,9 +40,9 @@ import { t } from "i18next";
   const duration = useSelector(selectDuration)
   const currentlyAt = useSelector(selectCurrentlyAt)
 
-  const { ref, width = 1, } = useResizeObserver<HTMLDivElement>();
+  const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLElement>(null);
-  const { ref: refMini, width: widthMiniTimeline = 1, } = useResizeObserver<HTMLDivElement>();
+  const { ref: refMini, width: widthMiniTimeline = 1 } = useResizeObserver<HTMLDivElement>();
 
   const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
 
@@ -53,8 +54,8 @@ import { t } from "i18next";
   });
 
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    let rect = e.currentTarget.getBoundingClientRect()
-    let offsetX = e.clientX - rect.left
+    const rect = e.currentTarget.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
     dispatch(setClickTriggered(true))
     dispatch(setCurrentlyAt((offsetX / widthMiniTimeline) * (duration)))
   }
@@ -104,7 +105,7 @@ import { t } from "i18next";
         }}
       />
       {/* Scrollable timeline container. Has width of parent*/}
-      <ScrollContainer innerRef={refTop}  css={{overflow: 'hidden', width: '100%', height: '215px'}}
+      <ScrollContainer innerRef={refTop} css={{overflow: 'hidden', width: '100%', height: '215px'}}
         vertical={false}
         horizontal={true}
         onEndScroll={onEndScroll}
@@ -144,16 +145,16 @@ import { t } from "i18next";
 
 
 
-    // <div className="layoutRoot absoluteLayout">
-    //   {/* <Example /> */}
-    //   <Example2 />
-    //   {/* <TimelineSubtitleSegment
-    //   timelineWidth={width}
-    //   cue={{id: '42', text:"HI", startTime: 1000, endTime: 5000, tree:{children: [{type: "", value: ""}]}}}
-    //   index={0}
-    //   height={80}
-    //   /> */}
-    // </div>
+  // <div className="layoutRoot absoluteLayout">
+  //   {/* <Example /> */}
+  //   <Example2 />
+  //   {/* <TimelineSubtitleSegment
+  //   timelineWidth={width}
+  //   cue={{id: '42', text:"HI", startTime: 1000, endTime: 5000, tree:{children: [{type: "", value: ""}]}}}
+  //   index={0}
+  //   height={80}
+  //   /> */}
+  // </div>
   );
 };
 
@@ -213,7 +214,7 @@ const TimelineSubtitleSegment: React.FC<{
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
     setControlledPosition({x: (props.cue.startTime / duration) * (props.timelineWidth), y: 0});
-  },[props.cue.startTime, duration, props.timelineWidth])
+  }, [props.cue.startTime, duration, props.timelineWidth])
 
   // Set width and reset any resizing that may have happened meanwhile
   useEffect(() => {
@@ -221,7 +222,7 @@ const TimelineSubtitleSegment: React.FC<{
     setAbsoluteHeight(props.height)
     setAbsoluteLeft(0)
     setAbsoluteTop(0)
-  },[duration, props.cue.endTime, props.cue.startTime, props.height, props.timelineWidth])
+  }, [duration, props.cue.endTime, props.cue.startTime, props.height, props.timelineWidth])
 
   // Check for impossible timestamps and update state in redux
   const dispatchNewTimes = (newStartTime: number, newEndTime: number) => {
@@ -249,7 +250,7 @@ const TimelineSubtitleSegment: React.FC<{
   // Resizable does not support resizing in the west/north directions out of the box,
   // so additional calculations are necessary.
   // Adapted from Resizable example code
-  const onResizeAbsolute = (event: any, {element, size, handle}: any) => {
+  const onResizeAbsolute = (_event: any, {size, handle}: any) => {
     // Possible TODO: Find a way to stop resizing a segment beyond 0ms here instead of later
     let newLeft = absoluteLeft;
     let newTop = absoluteTop;
@@ -273,7 +274,7 @@ const TimelineSubtitleSegment: React.FC<{
   };
 
   // Update redux state based on the resize
-  const onResizeStop = (event: any, {element, size, handle}: any) => {
+  const onResizeStop = (_event: any, {handle}: any) => {
     // Calc new width, factoring in offset
     const newWidth = absoluteWidth
 
@@ -302,11 +303,11 @@ const TimelineSubtitleSegment: React.FC<{
     setAbsoluteTop(0)
   }
 
-  const onStartDrag = (e: DraggableEvent) => {
+  const onStartDrag = (_e: DraggableEvent) => {
     setIsGrabbed(true)
   }
 
-  const onStopDrag = (e: DraggableEvent, position: any) => {
+  const onStopDrag = (_e: DraggableEvent, position: any) => {
     // Update position and thereby start/end times in redux
     const {x} = position
     dispatchNewTimes(
@@ -357,32 +358,32 @@ const TimelineSubtitleSegment: React.FC<{
   })
 
   return (
-      <Draggable
-        onStart={onStartDrag}
-        onStop={onStopDrag}
-        defaultPosition={{ x: 10, y: 10 }}
-        position={controlledPosition}
-        axis="x"
-        bounds="parent"
-        nodeRef={nodeRef}
-        cancel={".react-resizable-handle"}
+    <Draggable
+      onStart={onStartDrag}
+      onStop={onStopDrag}
+      defaultPosition={{ x: 10, y: 10 }}
+      position={controlledPosition}
+      axis="x"
+      bounds="parent"
+      nodeRef={nodeRef}
+      cancel={".react-resizable-handle"}
+    >
+      <Resizable
+        height={absoluteHeight}
+        width={absoluteWidth}
+        onResize={onResizeAbsolute}
+        onResizeStop={onResizeStop}
+        // TODO: The 'e' handle is currently NOT WORKING CORRECTLY!
+        //  The errounous behaviour can already be seens with a minimal
+        //  draggable + resizable example.
+        //  Fix most likely requires changes in one of those modules
+        resizeHandles={['w']}
       >
-        <Resizable
-          height={absoluteHeight}
-          width={absoluteWidth}
-          onResize={onResizeAbsolute}
-          onResizeStop={onResizeStop}
-          // TODO: The 'e' handle is currently NOT WORKING CORRECTLY!
-          //  The errounous behaviour can already be seens with a minimal
-          //  draggable + resizable example.
-          //  Fix most likely requires changes in one of those modules
-          resizeHandles={['w']}
-        >
-          <div css={ segmentStyle } ref={nodeRef} onClick={onClick} id="no-scrolling">
-            <span css={textStyle}>{props.cue.text}</span>
-          </div>
-        </Resizable>
-      </Draggable>
+        <div css={segmentStyle} ref={nodeRef} onClick={onClick} id="no-scrolling">
+          <span css={textStyle}>{props.cue.text}</span>
+        </div>
+      </Resizable>
+    </Draggable>
   )
 })
 
@@ -390,7 +391,7 @@ const TimelineSubtitleSegment: React.FC<{
 //  * For debugging
 //  * Minimal example: Resizable
 //  */
-//  const Example: React.FC<{}> = () => {
+//  const Example: React.FC = () => {
 
 //   const [absoluteWidth, setAbsoluteWidth] = useState(200)
 //   const [absoluteHeight, setAbsoluteHeight] = useState(200)
@@ -447,7 +448,7 @@ const TimelineSubtitleSegment: React.FC<{
 //  * Minimal example: Draggable + Resizable
 //  * Erratic behaviour when resizing the east handle for smallish widths
 //  */
-// const Example2: React.FC<{}> = () => {
+// const Example2: React.FC = () => {
 
 //   const [absoluteWidth, setAbsoluteWidth] = useState(200)
 //   const [absoluteHeight, setAbsoluteHeight] = useState(200)

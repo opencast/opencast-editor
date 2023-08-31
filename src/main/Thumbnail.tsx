@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faCamera, faCopy, faInfoCircle, faTimesCircle, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { t } from "i18next";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +21,7 @@ import { ThemedTooltip } from "./Tooltip";
 /**
  * User interface for handling thumbnails
  */
-const Thumbnail : React.FC<{}> = () => {
+const Thumbnail : React.FC = () => {
 
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -64,16 +63,16 @@ const Thumbnail : React.FC<{}> = () => {
       return
     }
 
-    var reader  = new FileReader();
-    reader.onload = function(e)  {
-        // the result image data
-        if (e.target && e.target.result) {
-          const uri = e.target.result.toString();
-          dispatch(setThumbnail({id: track.id, uri: uri}))
-          dispatch(setHasChanges(true))
-        }
+    const reader = new FileReader();
+    reader.onload = e => {
+      // the result image data
+      if (e.target && e.target.result) {
+        const uri = e.target.result.toString();
+        dispatch(setThumbnail({id: track.id, uri: uri}))
+        dispatch(setHasChanges(true))
       }
-      reader.readAsDataURL(fileObj);
+    }
+    reader.readAsDataURL(fileObj);
   };
 
   const discardThumbnail = (id: string) => {
@@ -141,7 +140,7 @@ const ThumbnailTable : React.FC<{
   })
 
   const renderSingleOrMultiple = () => {
-    const primaryTrack = videoTracks.find((e) => e.thumbnailPriority === 0)
+    const primaryTrack = videoTracks.find(e => e.thumbnailPriority === 0)
 
     if (settings.thumbnail.simpleMode && primaryTrack !== undefined) {
       return (<>
@@ -156,9 +155,9 @@ const ThumbnailTable : React.FC<{
         />
       </>)
     } else {
-      return ( <>
+      return (<>
         <AffectAllRow tracks={videoTracks} generate={generate}/>
-        {videoTracks.map( (track: Track, index: number) => (
+        {videoTracks.map((track: Track, index: number) => (
           <ThumbnailTableRow
             key={index}
             track={track}
@@ -174,7 +173,7 @@ const ThumbnailTable : React.FC<{
     }
   }
 
-  return(
+  return (
     <div css={thumbnailTableStyle}>
       {renderSingleOrMultiple()}
     </div>
@@ -329,23 +328,23 @@ const ThumbnailButtons : React.FC<{
         active={true}
       />
       {/* Hidden input field for upload */}
-        <input
-          style={{display: 'none'}}
-          ref={(el) => {
-            inputRefs.current[index] = el;
-          }}
-          type="file"
-          accept="image/*"
-          onChange={(event) => uploadCallback(event, track)}
-          aria-hidden="true"
-        />
+      <input
+        style={{display: 'none'}}
+        ref={el => {
+          inputRefs.current[index] = el;
+        }}
+        type="file"
+        accept="image/*"
+        onChange={event => uploadCallback(event, track)}
+        aria-hidden="true"
+      />
       <ThumbnailButton
         handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
         text={t('thumbnail.buttonUseForOtherThumbnails')}
         tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
         ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
         icon={faCopy}
-        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
       <ThumbnailButton
         handler={() => { discard(track.id) }}
@@ -353,7 +352,7 @@ const ThumbnailButtons : React.FC<{
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
         icon={faTimesCircle}
-        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
   )
@@ -371,7 +370,7 @@ const ThumbnailButton : React.FC<{
   const ref = React.useRef<HTMLDivElement>(null)
 
   const clickHandler = () => {
-    active && handler();
+    if (active) { handler() }
     ref.current?.blur();
   };
   const keyHandler = (event: React.KeyboardEvent) => {
@@ -445,7 +444,7 @@ const AffectAllRow : React.FC<{
           }}
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
             generateAll()
-          }}}
+          } }}
         >
           <FontAwesomeIcon icon={faCamera}/>
           {t('thumbnail.buttonGenerateAll')}
@@ -472,6 +471,7 @@ const ThumbnailTableSingleRow: React.FC<{
   uploadCallback: any,
   discard: any,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
+  const { t } = useTranslation();
 
   return (
     <div key={index} css={thumbnailTableRowStyle}>
@@ -512,7 +512,7 @@ const ThumbnailButtonsSimple : React.FC<{
 
   return (
     <div css={thumbnailButtonsStyle}>
-      {tracks.map( (generateTrack: Track, generateIndex: number) => (
+      {tracks.map((generateTrack: Track, generateIndex: number) => (
         <ThumbnailButton
           handler={() => { generate(track, generateIndex) }}
           text={t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
@@ -532,23 +532,23 @@ const ThumbnailButtonsSimple : React.FC<{
         active={true}
       />
       {/* Hidden input field for upload */}
-        <input
-          style={{display: 'none'}}
-          ref={(el) => {
-            inputRefs.current[index] = el;
-          }}
-          type="file"
-          accept="image/*"
-          onChange={(event) => uploadCallback(event, track)}
-          aria-hidden="true"
-        />
+      <input
+        style={{display: 'none'}}
+        ref={el => {
+          inputRefs.current[index] = el;
+        }}
+        type="file"
+        accept="image/*"
+        onChange={event => uploadCallback(event, track)}
+        aria-hidden="true"
+      />
       <ThumbnailButton
         handler={() => { discard(track.id) }}
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
         icon={faTimesCircle}
-        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true: false)}
+        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
   )
