@@ -23,7 +23,6 @@ import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metad
 import { selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
   setHasChanges as subtitleSetHasChanges } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
-import { Flavor } from "../types";
 import { selectTheme } from "../redux/themeSlice";
 import { ThemedTooltip } from "./Tooltip";
 
@@ -142,9 +141,11 @@ export const SaveButton: React.FC = () => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
-      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
-
+      subtitlesForPosting.push({
+        id: identifier,
+        subtitle: serializeSubtitle(subtitles[identifier].cues),
+        tags: subtitles[identifier].tags
+      })
     }
     return subtitlesForPosting
   }

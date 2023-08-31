@@ -30,6 +30,7 @@
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",
     "mui-rff": "^6.1.4",
+    "package-lock-only": "^0.0.4",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-beforeunload": "^2.6.0",
@@ -50,6 +51,7 @@
     "redux": "^4.2.1",
     "standardized-audio-context": "^25.3.55",
     "typescript": "^5.1.6",
+    "uuid": "^9.0.0",
     "webvtt-parser": "^2.2.0"
   },
   "overrides": {
@@ -87,6 +89,7 @@
     "@types/react-resizable": "^3.0.4",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
+    "@types/uuid": "^9.0.0",
     "use-resize-observer": "^9.1.0"
   }
 }
