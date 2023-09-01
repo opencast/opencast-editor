@@ -83,7 +83,7 @@
     "@types/react-resizable": "^3.0.4",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
-    "@types/uuid": "^9.0.0",
+    "@types/uuid": "^9.0.3",
     "use-resize-observer": "^9.1.0"
   }
 }
