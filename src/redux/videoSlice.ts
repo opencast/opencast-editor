@@ -270,17 +270,15 @@ const mergeSegments = (state: video, startSegmentIndex: number, endSegmentIndex:
     return
   }
 
-  const minSegmentIndex = Math.min(startSegmentIndex, endSegmentIndex)
-
   // Increase activeSegment length
-  state.segments[minSegmentIndex].start = Math.min(
+  state.segments[startSegmentIndex].start = Math.min(
     state.segments[startSegmentIndex].start, state.segments[endSegmentIndex].start)
-  state.segments[minSegmentIndex].end = Math.max(
+  state.segments[startSegmentIndex].end = Math.max(
     state.segments[startSegmentIndex].end, state.segments[endSegmentIndex].end)
 
-  // Remove the last segment and segments between
+  // Remove the end segment and segments between
   state.segments.splice(
-    minSegmentIndex + 1,
+    startSegmentIndex < endSegmentIndex ? startSegmentIndex + 1 : endSegmentIndex,
     Math.abs(endSegmentIndex - startSegmentIndex)
   );
 
