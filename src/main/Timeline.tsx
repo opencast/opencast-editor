@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, SyntheticEvent } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import Draggable from 'react-draggable';
 
@@ -7,11 +7,11 @@ import { css } from '@emotion/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Segment, httpRequestState } from '../types'
 import {
-  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages, markAsDeletedOrAliveByIndex
+  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faSpinner, faTrash, faTrashRestore } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import useResizeObserver from "use-resize-observer";
 
@@ -23,9 +23,8 @@ import { scrubberKeyMap } from '../globalKeys';
 import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
-import { selectTheme, Theme } from '../redux/themeSlice';
+import { selectTheme } from '../redux/themeSlice';
 import { ThemedTooltip } from './Tooltip';
-import { basicButtonStyle } from "../cssStyles";
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -196,7 +195,7 @@ export const Scrubber: React.FC<{
     height: timelineHeight - 10 + 'px', //    TODO: CHECK IF height: '100%',
     width: '1px',
     position: 'absolute',
-    zIndex: 1,
+    zIndex: 2,
     boxShadow: `${theme.boxShadow}`,
     display: 'flex',
     flexDirection: 'column',
@@ -294,20 +293,11 @@ export const SegmentsList: React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
 
   // Init redux variables
-  const dispatch = useDispatch()
   const segments = useSelector(selectSegments)
   const duration = useSelector(selectDuration)
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)
-
-  const markAsDeletedOrAlive = (event: KeyboardEvent | SyntheticEvent, index: number) => {
-    event.preventDefault()                      // Prevent page scrolling due to Space bar press
-    event.stopPropagation()                     // Prevent video playback due to Space bar press
-
-    dispatch(markAsDeletedOrAliveByIndex(index));
-  }
 
   /**
    * Returns a background color based on whether the segment is to be deleted
@@ -335,15 +325,6 @@ export const SegmentsList: React.FC<{
     }
   }
 
-  const markAsDeletedButtonStyle = (theme: Theme) => css({
-    position: 'absolute',
-    right: '8px',
-    top: '8px',
-    padding: '5px',
-    background: `${theme.element_bg}`,
-    zIndex: 2,
-  });
-
   // Render the individual segments
   const renderedSegments = () => {
     return (
@@ -357,7 +338,6 @@ export const SegmentsList: React.FC<{
                 end: convertMsToReadableString(segment.end) })}
             tabIndex={tabable ? 0 : -1}
             css={{
-              position: 'relative',
               background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
               borderRadius: '5px',
               borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
@@ -366,20 +346,8 @@ export const SegmentsList: React.FC<{
               boxSizing: 'border-box',
               width: ((segment.end - segment.start) / duration) * 100 + '%',
               height: timelineHeight - 20 + 'px',     // CHECK IF 100%
+              zIndex: 1,
             }}>
-            <ThemedTooltip title={segment.deleted ? t("timeline.segment-restore-tooltip") : t("timeline.segment-delete-tooltip")}>
-              <div css={[basicButtonStyle(theme), markAsDeletedButtonStyle(theme)]}
-                role="button" tabIndex={0}
-                aria-label={segment.deleted ? t("timeline.segment-restore-tooltip-aria") : t("timeline.segment-delete-tooltip-aria")}
-                onClick={(event: SyntheticEvent) => markAsDeletedOrAlive(event, index)}
-                onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-                  markAsDeletedOrAlive(event, index)
-                } }}
-                onMouseDown={event => event.stopPropagation()}  // Prevent timeline jump
-              >
-                <FontAwesomeIcon icon={segment.deleted ? faTrashRestore : faTrash} size="1x" />
-              </div>
-            </ThemedTooltip>
           </div>
         </ThemedTooltip>
       ))
