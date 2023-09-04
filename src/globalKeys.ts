@@ -1,4 +1,3 @@
-import { ApplicationKeyMap, ExtendedKeyMapOptions, KeyMapOptions, MouseTrapKeySequence } from 'react-hotkeys';
 /**
  * Contains mappings for special keyboard controls, beyond what is usually expected of a webpage
  * Learn more about keymaps at https://github.com/greena13/react-hotkeys#defining-key-maps (12.03.2021)
@@ -8,7 +7,6 @@ import { ApplicationKeyMap, ExtendedKeyMapOptions, KeyMapOptions, MouseTrapKeySe
  *
  * If you add a new keyMap, be sure to add it to the getAllHotkeys function
  */
-import { KeyMap } from "react-hotkeys";
 import { isMacOs } from 'react-device-detect';
 
 // Groups for displaying hotkeys in the overview page
@@ -25,159 +23,108 @@ const rewriteKeys = (key: string) => {
   if (isMacOs) {
     newKey = newKey.replace("Alt", "Option")
   }
+  newKey = isMacOs ? newKey.replace("Mod", "Command") : newKey.replace("Mod", "Control")
 
   return newKey
 }
 
-/**
- * (Semi-) global map for video player controls
- */
-export const videoPlayerKeyMap: KeyMap = {
-  preview: {
-    name: "video.previewButton",
-    sequence: rewriteKeys("Control+Alt+p"),
-    action: "keydown",
-    group: groupVideoPlayer,
-  },
-  play: {
-    name: "keyboardControls.videoPlayButton",
-    sequence: rewriteKeys("Space"),
-    sequences: [rewriteKeys("Control+Alt+Space"), "Space"],
-    action: "keydown",
-    group: groupVideoPlayer,
-  },
-}
-
-/**
- * (Semi-) global map for the buttons in the cutting view
- */
-export const cuttingKeyMap: KeyMap = {
-  cut: {
-    name: "cuttingActions.cut-button",
-    sequence: rewriteKeys("Control+Alt+c"),
-    action: "keydown",
-    group: groupCuttingView,
-  },
-  delete: {
-    name: "cuttingActions.delete-button",
-    sequence: rewriteKeys("Control+Alt+d"),
-    action: "keydown",
-    group: groupCuttingView,
-  },
-  mergeLeft: {
-    name: "cuttingActions.mergeLeft-button",
-    sequence: rewriteKeys("Control+Alt+n"),
-    action: "keydown",
-    group: groupCuttingView,
-  },
-  mergeRight: {
-    name: "cuttingActions.mergeRight-button",
-    sequence: rewriteKeys("Control+Alt+m"),
-    action: "keydown",
-    group: groupCuttingView,
-  },
-}
-
-/**
- * (Semi-) global map for moving the scrubber
- */
-export const scrubberKeyMap: KeyMap = {
-  left: {
-    name: "keyboardControls.scrubberLeft",
-    // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
-    sequence: rewriteKeys("Control+Alt+j"),
-    sequences: [rewriteKeys("Control+Alt+j"), "Left"],
-    action: "keydown",
-    group: groupCuttingViewScrubber,
-  },
-  right: {
-    name: "keyboardControls.scrubberRight",
-    // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
-    sequence: rewriteKeys("Control+Alt+l"),
-    sequences: [rewriteKeys("Control+Alt+l"), "Right"],
-    action: "keydown",
-    group: groupCuttingViewScrubber,
-  },
-  increase: {
-    name: "keyboardControls.scrubberIncrease",
-    // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
-    sequence: rewriteKeys("Control+Alt+i"),
-    sequences: [rewriteKeys("Control+Alt+i"), "Up"],
-    action: "keydown",
-    group: groupCuttingViewScrubber,
-  },
-  decrease: {
-    name: "keyboardControls.scrubberDecrease",
-    // Typescript requires 'sequence' even though there is 'sequences, but it doesn't do anything?
-    sequence: rewriteKeys("Control+Alt+k"),
-    sequences: [rewriteKeys("Control+Alt+k"), "Down"],
-    action: "keydown",
-    group: groupCuttingViewScrubber,
-  },
-}
-
-export const subtitleListKeyMap: KeyMap = {
-  addAbove: {
-    name: "subtitleList.addSegmentAbove",
-    sequence: rewriteKeys("Control+Alt+q"),
-    action: "keydown",
-    group: groupSubtitleList,
-  },
-  addBelow: {
-    name: "subtitleList.addSegmentBelow",
-    sequence: rewriteKeys("Control+Alt+a"),
-    action: "keydown",
-    group: groupSubtitleList,
-  },
-  jumpAbove: {
-    name: "subtitleList.jumpToSegmentAbove",
-    sequence: rewriteKeys("Control+Alt+w"),
-    action: "keydown",
-    group: groupSubtitleList,
-  },
-  jumpBelow: {
-    name: "subtitleList.jumpToSegmentBelow",
-    sequence: rewriteKeys("Control+Alt+s"),
-    action: "keydown",
-    group: groupSubtitleList,
-  },
-  delete: {
-    name: "subtitleList.deleteSegment",
-    sequence: rewriteKeys("Control+Alt+d"),
-    action: "keydown",
-    group: groupSubtitleList,
+export const getGroupName = (groupName: string) => {
+  switch (groupName) {
+    case "videoPlayer":
+      return groupVideoPlayer
+      break
+    case "cutting":
+      return groupCuttingView
+      break
+    case "timeline":
+      return groupCuttingViewScrubber
+      break
+    case "subtitleList":
+      return groupSubtitleList
+      break
   }
 }
 
-/**
- * Combines all keyMaps into a single list of keys for KeyboardControls to display
- * Placing this under the keyMaps is important, else the translation hooks won't happen
- */
-export const getAllHotkeys = () => {
-  const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap, subtitleListKeyMap]
-  const allKeys : ApplicationKeyMap = {}
+export interface KeyMapp {
+  [property: string]: KeyGroupp
+}
 
-  for (const keyMap of allKeyMaps) {
-    for (const [key, value] of Object.entries(keyMap)) {
+export interface KeyGroupp {
+  [property: string]: Keyy
+}
 
-      // Parse sequences
-      let sequences : KeyMapOptions[] = []
-      if ((value as ExtendedKeyMapOptions).sequences !== undefined) {
-        for (const sequence of (value as ExtendedKeyMapOptions).sequences) {
-          sequences.push({sequence: sequence as MouseTrapKeySequence, action: (value as ExtendedKeyMapOptions).action})
-        }
-      } else {
-        sequences = [{sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action }]
-      }
+export interface Keyy {
+  name: string
+  key: string
+}
 
-      // Create new key
-      allKeys[key] = {
-        name: (value as ExtendedKeyMapOptions).name,
-        group: (value as ExtendedKeyMapOptions).group,
-        sequences: sequences,
-      }
+export const KEYMAP: KeyMapp = {
+  videoPlayer: {
+    play: {
+      name: "keyboardControls.videoPlayButton",
+      key: rewriteKeys("Mod+Alt+Space, Space"),
+    },
+    preview: {
+      name: "video.previewButton",
+      key: rewriteKeys("Mod+Alt+p"),
+    }
+  },
+  cutting: {
+    cut: {
+      name: "cuttingActions.cut-button",
+      key: rewriteKeys("Mod+Alt+c"),
+    },
+    delete: {
+      name: "cuttingActions.delete-button",
+      key: rewriteKeys("Mod+Alt+d"),
+    },
+    mergeLeft: {
+      name: "cuttingActions.mergeLeft-button",
+      key: rewriteKeys("Mod+Alt+n"),
+    },
+    mergeRight: {
+      name: "cuttingActions.mergeRight-button",
+      key: rewriteKeys("Mod+Alt+m"),
+    },
+  },
+  timeline: {
+    left: {
+      name: "keyboardControls.scrubberLeft",
+      key: rewriteKeys("Mod+Alt+j , Left"),
+    },
+    right: {
+      name: "keyboardControls.scrubberRight",
+      key: rewriteKeys("Mod+Alt+l, Right"),
+    },
+    increase: {
+      name: "keyboardControls.scrubberIncrease",
+      key: rewriteKeys("Mod+Alt+i, Up"),
+    },
+    decrease: {
+      name: "keyboardControls.scrubberDecrease",
+      key: rewriteKeys("Mod+Alt+k, Down"),
+    },
+  },
+  subtitleList: {
+    addAbove: {
+      name: "subtitleList.addSegmentAbove",
+      key: rewriteKeys("Mod+Alt+q"),
+    },
+    addBelow: {
+      name: "subtitleList.addSegmentBelow",
+      key: rewriteKeys("Mod+Alt+a"),
+    },
+    jumpAbove: {
+      name: "subtitleList.jumpToSegmentAbove",
+      key: rewriteKeys("Mod+Alt+w"),
+    },
+    jumpBelow: {
+      name: "subtitleList.jumpToSegmentBelow",
+      key: rewriteKeys("Mod+Alt+s"),
+    },
+    delete: {
+      name: "subtitleList.deleteSegment",
+      key: rewriteKeys("Mod+Alt+d"),
     }
   }
-
-  return allKeys
 }

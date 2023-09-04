@@ -17,14 +17,14 @@ import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
-import { GlobalHotKeys } from 'react-hotkeys';
-import { scrubberKeyMap } from '../globalKeys';
+import { KEYMAP } from '../globalKeys';
 
 import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
 import { selectTheme } from '../redux/themeSlice';
 import { ThemedTooltip } from './Tooltip';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -183,12 +183,10 @@ export const Scrubber: React.FC<{
   // Callbacks for keyboard controls
   // TODO: Better increases and decreases than ten intervals
   // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
-  const handlers = {
-    left: () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
-    right: () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
-    increase: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
-    decrease: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1))
-  }
+  useHotkeys(KEYMAP.timeline.left.key, () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))), {}, [currentlyAt, keyboardJumpDelta]);
+  useHotkeys(KEYMAP.timeline.right.key, () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))), {}, [currentlyAt, keyboardJumpDelta, duration]);
+  useHotkeys(KEYMAP.timeline.increase.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)), {}, [keyboardJumpDelta]);
+  useHotkeys(KEYMAP.timeline.decrease.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)), {}, [keyboardJumpDelta]);
 
   const scrubberStyle = css({
     backgroundColor: `${theme.text}`,
@@ -249,32 +247,30 @@ export const Scrubber: React.FC<{
   // }
 
   return (
-    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
-      <Draggable
-        onDrag={onControlledDrag}
-        onStart={onStartDrag}
-        onStop={onStopDrag}
-        axis="x"
-        bounds="parent"
-        position={controlledPosition}
-        nodeRef={nodeRef}
-      >
-        <div ref={nodeRef} css={scrubberStyle}>
+    <Draggable
+      onDrag={onControlledDrag}
+      onStart={onStartDrag}
+      onStop={onStopDrag}
+      axis="x"
+      bounds="parent"
+      position={controlledPosition}
+      nodeRef={nodeRef}
+    >
+      <div ref={nodeRef} css={scrubberStyle}>
 
-          <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
-            aria-label={t("timeline.scrubber-text-aria",
-              {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
-                segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
-                moveLeft: scrubberKeyMap[handlers.left.name],
-                moveRight: scrubberKeyMap[handlers.right.name],
-                increase: scrubberKeyMap[handlers.increase.name],
-                decrease: scrubberKeyMap[handlers.decrease.name] })}
-            tabIndex={0}>
-            <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
-          </div>
+        <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
+          aria-label={t("timeline.scrubber-text-aria",
+            {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
+              segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
+              moveLeft: KEYMAP.timeline.left.key,
+              moveRight: KEYMAP.timeline.right.key,
+              increase: KEYMAP.timeline.increase.key,
+              decrease: KEYMAP.timeline.decrease.key })}
+          tabIndex={0}>
+          <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
         </div>
-      </Draggable>
-    </GlobalHotKeys>
+      </div>
+    </Draggable>
   );
 };
 

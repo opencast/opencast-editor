@@ -3,14 +3,13 @@ import { ParseKeys } from "i18next";
 
 import React from "react";
 
-import { KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation, Trans} from "react-i18next";
 import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
-import { getAllHotkeys } from "../globalKeys";
+import { getGroupName, KEYMAP } from "../globalKeys";
 import { selectTheme } from "../redux/themeSlice";
 
-const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
+const Group: React.FC<{name: ParseKeys, entries: { [key: string]: string[][] }}> = ({name, entries}) => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);
@@ -29,14 +28,14 @@ const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({na
   return (
     <div css={groupStyle}>
       <h3 css={headingStyle}>{t(name)}</h3>
-      {entries.map((entry: KeyMapDisplayOptions, index: number) => (
-        <Entry params={entry} key={index}></Entry>
-      ))}
+      {Object.entries(entries).map(([key, value], index) =>
+        <Entry name={key} sequences={value} key={index} />
+      )}
     </div>
   )
 }
 
-const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
+const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequences}) => {
 
   const { t } = useTranslation();
   const theme = useSelector(selectTheme);
@@ -88,10 +87,10 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   return (
     <div css={entryStyle}>
-      <div css={labelStyle}><Trans>{params.name || t("keyboardControls.missingLabel")}</Trans></div>
-      {params.sequences.map((sequence, index, arr) => (
+      <div css={labelStyle}><Trans>{name || t("keyboardControls.missingLabel")}</Trans></div>
+      {sequences.map((sequence, index, arr) => (
         <div css={sequenceStyle} key={index}>
-          {sequence.sequence.toString().split('+').map((singleKey, index) => (
+          {sequence.map((singleKey, index) => (
             <div css={singleKeyStyle} key={index}>{singleKey}</div>
           ))}
           <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
@@ -106,8 +105,6 @@ const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
 
-  const keyMap = getAllHotkeys()
-
   const groupsStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
@@ -117,30 +114,22 @@ const KeyboardControls: React.FC = () => {
   })
 
   const render = () => {
-    if (keyMap && Object.keys(keyMap).length > 0) {
-
-      const obj: Record<string, Array<KeyMapDisplayOptions>> = {}
-      obj[t("keyboardControls.defaultGroupName")] = []    // For keys without a group
-
-      // Sort by group
-      for (const [, value] of Object.entries(keyMap)) {
-        if (value.group) {
-          if (obj[value.group]) {
-            obj[value.group].push(value)
-          } else {
-            obj[value.group] = [value]
-          }
-        } else {
-          obj[t("keyboardControls.defaultGroupName")].push(value)
-        }
-      }
+    if (KEYMAP && Object.keys(KEYMAP).length > 0) {
 
       const groups: JSX.Element[] = [];
-      for (const key in obj) {
-        if (obj[key].length > 0) {
-          groups.push(<Group name={key as ParseKeys} entries={obj[key]} key={key}/>);
-        }
-      }
+      Object.entries(KEYMAP).forEach(([key, value], index) => {
+        const entries : { [key: string]: string[][] } = {}
+        Object.entries(value).forEach(([, value]) => {
+          const sequences = value.key.split(",").map(item => item.trim())
+          const lol: string[][] = []
+          Object.entries(sequences).forEach(([, value]) => {
+            const keys = value.split("+").map(item => item.trim())
+            lol.push(keys)
+          })
+          entries[value.name] = lol
+        })
+        groups.push(<Group name={getGroupName(key)} entries={entries} key={index}/>)
+      })
 
       return (
         <div css={groupsStyle}>
