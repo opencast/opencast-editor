@@ -5,6 +5,7 @@ import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowsLeftRightToLine,
   faCut,
   faStepBackward,
   faStepForward,
@@ -16,7 +17,7 @@ import { css } from '@emotion/react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, markAllAsDeleted
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll
 } from '../redux/videoSlice'
 import { GlobalHotKeys, KeySequence, KeyMapOptions } from "react-hotkeys";
 import { cuttingKeyMap } from "../globalKeys";
@@ -86,11 +87,6 @@ const CuttingActions: React.FC = () => {
           <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
             hotKeyName={(cuttingKeyMap[handlers.delete.name] as KeyMapOptions).sequence}
           />
-          <CuttingActionsButton iconName={faTrash}
-            actionName={t("cuttingActions.delete-all-button")} actionHandler={dispatchAction} action={markAllAsDeleted}
-            tooltip={t('cuttingActions.delete-all-tooltip')}
-            ariaLabelText={t('cuttingActions.delete-all-tooltip-aria')}
-          />
           <CuttingActionsButton iconName={faStepBackward}
             actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
             tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeLeft.name] as KeyMapOptions).sequence })}
@@ -100,6 +96,11 @@ const CuttingActions: React.FC = () => {
             actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
             tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
             ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
+          />
+          <CuttingActionsButton iconName={faArrowsLeftRightToLine}
+            actionName={t("cuttingActions.merge-all-button")} actionHandler={dispatchAction} action={mergeAll}
+            tooltip={t('cuttingActions.merge-all-tooltip')}
+            ariaLabelText={t('cuttingActions.merge-all-tooltip-aria')}
           />
         </div>
         <div css={blockStyle}>
