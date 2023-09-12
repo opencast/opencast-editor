@@ -246,7 +246,7 @@ const SubtitleAddButton: React.FC<{
     width: '100%',
     boxShadow: '',
     border: `1px solid ${theme.text}`,
-    background: `${theme.element_bg}`,
+    backgroundColor: `${theme.background}`,
     color: `${theme.text}`,
 
     "&[disabled]": {
@@ -280,6 +280,7 @@ const SubtitleAddButton: React.FC<{
                 */}
               <ThemeProvider theme={subtitleSelectStyle(theme)}>
                 <Select
+                  css={{ backgroundColor: `${theme.background}` }}
                   label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
                   name="selectedSubtitle"
                   data={selectData()}
@@ -292,14 +293,12 @@ const SubtitleAddButton: React.FC<{
                  * disabled elements, add a simple wrapper element, such as a span."
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
               <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
-                <span>
-                  <button css={[basicButtonStyle(theme), createButtonStyle]}
-                    type="submit"
-                    aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                    disabled={submitting || pristine}>
-                    {t("subtitles.createSubtitleButton-createButton")}
-                  </button>
-                </span>
+                <button css={[basicButtonStyle(theme), createButtonStyle]}
+                  type="submit"
+                  aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                  disabled={submitting || pristine}>
+                  {t("subtitles.createSubtitleButton-createButton")}
+                </button>
               </ThemedTooltip>
 
             </form>
