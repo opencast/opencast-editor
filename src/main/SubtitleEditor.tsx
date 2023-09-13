@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LuChevronLeft} from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
 } from '../redux/videoSlice'
@@ -17,9 +16,10 @@ import {
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { parseSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
+import { titleStyle, titleStyleBold } from "../cssStyles";
 import { generateButtonTitle } from "./SubtitleSelect";
 
 /**
@@ -34,7 +34,7 @@ const SubtitleEditor : React.FC = () => {
   const subtitle = useSelector(selectSelectedSubtitleById)
   const selectedId = useSelector(selectSelectedSubtitleId)
   const captionTrack = useSelector(selectSubtitlesFromOpencastById(selectedId))
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Prepare subtitle in redux
   useEffect(() => {
@@ -95,21 +95,6 @@ const SubtitleEditor : React.FC = () => {
     borderBottom: `${theme.menuBorder}`
   })
 
-  // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx
-  const titleStyle = css({
-    display: 'inline-block',
-    padding: '15px',
-    overflow: 'hidden',
-    whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    maxWidth: '500px',
-  })
-
-  const titleStyleBold = css({
-    fontWeight: 'bold',
-    fontSize: '24px',
-    verticalAlign: '-2.5px',
-  })
 
   const render = () => {
     if (getError !== undefined) {
@@ -121,7 +106,7 @@ const SubtitleEditor : React.FC = () => {
         <>
           <div css={headerRowStyle}>
             <BackButton />
-            <div css={[titleStyle, titleStyleBold]}>
+            <div css={[titleStyle(theme), titleStyleBold(theme)]}>
               {t("subtitles.editTitle", {title: getTitle()})}
             </div>
             <div css={{width: '50px'}}></div>
@@ -150,11 +135,10 @@ const SubtitleEditor : React.FC = () => {
 export const BackButton : React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch();
 
   const backButtonStyle = css({
-    width: '50px',
     height: '10px',
     padding: '16px',
     boxShadow: `${theme.boxShadow}`,
@@ -171,7 +155,7 @@ export const BackButton : React.FC = () => {
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(false))
         } }}>
-        <FontAwesomeIcon icon={faChevronLeft} size="1x" />
+        <LuChevronLeft css={{fontSize: 24 }}/>
         <span>{t("subtitles.backButton")}</span>
       </div>
     </ThemedTooltip>

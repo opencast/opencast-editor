@@ -8,7 +8,7 @@ import { selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice'
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
 import { PageButton } from './Finish'
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { LuChevronLeft } from "react-icons/lu";
 import { SaveAndProcessButton } from "./WorkflowConfiguration";
 import { selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
 import { selectStatus as saveSelectStatus, selectError as saveSelectError } from "../redux/workflowPostSlice";
@@ -19,7 +19,7 @@ import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * Allows the user to select a workflow
@@ -34,7 +34,7 @@ const WorkflowSelection : React.FC = () => {
   const workflows = useSelector(selectWorkflows)
   const finishState = useSelector(selectFinishState)
   const pageNumber = useSelector(selectPageNumber)
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const postAndProcessWorkflowStatus = useSelector(selectStatus);
   const postAndProcessError = useSelector(selectError)
@@ -44,7 +44,7 @@ const WorkflowSelection : React.FC = () => {
   const workflowSelectionStyle = css({
     padding: '20px',
     display: (finishState === "Start processing" && pageNumber === 1) ? 'flex' : 'none',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     ...(flexGapReplacementStyle(30, false)),
@@ -52,7 +52,7 @@ const WorkflowSelection : React.FC = () => {
 
   const workflowSelectionSelectionStyle = css({
     display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     alignItems: 'left',
     ...(flexGapReplacementStyle(20, false)),
     flexWrap: 'wrap',
@@ -90,7 +90,7 @@ const WorkflowSelection : React.FC = () => {
             </RadioGroup>
         }
         <div css={backOrContinueStyle}>
-          <PageButton pageNumber={0} label={t("workflowSelection.back-button")} iconName={faChevronLeft}/>
+          <PageButton pageNumber={0} label={t("workflowSelection.back-button")} Icon={LuChevronLeft}/>
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
@@ -160,12 +160,12 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
   const labelStyle = css({
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: '500px'
+    maxWidth: '500px',
   })
 
   const headerStyle = css({
     width: '100%',
-    padding: '5px',
+    padding: '5px 0px',
     fontSize: 'larger',
   });
 
@@ -183,11 +183,13 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
 
 const WorkflowSelectRadio: React.FC = props => {
 
+  const theme = useTheme()
+
   const style = css({
     alignSelf: 'start',
-    color: 'grey',
+    color: `${theme.text}`,
     "&$checked": {
-      color: 'grey'
+      color: `${theme.text}`
     }
   })
 

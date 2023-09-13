@@ -20,7 +20,7 @@ import { SubtitleCue } from "../types";
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { useTranslation } from "react-i18next";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -33,7 +33,7 @@ import { KEYMAP } from "../globalKeys";
 const SubtitleTimeline: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -95,7 +95,7 @@ const SubtitleTimeline: React.FC = () => {
         css={{
           position: 'absolute',
           width: '2px',
-          height: '190px',
+          height: '200px',
           ...(refTop.current) && {left: (refTop.current.clientWidth / 2)},
           top: '10px',
           background: `${theme.text}`,
@@ -206,7 +206,7 @@ const TimelineSubtitleSegment: React.FC<{
   const [isGrabbed, setIsGrabbed] = useState(false)
   const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
     setControlledPosition({x: (props.cue.startTime / duration) * (props.timelineWidth), y: 0});

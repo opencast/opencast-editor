@@ -8,16 +8,19 @@ import store from './redux/store'
 import { init } from './config'
 import { sleep } from './util/utilityFunctions'
 
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import "@fontsource-variable/roboto-flex";
 
 import './i18n/config';
+
+import '@opencast/appkit/dist/colors.css'
+import { ColorSchemeProvider } from '@opencast/appkit';
 
 const container = document.getElementById('root')
 if (!container) {
   throw new Error('Failed to find the root element');
 }
 const root = ReactDOMClient.createRoot(container);
+
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the
@@ -37,12 +40,9 @@ initialize.then(
     root.render(
       <React.StrictMode>
         <Provider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
-            {/* <GlobalHotKeys> */}
+          <ColorSchemeProvider>
             <App />
-            {/* </GlobalHotKeys> */}
-          </LocalizationProvider>
+          </ColorSchemeProvider>
         </Provider>
       </React.StrictMode>,
     );

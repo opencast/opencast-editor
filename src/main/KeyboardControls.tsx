@@ -4,25 +4,31 @@ import { ParseKeys } from "i18next";
 import React from "react";
 
 import { useTranslation, Trans} from "react-i18next";
-import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { getGroupName, KEYMAP } from "../globalKeys";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
+import { titleStyle, titleStyleBold } from '../cssStyles'
 
 const Group: React.FC<{name: ParseKeys, entries: { [key: string]: string[][] }}> = ({name, entries}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const groupStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
     width: '460px',
     maxWidth: '50vw',
+
+    background: `${theme.menu_background}`,
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    boxSizing: "border-box",
+    padding: '0px 20px 20px 20px',
   });
 
   const headingStyle = css({
-    borderBottom: `${theme.menuBorder}`
+    color: `${theme.text}`,
   })
 
   return (
@@ -38,51 +44,46 @@ const Group: React.FC<{name: ParseKeys, entries: { [key: string]: string[][] }}>
 const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequences}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const entryStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexFlow: 'column nowrap',
+    justifyContent: 'left',
     width: '100%',
-    paddingBottom: '5px',
-    paddingTop: '5px',
+    padding: '10px 0px',
+    ...(flexGapReplacementStyle(10, true))
   });
 
   const labelStyle = css({
-    alignSelf: 'center',
-    minWidth: '130px',
-    height: '5em',
+    fontWeight: 'bold',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     wordWrap: 'break-word',
-
-    // Center text vertically
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flexDirection: 'column',
+    color: `${theme.text}`,
   })
 
   const sequenceStyle = css({
-    alignSelf: 'center',
-    marginLeft: '15px',
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     ...(flexGapReplacementStyle(10, true))
   })
 
   const singleKeyStyle = css({
-    borderRadius: '5px',
+    borderRadius: '4px',
     borderWidth: '2px',
     borderStyle: 'solid',
     borderColor: `${theme.singleKey_border}`,
     background: `${theme.singleKey_bg}`,
+    boxShadow: `${theme.singleKey_boxShadow}`,
     padding: '10px',
+    color: `${theme.text}`,
   })
 
   const orStyle = css({
     alignSelf: 'center',
-    lineHeight: '32px',
+    fontSize: '20px',
+    fontWeight: 'bold',
   })
 
   return (
@@ -91,7 +92,10 @@ const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequence
       {sequences.map((sequence, index, arr) => (
         <div css={sequenceStyle} key={index}>
           {sequence.map((singleKey, index) => (
-            <div css={singleKeyStyle} key={index}>{singleKey}</div>
+            <>
+              <div css={singleKeyStyle} key={index}>{singleKey}</div>
+              {sequence.length - 1 !== index ? <div css={orStyle}>+</div> : ''}
+            </>
           ))}
           <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
         </div>
@@ -104,6 +108,7 @@ const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequence
 const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
+  const theme = useTheme()
 
   const groupsStyle = css({
     display: 'flex',
@@ -151,9 +156,9 @@ const KeyboardControls: React.FC = () => {
 
   return (
     <div css={keyboardControlsStyle}>
-      <h2>
+      <div css={[titleStyle(theme), titleStyleBold(theme)]}>
         {t("keyboardControls.header")}
-      </h2>
+      </div>
 
       {render()}
     </div>

@@ -46,7 +46,7 @@ const Body: React.FC = () => {
   const bodyStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    height: 'calc(100% - 48px)',
+    height: 'calc(100% - 64px)',
   });
 
   return (

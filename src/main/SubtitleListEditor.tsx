@@ -1,6 +1,6 @@
 import { css, SerializedStyles } from "@emotion/react"
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { IconType } from "react-icons";
+import { LuPlus, LuTrash} from "react-icons/lu";
 import { memoize } from "lodash"
 import React, { useRef } from "react"
 import { useEffect, useState } from "react"
@@ -27,10 +27,10 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
 import { VariableSizeList } from "react-window"
 import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { selectTheme, selectThemeState } from "../redux/themeSlice"
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip"
-import { IconProp } from "@fortawesome/fontawesome-svg-core"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useColorScheme } from "@opencast/appkit";
 
 /**
  * Displays everything needed to edit subtitles
@@ -183,7 +183,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   const cue = items[props.index]
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch()
 
   // Unfortunately, the focus selectors will cause every element to rerender,
@@ -305,7 +305,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     dispatch(setCurrentlyAt(cue.startTime))
   }
 
-  const themeState = useSelector(selectThemeState);
+  const { scheme } = useColorScheme();
 
   const segmentStyle = css({
     display: 'flex',
@@ -328,8 +328,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       outline: `${theme.element_outline}`,
     },
     '& input': {
-      marginTop: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
-      marginBottom: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
+      marginTop: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
+      marginBottom: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
     }
   })
 
@@ -424,7 +424,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             event.stopPropagation()                     // Prevent video playback due to Space bar press
             addCueAbove()
           } }}
-          icon={faPlus}
+          Icon={LuPlus}
         />
         <FunctionButton
           tooltip={t("subtitleList.deleteSegment")}
@@ -435,7 +435,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             event.stopPropagation()                     // Prevent video playback due to Space bar press
             deleteCue()
           } }}
-          icon={faTrash}
+          Icon={LuTrash}
         />
         <FunctionButton
           tooltip={t("subtitleList.addSegmentBelow")}
@@ -446,7 +446,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             event.stopPropagation()                     // Prevent video playback due to Space bar press
             addCueBelow()
           } }}
-          icon={faPlus}
+          Icon={LuPlus}
         />
       </div>
     </div>
@@ -458,16 +458,16 @@ const FunctionButton : React.FC<{
   tooltipAria: string,
   onClick: any,
   onKeyDown: any,
-  icon: IconProp
+  Icon: IconType
 }> = ({
   tooltip,
   tooltipAria,
   onClick,
   onKeyDown,
-  icon
+  Icon
 }) => {
 
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const addSegmentButtonStyle = css({
     width: '32px',
@@ -486,7 +486,7 @@ const FunctionButton : React.FC<{
         onClick={onClick}
         onKeyDown={onKeyDown}
       >
-        <FontAwesomeIcon icon={icon} size="1x" />
+        <Icon />
       </div>
     </ThemedTooltip>
   )

@@ -5,14 +5,13 @@ import { settings, subtitleTags } from '../config'
 import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { LuPlus} from "react-icons/lu";
 import { Form } from "react-final-form";
 import { Select } from "mui-rff";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectSubtitlesFromOpencast } from "../redux/videoSlice";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemeProvider } from '@mui/material/styles';
 import { ThemedTooltip } from "./Tooltip";
 import { languageCodeToName } from "../util/utilityFunctions";
@@ -93,9 +92,11 @@ const SubtitleSelect : React.FC = () => {
   }
 
   const subtitleSelectStyle = css({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(20em, 1fr))',
-    gridRowGap: '30px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    ...(flexGapReplacementStyle(30, false)),
   })
 
   const renderButtons = () => {
@@ -143,12 +144,21 @@ const SubtitleSelectButton: React.FC<{
   icon,
 }) => {
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch()
 
   const flagStyle = css({
-    fontSize: '2em',
-    overflow: 'hidden'
+    fontSize: '2.5em',
+    overflow: 'hidden',
+
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: `${theme.background_finish_menu_icon}`,
+    color: `${theme.text}`,
+    borderRadius: '50%',
+    width: '90px',
+    height: '90px',
   });
 
   const titleStyle = css({
@@ -187,7 +197,7 @@ const SubtitleAddButton: React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const dispatch = useDispatch()
 
@@ -220,21 +230,24 @@ const SubtitleAddButton: React.FC<{
   }
 
   const plusIconStyle = css({
-    display: isPlusDisplay ? 'block' : 'none'
+    display: isPlusDisplay ? 'flex' : 'none'
   });
 
   const subtitleAddFormStyle = css({
     display: !isPlusDisplay ? 'flex' : 'none',
     flexDirection: 'column' as const,
     ...(flexGapReplacementStyle(30, false)),
+    width: '80%',
     padding: '20px',
   });
 
   const createButtonStyle = css({
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    fontSize: '0.75em',
-    background: 'snow',
-    border: '1px solid #ccc',
+    padding: '10px 5px',
+    width: '100%',
+    boxShadow: '',
+    border: `1px solid ${theme.text}`,
+    backgroundColor: `${theme.background}`,
+    color: `${theme.text}`,
 
     "&[disabled]": {
       opacity: '0.6',
@@ -252,7 +265,7 @@ const SubtitleAddButton: React.FC<{
           setIsPlusDisplay(false)
         } }}
       >
-        <FontAwesomeIcon icon={faPlus} size="2x" css={plusIconStyle}/>
+        <LuPlus css={[plusIconStyle, {fontSize: 42}]}/>
         <Form
           onSubmit={onSubmit}
           subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
@@ -267,6 +280,7 @@ const SubtitleAddButton: React.FC<{
                 */}
               <ThemeProvider theme={subtitleSelectStyle(theme)}>
                 <Select
+                  css={{ backgroundColor: `${theme.background}` }}
                   label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
                   name="selectedSubtitle"
                   data={selectData()}
@@ -279,14 +293,12 @@ const SubtitleAddButton: React.FC<{
                  * disabled elements, add a simple wrapper element, such as a span."
                  * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
               <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
-                <span>
-                  <button css={[basicButtonStyle(theme), createButtonStyle, { width: "100%" }]}
-                    type="submit"
-                    aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                    disabled={submitting || pristine}>
-                    {t("subtitles.createSubtitleButton-createButton")}
-                  </button>
-                </span>
+                <button css={[basicButtonStyle(theme), createButtonStyle]}
+                  type="submit"
+                  aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                  disabled={submitting || pristine}>
+                  {t("subtitles.createSubtitleButton-createButton")}
+                </button>
               </ThemedTooltip>
 
             </form>

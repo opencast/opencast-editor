@@ -88,9 +88,9 @@ spanish = { lang = "es" }
 # A list of icons to be displayed for languages defined above.
 # Values are strings but should preferably be Unicode icons.
 # These are optional and you can also choose to have no icons.
-"de-DE" = "🇩🇪"
-"en-US" = "🇺🇸"
-"es" = "🇪🇸"
+"de-DE" = "DE"
+"en-US" = "EN"
+"es" = "ES"
 
 [subtitles.defaultVideoFlavor]
 # Specify the default video in the subtitle video player by flavor

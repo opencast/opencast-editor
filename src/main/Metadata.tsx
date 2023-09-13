@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
-import { calendarStyle, errorBoxStyle, selectFieldStyle } from '../cssStyles'
+import { calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -13,20 +13,14 @@ import { Form, Field, FieldInputProps } from 'react-final-form'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 
-import {
-  DateTimePicker,
-  TimePicker,
-  showErrorOnBlur,
-} from 'mui-rff';
-import DateFnsUtils from "@date-io/date-fns";
-
 import { useTranslation } from 'react-i18next';
 import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
 import { AppDispatch } from "../redux/store";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemeProvider } from "@mui/material/styles";
+import { cloneDeep } from "lodash";
 import { ParseKeys } from "i18next";
 
 /**
@@ -49,7 +43,7 @@ const Metadata: React.FC = () => {
   const getError = useSelector(selectGetError);
   const postStatus = useSelector(selectPostStatus);
   const postError = useSelector(selectPostError);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Try to fetch URL from external API
   useEffect(() => {
@@ -100,30 +94,44 @@ const Metadata: React.FC = () => {
     display: 'grid',
   })
 
+  const catalogStyle = css({
+    background: `${theme.menu_background}`,
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    marginTop: '24px',
+    boxSizing: "border-box",
+    padding: '10px',
+  })
+
   const fieldStyle = css({
     display: 'flex',
-    flexFlow: 'row nowrap',
+    flexFlow: 'column nowrap',
     lineHeight: '2em',
     margin: '10px',
   })
 
   const fieldLabelStyle = css({
-    alignSelf: 'center',
     width: '110px',
     fontSize: '1em',
+    fontWeight: 'bold',
+    color: `${theme.text}`,
     lineHeight: '32px',
   })
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
     return css({
-      flex: '1',
       fontSize: '1em',
-      marginLeft: '15px',
       borderRadius: '5px',
       boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
       ...(isReadOnly && {color: `${theme.text}`}),
       color: `${theme.text}`,
-      outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`
+      outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`,
+      "&:hover": {
+        borderColor: isReadOnly ? undefined : theme.metadata_highlight,
+      },
+      "&:focus": {
+        borderColor: isReadOnly ? undefined : theme.metadata_highlight,
+      },
     });
   }
 
@@ -131,33 +139,10 @@ const Metadata: React.FC = () => {
     return (
       css({
         padding: '10px 10px',
-        border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
+        border: '1px solid #ccc',
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
-      })
-    );
-  }
-
-  const dateTimeTypeStyle = (isReadOnly: boolean) => {
-    return (
-      css({
-        padding: '5px 10px',
-        border: isReadOnly ? '0px solid #ccc' : '1px solid #ccc',
-        background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
-        '.Mui-disabled, .Mui-disabled button > svg': {
-          color: `${theme.disabled} !important`,
-          'WebkitTextFillColor': `${theme.disabled}`,
-        },
-        'button > svg': {
-          color: `${theme.indicator_color}`
-        },
-        '.MuiInput-input, button': {
-          color: `${theme.text}`,
-          background: 'transparent !important',
-          '&:hover': {
-            background: 'transparent !important',
-            outline: 'none'
-          }
-        },
+        opacity: isReadOnly ? "0.6" : "1",
+        resize: 'vertical',
       })
     );
   }
@@ -538,41 +523,38 @@ const Metadata: React.FC = () => {
 
     } else if (field.type === "date") {
       return (
-        <div data-testid="dateTimePicker" css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <ThemeProvider theme={calendarStyle(theme)}>
-            <DateTimePicker {...input}
-              name={field.id}
-              inputFormat="yyyy/MM/dd HH:mm"
-              disabled={field.readOnly}
-              dateFunsUtils={DateFnsUtils}
-              TextFieldProps={{
-                variant: 'standard', // Removes default outline
-                onBlur: (e: any) => { blurWithSubmit(e, input) },
-                showError: showErrorOnBlur
-              }}
-              leftArrowButtonText={t('metadata.calendar-prev')}
-              rightArrowButtonText={t('metadata.calendar-next')}
-            />
-          </ThemeProvider>
-        </div>
+        <ThemeProvider theme={calendarStyle(theme)}>
+          <input {...input}
+            type="datetime-local"
+            name={field.id}
+            // inputFormat="yyyy/MM/dd HH:mm"
+            onBlur={e => { blurWithSubmit(e, input) }}
+            readOnly={field.readOnly}
+            css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
+              {
+                resize: 'none',
+              }
+            ]}
+            data-testid="dateTimePicker"
+          />
+        </ThemeProvider>
       );
     } else if (field.type === "time") {
       return (
-        <div css={[fieldTypeStyle(field.readOnly), dateTimeTypeStyle(field.readOnly)]}>
-          <ThemeProvider theme={calendarStyle(theme)}>
-            <TimePicker {...input}
-              name={field.id}
-              inputFormat="HH:mm"
-              disabled={field.readOnly}
-              dateFunsUtils={DateFnsUtils}
-              TextFieldProps={{
-                variant: 'standard', // Removes default outline
-                onBlur: (e: any) => { blurWithSubmit(e, input) },
-                showError: showErrorOnBlur
-              }}
-            />
-          </ThemeProvider>
-        </div>
+        <ThemeProvider theme={calendarStyle(theme)}>
+          <input {...input}
+            type="time"
+            name={field.id}
+            // inputFormat="HH:mm"
+            onBlur={e => { blurWithSubmit(e, input) }}
+            readOnly={field.readOnly}
+            css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
+              {
+                resize: 'none',
+              }
+            ]}
+          />
+        </ThemeProvider>
       );
     } else if (field.type === "text_long") {
       return (
@@ -611,6 +593,18 @@ const Metadata: React.FC = () => {
       if ((field.type === "date" || field.type === "time") && input.value === "") {
         const {value, ...other} = input
         return generateComponent(field, other)
+      }
+      // <input type="datetime-local"> is picky about its value and won't accept
+      // global datetime strings, so we have to convert them to local ourselves.
+      // TODO: Also we really should not be modifying the input element like that
+      // so ideally the conversion happens somewhere else in the code
+      // (see error in the console for further details)
+      if ((field.type === "date" || field.type === "time")) {
+        input = cloneDeep(input)
+        const leDate = new Date(input.value)
+        leDate.setMinutes(leDate.getMinutes() - leDate.getTimezoneOffset());
+        input.value = leDate.toISOString().slice(0, 16);
+        return generateComponent(field, input)
       } else {
         return generateComponent(field, input)
       }
@@ -642,13 +636,15 @@ const Metadata: React.FC = () => {
     catalogIndex: number,
     configureFields: { [key: string]: configureFieldsAttributes }
   ) => {
+
+
     return (
-      <div key={catalogIndex}>
-        <h2>
+      <div key={catalogIndex} css={catalogStyle}>
+        <div css={[titleStyle(theme), titleStyleBold(theme)]}>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
             t(`metadata.${catalog.title.replaceAll(".", "-")}` as ParseKeys) as string : catalog.title
           }
-        </h2>
+        </div>
 
         {catalog.fields.map((field, i) => {
           // Render fields based on given array (usually parsed from config settings)
