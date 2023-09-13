@@ -58,7 +58,9 @@
       "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
       "success-text": "Changes saved successfully! You can now close the editor or continue working.",
       "success-tooltip-aria": "Saved successfully",
-      "saveArea-tooltip": "Save Area"
+      "saveArea-tooltip": "Save Area",
+      "confirm-success": "Okay",
+      "cancel-save": "Don't save"
     },
 
     "discard": {
@@ -131,7 +133,7 @@
       },
       "language": {
         "LANGUAGES-SLOVENIAN": "Slovenian",
-        "LANGUAGES-PORTUGUESE": "Portuguese",
+        "LANGUAGES-PORTUGESE": "Portuguese",
         "LANGUAGES-ROMANSH": "Romansh",
         "LANGUAGES-ARABIC": "Arabic",
         "LANGUAGES-POLISH": "Polish",
@@ -218,7 +220,7 @@
     },
 
     "trackSelection": {
-      "description": "Select or deselect which tracks are used for processing and publication.",
+      "title": "Select track(s) for processing",
       "trackInactive": "inactive",
       "deleteTrackText": "Delete Track",
       "restoreTrackText": "Restore Track",
@@ -265,7 +267,7 @@
     },
 
     "keyboardControls": {
-      "header": "Keyboard Controls",
+      "header": "Shortcuts",
       "defaultGroupName": "General",
       "missingLabel": "Unknown",
       "groupVideoPlayer": "Video Player",
@@ -283,11 +285,14 @@
 
     "theme": {
       "appearance": "Appearance",
-      "selectThemesLabel": "Appearances",
-      "darkmode": "Dark mode",
-      "lightmode": "Light mode",
-      "system": "System design",
-      "high-contrast-dark": "High contrast (Dark mode)",
-      "high-contrast-light": "High contrast (Light mode)"
+      "dark": "Dark",
+      "light": "Light",
+      "auto": "Auto",
+      "dark-high-contrast": "Dark (High contrast)",
+      "light-high-contrast": "Light (High contrast)"
+    },
+
+    "language": {
+      "language": "Language"
     }
   }

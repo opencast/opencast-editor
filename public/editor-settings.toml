@@ -35,9 +35,9 @@ spanish = { lang = "es" }
 
 
 [subtitles.icons]
-"de-DE" = "🇩🇪"
-"en-US" = "🇺🇸"
-"es" = "🇪🇸"
+"de-DE" = "DE"
+"en-US" = "EN"
+"es" = "ES"
 
 [thumbnail]
 show = true

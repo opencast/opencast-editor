@@ -19,10 +19,11 @@ import { selectVideos } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
-import { VideoControls, VideoPlayer } from "./Video";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
+import { VideoPlayer } from "./VideoPlayers";
+import VideoControls from "./VideoControls";
 import Select from "react-select";
 import { selectFieldStyle } from "../cssStyles";
 
@@ -118,6 +119,8 @@ const SubtitleVideoArea : React.FC = () => {
             url={getTrackURI()}
             isPrimary={true}
             subtitleUrl={subtitleUrl}
+            first={true}
+            last={true}
             selectIsPlaying={selectIsPlaying}
             selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
             selectPreviewTriggered={selectPreviewTriggered}
@@ -162,7 +165,7 @@ const VideoSelectDropdown : React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const dropdownName = "flavors"
 
