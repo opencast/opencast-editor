@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { IconType } from "react-icons";
 
 interface error {
   error: boolean,
   errorTitle?: string,
   errorMessage: string,
   errorDetails?: string,
-  errorIcon?: IconDefinition,
+  errorIcon?: IconType,
 }
 
 const initialState: error = {
