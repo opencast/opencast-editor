@@ -54,7 +54,9 @@
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
         "success-text": "Änderungen erfolgreich gespeichert! Sie können den Editor nun schließen oder weiter arbeiten.",
         "success-tooltip-aria": "Erfolgreich gespeichert",
-        "saveArea-tooltip": "Speicherbereich"
+        "saveArea-tooltip": "Speicherbereich",
+        "confirm-success": "Okay",
+        "cancel-save": "Nicht speichern"
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
@@ -121,7 +123,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slowenisch",
-            "LANGUAGES-PORTUGUESE": "Portugiesisch",
+            "LANGUAGES-PORTUGESE": "Portugiesisch",
             "LANGUAGES-ROMANSH": "Rätoromanisch",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Polnisch",
@@ -202,7 +204,7 @@
         "goBack-button": "Nein, zurück"
     },
     "trackSelection": {
-        "description": "Wählen oder deaktivieren Sie die Spuren für die Verarbeitung und Veröffentlichung.",
+        "title": "Spur(en) für die Verarbeitung auswählen",
         "trackInactive": "inaktiv",
         "deleteTrackText": "Spur löschen",
         "restoreTrackText": "Spur wiederherstellen",
@@ -244,7 +246,7 @@
         "overviewTimelineTooltip": "Zeitleiste-Übersicht"
     },
     "keyboardControls": {
-        "header": "Tastatursteuerung",
+        "header": "Tastenkürzel",
         "defaultGroupName": "Allgemein",
         "missingLabel": "Unbekannt",
         "groupVideoPlayer": "Videoplayer",
@@ -261,11 +263,13 @@
     },
     "theme": {
         "appearance": "Erscheinungsbild",
-        "selectThemesLabel": "Darstellung",
-        "darkmode": "Dunkles Design",
-        "lightmode": "Helles Design",
-        "system": "System Design",
-        "high-contrast-dark": "Hoher Kontrast (Dunkles Design)",
-        "high-contrast-light": "Hoher Kontrast (Helles Design)"
+        "dark": "Dunkel",
+        "light": "Hell",
+        "auto": "Auto",
+        "dark-high-contrast": "Dunkel (hoher Kontrast)",
+        "light-high-contrast": "Hell (hoher Kontrast)"
+    },
+    "language": {
+        "language": "Sprache"
     }
 }

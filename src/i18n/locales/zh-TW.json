@@ -54,7 +54,9 @@
         "info-text": "影片不會被處理，但所有裁剪訊息都將存儲在 Opencast 中。 您可以稍後繼續編輯。",
         "success-text": "Changes saved successfully! You can now close the editor or continue working.",
         "success-tooltip-aria": "儲存成功",
-        "saveArea-tooltip": "儲存區域"
+        "saveArea-tooltip": "儲存區域",
+        "confirm-success": "Okay",
+        "cancel-save": "Don't save"
     },
     "discard": {
         "headline-text": "放棄變更",
@@ -121,7 +123,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "斯洛文尼亞語",
-            "LANGUAGES-PORTUGUESE": "Portuguese",
+            "LANGUAGES-PORTUGESE": "Portuguese",
             "LANGUAGES-ROMANSH": "羅曼什語",
             "LANGUAGES-ARABIC": "阿拉伯語",
             "LANGUAGES-POLISH": "波蘭語",
@@ -202,7 +204,7 @@
         "goBack-button": "不，回到上一步"
     },
     "trackSelection": {
-        "description": "選擇或取消選擇用於處理和發佈的影音軌道。",
+        "title": "Select track(s) for processing",
         "trackInactive": "不活動的",
         "deleteTrackText": "刪除影音軌道",
         "restoreTrackText": "還原影音軌道",
@@ -244,7 +246,7 @@
         "overviewTimelineTooltip": "Timeline overview"
     },
     "keyboardControls": {
-        "header": "鍵盤控制",
+        "header": "Shortcuts",
         "defaultGroupName": "一般",
         "missingLabel": "未知",
         "groupVideoPlayer": "Video Player",
@@ -261,11 +263,13 @@
     },
     "theme": {
         "appearance": "Appearance",
-        "selectThemesLabel": "Appearances",
-        "darkmode": "Dark mode",
-        "lightmode": "Light mode",
-        "system": "System design",
-        "high-contrast-dark": "High contrast (Dark mode)",
-        "high-contrast-light": "High contrast (Light mode)"
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Auto",
+        "dark-high-contrast": "Dark (High contrast)",
+        "light-high-contrast": "Light (High contrast)"
+    },
+    "language": {
+        "language": "語言"
     }
 }
