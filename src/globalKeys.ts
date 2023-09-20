@@ -45,20 +45,20 @@ export const getGroupName = (groupName: string) => {
   }
 }
 
-export interface KeyMapp {
-  [property: string]: KeyGroupp
+export interface IKeyMap {
+  [property: string]: IKeyGroup
 }
 
-export interface KeyGroupp {
-  [property: string]: Keyy
+export interface IKeyGroup {
+  [property: string]: IKey
 }
 
-export interface Keyy {
+export interface IKey {
   name: string
   key: string
 }
 
-export const KEYMAP: KeyMapp = {
+export const KEYMAP: IKeyMap = {
   videoPlayer: {
     play: {
       name: "keyboardControls.videoPlayButton",
