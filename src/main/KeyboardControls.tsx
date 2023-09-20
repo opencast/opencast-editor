@@ -122,18 +122,15 @@ const KeyboardControls: React.FC = () => {
     if (KEYMAP && Object.keys(KEYMAP).length > 0) {
 
       const groups: JSX.Element[] = [];
-      Object.entries(KEYMAP).forEach(([key, value], index) => {
-        const entries : { [key: string]: string[][] } = {}
-        Object.entries(value).forEach(([, value]) => {
-          const sequences = value.key.split(",").map(item => item.trim())
-          const lol: string[][] = []
-          Object.entries(sequences).forEach(([, value]) => {
-            const keys = value.split("+").map(item => item.trim())
-            lol.push(keys)
+      Object.entries(KEYMAP).forEach(([groupName, group], index) => {
+        const entries : { [groupName: string]: string[][] } = {}
+        Object.entries(group).forEach(([, action]) => {
+          const sequences = action.key.split(",").map(item => item.trim())
+          entries[action.name] = Object.entries(sequences).map(([, sequence]) => {
+            return sequence.split("+").map(item => item.trim())
           })
-          entries[value.name] = lol
         })
-        groups.push(<Group name={getGroupName(key)} entries={entries} key={index}/>)
+        groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index}/>)
       })
 
       return (
