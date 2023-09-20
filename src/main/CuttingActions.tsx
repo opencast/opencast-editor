@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
 } from '../redux/videoSlice'
-import { KEYMAP } from "../globalKeys";
+import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 import { useTranslation } from 'react-i18next';
@@ -67,24 +67,24 @@ const CuttingActions: React.FC = () => {
     <div css={cuttingStyle}>
       <CuttingActionsButton Icon={LuScissors}
         actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut}
-        tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: KEYMAP.cutting.cut.key })}
-        ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: KEYMAP.cutting.cut.key })}
+        tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
+        ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
       />
       <div css={verticalLineStyle} />
       <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
-        hotKeyName={KEYMAP.cutting.delete.key}
+        hotKeyName={rewriteKeys(KEYMAP.cutting.delete.key)}
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuChevronLeft}
         actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
-        tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: KEYMAP.cutting.mergeLeft.key })}
-        ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: KEYMAP.cutting.mergeLeft.key })}
+        tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
+        ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuChevronRight}
         actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
-        tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: KEYMAP.cutting.mergeRight.key})}
-        ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: KEYMAP.cutting.mergeRight.key })}
+        tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key)})}
+        ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
       />
       {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
         tooltip="Not implemented"

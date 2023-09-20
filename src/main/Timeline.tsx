@@ -16,7 +16,7 @@ import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
-import { KEYMAP } from '../globalKeys';
+import { KEYMAP, rewriteKeys } from '../globalKeys';
 
 import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
@@ -251,10 +251,10 @@ export const Scrubber: React.FC<{
           aria-label={t("timeline.scrubber-text-aria",
             {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
               segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
-              moveLeft: KEYMAP.timeline.left.key,
-              moveRight: KEYMAP.timeline.right.key,
-              increase: KEYMAP.timeline.increase.key,
-              decrease: KEYMAP.timeline.decrease.key })}
+              moveLeft: rewriteKeys(KEYMAP.timeline.left.key),
+              moveRight: rewriteKeys(KEYMAP.timeline.right.key),
+              increase: rewriteKeys(KEYMAP.timeline.increase.key),
+              decrease: rewriteKeys(KEYMAP.timeline.decrease.key) })}
           tabIndex={0}>
           <LuMenu css={scrubberDragHandleIconStyle}/>
         </div>

@@ -13,7 +13,7 @@ import {
 import { convertMsToReadableString } from '../util/utilityFunctions'
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
-import { KEYMAP } from "../globalKeys";
+import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTranslation } from 'react-i18next';
 
 import { RootState } from "../redux/store";
@@ -144,12 +144,12 @@ const PreviewMode: React.FC<{
   return (
     <ThemedTooltip
       title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"),
-        hotkeyName: KEYMAP.videoPlayer.preview.key })}
+        hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
     >
       <div css={previewModeStyle}
         ref={ref}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-        aria-label={t("video.previewButton-aria", { hotkeyName: KEYMAP.videoPlayer.preview.key })}
+        aria-label={t("video.previewButton-aria", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
         onClick={() => switchPlayPreview(ref)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
           switchPlayPreview(undefined)

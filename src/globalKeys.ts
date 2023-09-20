@@ -20,12 +20,11 @@ const groupSubtitleList = "keyboardControls.groupSubtitleList"
 /**
  * Helper function that rewrites keys based on the OS
  */
-const rewriteKeys = (key: string) => {
+export const rewriteKeys = (key: string) => {
   let newKey = key
   if (isMacOs) {
     newKey = newKey.replace("Alt", "Option")
   }
-  newKey = isMacOs ? newKey.replace("Mod", "Command") : newKey.replace("Mod", "Control")
 
   return newKey
 }
@@ -56,69 +55,69 @@ export const KEYMAP: IKeyMap = {
   videoPlayer: {
     play: {
       name: "keyboardControls.videoPlayButton",
-      key: rewriteKeys("Mod+Alt+Space, Space"),
+      key: "Shift+Alt+Space, Space",
     },
     preview: {
       name: "video.previewButton",
-      key: rewriteKeys("Mod+Alt+p"),
+      key: "Shift+Alt+p",
     }
   },
   cutting: {
     cut: {
       name: "cuttingActions.cut-button",
-      key: rewriteKeys("Mod+Alt+c"),
+      key: "Shift+Alt+c",
     },
     delete: {
       name: "cuttingActions.delete-button",
-      key: rewriteKeys("Mod+Alt+d"),
+      key: "Shift+Alt+d",
     },
     mergeLeft: {
       name: "cuttingActions.mergeLeft-button",
-      key: rewriteKeys("Mod+Alt+n"),
+      key: "Shift+Alt+n",
     },
     mergeRight: {
       name: "cuttingActions.mergeRight-button",
-      key: rewriteKeys("Mod+Alt+m"),
+      key: "Shift+Alt+m",
     },
   },
   timeline: {
     left: {
       name: "keyboardControls.scrubberLeft",
-      key: rewriteKeys("Mod+Alt+j , Left"),
+      key: "Shift+Alt+j , Left",
     },
     right: {
       name: "keyboardControls.scrubberRight",
-      key: rewriteKeys("Mod+Alt+l, Right"),
+      key: "Shift+Alt+l, Right",
     },
     increase: {
       name: "keyboardControls.scrubberIncrease",
-      key: rewriteKeys("Mod+Alt+i, Up"),
+      key: "Shift+Alt+i, Up",
     },
     decrease: {
       name: "keyboardControls.scrubberDecrease",
-      key: rewriteKeys("Mod+Alt+k, Down"),
+      key: "Shift+Alt+k, Down",
     },
   },
   subtitleList: {
     addAbove: {
       name: "subtitleList.addSegmentAbove",
-      key: rewriteKeys("Mod+Alt+q"),
+      key: "Shift+Alt+q",
     },
     addBelow: {
       name: "subtitleList.addSegmentBelow",
-      key: rewriteKeys("Mod+Alt+a"),
+      key: "Shift+Alt+a",
     },
     jumpAbove: {
       name: "subtitleList.jumpToSegmentAbove",
-      key: rewriteKeys("Mod+Alt+w"),
+      key: "Shift+Alt+w",
     },
     jumpBelow: {
       name: "subtitleList.jumpToSegmentBelow",
-      key: rewriteKeys("Mod+Alt+s"),
+      key: "Shift+Alt+s",
     },
     delete: {
       name: "subtitleList.deleteSegment",
-      key: rewriteKeys("Mod+Alt+d"),
+      key: "Shift+Alt+d",
     }
   }
 }

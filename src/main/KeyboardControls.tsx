@@ -5,7 +5,7 @@ import React from "react";
 
 import { useTranslation, Trans} from "react-i18next";
 import { flexGapReplacementStyle } from "../cssStyles";
-import { getGroupName, KEYMAP } from "../globalKeys";
+import { getGroupName, KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTheme } from "../themes";
 import { titleStyle, titleStyleBold } from '../cssStyles'
 
@@ -127,7 +127,7 @@ const KeyboardControls: React.FC = () => {
         Object.entries(group).forEach(([, action]) => {
           const sequences = action.key.split(",").map(item => item.trim())
           entries[action.name] = Object.entries(sequences).map(([, sequence]) => {
-            return sequence.split("+").map(item => item.trim())
+            return sequence.split("+").map(item => rewriteKeys(item.trim()))
           })
         })
         groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index}/>)
