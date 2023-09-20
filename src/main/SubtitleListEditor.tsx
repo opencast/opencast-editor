@@ -379,13 +379,13 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   })
 
   return (
-    <div ref={hotkeyRef} css={segmentStyle} tabIndex={-1} style={{
+    <div ref={hotkeyRef} tabIndex={-1} css={[segmentStyle, {
       ...props.style,
       // Used for padding in the VariableSizeList
       top: props.style.top !== undefined ? `${parseFloat(props.style.top.toString()) + PADDING_SIZE}px` : '0px',
       height: props.style.height !== undefined ? `${parseFloat(props.style.height.toString()) - PADDING_SIZE}px` : '0px',
       zIndex: '1000',
-    }}>
+    }]}>
 
       <textarea
         ref={textAreaRef}
