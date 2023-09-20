@@ -276,30 +276,35 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   }
 
   // Maps functions to hotkeys
-  const hotkeyRef = useHotkeys<HTMLDivElement>([KEYMAP.subtitleList.addAbove.key, KEYMAP.subtitleList.addBelow.key, KEYMAP.subtitleList.jumpAbove.key, KEYMAP.subtitleList.jumpBelow.key, KEYMAP.subtitleList.delete.key],
-    (_, handler) => {
-      switch (handler.keys?.join('')) {
-        case KEYMAP.subtitleList.addAbove.key.split('+').pop():
-          addCueAbove()
-          break;
-        case KEYMAP.subtitleList.addBelow.key.split('+').pop():
-          addCueBelow()
-          break;
-        case KEYMAP.subtitleList.jumpAbove.key.split('+').pop():
-          dispatch(setFocusSegmentTriggered(true))
-          dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.idInternal}))
-          break;
-        case KEYMAP.subtitleList.jumpBelow.key.split('+').pop():
-          dispatch(setFocusSegmentTriggered(true))
-          dispatch(setFocusToSegmentBelowId({identifier: identifier, segmentId: cue.idInternal}))
-          break;
-        case KEYMAP.subtitleList.delete.key.split('+').pop():
-          dispatch(setFocusSegmentTriggered(true))
-          dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.idInternal}))
-          deleteCue()
-          break;
-      }
-    }, { enableOnFormTags: ['input', 'select', 'textarea'] }, [identifier, cue, props.index])
+  const hotkeyRef = useHotkeys<HTMLDivElement>([
+    KEYMAP.subtitleList.addAbove.key,
+    KEYMAP.subtitleList.addBelow.key,
+    KEYMAP.subtitleList.jumpAbove.key,
+    KEYMAP.subtitleList.jumpBelow.key,
+    KEYMAP.subtitleList.delete.key
+  ], (_, handler) => {
+    switch (handler.keys?.join('')) {
+      case KEYMAP.subtitleList.addAbove.key.split('+').pop():
+        addCueAbove()
+        break;
+      case KEYMAP.subtitleList.addBelow.key.split('+').pop():
+        addCueBelow()
+        break;
+      case KEYMAP.subtitleList.jumpAbove.key.split('+').pop():
+        dispatch(setFocusSegmentTriggered(true))
+        dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.idInternal}))
+        break;
+      case KEYMAP.subtitleList.jumpBelow.key.split('+').pop():
+        dispatch(setFocusSegmentTriggered(true))
+        dispatch(setFocusToSegmentBelowId({identifier: identifier, segmentId: cue.idInternal}))
+        break;
+      case KEYMAP.subtitleList.delete.key.split('+').pop():
+        dispatch(setFocusSegmentTriggered(true))
+        dispatch(setFocusToSegmentAboveId({identifier: identifier, segmentId: cue.idInternal}))
+        deleteCue()
+        break;
+    }
+  }, { enableOnFormTags: ['input', 'select', 'textarea'] }, [identifier, cue, props.index])
 
   const setTimeToSegmentStart = () => {
     dispatch(setCurrentlyAt(cue.startTime))
