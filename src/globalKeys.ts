@@ -7,6 +7,8 @@
  *
  * If you add a new keyMap, be sure to add it to the getAllHotkeys function
  */
+import { match } from '@opencast/appkit';
+import { ParseKeys } from 'i18next';
 import { isMacOs } from 'react-device-detect';
 
 // Groups for displaying hotkeys in the overview page
@@ -28,21 +30,13 @@ const rewriteKeys = (key: string) => {
   return newKey
 }
 
-export const getGroupName = (groupName: string) => {
-  switch (groupName) {
-    case "videoPlayer":
-      return groupVideoPlayer
-      break
-    case "cutting":
-      return groupCuttingView
-      break
-    case "timeline":
-      return groupCuttingViewScrubber
-      break
-    case "subtitleList":
-      return groupSubtitleList
-      break
-  }
+export const getGroupName = (groupName: string) : ParseKeys => {
+  return match(groupName, {
+    videoPlayer: () => groupVideoPlayer,
+    cutting: () => groupCuttingView,
+    timeline: () => groupCuttingViewScrubber,
+    subtitleList: () => groupSubtitleList,
+  })
 }
 
 export interface IKeyMap {
