@@ -42,12 +42,20 @@ const TheEnd : React.FC = () => {
     ...(flexGapReplacementStyle(20, false)),
   })
 
+  const restartOrBackStyle = css({
+    display: "flex",
+    flexDirection: 'row',
+    ...(flexGapReplacementStyle(20, false)),
+  })
+
   return (
     <div css={theEndStyle}>
       {endState === 'discarded' ? <LuXCircle css={{fontSize: 80}}/> : <LuCheckCircle css={{fontSize: 80}}/> }
       <div>{text()}</div>
-      {(endState === 'discarded') && <StartOverButton />}
-      <CallbackButton />
+      <div css={restartOrBackStyle}>
+        <CallbackButton />
+        {(endState === 'discarded') && <StartOverButton />}
+      </div>
     </div>
   );
 }

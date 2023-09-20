@@ -6,6 +6,8 @@ import Discard from "./Discard"
 import WorkflowSelection from "./WorkflowSelection";
 import WorkflowConfiguration from "./WorkflowConfiguration";
 
+import { LuDoorOpen} from "react-icons/lu";
+
 import { css } from '@emotion/react'
 import { basicButtonStyle, navigationButtonStyle } from '../cssStyles'
 
@@ -95,7 +97,7 @@ export const CallbackButton : React.FC = () => {
 
   const { t } = useTranslation();
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const openCallbackUrl = () => {
     window.open(settings.callbackUrl, "_self");
@@ -110,7 +112,7 @@ export const CallbackButton : React.FC = () => {
           onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
             openCallbackUrl()
           } }}>
-          <FontAwesomeIcon icon={faRightFromBracket} size="1x" />
+          <LuDoorOpen />
           <span>{t("various.callback-button")}</span>
         </div>
       }
