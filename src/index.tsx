@@ -30,10 +30,6 @@ const initialize = Promise.race([
   sleep(300),
 ]);
 
-const render = (body: JSX.Element) => {
-  root.render(body);
-};
-
 initialize.then(
 
   () => {
@@ -49,7 +45,7 @@ initialize.then(
   },
 
   // This error case is vey unlikely to occur.
-  e => render(<p>
+  e => root.render(<p>
     {`Fatal error while loading app: ${e.message}`}
     <br />
     This might be caused by a incorrect configuration by the system administrator.
