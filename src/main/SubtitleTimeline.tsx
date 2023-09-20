@@ -73,10 +73,26 @@ const SubtitleTimeline: React.FC = () => {
   // Callbacks for keyboard controls
   // TODO: Better increases and decreases than ten intervals
   // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
-  useHotkeys(KEYMAP.timeline.left.key, () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))), {}, [currentlyAt, keyboardJumpDelta]);
-  useHotkeys(KEYMAP.timeline.right.key, () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))), {}, [currentlyAt, keyboardJumpDelta, duration]);
-  useHotkeys(KEYMAP.timeline.increase.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)), {}, [keyboardJumpDelta]);
-  useHotkeys(KEYMAP.timeline.decrease.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)), {}, [keyboardJumpDelta]);
+  useHotkeys(
+    KEYMAP.timeline.left.key,
+    () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
+    {}, [currentlyAt, keyboardJumpDelta]
+  );
+  useHotkeys(
+    KEYMAP.timeline.right.key,
+    () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
+    {}, [currentlyAt, keyboardJumpDelta, duration]
+  );
+  useHotkeys(
+    KEYMAP.timeline.increase.key,
+    () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
+    {}, [keyboardJumpDelta]
+  );
+  useHotkeys(
+    KEYMAP.timeline.decrease.key,
+    () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)),
+    {}, [keyboardJumpDelta]
+  );
 
   // Callback for the scroll container
   const onEndScroll = (e: ScrollEvent) => {
