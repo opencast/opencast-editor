@@ -94,7 +94,7 @@ const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequence
           {sequence.map((singleKey, index) => (
             <>
               <div css={singleKeyStyle} key={index}>{singleKey}</div>
-              {sequence.length - 1 !== index ? <div css={orStyle}>+</div> : ''}
+              {sequence.length - 1 !== index && <div css={orStyle}>+</div>}
             </>
           ))}
           <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
