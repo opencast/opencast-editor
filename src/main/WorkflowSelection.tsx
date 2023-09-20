@@ -76,7 +76,7 @@ const WorkflowSelection : React.FC = () => {
     return (
       <div css={workflowSelectionStyle}>
         <h2>{topTitle}</h2>
-        {!!topText}
+        {topText}
         { hasWorkflowButtons &&
             <RadioGroup
               css={workflowSelectionSelectionStyle}
