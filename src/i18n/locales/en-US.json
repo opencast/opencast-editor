@@ -217,7 +217,8 @@
       "error-details-text": "Details: {{errorMessage}}\n",
       "error-text": "An error has occurred. Please wait a bit and try again.",
       "goBack-button": "No, take me back",
-      "callback-button": "Back to previous system"
+      "callback-button-system": "Back to {{system}}",
+      "callback-button-generic": "Back to previous system"
     },
 
     "trackSelection": {

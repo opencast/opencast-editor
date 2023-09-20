@@ -202,7 +202,8 @@
         "error-details-text": "Details: {{errorMessage}}\n",
         "error-text": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.",
         "goBack-button": "Nein, zurück",
-        "callback-button": "Zurück zum vorigen System"
+        "callback-button-system": "Zurück zu {{system}}",
+        "callback-button-generic": "Zurück zum vorigen System"
     },
     "trackSelection": {
         "title": "Spur(en) für die Verarbeitung auswählen",

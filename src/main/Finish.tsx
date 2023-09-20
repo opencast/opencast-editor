@@ -113,7 +113,7 @@ export const CallbackButton : React.FC = () => {
             openCallbackUrl()
           } }}>
           <LuDoorOpen />
-          <span>{t("various.callback-button")}</span>
+          <span>{settings.callbackSystem ? t("various.callback-button-system", {system: settings.callbackSystem}) : t("various.callback-button-generic")}</span>
         </div>
       }
     </>

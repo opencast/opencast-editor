@@ -43,6 +43,7 @@ interface iSettings {
   id: string | undefined,
   allowedCallbackPrefixes: string[],
   callbackUrl: string | undefined,
+  callbackSystem: string | undefined,
   opencast: {
     url: string,
     name: string | undefined,
@@ -80,6 +81,7 @@ const defaultSettings: iSettings = {
   id: undefined,
   allowedCallbackPrefixes: [],
   callbackUrl: undefined,
+  callbackSystem: undefined,
   opencast: {
     url: window.location.origin,
     name: undefined,
@@ -389,6 +391,7 @@ const SCHEMA = {
   id: types.string,
   allowedCallbackPrefixes: types.array,
   callbackUrl: types.string,
+  callbackSystem: types.string,
   opencast: {
     url: types.string,
     name: types.string,

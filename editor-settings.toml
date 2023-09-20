@@ -24,6 +24,12 @@
 # Default: undefined
 #callbackUrl =
 
+# Name of system to go back to
+# If undefined, a generic system name is used instead of a speficic name
+# Type: string | undefined
+# Default: undefined
+#callbackSystem =
+
 
 ####
 # Metadata

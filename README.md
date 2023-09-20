@@ -71,6 +71,7 @@ Options which are usually specified in the configuration file are documented in 
 | mediaPackageId          | ✓   | ✓    | Deprecated. Use `id` instead.                                        |
 | allowedCallbackPrefixes | ✗   | ✓    | Allowed callback prefixes in callback url.                           |
 | callbackUrl             | ✓   | ✓    | Callback url to go back after finish.                                |
+| callbackSystem          | ✓   | ✓    | Callback system name to go back to.                                  |
 | opencast.url            | ✗   | ✓    | URL of the opencast server to connect to.                            |
 | opencast.name           | ✗   | ✓    | Opencast user to use. For demo purposes only.                        |
 | opencast.password       | ✗   | ✓    | Password to use for authentication. For demo purposes only.          |
