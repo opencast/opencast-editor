@@ -179,7 +179,8 @@ const videoSlice = createSlice({
       state.hasChanges = true
     },
     mergeAll: state => {
-      mergeSegments(state, 0, state.segments.length - 1)
+      mergeSegments(state, state.activeSegmentIndex, 0)
+      mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1)
       state.hasChanges = true
     },
   },
