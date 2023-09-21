@@ -54,7 +54,9 @@
         "info-text": "Το βίντεο δεν θα επεξεργαστεί, αλλά όλες οι πληροφορίες κοπής θα αποθηκευτούν στο Opencast. Μπορείτε να συνεχίσετε την επεξεργασία σας αργότερα.",
         "success-text": "Οι αλλαγές αποθηκεύτηκαν επιτυχώς! Τώρα μπορείτε να κλείσετε τον επεξεργαστή βίντεο ή να συνεχίσετε να εργάζεστε στο βίντεο.",
         "success-tooltip-aria": "Αποθηκεύτηκε επιτυχώς",
-        "saveArea-tooltip": "Αποθήκευση Περιοχής"
+        "saveArea-tooltip": "Αποθήκευση Περιοχής",
+        "confirm-success": "Okay",
+        "cancel-save": "Don't save"
     },
     "discard": {
         "headline-text": "Απόρριψη αλλαγών",
@@ -121,7 +123,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Σλοβενικά",
-            "LANGUAGES-PORTUGUESE": "Πορτογαλικά",
+            "LANGUAGES-PORTUGESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Ρωμανικά",
             "LANGUAGES-ARABIC": "Αραβικά",
             "LANGUAGES-POLISH": "Πολωνικά",
@@ -202,7 +204,7 @@
         "goBack-button": "Όχι, πήγαινέ με πίσω"
     },
     "trackSelection": {
-        "description": "Επιλέξτε ή αποεπιλέξτε ποια κομμάτια χρησιμοποιούνται για την επεξεργασία και τη δημοσίευση.",
+        "title": "Select track(s) for processing",
         "trackInactive": "ανενεργό",
         "deleteTrackText": "Διαγραφή Κομματιού",
         "restoreTrackText": "Επαναφορά Κομματιού",
@@ -244,7 +246,7 @@
         "overviewTimelineTooltip": "Επισκόπηση χρονολογίου"
     },
     "keyboardControls": {
-        "header": "Έλεγχοι Πληκτρολογίου",
+        "header": "Shortcuts",
         "defaultGroupName": "Γενικά",
         "missingLabel": "Άγνωστο",
         "groupVideoPlayer": "Αναπαραγωγή Βίντεο",
@@ -261,11 +263,13 @@
     },
     "theme": {
         "appearance": "Εμφάνιση",
-        "selectThemesLabel": "Εμφανίσεις",
-        "darkmode": "Σκοτεινή λειτουργία",
-        "lightmode": "Φωτεινή λειτουργία",
-        "system": "Σχεδιασμός συστήματος",
-        "high-contrast-dark": "Υψηλή αντίθεση (Λειτουργία μαύρου)",
-        "high-contrast-light": "Υψηλή αντίθεση (λειτουργία άσπρου)"
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Auto",
+        "dark-high-contrast": "Dark (High contrast)",
+        "light-high-contrast": "Light (High contrast)"
+    },
+    "language": {
+        "language": "Γλώσσα"
     }
 }

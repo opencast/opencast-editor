@@ -54,7 +54,9 @@
         "info-text": "De video wordt niet verwerkt, maar alle snijgegevens worden opgeslagen in Opencast. U kunt later doorgaan met uw bewerking.",
         "success-text": "Changes saved successfully! You can now close the editor or continue working.",
         "success-tooltip-aria": "Succesvol opgeslagen",
-        "saveArea-tooltip": "Gebied opslaan"
+        "saveArea-tooltip": "Gebied opslaan",
+        "confirm-success": "Okay",
+        "cancel-save": "Don't save"
     },
     "discard": {
         "headline-text": "Annuleren",
@@ -121,7 +123,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Sloveens",
-            "LANGUAGES-PORTUGUESE": "Portuguese",
+            "LANGUAGES-PORTUGESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Reto-Romaans",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Pools",
@@ -202,7 +204,7 @@
         "goBack-button": "Nee, breng me terug"
     },
     "trackSelection": {
-        "description": "Selecteer of deselecteer welke sporen worden gebruikt voor verwerking en publicatie.",
+        "title": "Select track(s) for processing",
         "trackInactive": "inactief",
         "deleteTrackText": "Verwijder spoor",
         "restoreTrackText": "Herstel spoor",
@@ -244,7 +246,7 @@
         "overviewTimelineTooltip": "Timeline overview"
     },
     "keyboardControls": {
-        "header": "Keyboard Controls",
+        "header": "Shortcuts",
         "defaultGroupName": "General",
         "missingLabel": "Unknown",
         "groupVideoPlayer": "Video Player",
@@ -261,11 +263,13 @@
     },
     "theme": {
         "appearance": "Appearance",
-        "selectThemesLabel": "Appearances",
-        "darkmode": "Dark mode",
-        "lightmode": "Light mode",
-        "system": "System design",
-        "high-contrast-dark": "High contrast (Dark mode)",
-        "high-contrast-light": "High contrast (Light mode)"
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Auto",
+        "dark-high-contrast": "Dark (High contrast)",
+        "light-high-contrast": "Light (High contrast)"
+    },
+    "language": {
+        "language": "Taal"
     }
 }

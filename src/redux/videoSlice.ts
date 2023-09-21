@@ -178,6 +178,11 @@ const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
       state.hasChanges = true
     },
+    mergeAll: state => {
+      mergeSegments(state, state.activeSegmentIndex, 0)
+      mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1)
+      state.hasChanges = true
+    },
   },
   // For Async Requests
   extraReducers: builder => {
@@ -258,22 +263,25 @@ export const parseSegments = (segments: Segment[], duration: number) => {
 }
 
 /**
- * Helper function for merging two segments
+ * Helper function for merging segments
  */
-const mergeSegments = (state: video, activeSegmentIndex: number, mergeSegmentIndex: number) => {
+const mergeSegments = (state: video, startSegmentIndex: number, endSegmentIndex: number) => {
   // Check if mergeSegmentIndex is valid
-  if (mergeSegmentIndex < 0 || mergeSegmentIndex > state.segments.length - 1) {
+  if (endSegmentIndex < 0 || endSegmentIndex > state.segments.length - 1) {
     return
   }
 
   // Increase activeSegment length
-  state.segments[activeSegmentIndex].start = Math.min(
-    state.segments[activeSegmentIndex].start, state.segments[mergeSegmentIndex].start)
-  state.segments[activeSegmentIndex].end = Math.max(
-    state.segments[activeSegmentIndex].end, state.segments[mergeSegmentIndex].end)
+  state.segments[startSegmentIndex].start = Math.min(
+    state.segments[startSegmentIndex].start, state.segments[endSegmentIndex].start)
+  state.segments[startSegmentIndex].end = Math.max(
+    state.segments[startSegmentIndex].end, state.segments[endSegmentIndex].end)
 
-  // Remove the other segment
-  state.segments.splice(mergeSegmentIndex, 1);
+  // Remove the end segment and segments between
+  state.segments.splice(
+    startSegmentIndex < endSegmentIndex ? startSegmentIndex + 1 : endSegmentIndex,
+    Math.abs(endSegmentIndex - startSegmentIndex)
+  );
 
   // Update active segment
   updateActiveSegment(state)
@@ -342,7 +350,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
