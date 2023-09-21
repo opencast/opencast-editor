@@ -3,8 +3,8 @@ import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import {
   selectCurrentlyAt,
-  selectSelectedSubtitleByFlavor,
-  selectSelectedSubtitleFlavor,
+  selectSelectedSubtitleById,
+  selectSelectedSubtitleId,
   setClickTriggered,
   setCueAtIndex,
   setCurrentlyAt,
@@ -22,7 +22,7 @@ import "react-resizable/css/styles.css";
 import { GlobalHotKeys } from "react-hotkeys";
 import { scrubberKeyMap } from "../globalKeys";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { useTranslation } from "react-i18next";
 
@@ -33,7 +33,7 @@ import { useTranslation } from "react-i18next";
 const SubtitleTimeline: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Init redux variables
   const dispatch = useDispatch();
@@ -97,7 +97,7 @@ const SubtitleTimeline: React.FC = () => {
         css={{
           position: 'absolute',
           width: '2px',
-          height: '190px',
+          height: '200px',
           ...(refTop.current) && {left: (refTop.current.clientWidth / 2)},
           top: '10px',
           background: `${theme.text}`,
@@ -165,7 +165,7 @@ const SubtitleTimeline: React.FC = () => {
 const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const arbitraryHeight = 80
-  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
+  const subtitle = useSelector(selectSelectedSubtitleById)
 
   const segmentsListStyle = css({
     position: 'relative',
@@ -176,7 +176,7 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
 
   return (
     <div css={segmentsListStyle}>
-      {subtitle?.map((item, i) => {
+      {subtitle?.cues?.map((item, i) => {
         return (
           <TimelineSubtitleSegment timelineWidth={timelineWidth} cue={item} height={arbitraryHeight} key={item.idInternal} index={i}/>
         )
@@ -197,7 +197,7 @@ const TimelineSubtitleSegment: React.FC<{
 
   // Redux
   const dispatch = useDispatch()
-  const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
+  const selectedId = useSelector(selectSelectedSubtitleId)
   const duration = useSelector(selectDuration)
 
   // Dimensions and position offsets in px. Required for resizing
@@ -210,7 +210,7 @@ const TimelineSubtitleSegment: React.FC<{
   const [isGrabbed, setIsGrabbed] = useState(false)
   const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
 
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   // Reposition scrubber when the current x position was changed externally
   useEffect(() => {
     setControlledPosition({x: (props.cue.startTime / duration) * (props.timelineWidth), y: 0});
@@ -234,7 +234,7 @@ const TimelineSubtitleSegment: React.FC<{
     }
 
     dispatch(setCueAtIndex({
-      identifier: selectedFlavor,
+      identifier: selectedId,
       cueIndex: props.index,
       newCue: {
         id: props.cue.id,

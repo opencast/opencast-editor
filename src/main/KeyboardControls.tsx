@@ -1,33 +1,40 @@
 import { css } from "@emotion/react";
-import { TFuncKey } from "i18next";
+import { ParseKeys } from "i18next";
+
 import React from "react";
 
 import { KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation, Trans} from "react-i18next";
-import { useSelector } from "react-redux";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { getAllHotkeys } from "../globalKeys";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
+import { titleStyle, titleStyleBold } from '../cssStyles'
 
-const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
+const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const groupStyle = css({
     display: 'flex',
     flexDirection: 'column' as const,
     width: '460px',
     maxWidth: '50vw',
+
+    background: `${theme.menu_background}`,
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
+    boxSizing: "border-box",
+    padding: '0px 20px 20px 20px',
   });
 
   const headingStyle = css({
-    borderBottom: `${theme.menuBorder}`
+    color: `${theme.text}`,
   })
 
   return (
     <div css={groupStyle}>
-      <h3 css={headingStyle}>{t(name) as string}</h3>
+      <h3 css={headingStyle}>{t(name)}</h3>
       {entries.map((entry: KeyMapDisplayOptions, index: number) => (
         <Entry params={entry} key={index}></Entry>
       ))}
@@ -38,64 +45,70 @@ const Group: React.FC<{name: TFuncKey, entries: KeyMapDisplayOptions[]}> = ({nam
 const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const entryStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexFlow: 'column nowrap',
+    justifyContent: 'left',
     width: '100%',
-    paddingBottom: '5px',
-    paddingTop: '5px',
+    padding: '10px 0px',
+    ...(flexGapReplacementStyle(10, true))
   });
 
   const labelStyle = css({
-    alignSelf: 'center',
-    minWidth: '130px',
-    height: '5em',
+    fontWeight: 'bold',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     wordWrap: 'break-word',
+    color: `${theme.text}`,
+  })
 
-    // Center text vertically
+  const sequencesStyle = css({
     display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    ...(flexGapReplacementStyle(10, true))
   })
 
   const sequenceStyle = css({
-    alignSelf: 'center',
-    marginLeft: '15px',
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'row',
     ...(flexGapReplacementStyle(10, true))
   })
 
   const singleKeyStyle = css({
-    borderRadius: '5px',
+    borderRadius: '4px',
     borderWidth: '2px',
     borderStyle: 'solid',
     borderColor: `${theme.singleKey_border}`,
     background: `${theme.singleKey_bg}`,
+    boxShadow: `${theme.singleKey_boxShadow}`,
     padding: '10px',
+    color: `${theme.text}`,
   })
 
   const orStyle = css({
     alignSelf: 'center',
-    lineHeight: '32px',
+    fontSize: '20px',
+    fontWeight: 'bold',
   })
 
   return (
     <div css={entryStyle}>
       <div css={labelStyle}><Trans>{params.name || t("keyboardControls.missingLabel")}</Trans></div>
-      {params.sequences.map((sequence, index, arr) => (
-        <div css={sequenceStyle} key={index}>
-          {sequence.sequence.toString().split('+').map((singleKey, index) => (
-            <div css={singleKeyStyle} key={index}>{singleKey}</div>
-          ))}
-          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
-        </div>
-      ))}
+      <div css={sequencesStyle}>
+        {params.sequences.map((sequence, index, arr) => (
+          <div css={sequenceStyle} key={index}>
+            {sequence.sequence.toString().split('+').map((singleKey, index, {length}) => (
+              <>
+                <div css={singleKeyStyle} key={index}>{singleKey}</div>
+                {length - 1 !== index ? <div css={orStyle}>+</div> : ''}
+              </>
+            ))}
+            <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -104,6 +117,7 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
+  const theme = useTheme()
 
   const keyMap = getAllHotkeys()
 
@@ -137,7 +151,7 @@ const KeyboardControls: React.FC = () => {
       const groups: JSX.Element[] = [];
       for (const key in obj) {
         if (obj[key].length > 0) {
-          groups.push(<Group name={key as TFuncKey} entries={obj[key]} key={key}/>);
+          groups.push(<Group name={key as ParseKeys} entries={obj[key]} key={key}/>);
         }
       }
 
@@ -161,9 +175,9 @@ const KeyboardControls: React.FC = () => {
 
   return (
     <div css={keyboardControlsStyle}>
-      <h2>
+      <div css={[titleStyle(theme), titleStyleBold(theme)]}>
         {t("keyboardControls.header")}
-      </h2>
+      </div>
 
       {render()}
     </div>

@@ -1,16 +1,12 @@
 import React from "react";
 
-import Video from './Video';
-import Timeline from './Timeline';
-import CuttingActions from './CuttingActions';
 import Metadata from './Metadata';
 import TrackSelection from './TrackSelection';
 import Subtitle from "./Subtitle";
 import Finish from "./Finish"
 import KeyboardControls from "./KeyboardControls";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTools} from "@fortawesome/free-solid-svg-icons";
+import { LuWrench } from "react-icons/lu";
 
 import { css } from '@emotion/react'
 
@@ -23,14 +19,10 @@ import { flexGapReplacementStyle } from "../cssStyles";
 import { useBeforeunload } from 'react-beforeunload';
 import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
 import { selectHasChanges as metadataSelectHasChanges} from "../redux/metadataSlice";
-import {
-  selectIsPlaying, selectCurrentlyAt,
-  setIsPlaying, setCurrentlyAt, setClickTriggered,
-} from '../redux/videoSlice'
 import { selectHasChanges as selectSubtitleHasChanges } from "../redux/subtitleSlice";
-import { selectTheme } from "../redux/themeSlice";
-import ThemeSwitcher from "./ThemeSwitcher";
+import { useTheme } from "../themes";
 import Thumbnail from "./Thumbnail";
+import Cutting from "./Cutting";
 
 /**
  * A container for the main functionality
@@ -42,7 +34,7 @@ const MainContent: React.FC = () => {
   const videoChanged = useSelector(videoSelectHasChanges)
   const metadataChanged = useSelector(metadataSelectHasChanges)
   const subtitleChanged = useSelector(selectSubtitleHasChanges)
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Display warning when leaving the page if there are unsaved changes
   useBeforeunload((event: { preventDefault: () => void; }) => {
@@ -58,7 +50,7 @@ const MainContent: React.FC = () => {
     paddingLeft: '20px',
     ...(flexGapReplacementStyle(20, false)),
     background: `${theme.background}`,
-    overflow: 'vertical',
+    overflow: 'auto',
   })
 
   const cuttingStyle = css({
@@ -102,9 +94,7 @@ const MainContent: React.FC = () => {
     if (mainMenuState === MainMenuStateNames.cutting) {
       return (
         <div css={[mainContentStyle, cuttingStyle]} role="main">
-          <Video />
-          <CuttingActions />
-          <CuttingTimeline />
+          <Cutting />
         </div>
       )
     } else if (mainMenuState === MainMenuStateNames.metadata) {
@@ -140,13 +130,12 @@ const MainContent: React.FC = () => {
     } else if (mainMenuState === MainMenuStateNames.keyboardControls) {
       return (
         <div css={[mainContentStyle, keyboardControlsStyle]} role="main">
-          <ThemeSwitcher/>
           <KeyboardControls />
         </div>
       )
     } else {
       <div css={[mainContentStyle, defaultStyle]} role="main">
-        <FontAwesomeIcon icon={faTools} size="10x" />
+        <LuWrench css={{fontSize: 80}} />
         Placeholder
       </div>
     }
@@ -156,17 +145,5 @@ const MainContent: React.FC = () => {
     <>{render()}</>
   );
 };
-
-const CuttingTimeline : React.FC = () => {
-  return (
-    <Timeline
-      selectIsPlaying={selectIsPlaying}
-      selectCurrentlyAt={selectCurrentlyAt}
-      setIsPlaying={setIsPlaying}
-      setCurrentlyAt={setCurrentlyAt}
-      setClickTriggered={setClickTriggered}
-    />
-  );
-}
 
 export default MainContent;

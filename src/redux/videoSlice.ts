@@ -13,7 +13,7 @@ export interface video {
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
-  captions: SubtitlesFromOpencast[],
+  subtitlesFromOpencast: SubtitlesFromOpencast[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
@@ -35,7 +35,7 @@ export const initialState: video & httpRequestState = {
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
-  captions: [],
+  subtitlesFromOpencast: [],
   activeSegmentIndex: 0,
   selectedWorkflowId: "",
   previewTriggered: false,
@@ -212,7 +212,7 @@ const videoSlice = createSlice({
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
-        state.captions = action.payload.subtitles ? state.captions = action.payload.subtitles : []
+        state.subtitlesFromOpencast = action.payload.subtitles ? state.subtitlesFromOpencast = action.payload.subtitles : []
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
@@ -389,11 +389,11 @@ export const selectTracks = (state: { videoState: { tracks: video["tracks"] } })
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
-export const selectCaptions = (state: { videoState: { captions: video["captions"]; }; }) =>
-  state.videoState.captions
-export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { captions: video["captions"]; }; }) => {
-  for (const cap of state.videoState.captions) {
-    if (cap.flavor.type + "/" + cap.flavor.subtype === flavor) {
+export const selectSubtitlesFromOpencast = (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) =>
+  state.videoState.subtitlesFromOpencast
+export const selectSubtitlesFromOpencastById = (id: string) => (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) => {
+  for (const cap of state.videoState.subtitlesFromOpencast) {
+    if (cap.id === id) {
       return cap
     }
   }

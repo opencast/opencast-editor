@@ -1,16 +1,16 @@
 {
     "mainMenu": {
-        "cutting-button": "裁剪",
-        "finish-button": "完成",
-        "select-tracks-button": "轨道",
-        "subtitles-button": "字幕",
-        "thumbnail-button": "缩略图",
-        "metadata-button": "元数据",
-        "keyboard-controls-button": "键盘设置",
-        "tooltip-aria": "主导航"
+        "cutting-button": "Cutting",
+        "finish-button": "Finish",
+        "select-tracks-button": "Tracks",
+        "subtitles-button": "Subtitles",
+        "thumbnail-button": "Thumbnail",
+        "metadata-button": "Metadata",
+        "keyboard-controls-button": "Keyboard Controls",
+        "tooltip-aria": "Main Navigation"
     },
     "cuttingActions": {
-        "cut-button": "切段",
+        "cut-button": "Cut",
         "cut-tooltip": "Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}",
         "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
         "delete-button": "Delete",
@@ -250,9 +250,9 @@
         "defaultGroupName": "General",
         "missingLabel": "Unknown",
         "groupVideoPlayer": "Video Player",
-        "groupCuttingView": "裁剪",
+        "groupCuttingView": "Cutting",
         "groupCuttingViewScrubber": "Timeline",
-        "groupSubtitleList": "字幕",
+        "groupSubtitleList": "Subtitles",
         "sequenceSeparator": "or",
         "genericError": "Failed to load overview",
         "videoPlayButton": "Play/Pause Video",

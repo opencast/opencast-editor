@@ -29,15 +29,15 @@ show = true
 mainFlavor = "captions"
 
 [subtitles.languages]
-"captions/source+de" = "Deutsch"
-"captions/source+en" = "English"
-"captions/source+es" = "Español"
-"captions/source" = "Generic"
+german = { lang = "de-DE" }
+english = { lang = "en-US", type = "closed-caption" }
+spanish = { lang = "es" }
+
 
 [subtitles.icons]
-"captions/source+de" = "🇩🇪"
-"captions/source+en" = "🇺🇸"
-"captions/source+es" = "🇪🇸"
+"de-DE" = "DE"
+"en-US" = "EN"
+"es" = "ES"
 
 [thumbnail]
 show = true
