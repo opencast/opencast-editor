@@ -14,7 +14,7 @@ import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
 
 
-const Body: React.FC<{}> = () => {
+const Body: React.FC = () => {
 
   const isEnd = useSelector(selectIsEnd)
   const isError = useSelector(selectIsError)
@@ -47,7 +47,7 @@ const Body: React.FC<{}> = () => {
   const bodyStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    height: '100%',
+    height: 'calc(100% - 64px)',
   });
 
   return (

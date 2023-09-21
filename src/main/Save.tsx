@@ -2,36 +2,32 @@ import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
-  navigationButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+  navigationButtonStyle, flexGapReplacementStyle, spinningStyle } from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSpinner, faCheck, faExclamationCircle, faChevronLeft, faSave, faCheckCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck} from "react-icons/lu";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
 import { selectHasChanges, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
 
-import { PageButton } from './Finish'
+import { CallbackButton, PageButton } from './Finish'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 import { AppDispatch } from "../redux/store";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
   selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
-import { selectSubtitles } from "../redux/subtitleSlice";
+import { selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
+  setHasChanges as subtitleSetHasChanges } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
-import { Flavor } from "../types";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 
 /**
  * Shown if the user wishes to save.
  * Informs the user about saving and displays a save button
  */
-const Save : React.FC<{}> = () => {
+const Save : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -41,9 +37,10 @@ const Save : React.FC<{}> = () => {
   const postError = useSelector(selectError)
   const postMetadataStatus = useSelector(selectPostStatus);
   const postMetadataError = useSelector(selectPostError);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   const metadataHasChanges = useSelector(metadataSelectHasChanges)
   const hasChanges = useSelector(selectHasChanges)
+  const subtitleHasChanges = useSelector(selectSubtitleHasChanges)
 
   const saveStyle = css({
     height: '100%',
@@ -56,11 +53,12 @@ const Save : React.FC<{}> = () => {
   const render = () => {
     // Post (successful) save
     if (postWorkflowStatus === 'success' && postMetadataStatus === 'success'
-      && !hasChanges && !metadataHasChanges) {
-      return(
+      && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
+      return (
         <>
-          <FontAwesomeIcon icon={faCheckCircle} size="10x" />
+          <LuCheckCircle css={{fontSize: 80}}/>
           <div>{t("save.success-text")}</div>
+          <CallbackButton />
         </>
       )
     // Pre save
@@ -71,7 +69,7 @@ const Save : React.FC<{}> = () => {
             {t("save.info-text")}
           </span>
           <div css={backOrContinueStyle}>
-            <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft}/>
+            <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={LuChevronLeft}/>
             <SaveButton />
           </div>
         </>
@@ -85,11 +83,11 @@ const Save : React.FC<{}> = () => {
       {render()}
       <div css={errorBoxStyle(postWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-noDetails-text")}<br />
+        {postError ? t("various.error-details-text", {errorMessage: postError}) : t("various.error-text")}<br />
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-noDetails-text")}<br />
+        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-text")}<br />
       </div>
     </div>
   );
@@ -98,7 +96,7 @@ const Save : React.FC<{}> = () => {
 /**
  * Button that sends a post request to save current changes
  */
-export const SaveButton: React.FC<{}> = () => {
+export const SaveButton: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -110,29 +108,29 @@ export const SaveButton: React.FC<{}> = () => {
   const subtitles = useSelector(selectSubtitles)
   const workflowStatus = useSelector(selectStatus);
   const metadataStatus = useSelector(selectPostStatus);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status
-  let icon = faSave
+  let Icon = LuSave
   let spin = false
   let tooltip = null
-  if (workflowStatus === 'failed' || metadataStatus === 'failed'){
-    icon = faExclamationCircle
+  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
+    Icon = LuAlertCircle
     spin = false
     tooltip = t("save.confirmButton-failed-tooltip")
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
-    icon = faCheck
+    Icon = LuCheck
     spin = false
     tooltip = t("save.confirmButton-success-tooltip")
-  } else if (workflowStatus === 'loading' || metadataStatus === 'loading')  {
-    icon = faSpinner
+  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
+    Icon = LuLoader
     spin = true
     tooltip = t("save.confirmButton-attempting-tooltip")
   }
 
   const ariaSaveUpdate = () => {
-    if(workflowStatus === 'success') {
+    if (workflowStatus === 'success') {
       return t("save.success-tooltip-aria")
     }
   }
@@ -141,9 +139,11 @@ export const SaveButton: React.FC<{}> = () => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      let flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
-      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
-
+      subtitlesForPosting.push({
+        id: identifier,
+        subtitle: serializeSubtitle(subtitles[identifier].cues),
+        tags: subtitles[identifier].tags
+      })
     }
     return subtitlesForPosting
   }
@@ -175,6 +175,7 @@ export const SaveButton: React.FC<{}> = () => {
     if (workflowStatus === 'success' && metadataStatus === 'success') {
       dispatch(videoSetHasChanges(false))
       dispatch(metadataSetHasChanges(false))
+      dispatch(subtitleSetHasChanges(false))
     }
   }, [dispatch, metadataStatus, workflowStatus])
 
@@ -182,17 +183,16 @@ export const SaveButton: React.FC<{}> = () => {
     <ThemedTooltip title={tooltip == null ? tooltip = "" : tooltip}>
       <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
         role="button" tabIndex={0}
-        onClick={ save }
+        onClick={save}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           save()
-        }}}>
-        <FontAwesomeIcon icon={icon} spin={spin} size="1x"/>
+        } }}>
+        <Icon css={spin ? spinningStyle : undefined}/>
         <span>{t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
       </div>
     </ThemedTooltip>
   );
 }
-
 
 export default Save;

@@ -3,10 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle} from '../cssStyles'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft, faTimesCircle
-} from "@fortawesome/free-solid-svg-icons";
+import { LuChevronLeft, LuXCircle } from "react-icons/lu";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFinishState } from '../redux/finishSlice'
@@ -14,15 +11,14 @@ import { setEnd } from '../redux/endSlice'
 
 import { PageButton } from './Finish'
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * Shown if the user wishes to abort.
  * Informs the user about aborting and displays abort button.
  */
-const Discard : React.FC<{}> = () => {
+const Discard : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -42,7 +38,7 @@ const Discard : React.FC<{}> = () => {
         {t("discard.info-text")}
       </span>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={0} label={t("various.goBack-button")} iconName={faChevronLeft} />
+        <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={LuChevronLeft} />
         <DiscardButton />
       </div>
     </div>
@@ -52,13 +48,13 @@ const Discard : React.FC<{}> = () => {
 /**
  * Button that sets the app into an aborted state
  */
-const DiscardButton : React.FC<{}> = () => {
+const DiscardButton : React.FC = () => {
 
   const { t } = useTranslation();
 
   // Initialize redux variables
   const dispatch = useDispatch()
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const discard = () => {
     dispatch(setEnd({hasEnded: true, value: 'discarded'}))
@@ -67,11 +63,11 @@ const DiscardButton : React.FC<{}> = () => {
   return (
     <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
       role="button" tabIndex={0}
-      onClick={ discard }
+      onClick={discard}
       onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
         discard()
-      }}}>
-      <FontAwesomeIcon  icon={faTimesCircle} size="1x"/>
+      } }}>
+      <LuXCircle />
       <span>{t("discard.confirm-button")}</span>
     </div>
   );

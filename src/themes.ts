@@ -1,87 +1,174 @@
-import { Theme } from "./redux/themeSlice";
+/* eslint-disable camelcase */
+
+import { match, useColorScheme } from "@opencast/appkit";
+import { COLORS } from "./util/appkit";
+
+export const useTheme = () : Theme => {
+  const scheme = useColorScheme()
+  return match(scheme.scheme, {
+    "light": () => lightMode,
+    "dark": () => darkMode,
+    "light-high-contrast": () => highContrastLightMode,
+    "dark-high-contrast": () => highContrastDarkMode,
+  })
+}
+
+export interface Theme {
+  background: string
+  menu_background: string
+  text: string
+  error: string
+  element_bg: string
+  multiValue: string
+  focused: string
+  focus_text: string
+  selected: string
+  disabled: string
+  menuBorder: string
+  boxShadow: string
+  boxShadow_tiles: string
+  singleKey_bg: string
+  singleKey_border: string
+  singleKey_boxShadow: string
+  invert_wave: string
+  inverted_text: string
+  tooltip: string
+  tooltip_text: string
+  element_outline: string
+  selected_text: string
+  dropdown_border: string
+  menuButton_outline: string
+  button_outline: string
+  button_color: string
+  indicator_color: string
+  icon_color: string
+  background_finish_menu_icon: string
+  background_play_icon: string
+  background_preview_icon: string
+  waveform_filter: string
+  waveform_bg: string
+  scrubber: string
+  scrubber_handle: string
+  scrubber_icon: string
+  subtitle_segment_bg: string
+  subtitle_segment_border: string
+  subtitle_segment_text: string
+  header_bg: string
+  header_text: string
+  header_button_hover_bg: string
+  metadata_highlight: string
+  clock_bg: string
+  clock_border: string
+  clock_hands: string
+  clock_focus: string
+  digit_selected: string
+  text_shadow: string
+}
 
 export const lightMode: Theme = {
-  background: 'whitesmoke',
-  menu_background: 'snow',
-  text: '#000',
+  background: COLORS.neutral10,
+  menu_background: COLORS.neutral05,
+  text: COLORS.neutral90,
   error: '#ed1741',
-  element_bg: 'snow',
-  multiValue: '#e6e6e6',
-  focused:'#e6e6e6',
-  focus_text: '#000',
-  selected: '#a1a1a1',
+  element_bg: COLORS.neutral05,
+  multiValue: COLORS.neutral15,
+  focused: COLORS.neutral15,
+  focus_text: COLORS.neutral90,
+  selected: COLORS.neutral25,
   disabled: 'rgba(0, 0, 0, 0.55)',
-  menuBorder: '1px solid #BBB',
-  boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-  singleKey_bg: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
-  singleKey_border: 'Gainsboro',
+  menuBorder: `1px solid ${COLORS.neutral30}`,
+  boxShadow: `0 0 2px 2px ${COLORS.neutral30}`,
+  boxShadow_tiles: '0 5px 10px 0px rgba(150, 150, 150, 0.5)',
+  singleKey_bg: COLORS.neutral10,
+  singleKey_border: COLORS.neutral20,
+  singleKey_boxShadow: `0 2px 2px 0px rgba(150, 150, 150, 0.2)`,
   invert_wave: 'invert(0%)',
-  inverted_text: '#000', // for "Generating waveform" text: in lightMode it's not inverted, so it has to be black
-  tooltip: '#363636',
-  tooltip_text: '#fff',
+  inverted_text: COLORS.neutral90, // for "Generating waveform" text: in lightMode it's not inverted, so it has to be black
+  tooltip: COLORS.neutral80,
+  tooltip_text: COLORS.neutral05,
   element_outline: '2px solid transparent',
-  selected_text: '#000',
-  dropdown_border: '1px solid #ccc',
+  selected_text: COLORS.neutral90,
+  dropdown_border: `1px solid ${COLORS.neutral40}`,
   menuButton_outline: '2px solid transparent',
   button_outline: 'none',
-  button_color: '#e6e6e6',
-  indicator_color: '#3d3d3d',
-  icon_color: '#000',
-  waveform_filter: 'invert(0%)',
-  waveform_bg: '#fff',
-  scrubber: '1px solid transparent',
+  button_color: COLORS.neutral10,
+  indicator_color: COLORS.neutral60,
+  icon_color: COLORS.neutral05,
+  background_finish_menu_icon: COLORS.neutral15,
+  background_play_icon: COLORS.neutral70,
+  background_preview_icon: COLORS.neutral70,
+  waveform_filter: 'invert(44%) sepia(8%) saturate(3893%) hue-rotate(169deg) brightness(99%) contrast(90%)', // All this just to turn the black part of the waveform image blue. Generated with: https://isotropic.co/tool/hex-color-to-css-filter/
+  waveform_bg: '',
+  scrubber: COLORS.neutral60,
+  scrubber_handle: COLORS.neutral05,
+  scrubber_icon: COLORS.neutral60,
   subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
-  subtitle_segment_border: '1px solid #363636',
-  subtitle_segment_text: '#fff',
-  clock_bg: '#e6e6e6',
+  subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
+  subtitle_segment_text: COLORS.neutral05,
+  header_bg: COLORS.neutral60,
+  header_text: COLORS.neutral05,
+  header_button_hover_bg: COLORS.neutral70,
+  metadata_highlight: COLORS.neutral50,
+  clock_bg: COLORS.neutral15,
   clock_border: '2px solid transparent',
-  clock_hands: '#a1a1a1',
-  clock_focus: '#000',
-  digit_selected: '#000',
-  text_shadow: '2px 0 #e6e6e6, -2px 0 #e6e6e6, 0 2px #e6e6e6, 0 -2px #e6e6e6,' +
-               '1px 1px #e6e6e6, -1px -1px #e6e6e6, 1px -1px #e6e6e6, -1px 1px #e6e6e6',
+  clock_hands: COLORS.neutral50,
+  clock_focus: COLORS.neutral90,
+  digit_selected: COLORS.neutral90,
+  text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15}, 0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
+               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15}, 1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
 };
 
 export const darkMode: Theme = {
-  background: '#1C1C1C',
-  menu_background: '#1C1C1C',
-  text: 'rgba(255, 255, 255, 0.87)',
+  background: COLORS.neutral10,
+  menu_background: COLORS.neutral05,
+  text: COLORS.neutral90,
   error: 'rgba(237, 23, 65, 0.8)',
-  element_bg: '#2b2b2b',
-  multiValue: '#4a4a4a',
-  focused: '#a1a1a1',
-  focus_text: '#000',
-  selected: '#4a4a4a',
+  element_bg: COLORS.neutral05,
+  multiValue: COLORS.neutral15,
+  focused: COLORS.neutral15,
+  focus_text: COLORS.neutral90,
+  selected: COLORS.neutral25,
   disabled: 'rgba(255, 255, 255, 0.5)',
-  menuBorder: '1px solid #5d5d5d',
-  boxShadow: '0 0 5px rgba(255, 255, 255, 0.3)',
+  menuBorder: `1px solid ${COLORS.neutral30}`,
+  boxShadow: `0 0 5px ${COLORS.neutral05}`,
+  boxShadow_tiles: '0 5px 10px 0px rgba(0, 0, 0, 0.3)',
   singleKey_bg: 'linear-gradient(180deg, rgba(40,40,40,1) 0%, rgba(30,30,30,1) 100%)',
-  singleKey_border: '#404040',
+  singleKey_border: COLORS.neutral20,
+  singleKey_boxShadow: `0 2px 2px 0px rgba(0, 0, 0, 1.0)`,
   invert_wave: 'invert(100%)',
-  inverted_text: '#000',
-  tooltip: '#dddddd',
-  tooltip_text: '#000',
+  inverted_text: COLORS.neutral90,
+  tooltip: COLORS.neutral80,
+  tooltip_text: COLORS.neutral05,
   element_outline: '2px solid transparent',
-  selected_text: '#fff',
-  dropdown_border: '1px solid #ccc',
+  selected_text: COLORS.neutral90,
+  dropdown_border: `1px solid ${COLORS.neutral40}`,
   menuButton_outline: '2px solid transparent',
   button_outline: '0px solid transparent',
-  button_color: '#2b2b2b',
-  indicator_color: '#ccc',
+  button_color: COLORS.neutral20,
+  indicator_color: COLORS.neutral60,
   icon_color: 'rgba(255, 255, 255, 0.87)',
+  background_finish_menu_icon: COLORS.neutral15,
+  background_play_icon: COLORS.neutral70,
+  background_preview_icon: COLORS.neutral70,
   waveform_filter: 'invert(11%)',
   waveform_bg: '#fff',
-  scrubber: '1px solid transparent',
+  scrubber: COLORS.neutral60,
+  scrubber_handle: COLORS.neutral70,
+  scrubber_icon: COLORS.neutral20,
   subtitle_segment_bg: 'rgba(0, 0, 0, 0.4)',
-  subtitle_segment_border: '1px solid #dddddd',
-  subtitle_segment_text: '#fff',
-  clock_bg: '#2b2b2b',
+  subtitle_segment_border: `1px solid ${COLORS.neutral80}`,
+  subtitle_segment_text: COLORS.neutral90,
+  header_bg: COLORS.neutral20,
+  header_text: COLORS.neutral90,
+  header_button_hover_bg: COLORS.neutral10,
+  metadata_highlight: COLORS.neutral50,
+  clock_bg: COLORS.neutral15,
   clock_border: '2px solid transparent',
-  clock_hands: '#a1a1a1',
-  clock_focus: '#fff',
-  digit_selected: '#000',
-  text_shadow: '2px 0 #2b2b2b, -2px 0 #2b2b2b, 0 2px #2b2b2b, 0 -2px #2b2b2b,' +
-               ' 1px 1px #2b2b2b, -1px -1px #2b2b2b, 1px -1px #2b2b2b, -1px 1px #2b2b2b'
+  clock_hands: COLORS.neutral50,
+  clock_focus: COLORS.neutral90,
+  digit_selected: COLORS.neutral90,
+  text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15}, 0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
+               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15}, 1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
 };
 
 export const highContrastDarkMode: Theme = {
@@ -97,8 +184,10 @@ export const highContrastDarkMode: Theme = {
   disabled: 'rgba(255, 255, 255, 0.6)',
   menuBorder: '2px solid #fff',
   boxShadow: '0 0 0 rgba(255, 255, 255, 0.3)',
+  boxShadow_tiles: '0 0 0 rgba(255, 255, 255, 0.3)',
   singleKey_bg: 'none',
   singleKey_border: '#fff',
+  singleKey_boxShadow: `0 2px 2px 0px rgba(150, 150, 150, 0.2)`,
   invert_wave: 'invert(100%)',
   inverted_text: '#000',
   tooltip: '#fff',
@@ -110,13 +199,22 @@ export const highContrastDarkMode: Theme = {
   button_outline: '2px solid #a6ffea',
   button_color: '#a6ffea',
   indicator_color: '#a6ffea',
-  icon_color: '#a6ffea',
+  icon_color: '#000',
+  background_finish_menu_icon: '#000',
+  background_play_icon: '#fff',
+  background_preview_icon: '#fff',
   waveform_filter: 'invert(100%)',
   waveform_bg: '#80B8AC',
-  scrubber: '1px solid transparent',
+  scrubber: '#fff',
+  scrubber_handle: '#fff',
+  scrubber_icon: '#000',
   subtitle_segment_bg: 'none',
   subtitle_segment_border: '2px solid #fff',
   subtitle_segment_text: '#fff',
+  header_bg: '#000',
+  header_text: '#fff',
+  header_button_hover_bg: '#000',
+  metadata_highlight: 'rgb(38, 132, 255)',
   clock_bg: '#000',
   clock_border: '2px solid #a6ffea',
   clock_hands: '#fff',
@@ -133,16 +231,18 @@ export const highContrastLightMode: Theme = {
   error: '#a5102d',
   element_bg: 'none',
   multiValue: '#2e2e2e',
-  focused:'#000099',
+  focused: '#000099',
   focus_text: '#fff',
   selected: '#4646b5',
   disabled: 'rgba(0, 0, 0, 0.6)',
   menuBorder: '2px solid #000',
   boxShadow: '0 0 0 rgba(0, 0, 0, 0.3)',
+  boxShadow_tiles: '0 0 0 rgba(0, 0, 0, 0.3)',
   singleKey_bg: 'none',
   singleKey_border: '#000',
+  singleKey_boxShadow: `0 2px 2px 0px rgba(150, 150, 150, 0.2)`,
   invert_wave: 'invert(0%)',
-  inverted_text: '#000',
+  inverted_text: '#fff',
   tooltip: '#000',
   tooltip_text: '#fff',
   element_outline: '2px solid #000',
@@ -152,13 +252,22 @@ export const highContrastLightMode: Theme = {
   button_outline: '3px solid #000099',
   button_color: '#000099',
   indicator_color: '#000099',
-  icon_color: '#000099',
+  icon_color: '#fff',
+  background_finish_menu_icon: 'snow',
+  background_play_icon: '#000',
+  background_preview_icon: '#000',
   waveform_filter: 'invert(0%)',
   waveform_bg: '#fff',
-  scrubber: '1px solid transparent',
+  scrubber: '#000',
+  scrubber_handle: '#000',
+  scrubber_icon: '#fff',
   subtitle_segment_bg: 'none',
   subtitle_segment_border: '2px solid #000',
   subtitle_segment_text: '#000',
+  header_bg: '#000',
+  header_text: '#fff',
+  header_button_hover_bg: '#000',
+  metadata_highlight: 'rgb(38, 132, 255)',
   clock_bg: 'snow',
   clock_border: '2px solid #000099',
   clock_hands: '#4646b5',

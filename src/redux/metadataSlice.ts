@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '../util/client'
 
-import { httpRequestState }  from '../types'
+import { httpRequestState } from '../types'
 import { settings } from '../config';
 
 export interface Catalog {
@@ -99,53 +99,53 @@ const metadataSlice = createSlice({
   name: 'metadataState',
   initialState,
   reducers: {
-    setFieldValue: (state, action: any) => {
+    setFieldValue: (state, action: PayloadAction<{catalogIndex: number, fieldIndex: number, value: string}>) => {
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value
       state.hasChanges = true
     },
-    setFieldReadonly: (state, action: any) => {
+    setFieldReadonly: (state, action: PayloadAction<{catalogIndex: number, fieldIndex: number, value: boolean}>) => {
       state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].readOnly = action.payload.value
     },
     setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
       state.hasChanges = action.payload
     },
-    resetPostRequestState: (state) => {
+    resetPostRequestState: state => {
       state.postStatus = 'idle'
     }
   },
   extraReducers: builder => {
     builder.addCase(
-      fetchMetadata.pending, (state, action) => {
+      fetchMetadata.pending, (state, _action) => {
         state.status = 'loading'
-    })
+      })
     builder.addCase(
       fetchMetadata.fulfilled, (state, action) => {
         state.catalogs = action.payload
 
         state.status = 'success'
-    })
+      })
     builder.addCase(
       fetchMetadata.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
-    })
+      })
     builder.addCase(
-      postMetadata.pending, (state, action) => {
+      postMetadata.pending, (state, _action) => {
         state.postStatus = 'loading'
-    })
+      })
     builder.addCase(
-      postMetadata.fulfilled, (state, action) => {
+      postMetadata.fulfilled, (state, _action) => {
         state.postStatus = 'success'
-    })
+      })
     builder.addCase(
       postMetadata.rejected, (state, action) => {
         state.postStatus = 'failed'
         state.postError = action.error.message
-    })
+      })
   }
 })
 
-export const { setFieldValue, setHasChanges, setFieldReadonly,resetPostRequestState } = metadataSlice.actions
+export const { setFieldValue, setHasChanges, setFieldReadonly, resetPostRequestState } = metadataSlice.actions
 
 export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
   state.metadataState.catalogs

@@ -4,7 +4,7 @@
  * - GET parameters
  * and exports them.
  * Code was largely adapted from https://github.com/elan-ev/opencast-studio/blob/master/src/settings.js (January 11th, 2021)
- * 
+ *
  * Also does some global hotkey configuration
  */
 import parseToml from '@iarna/toml/parse-string';
@@ -29,11 +29,21 @@ export interface configureFieldsAttributes {
   readonly: boolean,
 }
 
+export interface subtitleTags {
+  lang: string,
+  'auto-generated': string,
+  'auto-generator': string,
+  type: string,
+}
+
 /**
  * Settings interface
  */
 interface iSettings {
   id: string | undefined,
+  allowedCallbackPrefixes: string[],
+  callbackUrl: string | undefined,
+  callbackSystem: string | undefined,
   opencast: {
     url: string,
     name: string | undefined,
@@ -42,7 +52,7 @@ interface iSettings {
   },
   metadata: {
     show: boolean,
-    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } }  | undefined,
+    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } } | undefined,
   },
   trackSelection: {
     show: boolean,
@@ -54,7 +64,7 @@ interface iSettings {
   subtitles: {
     show: boolean,
     mainFlavor: string,
-    languages: { [key: string]: string } | undefined,
+    languages: { [key: string]: subtitleTags } | undefined,
     icons: { [key: string]: string } | undefined,
     defaultVideoFlavor: Flavor | undefined,
   }
@@ -67,8 +77,11 @@ interface iSettings {
  * urlParameterSettings: contains values from GET parameters
  * settings: contains the combined values from all other setting objects
  */
-var defaultSettings: iSettings = {
+const defaultSettings: iSettings = {
   id: undefined,
+  allowedCallbackPrefixes: [],
+  callbackUrl: undefined,
+  callbackSystem: undefined,
   opencast: {
     url: window.location.origin,
     name: undefined,
@@ -94,9 +107,9 @@ var defaultSettings: iSettings = {
     defaultVideoFlavor: undefined,
   }
 }
-var configFileSettings: iSettings
-var urlParameterSettings: iSettings
-export var settings: iSettings
+let configFileSettings: iSettings
+let urlParameterSettings: iSettings
+export let settings: iSettings
 
 /**
  * Entry point. Loads values from settings into the exported variables
@@ -106,20 +119,30 @@ export var settings: iSettings
  * 3. Default values
  */
 export const init = async () => {
+
+  // Get color scheme from local storage, otherwise set auto scheme based on preference
+  let scheme = window.localStorage.getItem("colorScheme");
+  if (scheme === null || !["light", "dark", "light-high-contrast", "dark-high-contrast"].includes(scheme)) {
+    const lightness = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    const contrast = window.matchMedia("(prefers-contrast: more)").matches ? "-high-contrast" : "";
+    scheme = `${lightness}${contrast}`;
+  }
+  document.documentElement.dataset.colorScheme = scheme;
+
   // Get settings from config file
-  await loadContextSettings().then((result) => {
+  await loadContextSettings().then(result => {
     configFileSettings = validate(result, false, SRC_SERVER, "from server settings file")
   })
 
   // Get settings from URL query.
-  var urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(window.location.search);
 
-  let rawUrlSettings = {};
+  const rawUrlSettings = {};
   urlParams.forEach((value, key) => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
     let obj : {[k: string]: any} = rawUrlSettings;
-    if (key.startsWith('opencast.')) {
+    if (key.startsWith('opencast.') || key === 'allowedCallbackPrefixes') {
       return;
     }
 
@@ -129,7 +152,7 @@ export const init = async () => {
     }
 
     const segments = key.split('.');
-    segments.slice(0, -1).forEach((segment) => {
+    segments.slice(0, -1).forEach(segment => {
       if (!(segment in obj)) {
         obj[segment] = {};
       }
@@ -146,9 +169,14 @@ export const init = async () => {
   // Prepare local setting to avoid complicated checks later
   settings.opencast.local = settings.opencast.local && settings.opencast.url === window.location.origin;
 
+  // Prevent malicious callback urls
+  settings.callbackUrl = settings.allowedCallbackPrefixes.some(
+    p => settings.callbackUrl?.startsWith(p)
+  ) ? settings.callbackUrl : undefined;
+
   // Configure hotkeys
   configure({
-    ignoreTags: [],   // Do not ignore hotkeys when focused on a textarea, input, select
+    ignoreTags: [], // Do not ignore hotkeys when focused on a textarea, input, select
     ignoreEventsCondition: (e: any) => {
       // Ignore hotkeys when focused on a textarea, input, select IF that hotkey is expected to perform
       // a certain function in that element that is more important than any hotkey function
@@ -255,7 +283,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
   const validateObj = (schema: any, obj: Record<string, any> | null, path: string) => {
     // We iterate through all keys of the given settings object, checking if
     // each key is valid and recursively validating the value of that key.
-    let out : {[k: string]: any} = {};
+    const out : {[k: string]: any} = {};
     for (const key in obj) {
       const newPath = path ? `${path}.${key}` : key;
       if (key in schema) {
@@ -282,7 +310,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
 
 // Validation functions for different types.
 const types = {
-  'string': (v: any, allowParse: any) => {
+  'string': (v: any, _allowParse: any) => {
     if (typeof v !== 'string') {
       throw new Error("is not a string, but should be");
     }
@@ -304,8 +332,18 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
-  'map': (v: any, allowParse: any) => {
-    for (let key in v) {
+  'array': (v: any, _allowParse: any) => {
+    if (!Array.isArray(v)) {
+      throw new Error("is not an array, but should be");
+    }
+    for (const entry in v) {
+      if (typeof entry !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+    }
+  },
+  'map': (v: any, _allowParse: any) => {
+    for (const key in v) {
       if (typeof key !== 'string') {
         throw new Error("is not a string, but should be");
       }
@@ -314,16 +352,16 @@ const types = {
       }
     }
   },
-  'objectsWithinObjects': (v: any, allowParse: any) => {
-    for (let catalogName in v) {
+  'objectsWithinObjects': (v: any, _allowParse: any) => {
+    for (const catalogName in v) {
       if (typeof catalogName !== 'string') {
         throw new Error("is not a string, but should be");
       }
-      for (let fieldName in v[catalogName]) {
+      for (const fieldName in v[catalogName]) {
         if (typeof fieldName !== 'string') {
           throw new Error("is not a string, but should be");
         }
-        for (let attributeName in v[catalogName][fieldName]) {
+        for (const attributeName in v[catalogName][fieldName]) {
           if (typeof attributeName !== 'string') {
             throw new Error("is not a string, but should be");
           }
@@ -351,27 +389,30 @@ const types = {
 // above for some examples.
 const SCHEMA = {
   id: types.string,
+  allowedCallbackPrefixes: types.array,
+  callbackUrl: types.string,
+  callbackSystem: types.string,
   opencast: {
     url: types.string,
     name: types.string,
     password: types.string,
   },
   metadata: {
-    show : types.boolean,
+    show: types.boolean,
     configureFields: types.objectsWithinObjects,
   },
   trackSelection: {
-    show : types.boolean,
+    show: types.boolean,
   },
   subtitles: {
     show: types.boolean,
     mainFlavor: types.string,
-    languages: types.map,
+    languages: types.objectsWithinObjects,
     icons: types.map,
     defaultVideoFlavor: types.map,
   },
   thumbnail: {
-    show : types.boolean,
+    show: types.boolean,
     simpleMode: types.boolean,
   }
 }
@@ -380,4 +421,4 @@ const merge = (a: iSettings, b: iSettings) => {
   return deepmerge(a, b, { arrayMerge });
 };
 merge.all = (array: object[]) => deepmerge.all(array, { arrayMerge })
-const arrayMerge = (destinationArray: any, sourceArray: any, options: any) => sourceArray;
+const arrayMerge = (_destinationArray: any, sourceArray: any, _options: any) => sourceArray;

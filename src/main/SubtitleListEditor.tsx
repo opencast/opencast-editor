@@ -1,6 +1,6 @@
 import { css, SerializedStyles } from "@emotion/react"
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { IconType } from "react-icons";
+import { LuPlus, LuTrash} from "react-icons/lu";
 import { memoize } from "lodash"
 import React, { useRef } from "react"
 import { useEffect, useState } from "react"
@@ -14,8 +14,8 @@ import { addCueAtIndex,
   selectFocusSegmentId,
   selectFocusSegmentTriggered,
   selectFocusSegmentTriggered2,
-  selectSelectedSubtitleByFlavor,
-  selectSelectedSubtitleFlavor,
+  selectSelectedSubtitleById,
+  selectSelectedSubtitleId,
   setCueAtIndex,
   setCurrentlyAt,
   setFocusSegmentTriggered,
@@ -28,19 +28,19 @@ import { convertMsToReadableString } from "../util/utilityFunctions"
 import { VariableSizeList } from "react-window"
 import { CSSProperties } from "react"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { selectTheme, selectThemeState } from "../redux/themeSlice"
+import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip"
-import { IconProp } from "@fortawesome/fontawesome-svg-core"
+import { useColorScheme } from "@opencast/appkit";
 
 /**
  * Displays everything needed to edit subtitles
  */
-const SubtitleListEditor : React.FC<{}> = () => {
+const SubtitleListEditor : React.FC = () => {
 
   const dispatch = useDispatch()
 
-  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
-  const subtitleFlavor = useSelector(selectSelectedSubtitleFlavor, shallowEqual)
+  const subtitle = useSelector(selectSelectedSubtitleById)
+  const subtitleId = useSelector(selectSelectedSubtitleId, shallowEqual)
   const focusTriggered = useSelector(selectFocusSegmentTriggered, shallowEqual)
   const focusId = useSelector(selectFocusSegmentId, shallowEqual)
   const defaultSegmentLength = 5000
@@ -51,16 +51,16 @@ const SubtitleListEditor : React.FC<{}> = () => {
 
   // Update ref array size
   useEffect(() => {
-    if (subtitle) {
-      itemsRef.current = itemsRef.current.slice(0, subtitle.length);
+    if (subtitle?.cues) {
+      itemsRef.current = itemsRef.current.slice(0, subtitle.cues.length);
     }
- }, [subtitle]);
+  }, [subtitle?.cues]);
 
   // Scroll to segment when triggered by reduxState
   useEffect(() => {
     if (focusTriggered) {
-      if (itemsRef && itemsRef.current && subtitle) {
-        const itemIndex = subtitle.findIndex(item => item.idInternal === focusId)
+      if (itemsRef && itemsRef.current && subtitle?.cues) {
+        const itemIndex = subtitle?.cues.findIndex(item => item.idInternal === focusId)
         if (listRef && listRef.current) {
           listRef.current.scrollToItem(itemIndex, "center");
 
@@ -68,20 +68,20 @@ const SubtitleListEditor : React.FC<{}> = () => {
       }
       dispatch(setFocusSegmentTriggered(false))
     }
-  }, [dispatch, focusId, focusTriggered, itemsRef, subtitle])
+  }, [dispatch, focusId, focusTriggered, itemsRef, subtitle?.cues])
 
   // Automatically create a segment if there are no segments
   useEffect(() => {
-    if (subtitle && subtitle.length === 0) {
+    if (subtitle?.cues && subtitle?.cues.length === 0) {
       dispatch(addCueAtIndex({
-        identifier: subtitleFlavor,
+        identifier: subtitleId,
         cueIndex: 0,
         text: "",
         startTime: 0,
         endTime: defaultSegmentLength
       }))
     }
-  }, [dispatch, subtitle, subtitleFlavor])
+  }, [dispatch, subtitle?.cues, subtitleId])
 
   const listStyle = css({
     display: 'flex',
@@ -110,19 +110,19 @@ const SubtitleListEditor : React.FC<{}> = () => {
     return segmentHeight
   }, [])
 
-  const itemData = createItemData(subtitle, subtitleFlavor, defaultSegmentLength)
+  const itemData = createItemData(subtitle?.cues, subtitleId, defaultSegmentLength)
 
   return (
     <div css={listStyle}>
       <AutoSizer>
-        {({ height, width }) => (
+        {({ height, width }: {height: string | number, width: string | number}) => (
           <VariableSizeList
-            height={height}
-            itemCount={subtitle !== undefined ? subtitle.length : 0}
+            height={height ? height : 0}
+            itemCount={subtitle?.cues !== undefined ? subtitle?.cues.length : 0}
             itemData={itemData}
-            itemSize={(index) => segmentHeight}
+            itemSize={_index => segmentHeight}
             itemKey={(index, data) => data.items[index].idInternal}
-            width={width}
+            width={width ? width : 0}
             overscanCount={4}
             estimatedItemSize={calcEstimatedSize()}
             innerElementType={innerElementType}
@@ -183,7 +183,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   const cue = items[props.index]
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch()
 
   // Unfortunately, the focus selectors will cause every element to rerender,
@@ -298,7 +298,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     dispatch(setCurrentlyAt(cue.startTime))
   }
 
-  const themeState = useSelector(selectThemeState);
+  const { scheme } = useColorScheme();
 
   const segmentStyle = css({
     display: 'flex',
@@ -321,8 +321,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       outline: `${theme.element_outline}`,
     },
     '& input': {
-      marginTop: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
-      marginBottom: (themeState === 'high-contrast-dark' || themeState === 'high-contrast-light' ? '3%' : '0%'),
+      marginTop: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
+      marginBottom: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
     }
   })
 
@@ -387,7 +387,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             }
           }}
           onChange={updateCueText}
-          onFocus={e => setTimeToSegmentStart()}
+          onFocus={() => setTimeToSegmentStart()}
         />
 
         <div css={timeAreaStyle}>
@@ -397,7 +397,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             value={cue.startTime}
             changeCallback={updateCueStart}
             tooltip={t("subtitleList.startTime-tooltip")}
-            tooltipAria={t("subtitleList.startTime-tooltip-aria")+": " + convertMsToReadableString(cue.startTime)}
+            tooltipAria={t("subtitleList.startTime-tooltip-aria") + ": " + convertMsToReadableString(cue.startTime)}
           />
           <TimeInput
             generalFieldStyle={[fieldStyle,
@@ -405,7 +405,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
             value={cue.endTime}
             changeCallback={updateCueEnd}
             tooltip={t("subtitleList.endTime-tooltip")}
-            tooltipAria={t("subtitleList.endTime-tooltip-aria")+": " + convertMsToReadableString(cue.endTime)}
+            tooltipAria={t("subtitleList.endTime-tooltip-aria") + ": " + convertMsToReadableString(cue.endTime)}
           />
         </div>
         <div css={functionButtonAreaStyle} className="functionButtonAreaStyle">
@@ -417,8 +417,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueAbove()
-            }}}
-            icon={faPlus}
+            } }}
+            Icon={LuPlus}
           />
           <FunctionButton
             tooltip={t("subtitleList.deleteSegment")}
@@ -428,8 +428,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               deleteCue()
-            }}}
-            icon={faTrash}
+            } }}
+            Icon={LuTrash}
           />
           <FunctionButton
             tooltip={t("subtitleList.addSegmentBelow")}
@@ -439,8 +439,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
               event.preventDefault()                      // Prevent page scrolling due to Space bar press
               event.stopPropagation()                     // Prevent video playback due to Space bar press
               addCueBelow()
-            }}}
-            icon={faPlus}
+            } }}
+            Icon={LuPlus}
           />
         </div>
       </div>
@@ -453,16 +453,16 @@ const FunctionButton : React.FC<{
   tooltipAria: string,
   onClick: any,
   onKeyDown: any,
-  icon: IconProp
+  Icon: IconType
 }> = ({
   tooltip,
   tooltipAria,
   onClick,
   onKeyDown,
-  icon
+  Icon
 }) => {
 
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   const addSegmentButtonStyle = css({
     width: '32px',
@@ -475,13 +475,13 @@ const FunctionButton : React.FC<{
   return (
     <ThemedTooltip title={tooltip}>
       <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
-        role="button" 
+        role="button"
         tabIndex={0}
-        arial-label={tooltipAria}
+        aria-label={tooltipAria}
         onClick={onClick}
         onKeyDown={onKeyDown}
       >
-        <FontAwesomeIcon icon={icon} size="1x" />
+        <Icon />
       </div>
     </ThemedTooltip>
   )
@@ -496,7 +496,7 @@ const TimeInput : React.FC<{
   generalFieldStyle: SerializedStyles[],
   tooltip: string,
   tooltipAria: string,
-}>= ({
+}> = ({
   value,
   changeCallback,
   generalFieldStyle,
@@ -554,14 +554,14 @@ const TimeInput : React.FC<{
         onBlur={onBlur}
         value={myValue}
       />
-     </ThemedTooltip>
+    </ThemedTooltip>
   )
 }
 
 /**
  * Converts a number into a string with leading zeros
  */
- const fillIn = (val: number) => {
+const fillIn = (val: number) => {
   return val < 10 ? `0${val}` : val
 }
 const fillInMilliseconds = (val: number) => {
@@ -578,11 +578,11 @@ const fillInMilliseconds = (val: number) => {
  * Utility function for TimeInpit
  * Converts a number in milliseoncsd to a string of the format HH:MM:SS:MSS
  */
-  function toHHMMSSMS (ms: number)  {
+function toHHMMSSMS(ms: number) {
   const milliseconds = (ms % 1000)
-  , seconds = Math.floor((ms/1000)%60)
-  , minutes = Math.floor((ms/(1000*60))%60)
-  , hours = Math.floor((ms/(1000*60*60)))
+  const seconds = Math.floor((ms / 1000) % 60)
+  const minutes = Math.floor((ms / (1000 * 60)) % 60)
+  const hours = Math.floor(ms / (1000 * 60 * 60))
 
   const millisecondsString = fillInMilliseconds(milliseconds)
   const secondsString = fillIn(seconds)
@@ -590,13 +590,13 @@ const fillInMilliseconds = (val: number) => {
   const hoursString = fillIn(hours)
 
   return [hoursString, minutesString, secondsString, millisecondsString].join(":")
-};
+}
 
 /**
   Utility function for TimeInpit
  * Converts a string of the format HH:MM:SS:MSS to a millisecond number
  */
-  function getMillisecondsFromHHMMSSMS(value: string) {
+function getMillisecondsFromHHMMSSMS(value: string) {
   const [str1, str2, str3, str4] = value.split(":");
 
   const val1 = Number(str1);
@@ -625,6 +625,6 @@ const fillInMilliseconds = (val: number) => {
   }
 
   return undefined
-};
+}
 
 export default SubtitleListEditor

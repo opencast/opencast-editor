@@ -2,21 +2,19 @@ import React from "react";
 
 import { css } from '@emotion/react'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFrown } from "@fortawesome/free-solid-svg-icons";
+import { LuFrown } from "react-icons/lu";
 
 import { useSelector } from 'react-redux';
 import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice'
 import { flexGapReplacementStyle } from "../cssStyles";
 
-import './../i18n/config';
 import { useTranslation } from 'react-i18next';
 
 /**
  * This page is to be displayed when the application has run into a critical error
  * from which it cannot recover.
  */
- const Error : React.FC<{}> = () => {
+const Error : React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -24,7 +22,7 @@ import { useTranslation } from 'react-i18next';
   const errorTitle = useSelector(selectErrorTitle)
   const errorMessage = useSelector(selectErrorMessage)
   const errorDetails = useSelector(selectErrorDetails)
-  const errorIcon = useSelector(selectErrorIcon)
+  const ErrorIcon = useSelector(selectErrorIcon)
 
   const detailsStyle = css({
     display: 'flex',
@@ -44,7 +42,7 @@ import { useTranslation } from 'react-i18next';
   return (
     <div css={theEndStyle} >
       <div>{errorTitle ? errorTitle : t("error.generic-message")}</div>
-      <FontAwesomeIcon icon={errorIcon ? errorIcon : faFrown} size="10x" />
+      {ErrorIcon ? <ErrorIcon css={{ fontSize: 80 }}/> : <LuFrown css={{ fontSize: 80 }}/>}
       <span>{errorMessage}</span><br />
       {errorDetails &&
         <div css={detailsStyle}>

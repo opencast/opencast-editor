@@ -141,7 +141,7 @@ export const subtitleListKeyMap: KeyMap = {
     action: "keydown",
     group: groupSubtitleList,
   },
-  delete : {
+  delete: {
     name: "subtitleList.deleteSegment",
     sequence: rewriteKeys("Control+Alt+d"),
     action: "keydown",
@@ -153,7 +153,7 @@ export const subtitleListKeyMap: KeyMap = {
  * Combines all keyMaps into a single list of keys for KeyboardControls to display
  * Placing this under the keyMaps is important, else the translation hooks won't happen
  */
- export const getAllHotkeys = () => {
+export const getAllHotkeys = () => {
   const allKeyMaps = [videoPlayerKeyMap, cuttingKeyMap, scrubberKeyMap, subtitleListKeyMap]
   const allKeys : ApplicationKeyMap = {}
 
@@ -167,7 +167,7 @@ export const subtitleListKeyMap: KeyMap = {
           sequences.push({sequence: sequence as MouseTrapKeySequence, action: (value as ExtendedKeyMapOptions).action})
         }
       } else {
-        sequences = [ {sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action } ]
+        sequences = [{sequence: (value as ExtendedKeyMapOptions).sequence, action: (value as ExtendedKeyMapOptions).action }]
       }
 
       // Create new key

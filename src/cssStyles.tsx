@@ -1,20 +1,19 @@
 /**
  * This file contains general css stylings
  */
-import { css, Global } from '@emotion/react'
+import { css, Global, keyframes } from '@emotion/react'
 import React from "react";
 import emotionNormalize from 'emotion-normalize';
 import { checkFlexGapSupport } from './util/utilityFunctions';
-import { useSelector } from 'react-redux';
-import { selectTheme, Theme } from './redux/themeSlice';
 import { createTheme } from '@mui/material/styles';
+import { Theme, useTheme } from './themes';
 
 /**
  * An emotion component that inserts styles globally
  * Is removed when the styles change or when the Global component unmounts.
  */
 export const GlobalStyle: React.FC = () => {
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
   return (
     <Global styles={globalStyle(theme)} />
   );
@@ -35,6 +34,11 @@ export const globalStyle = (theme: Theme) => css({
 });
 
 
+// When to switch behaviour based on screen width
+export const BREAKPOINT_SMALL = 450;
+export const BREAKPOINT_MEDIUM = 650;
+
+
 /**
  * CSS for replacing flexbox gap in browers that do not support it
  * Does not return a css prop, but is meant as a direct replacement for "gap"
@@ -42,15 +46,15 @@ export const globalStyle = (theme: Theme) => css({
  */
 export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow: boolean) => {
 
-  let half = flexGapValue / 2
-  let quarter = flexGapValue / 4
+  const half = flexGapValue / 2
+  const quarter = flexGapValue / 4
 
   return (
     {
     // Use gap if supported
-    ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
-    // Else use margins
-    ...(!checkFlexGapSupport()) &&
+      ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
+      // Else use margins
+      ...(!checkFlexGapSupport()) &&
       {
         ">*": { // For each child
           marginTop: `${quarter}px`,
@@ -75,19 +79,15 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
  * CSS for buttons
  */
 export const basicButtonStyle = (theme: Theme) => css({
-  borderRadius: '10px',
+  borderRadius: '5px',
   cursor: "pointer",
-  // Animation
-  transitionDuration: "0.3s",
-  transitionProperty: "transform",
   "&:hover": {
-    transform: 'scale(1.1)',
+    backgroundColor: `${theme.button_color}`,
+    color: `${theme.inverted_text}`,
   },
   "&:focus": {
-    transform: 'scale(1.1)',
-  },
-  "&:active": {
-    transform: 'scale(0.9)',
+    backgroundColor: `${theme.button_color}`,
+    color: `${theme.inverted_text}`,
   },
   // Flex position child elements
   display: 'flex',
@@ -95,7 +95,7 @@ export const basicButtonStyle = (theme: Theme) => css({
   alignItems: 'center',
   ...(flexGapReplacementStyle(10, false)),
   textAlign: 'center' as const,
-  outline: `${theme.button_outline}`
+  outline: `${theme.button_outline}`,
 });
 
 /**
@@ -104,7 +104,7 @@ export const basicButtonStyle = (theme: Theme) => css({
 export const deactivatedButtonStyle = css({
   borderRadius: '10px',
   cursor: "pointer",
-  opacity: "0.4",
+  opacity: "0.6",
   // Flex position child elements
   display: 'flex',
   justifyContent: 'center',
@@ -122,30 +122,29 @@ export const navigationButtonStyle = (theme: Theme) => css({
   justifyContent: 'space-around',
   boxShadow: `${theme.boxShadow}`,
   background: `${theme.element_bg}`,
- })
+})
 
 /**
  * CSS for a container that holds back/forward buttons
  */
 export const backOrContinueStyle = css(({
   display: 'flex',
-  flexDirection: 'row' as const,
+  flexDirection: 'row',
   ...(flexGapReplacementStyle(20, false)),
 }))
 
 /**
  * CSS for big buttons in a dynamic grid
  */
- export const tileButtonStyle = (theme: Theme) => css({
-  width: '250px',
+export const tileButtonStyle = (theme: Theme) => css({
+  width: '290px',
   height: '220px',
   display: 'flex',
-  flexDirection: 'column' as const,
-  fontSize: "x-large",
+  flexDirection: 'column',
+  fontWeight: "bold",
   ...(flexGapReplacementStyle(30, false)),
-  boxShadow: `${theme.boxShadow}`,
+  boxShadow: `${theme.boxShadow_tiles}`,
   background: `${theme.element_bg}`,
-  alignItems: 'unset',  // overwrite from basicButtonStyle to allow for textOverflow to work
   placeSelf: 'center',
 });
 
@@ -167,23 +166,24 @@ export const disableButtonAnimation = css({
 /**
  * CSS for a title
  */
-export const titleStyle = css(({
+export const titleStyle = (theme: Theme) => css(({
   display: 'inline-block',
   padding: '15px',
-  overflow: 'hidden',
   whiteSpace: "nowrap",
   textOverflow: 'ellipsis',
   maxWidth: '100%',
+  color: `${theme.text}`,
 }))
 
 /**
  * Addendum for the titleStyle
  * Used for page titles
  */
-export const titleStyleBold = css({
+export const titleStyleBold = (theme: Theme) => css({
   fontWeight: 'bold',
   fontSize: '24px',
   verticalAlign: '-2.5px',
+  color: `${theme.text}`,
 })
 
 /**
@@ -214,13 +214,19 @@ export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
 
 export function selectFieldStyle(theme: Theme) {
   return {
-    control: (provided: any) => ({
+    control: (provided: any, state: any) => ({
       ...provided,
-      background: theme.element_bg,
+      background: theme.menu_background,
+      ...(state.isFocused && {borderColor: theme.metadata_highlight}),
+      ...(state.isFocused && {boxShadow: `0 0 0 1px ${theme.metadata_highlight}`}),
+      "&:hover": {
+        borderColor: theme.menu_background,
+        boxShadow: `0 0 0 1px ${theme.metadata_highlight}`
+      },
     }),
     menu: (provided: any) => ({
       ...provided,
-      background: theme.element_bg,
+      background: theme.menu_background,
       outline: theme.dropdown_border,
       // kill the gap
       marginTop: 0,
@@ -229,20 +235,20 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       color: theme.text,
     }),
-    multiValue: (provided: any) =>({
+    multiValue: (provided: any) => ({
       ...provided,
-      color: theme.selected_text,
+      color: theme.inverted_text,
       background: theme.multiValue,
       cursor: 'default',
     }),
-    multiValueLabel: (provided: any) =>({
+    multiValueLabel: (provided: any) => ({
       ...provided,
-      color: theme.selected_text,
+      color: theme.inverted_text,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      background: state.isFocused ? theme.focused : theme.background
-        && state.isSelected ? theme.selected : theme.background,
+      background: state.isFocused ? theme.focused : theme.menu_background
+        && state.isSelected ? theme.selected : theme.menu_background,
       ...(state.isFocused && {color: theme.focus_text}),
       color: state.isFocused ? theme.focus_text : theme.text
         && state.isSelected ? theme.selected_text : theme.text,
@@ -273,13 +279,13 @@ export function selectFieldStyle(theme: Theme) {
 export const calendarStyle = (theme: Theme) => createTheme({
 
   components: {
-    
+
     MuiPaper: {
       styleOverrides: {
         root: {
           /* Modal */
           outline: `${theme.dropdown_border} !important`,
-          background: `${theme.background}`,
+          background: `${theme.menu_background}`,
           color: `${theme.text}`,
 
           /* Calendar-modal */
@@ -293,7 +299,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
               color: `${theme.selected_text}`,
             }
           },
-          
+
           /* Clock-modal */
           '& .MuiClock-clock': { // round clock
             background: `${theme.clock_bg}`,
@@ -316,14 +322,14 @@ export const calendarStyle = (theme: Theme) => createTheme({
             border: `16px solid ${theme.clock_hands}`,
           }
         },
-        
+
       }
     },
     MuiButtonBase: {
       styleOverrides: {
         root: {
           /* Calendar- and Clock-modal -> arrows, icon, days  */
-          color: `${theme.icon_color} !important`,
+          color: `${theme.text} !important`,
           '&.MuiPickersDay-root': {
             background: 'transparent !important',
             color: `${theme.text} !important`,
@@ -336,13 +342,13 @@ export const calendarStyle = (theme: Theme) => createTheme({
           '&.Mui-selected': {
             background: `${theme.selected} !important`,
             color: `${theme.selected_text} !important`,
-            
+
           },
           // Current day
           '&:not(.Mui-selected)': {
             borderColor: `${theme.focused} !important`,
           },
-          '&.Mui-disabled':{
+          '&.Mui-disabled': {
             color: `${theme.disabled} !important`,
           },
           '&.MuiClock-amButton, &.MuiClock-pmButton': {
@@ -361,7 +367,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
         },
       }
     },
-  }  
+  }
 })
 
 export const subtitleSelectStyle = (theme: Theme) => createTheme({
@@ -422,3 +428,39 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
     }
   }
 })
+
+export const spinningStyle = css({
+  animation: `2s linear infinite none ${keyframes({
+    "0%": { transform: "rotate(0)" },
+    "100%": { transform: "rotate(360deg)" },
+  })}`,
+})
+
+export const customIconStyle = (theme: Theme) => css(({
+  maxWidth: '16px',
+  height: 'auto',
+  color: theme.text,
+}))
+
+export const videosStyle = (theme: Theme) => css(({
+  display: 'flex',
+  flexDirection: 'column',
+
+  width: '100%',
+  background: `${theme.menu_background}`,
+  borderRadius: '5px',
+  boxShadow: `${theme.boxShadow_tiles}`,
+  marginTop: '24px',
+  boxSizing: "border-box",
+  padding: '10px',
+  ...(flexGapReplacementStyle(10, false)),
+}))
+
+export const backgroundBoxStyle = (theme: Theme) => css(({
+  background: `${theme.menu_background}`,
+  borderRadius: '7px',
+  boxShadow: `${theme.boxShadow_tiles}`,
+  boxSizing: "border-box",
+  padding: '20px',
+  ...(flexGapReplacementStyle(25, false)),
+}))
