@@ -11,6 +11,7 @@ import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from
 import { useTranslation } from 'react-i18next';
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { CallbackButton } from "./Finish";
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -41,11 +42,20 @@ const TheEnd : React.FC = () => {
     ...(flexGapReplacementStyle(20, false)),
   })
 
+  const restartOrBackStyle = css({
+    display: "flex",
+    flexDirection: 'row',
+    ...(flexGapReplacementStyle(20, false)),
+  })
+
   return (
     <div css={theEndStyle}>
       {endState === 'discarded' ? <LuXCircle css={{fontSize: 80}}/> : <LuCheckCircle css={{fontSize: 80}}/> }
       <div>{text()}</div>
-      {(endState === 'discarded') && <StartOverButton />}
+      <div css={restartOrBackStyle}>
+        <CallbackButton />
+        {(endState === 'discarded') && <StartOverButton />}
+      </div>
     </div>
   );
 }

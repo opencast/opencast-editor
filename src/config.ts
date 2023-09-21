@@ -41,6 +41,9 @@ export interface subtitleTags {
  */
 interface iSettings {
   id: string | undefined,
+  allowedCallbackPrefixes: string[],
+  callbackUrl: string | undefined,
+  callbackSystem: string | undefined,
   opencast: {
     url: string,
     name: string | undefined,
@@ -76,6 +79,9 @@ interface iSettings {
  */
 const defaultSettings: iSettings = {
   id: undefined,
+  allowedCallbackPrefixes: [],
+  callbackUrl: undefined,
+  callbackSystem: undefined,
   opencast: {
     url: window.location.origin,
     name: undefined,
@@ -136,7 +142,7 @@ export const init = async () => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
     let obj : {[k: string]: any} = rawUrlSettings;
-    if (key.startsWith('opencast.')) {
+    if (key.startsWith('opencast.') || key === 'allowedCallbackPrefixes') {
       return;
     }
 
@@ -162,6 +168,11 @@ export const init = async () => {
 
   // Prepare local setting to avoid complicated checks later
   settings.opencast.local = settings.opencast.local && settings.opencast.url === window.location.origin;
+
+  // Prevent malicious callback urls
+  settings.callbackUrl = settings.allowedCallbackPrefixes.some(
+    p => settings.callbackUrl?.startsWith(p)
+  ) ? settings.callbackUrl : undefined;
 
   // Configure hotkeys
   configure({
@@ -321,6 +332,16 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
+  'array': (v: any, _allowParse: any) => {
+    if (!Array.isArray(v)) {
+      throw new Error("is not an array, but should be");
+    }
+    for (const entry in v) {
+      if (typeof entry !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+    }
+  },
   'map': (v: any, _allowParse: any) => {
     for (const key in v) {
       if (typeof key !== 'string') {
@@ -368,6 +389,9 @@ const types = {
 // above for some examples.
 const SCHEMA = {
   id: types.string,
+  allowedCallbackPrefixes: types.array,
+  callbackUrl: types.string,
+  callbackSystem: types.string,
   opencast: {
     url: types.string,
     name: types.string,

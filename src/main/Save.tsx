@@ -11,7 +11,7 @@ import { selectFinishState } from '../redux/finishSlice'
 import { selectHasChanges, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
 
-import { PageButton } from './Finish'
+import { CallbackButton, PageButton } from './Finish'
 
 import { useTranslation } from 'react-i18next';
 import { AppDispatch } from "../redux/store";
@@ -58,6 +58,7 @@ const Save : React.FC = () => {
         <>
           <LuCheckCircle css={{fontSize: 80}}/>
           <div>{t("save.success-text")}</div>
+          <CallbackButton />
         </>
       )
     // Pre save
