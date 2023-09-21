@@ -3,14 +3,14 @@ import React, { SyntheticEvent } from "react";
 import { basicButtonStyle, customIconStyle } from '../cssStyles'
 
 import { IconType } from "react-icons";
-import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash} from "react-icons/lu";
+import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal} from "react-icons/lu";
 import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 
 import { css } from '@emotion/react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll
 } from '../redux/videoSlice'
 import { GlobalHotKeys, KeySequence, KeyMapOptions } from "react-hotkeys";
 import { cuttingKeyMap } from "../globalKeys";
@@ -90,6 +90,12 @@ const CuttingActions: React.FC = () => {
           actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
           tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
           ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: (cuttingKeyMap[handlers.mergeRight.name] as KeyMapOptions).sequence })}
+        />
+        <div css={verticalLineStyle} />
+        <CuttingActionsButton Icon={LuMoveHorizontal}
+          actionName={t("cuttingActions.merge-all-button")} actionHandler={dispatchAction} action={mergeAll}
+          tooltip={t('cuttingActions.merge-all-tooltip')}
+          ariaLabelText={t('cuttingActions.merge-all-tooltip-aria')}
         />
         {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
           tooltip="Not implemented"
