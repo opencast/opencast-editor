@@ -3,14 +3,13 @@ import { ParseKeys } from "i18next";
 
 import React from "react";
 
-import { KeyMapDisplayOptions } from 'react-hotkeys';
 import { useTranslation, Trans} from "react-i18next";
 import { flexGapReplacementStyle } from "../cssStyles";
-import { getAllHotkeys } from "../globalKeys";
+import { getGroupName, KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTheme } from "../themes";
 import { titleStyle, titleStyleBold } from '../cssStyles'
 
-const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
+const Group: React.FC<{name: ParseKeys, entries: { [key: string]: string[][] }}> = ({name, entries}) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
@@ -35,14 +34,14 @@ const Group: React.FC<{name: ParseKeys, entries: KeyMapDisplayOptions[]}> = ({na
   return (
     <div css={groupStyle}>
       <h3 css={headingStyle}>{t(name)}</h3>
-      {entries.map((entry: KeyMapDisplayOptions, index: number) => (
-        <Entry params={entry} key={index}></Entry>
-      ))}
+      {Object.entries(entries).map(([key, value], index) =>
+        <Entry name={key} sequences={value} key={index} />
+      )}
     </div>
   )
 }
 
-const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
+const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequences}) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
@@ -62,12 +61,6 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
     textOverflow: 'ellipsis',
     wordWrap: 'break-word',
     color: `${theme.text}`,
-  })
-
-  const sequencesStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    ...(flexGapReplacementStyle(10, true))
   })
 
   const sequenceStyle = css({
@@ -95,20 +88,18 @@ const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
 
   return (
     <div css={entryStyle}>
-      <div css={labelStyle}><Trans>{params.name || t("keyboardControls.missingLabel")}</Trans></div>
-      <div css={sequencesStyle}>
-        {params.sequences.map((sequence, index, arr) => (
-          <div css={sequenceStyle} key={index}>
-            {sequence.sequence.toString().split('+').map((singleKey, index, {length}) => (
-              <>
-                <div css={singleKeyStyle} key={index}>{singleKey}</div>
-                {length - 1 !== index ? <div css={orStyle}>+</div> : ''}
-              </>
-            ))}
-            <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
-          </div>
-        ))}
-      </div>
+      <div css={labelStyle}><Trans>{name || t("keyboardControls.missingLabel")}</Trans></div>
+      {sequences.map((sequence, index, arr) => (
+        <div css={sequenceStyle} key={index}>
+          {sequence.map((singleKey, index) => (
+            <>
+              <div css={singleKeyStyle} key={index}>{singleKey}</div>
+              {sequence.length - 1 !== index && <div css={orStyle}>+</div>}
+            </>
+          ))}
+          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -119,8 +110,6 @@ const KeyboardControls: React.FC = () => {
   const { t } = useTranslation();
   const theme = useTheme()
 
-  const keyMap = getAllHotkeys()
-
   const groupsStyle = css({
     display: 'flex',
     flexDirection: 'row' as const,
@@ -130,30 +119,19 @@ const KeyboardControls: React.FC = () => {
   })
 
   const render = () => {
-    if (keyMap && Object.keys(keyMap).length > 0) {
-
-      const obj: Record<string, Array<KeyMapDisplayOptions>> = {}
-      obj[t("keyboardControls.defaultGroupName")] = []    // For keys without a group
-
-      // Sort by group
-      for (const [, value] of Object.entries(keyMap)) {
-        if (value.group) {
-          if (obj[value.group]) {
-            obj[value.group].push(value)
-          } else {
-            obj[value.group] = [value]
-          }
-        } else {
-          obj[t("keyboardControls.defaultGroupName")].push(value)
-        }
-      }
+    if (KEYMAP && Object.keys(KEYMAP).length > 0) {
 
       const groups: JSX.Element[] = [];
-      for (const key in obj) {
-        if (obj[key].length > 0) {
-          groups.push(<Group name={key as ParseKeys} entries={obj[key]} key={key}/>);
-        }
-      }
+      Object.entries(KEYMAP).forEach(([groupName, group], index) => {
+        const entries : { [groupName: string]: string[][] } = {}
+        Object.entries(group).forEach(([, action]) => {
+          const sequences = action.key.split(",").map(item => item.trim())
+          entries[action.name] = Object.entries(sequences).map(([, sequence]) => {
+            return sequence.split("+").map(item => rewriteKeys(item.trim()))
+          })
+        })
+        groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index}/>)
+      })
 
       return (
         <div css={groupsStyle}>

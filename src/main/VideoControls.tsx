@@ -13,9 +13,7 @@ import {
 import { convertMsToReadableString } from '../util/utilityFunctions'
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
-import { GlobalHotKeys, KeyMapOptions } from 'react-hotkeys';
-import { videoPlayerKeyMap } from "../globalKeys";
-import { SyntheticEvent } from "react";
+import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTranslation } from 'react-i18next';
 
 import { RootState } from "../redux/store";
@@ -23,6 +21,7 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { ThemedTooltip } from "./Tooltip";
 import { Theme, useTheme } from "../themes";
+import { useHotkeys } from "react-hotkeys-hook";
 
 /**
  * Contains controls for manipulating multiple video players at once
@@ -111,9 +110,7 @@ const PreviewMode: React.FC<{
   const theme = useTheme();
 
   // Change preview mode from "on" to "off" and vice versa
-  const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent, ref: React.RefObject<HTMLDivElement> | undefined) => {
-    event.preventDefault()                      // Prevent page scrolling due to Space bar press
-    event.stopPropagation()                     // Prevent video playback due to Space bar press
+  const switchPlayPreview = (ref: React.RefObject<HTMLDivElement> | undefined) => {
     dispatch(setIsPlayPreview(!isPlayPreview))
 
     // Lose focus if clicked by mouse
@@ -123,10 +120,7 @@ const PreviewMode: React.FC<{
   }
 
   // Maps functions to hotkeys
-  const handlers = {
-    // preview: switchPlayPreview,
-    preview: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchPlayPreview(keyEvent, undefined) } }
-  }
+  useHotkeys(KEYMAP.videoPlayer.preview.key, () => switchPlayPreview(undefined), {preventDefault: true}, [isPlayPreview]);
 
   const previewModeStyle = css({
     cursor: "pointer",
@@ -150,17 +144,16 @@ const PreviewMode: React.FC<{
   return (
     <ThemedTooltip
       title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"),
-        hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
+        hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
     >
       <div css={previewModeStyle}
         ref={ref}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-        aria-label={t("video.previewButton-aria", { hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
-        onClick={(event: SyntheticEvent) => switchPlayPreview(event, ref)}
+        aria-label={t("video.previewButton-aria", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
+        onClick={() => switchPlayPreview(ref)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
-          switchPlayPreview(event, undefined)
+          switchPlayPreview(undefined)
         } }}>
-        <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
         <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
         </div>
@@ -190,15 +183,12 @@ const PlayButton: React.FC<{
   const theme = useTheme();
 
   // Change play mode from "on" to "off" and vice versa
-  const switchIsPlaying = (event: KeyboardEvent | SyntheticEvent) => {
-    event.preventDefault()                      // Prevent page scrolling due to Space bar press
+  const switchIsPlaying = () => {
     dispatch(setIsPlaying(!isPlaying))
   }
 
   // Maps functions to hotkeys
-  const handlers = {
-    play: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchIsPlaying(keyEvent) } }
-  }
+  useHotkeys(KEYMAP.videoPlayer.play.key, () => switchIsPlaying(), {preventDefault: true}, [isPlaying]);
 
   const playButtonStyle = css({
     justifySelf: 'center',
@@ -220,13 +210,12 @@ const PlayButton: React.FC<{
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
-        <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
         <div css={[basicButtonStyle(theme), playButtonStyle]}
           role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
           aria-label={t("video.playButton-tooltip")}
-          onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+          onClick={() => { switchIsPlaying() }}
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
-            switchIsPlaying(event)
+            switchIsPlaying()
           } }}>
           {isPlaying ? <LuPause css={playIconStyle} /> : <LuPlay css={playIconStyle} />}
         </div>

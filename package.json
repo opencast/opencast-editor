@@ -34,7 +34,7 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
     "react-final-form": "^6.5.9",
-    "react-hotkeys": "^2.0.0",
+    "react-hotkeys-hook": "^4.4.1",
     "react-i18next": "^13.2.1",
     "react-icons": "^4.9.0",
     "react-indiana-drag-scroll": "^2.2.0",

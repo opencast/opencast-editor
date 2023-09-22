@@ -197,7 +197,7 @@ export const VideoPlayer = React.forwardRef(
     }
 
     useEffect(() => {
-    // Seek if the position in the video got changed externally
+      // Seek if the position in the video got changed externally
       if (!isPlaying && ref.current && ready) {
         ref.current.seekTo(currentlyAt, "seconds")
       }
@@ -209,11 +209,14 @@ export const VideoPlayer = React.forwardRef(
         ref.current.seekTo(currentlyAt, "seconds")
         dispatch(setClickTriggered(false))
       }
-      if (!isAspectRatioUpdated && ready) {     //     if (!isAspectRatioUpdated && ref.current && ready) {
+    })
+
+    useEffect(() => {
+      if (!isAspectRatioUpdated && ready) {
       // Update the store with video dimensions for rendering purposes
         updateAspectRatio();
       }
-    })
+    }, [isAspectRatioUpdated, ready])
 
     // Callback specifically for the subtitle editor view
     // When changing urls while the player is playing, don't reset to 0

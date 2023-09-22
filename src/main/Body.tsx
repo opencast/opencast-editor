@@ -13,7 +13,6 @@ import { selectIsEnd } from '../redux/endSlice'
 import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
 
-
 const Body: React.FC = () => {
 
   const isEnd = useSelector(selectIsEnd)
