@@ -9,7 +9,7 @@
     "@fontsource-variable/roboto-flex": "^5.0.3",
     "@iarna/toml": "^2.2.5",
     "@mui/material": "^5.14.7",
-    "@opencast/appkit": "^0.2.0",
+    "@opencast/appkit": "^0.2.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^6.1.2",
     "@types/iarna__toml": "^2.0.2",
@@ -34,7 +34,7 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
     "react-final-form": "^6.5.9",
-    "react-hotkeys": "^2.0.0",
+    "react-hotkeys-hook": "^4.4.1",
     "react-i18next": "^13.2.1",
     "react-icons": "^4.9.0",
     "react-indiana-drag-scroll": "^2.2.0",
@@ -47,9 +47,14 @@
     "react-window": "^1.8.9",
     "redux": "^4.2.1",
     "standardized-audio-context": "^25.3.55",
-    "typescript": "^4.9.5",
+    "typescript": "^5.1.6",
     "uuid": "^9.0.0",
     "webvtt-parser": "^2.2.0"
+  },
+  "overrides": {
+    "react-scripts": {
+      "typescript": "^5"
+    }
   },
   "scripts": {
     "start": "REACT_APP_GIT_SHA=`git rev-parse HEAD` REACT_APP_BUILD_DATE=\"`date`\" react-app-rewired start",
