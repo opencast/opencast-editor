@@ -16,6 +16,9 @@
         "delete-button": "Borrar",
         "delete-restore-tooltip": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido:: {{hotKeyName}}.",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "Restaurar",
         "mergeLeft-button": "Fusionar a la izquierda",
         "mergeLeft-tooltip": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}",
@@ -201,7 +204,9 @@
     "various": {
         "error-details-text": "Detalles: {{errorMessage}}\n",
         "error-text": "Ha ocurrido un error. Por favor, espere un poco e inténtelo de nuevo.",
-        "goBack-button": "¡De ninguna manera! Volver atrás"
+        "goBack-button": "¡De ninguna manera! Volver atrás",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
         "title": "Select track(s) for processing",

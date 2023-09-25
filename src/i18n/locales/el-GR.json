@@ -16,6 +16,9 @@
         "delete-button": "Διαγραφή",
         "delete-restore-tooltip": "Σήμανση ή κατάργηση του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Διαγραφή και Επαναφορά. Σήμανση ή κατάργηση επισήμανσης του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotKeyName}}.",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "Επαναφορά",
         "mergeLeft-button": "Συγχώνευση Αριστερά",
         "mergeLeft-tooltip": "Συνδυάστε το τρέχον ενεργό τμήμα με το τμήμα στα αριστερά. Πλήκτρο συντόμευσης: {{hotkeyName}}",
@@ -201,7 +204,9 @@
     "various": {
         "error-details-text": "Λεπτομέρειες: {{errorMessage}}\n",
         "error-text": "Παρουσιάστηκε σφάλμα. Παρακαλώ περιμένετε λίγο και προσπαθήστε ξανά.",
-        "goBack-button": "Όχι, πήγαινέ με πίσω"
+        "goBack-button": "Όχι, πήγαινέ με πίσω",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
         "title": "Select track(s) for processing",
