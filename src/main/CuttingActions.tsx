@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BREAKPOINT_MEDIUM, basicButtonStyle, customIconStyle } from '../cssStyles'
+import { BREAKPOINT_MEDIUM, basicButtonStyle, customIconStyle, undisplay } from '../cssStyles'
 
 import { IconType } from "react-icons";
 import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal} from "react-icons/lu";
@@ -150,11 +150,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
         } }}
       >
         <Icon />
-        <span css={{
-          [`@media (max-width: ${BREAKPOINT_MEDIUM}px)`]: {
-            display: "none",
-          },
-        }}>{actionName}</span>
+        <span css={undisplay(BREAKPOINT_MEDIUM)}>{actionName}</span>
       </div>
     </ThemedTooltip>
   );
@@ -188,11 +184,7 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
         } }}
       >
         {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle(theme)} /> }
-        <span css={{
-          [`@media (max-width: ${BREAKPOINT_MEDIUM}px)`]: {
-            display: "none",
-          },
-        }}>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</span>
+        <span css={undisplay(BREAKPOINT_MEDIUM)}>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</span>
       </div>
     </ThemedTooltip>
   );

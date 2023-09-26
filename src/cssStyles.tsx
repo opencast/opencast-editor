@@ -464,3 +464,9 @@ export const backgroundBoxStyle = (theme: Theme) => css(({
   padding: '20px',
   ...(flexGapReplacementStyle(25, false)),
 }))
+
+export const undisplay = (maxWidth: number) => css({
+  [`@media (max-width: ${maxWidth}px)`]: {
+    display: "none",
+  }
+})

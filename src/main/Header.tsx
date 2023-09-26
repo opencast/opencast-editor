@@ -9,7 +9,7 @@ import { LuMoon, LuSun } from "react-icons/lu";
 import { HiOutlineTranslate } from "react-icons/hi";
 import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
-import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from '../cssStyles'
+import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle, undisplay } from '../cssStyles'
 
 import { ReactComponent as LogoSvg } from '../img/opencast-editor.svg';
 import { selectIsEnd } from "../redux/endSlice";
@@ -251,11 +251,7 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
         css={[basicButtonStyle(theme), themeSelectorButtonStyle]}
       >
         <Icon css={iconStyle} />
-        <span css={{
-          [`@media (max-width: ${BREAKPOINT_MEDIUM}px)`]: {
-            display: "none",
-          },
-        }}>{label}</span>
+        <span css={undisplay(BREAKPOINT_MEDIUM)}>{label}</span>
       </ProtoButton>
     )
   })
