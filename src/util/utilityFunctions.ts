@@ -1,6 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { WebVTTParser, WebVTTSerializer } from 'webvtt-parser';
 import { ExtendedSubtitleCue, SubtitleCue } from '../types';
+import { useEffect, useState } from 'react';
 
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
   const decimalFactor = Math.pow(10, decimalPlace)
@@ -179,4 +180,33 @@ export function languageCodeToName(lang: string | undefined): string | undefined
   } catch (e) {
     return undefined
   }
+}
+
+/**
+ * @returns the current window width and height
+ */
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
+/**
+ * A hook for window dimensions
+ */
+export default function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
 }

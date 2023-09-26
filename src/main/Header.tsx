@@ -12,10 +12,12 @@ import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle, undisplay } from '../cssStyles'
 
 import { ReactComponent as LogoSvg } from '../img/opencast-editor.svg';
+import { ReactComponent as LogoSvgNarrow } from '../img/opencast-editor-narrow.svg';
 import { selectIsEnd } from "../redux/endSlice";
-import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
+import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, screenWidthAtMost, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
+import useWindowDimensions from "../util/utilityFunctions";
 
 function Header() {
   const theme = useTheme()
@@ -67,6 +69,10 @@ function Header() {
       backgroundColor: theme.header_button_hover_bg,
       color: `${theme.header_text}`
     },
+
+    [screenWidthAtMost(BREAKPOINT_MEDIUM)]: {
+      fontSize: 0,
+    },
   })
 
   return (
@@ -94,6 +100,7 @@ const Logo: React.FC = () => {
 
   const { t } = useTranslation()
   const { scheme } = useColorScheme();
+  const { width } = useWindowDimensions()
 
   const logo = css({
     paddingLeft: '8px',
@@ -116,7 +123,7 @@ const Logo: React.FC = () => {
 
   return (
     <MainMenuButton
-      Icon={LogoSvg}
+      Icon={width > 920 ? LogoSvg : LogoSvgNarrow}
       stateName={MainMenuStateNames.cutting}
       bottomText={""}
       ariaLabelText={t("mainMenu.cutting-button")}
