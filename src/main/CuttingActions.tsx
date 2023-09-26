@@ -1,6 +1,6 @@
 import React from "react";
 
-import { basicButtonStyle, customIconStyle } from '../cssStyles'
+import { BREAKPOINT_MEDIUM, basicButtonStyle, customIconStyle } from '../cssStyles'
 
 import { IconType } from "react-icons";
 import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal} from "react-icons/lu";
@@ -56,6 +56,8 @@ const CuttingActions: React.FC = () => {
     flexDirection: 'row' as const,
     justifyContent: 'center',
     alignItems: 'center',
+
+    flexWrap: 'wrap',
   })
 
   const verticalLineStyle = css({
@@ -126,7 +128,14 @@ interface cuttingActionsButtonInterface {
  * A button representing a single action a user can take while cutting
  * @param param0
  */
-const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, actionName, actionHandler, action, tooltip, ariaLabelText}) => {
+const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
+  Icon,
+  actionName,
+  actionHandler,
+  action,
+  tooltip,
+  ariaLabelText,
+}) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const theme = useTheme();
 
@@ -141,7 +150,11 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, ac
         } }}
       >
         <Icon />
-        <span>{actionName}</span>
+        <span css={{
+          [`@media (max-width: ${BREAKPOINT_MEDIUM}px)`]: {
+            display: "none",
+          },
+        }}>{actionName}</span>
       </div>
     </ThemedTooltip>
   );
@@ -175,7 +188,11 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
         } }}
       >
         {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle(theme)} /> }
-        <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
+        <span css={{
+          [`@media (max-width: ${BREAKPOINT_MEDIUM}px)`]: {
+            display: "none",
+          },
+        }}>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</span>
       </div>
     </ThemedTooltip>
   );
