@@ -9,7 +9,7 @@ import { LuMoon, LuSun } from "react-icons/lu";
 import { HiOutlineTranslate } from "react-icons/hi";
 import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
-import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle, undisplay } from '../cssStyles'
+import { basicButtonStyle, BREAKPOINTS, flexGapReplacementStyle, undisplay } from '../cssStyles'
 
 import { ReactComponent as LogoSvg } from '../img/opencast-editor.svg';
 import { ReactComponent as LogoSvgNarrow } from '../img/opencast-editor-narrow.svg';
@@ -70,7 +70,7 @@ function Header() {
       color: `${theme.header_text}`
     },
 
-    [screenWidthAtMost(BREAKPOINT_MEDIUM)]: {
+    [screenWidthAtMost(BREAKPOINTS.medium)]: {
       fontSize: 0,
     },
   })
@@ -174,7 +174,7 @@ const LanguageButton: React.FC = () => {
       menu={{
         label,
         items: menuItems,
-        breakpoint: BREAKPOINT_SMALL,
+        breakpoint: BREAKPOINTS.small,
       }}
     >
       <HeaderButton Icon={HiOutlineTranslate} label={label} />
@@ -200,7 +200,7 @@ const ThemeButton: React.FC = () => {
       menu={{
         label: t("theme.appearance"),
         items: menuItems,
-        breakpoint: BREAKPOINT_MEDIUM,
+        breakpoint: BREAKPOINTS.medium,
       }}>
       <HeaderButton
         Icon={scheme === "light" || scheme === "light-high-contrast" ? LuMoon : LuSun}
@@ -258,7 +258,7 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
         css={[basicButtonStyle(theme), themeSelectorButtonStyle]}
       >
         <Icon css={iconStyle} />
-        <span css={undisplay(BREAKPOINT_MEDIUM)}>{label}</span>
+        <span css={undisplay(BREAKPOINTS.medium)}>{label}</span>
       </ProtoButton>
     )
   })
