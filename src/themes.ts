@@ -42,6 +42,9 @@ export interface Theme {
   button_color: string
   indicator_color: string
   icon_color: string
+  slider_thumb_color: string
+  slider_thumb_shadow: string
+  slider_track_color: string
   background_finish_menu_icon: string
   background_play_icon: string
   background_preview_icon: string
@@ -94,6 +97,9 @@ export const lightMode: Theme = {
   button_color: COLORS.neutral10,
   indicator_color: COLORS.neutral60,
   icon_color: COLORS.neutral05,
+  slider_thumb_color: COLORS.neutral70,
+  slider_thumb_shadow: `0 0 0 8px ${COLORS.neutral30}`,
+  slider_track_color: COLORS.neutral30,
   background_finish_menu_icon: COLORS.neutral15,
   background_play_icon: COLORS.neutral70,
   background_preview_icon: COLORS.neutral70,
@@ -147,6 +153,9 @@ export const darkMode: Theme = {
   button_color: COLORS.neutral20,
   indicator_color: COLORS.neutral60,
   icon_color: 'rgba(255, 255, 255, 0.87)',
+  slider_thumb_color: COLORS.neutral70,
+  slider_thumb_shadow: '0 0 0 8px rgba(255, 255, 255, 0.2)',
+  slider_track_color: COLORS.neutral90,
   background_finish_menu_icon: COLORS.neutral15,
   background_play_icon: COLORS.neutral70,
   background_preview_icon: COLORS.neutral70,
@@ -200,6 +209,9 @@ export const highContrastDarkMode: Theme = {
   button_color: '#a6ffea',
   indicator_color: '#a6ffea',
   icon_color: '#000',
+  slider_thumb_color: '#fff',
+  slider_thumb_shadow: '0 0 0 8px rgba(166, 255, 234, 0.8)',
+  slider_track_color: '#fff',
   background_finish_menu_icon: '#000',
   background_play_icon: '#fff',
   background_preview_icon: '#fff',
@@ -253,6 +265,9 @@ export const highContrastLightMode: Theme = {
   button_color: '#000099',
   indicator_color: '#000099',
   icon_color: '#fff',
+  slider_thumb_color: '#000',
+  slider_thumb_shadow: '0 0 0 8px rgba(0, 0, 153, 0.6)',
+  slider_track_color: '#000',
   background_finish_menu_icon: 'snow',
   background_play_icon: '#000',
   background_preview_icon: '#000',

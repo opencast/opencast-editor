@@ -3,7 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
-import { LuPlay, LuPause } from "react-icons/lu";
+import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -22,6 +22,7 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { ThemedTooltip } from "./Tooltip";
 import { Theme, useTheme } from "../themes";
 import { useHotkeys } from "react-hotkeys-hook";
+import { Slider } from "@mui/material";
 
 /**
  * Contains controls for manipulating multiple video players at once
@@ -30,14 +31,22 @@ import { useHotkeys } from "react-hotkeys-hook";
 const VideoControls: React.FC<{
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying: (state: RootState) => boolean,
+  selectIsMuted: (state: RootState) => boolean,
+  selectVolume: (state: RootState) => number,
   selectIsPlayPreview: (state: RootState) => boolean,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+  setIsMuted: ActionCreatorWithPayload<boolean, string>,
+  setVolume: ActionCreatorWithPayload<number, string>,
   setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   selectCurrentlyAt,
   selectIsPlaying,
+  selectIsMuted,
+  selectVolume,
   selectIsPlayPreview,
   setIsPlaying,
+  setIsMuted,
+  setVolume,
   setIsPlayPreview
 }) => {
 
@@ -79,6 +88,12 @@ const VideoControls: React.FC<{
       <PlayButton
         selectIsPlaying={selectIsPlaying}
         setIsPlaying={setIsPlaying}
+      />
+      <VolumeSlider
+        selectIsMuted={selectIsMuted}
+        setIsMuted={setIsMuted}
+        selectVolume={selectVolume}
+        setVolume={setVolume}
       />
       <div css={rightSideBoxStyle}>
         <PreviewMode
@@ -259,6 +274,110 @@ const TimeDisplay: React.FC<{
           tabIndex={0} aria-label={t("video.duration-aria") + ": " + convertMsToReadableString(duration)}>
           {new Date((duration ? duration : 0)).toISOString().substr(11, 10)}
         </div>
+      </ThemedTooltip>
+    </div>
+  );
+}
+
+const VolumeSlider: React.FC<{
+  selectIsMuted: (state: RootState) => boolean,
+  setIsMuted: ActionCreatorWithPayload<boolean, string>,
+  selectVolume: (state: RootState) => number,
+  setVolume: ActionCreatorWithPayload<number, string>,
+}> = ({
+        selectIsMuted,
+        setIsMuted,
+        selectVolume,
+        setVolume
+      }) => {
+
+  const { t } = useTranslation();
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const isMuted = useSelector(selectIsMuted)
+  const volume = useSelector(selectVolume)
+  const theme = useTheme();
+
+  // Toggle video mute
+  const switchIsMuted = () => {
+    // Increase volume when unmuting and no volume was set before
+    if (volume === 0 && isMuted) {
+      dispatch(setVolume(1));
+    }
+
+    dispatch(setIsMuted(!isMuted));
+  }
+
+  const volumeOnChange = (_event: Event, newValue: number | number[]) => {
+    // Disable mute when silder is moved
+    if (isMuted) {
+      dispatch(setIsMuted(false));
+    }
+
+    // Get first value if array given
+    if (Array.isArray(newValue)) {
+      newValue = newValue[0];
+    }
+
+    // Enable mute if no volume is set
+    if (newValue === 0) {
+      dispatch(setIsMuted(true));
+    }
+
+    dispatch(setVolume(Number(newValue)));
+  }
+
+  const volumeStyle = css({
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '15px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  })
+
+  const sliderStyle = css({
+    width: '80px',
+    "& .MuiSlider-thumb": {
+      color: `${theme.slider_thumb_color}`,
+      "&:hover, &.Mui-focusVisible, &.Mui-active": {
+        boxShadow: `${theme.slider_thumb_shadow}`,
+      },
+    },
+    "& .MuiSlider-rail": {
+      color: `${theme.slider_track_color}`,
+    },
+    "& .MuiSlider-track": {
+      color: `${theme.slider_track_color}`,
+    },
+  })
+
+  const volumeIconStyle = css({
+    fontSize: 24,
+    paddingLeft: '3px',
+  })
+
+  return (
+    <div css={volumeStyle}>
+      <ThemedTooltip title={isMuted ? t("video.unmutebutton-tooltip") : t("video.mutebutton-tooltip")}>
+        <div css={[basicButtonStyle(theme)]}
+          role="button" aria-pressed={isMuted} tabIndex={0} aria-hidden={false}
+          aria-label={t("video.mutebutton-tooltip")}
+          onClick={switchIsMuted}>
+          {isMuted ? <LuVolumeX css={volumeIconStyle} /> : <LuVolume2 css={volumeIconStyle} />}
+        </div>
+      </ThemedTooltip>
+      <ThemedTooltip title={t("video.volume-tooltip", { current: Math.trunc(volume * 100) })}>
+        <Slider
+          css={sliderStyle}
+          min={0}
+          max={1}
+          step={0.01}
+          value={isMuted ? 0 : volume}
+          onChange={volumeOnChange}
+          aria-label={t("video.volume-tooltip", { current: Math.trunc(volume * 100) })}
+          valueLabelDisplay="off"
+        />
       </ThemedTooltip>
     </div>
   );
