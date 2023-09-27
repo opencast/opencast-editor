@@ -285,11 +285,11 @@ const VolumeSlider: React.FC<{
   selectVolume: (state: RootState) => number,
   setVolume: ActionCreatorWithPayload<number, string>,
 }> = ({
-        selectIsMuted,
-        setIsMuted,
-        selectVolume,
-        setVolume
-      }) => {
+  selectIsMuted,
+  setIsMuted,
+  selectVolume,
+  setVolume
+}) => {
 
   const { t } = useTranslation();
 
