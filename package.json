@@ -10,7 +10,7 @@
     "@iarna/toml": "^2.2.5",
     "@mui/material": "^5.14.7",
     "@opencast/appkit": "^0.2.1",
-    "@reduxjs/toolkit": "^1.9.5",
+    "@reduxjs/toolkit": "^1.9.6",
     "@testing-library/jest-dom": "^6.1.2",
     "@types/iarna__toml": "^2.0.2",
     "@types/react": "^18.2.21",
