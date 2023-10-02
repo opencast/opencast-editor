@@ -66,25 +66,11 @@ const VideoControls: React.FC<{
     ...(flexGapReplacementStyle(30, false)),
   })
 
-  const leftSideBoxStyle = css({
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-end'
-  })
-
-  const rightSideBoxStyle = css({
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-start'
-  })
-
   return (
     <div css={videoControlsRowStyle}>
-      <div css={leftSideBoxStyle}>
-        <TimeDisplay
-          selectCurrentlyAt={selectCurrentlyAt}
-        />
-      </div>
+      <TimeDisplay
+        selectCurrentlyAt={selectCurrentlyAt}
+      />
       <PlayButton
         selectIsPlaying={selectIsPlaying}
         setIsPlaying={setIsPlaying}
@@ -95,12 +81,10 @@ const VideoControls: React.FC<{
         selectVolume={selectVolume}
         setVolume={setVolume}
       />
-      <div css={rightSideBoxStyle}>
-        <PreviewMode
-          selectIsPlayPreview={selectIsPlayPreview}
-          setIsPlayPreview={setIsPlayPreview}
-        />
-      </div>
+      <PreviewMode
+        selectIsPlayPreview={selectIsPlayPreview}
+        setIsPlayPreview={setIsPlayPreview}
+      />
     </div>
   );
 }
