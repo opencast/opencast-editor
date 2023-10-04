@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LuChevronLeft} from "react-icons/lu";
 import {
-  selectCaptionTrackByFlavor,
+  selectSubtitlesFromOpencastById,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleCue } from "../types";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
   setIsDisplayEditView,
-  selectSelectedSubtitleByFlavor,
-  selectSelectedSubtitleFlavor,
+  selectSelectedSubtitleById,
+  selectSelectedSubtitleId,
   setSubtitle
 } from '../redux/subtitleSlice'
-import { settings } from "../config";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 import { parseSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
+import { titleStyle, titleStyleBold } from "../cssStyles";
+import { generateButtonTitle } from "./SubtitleSelect";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -32,17 +31,17 @@ const SubtitleEditor : React.FC = () => {
 
   const dispatch = useDispatch()
   const [getError, setGetError] = useState<string | undefined>(undefined)
-  const subtitle : SubtitleCue[] = useSelector(selectSelectedSubtitleByFlavor)
-  const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
-  const captionTrack = useSelector(selectCaptionTrackByFlavor(selectedFlavor))
-  const theme = useSelector(selectTheme)
+  const subtitle = useSelector(selectSelectedSubtitleById)
+  const selectedId = useSelector(selectSelectedSubtitleId)
+  const captionTrack = useSelector(selectSubtitlesFromOpencastById(selectedId))
+  const theme = useTheme()
 
   // Prepare subtitle in redux
   useEffect(() => {
     // Parse subtitle data from Opencast
-    if (subtitle === undefined && captionTrack !== undefined && captionTrack.subtitle !== undefined && selectedFlavor) {
+    if (subtitle?.cues === undefined && captionTrack !== undefined && captionTrack.subtitle !== undefined && selectedId) {
       try {
-        dispatch(setSubtitle({identifier: selectedFlavor, subtitles: parseSubtitle(captionTrack.subtitle)}))
+        dispatch(setSubtitle({identifier: selectedId, subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags } }))
       } catch (error) {
         if (error instanceof Error) {
           setGetError(error.message)
@@ -52,15 +51,18 @@ const SubtitleEditor : React.FC = () => {
       }
 
     // Or create a new subtitle instead
-    } else if (subtitle === undefined && captionTrack === undefined && selectedFlavor) {
+    } else if (subtitle?.cues === undefined && captionTrack === undefined && selectedId) {
       // Create an empty subtitle
-      dispatch(setSubtitle({identifier: selectedFlavor, subtitles: []}))
+      dispatch(setSubtitle({identifier: selectedId, subtitles: { cues: [], tags: [] }}))
     }
-  }, [dispatch, captionTrack, subtitle, selectedFlavor])
+  }, [dispatch, captionTrack, subtitle, selectedId])
 
   const getTitle = () => {
-    return (settings.subtitles.languages !== undefined && subtitle && selectedFlavor) ?
-      settings.subtitles.languages[selectedFlavor] : t("subtitles.editTitle-loading")
+    if (subtitle) {
+      return generateButtonTitle(subtitle.tags, t)
+    } else {
+      return t("subtitles.editTitle-loading")
+    }
   }
 
   const subtitleEditorStyle = css({
@@ -93,21 +95,6 @@ const SubtitleEditor : React.FC = () => {
     borderBottom: `${theme.menuBorder}`
   })
 
-  // Taken from VideoHeader. Maybe generalize this to cssStyles.tsx
-  const titleStyle = css({
-    display: 'inline-block',
-    padding: '15px',
-    overflow: 'hidden',
-    whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    maxWidth: '500px',
-  })
-
-  const titleStyleBold = css({
-    fontWeight: 'bold',
-    fontSize: '24px',
-    verticalAlign: '-2.5px',
-  })
 
   const render = () => {
     if (getError !== undefined) {
@@ -119,7 +106,7 @@ const SubtitleEditor : React.FC = () => {
         <>
           <div css={headerRowStyle}>
             <BackButton />
-            <div css={[titleStyle, titleStyleBold]}>
+            <div css={[titleStyle(theme), titleStyleBold(theme)]}>
               {t("subtitles.editTitle", {title: getTitle()})}
             </div>
             <div css={{width: '50px'}}></div>
@@ -148,11 +135,10 @@ const SubtitleEditor : React.FC = () => {
 export const BackButton : React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
   const dispatch = useDispatch();
 
   const backButtonStyle = css({
-    width: '50px',
     height: '10px',
     padding: '16px',
     boxShadow: `${theme.boxShadow}`,
@@ -169,7 +155,7 @@ export const BackButton : React.FC = () => {
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           dispatch(setIsDisplayEditView(false))
         } }}>
-        <FontAwesomeIcon icon={faChevronLeft} size="1x" />
+        <LuChevronLeft css={{fontSize: 24 }}/>
         <span>{t("subtitles.backButton")}</span>
       </div>
     </ThemedTooltip>

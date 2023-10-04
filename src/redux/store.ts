@@ -8,7 +8,6 @@ import endReducer from './endSlice'
 import metadataReducer from './metadataSlice'
 import subtitleReducer from './subtitleSlice'
 import errorReducer from './errorSlice'
-import themeReducer from './themeSlice'
 
 export const store = configureStore({
   reducer: {
@@ -21,7 +20,6 @@ export const store = configureStore({
     metadataState: metadataReducer,
     subtitleState: subtitleReducer,
     errorState: errorReducer,
-    themeState: themeReducer,
   }
 })
 

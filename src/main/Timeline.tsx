@@ -10,21 +10,21 @@ import {
   selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages
 } from '../redux/videoSlice'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { LuMenu, LuLoader} from "react-icons/lu";
 
 import useResizeObserver from "use-resize-observer";
 
 import { Waveform } from '../util/waveform'
 import { convertMsToReadableString } from '../util/utilityFunctions';
-import { GlobalHotKeys } from 'react-hotkeys';
-import { scrubberKeyMap } from '../globalKeys';
+import { KEYMAP, rewriteKeys } from '../globalKeys';
 
 import { useTranslation } from 'react-i18next';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { RootState } from '../redux/store';
-import { selectTheme } from '../redux/themeSlice';
+import { useTheme } from "../themes";
 import { ThemedTooltip } from './Tooltip';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { spinningStyle } from '../cssStyles';
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -80,7 +80,7 @@ const Timeline: React.FC<{
         setCurrentlyAt={setCurrentlyAt}
         setIsPlaying={setIsPlaying}
       />
-      <div css={{position: 'relative', height: timelineHeight - 20 + 'px'}} >
+      <div css={{position: 'relative', height: timelineHeight + 'px'}} >
         <Waveforms timelineHeight={timelineHeight}/>
         <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
       </div>
@@ -117,7 +117,7 @@ export const Scrubber: React.FC<{
   const duration = useSelector(selectDuration)
   const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
   const segments = useSelector(selectSegments)                      // For ARIA information display
-  const theme = useSelector(selectTheme)
+  const theme = useTheme()
 
   // Init state variables
   const [controlledPosition, setControlledPosition] = useState({ x: 0, y: 0 });
@@ -183,64 +183,52 @@ export const Scrubber: React.FC<{
   // Callbacks for keyboard controls
   // TODO: Better increases and decreases than ten intervals
   // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
-  const handlers = {
-    left: () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
-    right: () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
-    increase: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
-    decrease: () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1))
-  }
+  useHotkeys(KEYMAP.timeline.left.key, () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))), {}, [currentlyAt, keyboardJumpDelta]);
+  useHotkeys(KEYMAP.timeline.right.key, () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))), {}, [currentlyAt, keyboardJumpDelta, duration]);
+  useHotkeys(KEYMAP.timeline.increase.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)), {}, [keyboardJumpDelta]);
+  useHotkeys(KEYMAP.timeline.decrease.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)), {}, [keyboardJumpDelta]);
 
   const scrubberStyle = css({
-    backgroundColor: `${theme.text}`,
-    height: timelineHeight - 10 + 'px', //    TODO: CHECK IF height: '100%',
+    backgroundColor: `${theme.scrubber}`,
+    height: timelineHeight + 20 + 'px', //    TODO: CHECK IF height: '100%',
     width: '1px',
     position: 'absolute',
     zIndex: 2,
-    boxShadow: `${theme.boxShadow}`,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    outline: `${theme.scrubber}`,
+    top: '-20px',
   });
 
   const scrubberDragHandleStyle = css({
     // Base style
-    background: `${theme.text}`,
+    background: `${theme.scrubber_handle}`,
     display: "inline-block",
-    height: "10px",
+    height: "20px",
     position: "relative",
     width: "20px",
+    borderRadius: '5px',
+    boxShadow: `${theme.boxShadow_tiles}`,
     "&:after": {
-      borderTop: `10px solid ${theme.text}`,
+      borderTop: `10px solid ${theme.scrubber_handle}`,
       borderLeft: '10px solid transparent',
       borderRight: '10px solid transparent',
       content: '""',
       height: 0,
       left: 0,
       position: "absolute",
-      top: "10px",
+      top: "17px",
       width: 0,
     },
     // Animation
     cursor: isGrabbed ? "grabbing" : "grab",
-    transitionDuration: "0.3s",
-    transitionProperty: "transform",
-    "&:hover": {
-      transform: 'scale(1.1)',
-    },
-    "&:focus": {
-      transform: 'scale(1.1)',
-    },
-    "&:active": {
-      transform: 'scale(0.9)',
-    },
   })
 
   const scrubberDragHandleIconStyle = css({
-    transform: 'scaleY(0.7) rotate(90deg)',
-    paddingRight: '5px',
-    color: `${theme.background}`,
+    paddingLeft: '2px',
+    paddingTop: '2px',
+    color: `${theme.scrubber_icon}`,
   })
 
   // // Possible TODO: Find a way to use ariaLive in a way that only the latest change is announced
@@ -249,32 +237,29 @@ export const Scrubber: React.FC<{
   // }
 
   return (
-    <GlobalHotKeys keyMap={scrubberKeyMap} handlers={handlers} allowChanges={true}>
-      <Draggable
-        onDrag={onControlledDrag}
-        onStart={onStartDrag}
-        onStop={onStopDrag}
-        axis="x"
-        bounds="parent"
-        position={controlledPosition}
-        nodeRef={nodeRef}
-      >
-        <div ref={nodeRef} css={scrubberStyle}>
-
-          <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
-            aria-label={t("timeline.scrubber-text-aria",
-              {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
-                segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
-                moveLeft: scrubberKeyMap[handlers.left.name],
-                moveRight: scrubberKeyMap[handlers.right.name],
-                increase: scrubberKeyMap[handlers.increase.name],
-                decrease: scrubberKeyMap[handlers.decrease.name] })}
-            tabIndex={0}>
-            <FontAwesomeIcon css={scrubberDragHandleIconStyle} icon={faBars} size="1x" />
-          </div>
+    <Draggable
+      onDrag={onControlledDrag}
+      onStart={onStartDrag}
+      onStop={onStopDrag}
+      axis="x"
+      bounds="parent"
+      position={controlledPosition}
+      nodeRef={nodeRef}
+    >
+      <div ref={nodeRef} css={scrubberStyle}>
+        <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
+          aria-label={t("timeline.scrubber-text-aria",
+            {currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
+              segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
+              moveLeft: rewriteKeys(KEYMAP.timeline.left.key),
+              moveRight: rewriteKeys(KEYMAP.timeline.right.key),
+              increase: rewriteKeys(KEYMAP.timeline.increase.key),
+              decrease: rewriteKeys(KEYMAP.timeline.decrease.key) })}
+          tabIndex={0}>
+          <LuMenu css={scrubberDragHandleIconStyle}/>
         </div>
-      </Draggable>
-    </GlobalHotKeys>
+      </div>
+    </Draggable>
   );
 };
 
@@ -305,23 +290,23 @@ export const SegmentsList: React.FC<{
    */
   const bgColor = (deleted: boolean, active: boolean) => {
     if (!deleted && !active) {
-      return 'rgba(0, 0, 255, 0.4)'
+      return 'rgba(137, 137, 137, 0.4)'
     } else if (deleted && !active) {
       return `repeating-linear-gradient(
-                -45deg,
-                rgba(255, 45, 45, 0.4),
-                rgba(255, 45, 45, 0.4) 10px,
-                rgba(255, 0, 0, 0.4) 10px,
-                rgba(255, 0, 0, 0.4) 20px);`
+                -35deg,
+                rgba(200, 0, 0, 0.4),
+                rgba(200, 0, 0, 0.4) 2px,
+                rgba(255, 95, 95, 0.4) 2px,
+                rgba(255, 95, 95, 0.4) 50px);`
     } else if (!deleted && active) {
-      return 'rgba(0, 0, 200, 0.4)'
+      return 'rgba(78, 78, 78, 0.4)'
     } else if (deleted && active) {
       return `repeating-linear-gradient(
-                -45deg,
-                rgba(200, 45, 45, 0.4),
-                rgba(200, 45, 45, 0.4) 10px,
-                rgba(200, 0, 0, 0.4) 10px,
-                rgba(200, 0, 0, 0.4) 20px);`
+                -35deg,
+                rgba(180, 0, 0, 0.4),
+                rgba(180, 0, 0, 0.4) 2px,
+                rgba(255, 65, 65, 0.4) 2px,
+                rgba(255, 65, 65, 0.4) 50px);`
     }
   }
 
@@ -339,13 +324,12 @@ export const SegmentsList: React.FC<{
             tabIndex={tabable ? 0 : -1}
             css={{
               background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
-              borderRadius: '5px',
               borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? 'dashed' : 'solid') : 'solid',
               borderColor: 'white',
               borderWidth: '1px',
               boxSizing: 'border-box',
               width: ((segment.end - segment.start) / duration) * 100 + '%',
-              height: timelineHeight - 20 + 'px',     // CHECK IF 100%
+              height: timelineHeight + 'px',     // CHECK IF 100%
               zIndex: 1,
             }}>
           </div>
@@ -357,7 +341,7 @@ export const SegmentsList: React.FC<{
   const segmentsStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: '10px',
+    // paddingTop: '10px',
     height: '100%',
   })
 
@@ -378,7 +362,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
   const dispatch = useDispatch();
   const videoURLs = useSelector(selectVideoURL)
   const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   // Update based on current fetching status
   const images = useSelector(selectWaveformImages)
@@ -391,15 +375,14 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
     justifyContent: 'center',
     ...(images.length <= 0) && {alignItems: 'center'},  // Only center during loading
     width: '100%',
-    height: timelineHeight - 20 + 'px',   // CHECK IF     height: '100%',
-    paddingTop: '10px',
+    height: timelineHeight + 'px',   // CHECK IF     height: '100%',
+    // paddingTop: '10px',
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,
   });
 
   const waveformStyle = css({
     background: `${theme.waveform_bg}`,
-    filter: `${theme.waveform_filter}`,
     borderRadius: '5px',
   });
 
@@ -468,7 +451,7 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
     else {
       return (
         <>
-          <FontAwesomeIcon icon={faSpinner} spin size="3x"/>
+          <LuLoader css={[spinningStyle, {fontSize: 40}]}/>
           <div>{t("timeline.generateWaveform-text")}</div>
         </>
       );

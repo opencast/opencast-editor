@@ -40,8 +40,46 @@ To make the editor work in a sub-path, use:
 Configuration
 -------------
 
-The editor can be configured through the `editor-settings.toml` settings file. It can either be provided in the public folder when running locally or can be found under `etc/opencast/ui-config/mh_default_org/editor` when deployed in Opencast. More information can be found in the example configuration file.
 
+### Configuration Methods
+
+Most configuration options can be set either as an option in the configuration file or as a URL parameter.
+
+The configuration file is called `editor-settings.toml`. It can either be provided in the public folder when running locally or can be found under `etc/opencast/ui-config/mh_default_org/editor` when deployed in Opencast. More information can be found in the example configuration file.
+
+If a configuration option belongs to a section, URL parameters are a combination of section and option separated by a single dot.
+
+For example, the following option in the configuration file:
+
+```toml
+[trackSelection]
+show = true
+```
+
+…can be specified as URL parameter in the form `trackSelection.show=true`.
+
+If an option can be specified both ways, the URL parameter will always take precedence.
+
+
+### Settings
+
+Options which are usually specified in the configuration file are documented in there as well. Metadata configuration options are only documented in the configuration file.
+
+| Option                  | URL | File | Description                                                          |
+|-------------------------|-----|------|----------------------------------------------------------------------|
+| id                      | ✓   | ✓    | Id of the event that the editor should open by default.              |
+| mediaPackageId          | ✓   | ✓    | Deprecated. Use `id` instead.                                        |
+| allowedCallbackPrefixes | ✗   | ✓    | Allowed callback prefixes in callback url.                           |
+| callbackUrl             | ✓   | ✓    | Callback url to go back after finish.                                |
+| callbackSystem          | ✓   | ✓    | Callback system name to go back to.                                  |
+| opencast.url            | ✗   | ✓    | URL of the opencast server to connect to.                            |
+| opencast.name           | ✗   | ✓    | Opencast user to use. For demo purposes only.                        |
+| opencast.password       | ✗   | ✓    | Password to use for authentication. For demo purposes only.          |
+| metadata.show           | ✓   | ✓    | Show metadata tab.                                                   |
+| trackSelection.show     | ✓   | ✓    | Show track selection tab.                                            |
+| thumbnail.show          | ✓   | ✓    | Show thumbnail tab. Demo only.                                       |
+| debug                   | ✓   | ✗    | Enable internationalization debugging.                               |
+| lng                     | ✓   | ✗    | Select a specific language. Use language codes like `de` or `en-US`. |
 
 How to cut a release for Opencast
 ---------------------------------
@@ -66,6 +104,7 @@ How to cut a release for Opencast
       if necessary
     - Verify that the new release runs in Opencast, then create the pull request.
 
+
 Opencast API used by the Editor
 -------------
 
@@ -82,40 +121,12 @@ Translating the Editor
 You can help translating the editor to your language on [crowdin.com/project/opencast-editor](https://crowdin.com/project/opencast-editor). Simply request to join the project on Crowdin and start translating. If you are interested in translating a language which is not a target language right now, please create [a GitHub issue](https://github.com/opencast/opencast-editor/issues) and we will add the language.
 
 
-Configuration
--------------
+Notes on Waveform Generation
+----------------------------
 
-### Configuration Methods
-
-Most configuration options can be set either as a URL parameter or as an option in the configuration file.
-
-If the option belongs to a section, URL parameters are a combination of section and option separated by a single dot.
-
-For example, the following option in the configuration file:
-
-```toml
-[trackSelection]
-show = true
-```
-
-…can be specified as URL parameter in the form `trackSelection.show=true`.
-
-If an option can be specified both ways, the URL parameter will always take precedence.
-
-
-### Settings
-
-Options which are usually specified in the configuration file are documented in there as well. Metadata configuration options are only documented in the configuration file.
-
-| Option              | URL | File | Description
-| --------------------|-----|------|------------
-| id                  | ✓   | ✓    | Id of the event that the editor should open by default.
-| mediaPackageId      | ✓   | ✓    | Deprecated. Use `id` instead.
-| opencast.url        | ✗   | ✓    | URL of the opencast server to connect to.
-| opencast.name       | ✗   | ✓    | Opencast user to use. For demo purposes only.
-| opencast.password   | ✗   | ✓    | Password to use for authentication. For demo purposes only.
-| metadata.show       | ✓   | ✓    | Show metadata tab.
-| trackSelection.show | ✓   | ✓    | Show track selection tab.
-| thumbnail.show      | ✓   | ✓    | Show thumbnail tab. Demo only.
-| debug               | ✓   | ✗    | Enable internationalization debugging.
-| lng                 | ✓   | ✗    | Select a specific language. Use language codes like `de` or `en-US`.
+The editor displays a waveform image on the timeline in the cutting view. This waveform image is generated at runtime
+from one of the videos of the event. However, to properly generate the image, the video it is generated from needs to be
+loaded completely once, which takes time and bandwidth. If this poses a problem for your use case, you can instead have
+Opencast provide an image in the internal publication. Provided images will always take precedence and prevent the
+generation algorithm form running. The provided image should have the same flavor that is specified in the Opencast
+configuration file `etc/org.opencastproject.editor.EditorServiceImpl.cfg`.

@@ -9,7 +9,6 @@
  */
 import parseToml from '@iarna/toml/parse-string';
 import deepmerge from 'deepmerge';
-import { configure } from 'react-hotkeys';
 import { Flavor } from './types';
 
 /**
@@ -29,11 +28,21 @@ export interface configureFieldsAttributes {
   readonly: boolean,
 }
 
+export interface subtitleTags {
+  lang: string,
+  'auto-generated': string,
+  'auto-generator': string,
+  type: string,
+}
+
 /**
  * Settings interface
  */
 interface iSettings {
   id: string | undefined,
+  allowedCallbackPrefixes: string[],
+  callbackUrl: string | undefined,
+  callbackSystem: string | undefined,
   opencast: {
     url: string,
     name: string | undefined,
@@ -54,7 +63,7 @@ interface iSettings {
   subtitles: {
     show: boolean,
     mainFlavor: string,
-    languages: { [key: string]: string } | undefined,
+    languages: { [key: string]: subtitleTags } | undefined,
     icons: { [key: string]: string } | undefined,
     defaultVideoFlavor: Flavor | undefined,
   }
@@ -69,6 +78,9 @@ interface iSettings {
  */
 const defaultSettings: iSettings = {
   id: undefined,
+  allowedCallbackPrefixes: [],
+  callbackUrl: undefined,
+  callbackSystem: undefined,
   opencast: {
     url: window.location.origin,
     name: undefined,
@@ -106,6 +118,16 @@ export let settings: iSettings
  * 3. Default values
  */
 export const init = async () => {
+
+  // Get color scheme from local storage, otherwise set auto scheme based on preference
+  let scheme = window.localStorage.getItem("colorScheme");
+  if (scheme === null || !["light", "dark", "light-high-contrast", "dark-high-contrast"].includes(scheme)) {
+    const lightness = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    const contrast = window.matchMedia("(prefers-contrast: more)").matches ? "-high-contrast" : "";
+    scheme = `${lightness}${contrast}`;
+  }
+  document.documentElement.dataset.colorScheme = scheme;
+
   // Get settings from config file
   await loadContextSettings().then(result => {
     configFileSettings = validate(result, false, SRC_SERVER, "from server settings file")
@@ -119,7 +141,7 @@ export const init = async () => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
     let obj : {[k: string]: any} = rawUrlSettings;
-    if (key.startsWith('opencast.')) {
+    if (key.startsWith('opencast.') || key === 'allowedCallbackPrefixes') {
       return;
     }
 
@@ -146,24 +168,10 @@ export const init = async () => {
   // Prepare local setting to avoid complicated checks later
   settings.opencast.local = settings.opencast.local && settings.opencast.url === window.location.origin;
 
-  // Configure hotkeys
-  configure({
-    ignoreTags: [], // Do not ignore hotkeys when focused on a textarea, input, select
-    ignoreEventsCondition: (e: any) => {
-      // Ignore hotkeys when focused on a textarea, input, select IF that hotkey is expected to perform
-      // a certain function in that element that is more important than any hotkey function
-      // (e.g. you need "Space" in a textarea to create whitespaces, not play/pause videos)
-      if (e.target && e.target.tagName) {
-        const tagname = e.target.tagName.toLowerCase()
-        if ((tagname === "textarea" || tagname === "input" || tagname === "select")
-          && (!e.altKey && !e.ctrlKey)
-          && (e.code === "Space" || e.code === "ArrowLeft" || e.code === "ArrowRight" || e.code === "ArrowUp" || e.code === "ArrowDown")) {
-          return true
-        }
-      }
-      return false
-    },
-  })
+  // Prevent malicious callback urls
+  settings.callbackUrl = settings.allowedCallbackPrefixes.some(
+    p => settings.callbackUrl?.startsWith(p)
+  ) ? settings.callbackUrl : undefined;
 };
 
 /**
@@ -304,6 +312,16 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
+  'array': (v: any, _allowParse: any) => {
+    if (!Array.isArray(v)) {
+      throw new Error("is not an array, but should be");
+    }
+    for (const entry in v) {
+      if (typeof entry !== 'string') {
+        throw new Error("is not a string, but should be");
+      }
+    }
+  },
   'map': (v: any, _allowParse: any) => {
     for (const key in v) {
       if (typeof key !== 'string') {
@@ -351,6 +369,9 @@ const types = {
 // above for some examples.
 const SCHEMA = {
   id: types.string,
+  allowedCallbackPrefixes: types.array,
+  callbackUrl: types.string,
+  callbackSystem: types.string,
   opencast: {
     url: types.string,
     name: types.string,
@@ -366,7 +387,7 @@ const SCHEMA = {
   subtitles: {
     show: types.boolean,
     mainFlavor: types.string,
-    languages: types.map,
+    languages: types.objectsWithinObjects,
     icons: types.map,
     defaultVideoFlavor: types.map,
   },

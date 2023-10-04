@@ -14,7 +14,6 @@ import { selectIsEnd } from '../redux/endSlice'
 import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
 
-
 const Body: React.FC = () => {
 
   const isEnd = useSelector(selectIsEnd)
@@ -52,7 +51,7 @@ const Body: React.FC = () => {
   const bodyStyle = css({
     display: 'flex',
     flexDirection: 'row',
-    height: 'calc(100% - 48px)',
+    height: 'calc(100% - 64px)',
   });
 
   return (

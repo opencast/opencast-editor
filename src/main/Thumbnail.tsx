@@ -1,21 +1,22 @@
 import { css } from "@emotion/react";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCamera, faCopy, faInfoCircle, faTimesCircle, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconType } from "react-icons";
+import { LuCamera, LuCopy, LuXCircle, LuUpload} from "react-icons/lu";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
-import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from "../cssStyles";
-import { selectTheme, Theme } from "../redux/themeSlice";
+import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
+  backgroundBoxStyle } from "../cssStyles";
+import { Theme, useTheme } from "../themes";
 import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
-import { VideoControls, VideoPlayers } from "./Video";
 import {
   selectIsPlaying, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
 import { ThemedTooltip } from "./Tooltip";
+import VideoPlayers from "./VideoPlayers";
+import VideoControls from "./VideoControls";
 
 
 /**
@@ -26,6 +27,7 @@ const Thumbnail : React.FC = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
 
+  const theme = useTheme();
   const originalThumbnails = useSelector(selectOriginalThumbnails)
 
   // Generate Refs
@@ -87,26 +89,15 @@ const Thumbnail : React.FC = () => {
     alignItems: 'center',
   })
 
+  const bottomStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  })
+
   return (
     <div css={thumbnailStyle}>
-      <div css={[titleStyle, titleStyleBold]}>{t('thumbnail.title')}</div>
-      <VideoPlayers refs={generateRefs} widthInPercent={50}/>
-      <VideoControls
-        selectCurrentlyAt={selectCurrentlyAt}
-        selectIsPlaying={selectIsPlaying}
-        selectIsPlayPreview={selectIsPlayPreview}
-        setIsPlaying={setIsPlaying}
-        setIsPlayPreview={setIsPlayPreview}
-      />
-      <Timeline
-        timelineHeight={125}
-        styleByActiveSegment={false}
-        selectIsPlaying={selectIsPlaying}
-        selectCurrentlyAt={selectCurrentlyAt}
-        setIsPlaying={setIsPlaying}
-        setCurrentlyAt={setCurrentlyAt}
-        setClickTriggered={setClickTriggered}
-      />
+      <div css={[titleStyle(theme), titleStyleBold(theme)]}>{t('thumbnail.title')}</div>
       <ThumbnailTable
         inputRefs={inputRefs}
         generate={generate}
@@ -114,6 +105,27 @@ const Thumbnail : React.FC = () => {
         uploadCallback={uploadCallback}
         discard={discardThumbnail}
       />
+      <div css={bottomStyle}>
+        <VideoPlayers refs={generateRefs} widthInPercent={100}/>
+        <div css={videosStyle(theme)}>
+          <Timeline
+            timelineHeight={125}
+            styleByActiveSegment={false}
+            selectIsPlaying={selectIsPlaying}
+            selectCurrentlyAt={selectCurrentlyAt}
+            setIsPlaying={setIsPlaying}
+            setCurrentlyAt={setCurrentlyAt}
+            setClickTriggered={setClickTriggered}
+          />
+          <VideoControls
+            selectCurrentlyAt={selectCurrentlyAt}
+            selectIsPlaying={selectIsPlaying}
+            selectIsPlayPreview={selectIsPlayPreview}
+            setIsPlaying={setIsPlaying}
+            setIsPlayPreview={setIsPlayPreview}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -133,50 +145,54 @@ const ThumbnailTable : React.FC<{
 
   const thumbnailTableStyle = css({
     display: 'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'center',
     ...(flexGapReplacementStyle(10, false)),
+    paddingBottom: '20px',
   })
 
   const renderSingleOrMultiple = () => {
     const primaryTrack = videoTracks.find(e => e.thumbnailPriority === 0)
 
     if (settings.thumbnail.simpleMode && primaryTrack !== undefined) {
-      return (<>
-        <ThumbnailTableSingleRow
-          track={primaryTrack}
-          index={videoTracks.indexOf(primaryTrack)}
-          inputRefs={inputRefs}
-          generate={generate}
-          upload={upload}
-          uploadCallback={uploadCallback}
-          discard={discard}
-        />
-      </>)
-    } else {
-      return (<>
-        <AffectAllRow tracks={videoTracks} generate={generate}/>
-        {videoTracks.map((track: Track, index: number) => (
-          <ThumbnailTableRow
-            key={index}
-            track={track}
-            index={index}
+      return (
+        <div css={thumbnailTableStyle}>
+          <ThumbnailTableSingleRow
+            track={primaryTrack}
+            index={videoTracks.indexOf(primaryTrack)}
             inputRefs={inputRefs}
             generate={generate}
             upload={upload}
             uploadCallback={uploadCallback}
             discard={discard}
           />
-        ))}
+        </div>
+      )
+    } else {
+      return (<>
+        <AffectAllRow tracks={videoTracks} generate={generate}/>
+        <div css={thumbnailTableStyle}>
+          {videoTracks.map((track: Track, index: number) => (
+            <ThumbnailTableRow
+              key={index}
+              track={track}
+              index={index}
+              inputRefs={inputRefs}
+              generate={generate}
+              upload={upload}
+              uploadCallback={uploadCallback}
+              discard={discard}
+            />
+          ))}
+        </div>
       </>)
     }
   }
 
   return (
-    <div css={thumbnailTableStyle}>
+    <>
       {renderSingleOrMultiple()}
-    </div>
+    </>
   )
 }
 
@@ -194,6 +210,7 @@ const ThumbnailTableRow: React.FC<{
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
+  const theme = useTheme();
 
   const renderPriority = (thumbnailPriority: number) => {
     if (isNaN(thumbnailPriority)) {
@@ -210,11 +227,10 @@ const ThumbnailTableRow: React.FC<{
   }
 
   return (
-    <div key={index} css={thumbnailTableRowStyle}>
+    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle]}>
       <div css={thumbnailTableRowTitleStyle}>
         {track.flavor.type + renderPriority(track.thumbnailPriority)}
       </div>
-      <hr css={{width: '100%'}}></hr>
       <div css={thumbnailTableRowRowStyle} key={index}>
         <ThumbnailDisplayer track={track} />
         <ThumbnailButtons
@@ -237,27 +253,24 @@ const ThumbnailTableRow: React.FC<{
 const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 
   const { t } = useTranslation()
+  const theme = useTheme()
 
   const generalStyle = css({
-    height: '280px',
+    width: '100%',
+    maxWidth: '457px',
+    aspectRatio: '16/9',
   })
 
   const imageStyle = css({
-    maxHeight: '100%',
   })
 
   const placeholderStyle = css({
+    width: '100vw', // TODO: This is necessary to make the placeholder large enough, but prevents it from shrinking
     backgroundColor: 'grey',
-    // For whatever reason, setting the width relative to height is way to difficult,
-    // so we hardcode the box size here
-    width: '497px',
-    // Support for aspectRatio is still spotty and implementations across browsers
-    // differ too much
-    // aspectRatio: '16/9',
-
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    color: `${theme.text}`,
   })
 
   return (
@@ -309,6 +322,11 @@ const ThumbnailButtons : React.FC<{
     dispatch(setHasChanges(true))
   }
 
+  const verticalLineStyle = css({
+    borderTop: '1px solid #DDD;',
+    width: '100%',
+  })
+
   return (
     <div css={thumbnailButtonsStyle}>
       <ThumbnailButton
@@ -316,15 +334,16 @@ const ThumbnailButtons : React.FC<{
         text={t('thumbnail.buttonGenerate')}
         tooltipText={t('thumbnail.buttonGenerate-tooltip')}
         ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
-        icon={faCamera}
+        Icon={LuCamera}
         active={true}
       />
+      <div css={verticalLineStyle} />
       <ThumbnailButton
         handler={() => { upload(index) }}
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
-        icon={faUpload}
+        Icon={LuUpload}
         active={true}
       />
       {/* Hidden input field for upload */}
@@ -338,20 +357,22 @@ const ThumbnailButtons : React.FC<{
         onChange={event => uploadCallback(event, track)}
         aria-hidden="true"
       />
+      <div css={verticalLineStyle} />
       <ThumbnailButton
         handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
         text={t('thumbnail.buttonUseForOtherThumbnails')}
         tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
         ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
-        icon={faCopy}
+        Icon={LuCopy}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
+      <div css={verticalLineStyle} />
       <ThumbnailButton
         handler={() => { discard(track.id) }}
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
-        icon={faTimesCircle}
+        Icon={LuXCircle}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
@@ -363,10 +384,10 @@ const ThumbnailButton : React.FC<{
   text: string
   tooltipText: string,
   ariaLabel: string,
-  icon: IconProp,
+  Icon: IconType,
   active: boolean,
-}> = ({handler, text, tooltipText, ariaLabel, icon, active}) => {
-  const theme = useSelector(selectTheme);
+}> = ({handler, text, tooltipText, ariaLabel, Icon, active}) => {
+  const theme = useTheme();
   const ref = React.useRef<HTMLDivElement>(null)
 
   const clickHandler = () => {
@@ -388,7 +409,7 @@ const ThumbnailButton : React.FC<{
         onClick={clickHandler}
         onKeyDown={keyHandler}
       >
-        <FontAwesomeIcon icon={icon}/>
+        <Icon />
         {text}
       </div>
     </ThemedTooltip>
@@ -405,7 +426,7 @@ const AffectAllRow : React.FC<{
 }> = ({generate, tracks}) => {
 
   const { t } = useTranslation()
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const generateAll = () => {
     for (let i = 0; i < tracks.length; i++) {
@@ -422,7 +443,6 @@ const AffectAllRow : React.FC<{
     gap: '20px',
     justifyContent: 'center',
     alignItems: 'center',
-    borderTop: `${theme.menuBorder}`,
   })
 
   const buttonStyle = css({
@@ -434,8 +454,6 @@ const AffectAllRow : React.FC<{
 
   return (
     <div css={rowStyle}>
-      <FontAwesomeIcon icon={faInfoCircle} size="2x" />
-      {t('thumbnail.explanation')}
       <ThemedTooltip title={t('thumbnail.buttonGenerateAll-tooltip')}>
         <div css={[basicButtonStyle(theme), buttonStyle]}
           role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
@@ -446,7 +464,7 @@ const AffectAllRow : React.FC<{
             generateAll()
           } }}
         >
-          <FontAwesomeIcon icon={faCamera}/>
+          <LuCamera />
           {t('thumbnail.buttonGenerateAll')}
         </div>
       </ThemedTooltip>
@@ -472,9 +490,10 @@ const ThumbnailTableSingleRow: React.FC<{
   discard: any,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
   const { t } = useTranslation();
+  const theme = useTheme();
 
   return (
-    <div key={index} css={thumbnailTableRowStyle}>
+    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle]}>
       <div css={thumbnailTableRowTitleStyle}>
         {t("thumbnailSimple.rowTitle")}
       </div>
@@ -518,7 +537,7 @@ const ThumbnailButtonsSimple : React.FC<{
           text={t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
           tooltipText={t('thumbnail.buttonGenerate-tooltip')}
           ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
-          icon={faCamera}
+          Icon={LuCamera}
           active={true}
           key={generateIndex}
         />
@@ -528,7 +547,7 @@ const ThumbnailButtonsSimple : React.FC<{
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
-        icon={faUpload}
+        Icon={LuUpload}
         active={true}
       />
       {/* Hidden input field for upload */}
@@ -547,7 +566,7 @@ const ThumbnailButtonsSimple : React.FC<{
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
-        icon={faTimesCircle}
+        Icon={LuXCircle}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
@@ -560,14 +579,15 @@ const ThumbnailButtonsSimple : React.FC<{
 const thumbnailTableRowStyle = css({
   display: 'flex',
   flexDirection: 'column',
-  padding: '6px 12px',
 })
 
 const thumbnailTableRowTitleStyle = css({
   textAlign: 'left',
-  textTransform: 'capitalize',
   fontSize: 'larger',
   fontWeight: 'bold',
+  '&:first-letter': {
+    textTransform: 'capitalize',
+  },
 })
 
 const thumbnailTableRowRowStyle = css({
@@ -581,13 +601,11 @@ const thumbnailTableRowRowStyle = css({
 
 const thumbnailButtonsStyle = css({
   // TODO: Avoid hard-coding max-width
-  "@media (max-width: 1000px)": {
-    flexDirection: 'row',
+  "@media (max-width: 1550px)": {
     width: '100%',
   },
   display: 'flex',
   flexDirection: 'column',
-  ...(flexGapReplacementStyle(20, true)),
 })
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
@@ -595,11 +613,10 @@ const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
   {
     width: '100%',
     height: '100%',
-    boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
     justifySelf: 'center',
     alignSelf: 'center',
-    padding: '0px 2px'
+    padding: '0px 4px'
   }
 ];
 

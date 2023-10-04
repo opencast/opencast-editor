@@ -13,7 +13,7 @@ export interface video {
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
-  captions: SubtitlesFromOpencast[],
+  subtitlesFromOpencast: SubtitlesFromOpencast[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
@@ -45,7 +45,7 @@ export const initialState: video & httpRequestState = {
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
-  captions: [],
+  subtitlesFromOpencast: [],
   activeSegmentIndex: 0,
   selectedWorkflowId: "",
   previewTriggered: false,
@@ -196,6 +196,11 @@ const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
       state.hasChanges = true
     },
+    mergeAll: state => {
+      mergeSegments(state, state.activeSegmentIndex, 0)
+      mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1)
+      state.hasChanges = true
+    },
   },
   // For Async Requests
   extraReducers: builder => {
@@ -226,7 +231,7 @@ const videoSlice = createSlice({
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
-        state.captions = action.payload.subtitles ? state.captions = action.payload.subtitles : []
+        state.subtitlesFromOpencast = action.payload.subtitles ? state.subtitlesFromOpencast = action.payload.subtitles : []
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
@@ -280,22 +285,25 @@ export const parseSegments = (segments: Segment[], duration: number) => {
 }
 
 /**
- * Helper function for merging two segments
+ * Helper function for merging segments
  */
-const mergeSegments = (state: video, activeSegmentIndex: number, mergeSegmentIndex: number) => {
+const mergeSegments = (state: video, startSegmentIndex: number, endSegmentIndex: number) => {
   // Check if mergeSegmentIndex is valid
-  if (mergeSegmentIndex < 0 || mergeSegmentIndex > state.segments.length - 1) {
+  if (endSegmentIndex < 0 || endSegmentIndex > state.segments.length - 1) {
     return
   }
 
   // Increase activeSegment length
-  state.segments[activeSegmentIndex].start = Math.min(
-    state.segments[activeSegmentIndex].start, state.segments[mergeSegmentIndex].start)
-  state.segments[activeSegmentIndex].end = Math.max(
-    state.segments[activeSegmentIndex].end, state.segments[mergeSegmentIndex].end)
+  state.segments[startSegmentIndex].start = Math.min(
+    state.segments[startSegmentIndex].start, state.segments[endSegmentIndex].start)
+  state.segments[startSegmentIndex].end = Math.max(
+    state.segments[startSegmentIndex].end, state.segments[endSegmentIndex].end)
 
-  // Remove the other segment
-  state.segments.splice(mergeSegmentIndex, 1);
+  // Remove the end segment and segments between
+  state.segments.splice(
+    startSegmentIndex < endSegmentIndex ? startSegmentIndex + 1 : endSegmentIndex,
+    Math.abs(endSegmentIndex - startSegmentIndex)
+  );
 
   // Update active segment
   updateActiveSegment(state)
@@ -343,8 +351,14 @@ const skipDeletedSegments = (state: video) => {
  * TODO: Improve calculation to handle multiple rows of videos
  */
 export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
-  const minHeight = Math.min(...aspectRatios.map(o => o.height))
+  let minHeight = Math.min(...aspectRatios.map(o => o.height))
   let minWidth = Math.min(...aspectRatios.map(o => o.width))
+  // Getting the aspect ratios of every video can take several seconds
+  // So we assume a default resolution until then
+  if (!minHeight || !minWidth) {
+    minHeight = 720
+    minWidth = 1280
+  }
   minWidth *= aspectRatios.length
   return Math.min((minHeight / minWidth) * 100, (9 / 32) * 100)
 }
@@ -358,7 +372,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
@@ -404,11 +418,11 @@ export const selectTracks = (state: { videoState: { tracks: video["tracks"] } })
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
-export const selectCaptions = (state: { videoState: { captions: video["captions"]; }; }) =>
-  state.videoState.captions
-export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { captions: video["captions"]; }; }) => {
-  for (const cap of state.videoState.captions) {
-    if (cap.flavor.type + "/" + cap.flavor.subtype === flavor) {
+export const selectSubtitlesFromOpencast = (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) =>
+  state.videoState.subtitlesFromOpencast
+export const selectSubtitlesFromOpencastById = (id: string) => (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) => {
+  for (const cap of state.videoState.subtitlesFromOpencast) {
+    if (cap.id === id) {
       return cap
     }
   }
