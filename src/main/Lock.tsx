@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { LuLock } from "react-icons/lu";
 
 import { useDispatch, useSelector } from "react-redux";
 import { settings } from "../config";
@@ -33,7 +33,7 @@ const Lock: React.FC = () => {
       dispatch(setError({
         error: true,
         errorDetails: error,
-        errorIcon: faLock,
+        errorIcon: LuLock,
         errorTitle: 'Video editing locked',
         errorMessage: 'This video is currently being edited by another user'
       }))
