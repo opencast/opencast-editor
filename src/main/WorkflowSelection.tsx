@@ -31,7 +31,12 @@ const WorkflowSelection : React.FC = () => {
   const dispatch = useDispatch();
 
   // Initialite redux states
-  const workflows = useSelector(selectWorkflows)
+  let workflows = useSelector(selectWorkflows)
+  // Need to make copy to handle undefined displayOrder values
+  workflows = [...workflows].sort((a, b) => {
+    return (b.displayOrder - a.displayOrder)
+  })
+
   const finishState = useSelector(selectFinishState)
   const pageNumber = useSelector(selectPageNumber)
   const theme = useTheme()

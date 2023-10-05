@@ -8,6 +8,8 @@ import { settings } from '../config';
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
+  isMuted: boolean,               // Is the volume muted?
+  volume: number,                 // Video playback volume
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   clickTriggered: boolean,        // Another video player callback
   currentlyAt: number,            // Position in the video in milliseconds
@@ -27,11 +29,23 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: Workflow[],
+
+  lockingActive: boolean,     // Whether locking event editing is enabled
+  lockRefresh: number | null, // Lock refresh period
+  lockState: boolean,         // Whether lock has been obtained
+  lock: lockData
+}
+
+export interface lockData {
+  uuid: string,
+  user: string
 }
 
 export const initialState: video & httpRequestState = {
   isPlaying: false,
   isPlayPreview: true,
+  isMuted: false,
+  volume: 1,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
@@ -51,6 +65,11 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
+
+  lockingActive: false,
+  lockRefresh: null,
+  lockState: false,
+  lock: {uuid: '', user: ''},
 
   status: 'idle',
   error: undefined,
@@ -105,6 +124,12 @@ const videoSlice = createSlice({
     setIsPlayPreview: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlayPreview = action.payload;
     },
+    setIsMuted: (state, action: PayloadAction<video["isMuted"]>) => {
+      state.isMuted = action.payload;
+    },
+    setVolume: (state, action: PayloadAction<video["volume"]>) => {
+      state.volume = action.payload;
+    },
     setPreviewTriggered: (state, action) => {
       state.previewTriggered = action.payload
     },
@@ -140,6 +165,9 @@ const videoSlice = createSlice({
     removeThumbnail: (state, action: PayloadAction<string>) => {
       const index = state.tracks.findIndex(t => t.id === action.payload)
       state.tracks[index].thumbnailUri = undefined
+    },
+    setLock: (state, action: PayloadAction<video["lockState"]>) => {
+      state.lockState = action.payload;
     },
     cut: state => {
       // If we're exactly between two segments, we can't split the current segment
@@ -217,13 +245,15 @@ const videoSlice = createSlice({
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; }, n2: { displayOrder: number; }) => {
-          return n1.displayOrder - n2.displayOrder;
-        });
+        state.workflows = action.payload.workflows
         state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
         state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
+        state.lockingActive = action.payload.locking_active
+        state.lockRefresh = action.payload.lock_refresh
+        state.lock.uuid = action.payload.lock_uuid;
+        state.lock.user = action.payload.lock_user;
       })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -348,9 +378,9 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 }
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
+export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
+  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
@@ -359,6 +389,10 @@ export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlayi
   state.videoState.isPlaying
 export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>
   state.videoState.isPlayPreview
+export const selectIsMuted = (state: { videoState: { isMuted: video["isMuted"] }; }) =>
+  state.videoState.isMuted
+export const selectVolume = (state: { videoState: { volume: video["volume"] }; }) =>
+  state.videoState.volume
 export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"] } }) =>
   state.videoState.previewTriggered
 export const selectClickTriggered = (state: { videoState: { clickTriggered: video["clickTriggered"] } }) =>
