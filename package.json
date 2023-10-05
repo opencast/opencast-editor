@@ -48,7 +48,7 @@
     "redux": "^4.2.1",
     "standardized-audio-context": "^25.3.55",
     "typescript": "^5.1.6",
-    "uuid": "^9.0.0",
+    "uuid": "^9.0.1",
     "webvtt-parser": "^2.2.0"
   },
   "overrides": {
@@ -86,7 +86,7 @@
     "@types/react-resizable": "^3.0.4",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
-    "@types/uuid": "^9.0.3",
+    "@types/uuid": "^9.0.4",
     "use-resize-observer": "^9.1.0"
   }
 }
