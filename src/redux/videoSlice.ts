@@ -8,6 +8,8 @@ import { settings } from '../config';
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
+  isMuted: boolean,               // Is the volume muted?
+  volume: number,                 // Video playback volume
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   clickTriggered: boolean,        // Another video player callback
   currentlyAt: number,            // Position in the video in milliseconds
@@ -32,6 +34,8 @@ export interface video {
 export const initialState: video & httpRequestState = {
   isPlaying: false,
   isPlayPreview: true,
+  isMuted: false,
+  volume: 1,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
@@ -104,6 +108,12 @@ const videoSlice = createSlice({
     },
     setIsPlayPreview: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlayPreview = action.payload;
+    },
+    setIsMuted: (state, action: PayloadAction<video["isMuted"]>) => {
+      state.isMuted = action.payload;
+    },
+    setVolume: (state, action: PayloadAction<video["volume"]>) => {
+      state.volume = action.payload;
     },
     setPreviewTriggered: (state, action) => {
       state.previewTriggered = action.payload
@@ -348,7 +358,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 }
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
+export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
   cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
@@ -359,6 +369,10 @@ export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlayi
   state.videoState.isPlaying
 export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>
   state.videoState.isPlayPreview
+export const selectIsMuted = (state: { videoState: { isMuted: video["isMuted"] }; }) =>
+  state.videoState.isMuted
+export const selectVolume = (state: { videoState: { volume: video["volume"] }; }) =>
+  state.videoState.volume
 export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"] } }) =>
   state.videoState.previewTriggered
 export const selectClickTriggered = (state: { videoState: { clickTriggered: video["clickTriggered"] } }) =>
