@@ -29,6 +29,16 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: Workflow[],
+
+  lockingActive: boolean,     // Whether locking event editing is enabled
+  lockRefresh: number | null, // Lock refresh period
+  lockState: boolean,         // Whether lock has been obtained
+  lock: lockData
+}
+
+export interface lockData {
+  uuid: string,
+  user: string
 }
 
 export const initialState: video & httpRequestState = {
@@ -55,6 +65,11 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
+
+  lockingActive: false,
+  lockRefresh: null,
+  lockState: false,
+  lock: {uuid: '', user: ''},
 
   status: 'idle',
   error: undefined,
@@ -151,6 +166,9 @@ const videoSlice = createSlice({
       const index = state.tracks.findIndex(t => t.id === action.payload)
       state.tracks[index].thumbnailUri = undefined
     },
+    setLock: (state, action: PayloadAction<video["lockState"]>) => {
+      state.lockState = action.payload;
+    },
     cut: state => {
       // If we're exactly between two segments, we can't split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
@@ -234,6 +252,10 @@ const videoSlice = createSlice({
         state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
+        state.lockingActive = action.payload.locking_active
+        state.lockRefresh = action.payload.lock_refresh
+        state.lock.uuid = action.payload.lock_uuid;
+        state.lock.user = action.payload.lock_user;
       })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -360,7 +382,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
+  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
