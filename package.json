@@ -24,7 +24,7 @@
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.1.0",
     "lodash": "^4.17.21",
-    "luxon": "^3.4.2",
+    "luxon": "^3.4.3",
     "mui-rff": "^6.2.3",
     "package-lock-only": "^0.0.4",
     "react": "^18.2.0",
