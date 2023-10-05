@@ -28,13 +28,6 @@ export interface configureFieldsAttributes {
   readonly: boolean,
 }
 
-export interface subtitleTags {
-  lang: string,
-  'auto-generated': string,
-  'auto-generator': string,
-  type: string,
-}
-
 /**
  * Settings interface
  */
@@ -63,7 +56,7 @@ interface iSettings {
   subtitles: {
     show: boolean,
     mainFlavor: string,
-    languages: { [key: string]: subtitleTags } | undefined,
+    languages: { [key: string]: string } | undefined,
     icons: { [key: string]: string } | undefined,
     defaultVideoFlavor: Flavor | undefined,
   }
@@ -387,7 +380,7 @@ const SCHEMA = {
   subtitles: {
     show: types.boolean,
     mainFlavor: types.string,
-    languages: types.objectsWithinObjects,
+    languages: types.map,
     icons: types.map,
     defaultVideoFlavor: types.map,
   },

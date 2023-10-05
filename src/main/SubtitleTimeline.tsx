@@ -3,8 +3,8 @@ import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import {
   selectCurrentlyAt,
-  selectSelectedSubtitleById,
-  selectSelectedSubtitleId,
+  selectSelectedSubtitleByFlavor,
+  selectSelectedSubtitleFlavor,
   setClickTriggered,
   setCueAtIndex,
   setCurrentlyAt,
@@ -177,7 +177,7 @@ const SubtitleTimeline: React.FC = () => {
 const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const arbitraryHeight = 80
-  const subtitle = useSelector(selectSelectedSubtitleById)
+  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
 
   const segmentsListStyle = css({
     position: 'relative',
@@ -188,7 +188,7 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
 
   return (
     <div css={segmentsListStyle}>
-      {subtitle?.cues?.map((item, i) => {
+      {subtitle?.map((item, i) => {
         return (
           <TimelineSubtitleSegment timelineWidth={timelineWidth} cue={item} height={arbitraryHeight} key={item.idInternal} index={i}/>
         )
@@ -209,7 +209,7 @@ const TimelineSubtitleSegment: React.FC<{
 
   // Redux
   const dispatch = useDispatch()
-  const selectedId = useSelector(selectSelectedSubtitleId)
+  const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
   const duration = useSelector(selectDuration)
 
   // Dimensions and position offsets in px. Required for resizing
@@ -246,7 +246,7 @@ const TimelineSubtitleSegment: React.FC<{
     }
 
     dispatch(setCueAtIndex({
-      identifier: selectedId,
+      identifier: selectedFlavor,
       cueIndex: props.index,
       newCue: {
         id: props.cue.id,

@@ -22,6 +22,7 @@ import { selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { Flavor } from "../types";
 
 /**
  * Shown if the user wishes to save.
@@ -139,11 +140,9 @@ export const SaveButton: React.FC = () => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      subtitlesForPosting.push({
-        id: identifier,
-        subtitle: serializeSubtitle(subtitles[identifier].cues),
-        tags: subtitles[identifier].tags
-      })
+      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
+
     }
     return subtitlesForPosting
   }

@@ -3,16 +3,18 @@ import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { LuChevronLeft} from "react-icons/lu";
 import {
-  selectSubtitlesFromOpencastById,
+  selectCaptionTrackByFlavor,
 } from '../redux/videoSlice'
 import { useDispatch, useSelector } from "react-redux";
+import { SubtitleCue } from "../types";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
   setIsDisplayEditView,
-  selectSelectedSubtitleById,
-  selectSelectedSubtitleId,
+  selectSelectedSubtitleByFlavor,
+  selectSelectedSubtitleFlavor,
   setSubtitle
 } from '../redux/subtitleSlice'
+import { settings } from "../config";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
@@ -20,7 +22,6 @@ import { useTheme } from "../themes";
 import { parseSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
-import { generateButtonTitle } from "./SubtitleSelect";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -31,17 +32,17 @@ const SubtitleEditor : React.FC = () => {
 
   const dispatch = useDispatch()
   const [getError, setGetError] = useState<string | undefined>(undefined)
-  const subtitle = useSelector(selectSelectedSubtitleById)
-  const selectedId = useSelector(selectSelectedSubtitleId)
-  const captionTrack = useSelector(selectSubtitlesFromOpencastById(selectedId))
+  const subtitle : SubtitleCue[] = useSelector(selectSelectedSubtitleByFlavor)
+  const selectedFlavor = useSelector(selectSelectedSubtitleFlavor)
+  const captionTrack = useSelector(selectCaptionTrackByFlavor(selectedFlavor))
   const theme = useTheme()
 
   // Prepare subtitle in redux
   useEffect(() => {
     // Parse subtitle data from Opencast
-    if (subtitle?.cues === undefined && captionTrack !== undefined && captionTrack.subtitle !== undefined && selectedId) {
+    if (subtitle === undefined && captionTrack !== undefined && captionTrack.subtitle !== undefined && selectedFlavor) {
       try {
-        dispatch(setSubtitle({identifier: selectedId, subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags } }))
+        dispatch(setSubtitle({identifier: selectedFlavor, subtitles: parseSubtitle(captionTrack.subtitle)}))
       } catch (error) {
         if (error instanceof Error) {
           setGetError(error.message)
@@ -51,18 +52,15 @@ const SubtitleEditor : React.FC = () => {
       }
 
     // Or create a new subtitle instead
-    } else if (subtitle?.cues === undefined && captionTrack === undefined && selectedId) {
+    } else if (subtitle === undefined && captionTrack === undefined && selectedFlavor) {
       // Create an empty subtitle
-      dispatch(setSubtitle({identifier: selectedId, subtitles: { cues: [], tags: [] }}))
+      dispatch(setSubtitle({identifier: selectedFlavor, subtitles: []}))
     }
-  }, [dispatch, captionTrack, subtitle, selectedId])
+  }, [dispatch, captionTrack, subtitle, selectedFlavor])
 
   const getTitle = () => {
-    if (subtitle) {
-      return generateButtonTitle(subtitle.tags, t)
-    } else {
-      return t("subtitles.editTitle-loading")
-    }
+    return (settings.subtitles.languages !== undefined && subtitle && selectedFlavor) ?
+      settings.subtitles.languages[selectedFlavor] : t("subtitles.editTitle-loading")
   }
 
   const subtitleEditorStyle = css({

@@ -18,6 +18,7 @@ import { AppDispatch } from "../redux/store";
 import { selectSubtitles } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
+import { Flavor } from "../types";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -93,11 +94,9 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
     const subtitlesForPosting = []
 
     for (const identifier in subtitles) {
-      subtitlesForPosting.push({
-        id: identifier,
-        subtitle: serializeSubtitle(subtitles[identifier].cues),
-        tags: subtitles[identifier].tags
-      })
+      const flavor: Flavor = {type: identifier.split("/")[0], subtype: identifier.split("/")[1]}
+      subtitlesForPosting.push({flavor: flavor, subtitle: serializeSubtitle(subtitles[identifier])})
+
     }
     return subtitlesForPosting
   }

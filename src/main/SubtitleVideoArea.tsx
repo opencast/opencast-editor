@@ -11,7 +11,7 @@ import { selectCurrentlyAt,
   selectAspectRatio,
   setAspectRatio,
   selectCurrentlyAtInSeconds,
-  selectSelectedSubtitleById,
+  selectSelectedSubtitleByFlavor,
   selectIsPlayPreview,
   setIsPlayPreview,
   setCurrentlyAtAndTriggerPreview} from "../redux/subtitleSlice";
@@ -39,7 +39,7 @@ import { selectFieldStyle } from "../cssStyles";
 const SubtitleVideoArea : React.FC = () => {
 
   const tracks = useSelector(selectVideos)
-  const subtitle = useSelector(selectSelectedSubtitleById)
+  const subtitle = useSelector(selectSelectedSubtitleByFlavor)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
 
@@ -80,12 +80,12 @@ const SubtitleVideoArea : React.FC = () => {
 
   // Parse subtitles to something the video player understands
   useEffect(() => {
-    if (subtitle?.cues) {
-      const serializedSubtitle = serializeSubtitle(subtitle?.cues)
+    if (subtitle) {
+      const serializedSubtitle = serializeSubtitle(subtitle)
       setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type: 'text/vtt'})))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subtitle?.cues])
+  }, [subtitle])
 
   const areaWrapper = css({
     display: 'block',
