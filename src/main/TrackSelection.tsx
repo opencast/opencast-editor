@@ -188,7 +188,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
         aria-label={tooltip}
         onClick={clickHandler}
         onKeyDown={keyHandler} >
-        <Icon css={customIconStyle(theme)}/>
+        <Icon css={customIconStyle}/>
         <div>{ text }</div>
       </div>
     </ThemedTooltip>
