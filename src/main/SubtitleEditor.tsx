@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
-import { LuChevronLeft} from "react-icons/lu";
+import { LuChevronLeft, LuDownload} from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
 } from '../redux/videoSlice'
@@ -17,7 +17,7 @@ import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
-import { parseSubtitle } from "../util/utilityFunctions";
+import { parseSubtitle, serializeSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
 import { generateButtonTitle } from "./SubtitleSelect";
@@ -109,7 +109,7 @@ const SubtitleEditor : React.FC = () => {
             <div css={[titleStyle(theme), titleStyleBold(theme)]}>
               {t("subtitles.editTitle", {title: getTitle()})}
             </div>
-            <div css={{width: '50px'}}></div>
+            <DownloadButton/>
           </div>
           <div css={subAreaStyle}>
             <SubtitleListEditor />
@@ -125,6 +125,47 @@ const SubtitleEditor : React.FC = () => {
     <div css={subtitleEditorStyle}>
       {render()}
     </div>
+  );
+}
+
+const DownloadButton: React.FC = () => {
+
+  const subtitle = useSelector(selectSelectedSubtitleById);
+
+  const downloadSubtitles = () => {
+
+    const vttFile = new Blob([serializeSubtitle(subtitle.cues)], {type: 'text/vtt'});
+
+    const vttFileLink = window.URL.createObjectURL(vttFile);
+    const vttHyperLink = document.createElement('a');
+    vttHyperLink.setAttribute('href', vttFileLink);
+
+    const vttFileName = generateButtonTitle(subtitle.tags, t).trimEnd();
+    vttHyperLink.setAttribute('download', `${vttFileName}.vtt`);
+    vttHyperLink.click();
+  }
+
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const style = css({
+    fontSize: '16px',
+    height: '10px',
+    padding: '16px',
+    justifyContent: 'space-around',
+    boxShadow: `${theme.boxShadow}`,
+    background: `${theme.element_bg}`,
+  });
+
+  return (
+    <ThemedTooltip title={t("subtitles.downloadButton-tooltip")}>
+      <div css={[basicButtonStyle(theme), style]}
+        role="button"
+        onClick={() => downloadSubtitles()}
+      >
+        <LuDownload css={{fontSize: '16px'}}/>
+        <span>{t("subtitles.downloadButton-title")}</span>
+      </div>
+    </ThemedTooltip>
   );
 }
 

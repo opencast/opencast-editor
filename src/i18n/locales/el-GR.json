@@ -232,6 +232,8 @@
         "createSubtitleDropdown-label": "Επιλέξτε μια γλώσσα",
         "backButton": "Επιστροφή",
         "backButton-tooltip": "Επιστροφή στην επιλογή υποτίτλων",
+        "downloadButton-title": "Κατεβάστε",
+        "downloadButton-tooltip": "Download subtitle as vtt file",
         "editTitle": "Επεξεργαστής υποτίτλων - {{title}}",
         "editTitle-loading": "Φόρτωση",
         "generic": "Γενικά",
