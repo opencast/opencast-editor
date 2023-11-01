@@ -249,6 +249,8 @@
       "createSubtitleDropdown-label": "Pick a language",
       "backButton": "Back",
       "backButton-tooltip": "Return to subtitle selection",
+      "downloadButton-title": "Download",
+      "downloadButton-tooltip": "Download subtitle as vtt file",
       "editTitle": "Subtitle Editor - {{title}}",
       "editTitle-loading": "Loading",
       "generic": "Generic",
