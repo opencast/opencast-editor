@@ -85,13 +85,21 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'left',
-
-    width: '100%',
-    maxWidth: '500px',
   });
+
+  const trackitemSubStyle = css({
+    display: 'flex',
+    flexDirection: 'row',
+    ...(flexGapReplacementStyle(20, true)),
+
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+  })
 
   const playerStyle = css({
     aspectRatio: '16 / 9',
+    width: '100%',
+    maxWidth: '457px',
   });
 
   const headerStyle = css({
@@ -102,6 +110,15 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
       textTransform: 'capitalize',
     },
   });
+
+  const buttonsStyle = css({
+    // TODO: Avoid hard-coding max-width
+    "@media (max-width: 1550px)": {
+      width: '100%',
+    },
+    display: 'flex',
+    flexDirection: 'column',
+  })
 
   // What state is the track in and can it be deactivated?
   // We do not permit deactivating the last remaining track
@@ -131,19 +148,24 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   return (
     <div css={[backgroundBoxStyle(theme), trackItemStyle]}>
       <div css={headerStyle}>{ header }</div>
-      <ReactPlayer
-        width="unset"
-        height="unset"
-        css={playerStyle}
-        style={{opacity: track.video_stream.enabled ? '1' : '0.5'}}
-        url={track.uri}
-      />
-      <SelectButton
-        text={deleteText}
-        tooltip={deleteTooltip}
-        handler={trackEnabledChange}
-        Icon={deleteIcon}
-        active={deleteEnabled} />
+      <div css={trackitemSubStyle}>
+        <ReactPlayer
+          width="unset"
+          height="unset"
+          css={playerStyle}
+          style={{opacity: track.video_stream.enabled ? '1' : '0.5'}}
+          url={track.uri}
+        />
+        <div css={buttonsStyle}>
+          <SelectButton
+            text={deleteText}
+            tooltip={deleteTooltip}
+            handler={trackEnabledChange}
+            Icon={deleteIcon}
+            active={deleteEnabled}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -163,25 +185,30 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
   const buttonStyle = [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
-      padding: '10px 5px',
-      width: '30%',
+      padding: '16px',
+      maxHeight: '21px',
       boxShadow: '',
-      border: `1px solid ${theme.text}`,
       background: `${theme.element_bg}`,
+      textWrap: 'nowrap',
     }];
+
   const clickHandler = () => {
     if (active) { handler() }
     ref.current?.blur();
   };
+
   const keyHandler = (event: React.KeyboardEvent) => {
     if (active && (event.key === " " || event.key === "Enter")) {
       handler();
     }
   };
+
   const ref = React.useRef<HTMLDivElement>(null)
+
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={buttonStyle}
+      <div
+        css={buttonStyle}
         tabIndex={0}
         ref={ref}
         role="button"
@@ -189,7 +216,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
         onClick={clickHandler}
         onKeyDown={keyHandler} >
         <Icon css={customIconStyle}/>
-        <div>{ text }</div>
+        { text }
       </div>
     </ThemedTooltip>
   );
