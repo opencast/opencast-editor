@@ -83,7 +83,7 @@
     "@types/luxon": "^3.3.3",
     "@types/react-beforeunload": "^2.1.3",
     "@types/react-final-form-listeners": "^1.0.2",
-    "@types/react-resizable": "^3.0.5",
+    "@types/react-resizable": "^3.0.6",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
     "@types/uuid": "^9.0.6",
