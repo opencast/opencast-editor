@@ -5,6 +5,7 @@ import MainContent from './MainContent';
 import TheEnd from './TheEnd';
 import Error from './Error';
 import Landing from "./Landing";
+import Lock from "./Lock";
 
 import { css } from '@emotion/react'
 
@@ -12,7 +13,6 @@ import { useSelector } from 'react-redux';
 import { selectIsEnd } from '../redux/endSlice'
 import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
-
 
 const Body: React.FC = () => {
 
@@ -28,7 +28,10 @@ const Body: React.FC = () => {
       )
     } else if (isEnd) {
       return (
-        <TheEnd />
+        <div>
+          <Lock />
+          <TheEnd />
+        </div>
       );
     } else if (isError) {
       return (
@@ -37,6 +40,7 @@ const Body: React.FC = () => {
     } else {
       return (
         <div css={bodyStyle}>
+          <Lock />
           <MainMenu />
           <MainContent />
         </div>

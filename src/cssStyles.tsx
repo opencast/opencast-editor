@@ -436,10 +436,9 @@ export const spinningStyle = css({
   })}`,
 })
 
-export const customIconStyle = (theme: Theme) => css(({
+export const customIconStyle = css(({
   maxWidth: '16px',
-  height: 'auto',
-  color: theme.text,
+  height: 'auto'
 }))
 
 export const videosStyle = (theme: Theme) => css(({

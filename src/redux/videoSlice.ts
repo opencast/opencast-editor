@@ -8,6 +8,8 @@ import { settings } from '../config';
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
+  isMuted: boolean,               // Is the volume muted?
+  volume: number,                 // Video playback volume
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   clickTriggered: boolean,        // Another video player callback
   currentlyAt: number,            // Position in the video in milliseconds
@@ -27,11 +29,23 @@ export interface video {
   title: string,
   presenters: string[],
   workflows: Workflow[],
+
+  lockingActive: boolean,     // Whether locking event editing is enabled
+  lockRefresh: number | null, // Lock refresh period
+  lockState: boolean,         // Whether lock has been obtained
+  lock: lockData
+}
+
+export interface lockData {
+  uuid: string,
+  user: string
 }
 
 export const initialState: video & httpRequestState = {
   isPlaying: false,
   isPlayPreview: true,
+  isMuted: false,
+  volume: 1,
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
   tracks: [],
@@ -51,6 +65,11 @@ export const initialState: video & httpRequestState = {
   title: '',
   presenters: [],
   workflows: [],
+
+  lockingActive: false,
+  lockRefresh: null,
+  lockState: false,
+  lock: {uuid: '', user: ''},
 
   status: 'idle',
   error: undefined,
@@ -105,6 +124,12 @@ const videoSlice = createSlice({
     setIsPlayPreview: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlayPreview = action.payload;
     },
+    setIsMuted: (state, action: PayloadAction<video["isMuted"]>) => {
+      state.isMuted = action.payload;
+    },
+    setVolume: (state, action: PayloadAction<video["volume"]>) => {
+      state.volume = action.payload;
+    },
     setPreviewTriggered: (state, action) => {
       state.previewTriggered = action.payload
     },
@@ -140,6 +165,9 @@ const videoSlice = createSlice({
     removeThumbnail: (state, action: PayloadAction<string>) => {
       const index = state.tracks.findIndex(t => t.id === action.payload)
       state.tracks[index].thumbnailUri = undefined
+    },
+    setLock: (state, action: PayloadAction<video["lockState"]>) => {
+      state.lockState = action.payload;
     },
     cut: state => {
       // If we're exactly between two segments, we can't split the current segment
@@ -178,6 +206,11 @@ const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
       state.hasChanges = true
     },
+    mergeAll: state => {
+      mergeSegments(state, state.activeSegmentIndex, 0)
+      mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1)
+      state.hasChanges = true
+    },
   },
   // For Async Requests
   extraReducers: builder => {
@@ -212,13 +245,15 @@ const videoSlice = createSlice({
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; }, n2: { displayOrder: number; }) => {
-          return n1.displayOrder - n2.displayOrder;
-        });
+        state.workflows = action.payload.workflows
         state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
         state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
 
         state.aspectRatios = new Array(state.videoCount)
+        state.lockingActive = action.payload.locking_active
+        state.lockRefresh = action.payload.lock_refresh
+        state.lock.uuid = action.payload.lock_uuid;
+        state.lock.user = action.payload.lock_user;
       })
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -258,22 +293,25 @@ export const parseSegments = (segments: Segment[], duration: number) => {
 }
 
 /**
- * Helper function for merging two segments
+ * Helper function for merging segments
  */
-const mergeSegments = (state: video, activeSegmentIndex: number, mergeSegmentIndex: number) => {
+const mergeSegments = (state: video, startSegmentIndex: number, endSegmentIndex: number) => {
   // Check if mergeSegmentIndex is valid
-  if (mergeSegmentIndex < 0 || mergeSegmentIndex > state.segments.length - 1) {
+  if (endSegmentIndex < 0 || endSegmentIndex > state.segments.length - 1) {
     return
   }
 
   // Increase activeSegment length
-  state.segments[activeSegmentIndex].start = Math.min(
-    state.segments[activeSegmentIndex].start, state.segments[mergeSegmentIndex].start)
-  state.segments[activeSegmentIndex].end = Math.max(
-    state.segments[activeSegmentIndex].end, state.segments[mergeSegmentIndex].end)
+  state.segments[startSegmentIndex].start = Math.min(
+    state.segments[startSegmentIndex].start, state.segments[endSegmentIndex].start)
+  state.segments[startSegmentIndex].end = Math.max(
+    state.segments[startSegmentIndex].end, state.segments[endSegmentIndex].end)
 
-  // Remove the other segment
-  state.segments.splice(mergeSegmentIndex, 1);
+  // Remove the end segment and segments between
+  state.segments.splice(
+    startSegmentIndex < endSegmentIndex ? startSegmentIndex + 1 : endSegmentIndex,
+    Math.abs(endSegmentIndex - startSegmentIndex)
+  );
 
   // Update active segment
   updateActiveSegment(state)
@@ -321,8 +359,14 @@ const skipDeletedSegments = (state: video) => {
  * TODO: Improve calculation to handle multiple rows of videos
  */
 export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
-  const minHeight = Math.min(...aspectRatios.map(o => o.height))
+  let minHeight = Math.min(...aspectRatios.map(o => o.height))
   let minWidth = Math.min(...aspectRatios.map(o => o.width))
+  // Getting the aspect ratios of every video can take several seconds
+  // So we assume a default resolution until then
+  if (!minHeight || !minWidth) {
+    minHeight = 720
+    minWidth = 1280
+  }
   minWidth *= aspectRatios.length
   return Math.min((minHeight / minWidth) * 100, (9 / 32) * 100)
 }
@@ -334,9 +378,9 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 }
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
+export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
+  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
   setClickTriggered } = videoSlice.actions
 
 // Export selectors
@@ -345,6 +389,10 @@ export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlayi
   state.videoState.isPlaying
 export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>
   state.videoState.isPlayPreview
+export const selectIsMuted = (state: { videoState: { isMuted: video["isMuted"] }; }) =>
+  state.videoState.isMuted
+export const selectVolume = (state: { videoState: { volume: video["volume"] }; }) =>
+  state.videoState.volume
 export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"] } }) =>
   state.videoState.previewTriggered
 export const selectClickTriggered = (state: { videoState: { clickTriggered: video["clickTriggered"] } }) =>

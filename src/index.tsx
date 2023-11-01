@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux'
@@ -8,14 +8,19 @@ import store from './redux/store'
 import { init } from './config'
 import { sleep } from './util/utilityFunctions'
 
-import { GlobalHotKeys } from 'react-hotkeys';
-
 import "@fontsource-variable/roboto-flex";
 
 import './i18n/config';
 
 import '@opencast/appkit/dist/colors.css'
 import { ColorSchemeProvider } from '@opencast/appkit';
+
+const container = document.getElementById('root')
+if (!container) {
+  throw new Error('Failed to find the root element');
+}
+const root = ReactDOMClient.createRoot(container);
+
 
 // Load config here
 // Load the rest of the application and try to fetch the settings file from the
@@ -25,30 +30,22 @@ const initialize = Promise.race([
   sleep(300),
 ]);
 
-const render = (body: JSX.Element) => {
-  ReactDOM.render(body, document.getElementById('root'));
-};
-
 initialize.then(
 
   () => {
-    ReactDOM.render(
+    root.render(
       <React.StrictMode>
         <Provider store={store}>
-          {/* Workaround for getApplicationKeyMap based on https://github.com/greena13/react-hotkeys/issues/228 */}
-          <GlobalHotKeys>
-            <ColorSchemeProvider>
-              <App />
-            </ColorSchemeProvider>
-          </GlobalHotKeys>
+          <ColorSchemeProvider>
+            <App />
+          </ColorSchemeProvider>
         </Provider>
       </React.StrictMode>,
-      document.getElementById('root')
     );
   },
 
   // This error case is vey unlikely to occur.
-  e => render(<p>
+  e => root.render(<p>
     {`Fatal error while loading app: ${e.message}`}
     <br />
     This might be caused by a incorrect configuration by the system administrator.

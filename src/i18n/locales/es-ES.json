@@ -16,6 +16,9 @@
         "delete-button": "Borrar",
         "delete-restore-tooltip": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido:: {{hotKeyName}}.",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "Restaurar",
         "mergeLeft-button": "Fusionar a la izquierda",
         "mergeLeft-tooltip": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}",
@@ -34,6 +37,10 @@
         "time-duration-tooltip": "Duración del vídeo",
         "duration-aria": "Duración",
         "time-aria": "Tiempo actual",
+        "mutebutton-tooltip": "Mute video",
+        "unmutebutton-tooltip": "Unmute video",
+        "volume-tooltip": "Adjust volume: {{current}}%",
+        "volumeSlider-aria": "Adjust the volume level of the video.",
         "comError-text": "Se ha producido un error al establecer comunicación con Opencast.",
         "loadError-text": "Ocurrió un error al cargar el video.",
         "durationError-text": "Opencast falló al proporcionar la duracion del vídeo.",
@@ -54,7 +61,9 @@
         "info-text": "El vídeo no será procesado, pero toda la información de corte será almacenada en Opencast. Puede continuar su edición más tarde.",
         "success-text": "¡Cambios guardados con éxito! Ahora puede cerrar el editor o continuar trabajando.",
         "success-tooltip-aria": "Guardado con éxito",
-        "saveArea-tooltip": "Guardar área"
+        "saveArea-tooltip": "Guardar área",
+        "confirm-success": "Okay",
+        "cancel-save": "Don't save"
     },
     "discard": {
         "headline-text": "Descartar cambios",
@@ -121,7 +130,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Esloveno",
-            "LANGUAGES-PORTUGUESE": "Portugués",
+            "LANGUAGES-PORTUGESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Rumano",
             "LANGUAGES-ARABIC": "Árabe",
             "LANGUAGES-POLISH": "Polaco",
@@ -199,10 +208,12 @@
     "various": {
         "error-details-text": "Detalles: {{errorMessage}}\n",
         "error-text": "Ha ocurrido un error. Por favor, espere un poco e inténtelo de nuevo.",
-        "goBack-button": "¡De ninguna manera! Volver atrás"
+        "goBack-button": "¡De ninguna manera! Volver atrás",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
-        "description": "Seleccione qué pistas serán usadas para el procesamiento y publicación.",
+        "title": "Select track(s) for processing",
         "trackInactive": "inactivo",
         "deleteTrackText": "Eliminar pista",
         "restoreTrackText": "Restaurar pista",
@@ -221,6 +232,8 @@
         "createSubtitleDropdown-label": "Seleccione un idioma",
         "backButton": "Atras",
         "backButton-tooltip": "Volver a la selección de subtítulos",
+        "downloadButton-title": "Descargar",
+        "downloadButton-tooltip": "Download subtitle as vtt file",
         "editTitle": "Editor de subtítulos - {{title}}",
         "editTitle-loading": "Cargando",
         "generic": "Generico",
@@ -244,7 +257,7 @@
         "overviewTimelineTooltip": "Previsualización de la línea de tiempo"
     },
     "keyboardControls": {
-        "header": "Controles del teclado",
+        "header": "Shortcuts",
         "defaultGroupName": "General",
         "missingLabel": "Desconocido",
         "groupVideoPlayer": "Reproductor de vídeo",
@@ -261,11 +274,13 @@
     },
     "theme": {
         "appearance": "Apariencia",
-        "selectThemesLabel": "Apariencias",
-        "darkmode": "Modo oscuro",
-        "lightmode": "Modo claro",
-        "system": "Diseño del sistema",
-        "high-contrast-dark": "Alto contraste (modo oscuro)",
-        "high-contrast-light": "Alto contraste (modo claro)"
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Auto",
+        "dark-high-contrast": "Dark (High contrast)",
+        "light-high-contrast": "Light (High contrast)"
+    },
+    "language": {
+        "language": "Idioma"
     }
 }

@@ -3,7 +3,7 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
-import { LuPlay, LuPause } from "react-icons/lu";
+import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -13,9 +13,7 @@ import {
 import { convertMsToReadableString } from '../util/utilityFunctions'
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
-import { GlobalHotKeys, KeyMapOptions } from 'react-hotkeys';
-import { videoPlayerKeyMap } from "../globalKeys";
-import { SyntheticEvent } from "react";
+import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTranslation } from 'react-i18next';
 
 import { RootState } from "../redux/store";
@@ -23,6 +21,8 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { ThemedTooltip } from "./Tooltip";
 import { Theme, useTheme } from "../themes";
+import { useHotkeys } from "react-hotkeys-hook";
+import { Slider } from "@mui/material";
 
 /**
  * Contains controls for manipulating multiple video players at once
@@ -31,14 +31,22 @@ import { Theme, useTheme } from "../themes";
 const VideoControls: React.FC<{
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying: (state: RootState) => boolean,
+  selectIsMuted: (state: RootState) => boolean,
+  selectVolume: (state: RootState) => number,
   selectIsPlayPreview: (state: RootState) => boolean,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
+  setIsMuted: ActionCreatorWithPayload<boolean, string>,
+  setVolume: ActionCreatorWithPayload<number, string>,
   setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   selectCurrentlyAt,
   selectIsPlaying,
+  selectIsMuted,
+  selectVolume,
   selectIsPlayPreview,
   setIsPlaying,
+  setIsMuted,
+  setVolume,
   setIsPlayPreview
 }) => {
 
@@ -58,35 +66,25 @@ const VideoControls: React.FC<{
     ...(flexGapReplacementStyle(30, false)),
   })
 
-  const leftSideBoxStyle = css({
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-end'
-  })
-
-  const rightSideBoxStyle = css({
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-start'
-  })
-
   return (
     <div css={videoControlsRowStyle}>
-      <div css={leftSideBoxStyle}>
-        <TimeDisplay
-          selectCurrentlyAt={selectCurrentlyAt}
-        />
-      </div>
+      <TimeDisplay
+        selectCurrentlyAt={selectCurrentlyAt}
+      />
       <PlayButton
         selectIsPlaying={selectIsPlaying}
         setIsPlaying={setIsPlaying}
       />
-      <div css={rightSideBoxStyle}>
-        <PreviewMode
-          selectIsPlayPreview={selectIsPlayPreview}
-          setIsPlayPreview={setIsPlayPreview}
-        />
-      </div>
+      <VolumeSlider
+        selectIsMuted={selectIsMuted}
+        setIsMuted={setIsMuted}
+        selectVolume={selectVolume}
+        setVolume={setVolume}
+      />
+      <PreviewMode
+        selectIsPlayPreview={selectIsPlayPreview}
+        setIsPlayPreview={setIsPlayPreview}
+      />
     </div>
   );
 }
@@ -111,9 +109,7 @@ const PreviewMode: React.FC<{
   const theme = useTheme();
 
   // Change preview mode from "on" to "off" and vice versa
-  const switchPlayPreview = (event: KeyboardEvent | SyntheticEvent, ref: React.RefObject<HTMLDivElement> | undefined) => {
-    event.preventDefault()                      // Prevent page scrolling due to Space bar press
-    event.stopPropagation()                     // Prevent video playback due to Space bar press
+  const switchPlayPreview = (ref: React.RefObject<HTMLDivElement> | undefined) => {
     dispatch(setIsPlayPreview(!isPlayPreview))
 
     // Lose focus if clicked by mouse
@@ -123,10 +119,7 @@ const PreviewMode: React.FC<{
   }
 
   // Maps functions to hotkeys
-  const handlers = {
-    // preview: switchPlayPreview,
-    preview: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchPlayPreview(keyEvent, undefined) } }
-  }
+  useHotkeys(KEYMAP.videoPlayer.preview.key, () => switchPlayPreview(undefined), {preventDefault: true}, [isPlayPreview]);
 
   const previewModeStyle = css({
     cursor: "pointer",
@@ -150,17 +143,16 @@ const PreviewMode: React.FC<{
   return (
     <ThemedTooltip
       title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"),
-        hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
+        hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
     >
       <div css={previewModeStyle}
         ref={ref}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
-        aria-label={t("video.previewButton-aria", { hotkeyName: (videoPlayerKeyMap[handlers.preview.name] as KeyMapOptions).sequence })}
-        onClick={(event: SyntheticEvent) => switchPlayPreview(event, ref)}
+        aria-label={t("video.previewButton-aria", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
+        onClick={() => switchPlayPreview(ref)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
-          switchPlayPreview(event, undefined)
+          switchPlayPreview(undefined)
         } }}>
-        <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
         <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
         </div>
@@ -190,15 +182,12 @@ const PlayButton: React.FC<{
   const theme = useTheme();
 
   // Change play mode from "on" to "off" and vice versa
-  const switchIsPlaying = (event: KeyboardEvent | SyntheticEvent) => {
-    event.preventDefault()                      // Prevent page scrolling due to Space bar press
+  const switchIsPlaying = () => {
     dispatch(setIsPlaying(!isPlaying))
   }
 
   // Maps functions to hotkeys
-  const handlers = {
-    play: (keyEvent?: KeyboardEvent) => { if (keyEvent) { switchIsPlaying(keyEvent) } }
-  }
+  useHotkeys(KEYMAP.videoPlayer.play.key, () => switchIsPlaying(), {preventDefault: true}, [isPlaying]);
 
   const playButtonStyle = css({
     justifySelf: 'center',
@@ -220,13 +209,12 @@ const PlayButton: React.FC<{
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
       <div>
-        <GlobalHotKeys keyMap={videoPlayerKeyMap} handlers={handlers} allowChanges={true} />
         <div css={[basicButtonStyle(theme), playButtonStyle]}
           role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
           aria-label={t("video.playButton-tooltip")}
-          onClick={(event: SyntheticEvent) => { switchIsPlaying(event) }}
+          onClick={() => { switchIsPlaying() }}
           onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
-            switchIsPlaying(event)
+            switchIsPlaying()
           } }}>
           {isPlaying ? <LuPause css={playIconStyle} /> : <LuPlay css={playIconStyle} />}
         </div>
@@ -270,6 +258,110 @@ const TimeDisplay: React.FC<{
           tabIndex={0} aria-label={t("video.duration-aria") + ": " + convertMsToReadableString(duration)}>
           {new Date((duration ? duration : 0)).toISOString().substr(11, 10)}
         </div>
+      </ThemedTooltip>
+    </div>
+  );
+}
+
+const VolumeSlider: React.FC<{
+  selectIsMuted: (state: RootState) => boolean,
+  setIsMuted: ActionCreatorWithPayload<boolean, string>,
+  selectVolume: (state: RootState) => number,
+  setVolume: ActionCreatorWithPayload<number, string>,
+}> = ({
+  selectIsMuted,
+  setIsMuted,
+  selectVolume,
+  setVolume
+}) => {
+
+  const { t } = useTranslation();
+
+  // Init redux variables
+  const dispatch = useDispatch();
+  const isMuted = useSelector(selectIsMuted)
+  const volume = useSelector(selectVolume)
+  const theme = useTheme();
+
+  // Toggle video mute
+  const switchIsMuted = () => {
+    // Increase volume when unmuting and no volume was set before
+    if (volume === 0 && isMuted) {
+      dispatch(setVolume(1));
+    }
+
+    dispatch(setIsMuted(!isMuted));
+  }
+
+  const volumeOnChange = (_event: Event, newValue: number | number[]) => {
+    // Disable mute when silder is moved
+    if (isMuted) {
+      dispatch(setIsMuted(false));
+    }
+
+    // Get first value if array given
+    if (Array.isArray(newValue)) {
+      newValue = newValue[0];
+    }
+
+    // Enable mute if no volume is set
+    if (newValue === 0) {
+      dispatch(setIsMuted(true));
+    }
+
+    dispatch(setVolume(Number(newValue)));
+  }
+
+  const volumeStyle = css({
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '15px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  })
+
+  const sliderStyle = css({
+    width: '80px',
+    "& .MuiSlider-thumb": {
+      color: `${theme.slider_thumb_color}`,
+      "&:hover, &.Mui-focusVisible, &.Mui-active": {
+        boxShadow: `${theme.slider_thumb_shadow}`,
+      },
+    },
+    "& .MuiSlider-rail": {
+      color: `${theme.slider_track_color}`,
+    },
+    "& .MuiSlider-track": {
+      color: `${theme.slider_track_color}`,
+    },
+  })
+
+  const volumeIconStyle = css({
+    fontSize: 24,
+    paddingLeft: '3px',
+  })
+
+  return (
+    <div css={volumeStyle}>
+      <ThemedTooltip title={isMuted ? t("video.unmutebutton-tooltip") : t("video.mutebutton-tooltip")}>
+        <div css={[basicButtonStyle(theme)]}
+          role="button" aria-pressed={isMuted} tabIndex={0} aria-hidden={false}
+          aria-label={t("video.mutebutton-tooltip")}
+          onClick={switchIsMuted}>
+          {isMuted ? <LuVolumeX css={volumeIconStyle} /> : <LuVolume2 css={volumeIconStyle} />}
+        </div>
+      </ThemedTooltip>
+      <ThemedTooltip title={t("video.volume-tooltip", { current: Math.trunc(volume * 100) })}>
+        <Slider
+          css={sliderStyle}
+          min={0}
+          max={1}
+          step={0.01}
+          value={isMuted ? 0 : volume}
+          onChange={volumeOnChange}
+          aria-label={t("video.volume-tooltip", { current: Math.trunc(volume * 100) })}
+          valueLabelDisplay="off"
+        />
       </ThemedTooltip>
     </div>
   );

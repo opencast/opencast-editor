@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import CuttingActions from "./CuttingActions"
 import Timeline from './Timeline';
-import { fetchVideoInformation, selectCurrentlyAt, selectDuration, selectIsPlaying, selectIsPlayPreview, selectTitle, setClickTriggered, setCurrentlyAt, setIsPlaying, setIsPlayPreview } from '../redux/videoSlice';
+import { fetchVideoInformation, selectCurrentlyAt, selectDuration, selectIsPlaying, selectIsMuted, selectVolume, selectIsPlayPreview, selectTitle, setClickTriggered, setCurrentlyAt, setIsPlaying, setIsMuted, setVolume, setIsPlayPreview } from '../redux/videoSlice';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../redux/store';
@@ -71,8 +71,12 @@ const Cutting: React.FC = () => {
         <VideoControls
           selectCurrentlyAt={selectCurrentlyAt}
           selectIsPlaying={selectIsPlaying}
+          selectIsMuted={selectIsMuted}
+          selectVolume={selectVolume}
           selectIsPlayPreview={selectIsPlayPreview}
           setIsPlaying={setIsPlaying}
+          setIsMuted={setIsMuted}
+          setVolume={setVolume}
           setIsPlayPreview={setIsPlayPreview}
         />
       </div>

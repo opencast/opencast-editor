@@ -17,6 +17,9 @@
       "delete-button": "Delete",
       "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}",
       "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotKeyName}}.",
+      "merge-all-button": "Merge All",
+      "merge-all-tooltip": "Combine all segments into a single segment.",
+      "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
       "restore-button": "Restore",
       "mergeLeft-button": "Merge Left",
       "mergeLeft-tooltip": "Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}",
@@ -36,6 +39,10 @@
       "time-duration-tooltip": "Video duration",
       "duration-aria": "Duration",
       "time-aria": "Current time",
+      "mutebutton-tooltip": "Mute video",
+      "unmutebutton-tooltip": "Unmute video",
+      "volume-tooltip": "Adjust volume: {{current}}%",
+      "volumeSlider-aria": "Adjust the volume level of the video.",
       "comError-text": "A problem occurred during communication with Opencast.",
       "loadError-text": "An error has occurred loading this video.",
       "durationError-text": "Opencast failed to provide the video duration.",
@@ -216,7 +223,9 @@
     "various": {
       "error-details-text": "Details: {{errorMessage}}\n",
       "error-text": "An error has occurred. Please wait a bit and try again.",
-      "goBack-button": "No, take me back"
+      "goBack-button": "No, take me back",
+      "callback-button-system": "Back to {{system}}",
+      "callback-button-generic": "Back to previous system"
     },
 
     "trackSelection": {
@@ -240,6 +249,8 @@
       "createSubtitleDropdown-label": "Pick a language",
       "backButton": "Back",
       "backButton-tooltip": "Return to subtitle selection",
+      "downloadButton-title": "Download",
+      "downloadButton-tooltip": "Download subtitle as vtt file",
       "editTitle": "Subtitle Editor - {{title}}",
       "editTitle-loading": "Loading",
       "generic": "Generic",

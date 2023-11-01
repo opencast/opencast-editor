@@ -16,6 +16,9 @@
         "delete-button": "Löschen",
         "delete-restore-tooltip": "Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "Wiederherstellen",
         "mergeLeft-button": "Links zusammenfügen",
         "mergeLeft-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}",
@@ -34,6 +37,10 @@
         "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",
         "time-aria": "Aktuelle Zeit",
+        "mutebutton-tooltip": "Mute video",
+        "unmutebutton-tooltip": "Unmute video",
+        "volume-tooltip": "Adjust volume: {{current}}%",
+        "volumeSlider-aria": "Adjust the volume level of the video.",
         "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
         "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
         "durationError-text": "Opencast konnte die Video-Dauer nicht angeben.",
@@ -54,7 +61,9 @@
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
         "success-text": "Änderungen erfolgreich gespeichert! Sie können den Editor nun schließen oder weiter arbeiten.",
         "success-tooltip-aria": "Erfolgreich gespeichert",
-        "saveArea-tooltip": "Speicherbereich"
+        "saveArea-tooltip": "Speicherbereich",
+        "confirm-success": "Okay",
+        "cancel-save": "Nicht speichern"
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
@@ -121,7 +130,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Slowenisch",
-            "LANGUAGES-PORTUGUESE": "Portugiesisch",
+            "LANGUAGES-PORTUGESE": "Portugiesisch",
             "LANGUAGES-ROMANSH": "Rätoromanisch",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Polnisch",
@@ -199,10 +208,12 @@
     "various": {
         "error-details-text": "Details: {{errorMessage}}\n",
         "error-text": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.",
-        "goBack-button": "Nein, zurück"
+        "goBack-button": "Nein, zurück",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
-        "description": "Wählen oder deaktivieren Sie die Spuren für die Verarbeitung und Veröffentlichung.",
+        "title": "Spur(en) für die Verarbeitung auswählen",
         "trackInactive": "inaktiv",
         "deleteTrackText": "Spur löschen",
         "restoreTrackText": "Spur wiederherstellen",
@@ -221,6 +232,8 @@
         "createSubtitleDropdown-label": "Wähle eine Sprache",
         "backButton": "Zurück",
         "backButton-tooltip": "Zurück zur Untertitelauswahl",
+        "downloadButton-title": "Herunterladen",
+        "downloadButton-tooltip": "Untertitel als VTT-Datei herunterladen",
         "editTitle": "Untertitel-Editor - {{title}}",
         "editTitle-loading": "Lädt",
         "generic": "Unspezifiziert",
@@ -244,7 +257,7 @@
         "overviewTimelineTooltip": "Zeitleiste-Übersicht"
     },
     "keyboardControls": {
-        "header": "Tastatursteuerung",
+        "header": "Tastenkürzel",
         "defaultGroupName": "Allgemein",
         "missingLabel": "Unbekannt",
         "groupVideoPlayer": "Videoplayer",
@@ -260,12 +273,14 @@
         "scrubberDecrease": "Langsamer"
     },
     "theme": {
-        "appearance": "Erscheinungsbild",
-        "selectThemesLabel": "Darstellung",
-        "darkmode": "Dunkles Design",
-        "lightmode": "Helles Design",
-        "system": "System Design",
-        "high-contrast-dark": "Hoher Kontrast (Dunkles Design)",
-        "high-contrast-light": "Hoher Kontrast (Helles Design)"
+        "appearance": "Aussehen",
+        "dark": "Dunkel",
+        "light": "Hell",
+        "auto": "Auto",
+        "dark-high-contrast": "Dunkel (hoher Kontrast)",
+        "light-high-contrast": "Hell (hoher Kontrast)"
+    },
+    "language": {
+        "language": "Sprache"
     }
 }

@@ -16,6 +16,9 @@
         "delete-button": "Διαγραφή",
         "delete-restore-tooltip": "Σήμανση ή κατάργηση του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Διαγραφή και Επαναφορά. Σήμανση ή κατάργηση επισήμανσης του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotKeyName}}.",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "Επαναφορά",
         "mergeLeft-button": "Συγχώνευση Αριστερά",
         "mergeLeft-tooltip": "Συνδυάστε το τρέχον ενεργό τμήμα με το τμήμα στα αριστερά. Πλήκτρο συντόμευσης: {{hotkeyName}}",
@@ -34,6 +37,10 @@
         "time-duration-tooltip": "Διάρκεια βίντεο",
         "duration-aria": "Διάρκεια",
         "time-aria": "Τρέχουσα ώρα",
+        "mutebutton-tooltip": "Mute video",
+        "unmutebutton-tooltip": "Unmute video",
+        "volume-tooltip": "Adjust volume: {{current}}%",
+        "volumeSlider-aria": "Adjust the volume level of the video.",
         "comError-text": "Προέκυψε πρόβλημα κατά την επικοινωνία με το Opencast.",
         "loadError-text": "Παρουσιάστηκε σφάλμα κατά τηn φόρτωση του βίντεο.",
         "durationError-text": "Opencast failed to provide the video duration.",
@@ -54,7 +61,9 @@
         "info-text": "Το βίντεο δεν θα επεξεργαστεί, αλλά όλες οι πληροφορίες κοπής θα αποθηκευτούν στο Opencast. Μπορείτε να συνεχίσετε την επεξεργασία σας αργότερα.",
         "success-text": "Οι αλλαγές αποθηκεύτηκαν επιτυχώς! Τώρα μπορείτε να κλείσετε τον επεξεργαστή βίντεο ή να συνεχίσετε να εργάζεστε στο βίντεο.",
         "success-tooltip-aria": "Αποθηκεύτηκε επιτυχώς",
-        "saveArea-tooltip": "Αποθήκευση Περιοχής"
+        "saveArea-tooltip": "Αποθήκευση Περιοχής",
+        "confirm-success": "Okay",
+        "cancel-save": "Don't save"
     },
     "discard": {
         "headline-text": "Απόρριψη αλλαγών",
@@ -121,7 +130,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Σλοβενικά",
-            "LANGUAGES-PORTUGUESE": "Πορτογαλικά",
+            "LANGUAGES-PORTUGESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Ρωμανικά",
             "LANGUAGES-ARABIC": "Αραβικά",
             "LANGUAGES-POLISH": "Πολωνικά",
@@ -199,10 +208,12 @@
     "various": {
         "error-details-text": "Λεπτομέρειες: {{errorMessage}}\n",
         "error-text": "Παρουσιάστηκε σφάλμα. Παρακαλώ περιμένετε λίγο και προσπαθήστε ξανά.",
-        "goBack-button": "Όχι, πήγαινέ με πίσω"
+        "goBack-button": "Όχι, πήγαινέ με πίσω",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
-        "description": "Επιλέξτε ή αποεπιλέξτε ποια κομμάτια χρησιμοποιούνται για την επεξεργασία και τη δημοσίευση.",
+        "title": "Select track(s) for processing",
         "trackInactive": "ανενεργό",
         "deleteTrackText": "Διαγραφή Κομματιού",
         "restoreTrackText": "Επαναφορά Κομματιού",
@@ -221,6 +232,8 @@
         "createSubtitleDropdown-label": "Επιλέξτε μια γλώσσα",
         "backButton": "Επιστροφή",
         "backButton-tooltip": "Επιστροφή στην επιλογή υποτίτλων",
+        "downloadButton-title": "Κατεβάστε",
+        "downloadButton-tooltip": "Download subtitle as vtt file",
         "editTitle": "Επεξεργαστής υποτίτλων - {{title}}",
         "editTitle-loading": "Φόρτωση",
         "generic": "Γενικά",
@@ -244,7 +257,7 @@
         "overviewTimelineTooltip": "Επισκόπηση χρονολογίου"
     },
     "keyboardControls": {
-        "header": "Έλεγχοι Πληκτρολογίου",
+        "header": "Shortcuts",
         "defaultGroupName": "Γενικά",
         "missingLabel": "Άγνωστο",
         "groupVideoPlayer": "Αναπαραγωγή Βίντεο",
@@ -261,11 +274,13 @@
     },
     "theme": {
         "appearance": "Εμφάνιση",
-        "selectThemesLabel": "Εμφανίσεις",
-        "darkmode": "Σκοτεινή λειτουργία",
-        "lightmode": "Φωτεινή λειτουργία",
-        "system": "Σχεδιασμός συστήματος",
-        "high-contrast-dark": "Υψηλή αντίθεση (Λειτουργία μαύρου)",
-        "high-contrast-light": "Υψηλή αντίθεση (λειτουργία άσπρου)"
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Auto",
+        "dark-high-contrast": "Dark (High contrast)",
+        "light-high-contrast": "Light (High contrast)"
+    },
+    "language": {
+        "language": "Γλώσσα"
     }
 }

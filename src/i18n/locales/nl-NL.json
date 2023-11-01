@@ -16,6 +16,9 @@
         "delete-button": "Verwijder",
         "delete-restore-tooltip": "Markeer of verwijder het segment op de huidige positie om te worden verwijderd. Sneltoets: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Verwijderen en herstellen. Markeer of verwijder het segment op de huidige positie om te worden verwijderd. Sneltoets: {{hotKeyName}}.",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "Herstellen",
         "mergeLeft-button": "Links samenvoegen",
         "mergeLeft-tooltip": "Combineer het momenteel actieve segment met het segment aan de linkerkant. Sneltoets: {{hotkeyName}}",
@@ -34,6 +37,10 @@
         "time-duration-tooltip": "Video duration",
         "duration-aria": "Duur",
         "time-aria": "Actuele tijd",
+        "mutebutton-tooltip": "Mute video",
+        "unmutebutton-tooltip": "Unmute video",
+        "volume-tooltip": "Adjust volume: {{current}}%",
+        "volumeSlider-aria": "Adjust the volume level of the video.",
         "comError-text": "Er is een probleem opgetreden tijdens de communicatie met Opencast.",
         "loadError-text": "Er is een fout opgetreden tijdens het laden van deze video.",
         "durationError-text": "Opencast failed to provide the video duration.",
@@ -54,7 +61,9 @@
         "info-text": "De video wordt niet verwerkt, maar alle snijgegevens worden opgeslagen in Opencast. U kunt later doorgaan met uw bewerking.",
         "success-text": "Changes saved successfully! You can now close the editor or continue working.",
         "success-tooltip-aria": "Succesvol opgeslagen",
-        "saveArea-tooltip": "Gebied opslaan"
+        "saveArea-tooltip": "Gebied opslaan",
+        "confirm-success": "Okay",
+        "cancel-save": "Don't save"
     },
     "discard": {
         "headline-text": "Annuleren",
@@ -121,7 +130,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "Sloveens",
-            "LANGUAGES-PORTUGUESE": "Portuguese",
+            "LANGUAGES-PORTUGESE": "Portuguese",
             "LANGUAGES-ROMANSH": "Reto-Romaans",
             "LANGUAGES-ARABIC": "Arabisch",
             "LANGUAGES-POLISH": "Pools",
@@ -199,10 +208,12 @@
     "various": {
         "error-details-text": "Details: {{errorMessage}}\n",
         "error-text": "Er is een fout opgetreden. Wacht even en probeer het opnieuw.",
-        "goBack-button": "Nee, breng me terug"
+        "goBack-button": "Nee, breng me terug",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
-        "description": "Selecteer of deselecteer welke sporen worden gebruikt voor verwerking en publicatie.",
+        "title": "Select track(s) for processing",
         "trackInactive": "inactief",
         "deleteTrackText": "Verwijder spoor",
         "restoreTrackText": "Herstel spoor",
@@ -221,6 +232,8 @@
         "createSubtitleDropdown-label": "Pick a language",
         "backButton": "Back",
         "backButton-tooltip": "Return to subtitle selection",
+        "downloadButton-title": "Download",
+        "downloadButton-tooltip": "Download subtitle as vtt file",
         "editTitle": "Subtitle Editor - {{title}}",
         "editTitle-loading": "Loading",
         "generic": "Generic",
@@ -244,7 +257,7 @@
         "overviewTimelineTooltip": "Timeline overview"
     },
     "keyboardControls": {
-        "header": "Keyboard Controls",
+        "header": "Shortcuts",
         "defaultGroupName": "General",
         "missingLabel": "Unknown",
         "groupVideoPlayer": "Video Player",
@@ -261,11 +274,13 @@
     },
     "theme": {
         "appearance": "Appearance",
-        "selectThemesLabel": "Appearances",
-        "darkmode": "Dark mode",
-        "lightmode": "Light mode",
-        "system": "System design",
-        "high-contrast-dark": "High contrast (Dark mode)",
-        "high-contrast-light": "High contrast (Light mode)"
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Auto",
+        "dark-high-contrast": "Dark (High contrast)",
+        "light-high-contrast": "Light (High contrast)"
+    },
+    "language": {
+        "language": "Taal"
     }
 }

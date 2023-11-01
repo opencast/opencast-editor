@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAtInSeconds, setIsPlaying,
+  selectIsPlaying, selectCurrentlyAtInSeconds, setIsPlaying, selectIsMuted, selectVolume,
   selectVideoURL, selectVideoCount, selectDurationInSeconds,
   setPreviewTriggered, selectPreviewTriggered, setAspectRatio, selectAspectRatio, setClickTriggered, selectClickTriggered, setCurrentlyAt
 } from '../redux/videoSlice'
@@ -53,6 +53,8 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
         first={i === 0}
         last={i === videoCount - 1}
         selectIsPlaying={selectIsPlaying}
+        selectIsMuted={selectIsMuted}
+        selectVolume={selectVolume}
         selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
         selectPreviewTriggered={selectPreviewTriggered}
         selectClickTriggered={selectClickTriggered}
@@ -91,6 +93,8 @@ export const VideoPlayer = React.forwardRef(
     first: boolean,
     last: boolean,
     selectIsPlaying:(state: RootState) => boolean,
+    selectIsMuted:(state: RootState) => boolean,
+    selectVolume:(state: RootState) => number,
     selectCurrentlyAtInSeconds: (state: RootState) => number,
     selectPreviewTriggered:(state: RootState) => boolean,
     selectClickTriggered:(state: RootState) => boolean,
@@ -108,6 +112,8 @@ export const VideoPlayer = React.forwardRef(
       url,
       isPrimary,
       selectIsPlaying,
+      selectIsMuted,
+      selectVolume,
       subtitleUrl,
       first,
       last,
@@ -127,6 +133,8 @@ export const VideoPlayer = React.forwardRef(
     // Init redux variables
     const dispatch = useDispatch();
     const isPlaying = useSelector(selectIsPlaying)
+    const isMuted = useSelector(selectIsMuted)
+    const volume = useSelector(selectVolume)
     const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
     const duration = useSelector(selectDurationInSeconds)
     const previewTriggered = useSelector(selectPreviewTriggered)
@@ -197,7 +205,7 @@ export const VideoPlayer = React.forwardRef(
     }
 
     useEffect(() => {
-    // Seek if the position in the video got changed externally
+      // Seek if the position in the video got changed externally
       if (!isPlaying && ref.current && ready) {
         ref.current.seekTo(currentlyAt, "seconds")
       }
@@ -209,11 +217,14 @@ export const VideoPlayer = React.forwardRef(
         ref.current.seekTo(currentlyAt, "seconds")
         dispatch(setClickTriggered(false))
       }
-      if (!isAspectRatioUpdated && ready) {     //     if (!isAspectRatioUpdated && ref.current && ready) {
+    })
+
+    useEffect(() => {
+      if (!isAspectRatioUpdated && ready) {
       // Update the store with video dimensions for rendering purposes
         updateAspectRatio();
       }
-    })
+    }, [isAspectRatioUpdated, ready])
 
     // Callback specifically for the subtitle editor view
     // When changing urls while the player is playing, don't reset to 0
@@ -344,7 +355,8 @@ export const VideoPlayer = React.forwardRef(
             width="unset"
             height="unset"
             playing={isPlaying}
-            muted={!isPrimary}
+            volume={volume}
+            muted={!isPrimary || isMuted}
             onProgress={onProgressCallback}
             progressInterval={100}
             onReady={onReadyCallback}
