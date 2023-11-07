@@ -91,6 +91,7 @@ const Thumbnail : React.FC = () => {
 
   const bottomStyle = css({
     display: 'flex',
+    width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
   })
