@@ -106,7 +106,8 @@ const Thumbnail : React.FC = () => {
         discard={discardThumbnail}
       />
       <div css={bottomStyle}>
-        <VideoPlayers refs={generateRefs} widthInPercent={100}/>
+        {/* use maxHeightInPixel to make video players the same size*/}
+        <VideoPlayers refs={generateRefs} widthInPercent={100} maxHeightInPixel={376}/>
         <div css={videosStyle(theme)}>
           <Timeline
             timelineHeight={125}
