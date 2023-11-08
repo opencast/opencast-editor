@@ -325,6 +325,9 @@ export const VideoPlayer = React.forwardRef(
           canvasContext.drawImage(video, 0, 0);
           return canvas.toDataURL('image/png')
         }
+      },
+      getWidth() {
+        return (ref.current?.getInternalPlayer() as HTMLVideoElement).clientWidth
       }
     }));
 
