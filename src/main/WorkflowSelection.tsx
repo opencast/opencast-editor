@@ -166,6 +166,7 @@ const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowD
     display: 'flex',
     flexDirection: 'column',
     maxWidth: '500px',
+    paddingTop: '2px',
   })
 
   const headerStyle = css({
