@@ -27,6 +27,7 @@
       "mergeRight-button": "Merge Right",
       "mergeRight-tooltip": "Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}",
       "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}.",
+      "zoom": "Zoom",
       "zoomSlider-aria": "Zoom"
     },
 

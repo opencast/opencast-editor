@@ -30,7 +30,6 @@ const CuttingActions: React.FC = () => {
 
   // Init redux variables
   const dispatch = useDispatch();
-  const theme = useTheme();
 
   /**
    * General action callback for cutting actions
@@ -63,11 +62,6 @@ const CuttingActions: React.FC = () => {
   useHotkeys(KEYMAP.cutting.mergeLeft.key, () => dispatchAction(mergeLeft, undefined, undefined), {preventDefault: true}, [mergeLeft]);
   useHotkeys(KEYMAP.cutting.mergeRight.key, () => dispatchAction(mergeRight, undefined, undefined), {preventDefault: true}, [mergeRight]);
 
-  // Callback for the zoom slider
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const zoomSliderOnChange = (event: Event, newValue: number | number[]) => {
-    dispatchAction(undefined, setTimelineZoom, newValue, undefined)
-  }
 
   const cuttingStyle = css({
     display: 'flex',
@@ -79,19 +73,6 @@ const CuttingActions: React.FC = () => {
   const verticalLineStyle = css({
     borderLeft: '2px solid #DDD;',
     height: '32px',
-  })
-
-  const sliderStyle = css({
-    width: '100px',
-    "& .MuiSlider-thumb": {
-      color: `${theme.text}`,
-    },
-    "& .MuiSlider-rail": {
-      color: `${theme.text}`,
-    },
-    "& .MuiSlider-track": {
-      color: `${theme.text}`,
-    },
   })
 
   return (
@@ -120,20 +101,11 @@ const CuttingActions: React.FC = () => {
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuMoveHorizontal}
         actionName={t("cuttingActions.merge-all-button")} actionHandler={dispatchAction} action={mergeAll} actionWithPayload={undefined} payload={undefined}
-        tooltip={t('cuttingActions.merge-all-tooltip')} z
+        tooltip={t('cuttingActions.merge-all-tooltip')}
         ariaLabelText={t('cuttingActions.merge-all-tooltip-aria')}
       />
       <div css={verticalLineStyle} />
-      <Slider
-        css={sliderStyle}
-        min={1}
-        max={10}
-        step={0.1}
-        defaultValue={1}
-        onChange={zoomSliderOnChange}
-        aria-label={t("cuttingActions.zoomSlider-aria")}
-        valueLabelDisplay="off"
-      />
+      <ZoomSlider actionHandler={dispatchAction}/>
       {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
         tooltip="Not implemented"
         ariaLabelText="Reset changes. Not implemented"
@@ -232,6 +204,70 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHand
         <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>
+  );
+}
+
+interface ZoomSliderInterface {
+  actionHandler: (
+    action: ActionCreatorWithoutPayload<string> | undefined,
+    actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    payload: any,
+    ref?: React.RefObject<HTMLDivElement>,
+  ) => void,
+}
+
+const ZoomSlider : React.FC<ZoomSliderInterface> = ({actionHandler}) => {
+
+  const { t } = useTranslation();
+  const theme = useTheme();
+
+  // Callback for the zoom slider
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const zoomSliderOnChange = (event: Event, newValue: number | number[]) => {
+    actionHandler(undefined, setTimelineZoom, newValue, undefined)
+  }
+
+  const zoomStyle = css({
+    display: 'flex',
+    flexDirection: 'row',
+    paddingLeft: '16px',
+    paddingRight: '16px',
+    gap: '15px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  })
+
+
+  const sliderStyle = css({
+    width: '100px',
+    "& .MuiSlider-thumb": {
+      color: `${theme.slider_thumb_color}`,
+      "&:hover, &.Mui-focusVisible, &.Mui-active": {
+        boxShadow: `${theme.slider_thumb_shadow}`,
+      },
+    },
+    "& .MuiSlider-rail": {
+      color: `${theme.slider_track_color}`,
+    },
+    "& .MuiSlider-track": {
+      color: `${theme.slider_track_color}`,
+    },
+  })
+
+  return (
+    <div css={zoomStyle}>
+      <span>{t("cuttingActions.zoom")}</span>
+      <Slider
+        css={sliderStyle}
+        min={1}
+        max={10}
+        step={0.1}
+        defaultValue={1}
+        onChange={zoomSliderOnChange}
+        aria-label={t("cuttingActions.zoomSlider-aria")}
+        valueLabelDisplay="off"
+      />
+    </div>
   );
 }
 
