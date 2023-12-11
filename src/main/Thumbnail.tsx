@@ -12,7 +12,7 @@ import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, se
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import {
-  selectIsPlaying, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setCurrentlyAt
+  selectIsPlaying, selectIsMuted, selectVolume, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setIsMuted, setVolume, setCurrentlyAt
 } from '../redux/videoSlice'
 import { ThemedTooltip } from "./Tooltip";
 import VideoPlayers from "./VideoPlayers";
@@ -120,8 +120,12 @@ const Thumbnail : React.FC = () => {
           <VideoControls
             selectCurrentlyAt={selectCurrentlyAt}
             selectIsPlaying={selectIsPlaying}
+            selectIsMuted={selectIsMuted}
+            selectVolume={selectVolume}
             selectIsPlayPreview={selectIsPlayPreview}
             setIsPlaying={setIsPlaying}
+            setIsMuted={setIsMuted}
+            setVolume={setVolume}
             setIsPlayPreview={setIsPlayPreview}
           />
         </div>

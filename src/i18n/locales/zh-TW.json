@@ -16,6 +16,9 @@
         "delete-button": "刪除",
         "delete-restore-tooltip": "在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotkeyName}}",
         "delete-restore-tooltip-aria": "刪除或還原。 在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotKeyName}}。",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "還原",
         "mergeLeft-button": "左合併",
         "mergeLeft-tooltip": "將當前活動區段與其左側的區段合併。 熱鍵：{{hotkeyName}}",
@@ -34,6 +37,10 @@
         "time-duration-tooltip": "Video duration",
         "duration-aria": "持續時間",
         "time-aria": "目前時間",
+        "mutebutton-tooltip": "Mute video",
+        "unmutebutton-tooltip": "Unmute video",
+        "volume-tooltip": "Adjust volume: {{current}}%",
+        "volumeSlider-aria": "Adjust the volume level of the video.",
         "comError-text": "與 Opencast 通訊時出現問題。",
         "loadError-text": "載入此影片時出現錯誤。",
         "durationError-text": "Opencast failed to provide the video duration.",
@@ -201,7 +208,9 @@
     "various": {
         "error-details-text": "詳細訊息：{{errorMessage}}",
         "error-text": "發生了錯誤。 請稍等，然後再重試。",
-        "goBack-button": "不，回到上一步"
+        "goBack-button": "不，回到上一步",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
         "title": "Select track(s) for processing",
@@ -223,6 +232,8 @@
         "createSubtitleDropdown-label": "Pick a language",
         "backButton": "Back",
         "backButton-tooltip": "Return to subtitle selection",
+        "downloadButton-title": "Download",
+        "downloadButton-tooltip": "Download subtitle as vtt file",
         "editTitle": "Subtitle Editor - {{title}}",
         "editTitle-loading": "Loading",
         "generic": "Generic",

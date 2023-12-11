@@ -16,6 +16,9 @@
         "delete-button": "Supprimer",
         "delete-restore-tooltip": "Sélectionner ou désélectionner un segment à la position actuelle pour suppression. Raccourci : {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Supprimer et Restaurer. Sélectionner ou désélectionner un segment à la position actuelle pour suppression. Raccourci : {{hotKeyName}}.",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "Restaurer",
         "mergeLeft-button": "Fusionner à gauche",
         "mergeLeft-tooltip": "Combine le segment actif avec le segment à sa gauche. Raccourci : {{hotkeyName}}",
@@ -34,6 +37,10 @@
         "time-duration-tooltip": "Video duration",
         "duration-aria": "Durée",
         "time-aria": "Temps actuel",
+        "mutebutton-tooltip": "Mute video",
+        "unmutebutton-tooltip": "Unmute video",
+        "volume-tooltip": "Adjust volume: {{current}}%",
+        "volumeSlider-aria": "Adjust the volume level of the video.",
         "comError-text": "Un problème est survenu lors de la communication avec Opencast.",
         "loadError-text": "Une erreur s'est produite lors du chargement de cette vidéo.",
         "durationError-text": "Opencast failed to provide the video duration.",
@@ -201,7 +208,9 @@
     "various": {
         "error-details-text": "Détails : {{errorMessage}}\n",
         "error-text": "Une erreur s\\'est produite. Veuillez réessayer.",
-        "goBack-button": "Non, laissez-moi revenir en arrière."
+        "goBack-button": "Non, laissez-moi revenir en arrière.",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
         "title": "Select track(s) for processing",
@@ -223,6 +232,8 @@
         "createSubtitleDropdown-label": "Pick a language",
         "backButton": "Back",
         "backButton-tooltip": "Return to subtitle selection",
+        "downloadButton-title": "Download",
+        "downloadButton-tooltip": "Download subtitle as vtt file",
         "editTitle": "Subtitle Editor - {{title}}",
         "editTitle-loading": "Loading",
         "generic": "Generic",

@@ -4,7 +4,7 @@
 import { settings } from '../config';
 
 /**
- * Client I stole this form a react tutorial
+ * Client I stole this from a react tutorial
  */
 export async function client(endpoint, { body, ...customConfig } = {}) {
   const headers = { 'Content-Type': 'application/json' }
@@ -29,7 +29,11 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   }
 
   if (body) {
-    config.body = JSON.stringify(body)
+    if (config.headers['Content-Type'].includes("urlencoded")) {
+      config.body = body
+    } else {
+      config.body = JSON.stringify(body)
+    }
   }
 
   let data
@@ -62,4 +66,8 @@ client.get = function (endpoint, customConfig = {}) {
 
 client.post = function (endpoint, body, customConfig = {}) {
   return client(endpoint, { ...customConfig, body })
+}
+
+client.delete = function (endpoint, customConfig = {}) {
+  return client(endpoint, { ...customConfig, method: 'DELETE' })
 }
