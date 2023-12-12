@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
-import { LuChevronLeft, LuDownload} from "react-icons/lu";
+import { basicButtonStyle, errorBoxStyle, flexGapReplacementStyle } from "../cssStyles";
+import { LuChevronLeft, LuDownload, LuUpload} from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
 } from '../redux/videoSlice'
@@ -16,7 +16,7 @@ import {
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "../themes";
+import { Theme, useTheme } from "../themes";
 import { parseSubtitle, serializeSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
@@ -82,6 +82,12 @@ const SubtitleEditor : React.FC = () => {
     width: '100%',
   })
 
+  const topRightButtons = css({
+    display: 'flex',
+    flexDirection: 'row',
+    ...(flexGapReplacementStyle(10, false)),
+  })
+
   const subAreaStyle = css({
     display: 'flex',
     flexDirection: 'row',
@@ -109,7 +115,10 @@ const SubtitleEditor : React.FC = () => {
             <div css={[titleStyle(theme), titleStyleBold(theme)]}>
               {t("subtitles.editTitle", {title: getTitle()})}
             </div>
-            <DownloadButton/>
+            <div css={topRightButtons}>
+              <UploadButton />
+              <DownloadButton />
+            </div>
           </div>
           <div css={subAreaStyle}>
             <SubtitleListEditor />
@@ -127,6 +136,15 @@ const SubtitleEditor : React.FC = () => {
     </div>
   );
 }
+
+const subtitleButtonStyle = (theme: Theme) => css({
+  fontSize: '16px',
+  height: '10px',
+  padding: '16px',
+  justifyContent: 'space-around',
+  boxShadow: `${theme.boxShadow}`,
+  background: `${theme.element_bg}`,
+})
 
 const DownloadButton: React.FC = () => {
 
@@ -147,18 +165,10 @@ const DownloadButton: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useTheme();
-  const style = css({
-    fontSize: '16px',
-    height: '10px',
-    padding: '16px',
-    justifyContent: 'space-around',
-    boxShadow: `${theme.boxShadow}`,
-    background: `${theme.element_bg}`,
-  });
 
   return (
     <ThemedTooltip title={t("subtitles.downloadButton-tooltip")}>
-      <div css={[basicButtonStyle(theme), style]}
+      <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
         role="button"
         onClick={() => downloadSubtitles()}
       >
@@ -166,6 +176,90 @@ const DownloadButton: React.FC = () => {
         <span>{t("subtitles.downloadButton-title")}</span>
       </div>
     </ThemedTooltip>
+  );
+}
+
+const UploadButton: React.FC = () => {
+
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const dispatch = useDispatch()
+
+  const [errorState, setErrorState] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const subtitle = useSelector(selectSelectedSubtitleById)
+  const selectedId = useSelector(selectSelectedSubtitleId)
+  // Upload Ref
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const uploadSubtitles = () => {
+    // open file input box on click of other element
+    const ref = inputRef.current
+    if (ref !== null) {
+      if (confirm(t("subtitles.uploadButton-warning"))) {
+        ref.click();
+      }
+    }
+  }
+
+  // Save uploaded file in redux
+  const uploadCallback = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileObj = event.target.files && event.target.files[0];
+    if (!fileObj) {
+      return;
+    }
+
+    // Check if image
+    if (fileObj.type.split('/')[0] !== 'text') {
+      setErrorState(true)
+      setErrorMessage(t("subtitles.uploadButton-error-filetype"))
+      return
+    }
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      // the result image data
+      if (e.target && e.target.result) {
+        try {
+          const text = e.target.result.toString()
+          const subtitleParsed = parseSubtitle(text)
+          dispatch(setSubtitle({identifier: selectedId, subtitles: {cues: subtitleParsed, tags: subtitle.tags}}))
+          setErrorState(false)
+        } catch (e) {
+          console.error(e)
+          setErrorState(true)
+          setErrorMessage(t("subtitles.uploadButton-error-parse"))
+        }
+      }
+    }
+    reader.readAsText(fileObj)
+  };
+
+  return (
+    <>
+      <ThemedTooltip title={t("subtitles.uploadButton-tooltip")}>
+        <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
+          role="button"
+          onClick={() => uploadSubtitles()}
+        >
+          <LuUpload css={{fontSize: '16px'}}/>
+          <span>{t("subtitles.uploadButton-title")}</span>
+        </div>
+      </ThemedTooltip>
+      <div css={errorBoxStyle(errorState, theme)} role="alert">
+        <span>{t("subtitles.uploadButton-error")}</span><br />
+        {errorMessage ? t("various.error-details-text", {errorMessage: errorMessage}) : t("various.error-text")}<br/>
+      </div>
+      {/* Hidden input field for upload */}
+      <input
+        style={{display: 'none'}}
+        ref={inputRef}
+        type="file"
+        accept="text/vtt"
+        onChange={event => uploadCallback(event)}
+        aria-hidden="true"
+      />
+    </>
   );
 }
 
@@ -179,17 +273,9 @@ export const BackButton : React.FC = () => {
   const theme = useTheme()
   const dispatch = useDispatch();
 
-  const backButtonStyle = css({
-    height: '10px',
-    padding: '16px',
-    boxShadow: `${theme.boxShadow}`,
-    background: `${theme.element_bg}`,
-    justifyContent: 'space-around'
-  })
-
   return (
     <ThemedTooltip title={t("subtitles.backButton-tooltip")}>
-      <div css={[basicButtonStyle(theme), backButtonStyle]}
+      <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
         role="button" tabIndex={0}
         aria-label={t("subtitles.backButton-tooltip")}
         onClick={() => dispatch(setIsDisplayEditView(false))}
