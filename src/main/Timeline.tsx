@@ -58,11 +58,13 @@ const Timeline: React.FC<{
 
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
   const scrollContainerRef = useRef(null);
+  const topOffset = 20
 
   const timelineStyle = css({
-    // position: 'relative',     // Need to set position for Draggable bounds to work
+    position: 'relative',     // Need to set position for Draggable bounds to work
     height: timelineHeight + 'px',
     width: (timelineZoom) * 100 + '%',    // Width modified by zoom
+    top: `${topOffset}px`,
   });
 
   // Update the current time based on the position clicked on the timeline
@@ -74,31 +76,29 @@ const Timeline: React.FC<{
   }
 
   return (
-    <div css={{position: 'relative'}}> {/* Relative top level container for absolute scrubber to attach to. Otherwise, the out-of-frame parts won't render, due to the "overflow" in the scroll container. */}
-      <ScrollContainer innerRef={scrollContainerRef} css={{overflowY: 'hidden', width: '100%', height: `${timelineHeight}px`}}
-        vertical={false}
-        horizontal={true}
-        ignoreElements={"#no-scrolling"}  // dom elements with this id in the container will not trigger scrolling when dragged
-        hideScrollbars={false}            // ScrollContainer hides scrollbars per default
-      >
-        <div ref={ref} css={timelineStyle} onMouseUp={e => setCurrentlyAtToClick(e)}>
-          <Scrubber
-            timelineWidth={width}
-            timelineHeight={timelineHeight}
-            selectCurrentlyAt={selectCurrentlyAt}
-            selectIsPlaying={selectIsPlaying}
-            setCurrentlyAt={setCurrentlyAt}
-            setIsPlaying={setIsPlaying}
-          />
+    <ScrollContainer innerRef={scrollContainerRef} css={{overflowY: 'hidden', width: '100%', height: `${timelineHeight + topOffset}px`}}
+      vertical={false}
+      horizontal={true}
+      ignoreElements={"#no-scrolling"}  // dom elements with this id in the container will not trigger scrolling when dragged
+      hideScrollbars={false}            // ScrollContainer hides scrollbars per default
+    >
+      <div ref={ref} css={timelineStyle} onMouseUp={e => setCurrentlyAtToClick(e)}>
+        <Scrubber
+          timelineWidth={width}
+          timelineHeight={timelineHeight}
+          selectCurrentlyAt={selectCurrentlyAt}
+          selectIsPlaying={selectIsPlaying}
+          setCurrentlyAt={setCurrentlyAt}
+          setIsPlaying={setIsPlaying}
+        />
 
-          <div css={{position: 'relative', height: timelineHeight + 'px'}} >
-            <Waveforms timelineHeight={timelineHeight}/>
-            <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
-          </div>
-
+        <div css={{position: 'relative', height: timelineHeight + 'px'}} >
+          <Waveforms timelineHeight={timelineHeight}/>
+          <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
         </div>
-      </ScrollContainer>
-    </div>
+
+      </div>
+    </ScrollContainer>
   );
 };
 
