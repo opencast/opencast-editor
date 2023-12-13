@@ -10,7 +10,8 @@ import { css } from '@emotion/react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll, setTimelineZoom
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll, setTimelineZoom,
+  timelineZoomIn, timelineZoomOut
 } from '../redux/videoSlice'
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
@@ -61,6 +62,8 @@ const CuttingActions: React.FC = () => {
   useHotkeys(KEYMAP.cutting.delete.key, () => dispatchAction(markAsDeletedOrAlive, undefined, undefined), {preventDefault: true}, [markAsDeletedOrAlive]);
   useHotkeys(KEYMAP.cutting.mergeLeft.key, () => dispatchAction(mergeLeft, undefined, undefined), {preventDefault: true}, [mergeLeft]);
   useHotkeys(KEYMAP.cutting.mergeRight.key, () => dispatchAction(mergeRight, undefined, undefined), {preventDefault: true}, [mergeRight]);
+  useHotkeys(KEYMAP.cutting.zoomIn.key, () => dispatchAction(timelineZoomIn, undefined, undefined), {preventDefault: true, combinationKey: KEYMAP.cutting.zoomIn.combinationKey}, [timelineZoomIn]);
+  useHotkeys(KEYMAP.cutting.zoomOut.key, () => dispatchAction(timelineZoomOut, undefined, undefined), {preventDefault: true}, [timelineZoomOut]);
 
 
   const cuttingStyle = css({

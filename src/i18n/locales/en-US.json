@@ -28,7 +28,9 @@
       "mergeRight-tooltip": "Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}",
       "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}.",
       "zoom": "Zoom",
-      "zoomSlider-aria": "Zoom"
+      "zoomSlider-aria": "Zoom",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
     },
 
     "video": {

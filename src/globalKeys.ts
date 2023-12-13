@@ -49,6 +49,7 @@ export interface IKeyGroup {
 export interface IKey {
   name: string
   key: string
+  combinationKey?: string
 }
 
 export const KEYMAP: IKeyMap = {
@@ -78,6 +79,15 @@ export const KEYMAP: IKeyMap = {
     mergeRight: {
       name: "cuttingActions.mergeRight-button",
       key: "Shift+Alt+m",
+    },
+    zoomIn: {
+      name: "cuttingActions.zoomIn",
+      key: "Shift;Alt;z, +",
+      combinationKey: ';',
+    },
+    zoomOut: {
+      name: "cuttingActions.zoomOut",
+      key: "Shift+Alt+t, -",
     },
   },
   timeline: {

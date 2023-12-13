@@ -154,7 +154,7 @@ const videoSlice = createSlice({
       state.hasChanges = action.payload
     },
     setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
-      state.timelineZoom = action.payload
+      state.timelineZoom = action.payload > 1 ? action.payload : 1
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload
@@ -215,6 +215,12 @@ const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, 0)
       mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1)
       state.hasChanges = true
+    },
+    timelineZoomIn: state => {
+      state.timelineZoom = state.timelineZoom + 1 <= 10 ? state.timelineZoom + 1 : state.timelineZoom
+    },
+    timelineZoomOut: state => {
+      state.timelineZoom = state.timelineZoom - 1 >= 1 ? state.timelineZoom - 1 : state.timelineZoom
     },
   },
   // For Async Requests
@@ -386,7 +392,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt, setCurrentlyAtInSeconds,
   addSegment, setAspectRatio, setHasChanges, setTimelineZoom, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
   setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+  setClickTriggered, timelineZoomIn, timelineZoomOut } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
