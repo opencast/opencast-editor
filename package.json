@@ -13,7 +13,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^6.1.4",
     "@types/iarna__toml": "^2.0.4",
-    "@types/react": "^18.2.24",
+    "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.14",
     "customize-cra": "^1.0.0",
     "deepmerge": "^4.3.1",
