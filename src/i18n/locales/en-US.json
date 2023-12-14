@@ -231,12 +231,18 @@
     "trackSelection": {
       "title": "Select track(s) for processing",
       "trackInactive": "inactive",
-      "deleteTrackText": "Delete Track",
-      "restoreTrackText": "Restore Track",
-      "cannotDeleteTrackText": "Cannot Delete Track",
-      "deleteTrackTooltip": "Do not encode and publish this track.",
-      "restoreTrackTooltip": "Encode and publish this track.",
-      "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
+      "deleteVideoText": "Delete Video",
+      "restoreVideoText": "Restore Video",
+      "cannotDeleteVideoText": "Cannot Delete Video",
+      "deleteVideoTooltip": "Do not encode and publish this video.",
+      "restoreVideoTooltip": "Encode and publish this video.",
+      "cannotDeleteVideoTooltip": "Cannot remove this video from publication.",
+      "deleteAudioText": "Delete Audio",
+      "noAudioText": "No Audio available",
+      "restoreAudioText": "Restore Audio",
+      "deleteAudioTooltip": "Do not encode and publish this audio.",
+      "noAudioTooltip": "This track does not have any audio.",
+      "restoreAudioTooltip": "Encode and publish this audio."
     },
 
     "subtitles": {

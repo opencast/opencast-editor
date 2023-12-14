@@ -109,11 +109,18 @@ const videoSlice = createSlice({
   name: 'videoState',
   initialState,
   reducers: {
-    setTrackEnabled: (state, action) => {
+    setVideoEnabled: (state, action: PayloadAction<{trackId: string, enabled: boolean}>) => {
       for (const track of state.tracks) {
-        if (track.id === action.payload.id) {
-          track.audio_stream.enabled = action.payload.enabled;
+        if (track.id === action.payload.trackId) {
           track.video_stream.enabled = action.payload.enabled;
+        }
+      }
+      state.hasChanges = true;
+    },
+    setAudioEnabled: (state, action: PayloadAction<{trackId: string, enabled: boolean}>) => {
+      for (const track of state.tracks) {
+        if (track.id === action.payload.trackId) {
+          track.audio_stream.enabled = action.payload.enabled;
         }
       }
       state.hasChanges = true;
@@ -378,10 +385,10 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 }
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+export const { setVideoEnabled, setAudioEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
+  setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
+  removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
+  setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state

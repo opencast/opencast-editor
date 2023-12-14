@@ -206,3 +206,11 @@ export function useInterval(callback: IntervalFunction, delay: number | null) {
     }
   }, [callback, delay]);
 }
+
+// Returns true if the given index is out of bounds on the given array
+export function outOfBounds(array: any[], index: number) {
+  if (index >= array.length) {
+    return true
+  }
+  return false
+}

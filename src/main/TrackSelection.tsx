@@ -2,18 +2,19 @@ import React from "react";
 import { css } from '@emotion/react'
 
 import { IconType } from "react-icons";
-import { LuTrash } from "react-icons/lu";
+import { LuTrash, LuXCircle } from "react-icons/lu";
 import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 import ReactPlayer from 'react-player'
 
 import { Track } from '../types'
 import { useSelector, useDispatch } from 'react-redux';
-import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
+import { selectVideos, selectWaveformImages, setAudioEnabled, setVideoEnabled } from '../redux/videoSlice'
 import { backgroundBoxStyle, basicButtonStyle, customIconStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { outOfBounds } from "../util/utilityFunctions";
 
 /**
  * Creates the track selection.
@@ -23,8 +24,14 @@ const TrackSelection: React.FC = () => {
   // Generate list of tracks
   const tracks: Track[] = useSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
-  const trackItems: JSX.Element[] = tracks.map((track: Track) =>
-    <TrackItem key={track.id} track={track} enabledCount={enabledCount} />
+  const images = useSelector(selectWaveformImages)
+  const trackItems: JSX.Element[] = tracks.map((track: Track, index: number) =>
+    <TrackItem
+      key={track.id}
+      track={track}
+      enabledCount={enabledCount}
+      waveform={outOfBounds(images, index) ? undefined : images[index]}
+    />
   );
 
   const trackSelectionStyle = css({
@@ -71,15 +78,15 @@ const Header: React.FC = () => {
 }
 
 
-const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
+const TrackItem: React.FC<{track: Track, enabledCount: number, waveform: string | undefined}> = ({track, enabledCount, waveform}) => {
 
   const theme = useTheme()
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const header = track.flavor.type + ' '
-    + (track.video_stream.enabled ? ''
-      : `(${t('trackSelection.trackInactive', 'inactive')})`);
+  const header = track.flavor.type
+
+  const imagesMaxWidth = 475
 
   const trackItemStyle = css({
     display: 'flex',
@@ -96,11 +103,26 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     flexWrap: 'wrap',
   })
 
+  const imagesStyle = css({
+    display: 'flex',
+    flexDirection: 'column',
+    ...(flexGapReplacementStyle(20, true)),
+  })
+
   const playerStyle = css({
     aspectRatio: '16 / 9',
     width: '100%',
-    maxWidth: '457px',
+    maxWidth: `${imagesMaxWidth}px`,
   });
+
+  const imgStyle = css({
+    height: '54px',   // Keep height consistent in case the image does not render
+    width: '100%',
+    maxWidth: `${imagesMaxWidth}px`,
+
+    filter: `${theme.invert_wave}`,
+    color: `${theme.inverted_text}`,
+  })
 
   const headerStyle = css({
     fontWeight: 'bold',
@@ -120,28 +142,52 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     flexDirection: 'column',
   })
 
-  // What state is the track in and can it be deactivated?
-  // We do not permit deactivating the last remaining track
-  // 2 -> Track is enabled and can be deactivated
-  // 1 -> Track is enabled but is the last and cannot be deactivated
-  // 0 -> Track is disabled and can be restored
+  // What state is the video stream in and can it be deactivated?
+  // We do not permit deactivating the last remaining video
+  // 2 -> Video is enabled and can be deactivated
+  // 1 -> Video is enabled but is the last and cannot be deactivated
+  // 0 -> Video is disabled and can be restored
   const deleteStatus = track.video_stream.enabled ? (enabledCount > 1 ? 0 : 1) : 2;
   const deleteEnabled = deleteStatus !== 1;
-  const deleteText = [
-    t('trackSelection.deleteTrackText', 'Delete Track'),
-    t('trackSelection.cannotDeleteTrackText', 'Cannot Delete Track'),
-    t('trackSelection.restoreTrackText', 'Restore Track')
+  const deleteTextVideo = [
+    t('trackSelection.deleteVideoText'),
+    t('trackSelection.cannotDeleteVideoText'),
+    t('trackSelection.restoreVideoText')
   ][deleteStatus];
-  const deleteTooltip = [
-    t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.'),
-    t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
-    t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
+  const deleteTooltipVideo = [
+    t('trackSelection.deleteVideoTooltip'),
+    t('trackSelection.cannotDeleteVideoTooltip'),
+    t('trackSelection.restoreVideoTooltip')
   ][deleteStatus];
-  const deleteIcon = [LuTrash, LuTrash, TrashRestore][deleteStatus];
-  const trackEnabledChange = () => {
-    dispatch(setTrackEnabled({
-      id: track.id,
+  const deleteIcon = [LuTrash, LuXCircle, TrashRestore][deleteStatus];
+  const videoEnabledChange = () => {
+    dispatch(setVideoEnabled({
+      trackId: track.id,
       enabled: !track.video_stream.enabled,
+    }))
+  }
+
+  // What state is the audio stream in and can it be deactivated?
+  // 2 -> Audio is enabled and can be deactivated
+  // 1 -> Audio is not available on this track and thus cannot be de-/activated
+  // 0 -> Audio is disabled and can be restored
+  const deleteStatusAudio = track.audio_stream.available ? (track.audio_stream.enabled ? 0 : 2) : 1;
+  const deleteEnabledAudio = deleteStatusAudio !== 1;
+  const deleteTextAudio = [
+    t('trackSelection.deleteAudioText'),
+    t('trackSelection.noAudioText'),
+    t('trackSelection.restoreAudioText')
+  ][deleteStatusAudio];
+  const deleteTooltipAudio = [
+    t('trackSelection.deleteAudioTooltip'),
+    t('trackSelection.noAudioTooltip'),
+    t('trackSelection.restoreAudioTooltip')
+  ][deleteStatusAudio];
+  const deleteIconAudio = [LuTrash, LuXCircle, TrashRestore][deleteStatusAudio];
+  const audioEnabledChange = () => {
+    dispatch(setAudioEnabled({
+      trackId: track.id,
+      enabled: !track.audio_stream.enabled,
     }))
   }
 
@@ -149,20 +195,46 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     <div css={[backgroundBoxStyle(theme), trackItemStyle]}>
       <div css={headerStyle}>{ header }</div>
       <div css={trackitemSubStyle}>
-        <ReactPlayer
-          width="unset"
-          height="unset"
-          css={playerStyle}
-          style={{opacity: track.video_stream.enabled ? '1' : '0.5'}}
-          url={track.uri}
-        />
+        <div css={imagesStyle}>
+          <ReactPlayer
+            width="unset"
+            height="unset"
+            css={playerStyle}
+            style={{opacity: track.video_stream.enabled ? '1' : '0.5'}}
+            url={track.uri}
+          />
+          {track.audio_stream.available ?
+            <img
+              src={waveform ?? "/placeholder-waveform.png"}
+              css={imgStyle}
+              style={{opacity: track.audio_stream.enabled ? '1' : '0.5'}}
+              alt="placeholder for audio stream"
+            />
+            :
+            <img
+              src="/placeholder-waveform-empty.png"
+              css={imgStyle}
+              style={{opacity: '0.5'}}
+              alt="placeholder for unavailable audio stream"
+            />
+          }
+        </div>
         <div css={buttonsStyle}>
           <SelectButton
-            text={deleteText}
-            tooltip={deleteTooltip}
-            handler={trackEnabledChange}
+            text={deleteTextVideo}
+            tooltip={deleteTooltipVideo}
+            handler={videoEnabledChange}
             Icon={deleteIcon}
             active={deleteEnabled}
+            positionAtEnd={false}
+          />
+          <SelectButton
+            text={deleteTextAudio}
+            tooltip={deleteTooltipAudio}
+            handler={audioEnabledChange}
+            Icon={deleteIconAudio}
+            active={deleteEnabledAudio}
+            positionAtEnd={true}
           />
         </div>
       </div>
@@ -176,9 +248,10 @@ interface selectButtonInterface {
   Icon: IconType | React.FunctionComponent,
   tooltip: string,
   active: boolean,
+  positionAtEnd: boolean,   // Just here to align the audio button with the corresponding image
 }
 
-const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, tooltip, active}) => {
+const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, tooltip, active, positionAtEnd}) => {
 
   const theme = useTheme();
 
@@ -190,6 +263,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
       boxShadow: '',
       background: `${theme.element_bg}`,
       textWrap: 'nowrap',
+      ...(positionAtEnd && {marginTop: 'auto'}),
     }];
 
   const clickHandler = () => {
