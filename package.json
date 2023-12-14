@@ -44,7 +44,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.7.7",
     "react-virtualized-auto-sizer": "^1.0.20",
-    "react-window": "^1.8.9",
+    "react-window": "^1.8.10",
     "redux": "^4.2.1",
     "standardized-audio-context": "^25.3.60",
     "typescript": "^5.3.2",
@@ -85,7 +85,7 @@
     "@types/react-final-form-listeners": "^1.0.2",
     "@types/react-resizable": "^3.0.7",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
-    "@types/react-window": "^1.8.5",
+    "@types/react-window": "^1.8.8",
     "@types/uuid": "^9.0.7",
     "use-resize-observer": "^9.1.0"
   }
