@@ -11,7 +11,7 @@
     "@mui/material": "^5.14.16",
     "@opencast/appkit": "^0.2.2",
     "@reduxjs/toolkit": "^1.9.7",
-    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/jest-dom": "^6.1.6",
     "@types/iarna__toml": "^2.0.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.14",
