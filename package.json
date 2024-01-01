@@ -78,7 +78,7 @@
   },
   "devDependencies": {
     "@opencast/eslint-config-ts-react": "^0.1.0",
-    "@playwright/test": "^1.38.1",
+    "@playwright/test": "^1.40.1",
     "@types/lodash": "^4.14.202",
     "@types/luxon": "^3.3.7",
     "@types/react-beforeunload": "^2.1.4",
