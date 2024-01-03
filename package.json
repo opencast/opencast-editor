@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@emotion/babel-preset-css-prop": "^11.10.0",
-    "@emotion/react": "^11.11.1",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource-variable/roboto-flex": "^5.0.3",
     "@iarna/toml": "^2.2.5",
