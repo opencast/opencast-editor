@@ -4,9 +4,21 @@ import { css } from '@emotion/react'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectIsPlaying, selectCurrentlyAtInSeconds, setIsPlaying, selectIsMuted, selectVolume,
-  selectVideoURL, selectVideoCount, selectDurationInSeconds,
-  setPreviewTriggered, selectPreviewTriggered, setAspectRatio, selectAspectRatio, setClickTriggered, selectClickTriggered, setCurrentlyAt
+  selectIsPlaying,
+  selectCurrentlyAtInSeconds,
+  setIsPlaying,
+  selectIsMuted,
+  selectVolume,
+  selectVideoURL,
+  selectVideoCount,
+  selectDurationInSeconds,
+  setPreviewTriggered,
+  selectPreviewTriggered,
+  setAspectRatio,
+  selectAspectRatio,
+  setClickTriggered,
+  selectClickTriggered,
+  setCurrentlyAt
 } from '../redux/videoSlice'
 
 import ReactPlayer, { Config } from 'react-player'
@@ -150,7 +162,9 @@ export const VideoPlayer = React.forwardRef(
     const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
 
     // Callback for when the video is playing
-    const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds: number }) => {
+    const onProgressCallback = (state: {
+      played: number, playedSeconds: number, loaded: number, loadedSeconds: number
+    }) => {
       if (isPrimary) {
       // Only update redux if there was a substantial change
         if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) &&
@@ -196,7 +210,8 @@ export const VideoPlayer = React.forwardRef(
     const onEndedCallback = () => {
       if (isPrimary && currentlyAt !== 0) {
         dispatch(setIsPlaying(false));
-        dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+        // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+        dispatch(setCurrentlyAt(duration * 1000));
       }
     }
 

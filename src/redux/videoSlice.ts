@@ -241,13 +241,16 @@ const videoSlice = createSlice({
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
         state.videoCount = state.videoURLs.length
-        state.subtitlesFromOpencast = action.payload.subtitles ? state.subtitlesFromOpencast = action.payload.subtitles : []
+        state.subtitlesFromOpencast = action.payload.subtitles ?
+          state.subtitlesFromOpencast = action.payload.subtitles : []
         state.duration = action.payload.duration
         state.title = action.payload.title
         state.segments = parseSegments(action.payload.segments, action.payload.duration)
         state.workflows = action.payload.workflows
         state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
-        state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
+        state.originalThumbnails = state.tracks.map(
+          (track: Track) => { return {id: track.id, uri: track.thumbnailUri} }
+        )
 
         state.aspectRatios = new Array(state.videoCount)
         state.lockingActive = action.payload.locking_active
@@ -378,10 +381,10 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 }
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
+  setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
+  removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
+  setPreviewTriggered, setClickTriggered } = videoSlice.actions
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -403,8 +406,9 @@ export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: v
   state.videoState.currentlyAt / 1000
 export const selectSegments = (state: { videoState: { segments: video["segments"] } }) =>
   state.videoState.segments
-export const selectActiveSegmentIndex = (state: { videoState: { activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
-  state.videoState.activeSegmentIndex
+export const selectActiveSegmentIndex =
+  (state: { videoState: { activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
+    state.videoState.activeSegmentIndex
 export const selectIsCurrentSegmentAlive = (state: { videoState:
   { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
   !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
@@ -415,30 +419,40 @@ export const selectHasChanges = (state: { videoState: { hasChanges: video["hasCh
   state.videoState.hasChanges
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
   state.videoState.waveformImages
-export const selectOriginalThumbnails = (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
-  state.videoState.originalThumbnails
+export const selectOriginalThumbnails =
+  (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
+    state.videoState.originalThumbnails
 
 // Selectors mainly pertaining to the information fetched from Opencast
 export const selectVideos = (state: { videoState: { tracks: video["tracks"] } }) =>
   state.videoState.tracks.filter((track: Track) => track.video_stream.available === true)
-export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
-export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"] } }) => state.videoState.videoCount
-export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
-export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
-export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
-export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
-export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
+export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) =>
+  state.videoState.videoURLs
+export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"] } }) =>
+  state.videoState.videoCount
+export const selectDuration = (state: { videoState: { duration: video["duration"] } }) =>
+  state.videoState.duration
+export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) =>
+  state.videoState.duration / 1000
+export const selectTitle = (state: { videoState: { title: video["title"] } }) =>
+  state.videoState.title
+export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) =>
+  state.videoState.tracks
+export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) =>
+  state.videoState.workflows
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
   calculateTotalAspectRatio(state.videoState.aspectRatios)
-export const selectSubtitlesFromOpencast = (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) =>
-  state.videoState.subtitlesFromOpencast
-export const selectSubtitlesFromOpencastById = (id: string) => (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) => {
-  for (const cap of state.videoState.subtitlesFromOpencast) {
-    if (cap.id === id) {
-      return cap
+export const selectSubtitlesFromOpencast =
+  (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) =>
+    state.videoState.subtitlesFromOpencast
+export const selectSubtitlesFromOpencastById = (id: string) =>
+  (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) => {
+    for (const cap of state.videoState.subtitlesFromOpencast) {
+      if (cap.id === id) {
+        return cap
+      }
     }
+    return undefined
   }
-  return undefined
-}
 
 export default videoSlice.reducer

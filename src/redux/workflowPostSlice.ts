@@ -9,7 +9,8 @@ const initialState: httpRequestState = {
   errorReason: 'unknown',
 }
 
-export const postVideoInformation = createAsyncThunk('video/postVideoInformation', async (argument: PostEditArgument) => {
+export const postVideoInformation =
+createAsyncThunk('video/postVideoInformation', async (argument: PostEditArgument) => {
   if (!settings.id) {
     throw new Error("Missing media package id")
   }

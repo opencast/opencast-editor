@@ -1,19 +1,35 @@
 import React, { useEffect, useState } from "react";
 
 import { css } from '@emotion/react'
-import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle, spinningStyle } from '../cssStyles'
+import {
+  basicButtonStyle,
+  backOrContinueStyle,
+  errorBoxStyle,
+  flexGapReplacementStyle,
+  spinningStyle
+} from '../cssStyles'
 
 import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal} from "react-icons/lu";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectSelectedWorkflowId } from '../redux/videoSlice'
+import {
+  selectSegments,
+  selectTracks,
+  setHasChanges as videoSetHasChanges,
+  selectSelectedWorkflowId
+} from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
 import { PageButton } from './Finish'
 import { setEnd } from "../redux/endSlice";
 
 import { useTranslation } from 'react-i18next';
-import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
+import {
+  postMetadata,
+  selectPostError,
+  selectPostStatus,
+  setHasChanges as metadataSetHasChanges
+} from "../redux/metadataSlice";
 import { AppDispatch } from "../redux/store";
 import { selectSubtitles } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
@@ -52,11 +68,15 @@ const WorkflowConfiguration : React.FC = () => {
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postAndProcessError ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-text")}<br/>
+        {postAndProcessError ? t("various.error-details-text",
+          {errorMessage: postAndProcessError}) :
+          t("various.error-text")}<br/>
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-text")}<br />
+        {postMetadataError ? t("various.error-details-text",
+          {errorMessage: postMetadataError}) :
+          t("various.error-text")}<br />
       </div>
     </div>
   );

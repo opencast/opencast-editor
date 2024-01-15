@@ -8,11 +8,28 @@ import { settings } from "../config";
 import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
   backgroundBoxStyle } from "../cssStyles";
 import { Theme, useTheme } from "../themes";
-import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
+import {
+  selectOriginalThumbnails,
+  selectVideos,
+  selectTracks,
+  setHasChanges,
+  setThumbnail,
+  setThumbnails
+} from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import {
-  selectIsPlaying, selectIsMuted, selectVolume, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setIsMuted, setVolume, setCurrentlyAt
+  selectIsPlaying,
+  selectIsMuted,
+  selectVolume,
+  selectCurrentlyAt,
+  setIsPlaying,
+  selectIsPlayPreview,
+  setIsPlayPreview,
+  setClickTriggered,
+  setIsMuted,
+  setVolume,
+  setCurrentlyAt
 } from '../redux/videoSlice'
 import { ThemedTooltip } from "./Tooltip";
 import VideoPlayers from "./VideoPlayers";

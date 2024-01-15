@@ -16,7 +16,8 @@ export interface subtitle {
   aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
   focusSegmentTriggered: boolean,   // a segment in the timeline was clicked
   focusSegmentId: string,           // which segment in the timeline was clicked
-  focusSegmentTriggered2: boolean,   // a different trigger for a child component, to avoid additional rerenders from the parent
+  // a different trigger for a child component, to avoid additional rerenders from the parent
+  focusSegmentTriggered2: boolean,
 
   hasChanges: boolean         // Did user make changes to metadata view since last save
 }
@@ -78,7 +79,8 @@ export const subtitleSlice = createSlice({
       state.subtitles[action.payload.identifier] = action.payload.subtitles
     },
     setCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, newCue: SubtitleCue}>) => {
-      if (action.payload.cueIndex < 0 || action.payload.cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
+      if (action.payload.cueIndex < 0 ||
+        action.payload.cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
         console.log("WARNING: Tried to set segment for subtitle " + action.payload.identifier + " but was out of range")
         return
       }
@@ -97,7 +99,10 @@ export const subtitleSlice = createSlice({
       sortSubtitle(state, action.payload.identifier)
       state.hasChanges = true
     },
-    addCueAtIndex: (state, action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>) => {
+    addCueAtIndex: (
+      state,
+      action: PayloadAction<{identifier: string, cueIndex: number, text: string, startTime: number, endTime: number}>
+    ) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0
       const cue: SubtitleCue = {
         id: undefined,
@@ -117,7 +122,8 @@ export const subtitleSlice = createSlice({
         state.subtitles[action.payload.identifier].cues.splice(0, 0, cue);
       }
 
-      if (action.payload.cueIndex >= 0 || action.payload.cueIndex < state.subtitles[action.payload.identifier].cues.length) {
+      if (action.payload.cueIndex >= 0 ||
+        action.payload.cueIndex < state.subtitles[action.payload.identifier].cues.length) {
         state.subtitles[action.payload.identifier].cues.splice(action.payload.cueIndex, 0, cue);
       }
 
@@ -129,7 +135,9 @@ export const subtitleSlice = createSlice({
       state.hasChanges = true
     },
     removeCue: (state, action: PayloadAction<{identifier: string, cue: SubtitleCue}>) => {
-      const cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.idInternal === action.payload.cue.idInternal);
+      const cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(
+        i => i.idInternal === action.payload.cue.idInternal
+      );
       if (cueIndex > -1) {
         state.subtitles[action.payload.identifier].cues.splice(cueIndex, 1);
       }
@@ -150,16 +158,26 @@ export const subtitleSlice = createSlice({
     setFocusSegmentTriggered2: (state, action: PayloadAction<subtitle["focusSegmentTriggered2"]>) => {
       state.focusSegmentTriggered2 = action.payload
     },
-    setFocusToSegmentAboveId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
-      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.idInternal === action.payload.segmentId);
+    setFocusToSegmentAboveId: (
+      state,
+      action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>
+    ) => {
+      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(
+        i => i.idInternal === action.payload.segmentId
+      );
       cueIndex = cueIndex - 1
       if (cueIndex < 0) {
         cueIndex = 0
       }
       state.focusSegmentId = state.subtitles[action.payload.identifier].cues[cueIndex].idInternal
     },
-    setFocusToSegmentBelowId: (state, action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>) => {
-      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(i => i.idInternal === action.payload.segmentId);
+    setFocusToSegmentBelowId: (
+      state,
+      action: PayloadAction<{identifier: string, segmentId: subtitle["focusSegmentId"]}>
+    ) => {
+      let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(
+        i => i.idInternal === action.payload.segmentId
+      );
       cueIndex = cueIndex + 1
       if (cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
         cueIndex = state.subtitles[action.payload.identifier].cues.length - 1
@@ -201,12 +219,14 @@ export const selectCurrentlyAtInSeconds = (state: { subtitleState: { currentlyAt
   state.subtitleState.currentlyAt / 1000
 export const selectClickTriggered = (state: { subtitleState: { clickTriggered: subtitle["clickTriggered"] } }) =>
   state.subtitleState.clickTriggered
-export const selectFocusSegmentTriggered = (state: { subtitleState: { focusSegmentTriggered: subtitle["focusSegmentTriggered"] } }) =>
-  state.subtitleState.focusSegmentTriggered
+export const selectFocusSegmentTriggered =
+  (state: { subtitleState: { focusSegmentTriggered: subtitle["focusSegmentTriggered"] } }) =>
+    state.subtitleState.focusSegmentTriggered
 export const selectFocusSegmentId = (state: { subtitleState: { focusSegmentId: subtitle["focusSegmentId"] } }) =>
   state.subtitleState.focusSegmentId
-export const selectFocusSegmentTriggered2 = (state: { subtitleState: { focusSegmentTriggered2: subtitle["focusSegmentTriggered2"] } }) =>
-  state.subtitleState.focusSegmentTriggered2
+export const selectFocusSegmentTriggered2 =
+  (state: { subtitleState: { focusSegmentTriggered2: subtitle["focusSegmentTriggered2"] } }) =>
+    state.subtitleState.focusSegmentTriggered2
 // Hardcoding this value to achieve a desired size for the video player
 // TODO: Don't hardcode this value, instead make the video player component more flexible
 export const selectAspectRatio = (_state: { subtitleState: { aspectRatios: subtitle["aspectRatios"] } }) =>
@@ -214,8 +234,9 @@ export const selectAspectRatio = (_state: { subtitleState: { aspectRatios: subti
 
 export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"] } }) =>
   state.subtitleState.subtitles
-export const selectSelectedSubtitleId = (state: { subtitleState: { selectedSubtitleId: subtitle["selectedSubtitleId"] } }) =>
-  state.subtitleState.selectedSubtitleId
+export const selectSelectedSubtitleId =
+  (state: { subtitleState: { selectedSubtitleId: subtitle["selectedSubtitleId"] } }) =>
+    state.subtitleState.selectedSubtitleId
 export const selectSelectedSubtitleById = (state: { subtitleState:
   { subtitles: subtitle["subtitles"]; selectedSubtitleId: subtitle["selectedSubtitleId"]; }; }) =>
   state.subtitleState.subtitles[state.subtitleState.selectedSubtitleId]
