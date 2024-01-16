@@ -5,7 +5,7 @@ import { basicButtonStyle, backOrContinueStyle, errorBoxStyle, flexGapReplacemen
 
 import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal} from "react-icons/lu";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectSegments, selectTracks, setHasChanges as videoSetHasChanges, selectSelectedWorkflowId } from '../redux/videoSlice'
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
 
@@ -14,7 +14,6 @@ import { setEnd } from "../redux/endSlice";
 
 import { useTranslation } from 'react-i18next';
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges } from "../redux/metadataSlice";
-import { AppDispatch } from "../redux/store";
 import { selectSubtitles } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
@@ -26,10 +25,10 @@ const WorkflowConfiguration : React.FC = () => {
 
   const { t } = useTranslation();
 
-  const postAndProcessWorkflowStatus = useSelector(selectStatus);
-  const postAndProcessError = useSelector(selectError)
-  const postMetadataStatus = useSelector(selectPostStatus);
-  const postMetadataError = useSelector(selectPostError);
+  const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
+  const postAndProcessError = useAppSelector(selectError)
+  const postMetadataStatus = useAppSelector(selectPostStatus);
+  const postMetadataError = useAppSelector(selectPostError);
   const theme = useTheme();
 
   const workflowConfigurationStyle = css({
@@ -69,14 +68,14 @@ const WorkflowConfiguration : React.FC = () => {
 export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
 
   // Initialize redux variables
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch();
 
-  const selectedWorkflowId = useSelector(selectSelectedWorkflowId)
-  const segments = useSelector(selectSegments)
-  const tracks = useSelector(selectTracks)
-  const subtitles = useSelector(selectSubtitles)
-  const workflowStatus = useSelector(selectStatus);
-  const metadataStatus = useSelector(selectPostStatus);
+  const selectedWorkflowId = useAppSelector(selectSelectedWorkflowId)
+  const segments = useAppSelector(selectSegments)
+  const tracks = useAppSelector(selectTracks)
+  const subtitles = useAppSelector(selectSubtitles)
+  const workflowStatus = useAppSelector(selectStatus);
+  const metadataStatus = useAppSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
   const theme = useTheme();
 

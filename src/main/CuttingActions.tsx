@@ -8,7 +8,7 @@ import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 
 import { css } from '@emotion/react'
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll
 } from '../redux/videoSlice'
@@ -28,7 +28,7 @@ const CuttingActions: React.FC = () => {
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   /**
    * General action callback for cutting actions
@@ -158,7 +158,7 @@ interface markAsDeleteButtonInterface {
  */
 const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHandler, action, hotKeyName}) => {
   const { t } = useTranslation();
-  const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
+  const isCurrentSegmentAlive = useAppSelector(selectIsCurrentSegmentAlive)
   const ref = React.useRef<HTMLDivElement>(null)
 
   const theme = useTheme();

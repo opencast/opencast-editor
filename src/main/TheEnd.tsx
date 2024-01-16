@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 
 import { LuCheckCircle, LuXCircle} from "react-icons/lu";
 
-import { useSelector } from 'react-redux';
+import { useAppSelector } from "../redux/store";
 import { selectEndState } from '../redux/endSlice'
 import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
 
@@ -22,7 +22,7 @@ const TheEnd : React.FC = () => {
   const { t } = useTranslation();
 
   // Init redux variables
-  const endState = useSelector(selectEndState)
+  const endState = useAppSelector(selectEndState)
 
   const text = () => {
     if (endState === 'discarded') {

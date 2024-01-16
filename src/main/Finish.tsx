@@ -13,7 +13,7 @@ import { basicButtonStyle, navigationButtonStyle } from '../cssStyles'
 
 import { IconType } from "react-icons";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectPageNumber, setPageNumber } from '../redux/finishSlice';
 import { useTheme } from "../themes";
 import { settings } from "../config";
@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next";
  */
 const Finish : React.FC = () => {
 
-  const pageNumber = useSelector(selectPageNumber)
+  const pageNumber = useAppSelector(selectPageNumber)
 
   const pageZeroStyle = css({
     display: pageNumber !== 0 ? 'none' : 'block',
@@ -63,7 +63,7 @@ export const PageButton : React.FC<{pageNumber: number, label: string, Icon: Ico
   const theme = useTheme();
 
   // Initialize redux variables
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
   const onPageChange = () => {
     dispatch(setPageNumber(pageNumber))

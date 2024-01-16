@@ -10,7 +10,7 @@ import { LuWrench } from "react-icons/lu";
 
 import { css } from '@emotion/react'
 
-import { useSelector } from 'react-redux'
+import { useAppSelector } from "../redux/store";
 import { selectMainMenuState } from '../redux/mainMenuSlice'
 
 import { MainMenuStateNames } from '../types'
@@ -30,10 +30,10 @@ import Cutting from "./Cutting";
  */
 const MainContent: React.FC = () => {
 
-  const mainMenuState = useSelector(selectMainMenuState)
-  const videoChanged = useSelector(videoSelectHasChanges)
-  const metadataChanged = useSelector(metadataSelectHasChanges)
-  const subtitleChanged = useSelector(selectSubtitleHasChanges)
+  const mainMenuState = useAppSelector(selectMainMenuState)
+  const videoChanged = useAppSelector(videoSelectHasChanges)
+  const metadataChanged = useAppSelector(metadataSelectHasChanges)
+  const subtitleChanged = useAppSelector(selectSubtitleHasChanges)
   const theme = useTheme()
 
   // Display warning when leaving the page if there are unsaved changes

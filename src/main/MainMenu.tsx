@@ -7,7 +7,7 @@ import { LuScissors, LuFilm, LuFileText, LuCheckSquare } from "react-icons/lu";
 import { LuImage } from "react-icons/lu";
 import { ReactComponent as SubtitleIcon } from '../img/subtitle.svg';
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
 import { setPageNumber } from '../redux/finishSlice'
 
@@ -109,8 +109,8 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
   iconCustomCSS,
 }) => {
 
-  const dispatch = useDispatch();
-  const activeState = useSelector(selectMainMenuState)
+  const dispatch = useAppDispatch();
+  const activeState = useAppSelector(selectMainMenuState)
   const theme = useTheme();
 
   const onMenuItemClicked = () => {

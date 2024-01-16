@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { css } from '@emotion/react'
 import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice'
 import { selectFinishState, selectPageNumber } from '../redux/finishSlice'
 
@@ -28,23 +28,23 @@ const WorkflowSelection : React.FC = () => {
 
   const { t } = useTranslation();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Initialite redux states
-  let workflows = useSelector(selectWorkflows)
+  let workflows = useAppSelector(selectWorkflows)
   // Need to make copy to handle undefined displayOrder values
   workflows = [...workflows].sort((a, b) => {
     return (b.displayOrder - a.displayOrder)
   })
 
-  const finishState = useSelector(selectFinishState)
-  const pageNumber = useSelector(selectPageNumber)
+  const finishState = useAppSelector(selectFinishState)
+  const pageNumber = useAppSelector(selectPageNumber)
   const theme = useTheme()
 
-  const postAndProcessWorkflowStatus = useSelector(selectStatus);
-  const postAndProcessError = useSelector(selectError)
-  const saveStatus = useSelector(saveSelectStatus);
-  const saveError = useSelector(saveSelectError)
+  const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
+  const postAndProcessError = useAppSelector(selectError)
+  const saveStatus = useAppSelector(saveSelectStatus);
+  const saveError = useAppSelector(saveSelectError)
 
   const workflowSelectionStyle = css({
     padding: '20px',

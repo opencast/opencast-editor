@@ -4,7 +4,7 @@ import Draggable from 'react-draggable';
 
 import { css } from '@emotion/react'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { Segment, httpRequestState } from '../types'
 import {
   selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages
@@ -51,8 +51,8 @@ const Timeline: React.FC<{
 }) => {
 
   // Init redux variables
-  const dispatch = useDispatch();
-  const duration = useSelector(selectDuration)
+  const dispatch = useAppDispatch();
+  const duration = useAppSelector(selectDuration)
 
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
 
@@ -111,12 +111,12 @@ export const Scrubber: React.FC<{
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch();
-  const isPlaying = useSelector(selectIsPlaying)
-  const currentlyAt = useSelector(selectCurrentlyAt)
-  const duration = useSelector(selectDuration)
-  const activeSegmentIndex = useSelector(selectActiveSegmentIndex)  // For ARIA information display
-  const segments = useSelector(selectSegments)                      // For ARIA information display
+  const dispatch = useAppDispatch();
+  const isPlaying = useAppSelector(selectIsPlaying)
+  const currentlyAt = useAppSelector(selectCurrentlyAt)
+  const duration = useAppSelector(selectDuration)
+  const activeSegmentIndex = useAppSelector(selectActiveSegmentIndex)  // For ARIA information display
+  const segments = useAppSelector(selectSegments)                      // For ARIA information display
   const theme = useTheme()
 
   // Init state variables
@@ -280,9 +280,9 @@ export const SegmentsList: React.FC<{
   const { t } = useTranslation();
 
   // Init redux variables
-  const segments = useSelector(selectSegments)
-  const duration = useSelector(selectDuration)
-  const activeSegmentIndex = useSelector(selectActiveSegmentIndex)
+  const segments = useAppSelector(selectSegments)
+  const duration = useAppSelector(selectDuration)
+  const activeSegmentIndex = useAppSelector(selectActiveSegmentIndex)
 
   /**
    * Returns a background color based on whether the segment is to be deleted
@@ -359,13 +359,13 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
 
   const { t } = useTranslation();
 
-  const dispatch = useDispatch();
-  const videoURLs = useSelector(selectVideoURL)
-  const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+  const dispatch = useAppDispatch();
+  const videoURLs = useAppSelector(selectVideoURL)
+  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
   const theme = useTheme();
 
   // Update based on current fetching status
-  const images = useSelector(selectWaveformImages)
+  const images = useAppSelector(selectWaveformImages)
   const [waveformWorkerError, setWaveformWorkerError] = useState<boolean>(false)
 
   const waveformDisplayTestStyle = css({

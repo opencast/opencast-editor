@@ -7,7 +7,7 @@ import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 import ReactPlayer from 'react-player'
 
 import { Track } from '../types'
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
 import { backgroundBoxStyle, basicButtonStyle, customIconStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
@@ -21,7 +21,7 @@ import { ThemedTooltip } from "./Tooltip";
 const TrackSelection: React.FC = () => {
 
   // Generate list of tracks
-  const tracks: Track[] = useSelector(selectVideos);
+  const tracks: Track[] = useAppSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
     <TrackItem key={track.id} track={track} enabledCount={enabledCount} />
@@ -76,7 +76,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   const theme = useTheme()
 
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const header = track.flavor.type + ' '
     + (track.video_stream.enabled ? ''
       : `(${t('trackSelection.trackInactive', 'inactive')})`);

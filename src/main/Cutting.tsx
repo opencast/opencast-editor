@@ -3,8 +3,7 @@ import CuttingActions from "./CuttingActions"
 import Timeline from './Timeline';
 import { fetchVideoInformation, selectCurrentlyAt, selectDuration, selectIsPlaying, selectIsMuted, selectVolume, selectIsPlayPreview, selectTitle, setClickTriggered, setCurrentlyAt, setIsPlaying, setIsMuted, setVolume, setIsPlayPreview } from '../redux/videoSlice';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../redux/store';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { httpRequestState } from '../types';
 import { useTheme } from "../themes";
 import { setError } from '../redux/errorSlice';
@@ -20,12 +19,12 @@ const Cutting: React.FC = () => {
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch<AppDispatch>()
-  const videoURLStatus = useSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
-  const error = useSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
-  const duration = useSelector(selectDuration)
+  const dispatch = useAppDispatch();
+  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+  const error = useAppSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
+  const duration = useAppSelector(selectDuration)
   const theme = useTheme();
-  const errorReason = useSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
+  const errorReason = useAppSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
 
   // Try to fetch URL from external API
   useEffect(() => {
@@ -87,8 +86,8 @@ const Cutting: React.FC = () => {
 
 const CuttingHeader: React.FC = () => {
 
-  const title = useSelector(selectTitle)
-  const metadataTitle = useSelector(selectTitleFromEpisodeDc)
+  const title = useAppSelector(selectTitle)
+  const metadataTitle = useAppSelector(selectTitleFromEpisodeDc)
   const theme = useTheme();
 
   return (

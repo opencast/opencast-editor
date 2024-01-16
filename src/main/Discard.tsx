@@ -5,7 +5,7 @@ import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapRe
 
 import { LuChevronLeft, LuXCircle } from "react-icons/lu";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectFinishState } from '../redux/finishSlice'
 import { setEnd } from '../redux/endSlice'
 
@@ -22,7 +22,7 @@ const Discard : React.FC = () => {
 
   const { t } = useTranslation();
 
-  const finishState = useSelector(selectFinishState)
+  const finishState = useAppSelector(selectFinishState)
 
   const cancelStyle = css({
     display: finishState !== "Discard changes" ? 'none' : 'flex',
@@ -53,7 +53,7 @@ const DiscardButton : React.FC = () => {
   const { t } = useTranslation();
 
   // Initialize redux variables
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const discard = () => {

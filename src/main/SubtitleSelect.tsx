@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation, subtitleSelectStyle } from "../cssStyles";
 import { settings, subtitleTags } from '../config'
 import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/subtitleSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 import { LuPlus} from "react-icons/lu";
 import { Form } from "react-final-form";
@@ -23,8 +23,8 @@ import { v4 as uuidv4 } from 'uuid';
 const SubtitleSelect : React.FC = () => {
 
   const { t } = useTranslation();
-  const subtitlesFromOpencast = useSelector(selectSubtitlesFromOpencast) // track objects received from Opencast
-  const subtitles = useSelector(selectSubtitles)                         // parsed subtitles stored in redux
+  const subtitlesFromOpencast = useAppSelector(selectSubtitlesFromOpencast) // track objects received from Opencast
+  const subtitles = useAppSelector(selectSubtitles)                         // parsed subtitles stored in redux
 
   const [displaySubtitles, setDisplaySubtitles] = useState<{id: string, tags: string[]}[]>([])
   const [canBeAddedSubtitles, setCanBeAddedSubtitles] = useState<{id: string, tags: string[]}[]>([])
@@ -145,7 +145,7 @@ const SubtitleSelectButton: React.FC<{
 }) => {
   const { t } = useTranslation();
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
   const flagStyle = css({
     fontSize: '2.5em',
@@ -199,7 +199,7 @@ const SubtitleAddButton: React.FC<{
   const { t } = useTranslation();
   const theme = useTheme()
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true)
 

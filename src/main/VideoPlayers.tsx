@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { css } from '@emotion/react'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectIsPlaying, selectCurrentlyAtInSeconds, setIsPlaying, selectIsMuted, selectVolume,
   selectVideoURL, selectVideoCount, selectDurationInSeconds,
@@ -26,8 +26,8 @@ import { backgroundBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
 const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
 
-  const videoURLs = useSelector(selectVideoURL)
-  const videoCount = useSelector(selectVideoCount)
+  const videoURLs = useAppSelector(selectVideoURL)
+  const videoCount = useAppSelector(selectVideoCount)
 
   const videoPlayerAreaStyle = css({
     display: 'flex',
@@ -131,16 +131,16 @@ export const VideoPlayer = React.forwardRef(
     const { t } = useTranslation();
 
     // Init redux variables
-    const dispatch = useDispatch();
-    const isPlaying = useSelector(selectIsPlaying)
-    const isMuted = useSelector(selectIsMuted)
-    const volume = useSelector(selectVolume)
-    const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
-    const duration = useSelector(selectDurationInSeconds)
-    const previewTriggered = useSelector(selectPreviewTriggered)
-    const clickTriggered = useSelector(selectClickTriggered)
+    const dispatch = useAppDispatch();
+    const isPlaying = useAppSelector(selectIsPlaying)
+    const isMuted = useAppSelector(selectIsMuted)
+    const volume = useAppSelector(selectVolume)
+    const currentlyAt = useAppSelector(selectCurrentlyAtInSeconds)
+    const duration = useAppSelector(selectDurationInSeconds)
+    const previewTriggered = useAppSelector(selectPreviewTriggered)
+    const clickTriggered = useAppSelector(selectClickTriggered)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const aspectRatio = useSelector(selectAspectRatio)
+    const aspectRatio = useAppSelector(selectAspectRatio)
     const theme = useTheme()
 
     // Init state variables

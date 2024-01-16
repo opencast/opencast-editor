@@ -5,7 +5,8 @@ import { memoize } from "lodash"
 import React, { useRef } from "react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
+import { shallowEqual } from "react-redux"
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles"
 import { KEYMAP } from "../globalKeys"
 import { addCueAtIndex,
@@ -37,12 +38,12 @@ import { useColorScheme } from "@opencast/appkit";
  */
 const SubtitleListEditor : React.FC = () => {
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
-  const subtitle = useSelector(selectSelectedSubtitleById)
-  const subtitleId = useSelector(selectSelectedSubtitleId, shallowEqual)
-  const focusTriggered = useSelector(selectFocusSegmentTriggered, shallowEqual)
-  const focusId = useSelector(selectFocusSegmentId, shallowEqual)
+  const subtitle = useAppSelector(selectSelectedSubtitleById)
+  const subtitleId = useAppSelector(selectSelectedSubtitleId, shallowEqual)
+  const focusTriggered = useAppSelector(selectFocusSegmentTriggered, shallowEqual)
+  const focusId = useAppSelector(selectFocusSegmentId, shallowEqual)
   const defaultSegmentLength = 5000
   const segmentHeight = 100
 
@@ -184,14 +185,14 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
 
   const { t } = useTranslation();
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
   // Unfortunately, the focus selectors will cause every element to rerender,
   // even if they are not the ones that are focused
   // However, since the number of list segments rendered is severly limited
   // by react-window, so it should not be an issue
-  const focusTriggered2 = useSelector(selectFocusSegmentTriggered2, shallowEqual)
-  const focusId2 = useSelector(selectFocusSegmentId, shallowEqual)
+  const focusTriggered2 = useAppSelector(selectFocusSegmentTriggered2, shallowEqual)
+  const focusId2 = useAppSelector(selectFocusSegmentId, shallowEqual)
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   // Set focus to textarea

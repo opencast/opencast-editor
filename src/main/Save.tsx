@@ -6,7 +6,7 @@ import { basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
 
 import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck} from "react-icons/lu";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectFinishState } from '../redux/finishSlice'
 import { selectHasChanges, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
@@ -14,7 +14,6 @@ import { postVideoInformation, selectStatus, selectError } from '../redux/workfl
 import { CallbackButton, PageButton } from './Finish'
 
 import { useTranslation } from 'react-i18next';
-import { AppDispatch } from "../redux/store";
 import { postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
   selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
 import { selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
@@ -31,16 +30,16 @@ const Save : React.FC = () => {
 
   const { t } = useTranslation();
 
-  const finishState = useSelector(selectFinishState)
+  const finishState = useAppSelector(selectFinishState)
 
-  const postWorkflowStatus = useSelector(selectStatus);
-  const postError = useSelector(selectError)
-  const postMetadataStatus = useSelector(selectPostStatus);
-  const postMetadataError = useSelector(selectPostError);
+  const postWorkflowStatus = useAppSelector(selectStatus);
+  const postError = useAppSelector(selectError)
+  const postMetadataStatus = useAppSelector(selectPostStatus);
+  const postMetadataError = useAppSelector(selectPostError);
   const theme = useTheme();
-  const metadataHasChanges = useSelector(metadataSelectHasChanges)
-  const hasChanges = useSelector(selectHasChanges)
-  const subtitleHasChanges = useSelector(selectSubtitleHasChanges)
+  const metadataHasChanges = useAppSelector(metadataSelectHasChanges)
+  const hasChanges = useAppSelector(selectHasChanges)
+  const subtitleHasChanges = useAppSelector(selectSubtitleHasChanges)
 
   const saveStyle = css({
     height: '100%',
@@ -101,13 +100,13 @@ export const SaveButton: React.FC = () => {
   const { t } = useTranslation();
 
   // Initialize redux variables
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch();
 
-  const segments = useSelector(selectSegments)
-  const tracks = useSelector(selectTracks)
-  const subtitles = useSelector(selectSubtitles)
-  const workflowStatus = useSelector(selectStatus);
-  const metadataStatus = useSelector(selectPostStatus);
+  const segments = useAppSelector(selectSegments)
+  const tracks = useAppSelector(selectTracks)
+  const subtitles = useAppSelector(selectSubtitles)
+  const workflowStatus = useAppSelector(selectStatus);
+  const metadataStatus = useAppSelector(selectPostStatus);
   const theme = useTheme();
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 

@@ -9,15 +9,15 @@ import Lock from "./Lock";
 
 import { css } from '@emotion/react'
 
-import { useSelector } from 'react-redux';
+import { useAppSelector } from "../redux/store";
 import { selectIsEnd } from '../redux/endSlice'
 import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
 
 const Body: React.FC = () => {
 
-  const isEnd = useSelector(selectIsEnd)
-  const isError = useSelector(selectIsError)
+  const isEnd = useAppSelector(selectIsEnd)
+  const isError = useAppSelector(selectIsError)
 
   // If we're in a special state, display a special page
   // Otherwise display the normal page

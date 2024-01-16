@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
 import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectDuration,
 } from '../redux/videoSlice'
@@ -104,8 +104,8 @@ const PreviewMode: React.FC<{
   const ref = React.useRef<HTMLDivElement>(null)
 
   // Init redux variables
-  const dispatch = useDispatch();
-  const isPlayPreview = useSelector(selectIsPlayPreview)
+  const dispatch = useAppDispatch();
+  const isPlayPreview = useAppSelector(selectIsPlayPreview)
   const theme = useTheme();
 
   // Change preview mode from "on" to "off" and vice versa
@@ -177,8 +177,8 @@ const PlayButton: React.FC<{
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch();
-  const isPlaying = useSelector(selectIsPlaying)
+  const dispatch = useAppDispatch();
+  const isPlaying = useAppSelector(selectIsPlaying)
   const theme = useTheme();
 
   // Change play mode from "on" to "off" and vice versa
@@ -235,8 +235,8 @@ const TimeDisplay: React.FC<{
   const { t } = useTranslation();
 
   // Init redux variables
-  const currentlyAt = useSelector(selectCurrentlyAt)
-  const duration = useSelector(selectDuration)
+  const currentlyAt = useAppSelector(selectCurrentlyAt)
+  const duration = useAppSelector(selectDuration)
   const theme = useTheme()
 
   const timeTextStyle = (theme: Theme) => css({
@@ -278,9 +278,9 @@ const VolumeSlider: React.FC<{
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch();
-  const isMuted = useSelector(selectIsMuted)
-  const volume = useSelector(selectVolume)
+  const dispatch = useAppDispatch();
+  const isMuted = useAppSelector(selectIsMuted)
+  const volume = useAppSelector(selectVolume)
   const theme = useTheme();
 
   // Toggle video mute
