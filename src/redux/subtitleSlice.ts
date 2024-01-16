@@ -1,7 +1,7 @@
 import { Segment, SubtitleCue, SubtitlesInEditor } from './../types';
-import { createSlice, Dispatch, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { roundToDecimalPlace } from '../util/utilityFunctions';
-import type { RootState } from '../redux/store'
+import type { AppDispatch, RootState } from '../redux/store'
 import { video } from './videoSlice';
 
 export interface subtitle {
@@ -228,7 +228,7 @@ export const selectHasChanges = (state: { subtitleState: { hasChanges: subtitle[
  * mode is active.
  */
 export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
-  return (dispatch: Dispatch, getState: any) => {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     milliseconds = roundToDecimalPlace(milliseconds, 0);
 
     if (milliseconds < 0) {

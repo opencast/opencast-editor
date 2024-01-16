@@ -78,7 +78,7 @@ const Thumbnail : React.FC = () => {
   };
 
   const discardThumbnail = (id: string) => {
-    dispatch(setThumbnail({ id: id, uri: originalThumbnails.find((e: any) => e.id === id)?.uri }))
+    dispatch(setThumbnail({ id: id, uri: originalThumbnails.find(e => e.id === id)?.uri }))
   }
 
   const thumbnailStyle = css({
@@ -138,11 +138,11 @@ const Thumbnail : React.FC = () => {
  * A table for displaying thumbnails and associated actions
  */
 const ThumbnailTable : React.FC<{
-  inputRefs: any,
-  generate: any,
-  upload: any,
-  uploadCallback: any,
-  discard: any,
+  inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
+  generate: (track: Track, index: number) => void,
+  upload: (index: number) => void,
+  uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
+  discard: (id: string) => void,
 }> = ({inputRefs, generate, upload, uploadCallback, discard}) => {
 
   const videoTracks = useSelector(selectVideos)
@@ -206,11 +206,11 @@ const ThumbnailTable : React.FC<{
 const ThumbnailTableRow: React.FC<{
   track: Track,
   index: number,
-  inputRefs: any,
-  generate: any,
-  upload: any,
-  uploadCallback: any,
-  discard: any,
+  inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
+  generate: (track: Track, index: number) => void,
+  upload: (index: number) => void,
+  uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
+  discard: (id: string) => void,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
@@ -301,11 +301,11 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
 const ThumbnailButtons : React.FC<{
   track: Track,
   index: number,
-  inputRefs: any,
-  generate: any,
-  upload: any,
-  uploadCallback: any,
-  discard: any,
+  inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
+  generate: (track: Track, index: number) => void,
+  upload: (index: number) => void,
+  uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
+  discard: (id: string) => void,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
@@ -384,7 +384,7 @@ const ThumbnailButtons : React.FC<{
 }
 
 const ThumbnailButton : React.FC<{
-  handler: any,
+  handler: () => void,
   text: string
   tooltipText: string,
   ariaLabel: string,
@@ -426,7 +426,7 @@ const ThumbnailButton : React.FC<{
  */
 const AffectAllRow : React.FC<{
   tracks: Track[]
-  generate: any
+  generate: (track: Track, index: number) => void
 }> = ({generate, tracks}) => {
 
   const { t } = useTranslation()
@@ -487,11 +487,11 @@ const AffectAllRow : React.FC<{
 const ThumbnailTableSingleRow: React.FC<{
   track: Track,
   index: number,
-  inputRefs: any,
-  generate: any,
-  upload: any,
-  uploadCallback: any,
-  discard: any,
+  inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
+  generate: (track: Track, index: number) => void,
+  upload: (index: number) => void,
+  uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
+  discard: (id: string) => void,
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -523,11 +523,11 @@ const ThumbnailTableSingleRow: React.FC<{
 const ThumbnailButtonsSimple : React.FC<{
   track: Track,
   index: number,
-  inputRefs: any,
-  generate: any,
-  upload: any,
-  uploadCallback: any,
-  discard: any,
+  inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
+  generate: (track: Track, index: number) => void,
+  upload: (index: number) => void,
+  uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
+  discard: (id: string) => void,
 }> = ({track, index, generate, inputRefs, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()

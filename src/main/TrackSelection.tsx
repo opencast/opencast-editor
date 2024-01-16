@@ -171,7 +171,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
 }
 
 interface selectButtonInterface {
-  handler: any,
+  handler: () => void,
   text: string,
   Icon: IconType | React.FunctionComponent,
   tooltip: string,

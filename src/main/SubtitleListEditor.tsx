@@ -204,7 +204,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     }
   }, [cue.idInternal, dispatch, focusId2, focusTriggered2])
 
-  const updateCueText = (event: { target: { value: any } }) => {
+  const updateCueText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch(setCueAtIndex({
       identifier: identifier,
       cueIndex: props.index,
@@ -219,7 +219,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     }))
   };
 
-  const updateCueStart = (event: { target: { value: any } }) => {
+  const updateCueStart = (value: number) => {
     dispatch(setCueAtIndex({
       identifier: identifier,
       cueIndex: props.index,
@@ -227,14 +227,14 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         id: cue.id,
         idInternal: cue.idInternal,
         text: cue.text,
-        startTime: event.target.value,
+        startTime: value,
         endTime: cue.endTime,
         tree: cue.tree
       }
     }))
   };
 
-  const updateCueEnd = (event: { target: { value: any } }) => {
+  const updateCueEnd = (value: number) => {
     dispatch(setCueAtIndex({
       identifier: identifier,
       cueIndex: props.index,
@@ -243,7 +243,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         idInternal: cue.idInternal,
         text: cue.text,
         startTime: cue.startTime,
-        endTime: event.target.value,
+        endTime: value,
         tree: cue.tree
       }
     }))
@@ -461,8 +461,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
 const FunctionButton : React.FC<{
   tooltip: string,
   tooltipAria: string,
-  onClick: any,
-  onKeyDown: any,
+  onClick: React.MouseEventHandler,
+  onKeyDown: React.KeyboardEventHandler,
   Icon: IconType
 }> = ({
   tooltip,
@@ -502,7 +502,7 @@ const FunctionButton : React.FC<{
  */
 const TimeInput : React.FC<{
   value: number,
-  changeCallback: any,
+  changeCallback: (value: number) => void,
   generalFieldStyle: SerializedStyles[],
   tooltip: string,
   tooltipAria: string,
@@ -531,7 +531,7 @@ const TimeInput : React.FC<{
   };
 
   // Update state in redux
-  const onBlur = (event: { target: { value: any; }; }) => {
+  const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     setParsingError(false)
 
     // Parse value and pass it to parent
@@ -541,7 +541,7 @@ const TimeInput : React.FC<{
       setParsingError(true)
       return
     }
-    changeCallback({ target: { value: milliseconds } });
+    changeCallback(milliseconds);
 
     // Make sure to set state to the parsed value
     const time = toHHMMSSMS(milliseconds);
