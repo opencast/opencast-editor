@@ -24,7 +24,7 @@ import { useTheme } from "../themes";
 
 import { backgroundBoxStyle, flexGapReplacementStyle } from '../cssStyles'
 
-const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
+const VideoPlayers: React.FC<{refs: any, widthInPercent?: number, maxHeightInPixel?: number}> = ({refs, widthInPercent = 100, maxHeightInPixel = 300}) => {
 
   const videoURLs = useSelector(selectVideoURL)
   const videoCount = useSelector(selectVideoCount)
@@ -37,7 +37,7 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
     borderRadius: '5px',
     ...(flexGapReplacementStyle(10, false)),
 
-    maxHeight: '300px',
+    maxHeight: maxHeightInPixel + 'px',
   });
 
   // Initialize video players
@@ -325,6 +325,9 @@ export const VideoPlayer = React.forwardRef(
           canvasContext.drawImage(video, 0, 0);
           return canvas.toDataURL('image/png')
         }
+      },
+      getWidth() {
+        return (ref.current?.getInternalPlayer() as HTMLVideoElement).clientWidth
       }
     }));
 
