@@ -15,9 +15,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
-import Draggable, { DraggableEvent } from "react-draggable";
+import Draggable, { DraggableEventHandler } from "react-draggable";
 import { SubtitleCue } from "../types";
-import { Resizable } from "react-resizable";
+import { Resizable, ResizableProps } from "react-resizable";
 import "react-resizable/css/styles.css";
 import ScrollContainer, { ScrollEvent } from "react-indiana-drag-scroll";
 import { useTheme } from "../themes";
@@ -284,7 +284,7 @@ const TimelineSubtitleSegment: React.FC<{
   // Resizable does not support resizing in the west/north directions out of the box,
   // so additional calculations are necessary.
   // Adapted from Resizable example code
-  const onResizeAbsolute = (_event: any, {size, handle}: any) => {
+  const onResizeAbsolute: ResizableProps["onResize"] = (_event, {size, handle}) => {
     // Possible TODO: Find a way to stop resizing a segment beyond 0ms here instead of later
     let newLeft = absoluteLeft;
     let newTop = absoluteTop;
@@ -308,7 +308,7 @@ const TimelineSubtitleSegment: React.FC<{
   };
 
   // Update redux state based on the resize
-  const onResizeStop = (_event: any, {handle}: any) => {
+  const onResizeStop: ResizableProps["onResizeStop"] = (_event, {handle}) => {
     // Calc new width, factoring in offset
     const newWidth = absoluteWidth
 
@@ -337,11 +337,11 @@ const TimelineSubtitleSegment: React.FC<{
     setAbsoluteTop(0)
   }
 
-  const onStartDrag = (_e: DraggableEvent) => {
+  const onStartDrag: DraggableEventHandler = _e => {
     setIsGrabbed(true)
   }
 
-  const onStopDrag = (_e: DraggableEvent, position: any) => {
+  const onStopDrag: DraggableEventHandler = (_e, position) => {
     // Update position and thereby start/end times in redux
     const {x} = position
     dispatchNewTimes(

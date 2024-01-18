@@ -1,4 +1,4 @@
-import i18next from 'i18next';
+import i18next, { InitOptions } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -6,7 +6,7 @@ import locales from './locales/locales.json';
 
 const debug = Boolean(new URLSearchParams(window.location.search).get('debug'));
 
-const resources: any = {};
+const resources: InitOptions["resources"] = {};
 for (const lang of locales) {
   const code = lang.replace(/\..*$/, '');
   const short = code.replace(/-.*$/, '');

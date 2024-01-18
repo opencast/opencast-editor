@@ -22,6 +22,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { ThemedTooltip } from "./Tooltip";
 import { languageCodeToName } from "../util/utilityFunctions";
 import { v4 as uuidv4 } from 'uuid';
+import { TFunction } from "i18next";
 
 /**
  * Displays buttons that allow the user to select the subtitle they want to edit
@@ -319,7 +320,7 @@ const SubtitleAddButton: React.FC<{
 /**
  * Generates a title for the buttons from the tags
  */
-export function generateButtonTitle(tags: string[], t: any) {
+export function generateButtonTitle(tags: string[], t: TFunction<"translation", undefined>) {
   let lang = tags.find(e => e.startsWith('lang:'))
   lang = lang ? lang.split(':')[1].trim() : undefined
   lang = languageCodeToName(lang?.trim()) ?? lang

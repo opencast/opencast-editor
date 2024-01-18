@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-import Draggable from 'react-draggable';
+import Draggable, { DraggableEventHandler } from 'react-draggable';
 
 import { css } from '@emotion/react'
 
@@ -149,7 +149,7 @@ export const Scrubber: React.FC<{
   }, [timelineWidth])
 
   // Callback for when the scrubber gets dragged by the user
-  const onControlledDrag = (_e: any, position: any) => {
+  const onControlledDrag: DraggableEventHandler = (_e, position) => {
     // Update position
     const {x} = position
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)))
@@ -160,7 +160,7 @@ export const Scrubber: React.FC<{
     setControlledPosition({x: (currentlyAt / duration) * (timelineWidth), y: 0});
   };
 
-  const onStartDrag = () => {
+  const onStartDrag: DraggableEventHandler = () => {
     setIsGrabbed(true)
 
     // Halt video playback
@@ -172,7 +172,7 @@ export const Scrubber: React.FC<{
     }
   }
 
-  const onStopDrag = (_e: any, position: any) => {
+  const onStopDrag: DraggableEventHandler = (_e, position) => {
     // Update position
     const {x} = position;
     setControlledPosition({x, y: 0});
