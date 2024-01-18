@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../redux/store";
 import { selectCurrentlyAt,
   selectIsPlaying,
   setClickTriggered,
@@ -38,8 +38,8 @@ import { selectFieldStyle } from "../cssStyles";
  */
 const SubtitleVideoArea : React.FC = () => {
 
-  const tracks = useSelector(selectVideos)
-  const subtitle = useSelector(selectSelectedSubtitleById)
+  const tracks = useAppSelector(selectVideos)
+  const subtitle = useAppSelector(selectSelectedSubtitleById)
   const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
   const [subtitleUrl, setSubtitleUrl] = useState("")
 

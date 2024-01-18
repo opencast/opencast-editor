@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { LuLock } from "react-icons/lu";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { settings } from "../config";
 import { setLock, video } from "../redux/videoSlice";
 import { selectIsEnd } from '../redux/endSlice'
@@ -13,15 +13,15 @@ import { useBeforeunload } from 'react-beforeunload';
 const Lock: React.FC = () => {
   const endpoint = `${settings.opencast.url}/editor/${settings.id}/lock`
 
-  const dispatch = useDispatch();
-  const lockingActive = useSelector((state: { videoState: { lockingActive: video["lockingActive"] } }) =>
+  const dispatch = useAppDispatch();
+  const lockingActive = useAppSelector((state: { videoState: { lockingActive: video["lockingActive"] } }) =>
     state.videoState.lockingActive);
-  const lockRefresh = useSelector((state: { videoState: { lockRefresh: video["lockRefresh"] } }) =>
+  const lockRefresh = useAppSelector((state: { videoState: { lockRefresh: video["lockRefresh"] } }) =>
     state.videoState.lockRefresh);
-  const lockState = useSelector((state: { videoState: { lockState: video["lockState"] } }) =>
+  const lockState = useAppSelector((state: { videoState: { lockState: video["lockState"] } }) =>
     state.videoState.lockState);
-  const lock = useSelector((state: { videoState: { lock: video["lock"] } }) => state.videoState.lock);
-  const isEnd = useSelector(selectIsEnd)
+  const lock = useAppSelector((state: { videoState: { lock: video["lock"] } }) => state.videoState.lock);
+  const isEnd = useAppSelector(selectIsEnd)
 
   function requestLock() {
     const form = `user=${lock.user}&uuid=${lock.uuid}`;

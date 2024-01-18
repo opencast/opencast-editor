@@ -12,7 +12,7 @@ import {
   setFocusSegmentTriggered,
   setFocusSegmentTriggered2,
 } from '../redux/subtitleSlice'
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
 import Draggable, { DraggableEventHandler } from "react-draggable";
@@ -36,9 +36,9 @@ const SubtitleTimeline: React.FC = () => {
   const theme = useTheme()
 
   // Init redux variables
-  const dispatch = useDispatch();
-  const duration = useSelector(selectDuration)
-  const currentlyAt = useSelector(selectCurrentlyAt)
+  const dispatch = useAppDispatch();
+  const duration = useAppSelector(selectDuration)
+  const currentlyAt = useAppSelector(selectCurrentlyAt)
 
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLElement>(null);
@@ -193,7 +193,7 @@ const SubtitleTimeline: React.FC = () => {
 const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timelineWidth}) => {
 
   const arbitraryHeight = 80
-  const subtitle = useSelector(selectSelectedSubtitleById)
+  const subtitle = useAppSelector(selectSelectedSubtitleById)
 
   const segmentsListStyle = css({
     position: 'relative',
@@ -230,9 +230,9 @@ const TimelineSubtitleSegment: React.FC<{
 }> = React.memo(props => {
 
   // Redux
-  const dispatch = useDispatch()
-  const selectedId = useSelector(selectSelectedSubtitleId)
-  const duration = useSelector(selectDuration)
+  const dispatch = useAppDispatch();
+  const selectedId = useAppSelector(selectSelectedSubtitleId)
+  const duration = useAppSelector(selectDuration)
 
   // Dimensions and position offsets in px. Required for resizing
   const [absoluteWidth, setAbsoluteWidth] = useState(0)

@@ -5,7 +5,7 @@ import { LuChevronLeft, LuDownload} from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
 } from '../redux/videoSlice'
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
   setIsDisplayEditView,
@@ -29,11 +29,11 @@ const SubtitleEditor : React.FC = () => {
 
   const { t } = useTranslation();
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
   const [getError, setGetError] = useState<string | undefined>(undefined)
-  const subtitle = useSelector(selectSelectedSubtitleById)
-  const selectedId = useSelector(selectSelectedSubtitleId)
-  const captionTrack = useSelector(selectSubtitlesFromOpencastById(selectedId))
+  const subtitle = useAppSelector(selectSelectedSubtitleById)
+  const selectedId = useAppSelector(selectSelectedSubtitleId)
+  const captionTrack = useAppSelector(selectSubtitlesFromOpencastById(selectedId))
   const theme = useTheme()
 
   // Prepare subtitle in redux
@@ -134,7 +134,7 @@ const SubtitleEditor : React.FC = () => {
 
 const DownloadButton: React.FC = () => {
 
-  const subtitle = useSelector(selectSelectedSubtitleById);
+  const subtitle = useAppSelector(selectSelectedSubtitleById);
 
   const downloadSubtitles = () => {
 
@@ -181,7 +181,7 @@ export const BackButton : React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useTheme()
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const backButtonStyle = css({
     height: '10px',

@@ -8,6 +8,7 @@ import endReducer from './endSlice'
 import metadataReducer from './metadataSlice'
 import subtitleReducer from './subtitleSlice'
 import errorReducer from './errorSlice'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 export const store = configureStore({
   reducer: {
@@ -27,5 +28,9 @@ export type AppDispatch = typeof store.dispatch
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
+
+// Use instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export default store;

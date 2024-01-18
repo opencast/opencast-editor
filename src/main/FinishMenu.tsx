@@ -6,7 +6,7 @@ import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from '../c
 import { IconType } from "react-icons";
 import { LuSave, LuDatabase, LuXCircle } from "react-icons/lu";
 
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from "../redux/store";
 import { setState, setPageNumber, finish } from '../redux/finishSlice'
 
 import { useTranslation } from 'react-i18next';
@@ -41,7 +41,7 @@ const FinishMenuButton: React.FC<{Icon: IconType, stateName: finish["value"]}> =
 
   const { t } = useTranslation();
   const theme = useTheme()
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const finish = () => {
     dispatch(setState(stateName));

@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 
 import { LuFrown } from "react-icons/lu";
 
-import { useSelector } from 'react-redux';
+import { useAppSelector } from "../redux/store";
 import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice'
 import { flexGapReplacementStyle } from "../cssStyles";
 
@@ -19,10 +19,10 @@ const Error : React.FC = () => {
   const { t } = useTranslation();
 
   // Init redux variables
-  const errorTitle = useSelector(selectErrorTitle)
-  const errorMessage = useSelector(selectErrorMessage)
-  const errorDetails = useSelector(selectErrorDetails)
-  const ErrorIcon = useSelector(selectErrorIcon)
+  const errorTitle = useAppSelector(selectErrorTitle)
+  const errorMessage = useAppSelector(selectErrorMessage)
+  const errorDetails = useAppSelector(selectErrorDetails)
+  const ErrorIcon = useAppSelector(selectErrorIcon)
 
   const detailsStyle = css({
     display: 'flex',

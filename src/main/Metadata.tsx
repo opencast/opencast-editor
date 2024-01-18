@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { css } from '@emotion/react'
 import { calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleBold } from '../cssStyles'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   fetchMetadata,
   postMetadata,
@@ -26,7 +26,6 @@ import { useTranslation } from 'react-i18next';
 import { DateTime as LuxonDateTime} from "luxon";
 
 import { configureFieldsAttributes, settings } from '../config'
-import { AppDispatch } from "../redux/store";
 import { useTheme } from "../themes";
 import { ThemeProvider } from "@mui/material/styles";
 import { cloneDeep } from "lodash";
@@ -46,12 +45,12 @@ const Metadata: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch<AppDispatch>()
-  const catalogs = useSelector(selectCatalogs);
-  const getStatus = useSelector(selectGetStatus);
-  const getError = useSelector(selectGetError);
-  const postStatus = useSelector(selectPostStatus);
-  const postError = useSelector(selectPostError);
+  const dispatch = useAppDispatch();
+  const catalogs = useAppSelector(selectCatalogs);
+  const getStatus = useAppSelector(selectGetStatus);
+  const getError = useAppSelector(selectGetError);
+  const postStatus = useAppSelector(selectPostStatus);
+  const postError = useAppSelector(selectPostError);
   const theme = useTheme();
 
   // Try to fetch URL from external API

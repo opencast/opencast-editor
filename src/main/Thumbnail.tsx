@@ -3,7 +3,7 @@ import { IconType } from "react-icons";
 import { LuCamera, LuCopy, LuXCircle, LuUpload} from "react-icons/lu";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { settings } from "../config";
 import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
   backgroundBoxStyle } from "../cssStyles";
@@ -42,10 +42,10 @@ import VideoControls from "./VideoControls";
 const Thumbnail : React.FC = () => {
 
   const { t } = useTranslation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
   const theme = useTheme();
-  const originalThumbnails = useSelector(selectOriginalThumbnails)
+  const originalThumbnails = useAppSelector(selectOriginalThumbnails)
 
   // Generate Refs
   const generateRefs = React.useRef<any>([]);
@@ -166,7 +166,7 @@ const ThumbnailTable : React.FC<{
   discard: (id: string) => void,
 }> = ({inputRefs, generateRefs, generate, upload, uploadCallback, discard}) => {
 
-  const videoTracks = useSelector(selectVideos)
+  const videoTracks = useAppSelector(selectVideos)
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -338,9 +338,9 @@ const ThumbnailButtons : React.FC<{
 }> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
 
-  const tracks = useSelector(selectTracks)
+  const tracks = useAppSelector(selectTracks)
 
   // Set the given thumbnail for all tracks
   const setForOtherThumbnails = (uri: string | undefined) => {
@@ -564,7 +564,7 @@ const ThumbnailButtonsSimple : React.FC<{
 }> = ({track, index, generate, inputRefs, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
-  const tracks = useSelector(selectTracks)
+  const tracks = useAppSelector(selectTracks)
 
   return (
     <div css={thumbnailButtonsStyle}>

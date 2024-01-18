@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux"
+import { useAppSelector } from "../redux/store";
 import { useTheme } from "../themes";
 
 import { css } from '@emotion/react'
@@ -22,7 +22,7 @@ function Header() {
   const { scheme } = useColorScheme();
   const { t } = useTranslation()
 
-  const isEnd = useSelector(selectIsEnd)
+  const isEnd = useAppSelector(selectIsEnd)
 
   const headerStyle = css({
     display: 'flex',
