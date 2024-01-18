@@ -1,14 +1,14 @@
 import React from "react";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 import { LuCheckCircle, LuXCircle } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
-import { selectEndState } from '../redux/endSlice';
+import { selectEndState } from "../redux/endSlice";
 import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { CallbackButton } from "./Finish";
@@ -25,36 +25,36 @@ const TheEnd: React.FC = () => {
   const endState = useAppSelector(selectEndState);
 
   const text = () => {
-    if (endState === 'discarded') {
+    if (endState === "discarded") {
       return t("theEnd.discarded-text");
-    } else if (endState === 'success') {
+    } else if (endState === "success") {
       return t("theEnd.info-text");
     }
   };
 
   const theEndStyle = css({
-    width: '100%',
-    height: 'calc(100% - 64px)',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "calc(100% - 64px)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     ...(flexGapReplacementStyle(20, false)),
   });
 
   const restartOrBackStyle = css({
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     ...(flexGapReplacementStyle(20, false)),
   });
 
   return (
     <div css={theEndStyle}>
-      {endState === 'discarded' ? <LuXCircle css={{ fontSize: 80 }} /> : <LuCheckCircle css={{ fontSize: 80 }} />}
+      {endState === "discarded" ? <LuXCircle css={{ fontSize: 80 }} /> : <LuCheckCircle css={{ fontSize: 80 }} />}
       <div>{text()}</div>
       <div css={restartOrBackStyle}>
         <CallbackButton />
-        {(endState === 'discarded') && <StartOverButton />}
+        {(endState === "discarded") && <StartOverButton />}
       </div>
     </div>
   );

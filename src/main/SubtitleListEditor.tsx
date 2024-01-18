@@ -86,26 +86,26 @@ const SubtitleListEditor: React.FC = () => {
   }, [dispatch, subtitle?.cues, subtitleId]);
 
   const listStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '60%',
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    width: "60%",
     ...(flexGapReplacementStyle(20, false)),
   });
 
   // Old CSS for not yet implemented buttons
   // const headerStyle = css({
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   justifyContent: 'flex-end',
-  //   flexWrap: 'wrap',
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   justifyContent: "flex-end",
+  //   flexWrap: "wrap",
   //   ...(flexGapReplacementStyle(20, false)),
-  //   paddingRight: '20px',
+  //   paddingRight: "20px",
   // })
 
   // const cuttingActionButtonStyle = {
-  //   padding: '16px',
-  //   boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  //   padding: "16px",
+  //   boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
   // };
 
   const calcEstimatedSize = React.useCallback(() => {
@@ -159,8 +159,8 @@ const innerElementType = React.forwardRef<HTMLDivElement, { style: CSSProperties
     style={{
       ...style,
       // height: `${parseFloat(style.height !== undefined ? style.height.toString() : "0") + PADDING_SIZE * 2}px`,
-      paddingTop: PADDING_SIZE + 'px',
-      zIndex: '1000',
+      paddingTop: PADDING_SIZE + "px",
+      zIndex: "1000",
     }}
     {...rest}
   />
@@ -286,28 +286,28 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     KEYMAP.subtitleList.jumpBelow.key,
     KEYMAP.subtitleList.delete.key
   ], (_, handler) => {
-    switch (handler.keys?.join('')) {
-      case KEYMAP.subtitleList.addAbove.key.split('+').pop():
+    switch (handler.keys?.join("")) {
+      case KEYMAP.subtitleList.addAbove.key.split("+").pop():
         addCueAbove();
         break;
-      case KEYMAP.subtitleList.addBelow.key.split('+').pop():
+      case KEYMAP.subtitleList.addBelow.key.split("+").pop():
         addCueBelow();
         break;
-      case KEYMAP.subtitleList.jumpAbove.key.split('+').pop():
+      case KEYMAP.subtitleList.jumpAbove.key.split("+").pop():
         dispatch(setFocusSegmentTriggered(true));
         dispatch(setFocusToSegmentAboveId({ identifier: identifier, segmentId: cue.idInternal }));
         break;
-      case KEYMAP.subtitleList.jumpBelow.key.split('+').pop():
+      case KEYMAP.subtitleList.jumpBelow.key.split("+").pop():
         dispatch(setFocusSegmentTriggered(true));
         dispatch(setFocusToSegmentBelowId({ identifier: identifier, segmentId: cue.idInternal }));
         break;
-      case KEYMAP.subtitleList.delete.key.split('+').pop():
+      case KEYMAP.subtitleList.delete.key.split("+").pop():
         dispatch(setFocusSegmentTriggered(true));
         dispatch(setFocusToSegmentAboveId({ identifier: identifier, segmentId: cue.idInternal }));
         deleteCue();
         break;
     }
-  }, { enableOnFormTags: ['input', 'select', 'textarea'] }, [identifier, cue, props.index]);
+  }, { enableOnFormTags: ["input", "select", "textarea"] }, [identifier, cue, props.index]);
 
   const setTimeToSegmentStart = () => {
     dispatch(setCurrentlyAt(cue.startTime));
@@ -316,10 +316,10 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
   const { scheme } = useColorScheme();
 
   const segmentStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
     ...(flexGapReplacementStyle(20, false)),
     // Make function buttons visible when hovered or focused
     "&:hover": {
@@ -332,55 +332,55 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         visibility: "visible",
       }
     },
-    '& textarea, input': {
+    "& textarea, input": {
       outline: `${theme.element_outline}`,
     },
-    '& input': {
-      marginTop: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
-      marginBottom: (scheme === 'dark-high-contrast' || scheme === 'light-high-contrast' ? '3%' : '0%'),
+    "& input": {
+      marginTop: (scheme === "dark-high-contrast" || scheme === "light-high-contrast" ? "3%" : "0%"),
+      marginBottom: (scheme === "dark-high-contrast" || scheme === "light-high-contrast" ? "3%" : "0%"),
     }
   });
 
   const timeAreaStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    height: '100%',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: "100%",
   });
 
   const functionButtonAreaStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
     ...(flexGapReplacementStyle(10, false)),
-    flexGrow: '0.5',
-    minWidth: '20px',
+    flexGrow: "0.5",
+    minWidth: "20px",
     // Hackily moves buttons beyond the segment border.
     // Specific value causes buttons from neighboring segments to overlay.
-    height: '132px',
-    visibility: 'hidden',
+    height: "132px",
+    visibility: "hidden",
   });
 
   const fieldStyle = css({
-    fontSize: '1em',
-    marginLeft: '15px',
-    borderRadius: '5px',
-    borderWidth: '1px',
-    padding: '10px 10px',
+    fontSize: "1em",
+    marginLeft: "15px",
+    borderRadius: "5px",
+    borderWidth: "1px",
+    padding: "10px 10px",
     background: `${theme.element_bg}`,
-    border: '1px solid #ccc',
+    border: "1px solid #ccc",
     color: `${theme.text}`
   });
 
   const textFieldStyle = css({
-    flexGrow: '7',
-    height: '80%',
-    minWidth: '100px',
+    flexGrow: "7",
+    height: "80%",
+    minWidth: "100px",
     // TODO: Find a way to allow resizing without breaking the UI
     //  Manual or automatic resizing can cause neighboring textareas to overlap
     //  Can use TextareaAutosize from mui, but that does not fix the overlap problem
-    resize: 'none',
+    resize: "none",
   });
 
   return (
@@ -388,10 +388,10 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       ...props.style,
       // Used for padding in the VariableSizeList
       top: props.style.top !== undefined ?
-        `${parseFloat(props.style.top.toString()) + PADDING_SIZE}px` : '0px',
+        `${parseFloat(props.style.top.toString()) + PADDING_SIZE}px` : "0px",
       height: props.style.height !== undefined ?
-        `${parseFloat(props.style.height.toString()) - PADDING_SIZE}px` : '0px',
-      zIndex: '1000',
+        `${parseFloat(props.style.height.toString()) - PADDING_SIZE}px` : "0px",
+      zIndex: "1000",
     }]}>
 
       <textarea
@@ -411,7 +411,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       <div css={timeAreaStyle}>
         <TimeInput
           generalFieldStyle={[fieldStyle,
-            css({ ...(cue.startTime > cue.endTime && { borderColor: 'red', borderWidth: '2px' }) })]}
+            css({ ...(cue.startTime > cue.endTime && { borderColor: "red", borderWidth: "2px" }) })]}
           value={cue.startTime}
           changeCallback={updateCueStart}
           tooltip={t("subtitleList.startTime-tooltip")}
@@ -419,7 +419,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         />
         <TimeInput
           generalFieldStyle={[fieldStyle,
-            css({ ...(cue.startTime > cue.endTime && { borderColor: 'red', borderWidth: '2px' }) })]}
+            css({ ...(cue.startTime > cue.endTime && { borderColor: "red", borderWidth: "2px" }) })]}
           value={cue.endTime}
           changeCallback={updateCueEnd}
           tooltip={t("subtitleList.endTime-tooltip")}
@@ -488,11 +488,11 @@ const FunctionButton: React.FC<{
   const theme = useTheme();
 
   const addSegmentButtonStyle = css({
-    width: '32px',
-    height: '32px',
+    width: "32px",
+    height: "32px",
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
-    zIndex: '1000',
+    zIndex: "1000",
   });
 
   return (
@@ -562,9 +562,9 @@ const TimeInput: React.FC<{
   };
 
   const timeFieldStyle = css({
-    height: '20%',
-    width: '100px',
-    ...(parsingError && { borderColor: 'red', borderWidth: '2px' })
+    height: "20%",
+    width: "100px",
+    ...(parsingError && { borderColor: "red", borderWidth: "2px" })
   });
 
   return (

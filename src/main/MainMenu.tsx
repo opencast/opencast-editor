@@ -1,22 +1,22 @@
 import React from "react";
 
-import { css, SerializedStyles } from '@emotion/react';
+import { css, SerializedStyles } from "@emotion/react";
 
 import { IconType } from "react-icons";
 import { LuScissors, LuFilm, LuFileText, LuCheckSquare } from "react-icons/lu";
 import { LuImage } from "react-icons/lu";
-import { ReactComponent as SubtitleIcon } from '../img/subtitle.svg';
+import { ReactComponent as SubtitleIcon } from "../img/subtitle.svg";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice';
-import { setPageNumber } from '../redux/finishSlice';
+import { setState, selectMainMenuState, mainMenu } from "../redux/mainMenuSlice";
+import { setPageNumber } from "../redux/finishSlice";
 
-import { MainMenuStateNames } from '../types';
-import { settings } from '../config';
-import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles';
+import { MainMenuStateNames } from "../types";
+import { settings } from "../config";
+import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { setIsPlaying } from "../redux/videoSlice";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
@@ -33,14 +33,14 @@ const MainMenu: React.FC = () => {
 
   const mainMenuStyle = css({
     borderRight: `${theme.menuBorder}`,
-    minWidth: '120px',
-    maxWidth: '140px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
-    overflowX: 'hidden',
-    overflowY: 'auto',
+    minWidth: "120px",
+    maxWidth: "140px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px",
+    overflowX: "hidden",
+    overflowY: "auto",
     background: `${theme.menu_background}`,
     ...(flexGapReplacementStyle(30, false)),
   });
@@ -130,20 +130,20 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
   };
 
   const mainMenuButtonStyle = css({
-    width: '100%',
-    height: '100px',
+    width: "100%",
+    height: "100px",
     outline: `${theme.menuButton_outline}`,
     ...(activeState === stateName) && {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.inverted_text}`,
       boxShadow: `${theme.boxShadow}`,
     },
-    '&:hover': {
+    "&:hover": {
       backgroundColor: `${theme.button_color}`,
       color: `${theme.inverted_text}`,
       boxShadow: `${theme.boxShadow}`,
     },
-    flexDirection: 'column',
+    flexDirection: "column",
   });
 
   return (
@@ -159,8 +159,8 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
     >
       <Icon css={iconCustomCSS ? iconCustomCSS : {
         fontSize: 36,
-        width: '36px',
-        height: 'auto'
+        width: "36px",
+        height: "auto"
       }} />
       {bottomText && <div>{bottomText}</div>}
     </li>

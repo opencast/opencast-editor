@@ -1,8 +1,8 @@
 import React from "react";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 /**
  * This page is to be displayed when the application has run into a critical error
@@ -13,22 +13,22 @@ const Landing: React.FC = () => {
   const { t } = useTranslation();
 
   const landingStyle = css({
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
 
     a: {
-      color: '#007bff',
-      textDecoration: 'none',
+      color: "#007bff",
+      textDecoration: "none",
     },
     li: {
-      margin: '5px',
+      margin: "5px",
     },
     code: {
-      userSelect: 'all',
-      color: '#e83e8c',
+      userSelect: "all",
+      color: "#e83e8c",
     }
   });
 

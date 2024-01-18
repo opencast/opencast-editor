@@ -1,17 +1,17 @@
 import React from "react";
 
-import { css } from '@emotion/react';
-import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle } from '../cssStyles';
+import { css } from "@emotion/react";
+import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
 import { LuChevronLeft, LuXCircle } from "react-icons/lu";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectFinishState } from '../redux/finishSlice';
-import { setEnd } from '../redux/endSlice';
+import { selectFinishState } from "../redux/finishSlice";
+import { setEnd } from "../redux/endSlice";
 
-import { PageButton } from './Finish';
+import { PageButton } from "./Finish";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 
 /**
@@ -25,9 +25,9 @@ const Discard: React.FC = () => {
   const finishState = useAppSelector(selectFinishState);
 
   const cancelStyle = css({
-    display: finishState !== "Discard changes" ? 'none' : 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
+    display: finishState !== "Discard changes" ? "none" : "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
     ...(flexGapReplacementStyle(30, false)),
   });
 
@@ -57,7 +57,7 @@ const DiscardButton: React.FC = () => {
   const theme = useTheme();
 
   const discard = () => {
-    dispatch(setEnd({ hasEnded: true, value: 'discarded' }));
+    dispatch(setEnd({ hasEnded: true, value: "discarded" }));
   };
 
   return (

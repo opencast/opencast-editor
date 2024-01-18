@@ -1,12 +1,12 @@
 /**
  * This file contains general css stylings
  */
-import { css, Global, keyframes } from '@emotion/react';
+import { css, Global, keyframes } from "@emotion/react";
 import React from "react";
-import emotionNormalize from 'emotion-normalize';
-import { checkFlexGapSupport } from './util/utilityFunctions';
-import { createTheme } from '@mui/material/styles';
-import { Theme, useTheme } from './themes';
+import emotionNormalize from "emotion-normalize";
+import { checkFlexGapSupport } from "./util/utilityFunctions";
+import { createTheme } from "@mui/material/styles";
+import { Theme, useTheme } from "./themes";
 
 /**
  * An emotion component that inserts styles globally
@@ -27,7 +27,7 @@ export const globalStyle = (theme: Theme) => css({
   body: {
     backgroundColor: `${theme.background}`,
     color: `${theme.text}`,
-    fontSize: 'medium',
+    fontSize: "medium",
     // Makes the body span to the bottom of the page
     minHeight: "100vh",
   },
@@ -64,10 +64,10 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
         },
         ...(flexDirectionIsRow) && {
           ">*:first-of-type": {
-            marginLeft: '0px',
+            marginLeft: "0px",
           },
           ">*:last-child": {
-            marginRight: '0px',
+            marginRight: "0px",
           },
         },
       }
@@ -79,7 +79,7 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
  * CSS for buttons
  */
 export const basicButtonStyle = (theme: Theme) => css({
-  borderRadius: '5px',
+  borderRadius: "5px",
   cursor: "pointer",
   "&:hover": {
     backgroundColor: `${theme.button_color}`,
@@ -90,11 +90,11 @@ export const basicButtonStyle = (theme: Theme) => css({
     color: `${theme.inverted_text}`,
   },
   // Flex position child elements
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   ...(flexGapReplacementStyle(10, false)),
-  textAlign: 'center' as const,
+  textAlign: "center" as const,
   outline: `${theme.button_outline}`,
 });
 
@@ -102,24 +102,24 @@ export const basicButtonStyle = (theme: Theme) => css({
  * CSS for deactivated buttons
  */
 export const deactivatedButtonStyle = css({
-  borderRadius: '10px',
+  borderRadius: "10px",
   cursor: "pointer",
   opacity: "0.6",
   // Flex position child elements
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   ...(flexGapReplacementStyle(10, false)),
-  textAlign: 'center' as const,
+  textAlign: "center" as const,
 });
 
 /**
  * CSS for nagivation styled buttons
  */
 export const navigationButtonStyle = (theme: Theme) => css({
-  width: '200px',
-  padding: '16px',
-  justifyContent: 'space-around',
+  width: "200px",
+  padding: "16px",
+  justifyContent: "space-around",
   boxShadow: `${theme.boxShadow}`,
   background: `${theme.element_bg}`,
 });
@@ -128,8 +128,8 @@ export const navigationButtonStyle = (theme: Theme) => css({
  * CSS for a container that holds back/forward buttons
  */
 export const backOrContinueStyle = css(({
-  display: 'flex',
-  flexDirection: 'row',
+  display: "flex",
+  flexDirection: "row",
   ...(flexGapReplacementStyle(20, false)),
 }));
 
@@ -137,15 +137,15 @@ export const backOrContinueStyle = css(({
  * CSS for big buttons in a dynamic grid
  */
 export const tileButtonStyle = (theme: Theme) => css({
-  width: '290px',
-  height: '220px',
-  display: 'flex',
-  flexDirection: 'column',
+  width: "290px",
+  height: "220px",
+  display: "flex",
+  flexDirection: "column",
   fontWeight: "bold",
   ...(flexGapReplacementStyle(30, false)),
   boxShadow: `${theme.boxShadow_tiles}`,
   background: `${theme.element_bg}`,
-  placeSelf: 'center',
+  placeSelf: "center",
 });
 
 /**
@@ -153,13 +153,13 @@ export const tileButtonStyle = (theme: Theme) => css({
  */
 export const disableButtonAnimation = css({
   "&:hover": {
-    transform: 'none',
+    transform: "none",
   },
   "&:focus": {
-    transform: 'none',
+    transform: "none",
   },
   "&:active": {
-    transform: 'none',
+    transform: "none",
   },
 });
 
@@ -167,11 +167,11 @@ export const disableButtonAnimation = css({
  * CSS for a title
  */
 export const titleStyle = (theme: Theme) => css(({
-  display: 'inline-block',
-  padding: '15px',
+  display: "inline-block",
+  padding: "15px",
   whiteSpace: "nowrap",
-  textOverflow: 'ellipsis',
-  maxWidth: '100%',
+  textOverflow: "ellipsis",
+  maxWidth: "100%",
   color: `${theme.text}`,
 }));
 
@@ -180,9 +180,9 @@ export const titleStyle = (theme: Theme) => css(({
  * Used for page titles
  */
 export const titleStyleBold = (theme: Theme) => css({
-  fontWeight: 'bold',
-  fontSize: '24px',
-  verticalAlign: '-2.5px',
+  fontWeight: "bold",
+  fontSize: "24px",
+  verticalAlign: "-2.5px",
   color: `${theme.text}`,
 });
 
@@ -190,11 +190,11 @@ export const titleStyleBold = (theme: Theme) => css({
  * CSS for ariaLive regions that should not be visible
  */
 export const ariaLive = css({
-  position: 'absolute',
-  left: '-99999px',
-  height: '1px',
-  width: '1px',
-  overflow: 'hidden',
+  position: "absolute",
+  left: "-99999px",
+  height: "1px",
+  width: "1px",
+  overflow: "hidden",
 });
 
 /**
@@ -205,9 +205,9 @@ export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
     css({
       ...(!errorStatus) && { display: "none" },
       borderColor: `${theme.error}`,
-      borderStyle: 'dashed',
-      fontWeight: 'bold',
-      padding: '10px',
+      borderStyle: "dashed",
+      fontWeight: "bold",
+      padding: "10px",
     })
   );
 };
@@ -239,7 +239,7 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       color: theme.inverted_text,
       background: theme.multiValue,
-      cursor: 'default',
+      cursor: "default",
     }),
     multiValueLabel: (provided: any) => ({
       ...provided,
@@ -289,35 +289,35 @@ export const calendarStyle = (theme: Theme) => createTheme({
           color: `${theme.text}`,
 
           /* Calendar-modal */
-          '.MuiYearPicker-root': {
-            '.PrivatePickersYear-yearButton:hover, .Mui-selected:hover': {
+          ".MuiYearPicker-root": {
+            ".PrivatePickersYear-yearButton:hover, .Mui-selected:hover": {
               background: `${theme.focused}`,
               color: `${theme.focus_text}`,
             },
-            '.Mui-selected': {
+            ".Mui-selected": {
               background: `${theme.selected}`,
               color: `${theme.selected_text}`,
             }
           },
 
           /* Clock-modal */
-          '& .MuiClock-clock': { // round clock
+          "& .MuiClock-clock": { // round clock
             background: `${theme.clock_bg}`,
             outline: `${theme.clock_border}`,
-            '-webkitTextFillColor': `${theme.text}`, // Digits on the clock
+            "-webkitTextFillColor": `${theme.text}`, // Digits on the clock
             textShadow: `${theme.text_shadow}`
           },
           /* selected digit (hour/minute) */
-          '& .MuiClockPicker-root .Mui-selected': {
-            '-webkitTextFillColor': `${theme.digit_selected}`,
-            fontWeight: 'bold',
-            textShadow: 'none',
+          "& .MuiClockPicker-root .Mui-selected": {
+            "-webkitTextFillColor": `${theme.digit_selected}`,
+            fontWeight: "bold",
+            textShadow: "none",
           },
           /* clock hands */
-          '& .MuiClock-pin, .MuiClockPointer-root': {
+          "& .MuiClock-pin, .MuiClockPointer-root": {
             background: `${theme.clock_hands}`
           },
-          '& .MuiClockPointer-thumb': {
+          "& .MuiClockPointer-thumb": {
             background: `${theme.clock_hands}`,
             border: `16px solid ${theme.clock_hands}`,
           }
@@ -330,31 +330,31 @@ export const calendarStyle = (theme: Theme) => createTheme({
         root: {
           /* Calendar- and Clock-modal -> arrows, icon, days  */
           color: `${theme.text} !important`,
-          '&.MuiPickersDay-root': {
-            background: 'transparent !important',
+          "&.MuiPickersDay-root": {
+            background: "transparent !important",
             color: `${theme.text} !important`,
           },
-          '&:hover, &.Mui-selected:hover': {
+          "&:hover, &.Mui-selected:hover": {
             background: `${theme.focused} !important`,
             color: `${theme.focus_text} !important`,
           },
           // Selected day
-          '&.Mui-selected': {
+          "&.Mui-selected": {
             background: `${theme.selected} !important`,
             color: `${theme.selected_text} !important`,
 
           },
           // Current day
-          '&:not(.Mui-selected)': {
+          "&:not(.Mui-selected)": {
             borderColor: `${theme.focused} !important`,
           },
-          '&.Mui-disabled': {
+          "&.Mui-disabled": {
             color: `${theme.disabled} !important`,
           },
-          '&.MuiClock-amButton, &.MuiClock-pmButton': {
-            '-webkitTextFillColor': `${theme.text} !important`,
-            '&:hover': {
-              '-webkitTextFillColor': `${theme.clock_focus} !important`
+          "&.MuiClock-amButton, &.MuiClock-pmButton": {
+            "-webkitTextFillColor": `${theme.text} !important`,
+            "&:hover": {
+              "-webkitTextFillColor": `${theme.clock_focus} !important`
             }
           },
         }
@@ -372,7 +372,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
 
 export const subtitleSelectStyle = (theme: Theme) => createTheme({
   components: {
-    /* Label: 'Pick a language' & 'Video Flavor' */
+    /* Label: "Pick a language" & "Video Flavor" */
     MuiInputLabel: {
       styleOverrides: {
         root: {
@@ -415,11 +415,11 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
     MuiMenuItem: {
       styleOverrides: {
         root: {
-          '&:hover, &.Mui-selected:hover': {
+          "&:hover, &.Mui-selected:hover": {
             color: `${theme.focus_text}`,
             background: `${theme.focused}`
           },
-          '&.Mui-selected': {
+          "&.Mui-selected": {
             color: `${theme.selected_text}`,
             background: `${theme.selected}`,
           },
@@ -437,29 +437,29 @@ export const spinningStyle = css({
 });
 
 export const customIconStyle = css(({
-  maxWidth: '16px',
-  height: 'auto'
+  maxWidth: "16px",
+  height: "auto"
 }));
 
 export const videosStyle = (theme: Theme) => css(({
-  display: 'flex',
-  flexDirection: 'column',
+  display: "flex",
+  flexDirection: "column",
 
-  width: '100%',
+  width: "100%",
   background: `${theme.menu_background}`,
-  borderRadius: '5px',
+  borderRadius: "5px",
   boxShadow: `${theme.boxShadow_tiles}`,
-  marginTop: '24px',
+  marginTop: "24px",
   boxSizing: "border-box",
-  padding: '10px',
+  padding: "10px",
   ...(flexGapReplacementStyle(10, false)),
 }));
 
 export const backgroundBoxStyle = (theme: Theme) => css(({
   background: `${theme.menu_background}`,
-  borderRadius: '7px',
+  borderRadius: "7px",
   boxShadow: `${theme.boxShadow_tiles}`,
   boxSizing: "border-box",
-  padding: '20px',
+  padding: "20px",
   ...(flexGapReplacementStyle(25, false)),
 }));

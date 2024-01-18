@@ -1,15 +1,15 @@
 import React from "react";
 
-import { css } from '@emotion/react';
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from '../cssStyles';
+import { css } from "@emotion/react";
+import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
 import { LuSave, LuDatabase, LuXCircle } from "react-icons/lu";
 
 import { useAppDispatch } from "../redux/store";
-import { setState, setPageNumber, finish } from '../redux/finishSlice';
+import { setState, setPageNumber, finish } from "../redux/finishSlice";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 
 /**
@@ -18,10 +18,10 @@ import { useTheme } from "../themes";
 const FinishMenu: React.FC = () => {
 
   const finishMenuStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
     ...(flexGapReplacementStyle(30, false)),
   });
 
@@ -65,19 +65,19 @@ const FinishMenuButton: React.FC<{ Icon: IconType, stateName: finish["value"]; }
   }
 
   const iconStyle = css({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
 
     background: `${theme.background_finish_menu_icon}`,
     color: `${theme.text}`,
-    borderRadius: '50%',
-    width: '90px',
-    height: '90px',
+    borderRadius: "50%",
+    width: "90px",
+    height: "90px",
   });
 
   const labelStyle = css({
-    padding: '0px 20px',
+    padding: "0px 20px",
   });
 
   return (

@@ -11,7 +11,7 @@ import {
   setFocusSegmentId,
   setFocusSegmentTriggered,
   setFocusSegmentTriggered2,
-} from '../redux/subtitleSlice';
+} from "../redux/subtitleSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import useResizeObserver from "use-resize-observer";
 import { selectDuration } from "../redux/videoSlice";
@@ -48,10 +48,10 @@ const SubtitleTimeline: React.FC = () => {
   const timelineCutoutInMs = 10000;
 
   const timelineStyle = css({
-    position: 'relative',     // Need to set position for Draggable bounds to work
-    width: ((duration / timelineCutoutInMs)) * 100 + '%',    // Total length of timeline based on number of cutouts
-    paddingLeft: '50%',
-    paddingRight: '50%',
+    position: "relative",     // Need to set position for Draggable bounds to work
+    width: ((duration / timelineCutoutInMs)) * 100 + "%",    // Total length of timeline based on number of cutouts
+    paddingLeft: "50%",
+    paddingRight: "50%",
   });
 
   const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -106,21 +106,21 @@ const SubtitleTimeline: React.FC = () => {
   };
 
   return (
-    <div css={{ position: 'relative', width: '100%', height: '250px' }}>
+    <div css={{ position: "relative", width: "100%", height: "250px" }}>
       {/* "Scrubber". Sits smack dab in the middle and does not move */}
       <div
         css={{
-          position: 'absolute',
-          width: '2px',
-          height: '200px',
+          position: "absolute",
+          width: "2px",
+          height: "200px",
           ...(refTop.current) && { left: (refTop.current.clientWidth / 2) },
-          top: '10px',
+          top: "10px",
           background: `${theme.text}`,
           zIndex: 100,
         }}
       />
       {/* Scrollable timeline container. Has width of parent*/}
-      <ScrollContainer innerRef={refTop} css={{ overflow: 'hidden', width: '100%', height: '215px' }}
+      <ScrollContainer innerRef={refTop} css={{ overflow: "hidden", width: "100%", height: "215px" }}
         vertical={false}
         horizontal={true}
         onEndScroll={onEndScroll}
@@ -130,9 +130,9 @@ const SubtitleTimeline: React.FC = () => {
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle}>
           {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
-          <div css={{ height: '10px' }} />
+          <div css={{ height: "10px" }} />
           <TimelineSubtitleSegmentsList timelineWidth={width} />
-          <div css={{ position: 'relative', height: '100px' }} >
+          <div css={{ position: "relative", height: "100px" }} >
             <Waveforms timelineHeight={120} />
             <CuttingSegmentsList
               timelineWidth={width}
@@ -144,27 +144,27 @@ const SubtitleTimeline: React.FC = () => {
         </div>
       </ScrollContainer>
       {/* Mini Timeline. Makes it easier to understand position in scrollable timeline */}
-      <ThemedTooltip title={t('subtitleTimeline.overviewTimelineTooltip')}>
+      <ThemedTooltip title={t("subtitleTimeline.overviewTimelineTooltip")}>
         <div
           onMouseDown={e => setCurrentlyAtToClick(e)}
           css={{
-            position: 'relative',
-            width: '100%',
-            height: '15px',
+            position: "relative",
+            width: "100%",
+            height: "15px",
             background: `linear-gradient(to right, grey ${(currentlyAt / duration) * 100}%,
               lightgrey ${(currentlyAt / duration) * 100}%)`,
-            borderRadius: '3px',
+            borderRadius: "3px",
           }}
           ref={refMini}
         >
           <div
             css={{
-              position: 'absolute',
-              width: '2px',
-              height: '100%',
+              position: "absolute",
+              width: "2px",
+              height: "100%",
               left: (currentlyAt / duration) * (widthMiniTimeline),
               top: 0,
-              background: 'black'
+              background: "black"
             }}
           />
         </div>
@@ -178,7 +178,7 @@ const SubtitleTimeline: React.FC = () => {
   //   <Example2 />
   //   {/* <TimelineSubtitleSegment
   //   timelineWidth={width}
-  //   cue={{id: '42', text:"HI", startTime: 1000, endTime: 5000, tree:{children: [{type: "", value: ""}]}}}
+  //   cue={{id: "42", text:"HI", startTime: 1000, endTime: 5000, tree:{children: [{type: "", value: ""}]}}}
   //   index={0}
   //   height={80}
   //   /> */}
@@ -196,10 +196,10 @@ const TimelineSubtitleSegmentsList: React.FC<{ timelineWidth: number; }> = ({ ti
   const subtitle = useAppSelector(selectSelectedSubtitleById);
 
   const segmentsListStyle = css({
-    position: 'relative',
-    width: '100%',
+    position: "relative",
+    width: "100%",
     height: `${arbitraryHeight}px`,
-    overflow: 'hidden',
+    overflow: "hidden",
   });
 
   return (
@@ -290,14 +290,14 @@ const TimelineSubtitleSegment: React.FC<{
     let newTop = absoluteTop;
     const deltaHeight = size.height - absoluteHeight;
     const deltaWidth = size.width - absoluteWidth;
-    if (handle[0] === 'n') {
+    if (handle[0] === "n") {
       newTop -= deltaHeight;
-    } else if (handle[0] === 's') {
+    } else if (handle[0] === "s") {
       newTop += deltaHeight;
     }
-    if (handle[handle.length - 1] === 'w') {
+    if (handle[handle.length - 1] === "w") {
       newLeft -= deltaWidth;
-    } else if (handle[handle.length - 1] === 'e') {
+    } else if (handle[handle.length - 1] === "e") {
       newLeft += deltaWidth;
     }
 
@@ -318,11 +318,11 @@ const TimelineSubtitleSegment: React.FC<{
     let newStartTime = props.cue.startTime;
     let newEndTime = props.cue.endTime;
     // if handle === left, update startTime
-    if (handle === 'w') {
+    if (handle === "w") {
       newStartTime = props.cue.startTime + timeDiff;
     }
     // if handle === right, update endTime
-    if (handle === 'e') {
+    if (handle === "e") {
       newEndTime = props.cue.endTime + timeDiff;
     }
 
@@ -363,7 +363,7 @@ const TimelineSubtitleSegment: React.FC<{
   };
 
   const segmentStyle = css({
-    position: 'absolute',
+    position: "absolute",
 
     // Apply resizable calculations
     width: absoluteWidth,
@@ -372,22 +372,22 @@ const TimelineSubtitleSegment: React.FC<{
 
     background: `${theme.subtitle_segment_bg}`,
     border: `${theme.subtitle_segment_border}`,
-    borderRadius: '5px',
-    boxSizing: 'border-box',
+    borderRadius: "5px",
+    boxSizing: "border-box",
     zIndex: 1,
 
     cursor: isGrabbed ? "grabbing" : "grab",
 
     // Center text
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
   });
 
   const textStyle = css({
-    overflow: 'hidden',
+    overflow: "hidden",
     whiteSpace: "nowrap",
-    textOverflow: 'ellipsis',
-    padding: '8px',
+    textOverflow: "ellipsis",
+    padding: "8px",
     color: `${theme.subtitle_segment_text}`
   });
 
@@ -407,11 +407,11 @@ const TimelineSubtitleSegment: React.FC<{
         width={absoluteWidth}
         onResize={onResizeAbsolute}
         onResizeStop={onResizeStop}
-        // TODO: The 'e' handle is currently NOT WORKING CORRECTLY!
+        // TODO: The "e" handle is currently NOT WORKING CORRECTLY!
         //  The errounous behaviour can already be seens with a minimal
         //  draggable + resizable example.
         //  Fix most likely requires changes in one of those modules
-        resizeHandles={['w']}
+        resizeHandles={["w"]}
       >
         <div css={segmentStyle} ref={nodeRef} onClick={onClick} id="no-scrolling">
           <span css={textStyle}>{props.cue.text}</span>
@@ -438,14 +438,14 @@ const TimelineSubtitleSegment: React.FC<{
 //     let newTop = absoluteTop;
 //     const deltaHeight = size.height - absoluteHeight;
 //     const deltaWidth = size.width - absoluteWidth;
-//     if (handle[0] === 'n') {
+//     if (handle[0] === "n") {
 //       newTop -= deltaHeight;
-//     } else if (handle[0] === 's') {
+//     } else if (handle[0] === "s") {
 //       newTop += deltaHeight;
 //     }
-//     if (handle[handle.length - 1] === 'w') {
+//     if (handle[handle.length - 1] === "w") {
 //       newLeft -= deltaWidth;
-//     } else if (handle[handle.length - 1] === 'e') {
+//     } else if (handle[handle.length - 1] === "e") {
 //       newLeft += deltaWidth;
 //     }
 
@@ -461,7 +461,7 @@ const TimelineSubtitleSegment: React.FC<{
 //       height={absoluteHeight}
 //       width={absoluteWidth}
 //       onResize={onResizeAbsolute}
-//       resizeHandles={['sw', 'se', 'nw', 'ne', 'w', 'e', 'n', 's']}
+//       resizeHandles={["sw", "se", "nw", "ne", "w", "e", "n", "s"]}
 //     >
 //       <div
 //         // className="box"
@@ -498,14 +498,14 @@ const TimelineSubtitleSegment: React.FC<{
 //     let newTop = absoluteTop;
 //     const deltaHeight = size.height - absoluteHeight;
 //     const deltaWidth = size.width - absoluteWidth;
-//     if (handle[0] === 'n') {
+//     if (handle[0] === "n") {
 //       newTop -= deltaHeight;
-//     } else if (handle[0] === 's') {
+//     } else if (handle[0] === "s") {
 //       newTop += deltaHeight;
 //     }
-//     if (handle[handle.length - 1] === 'w') {
+//     if (handle[handle.length - 1] === "w") {
 //       newLeft -= deltaWidth;
-//     } else if (handle[handle.length - 1] === 'e') {
+//     } else if (handle[handle.length - 1] === "e") {
 //       newLeft += deltaWidth;
 //     }
 
@@ -533,7 +533,7 @@ const TimelineSubtitleSegment: React.FC<{
 //           height={absoluteHeight}
 //           width={absoluteWidth}
 //           onResize={onResizeAbsolute}
-//           resizeHandles={['sw', 'se', 'nw', 'ne', 'w', 'e', 'n', 's']}
+//           resizeHandles={["sw", "se", "nw", "ne", "w", "e", "n", "s"]}
 //         >
 //           <div style={ leStyle }>
 //             test

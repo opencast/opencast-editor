@@ -84,24 +84,24 @@ const SubtitleVideoArea: React.FC = () => {
   useEffect(() => {
     if (subtitle?.cues) {
       const serializedSubtitle = serializeSubtitle(subtitle?.cues);
-      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], { type: 'text/vtt' })));
+      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], { type: "text/vtt" })));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtitle?.cues]);
 
   const areaWrapper = css({
-    display: 'block',
-    height: '100%',
-    width: '40%',
+    display: "block",
+    height: "100%",
+    width: "40%",
   });
 
   const videoPlayerAreaStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    // width: '40%',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    // width: "40%",
     ...(flexGapReplacementStyle(10, false)),
   });
 
@@ -198,7 +198,7 @@ const VideoSelectDropdown: React.FC<{
   }));
 
   const subtitleAddFormStyle = css({
-    width: '100%',
+    width: "100%",
   });
 
   return (

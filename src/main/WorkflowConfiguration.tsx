@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import {
   basicButtonStyle,
   backOrContinueStyle,
   errorBoxStyle,
   flexGapReplacementStyle,
   spinningStyle
-} from '../cssStyles';
+} from "../cssStyles";
 
 import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
 
@@ -17,13 +17,13 @@ import {
   selectTracks,
   setHasChanges as videoSetHasChanges,
   selectSelectedWorkflowId
-} from '../redux/videoSlice';
-import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice';
+} from "../redux/videoSlice";
+import { postVideoInformationWithWorkflow, selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
 
-import { PageButton } from './Finish';
+import { PageButton } from "./Finish";
 import { setEnd } from "../redux/endSlice";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import {
   postMetadata,
   selectPostError,
@@ -48,10 +48,10 @@ const WorkflowConfiguration: React.FC = () => {
   const theme = useTheme();
 
   const workflowConfigurationStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    padding: '20px',
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
+    padding: "20px",
     ...(flexGapReplacementStyle(30, false)),
   });
 
@@ -101,8 +101,8 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
-    if (workflowStatus === 'success' && metadataStatus === 'success') {
-      dispatch(setEnd({ hasEnded: true, value: 'success' }));
+    if (workflowStatus === "success" && metadataStatus === "success") {
+      dispatch(setEnd({ hasEnded: true, value: "success" }));
       dispatch(videoSetHasChanges(false));
       dispatch(metadataSetHasChanges(false));
     }
@@ -131,7 +131,7 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
 
   // Subsequent save request
   useEffect(() => {
-    if (metadataStatus === 'success' && metadataSaveStarted) {
+    if (metadataStatus === "success" && metadataSaveStarted) {
       setMetadataSaveStarted(false);
       dispatch(postVideoInformationWithWorkflow({
         segments: segments,
@@ -146,20 +146,20 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
   // Update based on current fetching status
   let Icon = LuDatabase;
   let spin = false;
-  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
+  if (workflowStatus === "failed" || metadataStatus === "failed") {
     Icon = LuAlertCircle;
     spin = false;
-  } else if (workflowStatus === 'success' && metadataStatus === 'success') {
+  } else if (workflowStatus === "success" && metadataStatus === "success") {
     Icon = LuCheck;
     spin = false;
-  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
+  } else if (workflowStatus === "loading" || metadataStatus === "loading") {
     Icon = LuLoader;
     spin = true;
 
   }
 
   const saveButtonStyle = css({
-    padding: '16px',
+    padding: "16px",
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
   });

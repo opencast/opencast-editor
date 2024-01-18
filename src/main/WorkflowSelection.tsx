@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 
-import { css } from '@emotion/react';
-import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from '../cssStyles';
+import { css } from "@emotion/react";
+import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from "../cssStyles";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectWorkflows, setSelectedWorkflowIndex } from '../redux/videoSlice';
-import { selectFinishState, selectPageNumber } from '../redux/finishSlice';
+import { selectWorkflows, setSelectedWorkflowIndex } from "../redux/videoSlice";
+import { selectFinishState, selectPageNumber } from "../redux/finishSlice";
 
-import { PageButton } from './Finish';
+import { PageButton } from "./Finish";
 import { LuChevronLeft } from "react-icons/lu";
 import { SaveAndProcessButton } from "./WorkflowConfiguration";
 import { selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
@@ -16,7 +16,7 @@ import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useTheme } from "../themes";
@@ -47,21 +47,21 @@ const WorkflowSelection: React.FC = () => {
   const saveError = useAppSelector(saveSelectError);
 
   const workflowSelectionStyle = css({
-    padding: '20px',
-    display: (finishState === "Start processing" && pageNumber === 1) ? 'flex' : 'none',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: "20px",
+    display: (finishState === "Start processing" && pageNumber === 1) ? "flex" : "none",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     ...(flexGapReplacementStyle(30, false)),
   });
 
   const workflowSelectionSelectionStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'left',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "left",
     ...(flexGapReplacementStyle(20, false)),
-    flexWrap: 'wrap',
-    maxHeight: '50vh',
+    flexWrap: "wrap",
+    maxHeight: "50vh",
   });
 
   useEffect(() => {
@@ -178,16 +178,16 @@ const WorkflowButton: React.FC<{
   // Note: Styling the Radio Button is done in WorkflowSelectRadio
 
   const labelStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: '500px',
-    paddingTop: '2px',
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: "500px",
+    paddingTop: "2px",
   });
 
   const headerStyle = css({
-    width: '100%',
-    padding: '5px 0px',
-    fontSize: 'larger',
+    width: "100%",
+    padding: "5px 0px",
+    fontSize: "larger",
   });
 
   return (
@@ -207,7 +207,7 @@ const WorkflowSelectRadio: React.FC = props => {
   const theme = useTheme();
 
   const style = css({
-    alignSelf: 'start',
+    alignSelf: "start",
     color: `${theme.text}`,
     "&$checked": {
       color: `${theme.text}`

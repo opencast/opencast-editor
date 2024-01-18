@@ -1,13 +1,13 @@
 // A tiny wrapper around fetch(), borrowed from
 // https://kentcdodds.com/blog/replace-axios-with-a-simple-custom-fetch-wrapper
 
-import { settings } from '../config';
+import { settings } from "../config";
 
 /**
  * Client I stole this from a react tutorial
  */
 export async function client(endpoint, { body, ...customConfig } = {}) {
-  const headers = { 'Content-Type': 'application/json' };
+  const headers = { "Content-Type": "application/json" };
 
   // Attempt Http basic auth if we got credentials
   let authHeaders = {};
@@ -15,11 +15,11 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
     const encoded = btoa(unescape(encodeURIComponent(
       settings.opencast.name + ":" + settings.opencast.password
     )));
-    authHeaders = { 'Authorization': `Basic ${encoded}` };
+    authHeaders = { "Authorization": `Basic ${encoded}` };
   }
 
   const config = {
-    method: body ? 'POST' : 'GET',
+    method: body ? "POST" : "GET",
     ...customConfig,
     headers: {
       ...headers,
@@ -29,7 +29,7 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   };
 
   if (body) {
-    if (config.headers['Content-Type'].includes("urlencoded")) {
+    if (config.headers["Content-Type"].includes("urlencoded")) {
       config.body = body;
     } else {
       config.body = JSON.stringify(body);
@@ -48,7 +48,7 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
     }
 
     if (response.ok) {
-      data = text.length ? text : '';
+      data = text.length ? text : "";
       return data;
     }
     throw new Error(response.statusText);
@@ -61,7 +61,7 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
 }
 
 client.get = function (endpoint, customConfig = {}) {
-  return client(endpoint, { ...customConfig, method: 'GET' });
+  return client(endpoint, { ...customConfig, method: "GET" });
 };
 
 client.post = function (endpoint, body, customConfig = {}) {
@@ -69,5 +69,5 @@ client.post = function (endpoint, body, customConfig = {}) {
 };
 
 client.delete = function (endpoint, customConfig = {}) {
-  return client(endpoint, { ...customConfig, method: 'DELETE' });
+  return client(endpoint, { ...customConfig, method: "DELETE" });
 };

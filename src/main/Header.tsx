@@ -2,16 +2,16 @@ import React from "react";
 import { useAppSelector } from "../redux/store";
 import { useTheme } from "../themes";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 import { MainMenuButton } from "./MainMenu";
 import { LuMoon, LuSun } from "react-icons/lu";
 import { HiOutlineTranslate } from "react-icons/hi";
 import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
-import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from '../cssStyles';
+import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from "../cssStyles";
 
-import { ReactComponent as LogoSvg } from '../img/opencast-editor.svg';
+import { ReactComponent as LogoSvg } from "../img/opencast-editor.svg";
 import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
@@ -25,33 +25,33 @@ function Header() {
   const isEnd = useAppSelector(selectIsEnd);
 
   const headerStyle = css({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
     backgroundColor: `${theme.header_bg}`,
   });
 
-  const headerStyleThemed = scheme.includes('high-contrast-')
+  const headerStyleThemed = scheme.includes("high-contrast-")
     ? css({
-      height: '62px',
-      borderBottom: '2px solid white'
+      height: "62px",
+      borderBottom: "2px solid white"
     })
     : css({
-      height: '64px',
+      height: "64px",
     });
 
   const rightSideButtonsStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    height: '100%',
-    alignItems: 'center',
-    paddingRight: '24px',
+    display: "flex",
+    flexDirection: "row",
+    height: "100%",
+    alignItems: "center",
+    paddingRight: "24px",
     ...(flexGapReplacementStyle(16, false)),
   });
 
   const settingsButtonCSS = css({
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     ...(flexGapReplacementStyle(8, false)),
 
@@ -96,8 +96,8 @@ const Logo: React.FC = () => {
   const { scheme } = useColorScheme();
 
   const logo = css({
-    paddingLeft: '8px',
-    opacity: scheme === 'dark' ? '0.8' : '1',
+    paddingLeft: "8px",
+    opacity: scheme === "dark" ? "0.8" : "1",
 
     height: "100%",
     "> *": {
@@ -105,12 +105,12 @@ const Logo: React.FC = () => {
     },
 
     // Unset a bunch of CSS to keep the logo clean
-    outline: 'unset',
+    outline: "unset",
     "&:hover": {
-      backgroundColor: `unset`,
+      backgroundColor: "unset",
     },
     "&:focus": {
-      backgroundColor: `unset`,
+      backgroundColor: "unset",
     },
   });
 
@@ -121,7 +121,7 @@ const Logo: React.FC = () => {
       bottomText={""}
       ariaLabelText={t("mainMenu.cutting-button")}
       customCSS={logo}
-      iconCustomCSS={css({ width: 'auto', height: '60px' })}
+      iconCustomCSS={css({ width: "auto", height: "60px" })}
     />
   );
 };
@@ -137,7 +137,7 @@ const LanguageButton: React.FC = () => {
 
   const languageNames = (language: string) => {
     return new Intl.DisplayNames([language], {
-      type: 'language'
+      type: "language"
     }).of(language);
   };
 
@@ -147,7 +147,7 @@ const LanguageButton: React.FC = () => {
     return { value: entry, label: languageNames(entry) };
   });
 
-  // menuItems can't deal with languages being undefined, so we return early
+  // menuItems can"t deal with languages being undefined, so we return early
   // until we reach a rerender with actual information
   if (languages === undefined) {
     return (<></>);
@@ -230,7 +230,7 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
         color: `${theme.header_text}`
       },
       ":focus": {
-        backgroundColor: 'inherit',
+        backgroundColor: "inherit",
         color: `${theme.header_text}`
       },
       ":focus:hover": {

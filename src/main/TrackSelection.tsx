@@ -1,14 +1,14 @@
 import React from "react";
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 import { IconType } from "react-icons";
 import { LuTrash } from "react-icons/lu";
-import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
-import ReactPlayer from 'react-player';
+import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
+import ReactPlayer from "react-player";
 
-import { Track } from '../types';
+import { Track } from "../types";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectVideos, setTrackEnabled } from '../redux/videoSlice';
+import { selectVideos, setTrackEnabled } from "../redux/videoSlice";
 import {
   backgroundBoxStyle,
   basicButtonStyle,
@@ -17,9 +17,9 @@ import {
   flexGapReplacementStyle,
   titleStyle,
   titleStyleBold
-} from '../cssStyles';
+} from "../cssStyles";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 
@@ -36,20 +36,20 @@ const TrackSelection: React.FC = () => {
   );
 
   const trackSelectionStyle = css({
-    display: 'flex',
-    width: 'auto',
-    height: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    width: "auto",
+    height: "100%",
+    flexDirection: "column",
+    alignItems: "center",
   });
 
   const trackAreaStyle = css({
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     ...(flexGapReplacementStyle(10, false)),
   });
 
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
   const { t } = useTranslation();
   const theme = useTheme();
 
-  const description: string = t('trackSelection.title');
+  const description: string = t("trackSelection.title");
 
   return (
     <div css={[titleStyle(theme), titleStyleBold(theme)]}>
@@ -85,47 +85,47 @@ const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, e
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const header = track.flavor.type + ' '
-    + (track.video_stream.enabled ? ''
-      : `(${t('trackSelection.trackInactive', 'inactive')})`);
+  const header = track.flavor.type + " "
+    + (track.video_stream.enabled ? ""
+      : `(${t("trackSelection.trackInactive", "inactive")})`);
 
   const trackItemStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'left',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "left",
   });
 
   const trackitemSubStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     ...(flexGapReplacementStyle(20, true)),
 
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
+    justifyContent: "space-around",
+    flexWrap: "wrap",
   });
 
   const playerStyle = css({
-    aspectRatio: '16 / 9',
-    width: '100%',
-    maxWidth: '457px',
+    aspectRatio: "16 / 9",
+    width: "100%",
+    maxWidth: "457px",
   });
 
   const headerStyle = css({
-    fontWeight: 'bold',
-    fontSize: 'larger',
+    fontWeight: "bold",
+    fontSize: "larger",
     color: `${theme.text}`,
-    '&:first-letter': {
-      textTransform: 'capitalize',
+    "&:first-letter": {
+      textTransform: "capitalize",
     },
   });
 
   const buttonsStyle = css({
     // TODO: Avoid hard-coding max-width
     "@media (max-width: 1550px)": {
-      width: '100%',
+      width: "100%",
     },
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   });
 
   // What state is the track in and can it be deactivated?
@@ -136,14 +136,14 @@ const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, e
   const deleteStatus = track.video_stream.enabled ? (enabledCount > 1 ? 0 : 1) : 2;
   const deleteEnabled = deleteStatus !== 1;
   const deleteText = [
-    t('trackSelection.deleteTrackText', 'Delete Track'),
-    t('trackSelection.cannotDeleteTrackText', 'Cannot Delete Track'),
-    t('trackSelection.restoreTrackText', 'Restore Track')
+    t("trackSelection.deleteTrackText", "Delete Track"),
+    t("trackSelection.cannotDeleteTrackText", "Cannot Delete Track"),
+    t("trackSelection.restoreTrackText", "Restore Track")
   ][deleteStatus];
   const deleteTooltip = [
-    t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.'),
-    t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
-    t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
+    t("trackSelection.deleteTrackTooltip", "Do not encode and publish this track."),
+    t("trackSelection.cannotDeleteTrackTooltip", "Cannot remove this track from publication."),
+    t("trackSelection.restoreTrackTooltip", "Encode and publish this track.")
   ][deleteStatus];
   const deleteIcon = [LuTrash, LuTrash, TrashRestore][deleteStatus];
   const trackEnabledChange = () => {
@@ -161,7 +161,7 @@ const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, e
           width="unset"
           height="unset"
           css={playerStyle}
-          style={{ opacity: track.video_stream.enabled ? '1' : '0.5' }}
+          style={{ opacity: track.video_stream.enabled ? "1" : "0.5" }}
           url={track.uri}
         />
         <div css={buttonsStyle}>
@@ -193,11 +193,11 @@ const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, to
   const buttonStyle = [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
-      padding: '16px',
-      maxHeight: '21px',
-      boxShadow: '',
+      padding: "16px",
+      maxHeight: "21px",
+      boxShadow: "",
       background: `${theme.element_bg}`,
-      textWrap: 'nowrap',
+      textWrap: "nowrap",
     }];
 
   const clickHandler = () => {

@@ -1,21 +1,21 @@
 import React from "react";
 
-import { basicButtonStyle, customIconStyle } from '../cssStyles';
+import { basicButtonStyle, customIconStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
 import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal } from "react-icons/lu";
-import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
+import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll
-} from '../redux/videoSlice';
+} from "../redux/videoSlice";
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -72,15 +72,15 @@ const CuttingActions: React.FC = () => {
   );
 
   const cuttingStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row" as const,
+    justifyContent: "center",
+    alignItems: "center",
   });
 
   const verticalLineStyle = css({
-    borderLeft: '2px solid #DDD;',
-    height: '32px',
+    borderLeft: "2px solid #DDD;",
+    height: "32px",
   });
 
   return (
@@ -89,8 +89,8 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.cut-button")}
         actionHandler={dispatchAction}
         action={cut}
-        tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
-        ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
+        tooltip={t("cuttingActions.cut-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
+        ariaLabelText={t("cuttingActions.cut-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
       />
       <div css={verticalLineStyle} />
       <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
@@ -101,9 +101,9 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.mergeLeft-button")}
         actionHandler={dispatchAction}
         action={mergeLeft}
-        tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
+        tooltip={t("cuttingActions.mergeLeft-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
         ariaLabelText={
-          t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })
+          t("cuttingActions.mergeLeft-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })
         }
       />
       <div css={verticalLineStyle} />
@@ -111,9 +111,9 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.mergeRight-button")}
         actionHandler={dispatchAction}
         action={mergeRight}
-        tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
+        tooltip={t("cuttingActions.mergeRight-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
         ariaLabelText={
-          t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })
+          t("cuttingActions.mergeRight-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })
         }
       />
       <div css={verticalLineStyle} />
@@ -121,8 +121,8 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.merge-all-button")}
         actionHandler={dispatchAction}
         action={mergeAll}
-        tooltip={t('cuttingActions.merge-all-tooltip')}
-        ariaLabelText={t('cuttingActions.merge-all-tooltip-aria')}
+        tooltip={t("cuttingActions.merge-all-tooltip")}
+        ariaLabelText={t("cuttingActions.merge-all-tooltip-aria")}
       />
       {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
         tooltip="Not implemented"
@@ -140,7 +140,7 @@ const CuttingActions: React.FC = () => {
  * CSS for cutting buttons
  */
 const cuttingActionButtonStyle = css({
-  padding: '16px',
+  padding: "16px",
   // boxShadow: `${theme.boxShadow}`,
   // background: `${theme.element_bg}`
 });
@@ -209,11 +209,11 @@ const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
   const theme = useTheme();
 
   return (
-    <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}>
+    <ThemedTooltip title={t("cuttingActions.delete-restore-tooltip", { hotkeyName: hotKeyName })}>
       <div css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
         ref={ref}
         role="button" tabIndex={0}
-        aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}
+        aria-label={t("cuttingActions.delete-restore-tooltip-aria", { hotkeyName: hotKeyName })}
         onClick={() => actionHandler(action, ref)}
         onKeyDown={(event: React.KeyboardEvent) => {
           if (event.key === " " || event.key === "Enter") {
@@ -222,7 +222,7 @@ const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
         }}
       >
         {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} />}
-        <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
+        <div>{isCurrentSegmentAlive ? t("cuttingActions.delete-button") : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>
   );

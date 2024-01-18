@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
-import { css } from '@emotion/react';
-import { calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleBold } from '../cssStyles';
+import { css } from "@emotion/react";
+import { calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -16,16 +16,16 @@ import {
   selectPostError,
   selectPostStatus,
   setFieldReadonly
-} from '../redux/metadataSlice';
+} from "../redux/metadataSlice";
 
-import { Form, Field, FieldInputProps } from 'react-final-form';
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
+import { Form, Field, FieldInputProps } from "react-final-form";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { DateTime as LuxonDateTime } from "luxon";
 
-import { configureFieldsAttributes, settings } from '../config';
+import { configureFieldsAttributes, settings } from "../config";
 import { useTheme } from "../themes";
 import { ThemeProvider } from "@mui/material/styles";
 import { cloneDeep } from "lodash";
@@ -37,7 +37,7 @@ import { ParseKeys } from "i18next";
  * Takes data from a redux slice and throws it into a react-final-form.
  * When submitting, the state in the redux slice gets updated
  *
- * If something doesn't work, main places of interest are the submit function
+ * If something doesn"t work, main places of interest are the submit function
  * and the initialValues function
  */
 const Metadata: React.FC = () => {
@@ -55,14 +55,14 @@ const Metadata: React.FC = () => {
 
   // Try to fetch URL from external API
   useEffect(() => {
-    if (getStatus === 'idle') {
+    if (getStatus === "idle") {
       dispatch(fetchMetadata());
     }
   }, [getStatus, dispatch]);
 
   // Overwrite readonly property of fields based on config settings
   useEffect(() => {
-    if (getStatus === 'success') {
+    if (getStatus === "success") {
       for (let catalogIndex = 0; catalogIndex < catalogs.length; catalogIndex++) {
         if (settings.metadata.configureFields) {
           const configureFields = settings.metadata.configureFields;
@@ -96,45 +96,45 @@ const Metadata: React.FC = () => {
    */
 
   const metadataStyle = css({
-    padding: '20px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    minWidth: '50%',
-    display: 'grid',
+    padding: "20px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    minWidth: "50%",
+    display: "grid",
   });
 
   const catalogStyle = css({
     background: `${theme.menu_background}`,
-    borderRadius: '5px',
+    borderRadius: "5px",
     boxShadow: `${theme.boxShadow_tiles}`,
-    marginTop: '24px',
+    marginTop: "24px",
     boxSizing: "border-box",
-    padding: '10px',
+    padding: "10px",
   });
 
   const fieldStyle = css({
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    lineHeight: '2em',
-    margin: '10px',
+    display: "flex",
+    flexFlow: "column nowrap",
+    lineHeight: "2em",
+    margin: "10px",
   });
 
   const fieldLabelStyle = css({
-    width: '110px',
-    fontSize: '1em',
-    fontWeight: 'bold',
+    width: "110px",
+    fontSize: "1em",
+    fontWeight: "bold",
     color: `${theme.text}`,
-    lineHeight: '32px',
+    lineHeight: "32px",
   });
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
     return css({
-      fontSize: '1em',
-      borderRadius: '5px',
-      boxShadow: isReadOnly ? '0 0 0px rgba(0, 0, 0, 0.3)' : '0 0 1px rgba(0, 0, 0, 0.3)',
+      fontSize: "1em",
+      borderRadius: "5px",
+      boxShadow: isReadOnly ? "0 0 0px rgba(0, 0, 0, 0.3)" : "0 0 1px rgba(0, 0, 0, 0.3)",
       ...(isReadOnly && { color: `${theme.text}` }),
       color: `${theme.text}`,
-      outline: isReadOnly ? '0px solid transparent' : `${theme.element_outline}`,
+      outline: isReadOnly ? "0px solid transparent" : `${theme.element_outline}`,
       "&:hover": {
         borderColor: isReadOnly ? undefined : theme.metadata_highlight,
       },
@@ -147,62 +147,62 @@ const Metadata: React.FC = () => {
   const inputFieldTypeStyle = (isReadOnly: boolean) => {
     return (
       css({
-        padding: '10px 10px',
-        border: '1px solid #ccc',
+        padding: "10px 10px",
+        border: "1px solid #ccc",
         background: isReadOnly ? `${theme.background}` : `${theme.element_bg}`,
         opacity: isReadOnly ? "0.6" : "1",
-        resize: 'vertical',
+        resize: "vertical",
       })
     );
   };
 
   const validateStyle = (isError: boolean) => {
     return css({
-      lineHeight: '32px',
-      marginLeft: '10px',
+      lineHeight: "32px",
+      marginLeft: "10px",
       ...(isError && { color: `${theme.error}` }),
-      fontWeight: 'bold',
+      fontWeight: "bold",
     });
   };
 
   // const buttonContainerStyle = css({
-  //   display: 'flex',
-  //   flexFlow: 'row nowrap',
-  //   justifyContent: 'space-around',
-  //   marginTop: '25px',
+  //   display: "flex",
+  //   flexFlow: "row nowrap",
+  //   justifyContent: "space-around",
+  //   marginTop: "25px",
   // })
 
-  // // TODO: Rework all div buttons so the ':enabled' pseudo-class does not screw them over
+  // // TODO: Rework all div buttons so the ":enabled" pseudo-class does not screw them over
   // const basicButtonStyleCOPY = css({
-  //   borderRadius: '10px',
+  //   borderRadius: "10px",
   //   cursor: "pointer",
   //   // Animation
   //   transitionDuration: "0.3s",
   //   transitionProperty: "transform",
   //   "&:hover:enabled": {
-  //     transform: 'scale(1.1)',
+  //     transform: "scale(1.1)",
   //   },
   //   "&:focus:enabled": {
-  //     transform: 'scale(1.1)',
+  //     transform: "scale(1.1)",
   //   },
   //   "&:active:enabled": {
-  //     transform: 'scale(0.9)',
+  //     transform: "scale(0.9)",
   //   },
   //   // Flex position child elements
-  //   display: 'flex',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   gap: '10px',
-  //   textAlign: 'center' as const,
+  //   display: "flex",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   gap: "10px",
+  //   textAlign: "center" as const,
   // });
 
   // const submitButtonStyle = css({
-  //   background: 'snow',
-  //   border: '1px solid #ccc',
+  //   background: "snow",
+  //   border: "1px solid #ccc",
 
   //   "&[disabled]": {
-  //     opacity: '0.6',
-  //     cursor: 'not-allowed',
+  //     opacity: "0.6",
+  //     cursor: "not-allowed",
   //   },
   // })
 
@@ -292,10 +292,10 @@ const Metadata: React.FC = () => {
     }
 
     let dt = undefined;
-    if (Object.prototype.toString.call(date) === '[object Date]') {
+    if (Object.prototype.toString.call(date) === "[object Date]") {
       dt = LuxonDateTime.fromJSDate(date);
     }
-    if (typeof date === 'string') {
+    if (typeof date === "string") {
       dt = LuxonDateTime.fromISO(date);
     }
 
@@ -311,7 +311,7 @@ const Metadata: React.FC = () => {
 
   /**
    * Returns the desired combination of validators for a given field
-   * TODO: Fix 'composeValidators' so this function can actually work as advertised
+   * TODO: Fix "composeValidators" so this function can actually work as advertised
    * @param field
    */
   const getValidators = (field: MetadataField) => {
@@ -389,9 +389,9 @@ const Metadata: React.FC = () => {
     }
 
     // If the value is hidden an object due to react-select, extract it
-    if (typeof value === 'object' && value !== null && Object.prototype.hasOwnProperty.call(value, "submitValue")) {
+    if (typeof value === "object" && value !== null && Object.prototype.hasOwnProperty.call(value, "submitValue")) {
       returnValue = value.submitValue;
-    } else if (typeof value === 'object' && value !== null && value.__isNew__) {
+    } else if (typeof value === "object" && value !== null && value.__isNew__) {
       returnValue = value.value;
     }
 
@@ -402,7 +402,7 @@ const Metadata: React.FC = () => {
 
     // For these fields, the value needs to be inside an array
     if (field && (field.type === "date" || field.type === "time") &&
-      Object.prototype.toString.call(returnValue) === '[object Date]') {
+      Object.prototype.toString.call(returnValue) === "[object Date]") {
       // If invalid date
       if ((isNaN(returnValue.getTime()))) {
         // Do nothing
@@ -459,7 +459,7 @@ const Metadata: React.FC = () => {
    */
   const generateReactSelectLibrary = (field: MetadataField) => {
     if (field.collection) {
-      // For whatever reason react-select uses 'value' as their key, which is not at all confusing
+      // For whatever reason react-select uses "value" as their key, which is not at all confusing
       const library: [{ value: any, label: any, submitValue: any; }] =
         [{ value: "", label: "No value", submitValue: "" }];
       Object.entries(field.collection).forEach(([key, value]) => {
@@ -545,7 +545,7 @@ const Metadata: React.FC = () => {
             readOnly={field.readOnly}
             css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
               {
-                resize: 'none',
+                resize: "none",
               }
             ]}
             data-testid="dateTimePicker"
@@ -563,7 +563,7 @@ const Metadata: React.FC = () => {
             readOnly={field.readOnly}
             css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
               {
-                resize: 'none',
+                resize: "none",
               }
             ]}
           />
@@ -599,7 +599,7 @@ const Metadata: React.FC = () => {
     /**
      * Wrapper function for component generation.
      * Handles the special case of DateTimePicker/TimePicker, which
-     * can't handle empty string as a value (which is what Opencast uses to
+     * can"t handle empty string as a value (which is what Opencast uses to
      * represent no date/time)
      */
     const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
@@ -607,7 +607,7 @@ const Metadata: React.FC = () => {
         const { value, ...other } = input;
         return generateComponent(field, other);
       }
-      // <input type="datetime-local"> is picky about its value and won't accept
+      // <input type="datetime-local"> is picky about its value and won"t accept
       // global datetime strings, so we have to convert them to local ourselves.
       // TODO: Also we really should not be modifying the input element like that
       // so ideally the conversion happens somewhere else in the code
@@ -627,7 +627,7 @@ const Metadata: React.FC = () => {
       <Field key={fieldIndex}
         name={"catalog" + catalogIndex + "." + field.id}
         validate={getValidators(field)}
-        // react-final-form complains if we don't specify checkboxes here
+        // react-final-form complains if we don"t specify checkboxes here
         type={field.type === "boolean" ? "checkbox" : undefined}
       >
         {({ input, meta }) => (

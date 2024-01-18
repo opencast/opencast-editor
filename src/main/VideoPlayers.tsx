@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -19,22 +19,22 @@ import {
   setClickTriggered,
   selectClickTriggered,
   setCurrentlyAt
-} from '../redux/videoSlice';
+} from "../redux/videoSlice";
 
-import ReactPlayer, { Config } from 'react-player';
+import ReactPlayer, { Config } from "react-player";
 
-import { roundToDecimalPlace } from '../util/utilityFunctions';
+import { roundToDecimalPlace } from "../util/utilityFunctions";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { sleep } from './../util/utilityFunctions';
+import { sleep } from "./../util/utilityFunctions";
 
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { useTheme } from "../themes";
 
-import { backgroundBoxStyle, flexGapReplacementStyle } from '../cssStyles';
+import { backgroundBoxStyle, flexGapReplacementStyle } from "../cssStyles";
 import { BaseReactPlayerProps } from "react-player/base";
 
 const VideoPlayers: React.FC<{
@@ -51,14 +51,14 @@ const VideoPlayers: React.FC<{
   const videoCount = useAppSelector(selectVideoCount);
 
   const videoPlayerAreaStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: widthInPercent + '%',
-    borderRadius: '5px',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: widthInPercent + "%",
+    borderRadius: "5px",
     ...(flexGapReplacementStyle(10, false)),
 
-    maxHeight: maxHeightInPixel + 'px',
+    maxHeight: maxHeightInPixel + "px",
   });
 
   // Initialize video players
@@ -210,7 +210,7 @@ export const VideoPlayer = React.forwardRef(
       // Restart the video from the beginning when at the end
       if (isPrimary && currentlyAt >= duration) {
         dispatch(setCurrentlyAt(0));
-        // Flip-flop the "isPlaying" switch, or else the video won't start playing
+        // Flip-flop the "isPlaying" switch, or else the video won"t start playing
         dispatch(setIsPlaying(false));
         dispatch(setIsPlaying(true));
       }
@@ -251,7 +251,7 @@ export const VideoPlayer = React.forwardRef(
     }, [isAspectRatioUpdated, ready]);
 
     // Callback specifically for the subtitle editor view
-    // When changing urls while the player is playing, don't reset to 0
+    // When changing urls while the player is playing, don"t reset to 0
     // (due to onProgressCallback resetting to 0),
     // but keep the current currentlyAt
     useEffect(() => {
@@ -266,7 +266,7 @@ export const VideoPlayer = React.forwardRef(
       // Only trigger workaround in Firefox, as it will cause issues in Chrome
       /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
       // @ts-ignore
-      if (typeof InstallTrigger !== 'undefined') {
+      if (typeof InstallTrigger !== "undefined") {
         reAddTrack();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -276,11 +276,11 @@ export const VideoPlayer = React.forwardRef(
       file: {
         attributes: {
           // Skip player when navigating page with keyboard
-          tabIndex: '-1',
+          tabIndex: "-1",
           crossOrigin: "anonymous"    // allow thumbnail generation
         },
         tracks: [
-          { kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant' }
+          { kind: "subtitles", src: subtitleUrl, srcLang: "en", default: true, label: "I am irrelevant" }
         ]
       }
     };
@@ -293,10 +293,10 @@ export const VideoPlayer = React.forwardRef(
    * https://github.com/CookPete/react-player/issues/490
    */
     function reAddTrack() {
-      const video = document.querySelector('video');
+      const video = document.querySelector("video");
 
       if (video) {
-        const oldTracks = video.querySelectorAll('track');
+        const oldTracks = video.querySelectorAll("track");
         oldTracks.forEach(oldTrack => {
           video.removeChild(oldTrack);
         });
@@ -305,7 +305,7 @@ export const VideoPlayer = React.forwardRef(
       if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
         // eslint-disable-next-line array-callback-return
         playerConfig.file.tracks.map((t, trackIdx) => {
-          const track = document.createElement('track');
+          const track = document.createElement("track");
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.kind = t.kind!;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -316,26 +316,26 @@ export const VideoPlayer = React.forwardRef(
           track.default = t.default!;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.src = t.src!;
-          track.track.mode = 'showing';    // Because the load callback may sometimes not execute properly
-          track.addEventListener('error', (_e: Event) => {
+          track.track.mode = "showing";    // Because the load callback may sometimes not execute properly
+          track.addEventListener("error", (_e: Event) => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             console.warn(`Cannot load track ${t.src!}`);
           });
-          track.addEventListener('load', (e: Event) => {
+          track.addEventListener("load", (e: Event) => {
             const textTrack = e.currentTarget as HTMLTrackElement;
             if (textTrack) {
               if (t.default === true) {
-                textTrack.track.mode = 'showing';
+                textTrack.track.mode = "showing";
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                video!.textTracks[trackIdx].mode = 'showing'; // thanks Firefox
+                video!.textTracks[trackIdx].mode = "showing"; // thanks Firefox
               } else {
-                textTrack.track.mode = 'hidden';
+                textTrack.track.mode = "hidden";
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                video!.textTracks[trackIdx].mode = 'hidden'; // thanks Firefox
+                video!.textTracks[trackIdx].mode = "hidden"; // thanks Firefox
               }
             }
           });
-          const video = document.querySelector('video');
+          const video = document.querySelector("video");
           if (video) {
             video.appendChild(track);
           }
@@ -355,7 +355,7 @@ export const VideoPlayer = React.forwardRef(
         const canvasContext = canvas.getContext("2d");
         if (canvasContext !== null) {
           canvasContext.drawImage(video, 0, 0);
-          return canvas.toDataURL('image/png');
+          return canvas.toDataURL("image/png");
         }
       },
       getWidth() {
@@ -366,19 +366,19 @@ export const VideoPlayer = React.forwardRef(
     const errorBoxStyle = css({
       ...(!errorState) && { display: "none" },
       borderColor: `${theme.error}`,
-      borderStyle: 'dashed',
-      fontWeight: 'bold',
-      padding: '10px',
+      borderStyle: "dashed",
+      fontWeight: "bold",
+      padding: "10px",
     });
 
     const reactPlayerStyle = css({
-      aspectRatio: '16 / 9',    // Hard-coded for now because there are problems with updating this value at runtime
+      aspectRatio: "16 / 9",    // Hard-coded for now because there are problems with updating this value at runtime
 
-      overflow: 'hidden', // Required for borderRadius to show
-      ...(first) && { borderTopLeftRadius: '5px' },
-      ...(first) && { borderBottomLeftRadius: '5px' },
-      ...(last) && { borderTopRightRadius: '5px' },
-      ...(last) && { borderBottomRightRadius: '5px' },
+      overflow: "hidden", // Required for borderRadius to show
+      ...(first) && { borderTopLeftRadius: "5px" },
+      ...(first) && { borderBottomLeftRadius: "5px" },
+      ...(last) && { borderTopRightRadius: "5px" },
+      ...(last) && { borderBottomRightRadius: "5px" },
     });
 
     const render = () => {

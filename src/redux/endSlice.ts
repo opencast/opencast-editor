@@ -1,20 +1,20 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface end {
   end: boolean,
-  value: 'success' | 'discarded',
+  value: "success" | "discarded",
 }
 
 const initialState: end = {
   end: false,
-  value: 'success',
+  value: "success",
 };
 
 /**
  * Slice for the main menu state
  */
 export const endSlice = createSlice({
-  name: 'endState',
+  name: "endState",
   initialState,
   reducers: {
     setEnd: (state, action: PayloadAction<{ hasEnded: end["end"], value: end["value"]; }>) => {

@@ -1,16 +1,16 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { client } from '../util/client';
-import { Segment, PostEditArgument, httpRequestState } from '../types';
-import { settings } from '../config';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { client } from "../util/client";
+import { Segment, PostEditArgument, httpRequestState } from "../types";
+import { settings } from "../config";
 
 const initialState: httpRequestState = {
-  status: 'idle',
+  status: "idle",
   error: undefined,
-  errorReason: 'unknown',
+  errorReason: "unknown",
 };
 
 export const postVideoInformation =
-  createAsyncThunk('video/postVideoInformation', async (argument: PostEditArgument) => {
+  createAsyncThunk("video/postVideoInformation", async (argument: PostEditArgument) => {
     if (!settings.id) {
       throw new Error("Missing media package id");
     }
@@ -30,25 +30,25 @@ export const postVideoInformation =
  * TODO: Create a wrapper for this and workflowPostAndProcessSlice
  */
 const workflowPostSlice = createSlice({
-  name: 'workflowPostState',
+  name: "workflowPostState",
   initialState,
   reducers: {
     resetPostRequestState: state => {
-      state.status = 'idle';
+      state.status = "idle";
     }
   },
   extraReducers: builder => {
     builder.addCase(
       postVideoInformation.pending, (state, _action) => {
-        state.status = 'loading';
+        state.status = "loading";
       });
     builder.addCase(
       postVideoInformation.fulfilled, (state, _action) => {
-        state.status = 'success';
+        state.status = "success";
       });
     builder.addCase(
       postVideoInformation.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       });
   }

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface finish {
   value: "Save changes" | "Start processing" | "Discard changes" | undefined,
@@ -14,7 +14,7 @@ const initialState: finish = {
  * Slice for the main menu state
  */
 export const finishSlice = createSlice({
-  name: 'finishState',
+  name: "finishState",
   initialState,
   reducers: {
     setState: (state, action: PayloadAction<finish["value"]>) => {

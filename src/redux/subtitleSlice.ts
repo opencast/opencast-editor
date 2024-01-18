@@ -1,8 +1,8 @@
-import { Segment, SubtitleCue, SubtitlesInEditor } from './../types';
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
-import { roundToDecimalPlace } from '../util/utilityFunctions';
-import type { AppDispatch, RootState } from '../redux/store';
-import { video } from './videoSlice';
+import { Segment, SubtitleCue, SubtitlesInEditor } from "./../types";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { roundToDecimalPlace } from "../util/utilityFunctions";
+import type { AppDispatch, RootState } from "../redux/store";
+import { video } from "./videoSlice";
 
 export interface subtitle {
   isDisplayEditView: boolean;    // Should the edit view be displayed
@@ -51,7 +51,7 @@ const updateCurrentlyAt = (state: subtitle, milliseconds: number) => {
  * Slice for the subtitle editor state
  */
 export const subtitleSlice = createSlice({
-  name: 'subtitleState',
+  name: "subtitleState",
   initialState,
   reducers: {
     setIsDisplayEditView: (state, action: PayloadAction<subtitle["isDisplayEditView"]>) => {
@@ -111,7 +111,7 @@ export const subtitleSlice = createSlice({
         text: action.payload.text,
         startTime: Math.round(startTime),
         endTime: Math.round(action.payload.endTime),
-        tree: { children: [{ type: 'text', value: action.payload.text }] }
+        tree: { children: [{ type: "text", value: action.payload.text }] }
       };
 
       // Trigger a callback in the list component that focuses the newly added element
@@ -230,7 +230,7 @@ export const selectFocusSegmentTriggered2 =
   (state: { subtitleState: { focusSegmentTriggered2: subtitle["focusSegmentTriggered2"]; }; }) =>
     state.subtitleState.focusSegmentTriggered2;
 // Hardcoding this value to achieve a desired size for the video player
-// TODO: Don't hardcode this value, instead make the video player component more flexible
+// TODO: Don"t hardcode this value, instead make the video player component more flexible
 export const selectAspectRatio = (_state: { subtitleState: { aspectRatios: subtitle["aspectRatios"]; }; }) =>
   50;
 
