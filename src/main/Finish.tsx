@@ -58,7 +58,15 @@ const Finish : React.FC = () => {
 /**
  * Takes you to a different page
  */
-export const PageButton : React.FC<{pageNumber: number, label: string, Icon: IconType}> = ({pageNumber, label, Icon}) => {
+export const PageButton : React.FC<{
+  pageNumber: number,
+  label: string,
+  Icon: IconType
+}> = ({
+  pageNumber,
+  label,
+  Icon
+}) => {
 
   const theme = useTheme();
 
@@ -113,7 +121,12 @@ export const CallbackButton : React.FC = () => {
             openCallbackUrl()
           } }}>
           <LuDoorOpen />
-          <span>{settings.callbackSystem ? t("various.callback-button-system", {system: settings.callbackSystem}) : t("various.callback-button-generic")}</span>
+          <span>
+            {settings.callbackSystem ?
+              t("various.callback-button-system", {system: settings.callbackSystem}) :
+              t("various.callback-button-generic")
+            }
+          </span>
         </div>
       }
     </>

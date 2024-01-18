@@ -245,7 +245,11 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
 
   // Validate a settings value with a validation function. Returns the final
   // value of the setting or `null` if it should be ignored.
-  const validateValue = (validation: (arg0: any, arg1: boolean, arg2: string) => any, value: Record<string, any> | null, path: string) => {
+  const validateValue = (
+    validation: (arg0: any, arg1: boolean, arg2: string) => any,
+    value: Record<string, any> | null,
+    path: string
+  ) => {
     try {
       const newValue = validation(value, allowParse, src);
       return newValue === undefined ? value : newValue;

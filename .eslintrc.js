@@ -17,10 +17,6 @@ module.exports = {
     // Many multiline lists do not have a trailing comma right now
     "comma-dangle": ["warn", "only-multiline"],
 
-    // Currently there are quite a lot of lines longer than 120 chars (85 ones).
-    // And 34 even longer than 140 chars.
-    "max-len": "off",
-
     // Currently 120 warnings.
     "@typescript-eslint/no-explicit-any": "off",
 

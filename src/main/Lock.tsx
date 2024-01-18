@@ -14,9 +14,12 @@ const Lock: React.FC = () => {
   const endpoint = `${settings.opencast.url}/editor/${settings.id}/lock`
 
   const dispatch = useDispatch();
-  const lockingActive = useSelector((state: { videoState: { lockingActive: video["lockingActive"] } }) => state.videoState.lockingActive);
-  const lockRefresh = useSelector((state: { videoState: { lockRefresh: video["lockRefresh"] } }) => state.videoState.lockRefresh);
-  const lockState = useSelector((state: { videoState: { lockState: video["lockState"] } }) => state.videoState.lockState);
+  const lockingActive = useSelector((state: { videoState: { lockingActive: video["lockingActive"] } }) =>
+    state.videoState.lockingActive);
+  const lockRefresh = useSelector((state: { videoState: { lockRefresh: video["lockRefresh"] } }) =>
+    state.videoState.lockRefresh);
+  const lockState = useSelector((state: { videoState: { lockState: video["lockState"] } }) =>
+    state.videoState.lockState);
   const lock = useSelector((state: { videoState: { lock: video["lock"] } }) => state.videoState.lock);
   const isEnd = useSelector(selectIsEnd)
 

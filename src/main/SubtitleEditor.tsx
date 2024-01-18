@@ -39,9 +39,13 @@ const SubtitleEditor : React.FC = () => {
   // Prepare subtitle in redux
   useEffect(() => {
     // Parse subtitle data from Opencast
-    if (subtitle?.cues === undefined && captionTrack !== undefined && captionTrack.subtitle !== undefined && selectedId) {
+    if (subtitle?.cues === undefined && captionTrack !== undefined && captionTrack.subtitle !== undefined
+      && selectedId) {
       try {
-        dispatch(setSubtitle({identifier: selectedId, subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags } }))
+        dispatch(setSubtitle({
+          identifier: selectedId,
+          subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags }
+        }))
       } catch (error) {
         if (error instanceof Error) {
           setGetError(error.message)

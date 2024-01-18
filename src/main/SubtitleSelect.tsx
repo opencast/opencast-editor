@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation, subtitleSelectStyle } from "../cssStyles";
+import {
+  basicButtonStyle,
+  flexGapReplacementStyle,
+  tileButtonStyle,
+  disableButtonAnimation,
+  subtitleSelectStyle
+} from "../cssStyles";
 import { settings, subtitleTags } from '../config'
 import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/subtitleSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -260,7 +266,8 @@ const SubtitleAddButton: React.FC<{
     <ThemedTooltip title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}>
       <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
         role="button" tabIndex={0}
-        aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
+        aria-label={isPlusDisplay ?
+          t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
         onClick={() => setIsPlusDisplay(false)}
         onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
           setIsPlusDisplay(false)

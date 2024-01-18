@@ -43,10 +43,15 @@ export const errorSlice = createSlice({
 export const { setError } = errorSlice.actions
 
 // Export Selectors
-export const selectIsError = (state: { errorState: { error: error["error"] }; }) => state.errorState.error
-export const selectErrorTitle = (state: { errorState: { errorTitle: error["errorTitle"] }; }) => state.errorState.errorTitle
-export const selectErrorMessage = (state: { errorState: { errorMessage: error["errorMessage"] }; }) => state.errorState.errorMessage
-export const selectErrorDetails = (state: { errorState: { errorDetails: error["errorDetails"] }; }) => state.errorState.errorDetails
-export const selectErrorIcon = (state: { errorState: { errorIcon: error["errorIcon"] }; }) => state.errorState.errorIcon
+export const selectIsError = (state: { errorState: { error: error["error"] }; }) =>
+  state.errorState.error
+export const selectErrorTitle = (state: { errorState: { errorTitle: error["errorTitle"] }; }) =>
+  state.errorState.errorTitle
+export const selectErrorMessage = (state: { errorState: { errorMessage: error["errorMessage"] }; }) =>
+  state.errorState.errorMessage
+export const selectErrorDetails = (state: { errorState: { errorDetails: error["errorDetails"] }; }) =>
+  state.errorState.errorDetails
+export const selectErrorIcon = (state: { errorState: { errorIcon: error["errorIcon"] }; }) =>
+  state.errorState.errorIcon
 
 export default errorSlice.reducer
