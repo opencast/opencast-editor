@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 import {
   basicButtonStyle,
   backOrContinueStyle,
   errorBoxStyle,
   flexGapReplacementStyle,
   spinningStyle
-} from '../cssStyles'
+} from '../cssStyles';
 
-import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal} from "react-icons/lu";
+import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -17,10 +17,10 @@ import {
   selectTracks,
   setHasChanges as videoSetHasChanges,
   selectSelectedWorkflowId
-} from '../redux/videoSlice'
-import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice'
+} from '../redux/videoSlice';
+import { postVideoInformationWithWorkflow, selectStatus, selectError } from '../redux/workflowPostAndProcessSlice';
 
-import { PageButton } from './Finish'
+import { PageButton } from './Finish';
 import { setEnd } from "../redux/endSlice";
 
 import { useTranslation } from 'react-i18next';
@@ -37,12 +37,12 @@ import { useTheme } from "../themes";
 /**
  * Will eventually display settings based on the selected workflow index
  */
-const WorkflowConfiguration : React.FC = () => {
+const WorkflowConfiguration: React.FC = () => {
 
   const { t } = useTranslation();
 
   const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
-  const postAndProcessError = useAppSelector(selectError)
+  const postAndProcessError = useAppSelector(selectError);
   const postMetadataStatus = useAppSelector(selectPostStatus);
   const postMetadataError = useAppSelector(selectPostError);
   const theme = useTheme();
@@ -53,47 +53,47 @@ const WorkflowConfiguration : React.FC = () => {
     alignItems: 'center',
     padding: '20px',
     ...(flexGapReplacementStyle(30, false)),
-  })
+  });
 
   return (
     <div css={workflowConfigurationStyle}>
       <h2>{t("workflowConfig.headline-text")}</h2>
-      <LuMoreHorizontal css={{fontSize: 80}} />
+      <LuMoreHorizontal css={{ fontSize: 80 }} />
       Placeholder
       <div>{t("workflowConfig.satisfied-text")}</div>
       <div css={backOrContinueStyle}>
-        <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={LuChevronLeft}/>
-        <SaveAndProcessButton text={t("workflowConfig.confirm-button")}/>
+        <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={LuChevronLeft} />
+        <SaveAndProcessButton text={t("workflowConfig.confirm-button")} />
       </div>
       <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postAndProcessError ? t("various.error-details-text",
-          {errorMessage: postAndProcessError}) :
-          t("various.error-text")}<br/>
+          { errorMessage: postAndProcessError }) :
+          t("various.error-text")}<br />
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
         {postMetadataError ? t("various.error-details-text",
-          {errorMessage: postMetadataError}) :
+          { errorMessage: postMetadataError }) :
           t("various.error-text")}<br />
       </div>
     </div>
   );
-}
+};
 
 /**
  * Button that sends a post request to save current changes
  * and starts the selected workflow
  */
-export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
+export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
 
   // Initialize redux variables
   const dispatch = useAppDispatch();
 
-  const selectedWorkflowId = useAppSelector(selectSelectedWorkflowId)
-  const segments = useAppSelector(selectSegments)
-  const tracks = useAppSelector(selectTracks)
-  const subtitles = useAppSelector(selectSubtitles)
+  const selectedWorkflowId = useAppSelector(selectSelectedWorkflowId);
+  const segments = useAppSelector(selectSegments);
+  const tracks = useAppSelector(selectTracks);
+  const subtitles = useAppSelector(selectSubtitles);
   const workflowStatus = useAppSelector(selectStatus);
   const metadataStatus = useAppSelector(selectPostStatus);
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
@@ -102,59 +102,59 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
   // Let users leave the page without warning after a successful save
   useEffect(() => {
     if (workflowStatus === 'success' && metadataStatus === 'success') {
-      dispatch(setEnd({hasEnded: true, value: 'success'}))
-      dispatch(videoSetHasChanges(false))
-      dispatch(metadataSetHasChanges(false))
+      dispatch(setEnd({ hasEnded: true, value: 'success' }));
+      dispatch(videoSetHasChanges(false));
+      dispatch(metadataSetHasChanges(false));
     }
-  }, [dispatch, metadataStatus, workflowStatus])
+  }, [dispatch, metadataStatus, workflowStatus]);
 
   const prepareSubtitles = () => {
-    const subtitlesForPosting = []
+    const subtitlesForPosting = [];
 
     for (const identifier in subtitles) {
       subtitlesForPosting.push({
         id: identifier,
         subtitle: serializeSubtitle(subtitles[identifier].cues),
         tags: subtitles[identifier].tags
-      })
+      });
     }
-    return subtitlesForPosting
-  }
+    return subtitlesForPosting;
+  };
 
   // Dispatches first save request
   // Subsequent save requests should be wrapped in useEffect hooks,
   // so they are only sent after the previous one has finished
   const saveAndProcess = () => {
-    setMetadataSaveStarted(true)
-    dispatch(postMetadata())
-  }
+    setMetadataSaveStarted(true);
+    dispatch(postMetadata());
+  };
 
   // Subsequent save request
   useEffect(() => {
     if (metadataStatus === 'success' && metadataSaveStarted) {
-      setMetadataSaveStarted(false)
+      setMetadataSaveStarted(false);
       dispatch(postVideoInformationWithWorkflow({
         segments: segments,
         tracks: tracks,
-        workflow: [{id: selectedWorkflowId}],
+        workflow: [{ id: selectedWorkflowId }],
         subtitles: prepareSubtitles()
-      }))
+      }));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadataStatus])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadataStatus]);
 
   // Update based on current fetching status
-  let Icon = LuDatabase
-  let spin = false
+  let Icon = LuDatabase;
+  let spin = false;
   if (workflowStatus === 'failed' || metadataStatus === 'failed') {
-    Icon = LuAlertCircle
-    spin = false
+    Icon = LuAlertCircle;
+    spin = false;
   } else if (workflowStatus === 'success' && metadataStatus === 'success') {
-    Icon = LuCheck
-    spin = false
+    Icon = LuCheck;
+    spin = false;
   } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
-    Icon = LuLoader
-    spin = true
+    Icon = LuLoader;
+    spin = true;
 
   }
 
@@ -162,19 +162,21 @@ export const SaveAndProcessButton: React.FC<{text: string}> = ({text}) => {
     padding: '16px',
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
-  })
+  });
 
   return (
     <div css={[basicButtonStyle(theme), saveButtonStyle]}
       role="button" tabIndex={0}
       onClick={saveAndProcess}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        saveAndProcess()
-      } }}>
-      <Icon css={spin ? spinningStyle : undefined}/>
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === " " || event.key === "Enter") {
+          saveAndProcess();
+        }
+      }}>
+      <Icon css={spin ? spinningStyle : undefined} />
       <span>{text}</span>
     </div>
   );
-}
+};
 
 export default WorkflowConfiguration;

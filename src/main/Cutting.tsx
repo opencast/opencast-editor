@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import CuttingActions from "./CuttingActions"
+import CuttingActions from "./CuttingActions";
 import Timeline from './Timeline';
 import {
   fetchVideoInformation,
@@ -35,18 +35,19 @@ const Cutting: React.FC = () => {
 
   // Init redux variables
   const dispatch = useAppDispatch();
-  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"] } }) =>
+  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"]; }; }) =>
     state.videoState.status);
-  const error = useAppSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
-  const duration = useAppSelector(selectDuration)
+  const error = useAppSelector((state: { videoState: { error: httpRequestState["error"]; }; }) =>
+    state.videoState.error);
+  const duration = useAppSelector(selectDuration);
   const theme = useTheme();
-  const errorReason = useAppSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) =>
-    state.videoState.errorReason)
+  const errorReason = useAppSelector((state: { videoState: { errorReason: httpRequestState["errorReason"]; }; }) =>
+    state.videoState.errorReason);
 
   // Try to fetch URL from external API
   useEffect(() => {
     if (videoURLStatus === 'idle') {
-      dispatch(fetchVideoInformation())
+      dispatch(fetchVideoInformation());
     } else if (videoURLStatus === 'failed') {
       if (errorReason === 'workflowActive') {
         dispatch(setError({
@@ -54,13 +55,13 @@ const Cutting: React.FC = () => {
           errorTitle: t("error.workflowActive-errorTitle"),
           errorMessage: t("error.workflowActive-errorMessage"),
           errorIcon: LuMoreHorizontal
-        }))
+        }));
       } else {
         dispatch(setError({
           error: true,
           errorMessage: t("video.comError-text"),
           errorDetails: error
-        }))
+        }));
       }
     } else if (videoURLStatus === 'success') {
       if (duration === null) {
@@ -68,10 +69,10 @@ const Cutting: React.FC = () => {
           error: true,
           errorMessage: t("video.durationError-text"),
           errorDetails: error
-        }))
+        }));
       }
     }
-  }, [videoURLStatus, dispatch, error, t, errorReason, duration])
+  }, [videoURLStatus, dispatch, error, t, errorReason, duration]);
 
   // Style
   const cuttingStyle = css({
@@ -86,7 +87,7 @@ const Cutting: React.FC = () => {
   return (
     <div css={cuttingStyle}>
       <CuttingHeader />
-      <VideoPlayers refs={undefined}/>
+      <VideoPlayers refs={undefined} />
       <div css={videosStyle(theme)}>
         <Timeline
           timelineHeight={260}
@@ -110,14 +111,14 @@ const Cutting: React.FC = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
 
 const CuttingHeader: React.FC = () => {
 
-  const title = useAppSelector(selectTitle)
-  const metadataTitle = useAppSelector(selectTitleFromEpisodeDc)
+  const title = useAppSelector(selectTitle);
+  const metadataTitle = useAppSelector(selectTitleFromEpisodeDc);
   const theme = useTheme();
 
   return (
@@ -125,6 +126,6 @@ const CuttingHeader: React.FC = () => {
       {metadataTitle ? metadataTitle : title}
     </div>
   );
-}
+};
 
-export default Cutting
+export default Cutting;

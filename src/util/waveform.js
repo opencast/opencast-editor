@@ -49,7 +49,7 @@ export function Waveform(opts) {
       })
       .catch(e => {
         console.log("Waveform Worker: " + e);
-        this._error = e.toString()
+        this._error = e.toString();
         this.onerror.forEach(fn => fn(e.toString()));
       });
   }
@@ -108,7 +108,7 @@ Waveform.prototype = {
           let reader = new FileReader();
           reader.onload = function() {
             res(reader.result);
-          }
+          };
           reader.readAsArrayBuffer(arraybuffer);
         }
       })
@@ -120,12 +120,12 @@ Waveform.prototype = {
           })
           .catch(e => {
             reject(e);
-          })
+          });
       })
       .catch(e => {
         reject(e);
-      })
-    })
+      });
+    });
   },
   getAudioData: function(buffer) {
     buffer = buffer || this.buffer;

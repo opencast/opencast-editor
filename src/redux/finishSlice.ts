@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface finish {
   value: "Save changes" | "Start processing" | "Discard changes" | undefined,
@@ -8,7 +8,7 @@ export interface finish {
 const initialState: finish = {
   value: "Start processing",
   pageNumber: 0,
-}
+};
 
 /**
  * Slice for the main menu state
@@ -24,15 +24,15 @@ export const finishSlice = createSlice({
       state.pageNumber = action.payload;
     }
   }
-})
+});
 
 // Export Actions
-export const { setState, setPageNumber } = finishSlice.actions
+export const { setState, setPageNumber } = finishSlice.actions;
 
 // Export Selectors
 export const selectFinishState = (state: { finishState: { value: finish["value"]; }; }) =>
-  state.finishState.value
+  state.finishState.value;
 export const selectPageNumber = (state: { finishState: { pageNumber: finish["pageNumber"]; }; }) =>
-  state.finishState.pageNumber
+  state.finishState.pageNumber;
 
-export default finishSlice.reducer
+export default finishSlice.reducer;

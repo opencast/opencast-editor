@@ -3,69 +3,69 @@
 import { match, useColorScheme } from "@opencast/appkit";
 import { COLORS } from "./util/appkit";
 
-export const useTheme = () : Theme => {
-  const scheme = useColorScheme()
+export const useTheme = (): Theme => {
+  const scheme = useColorScheme();
   return match(scheme.scheme, {
     "light": () => lightMode,
     "dark": () => darkMode,
     "light-high-contrast": () => highContrastLightMode,
     "dark-high-contrast": () => highContrastDarkMode,
-  })
-}
+  });
+};
 
 export interface Theme {
-  background: string
-  menu_background: string
-  text: string
-  error: string
-  element_bg: string
-  multiValue: string
-  focused: string
-  focus_text: string
-  selected: string
-  disabled: string
-  menuBorder: string
-  boxShadow: string
-  boxShadow_tiles: string
-  singleKey_bg: string
-  singleKey_border: string
-  singleKey_boxShadow: string
-  invert_wave: string
-  inverted_text: string
-  tooltip: string
-  tooltip_text: string
-  element_outline: string
-  selected_text: string
-  dropdown_border: string
-  menuButton_outline: string
-  button_outline: string
-  button_color: string
-  indicator_color: string
-  icon_color: string
-  slider_thumb_color: string
-  slider_thumb_shadow: string
-  slider_track_color: string
-  background_finish_menu_icon: string
-  background_play_icon: string
-  background_preview_icon: string
-  waveform_filter: string
-  waveform_bg: string
-  scrubber: string
-  scrubber_handle: string
-  scrubber_icon: string
-  subtitle_segment_bg: string
-  subtitle_segment_border: string
-  subtitle_segment_text: string
-  header_bg: string
-  header_text: string
-  header_button_hover_bg: string
-  metadata_highlight: string
-  clock_bg: string
-  clock_border: string
-  clock_hands: string
-  clock_focus: string
-  digit_selected: string
-  text_shadow: string
+  background: string;
+  menu_background: string;
+  text: string;
+  error: string;
+  element_bg: string;
+  multiValue: string;
+  focused: string;
+  focus_text: string;
+  selected: string;
+  disabled: string;
+  menuBorder: string;
+  boxShadow: string;
+  boxShadow_tiles: string;
+  singleKey_bg: string;
+  singleKey_border: string;
+  singleKey_boxShadow: string;
+  invert_wave: string;
+  inverted_text: string;
+  tooltip: string;
+  tooltip_text: string;
+  element_outline: string;
+  selected_text: string;
+  dropdown_border: string;
+  menuButton_outline: string;
+  button_outline: string;
+  button_color: string;
+  indicator_color: string;
+  icon_color: string;
+  slider_thumb_color: string;
+  slider_thumb_shadow: string;
+  slider_track_color: string;
+  background_finish_menu_icon: string;
+  background_play_icon: string;
+  background_preview_icon: string;
+  waveform_filter: string;
+  waveform_bg: string;
+  scrubber: string;
+  scrubber_handle: string;
+  scrubber_icon: string;
+  subtitle_segment_bg: string;
+  subtitle_segment_border: string;
+  subtitle_segment_text: string;
+  header_bg: string;
+  header_text: string;
+  header_button_hover_bg: string;
+  metadata_highlight: string;
+  clock_bg: string;
+  clock_border: string;
+  clock_hands: string;
+  clock_focus: string;
+  digit_selected: string;
+  text_shadow: string;
 }
 
 export const lightMode: Theme = {
@@ -123,9 +123,9 @@ export const lightMode: Theme = {
   clock_focus: COLORS.neutral90,
   digit_selected: COLORS.neutral90,
   text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15},` +
-               `0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
-               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15},` +
-               `1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
+    `0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
+    `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15},` +
+    `1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
 };
 
 export const darkMode: Theme = {
@@ -181,9 +181,9 @@ export const darkMode: Theme = {
   clock_focus: COLORS.neutral90,
   digit_selected: COLORS.neutral90,
   text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15},` +
-               `0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
-               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15},` +
-               `1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
+    `0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
+    `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15},` +
+    `1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
 };
 
 export const highContrastDarkMode: Theme = {
@@ -239,8 +239,8 @@ export const highContrastDarkMode: Theme = {
   clock_focus: '#000',
   digit_selected: '#000',
   text_shadow: '2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,' +
-               ' 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000',
-}
+    ' 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000',
+};
 
 export const highContrastLightMode: Theme = {
   background: 'snow',
@@ -295,5 +295,5 @@ export const highContrastLightMode: Theme = {
   clock_focus: '#fff',
   digit_selected: '#fff',
   text_shadow: '2px 0 snow, -2px 0 snow, 0 2px snow, 0 -2px snow,' +
-               ' 1px 1px snow, -1px -1px snow, 1px -1px snow, -1px 1px snow',
-}
+    ' 1px 1px snow, -1px -1px snow, 1px -1px snow, -1px 1px snow',
+};

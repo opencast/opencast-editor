@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
  * This page is to be displayed when the application has run into a critical error
  * from which it cannot recover.
  */
-const Landing : React.FC = () => {
+const Landing: React.FC = () => {
 
   const { t } = useTranslation();
 
@@ -30,7 +30,7 @@ const Landing : React.FC = () => {
       userSelect: 'all',
       color: '#e83e8c',
     }
-  })
+  });
 
   return (
     <div css={landingStyle} >
@@ -53,6 +53,6 @@ const Landing : React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Landing
+export default Landing;

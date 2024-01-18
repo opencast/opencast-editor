@@ -51,7 +51,7 @@ interface iSettings {
   },
   metadata: {
     show: boolean,
-    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } } | undefined,
+    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes; }; } | undefined,
   },
   trackSelection: {
     show: boolean,
@@ -63,10 +63,10 @@ interface iSettings {
   subtitles: {
     show: boolean,
     mainFlavor: string,
-    languages: { [key: string]: subtitleTags } | undefined,
-    icons: { [key: string]: string } | undefined,
+    languages: { [key: string]: subtitleTags; } | undefined,
+    icons: { [key: string]: string; } | undefined,
     defaultVideoFlavor: Flavor | undefined,
-  }
+  };
 }
 
 /**
@@ -105,10 +105,10 @@ const defaultSettings: iSettings = {
     icons: undefined,
     defaultVideoFlavor: undefined,
   }
-}
-let configFileSettings: iSettings
-let urlParameterSettings: iSettings
-export let settings: iSettings
+};
+let configFileSettings: iSettings;
+let urlParameterSettings: iSettings;
+export let settings: iSettings;
 
 /**
  * Entry point. Loads values from settings into the exported variables
@@ -130,8 +130,8 @@ export const init = async () => {
 
   // Get settings from config file
   await loadContextSettings().then(result => {
-    configFileSettings = validate(result, false, SRC_SERVER, "from server settings file")
-  })
+    configFileSettings = validate(result, false, SRC_SERVER, "from server settings file");
+  });
 
   // Get settings from URL query.
   const urlParams = new URLSearchParams(window.location.search);
@@ -140,7 +140,7 @@ export const init = async () => {
   urlParams.forEach((value, key) => {
     // Create empty objects for full path (if the key contains '.') and set
     // the value at the end.
-    let obj : {[k: string]: any} = rawUrlSettings;
+    let obj: { [k: string]: any; } = rawUrlSettings;
     if (key.startsWith('opencast.') || key === 'allowedCallbackPrefixes') {
       return;
     }
@@ -256,7 +256,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
     } catch (e) {
       console.warn(
         `Validation of setting '${path}' (${sourceDescription}) with value '${value}' failed: `
-          + `${e}. Ignoring.`
+        + `${e}. Ignoring.`
       );
       return null;
     }
@@ -267,7 +267,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
   const validateObj = (schema: any, obj: Record<string, any> | null, path: string) => {
     // We iterate through all keys of the given settings object, checking if
     // each key is valid and recursively validating the value of that key.
-    const out : {[k: string]: any} = {};
+    const out: { [k: string]: any; } = {};
     for (const key in obj) {
       const newPath = path ? `${path}.${key}` : key;
       if (key in schema) {
@@ -289,7 +289,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
   };
 
   return validate(SCHEMA, obj, "");
-}
+};
 
 
 // Validation functions for different types.
@@ -399,10 +399,10 @@ const SCHEMA = {
     show: types.boolean,
     simpleMode: types.boolean,
   }
-}
+};
 
 const merge = (a: iSettings, b: iSettings) => {
   return deepmerge(a, b, { arrayMerge });
 };
-merge.all = (array: object[]) => deepmerge.all(array, { arrayMerge })
+merge.all = (array: object[]) => deepmerge.all(array, { arrayMerge });
 const arrayMerge = (_destinationArray: any, sourceArray: any, _options: any) => sourceArray;

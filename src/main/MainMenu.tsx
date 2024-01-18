@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css, SerializedStyles } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react';
 
 import { IconType } from "react-icons";
 import { LuScissors, LuFilm, LuFileText, LuCheckSquare } from "react-icons/lu";
@@ -8,12 +8,12 @@ import { LuImage } from "react-icons/lu";
 import { ReactComponent as SubtitleIcon } from '../img/subtitle.svg';
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
-import { setPageNumber } from '../redux/finishSlice'
+import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice';
+import { setPageNumber } from '../redux/finishSlice';
 
-import { MainMenuStateNames } from '../types'
-import { settings } from '../config'
-import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+import { MainMenuStateNames } from '../types';
+import { settings } from '../config';
+import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles';
 import { setIsPlaying } from "../redux/videoSlice";
 
 import { useTranslation } from 'react-i18next';
@@ -110,24 +110,24 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
 }) => {
 
   const dispatch = useAppDispatch();
-  const activeState = useAppSelector(selectMainMenuState)
+  const activeState = useAppSelector(selectMainMenuState);
   const theme = useTheme();
 
   const onMenuItemClicked = () => {
     dispatch(setState(stateName));
     // Reset multi-page content to their first page
     if (stateName === MainMenuStateNames.finish) {
-      dispatch(setPageNumber(0))
+      dispatch(setPageNumber(0));
     }
     if (stateName === MainMenuStateNames.subtitles) {
-      dispatch(setIsDisplayEditView(false))
+      dispatch(setIsDisplayEditView(false));
     }
     // Halt ongoing events
-    dispatch(setIsPlaying(false))
+    dispatch(setIsPlaying(false));
     // Reset states
-    dispatch(resetPostRequestState())
-    dispatch(metadataResetPostRequestState())
-  }
+    dispatch(resetPostRequestState());
+    dispatch(metadataResetPostRequestState());
+  };
 
   const mainMenuButtonStyle = css({
     width: '100%',
@@ -151,15 +151,17 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
       role="menuitem" tabIndex={0}
       aria-label={ariaLabelText}
       onClick={onMenuItemClicked}
-      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
-        onMenuItemClicked()
-      } }}
+      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => {
+        if (event.key === "Enter") {
+          onMenuItemClicked();
+        }
+      }}
     >
       <Icon css={iconCustomCSS ? iconCustomCSS : {
         fontSize: 36,
         width: '36px',
         height: 'auto'
-      }}/>
+      }} />
       {bottomText && <div>{bottomText}</div>}
     </li>
   );

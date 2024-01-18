@@ -1,14 +1,14 @@
 import React from "react";
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
 import { IconType } from "react-icons";
 import { LuTrash } from "react-icons/lu";
 import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 
-import { Track } from '../types'
+import { Track } from '../types';
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
+import { selectVideos, setTrackEnabled } from '../redux/videoSlice';
 import {
   backgroundBoxStyle,
   basicButtonStyle,
@@ -17,7 +17,7 @@ import {
   flexGapReplacementStyle,
   titleStyle,
   titleStyleBold
-} from '../cssStyles'
+} from '../cssStyles';
 
 import { useTranslation } from 'react-i18next';
 import { useTheme } from "../themes";
@@ -41,7 +41,7 @@ const TrackSelection: React.FC = () => {
     height: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-  })
+  });
 
   const trackAreaStyle = css({
     display: 'flex',
@@ -51,37 +51,37 @@ const TrackSelection: React.FC = () => {
     justifyContent: 'center',
     alignItems: 'center',
     ...(flexGapReplacementStyle(10, false)),
-  })
+  });
 
   return (
     <div css={trackSelectionStyle}>
       <Header />
       <div css={trackAreaStyle}>
-        { trackItems }
+        {trackItems}
       </div>
     </div>
   );
-}
+};
 
 
 const Header: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useTheme()
+  const theme = useTheme();
 
   const description: string = t('trackSelection.title');
 
   return (
     <div css={[titleStyle(theme), titleStyleBold(theme)]}>
-      { description }
+      {description}
     </div>
   );
-}
+};
 
 
-const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
+const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, enabledCount }) => {
 
-  const theme = useTheme()
+  const theme = useTheme();
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -102,7 +102,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
 
     justifyContent: 'space-around',
     flexWrap: 'wrap',
-  })
+  });
 
   const playerStyle = css({
     aspectRatio: '16 / 9',
@@ -126,7 +126,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     },
     display: 'flex',
     flexDirection: 'column',
-  })
+  });
 
   // What state is the track in and can it be deactivated?
   // We do not permit deactivating the last remaining track
@@ -150,18 +150,18 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
     dispatch(setTrackEnabled({
       id: track.id,
       enabled: !track.video_stream.enabled,
-    }))
-  }
+    }));
+  };
 
   return (
     <div css={[backgroundBoxStyle(theme), trackItemStyle]}>
-      <div css={headerStyle}>{ header }</div>
+      <div css={headerStyle}>{header}</div>
       <div css={trackitemSubStyle}>
         <ReactPlayer
           width="unset"
           height="unset"
           css={playerStyle}
-          style={{opacity: track.video_stream.enabled ? '1' : '0.5'}}
+          style={{ opacity: track.video_stream.enabled ? '1' : '0.5' }}
           url={track.uri}
         />
         <div css={buttonsStyle}>
@@ -176,7 +176,7 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
       </div>
     </div>
   );
-}
+};
 
 interface selectButtonInterface {
   handler: () => void,
@@ -186,7 +186,7 @@ interface selectButtonInterface {
   active: boolean,
 }
 
-const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, tooltip, active}) => {
+const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, tooltip, active }) => {
 
   const theme = useTheme();
 
@@ -201,7 +201,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
     }];
 
   const clickHandler = () => {
-    if (active) { handler() }
+    if (active) { handler(); }
     ref.current?.blur();
   };
 
@@ -211,7 +211,7 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
     }
   };
 
-  const ref = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null);
 
   return (
     <ThemedTooltip title={tooltip}>
@@ -223,11 +223,11 @@ const SelectButton : React.FC<selectButtonInterface> = ({handler, text, Icon, to
         aria-label={tooltip}
         onClick={clickHandler}
         onKeyDown={keyHandler} >
-        <Icon css={customIconStyle}/>
-        { text }
+        <Icon css={customIconStyle} />
+        {text}
       </div>
     </ThemedTooltip>
   );
-}
+};
 
 export default TrackSelection;

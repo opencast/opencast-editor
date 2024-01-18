@@ -4,10 +4,6 @@ module.exports = {
     "react-app/jest"
   ],
   rules: {
-    // Semicolon usage is inconsistent right now. Both, "always" and "never",
-    // result in a significant number of warnings.
-    "semi": "off",
-
     // Both kinds of quotes are used a lot
     "quotes": "off",
 

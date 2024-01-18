@@ -7,17 +7,17 @@ import Error from './Error';
 import Landing from "./Landing";
 import Lock from "./Lock";
 
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
 import { useAppSelector } from "../redux/store";
-import { selectIsEnd } from '../redux/endSlice'
+import { selectIsEnd } from '../redux/endSlice';
 import { selectIsError } from "../redux/errorSlice";
 import { settings } from '../config';
 
 const Body: React.FC = () => {
 
-  const isEnd = useAppSelector(selectIsEnd)
-  const isError = useAppSelector(selectIsError)
+  const isEnd = useAppSelector(selectIsEnd);
+  const isError = useAppSelector(selectIsError);
 
   // If we're in a special state, display a special page
   // Otherwise display the normal page
@@ -25,7 +25,7 @@ const Body: React.FC = () => {
     if (!settings.id) {
       return (
         <Landing />
-      )
+      );
     } else if (isEnd) {
       return (
         <div>
@@ -46,7 +46,7 @@ const Body: React.FC = () => {
         </div>
       );
     }
-  }
+  };
 
   const bodyStyle = css({
     display: 'flex',

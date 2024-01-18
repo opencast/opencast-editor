@@ -1,7 +1,7 @@
 /**
  * This file contains general css stylings
  */
-import { css, Global, keyframes } from '@emotion/react'
+import { css, Global, keyframes } from '@emotion/react';
 import React from "react";
 import emotionNormalize from 'emotion-normalize';
 import { checkFlexGapSupport } from './util/utilityFunctions';
@@ -17,7 +17,7 @@ export const GlobalStyle: React.FC = () => {
   return (
     <Global styles={globalStyle(theme)} />
   );
-}
+};
 
 /**
  * CSS for the global style component
@@ -46,13 +46,13 @@ export const BREAKPOINT_MEDIUM = 650;
  */
 export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow: boolean) => {
 
-  const half = flexGapValue / 2
-  const quarter = flexGapValue / 4
+  const half = flexGapValue / 2;
+  const quarter = flexGapValue / 4;
 
   return (
     {
-    // Use gap if supported
-      ...(checkFlexGapSupport()) && {gap: `${flexGapValue}px`},
+      // Use gap if supported
+      ...(checkFlexGapSupport()) && { gap: `${flexGapValue}px` },
       // Else use margins
       ...(!checkFlexGapSupport()) &&
       {
@@ -73,7 +73,7 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
       }
     }
   );
-}
+};
 
 /**
  * CSS for buttons
@@ -122,7 +122,7 @@ export const navigationButtonStyle = (theme: Theme) => css({
   justifyContent: 'space-around',
   boxShadow: `${theme.boxShadow}`,
   background: `${theme.element_bg}`,
-})
+});
 
 /**
  * CSS for a container that holds back/forward buttons
@@ -131,7 +131,7 @@ export const backOrContinueStyle = css(({
   display: 'flex',
   flexDirection: 'row',
   ...(flexGapReplacementStyle(20, false)),
-}))
+}));
 
 /**
  * CSS for big buttons in a dynamic grid
@@ -161,7 +161,7 @@ export const disableButtonAnimation = css({
   "&:active": {
     transform: 'none',
   },
-})
+});
 
 /**
  * CSS for a title
@@ -173,7 +173,7 @@ export const titleStyle = (theme: Theme) => css(({
   textOverflow: 'ellipsis',
   maxWidth: '100%',
   color: `${theme.text}`,
-}))
+}));
 
 /**
  * Addendum for the titleStyle
@@ -184,7 +184,7 @@ export const titleStyleBold = (theme: Theme) => css({
   fontSize: '24px',
   verticalAlign: '-2.5px',
   color: `${theme.text}`,
-})
+});
 
 /**
  * CSS for ariaLive regions that should not be visible
@@ -195,7 +195,7 @@ export const ariaLive = css({
   height: '1px',
   width: '1px',
   overflow: 'hidden',
-})
+});
 
 /**
  * CSS for displaying of errors
@@ -203,22 +203,22 @@ export const ariaLive = css({
 export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
   return (
     css({
-      ...(!errorStatus) && {display: "none"},
+      ...(!errorStatus) && { display: "none" },
       borderColor: `${theme.error}`,
       borderStyle: 'dashed',
       fontWeight: 'bold',
       padding: '10px',
     })
   );
-}
+};
 
 export function selectFieldStyle(theme: Theme) {
   return {
     control: (provided: any, state: any) => ({
       ...provided,
       background: theme.menu_background,
-      ...(state.isFocused && {borderColor: theme.metadata_highlight}),
-      ...(state.isFocused && {boxShadow: `0 0 0 1px ${theme.metadata_highlight}`}),
+      ...(state.isFocused && { borderColor: theme.metadata_highlight }),
+      ...(state.isFocused && { boxShadow: `0 0 0 1px ${theme.metadata_highlight}` }),
       "&:hover": {
         borderColor: theme.menu_background,
         boxShadow: `0 0 0 1px ${theme.metadata_highlight}`
@@ -249,7 +249,7 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       background: state.isFocused ? theme.focused : theme.menu_background
         && state.isSelected ? theme.selected : theme.menu_background,
-      ...(state.isFocused && {color: theme.focus_text}),
+      ...(state.isFocused && { color: theme.focus_text }),
       color: state.isFocused ? theme.focus_text : theme.text
         && state.isSelected ? theme.selected_text : theme.text,
     }),
@@ -273,7 +273,7 @@ export function selectFieldStyle(theme: Theme) {
       ...provided,
       color: theme.text,
     }),
-  }
+  };
 }
 
 export const calendarStyle = (theme: Theme) => createTheme({
@@ -368,7 +368,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
       }
     },
   }
-})
+});
 
 export const subtitleSelectStyle = (theme: Theme) => createTheme({
   components: {
@@ -427,19 +427,19 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
       }
     }
   }
-})
+});
 
 export const spinningStyle = css({
   animation: `2s linear infinite none ${keyframes({
     "0%": { transform: "rotate(0)" },
     "100%": { transform: "rotate(360deg)" },
   })}`,
-})
+});
 
 export const customIconStyle = css(({
   maxWidth: '16px',
   height: 'auto'
-}))
+}));
 
 export const videosStyle = (theme: Theme) => css(({
   display: 'flex',
@@ -453,7 +453,7 @@ export const videosStyle = (theme: Theme) => css(({
   boxSizing: "border-box",
   padding: '10px',
   ...(flexGapReplacementStyle(10, false)),
-}))
+}));
 
 export const backgroundBoxStyle = (theme: Theme) => css(({
   background: `${theme.menu_background}`,
@@ -462,4 +462,4 @@ export const backgroundBoxStyle = (theme: Theme) => css(({
   boxSizing: "border-box",
   padding: '20px',
   ...(flexGapReplacementStyle(25, false)),
-}))
+}));
