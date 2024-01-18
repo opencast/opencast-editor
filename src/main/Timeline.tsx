@@ -82,7 +82,12 @@ const Timeline: React.FC<{
       />
       <div css={{position: 'relative', height: timelineHeight + 'px'}} >
         <Waveforms timelineHeight={timelineHeight}/>
-        <SegmentsList timelineWidth={width} timelineHeight={timelineHeight} styleByActiveSegment={styleByActiveSegment} tabable={true}/>
+        <SegmentsList
+          timelineWidth={width}
+          timelineHeight={timelineHeight}
+          styleByActiveSegment={styleByActiveSegment}
+          tabable={true}
+        />
       </div>
     </div>
   );
@@ -183,10 +188,30 @@ export const Scrubber: React.FC<{
   // Callbacks for keyboard controls
   // TODO: Better increases and decreases than ten intervals
   // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
-  useHotkeys(KEYMAP.timeline.left.key, () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))), {}, [currentlyAt, keyboardJumpDelta]);
-  useHotkeys(KEYMAP.timeline.right.key, () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))), {}, [currentlyAt, keyboardJumpDelta, duration]);
-  useHotkeys(KEYMAP.timeline.increase.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)), {}, [keyboardJumpDelta]);
-  useHotkeys(KEYMAP.timeline.decrease.key, () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)), {}, [keyboardJumpDelta]);
+  useHotkeys(
+    KEYMAP.timeline.left.key,
+    () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
+    {},
+    [currentlyAt, keyboardJumpDelta]
+  );
+  useHotkeys(
+    KEYMAP.timeline.right.key,
+    () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
+    {},
+    [currentlyAt, keyboardJumpDelta, duration]
+  );
+  useHotkeys(
+    KEYMAP.timeline.increase.key,
+    () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
+    {},
+    [keyboardJumpDelta]
+  );
+  useHotkeys(
+    KEYMAP.timeline.decrease.key,
+    () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)),
+    {},
+    [keyboardJumpDelta]
+  );
 
   const scrubberStyle = css({
     backgroundColor: `${theme.scrubber}`,
@@ -361,7 +386,8 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
 
   const dispatch = useAppDispatch();
   const videoURLs = useAppSelector(selectVideoURL)
-  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"] } }) =>
+    state.videoState.status);
   const theme = useTheme();
 
   // Update based on current fetching status
@@ -410,7 +436,9 @@ export const Waveforms: React.FC<{timelineHeight: number}> = ({timelineHeight}) 
           const file = new File([blob], blob)
 
           // Start waveform worker with blob
-          const waveformWorker : any = new Waveform({type: 'img', width: '2000', height: '230', samples: 100000, media: file})
+          const waveformWorker : any = new Waveform({
+            type: 'img', width: '2000', height: '230', samples: 100000, media: file
+          })
 
           waveformWorker.onerror = (error: string) => {
             setWaveformWorkerError(true)

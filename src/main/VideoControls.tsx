@@ -119,7 +119,12 @@ const PreviewMode: React.FC<{
   }
 
   // Maps functions to hotkeys
-  useHotkeys(KEYMAP.videoPlayer.preview.key, () => switchPlayPreview(undefined), {preventDefault: true}, [isPlayPreview]);
+  useHotkeys(
+    KEYMAP.videoPlayer.preview.key,
+    () => switchPlayPreview(undefined),
+    {preventDefault: true},
+    [isPlayPreview]
+  );
 
   const previewModeStyle = css({
     cursor: "pointer",

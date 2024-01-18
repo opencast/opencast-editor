@@ -1,7 +1,22 @@
 import React, { useEffect } from "react";
 import CuttingActions from "./CuttingActions"
 import Timeline from './Timeline';
-import { fetchVideoInformation, selectCurrentlyAt, selectDuration, selectIsPlaying, selectIsMuted, selectVolume, selectIsPlayPreview, selectTitle, setClickTriggered, setCurrentlyAt, setIsPlaying, setIsMuted, setVolume, setIsPlayPreview } from '../redux/videoSlice';
+import {
+  fetchVideoInformation,
+  selectCurrentlyAt,
+  selectDuration,
+  selectIsPlaying,
+  selectIsMuted,
+  selectVolume,
+  selectIsPlayPreview,
+  selectTitle,
+  setClickTriggered,
+  setCurrentlyAt,
+  setIsPlaying,
+  setIsMuted,
+  setVolume,
+  setIsPlayPreview
+} from '../redux/videoSlice';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { httpRequestState } from '../types';
@@ -20,11 +35,13 @@ const Cutting: React.FC = () => {
 
   // Init redux variables
   const dispatch = useAppDispatch();
-  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"] } }) => state.videoState.status);
+  const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"] } }) =>
+    state.videoState.status);
   const error = useAppSelector((state: { videoState: { error: httpRequestState["error"] } }) => state.videoState.error)
   const duration = useAppSelector(selectDuration)
   const theme = useTheme();
-  const errorReason = useAppSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) => state.videoState.errorReason)
+  const errorReason = useAppSelector((state: { videoState: { errorReason: httpRequestState["errorReason"] } }) =>
+    state.videoState.errorReason)
 
   // Try to fetch URL from external API
   useEffect(() => {
@@ -32,13 +49,26 @@ const Cutting: React.FC = () => {
       dispatch(fetchVideoInformation())
     } else if (videoURLStatus === 'failed') {
       if (errorReason === 'workflowActive') {
-        dispatch(setError({error: true, errorTitle: t("error.workflowActive-errorTitle"), errorMessage: t("error.workflowActive-errorMessage"), errorIcon: LuMoreHorizontal}))
+        dispatch(setError({
+          error: true,
+          errorTitle: t("error.workflowActive-errorTitle"),
+          errorMessage: t("error.workflowActive-errorMessage"),
+          errorIcon: LuMoreHorizontal
+        }))
       } else {
-        dispatch(setError({error: true, errorMessage: t("video.comError-text"), errorDetails: error}))
+        dispatch(setError({
+          error: true,
+          errorMessage: t("video.comError-text"),
+          errorDetails: error
+        }))
       }
     } else if (videoURLStatus === 'success') {
       if (duration === null) {
-        dispatch(setError({error: true, errorMessage: t("video.durationError-text"), errorDetails: error}))
+        dispatch(setError({
+          error: true,
+          errorMessage: t("video.durationError-text"),
+          errorDetails: error
+        }))
       }
     }
   }, [videoURLStatus, dispatch, error, t, errorReason, duration])

@@ -90,7 +90,12 @@ const WorkflowSelection : React.FC = () => {
               onChange={handleWorkflowSelectChange}
             >
               {workflows.map((workflow: Workflow, _index: number) => (
-                <WorkflowButton key={workflow.id} stateName={workflow.name} workflowId={workflow.id} workflowDescription={workflow.description}/>
+                <WorkflowButton
+                  key={workflow.id}
+                  stateName={workflow.name}
+                  workflowId={workflow.id}
+                  workflowDescription={workflow.description}
+                />
               ))}
             </RadioGroup>
         }
@@ -101,7 +106,9 @@ const WorkflowSelection : React.FC = () => {
         </div>
         <div css={errorBoxStyle(errorStatus === "failed", theme)} role="alert">
           <span>{t("various.error-text")}</span><br />
-          {errorMessage ? t("various.error-details-text", {errorMessage: postAndProcessError}) : t("various.error-text")}<br/>
+          {errorMessage ?
+            t("various.error-details-text", {errorMessage: postAndProcessError}) :
+            t("various.error-text")}<br/>
         </div>
       </div>
     );
@@ -158,7 +165,15 @@ const WorkflowSelection : React.FC = () => {
   );
 }
 
-const WorkflowButton: React.FC<{stateName: string, workflowId: string, workflowDescription: string}> = ({stateName, workflowId, workflowDescription}) => {
+const WorkflowButton: React.FC<{
+  stateName: string,
+  workflowId: string,
+  workflowDescription: string
+}> = ({
+  stateName,
+  workflowId,
+  workflowDescription
+}) => {
 
   // Note: Styling the Radio Button is done in WorkflowSelectRadio
 

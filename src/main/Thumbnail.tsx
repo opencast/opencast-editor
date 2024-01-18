@@ -8,11 +8,28 @@ import { settings } from "../config";
 import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
   backgroundBoxStyle } from "../cssStyles";
 import { Theme, useTheme } from "../themes";
-import { selectOriginalThumbnails, selectVideos, selectTracks, setHasChanges, setThumbnail, setThumbnails } from "../redux/videoSlice";
+import {
+  selectOriginalThumbnails,
+  selectVideos,
+  selectTracks,
+  setHasChanges,
+  setThumbnail,
+  setThumbnails
+} from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
 import {
-  selectIsPlaying, selectIsMuted, selectVolume, selectCurrentlyAt, setIsPlaying, selectIsPlayPreview, setIsPlayPreview, setClickTriggered, setIsMuted, setVolume, setCurrentlyAt
+  selectIsPlaying,
+  selectIsMuted,
+  selectVolume,
+  selectCurrentlyAt,
+  setIsPlaying,
+  selectIsPlayPreview,
+  setIsPlayPreview,
+  setClickTriggered,
+  setIsMuted,
+  setVolume,
+  setCurrentlyAt
 } from '../redux/videoSlice'
 import { ThemedTooltip } from "./Tooltip";
 import VideoPlayers from "./VideoPlayers";
@@ -91,6 +108,7 @@ const Thumbnail : React.FC = () => {
 
   const bottomStyle = css({
     display: 'flex',
+    width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
   })
@@ -100,13 +118,15 @@ const Thumbnail : React.FC = () => {
       <div css={[titleStyle(theme), titleStyleBold(theme)]}>{t('thumbnail.title')}</div>
       <ThumbnailTable
         inputRefs={inputRefs}
+        generateRefs={generateRefs}
         generate={generate}
         upload={upload}
         uploadCallback={uploadCallback}
         discard={discardThumbnail}
       />
       <div css={bottomStyle}>
-        <VideoPlayers refs={generateRefs} widthInPercent={100}/>
+        {/* use maxHeightInPixel to make video players the same size*/}
+        <VideoPlayers refs={generateRefs} widthInPercent={100} maxHeightInPixel={420}/>
         <div css={videosStyle(theme)}>
           <Timeline
             timelineHeight={125}
@@ -139,16 +159,18 @@ const Thumbnail : React.FC = () => {
  */
 const ThumbnailTable : React.FC<{
   inputRefs: any,
+  generateRefs: React.MutableRefObject<any>,
   generate: any,
   upload: any,
   uploadCallback: any,
   discard: any,
-}> = ({inputRefs, generate, upload, uploadCallback, discard}) => {
+}> = ({inputRefs, generateRefs, generate, upload, uploadCallback, discard}) => {
 
   const videoTracks = useAppSelector(selectVideos)
 
   const thumbnailTableStyle = css({
     display: 'flex',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     ...(flexGapReplacementStyle(10, false)),
@@ -174,7 +196,9 @@ const ThumbnailTable : React.FC<{
       )
     } else {
       return (<>
-        <AffectAllRow tracks={videoTracks} generate={generate}/>
+        { videoTracks.length > 1 &&
+          <AffectAllRow tracks={videoTracks} generate={generate}/>
+        }
         <div css={thumbnailTableStyle}>
           {videoTracks.map((track: Track, index: number) => (
             <ThumbnailTableRow
@@ -182,6 +206,7 @@ const ThumbnailTable : React.FC<{
               track={track}
               index={index}
               inputRefs={inputRefs}
+              generateRef={generateRefs.current[index]}
               generate={generate}
               upload={upload}
               uploadCallback={uploadCallback}
@@ -207,14 +232,18 @@ const ThumbnailTableRow: React.FC<{
   track: Track,
   index: number,
   inputRefs: any,
+  generateRef: any,
   generate: any,
   upload: any,
   uploadCallback: any,
   discard: any,
-}> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
+}> = ({track, index, inputRefs, generateRef, generate, upload, uploadCallback, discard}) => {
 
   const { t } = useTranslation()
   const theme = useTheme();
+
+  // The "+40" comes from padding that is not included in the "getWidth" function
+  const videoWidth = generateRef ? generateRef.getWidth() + 40 : undefined
 
   const renderPriority = (thumbnailPriority: number) => {
     if (isNaN(thumbnailPriority)) {
@@ -231,7 +260,7 @@ const ThumbnailTableRow: React.FC<{
   }
 
   return (
-    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle]}>
+    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle(videoWidth)]}>
       <div css={thumbnailTableRowTitleStyle}>
         {track.flavor.type + renderPriority(track.thumbnailPriority)}
       </div>
@@ -362,15 +391,19 @@ const ThumbnailButtons : React.FC<{
         aria-hidden="true"
       />
       <div css={verticalLineStyle} />
-      <ThumbnailButton
-        handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
-        text={t('thumbnail.buttonUseForOtherThumbnails')}
-        tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
-        ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
-        Icon={LuCopy}
-        active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
-      />
-      <div css={verticalLineStyle} />
+      { tracks.length > 1 &&
+        <>
+          <ThumbnailButton
+            handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
+            text={t('thumbnail.buttonUseForOtherThumbnails')}
+            tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
+            ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
+            Icon={LuCopy}
+            active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
+          />
+          <div css={verticalLineStyle} />
+        </>
+      }
       <ThumbnailButton
         handler={() => { discard(track.id) }}
         text={t('thumbnail.buttonDiscard')}
@@ -497,7 +530,7 @@ const ThumbnailTableSingleRow: React.FC<{
   const theme = useTheme();
 
   return (
-    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle]}>
+    <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle(500)]}>
       <div css={thumbnailTableRowTitleStyle}>
         {t("thumbnailSimple.rowTitle")}
       </div>
@@ -580,9 +613,11 @@ const ThumbnailButtonsSimple : React.FC<{
 /**
  * CSS shared between multi and simple display mode
  */
-const thumbnailTableRowStyle = css({
+const thumbnailTableRowStyle = (maxWidth: number) => css({
   display: 'flex',
   flexDirection: 'column',
+  width: '100%',
+  maxWidth: `${maxWidth}px`,
 })
 
 const thumbnailTableRowTitleStyle = css({

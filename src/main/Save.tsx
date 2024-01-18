@@ -8,7 +8,12 @@ import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck}
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectFinishState } from '../redux/finishSlice'
-import { selectHasChanges, selectSegments, selectTracks, setHasChanges as videoSetHasChanges } from '../redux/videoSlice'
+import {
+  selectHasChanges,
+  selectSegments,
+  selectTracks,
+  setHasChanges as videoSetHasChanges
+} from '../redux/videoSlice'
 import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice'
 
 import { CallbackButton, PageButton } from './Finish'
@@ -86,7 +91,9 @@ const Save : React.FC = () => {
       </div>
       <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
         <span>{t("various.error-text")}</span><br />
-        {postMetadataError ? t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-text")}<br />
+        {postMetadataError ?
+          t("various.error-details-text", {errorMessage: postMetadataError}) : t("various.error-text")
+        }<br />
       </div>
     </div>
   );
