@@ -35,9 +35,10 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useTheme } from "../themes";
 
 import { backgroundBoxStyle, flexGapReplacementStyle } from '../cssStyles'
+import { BaseReactPlayerProps } from "react-player/base";
 
 const VideoPlayers: React.FC<{
-  refs: any,
+  refs?: React.MutableRefObject<any>,
   widthInPercent?: number,
   maxHeightInPixel?: number
 }> = ({
@@ -122,7 +123,7 @@ export const VideoPlayer = React.forwardRef(
     setIsPlaying: ActionCreatorWithPayload<boolean, string>,
     setPreviewTriggered: ActionCreatorWithPayload<any, string>,
     setClickTriggered: ActionCreatorWithPayload<any, string>,
-    setCurrentlyAt: any,
+    setCurrentlyAt: ActionCreatorWithPayload<number, string>,
     setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
   },
   forwardRefThing
@@ -223,7 +224,7 @@ export const VideoPlayer = React.forwardRef(
       }
     }
 
-    const onErrorCallback = (_e: any) => {
+    const onErrorCallback: BaseReactPlayerProps["onError"] = _e => {
       setError(true)
     }
 
