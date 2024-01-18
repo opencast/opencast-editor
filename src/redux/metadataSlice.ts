@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { client } from '../util/client'
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { client } from "../util/client";
 
-import { httpRequestState } from '../types'
-import { settings } from '../config';
+import { httpRequestState } from "../types";
+import { settings } from "../config";
 
 export interface Catalog {
   fields: MetadataField[],
@@ -12,9 +12,9 @@ export interface Catalog {
 
 export interface MetadataField {
   readOnly: boolean,
-  id: string      // name
-  label: string   // name identifier
-  type: string    // irrelevant?
+  id: string;      // name
+  label: string;   // name identifier
+  type: string;    // irrelevant?
   value: string,
   required: boolean,
   collection: any | undefined,
@@ -44,134 +44,134 @@ export interface MetadataField {
 // }
 
 interface metadata {
-  catalogs: Catalog[]
-  hasChanges: boolean         // Did user make changes to metadata view since last save
+  catalogs: Catalog[];
+  hasChanges: boolean;         // Did user make changes to metadata view since last save
 }
 
 interface postRequestState {
-  postStatus: 'idle' | 'loading' | 'success' | 'failed',
+  postStatus: "idle" | "loading" | "success" | "failed",
   postError: string | undefined,
-  postErrorReason: 'unknown',
+  postErrorReason: "unknown",
 }
 
-// TODO: Create an 'httpRequestState' array or something
+// TODO: Create an "httpRequestState" array or something
 const initialState: metadata & httpRequestState & postRequestState = {
   catalogs: [],
   hasChanges: false,
 
-  status: 'idle',
+  status: "idle",
   error: undefined,
-  errorReason: 'unknown',
+  errorReason: "unknown",
 
-  postStatus: 'idle',
+  postStatus: "idle",
   postError: undefined,
-  postErrorReason: 'unknown',
-}
+  postErrorReason: "unknown",
+};
 
-export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async () => {
+export const fetchMetadata = createAsyncThunk("metadata/fetchMetadata", async () => {
   if (!settings.id) {
-    throw new Error("Missing media package identifier")
+    throw new Error("Missing media package identifier");
   }
 
-  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/metadata.json`)
-  return JSON.parse(response)
-})
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/metadata.json`);
+  return JSON.parse(response);
+});
 
-export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, { getState }) => {
+export const postMetadata = createAsyncThunk("metadata/postMetadata", async (_, { getState }) => {
   if (!settings.id) {
-    throw new Error("Missing media package identifier")
+    throw new Error("Missing media package identifier");
   }
 
   // TODO: Get only metadataState instead of all states
-  const allStates = getState() as { metadataState: { catalogs: metadata["catalogs"] } }
+  const allStates = getState() as { metadataState: { catalogs: metadata["catalogs"]; }; };
 
   await client.post(`${settings.opencast.url}/editor/${settings.id}/metadata.json`,
     allStates.metadataState.catalogs
-  )
+  );
 
-  return
-})
+  return;
+});
 
 /**
  * Slice for managing a post request for saving current changes and starting a workflow
  */
 const metadataSlice = createSlice({
-  name: 'metadataState',
+  name: "metadataState",
   initialState,
   reducers: {
-    setFieldValue: (state, action: PayloadAction<{catalogIndex: number, fieldIndex: number, value: string}>) => {
-      state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value
-      state.hasChanges = true
+    setFieldValue: (state, action: PayloadAction<{ catalogIndex: number, fieldIndex: number, value: string; }>) => {
+      state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].value = action.payload.value;
+      state.hasChanges = true;
     },
-    setFieldReadonly: (state, action: PayloadAction<{catalogIndex: number, fieldIndex: number, value: boolean}>) => {
-      state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].readOnly = action.payload.value
+    setFieldReadonly: (state, action: PayloadAction<{ catalogIndex: number, fieldIndex: number, value: boolean; }>) => {
+      state.catalogs[action.payload.catalogIndex].fields[action.payload.fieldIndex].readOnly = action.payload.value;
     },
     setHasChanges: (state, action: PayloadAction<metadata["hasChanges"]>) => {
-      state.hasChanges = action.payload
+      state.hasChanges = action.payload;
     },
     resetPostRequestState: state => {
-      state.postStatus = 'idle'
-    }
+      state.postStatus = "idle";
+    },
   },
   extraReducers: builder => {
     builder.addCase(
       fetchMetadata.pending, (state, _action) => {
-        state.status = 'loading'
-      })
+        state.status = "loading";
+      });
     builder.addCase(
       fetchMetadata.fulfilled, (state, action) => {
-        state.catalogs = action.payload
+        state.catalogs = action.payload;
 
-        state.status = 'success'
-      })
+        state.status = "success";
+      });
     builder.addCase(
       fetchMetadata.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.error.message
-      })
+        state.status = "failed";
+        state.error = action.error.message;
+      });
     builder.addCase(
       postMetadata.pending, (state, _action) => {
-        state.postStatus = 'loading'
-      })
+        state.postStatus = "loading";
+      });
     builder.addCase(
       postMetadata.fulfilled, (state, _action) => {
-        state.postStatus = 'success'
-      })
+        state.postStatus = "success";
+      });
     builder.addCase(
       postMetadata.rejected, (state, action) => {
-        state.postStatus = 'failed'
-        state.postError = action.error.message
-      })
-  }
-})
+        state.postStatus = "failed";
+        state.postError = action.error.message;
+      });
+  },
+});
 
-export const { setFieldValue, setHasChanges, setFieldReadonly, resetPostRequestState } = metadataSlice.actions
+export const { setFieldValue, setHasChanges, setFieldReadonly, resetPostRequestState } = metadataSlice.actions;
 
-export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"] } }) =>
-  state.metadataState.catalogs
-export const selectHasChanges = (state: { metadataState: { hasChanges: metadata["hasChanges"] } }) =>
-  state.metadataState.hasChanges
-export const selectGetStatus = (state: { metadataState: { status: httpRequestState["status"] } }) =>
-  state.metadataState.status
-export const selectGetError = (state: { metadataState: { error: httpRequestState["error"] } }) =>
-  state.metadataState.error
-export const selectPostStatus = (state: { metadataState: { postStatus: postRequestState["postStatus"] } }) =>
-  state.metadataState.postStatus
-export const selectPostError = (state: { metadataState: { postError: postRequestState["postError"] } }) =>
-  state.metadataState.postError
+export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"]; }; }) =>
+  state.metadataState.catalogs;
+export const selectHasChanges = (state: { metadataState: { hasChanges: metadata["hasChanges"]; }; }) =>
+  state.metadataState.hasChanges;
+export const selectGetStatus = (state: { metadataState: { status: httpRequestState["status"]; }; }) =>
+  state.metadataState.status;
+export const selectGetError = (state: { metadataState: { error: httpRequestState["error"]; }; }) =>
+  state.metadataState.error;
+export const selectPostStatus = (state: { metadataState: { postStatus: postRequestState["postStatus"]; }; }) =>
+  state.metadataState.postStatus;
+export const selectPostError = (state: { metadataState: { postError: postRequestState["postError"]; }; }) =>
+  state.metadataState.postError;
 
-export const selectTitleFromEpisodeDc = (state: { metadataState: { catalogs: metadata["catalogs"] } }) => {
+export const selectTitleFromEpisodeDc = (state: { metadataState: { catalogs: metadata["catalogs"]; }; }) => {
   for (const catalog of state.metadataState.catalogs) {
     if (catalog.flavor === "dublincore/episode") {
       for (const field of catalog.fields) {
         if (field.id === "title") {
-          return field.value
+          return field.value;
         }
       }
     }
   }
 
-  return undefined
-}
+  return undefined;
+};
 
-export default metadataSlice.reducer
+export default metadataSlice.reducer;
