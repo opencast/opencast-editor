@@ -21,7 +21,7 @@ export const store = configureStore({
     metadataState: metadataReducer,
     subtitleState: subtitleReducer,
     errorState: errorReducer,
-  }
+  },
 });
 
 export type AppDispatch = typeof store.dispatch;

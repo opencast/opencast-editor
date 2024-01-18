@@ -65,7 +65,7 @@ export const PageButton: React.FC<{
 }> = ({
   pageNumber,
   label,
-  Icon
+  Icon,
 }) => {
 
   const theme = useTheme();

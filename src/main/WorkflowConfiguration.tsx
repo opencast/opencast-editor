@@ -6,7 +6,7 @@ import {
   backOrContinueStyle,
   errorBoxStyle,
   flexGapReplacementStyle,
-  spinningStyle
+  spinningStyle,
 } from "../cssStyles";
 
 import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
@@ -16,7 +16,7 @@ import {
   selectSegments,
   selectTracks,
   setHasChanges as videoSetHasChanges,
-  selectSelectedWorkflowId
+  selectSelectedWorkflowId,
 } from "../redux/videoSlice";
 import { postVideoInformationWithWorkflow, selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
 
@@ -28,7 +28,7 @@ import {
   postMetadata,
   selectPostError,
   selectPostStatus,
-  setHasChanges as metadataSetHasChanges
+  setHasChanges as metadataSetHasChanges,
 } from "../redux/metadataSlice";
 import { selectSubtitles } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
@@ -115,7 +115,7 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
       subtitlesForPosting.push({
         id: identifier,
         subtitle: serializeSubtitle(subtitles[identifier].cues),
-        tags: subtitles[identifier].tags
+        tags: subtitles[identifier].tags,
       });
     }
     return subtitlesForPosting;
@@ -137,7 +137,7 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
         segments: segments,
         tracks: tracks,
         workflow: [{ id: selectedWorkflowId }],
-        subtitles: prepareSubtitles()
+        subtitles: prepareSubtitles(),
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

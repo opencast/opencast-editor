@@ -22,7 +22,7 @@ export const postVideoInformationWithWorkflow =
         segments: convertSegments(argument.segments),
         tracks: argument.tracks,
         subtitles: argument.subtitles,
-        workflows: argument.workflow
+        workflows: argument.workflow,
       }
     );
     return response;
@@ -51,7 +51,7 @@ const workflowPostAndProcessSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       });
-  }
+  },
 });
 
 export const selectStatus = (state: { workflowPostAndProcessState: { status: httpRequestState["status"]; }; }) =>

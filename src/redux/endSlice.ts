@@ -21,7 +21,7 @@ export const endSlice = createSlice({
       state.end = action.payload.hasEnded;
       state.value = action.payload.value;
     },
-  }
+  },
 });
 
 export const { setEnd } = endSlice.actions;

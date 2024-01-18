@@ -7,7 +7,7 @@ import { css } from "@emotion/react";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { Segment, httpRequestState } from "../types";
 import {
-  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages
+  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages,
 } from "../redux/videoSlice";
 
 import { LuMenu, LuLoader } from "react-icons/lu";
@@ -47,7 +47,7 @@ const Timeline: React.FC<{
   selectIsPlaying,
   setClickTriggered,
   setCurrentlyAt,
-  setIsPlaying
+  setIsPlaying,
 }) => {
 
   // Init redux variables
@@ -280,7 +280,7 @@ export const Scrubber: React.FC<{
               moveLeft: rewriteKeys(KEYMAP.timeline.left.key),
               moveRight: rewriteKeys(KEYMAP.timeline.right.key),
               increase: rewriteKeys(KEYMAP.timeline.increase.key),
-              decrease: rewriteKeys(KEYMAP.timeline.decrease.key)
+              decrease: rewriteKeys(KEYMAP.timeline.decrease.key),
             })}
           tabIndex={0}>
           <LuMenu css={scrubberDragHandleIconStyle} />
@@ -348,7 +348,7 @@ export const SegmentsList: React.FC<{
                 segment: index,
                 segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
                 start: convertMsToReadableString(segment.start),
-                end: convertMsToReadableString(segment.end)
+                end: convertMsToReadableString(segment.end),
               })}
             tabIndex={tabable ? 0 : -1}
             css={{
@@ -441,7 +441,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
 
           // Start waveform worker with blob
           const waveformWorker: any = new Waveform({
-            type: "img", width: "2000", height: "230", samples: 100000, media: file
+            type: "img", width: "2000", height: "230", samples: 100000, media: file,
           });
 
           waveformWorker.onerror = (error: string) => {

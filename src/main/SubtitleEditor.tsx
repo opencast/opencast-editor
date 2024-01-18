@@ -11,7 +11,7 @@ import {
   setIsDisplayEditView,
   selectSelectedSubtitleById,
   selectSelectedSubtitleId,
-  setSubtitle
+  setSubtitle,
 } from "../redux/subtitleSlice";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
@@ -44,7 +44,7 @@ const SubtitleEditor: React.FC = () => {
       try {
         dispatch(setSubtitle({
           identifier: selectedId,
-          subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags }
+          subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags },
         }));
       } catch (error) {
         if (error instanceof Error) {
@@ -96,7 +96,7 @@ const SubtitleEditor: React.FC = () => {
     paddingTop: "10px",
     paddingBottom: "10px",
     ...(flexGapReplacementStyle(30, true)),
-    borderBottom: `${theme.menuBorder}`
+    borderBottom: `${theme.menuBorder}`,
   });
 
 
@@ -188,7 +188,7 @@ export const BackButton: React.FC = () => {
     padding: "16px",
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
-    justifyContent: "space-around"
+    justifyContent: "space-around",
   });
 
   return (

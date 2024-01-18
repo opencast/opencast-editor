@@ -60,7 +60,7 @@ export const KEYMAP: IKeyMap = {
     preview: {
       name: "video.previewButton",
       key: "Shift+Alt+p",
-    }
+    },
   },
   cutting: {
     cut: {
@@ -118,6 +118,6 @@ export const KEYMAP: IKeyMap = {
     delete: {
       name: "subtitleList.deleteSegment",
       key: "Shift+Alt+d",
-    }
-  }
+    },
+  },
 };

@@ -111,7 +111,7 @@ const metadataSlice = createSlice({
     },
     resetPostRequestState: state => {
       state.postStatus = "idle";
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(
@@ -142,7 +142,7 @@ const metadataSlice = createSlice({
         state.postStatus = "failed";
         state.postError = action.error.message;
       });
-  }
+  },
 });
 
 export const { setFieldValue, setHasChanges, setFieldReadonly, resetPostRequestState } = metadataSlice.actions;

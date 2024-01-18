@@ -22,7 +22,7 @@ import {
   setFocusSegmentTriggered,
   setFocusSegmentTriggered2,
   setFocusToSegmentAboveId,
-  setFocusToSegmentBelowId
+  setFocusToSegmentBelowId,
 } from "../redux/subtitleSlice";
 import { SubtitleCue } from "../types";
 import { convertMsToReadableString } from "../util/utilityFunctions";
@@ -80,7 +80,7 @@ const SubtitleListEditor: React.FC = () => {
         cueIndex: 0,
         text: "",
         startTime: 0,
-        endTime: defaultSegmentLength
+        endTime: defaultSegmentLength,
       }));
     }
   }, [dispatch, subtitle?.cues, subtitleId]);
@@ -216,8 +216,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         text: event.target.value,
         startTime: cue.startTime,
         endTime: cue.endTime,
-        tree: cue.tree
-      }
+        tree: cue.tree,
+      },
     }));
   };
 
@@ -231,8 +231,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         text: cue.text,
         startTime: value,
         endTime: cue.endTime,
-        tree: cue.tree
-      }
+        tree: cue.tree,
+      },
     }));
   };
 
@@ -246,8 +246,8 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
         text: cue.text,
         startTime: cue.startTime,
         endTime: value,
-        tree: cue.tree
-      }
+        tree: cue.tree,
+      },
     }));
   };
 
@@ -257,7 +257,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       cueIndex: props.index,
       text: "",
       startTime: cue.startTime - defaultSegmentLength,
-      endTime: cue.startTime
+      endTime: cue.startTime,
     }));
   };
 
@@ -267,14 +267,14 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
       cueIndex: props.index + 1,
       text: "",
       startTime: cue.endTime,
-      endTime: cue.endTime + defaultSegmentLength
+      endTime: cue.endTime + defaultSegmentLength,
     }));
   };
 
   const deleteCue = () => {
     dispatch(removeCue({
       identifier: identifier,
-      cue: cue
+      cue: cue,
     }));
   };
 
@@ -284,7 +284,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     KEYMAP.subtitleList.addBelow.key,
     KEYMAP.subtitleList.jumpAbove.key,
     KEYMAP.subtitleList.jumpBelow.key,
-    KEYMAP.subtitleList.delete.key
+    KEYMAP.subtitleList.delete.key,
   ], (_, handler) => {
     switch (handler.keys?.join("")) {
       case KEYMAP.subtitleList.addAbove.key.split("+").pop():
@@ -325,12 +325,12 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     "&:hover": {
       "& .functionButtonAreaStyle": {
         visibility: "visible",
-      }
+      },
     },
     "&:focus-within": {
       "& .functionButtonAreaStyle": {
         visibility: "visible",
-      }
+      },
     },
     "& textarea, input": {
       outline: `${theme.element_outline}`,
@@ -338,7 +338,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     "& input": {
       marginTop: (scheme === "dark-high-contrast" || scheme === "light-high-contrast" ? "3%" : "0%"),
       marginBottom: (scheme === "dark-high-contrast" || scheme === "light-high-contrast" ? "3%" : "0%"),
-    }
+    },
   });
 
   const timeAreaStyle = css({
@@ -370,7 +370,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     padding: "10px 10px",
     background: `${theme.element_bg}`,
     border: "1px solid #ccc",
-    color: `${theme.text}`
+    color: `${theme.text}`,
   });
 
   const textFieldStyle = css({
@@ -482,7 +482,7 @@ const FunctionButton: React.FC<{
   tooltipAria,
   onClick,
   onKeyDown,
-  Icon
+  Icon,
 }) => {
 
   const theme = useTheme();
@@ -564,7 +564,7 @@ const TimeInput: React.FC<{
   const timeFieldStyle = css({
     height: "20%",
     width: "100px",
-    ...(parsingError && { borderColor: "red", borderWidth: "2px" })
+    ...(parsingError && { borderColor: "red", borderWidth: "2px" }),
   });
 
   return (

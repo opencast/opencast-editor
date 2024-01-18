@@ -18,7 +18,7 @@ import {
   selectAspectRatio,
   setClickTriggered,
   selectClickTriggered,
-  setCurrentlyAt
+  setCurrentlyAt,
 } from "../redux/videoSlice";
 
 import ReactPlayer, { Config } from "react-player";
@@ -44,7 +44,7 @@ const VideoPlayers: React.FC<{
 }> = ({
   refs,
   widthInPercent = 100,
-  maxHeightInPixel = 300
+  maxHeightInPixel = 300,
 }) => {
 
   const videoURLs = useAppSelector(selectVideoURL);
@@ -123,7 +123,7 @@ export const VideoPlayer = React.forwardRef(
     setIsPlaying: ActionCreatorWithPayload<boolean, string>,
     setPreviewTriggered: ActionCreatorWithPayload<any, string>,
     setClickTriggered: ActionCreatorWithPayload<any, string>,
-    setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+    setCurrentlyAt: any,
     setAspectRatio: ActionCreatorWithPayload<{ dataKey: number; } & { width: number, height: number; }, string>,
   },
   forwardRefThing
@@ -277,12 +277,12 @@ export const VideoPlayer = React.forwardRef(
         attributes: {
           // Skip player when navigating page with keyboard
           tabIndex: "-1",
-          crossOrigin: "anonymous"    // allow thumbnail generation
+          crossOrigin: "anonymous",    // allow thumbnail generation
         },
         tracks: [
-          { kind: "subtitles", src: subtitleUrl, srcLang: "en", default: true, label: "I am irrelevant" }
-        ]
-      }
+          { kind: "subtitles", src: subtitleUrl, srcLang: "en", default: true, label: "I am irrelevant" },
+        ],
+      },
     };
 
     /**
@@ -360,7 +360,7 @@ export const VideoPlayer = React.forwardRef(
       },
       getWidth() {
         return (ref.current?.getInternalPlayer() as HTMLVideoElement).clientWidth;
-      }
+      },
     }));
 
     const errorBoxStyle = css({

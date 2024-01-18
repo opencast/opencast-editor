@@ -5,7 +5,7 @@ import {
   flexGapReplacementStyle,
   tileButtonStyle,
   disableButtonAnimation,
-  subtitleSelectStyle
+  subtitleSelectStyle,
 } from "../cssStyles";
 import { settings, subtitleTags } from "../config";
 import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/subtitleSlice";
@@ -202,7 +202,7 @@ const SubtitleSelectButton: React.FC<{
 const SubtitleAddButton: React.FC<{
   subtitlesForDropdown: { id: string, tags: string[]; }[];
 }> = ({
-  subtitlesForDropdown
+  subtitlesForDropdown,
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -238,7 +238,7 @@ const SubtitleAddButton: React.FC<{
   };
 
   const plusIconStyle = css({
-    display: isPlusDisplay ? "flex" : "none"
+    display: isPlusDisplay ? "flex" : "none",
   });
 
   const subtitleAddFormStyle = css({

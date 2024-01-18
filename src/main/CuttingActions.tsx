@@ -10,7 +10,7 @@ import { css } from "@emotion/react";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll,
 } from "../redux/videoSlice";
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
@@ -164,7 +164,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
   actionHandler,
   action,
   tooltip,
-  ariaLabelText
+  ariaLabelText,
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const theme = useTheme();
@@ -200,7 +200,7 @@ interface markAsDeleteButtonInterface {
 const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
   actionHandler,
   action,
-  hotKeyName
+  hotKeyName,
 }) => {
   const { t } = useTranslation();
   const isCurrentSegmentAlive = useAppSelector(selectIsCurrentSegmentAlive);

@@ -15,7 +15,7 @@ import {
   selectSelectedSubtitleById,
   selectIsPlayPreview,
   setIsPlayPreview,
-  setCurrentlyAtAndTriggerPreview
+  setCurrentlyAtAndTriggerPreview,
 } from "../redux/subtitleSlice";
 import { selectIsMuted, selectVideos, selectVolume, setIsMuted, setVolume } from "../redux/videoSlice";
 import { Flavor } from "../types";
@@ -169,7 +169,7 @@ const VideoSelectDropdown: React.FC<{
 }> = ({
   flavors,
   changeFlavorcallback,
-  defaultFlavor
+  defaultFlavor,
 }) => {
 
   const { t } = useTranslation();

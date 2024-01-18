@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import {
   basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
-  navigationButtonStyle, flexGapReplacementStyle, spinningStyle
+  navigationButtonStyle, flexGapReplacementStyle, spinningStyle,
 } from "../cssStyles";
 
 import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck } from "react-icons/lu";
@@ -14,7 +14,7 @@ import {
   selectHasChanges,
   selectSegments,
   selectTracks,
-  setHasChanges as videoSetHasChanges
+  setHasChanges as videoSetHasChanges,
 } from "../redux/videoSlice";
 import { postVideoInformation, selectStatus, selectError } from "../redux/workflowPostSlice";
 
@@ -23,11 +23,11 @@ import { CallbackButton, PageButton } from "./Finish";
 import { useTranslation } from "react-i18next";
 import {
   postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
-  selectHasChanges as metadataSelectHasChanges
+  selectHasChanges as metadataSelectHasChanges,
 } from "../redux/metadataSlice";
 import {
   selectSubtitles, selectHasChanges as selectSubtitleHasChanges,
-  setHasChanges as subtitleSetHasChanges
+  setHasChanges as subtitleSetHasChanges,
 } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
@@ -154,7 +154,7 @@ export const SaveButton: React.FC = () => {
       subtitlesForPosting.push({
         id: identifier,
         subtitle: serializeSubtitle(subtitles[identifier].cues),
-        tags: subtitles[identifier].tags
+        tags: subtitles[identifier].tags,
       });
     }
     return subtitlesForPosting;
@@ -175,7 +175,7 @@ export const SaveButton: React.FC = () => {
       dispatch(postVideoInformation({
         segments: segments,
         tracks: tracks,
-        subtitles: prepareSubtitles()
+        subtitles: prepareSubtitles(),
       }));
 
     }

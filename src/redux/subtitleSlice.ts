@@ -111,7 +111,7 @@ export const subtitleSlice = createSlice({
         text: action.payload.text,
         startTime: Math.round(startTime),
         endTime: Math.round(action.payload.endTime),
-        tree: { children: [{ type: "text", value: action.payload.text }] }
+        tree: { children: [{ type: "text", value: action.payload.text }] },
       };
 
       // Trigger a callback in the list component that focuses the newly added element

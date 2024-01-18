@@ -22,8 +22,8 @@ export const finishSlice = createSlice({
     },
     setPageNumber: (state, action) => {
       state.pageNumber = action.payload;
-    }
-  }
+    },
+  },
 });
 
 // Export Actions

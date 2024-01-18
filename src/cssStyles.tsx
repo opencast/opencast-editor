@@ -70,7 +70,7 @@ export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow
             marginRight: "0px",
           },
         },
-      }
+      },
     }
   );
 };
@@ -221,7 +221,7 @@ export function selectFieldStyle(theme: Theme) {
       ...(state.isFocused && { boxShadow: `0 0 0 1px ${theme.metadata_highlight}` }),
       "&:hover": {
         borderColor: theme.menu_background,
-        boxShadow: `0 0 0 1px ${theme.metadata_highlight}`
+        boxShadow: `0 0 0 1px ${theme.metadata_highlight}`,
       },
     }),
     menu: (provided: any) => ({
@@ -297,7 +297,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
             ".Mui-selected": {
               background: `${theme.selected}`,
               color: `${theme.selected_text}`,
-            }
+            },
           },
 
           /* Clock-modal */
@@ -305,7 +305,7 @@ export const calendarStyle = (theme: Theme) => createTheme({
             background: `${theme.clock_bg}`,
             outline: `${theme.clock_border}`,
             "-webkitTextFillColor": `${theme.text}`, // Digits on the clock
-            textShadow: `${theme.text_shadow}`
+            textShadow: `${theme.text_shadow}`,
           },
           /* selected digit (hour/minute) */
           "& .MuiClockPicker-root .Mui-selected": {
@@ -315,15 +315,15 @@ export const calendarStyle = (theme: Theme) => createTheme({
           },
           /* clock hands */
           "& .MuiClock-pin, .MuiClockPointer-root": {
-            background: `${theme.clock_hands}`
+            background: `${theme.clock_hands}`,
           },
           "& .MuiClockPointer-thumb": {
             background: `${theme.clock_hands}`,
             border: `16px solid ${theme.clock_hands}`,
-          }
+          },
         },
 
-      }
+      },
     },
     MuiButtonBase: {
       styleOverrides: {
@@ -354,20 +354,20 @@ export const calendarStyle = (theme: Theme) => createTheme({
           "&.MuiClock-amButton, &.MuiClock-pmButton": {
             "-webkitTextFillColor": `${theme.text} !important`,
             "&:hover": {
-              "-webkitTextFillColor": `${theme.clock_focus} !important`
-            }
+              "-webkitTextFillColor": `${theme.clock_focus} !important`,
+            },
           },
-        }
-      }
+        },
+      },
     },
     MuiTypography: {
       styleOverrides: {
         root: { // Weekdays
           color: `${theme.disabled} !important`,
         },
-      }
+      },
     },
-  }
+  },
 });
 
 export const subtitleSelectStyle = (theme: Theme) => createTheme({
@@ -378,7 +378,7 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
         root: {
           color: `${theme.text} !important`,
         },
-      }
+      },
     },
     /* Labelborder */
     MuiOutlinedInput: {
@@ -386,7 +386,7 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
         notchedOutline: {
           border: `${theme.dropdown_border} !important`,
         },
-      }
+      },
     },
     /* Selectfield/Inputfield with Icon */
     MuiSelect: {
@@ -398,7 +398,7 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
         icon: {
           color: `${theme.indicator_color}`,
         },
-      }
+      },
     },
 
     /* Dropdownlist */
@@ -409,7 +409,7 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
           color: `${theme.text}`,
           border: `${theme.dropdown_border}`,
         },
-      }
+      },
     },
     /* Dropdownlist: Single entry */
     MuiMenuItem: {
@@ -417,16 +417,16 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
         root: {
           "&:hover, &.Mui-selected:hover": {
             color: `${theme.focus_text}`,
-            background: `${theme.focused}`
+            background: `${theme.focused}`,
           },
           "&.Mui-selected": {
             color: `${theme.selected_text}`,
             background: `${theme.selected}`,
           },
         },
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 export const spinningStyle = css({
@@ -438,7 +438,7 @@ export const spinningStyle = css({
 
 export const customIconStyle = css(({
   maxWidth: "16px",
-  height: "auto"
+  height: "auto",
 }));
 
 export const videosStyle = (theme: Theme) => css(({

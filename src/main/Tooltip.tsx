@@ -46,13 +46,13 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
             fontSize: "16px",
             lineHeight: "normal",
             fontFamily: "Roboto Flex Variable",
-          }
+          },
         },
         arrow: {
           sx: {
             color: `${theme.tooltip}`,
-          }
-        }
+          },
+        },
       }}
 
     />

@@ -29,7 +29,7 @@ const Landing: React.FC = () => {
     code: {
       userSelect: "all",
       color: "#e83e8c",
-    }
+    },
   });
 
   return (

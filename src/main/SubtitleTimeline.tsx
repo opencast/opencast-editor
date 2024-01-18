@@ -164,7 +164,7 @@ const SubtitleTimeline: React.FC = () => {
               height: "100%",
               left: (currentlyAt / duration) * (widthMiniTimeline),
               top: 0,
-              background: "black"
+              background: "black",
             }}
           />
         </div>
@@ -276,8 +276,8 @@ const TimelineSubtitleSegment: React.FC<{
         text: props.cue.text,
         startTime: newStartTime,
         endTime: newEndTime,
-        tree: props.cue.tree
-      }
+        tree: props.cue.tree,
+      },
     }));
   };
 
@@ -388,7 +388,7 @@ const TimelineSubtitleSegment: React.FC<{
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
     padding: "8px",
-    color: `${theme.subtitle_segment_text}`
+    color: `${theme.subtitle_segment_text}`,
   });
 
   return (

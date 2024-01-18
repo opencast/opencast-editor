@@ -52,7 +52,7 @@ const Entry: React.FC<{ name: string, sequences: string[][]; }> = ({ name, seque
     justifyContent: "left",
     width: "100%",
     padding: "10px 0px",
-    ...(flexGapReplacementStyle(10, true))
+    ...(flexGapReplacementStyle(10, true)),
   });
 
   const labelStyle = css({
@@ -66,7 +66,7 @@ const Entry: React.FC<{ name: string, sequences: string[][]; }> = ({ name, seque
   const sequenceStyle = css({
     display: "flex",
     flexDirection: "row",
-    ...(flexGapReplacementStyle(10, true))
+    ...(flexGapReplacementStyle(10, true)),
   });
 
   const singleKeyStyle = css({

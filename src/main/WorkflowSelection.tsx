@@ -172,7 +172,7 @@ const WorkflowButton: React.FC<{
 }> = ({
   stateName,
   workflowId,
-  workflowDescription
+  workflowDescription,
 }) => {
 
   // Note: Styling the Radio Button is done in WorkflowSelectRadio
@@ -210,8 +210,8 @@ const WorkflowSelectRadio: React.FC = props => {
     alignSelf: "start",
     color: `${theme.text}`,
     "&$checked": {
-      color: `${theme.text}`
-    }
+      color: `${theme.text}`,
+    },
   });
 
   return (
