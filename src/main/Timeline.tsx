@@ -479,8 +479,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
         // Display a flatline
         <div css={{ width: "100%" }}><hr /></div>
       );
-    }
-    else {
+    } else {
       return (
         <>
           <LuLoader css={[spinningStyle, { fontSize: 40 }]} />
