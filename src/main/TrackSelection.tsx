@@ -1,100 +1,131 @@
 import React from "react";
-import { css } from '@emotion/react'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { css } from "@emotion/react";
+
+import { IconType } from "react-icons";
+import { LuTrash } from "react-icons/lu";
+import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
+import ReactPlayer from "react-player";
+
+import { Track } from "../types";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { selectVideos, setTrackEnabled } from "../redux/videoSlice";
 import {
-  faInfoCircle,
-  faTrash,
-  faTrashRestore,
-} from "@fortawesome/free-solid-svg-icons";
-import ReactPlayer from 'react-player'
+  backgroundBoxStyle,
+  basicButtonStyle,
+  customIconStyle,
+  deactivatedButtonStyle,
+  flexGapReplacementStyle,
+  titleStyle,
+  titleStyleBold,
+} from "../cssStyles";
 
-import { Track }  from '../types'
-import { useSelector, useDispatch } from 'react-redux';
-import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
-import { basicButtonStyle, deactivatedButtonStyle } from '../cssStyles'
-
-import { useTranslation } from 'react-i18next';
-import { selectTheme } from "../redux/themeSlice";
+import { useTranslation } from "react-i18next";
+import { useTheme } from "../themes";
+import { ThemedTooltip } from "./Tooltip";
 
 /**
  * Creates the track selection.
  */
-const TrackSelection: React.FC<{}> = () => {
+const TrackSelection: React.FC = () => {
 
   // Generate list of tracks
-  const tracks: Track[] = useSelector(selectVideos);
+  const tracks: Track[] = useAppSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
-    <TrackItem key={ track.id } track={ track } enabledCount={ enabledCount } />
+    <TrackItem key={track.id} track={track} enabledCount={enabledCount} />
   );
 
-  return (
-    <div>
-      { trackItems }
-      <Description />
-    </div>
-  );
-}
+  const trackSelectionStyle = css({
+    display: "flex",
+    width: "auto",
+    height: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+  });
 
-
-const Description: React.FC<{}> = () => {
-
-  const { t } = useTranslation();
-
-  const description: string = t('trackSelection.description',
-    'Select or deselect which tracks are used for processing and publication.');
-
-  const descriptionStyle = css({
-    display: 'flex',
-    alignItems: 'center',
-    margin: '20px',
-    padding: '10px',
+  const trackAreaStyle = css({
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    ...(flexGapReplacementStyle(10, false)),
   });
 
   return (
-    <aside css={ descriptionStyle }>
-      <FontAwesomeIcon css={{margin: '10px'}} icon={faInfoCircle} size="2x" />
-      { description }
-    </aside>
+    <div css={trackSelectionStyle}>
+      <Header />
+      <div css={trackAreaStyle}>
+        {trackItems}
+      </div>
+    </div>
   );
-}
+};
 
 
-const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabledCount}) => {
-
-  const theme = useSelector(selectTheme);
+const Header: React.FC = () => {
 
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const header = track.flavor.type + ' '
-    + (track.video_stream.enabled ? ''
-       :  `(${t('trackSelection.trackInactive', 'inactive')})`);
+  const theme = useTheme();
+
+  const description: string = t("trackSelection.title");
+
+  return (
+    <div css={[titleStyle(theme), titleStyleBold(theme)]}>
+      {description}
+    </div>
+  );
+};
+
+
+const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, enabledCount }) => {
+
+  const theme = useTheme();
+
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const header = track.flavor.type + " "
+    + (track.video_stream.enabled ? ""
+      : `(${t("trackSelection.trackInactive", "inactive")})`);
 
   const trackItemStyle = css({
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: '20px',
-    paddingBottom: '10px',
-    verticalAlign: 'middle',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "left",
+  });
+
+  const trackitemSubStyle = css({
+    display: "flex",
+    flexDirection: "row",
+    ...(flexGapReplacementStyle(20, true)),
+
+    justifyContent: "space-around",
+    flexWrap: "wrap",
   });
 
   const playerStyle = css({
-    display: 'inline-block',
-    width: '80%',
-    maxHeight: '200px',
-    margin: '10px',
+    aspectRatio: "16 / 9",
+    width: "100%",
+    maxWidth: "457px",
   });
 
   const headerStyle = css({
-    display: 'inline-block',
-    width: '100%',
-    fontWeight: 'bold',
-    padding: '5px 25px',
-    borderBottom: `${theme.menuBorder}`,
-    textTransform: 'capitalize',
-    fontSize: 'larger',
+    fontWeight: "bold",
+    fontSize: "larger",
+    color: `${theme.text}`,
+    "&:first-letter": {
+      textTransform: "capitalize",
+    },
+  });
+
+  const buttonsStyle = css({
+    // TODO: Avoid hard-coding max-width
+    "@media (max-width: 1550px)": {
+      width: "100%",
+    },
+    display: "flex",
+    flexDirection: "column",
   });
 
   // What state is the track in and can it be deactivated?
@@ -105,83 +136,98 @@ const TrackItem: React.FC<{track: Track, enabledCount: number}> = ({track, enabl
   const deleteStatus = track.video_stream.enabled ? (enabledCount > 1 ? 0 : 1) : 2;
   const deleteEnabled = deleteStatus !== 1;
   const deleteText = [
-    t('trackSelection.deleteTrackText', 'Delete Track'),
-    t('trackSelection.cannotDeleteTrackText', 'Cannot Delete Track'),
-    t('trackSelection.restoreTrackText', 'Restore Track')
-    ][deleteStatus];
+    t("trackSelection.deleteTrackText", "Delete Track"),
+    t("trackSelection.cannotDeleteTrackText", "Cannot Delete Track"),
+    t("trackSelection.restoreTrackText", "Restore Track"),
+  ][deleteStatus];
   const deleteTooltip = [
-    t('trackSelection.deleteTrackTooltip', 'Do not encode and publish this track.'),
-    t('trackSelection.cannotDeleteTrackTooltip', 'Cannot remove this track from publication.'),
-    t('trackSelection.restoreTrackTooltip', 'Encode and publish this track.')
-    ][deleteStatus];
-  const deleteIcon = [faTrash, faTrash, faTrashRestore][deleteStatus];
+    t("trackSelection.deleteTrackTooltip", "Do not encode and publish this track."),
+    t("trackSelection.cannotDeleteTrackTooltip", "Cannot remove this track from publication."),
+    t("trackSelection.restoreTrackTooltip", "Encode and publish this track."),
+  ][deleteStatus];
+  const deleteIcon = [LuTrash, LuTrash, TrashRestore][deleteStatus];
   const trackEnabledChange = () => {
     dispatch(setTrackEnabled({
       id: track.id,
       enabled: !track.video_stream.enabled,
-    }))
-  }
+    }));
+  };
 
   return (
-    <div css={ trackItemStyle }>
-      <div css={ headerStyle }>{ header }</div>
-      <div css={{ width: '95%', textAlign: 'center', opacity: track.video_stream.enabled ? '1' : '0.5' }}>
-        <ReactPlayer css={ playerStyle } url={ track.uri } width="90%" />
+    <div css={[backgroundBoxStyle(theme), trackItemStyle]}>
+      <div css={headerStyle}>{header}</div>
+      <div css={trackitemSubStyle}>
+        <ReactPlayer
+          width="unset"
+          height="unset"
+          css={playerStyle}
+          style={{ opacity: track.video_stream.enabled ? "1" : "0.5" }}
+          url={track.uri}
+        />
+        <div css={buttonsStyle}>
+          <SelectButton
+            text={deleteText}
+            tooltip={deleteTooltip}
+            handler={trackEnabledChange}
+            Icon={deleteIcon}
+            active={deleteEnabled}
+          />
+        </div>
       </div>
-      <SelectButton
-        text={ deleteText }
-        tooltip={ deleteTooltip }
-        handler={ trackEnabledChange }
-        icon={ deleteIcon }
-        active={ deleteEnabled } />
     </div>
   );
-}
+};
 
 interface selectButtonInterface {
-  handler: any,
+  handler: () => void,
   text: string,
-  icon: any,
+  Icon: IconType | React.FunctionComponent,
   tooltip: string,
   active: boolean,
 }
 
-const SelectButton : React.FC<selectButtonInterface> = ({handler, text, icon, tooltip, active}) => {
+const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, tooltip, active }) => {
 
-  const theme = useSelector(selectTheme);
-  
+  const theme = useTheme();
+
   const buttonStyle = [
-    active ? basicButtonStyle : deactivatedButtonStyle,
+    active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     {
-      margin: '10px 15px',
-      padding: '16px',
-      width: '25%',
-      boxShadow: `${theme.boxShadow}`,
+      padding: "16px",
+      maxHeight: "21px",
+      boxShadow: "",
       background: `${theme.element_bg}`,
+      textWrap: "nowrap",
     }];
+
   const clickHandler = () => {
-    active && handler();
+    if (active) { handler(); }
     ref.current?.blur();
   };
+
   const keyHandler = (event: React.KeyboardEvent) => {
     if (active && (event.key === " " || event.key === "Enter")) {
       handler();
     }
   };
-  const ref = React.useRef<HTMLDivElement>(null)
+
+  const ref = React.useRef<HTMLDivElement>(null);
+
   return (
-    <div css={ buttonStyle }
-         tabIndex={ 0 }
-         ref={ref}
-         role="button"
-         title={ tooltip }
-         aria-label={ tooltip }
-         onClick={ clickHandler }
-         onKeyDown={ keyHandler } >
-      <FontAwesomeIcon icon={ icon } size="1x" />
-      <div>{ text }</div>
-    </div>
+    <ThemedTooltip title={tooltip}>
+      <div
+        css={buttonStyle}
+        tabIndex={0}
+        ref={ref}
+        role="button"
+        aria-label={tooltip}
+        onClick={clickHandler}
+        onKeyDown={keyHandler} >
+        <Icon css={customIconStyle} />
+        {text}
+      </div>
+    </ThemedTooltip>
   );
-}
+};
 
 export default TrackSelection;

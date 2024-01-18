@@ -1,42 +1,55 @@
-import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { client } from '../util/client'
+import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { client } from "../util/client";
 
-import { Segment, httpRequestState, Track, Workflow, Flavor, SubtitlesFromOpencast }  from '../types'
-import { roundToDecimalPlace } from '../util/utilityFunctions'
-import { WritableDraft } from 'immer/dist/internal';
-import { settings } from '../config';
+import { Segment, httpRequestState, Track, Workflow, Flavor, SubtitlesFromOpencast } from "../types";
+import { roundToDecimalPlace } from "../util/utilityFunctions";
+import { settings } from "../config";
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
   isPlayPreview: boolean,         // Should deleted segments be skipped?
+  isMuted: boolean,               // Is the volume muted?
+  volume: number,                 // Video playback volume
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   clickTriggered: boolean,        // Another video player callback
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
-  captions: SubtitlesFromOpencast[],
+  subtitlesFromOpencast: SubtitlesFromOpencast[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
-  aspectRatios: {width: number, height: number}[],  // Aspect ratios of every video
+  aspectRatios: { width: number, height: number; }[],  // Aspect ratios of every video
   hasChanges: boolean,             // Did user make changes in cutting view since last save
-  waveformImages: string[]
-  originalThumbnails: {id: Track["id"], uri: Track["thumbnailUri"]}[]
+  waveformImages: string[];
+  originalThumbnails: { id: Track["id"], uri: Track["thumbnailUri"]; }[];
 
   videoURLs: string[],  // Links to each video
   videoCount: number,   // Total number of videos
-  duration: number,     // Video duration in milliseconds
+  duration: number,     // Video duration in milliseconds. Can be null due to Opencast internal error
   title: string,
   presenters: string[],
   workflows: Workflow[],
+
+  lockingActive: boolean,     // Whether locking event editing is enabled
+  lockRefresh: number | null, // Lock refresh period
+  lockState: boolean,         // Whether lock has been obtained
+  lock: lockData;
+}
+
+export interface lockData {
+  uuid: string,
+  user: string;
 }
 
 export const initialState: video & httpRequestState = {
   isPlaying: false,
   isPlayPreview: true,
+  isMuted: false,
+  volume: 1,
   currentlyAt: 0,   // Position in the video in milliseconds
-  segments: [{id: nanoid(), start: 0, end: 1, deleted: false}],
+  segments: [{ id: nanoid(), start: 0, end: 1, deleted: false }],
   tracks: [],
-  captions: [],
+  subtitlesFromOpencast: [],
   activeSegmentIndex: 0,
   selectedWorkflowId: "",
   previewTriggered: false,
@@ -49,24 +62,29 @@ export const initialState: video & httpRequestState = {
   videoURLs: [],
   videoCount: 0,
   duration: 0,
-  title: '',
+  title: "",
   presenters: [],
   workflows: [],
 
-  status: 'idle',
-  error: undefined,
-  errorReason: 'unknown',
-}
+  lockingActive: false,
+  lockRefresh: null,
+  lockState: false,
+  lock: { uuid: "", user: "" },
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
+  status: "idle",
+  error: undefined,
+  errorReason: "unknown",
+};
+
+export const fetchVideoInformation = createAsyncThunk("video/fetchVideoInformation", async () => {
   if (!settings.id) {
-    throw new Error("Missing media package identifier")
+    throw new Error("Missing media package identifier");
   }
 
-  // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
-  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/edit.json`)
-  return JSON.parse(response)
-})
+  // const response = await client.get("https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json")
+  const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/edit.json`);
+  return JSON.parse(response);
+});
 
 const updateCurrentlyAt = (state: video, milliseconds: number) => {
   state.currentlyAt = roundToDecimalPlace(milliseconds, 0);
@@ -76,7 +94,7 @@ const updateCurrentlyAt = (state: video, milliseconds: number) => {
   }
 
   if (state.duration !== 0 && state.duration < state.currentlyAt) {
-    state.currentlyAt = state.duration
+    state.currentlyAt = state.duration;
   }
 
   updateActiveSegment(state);
@@ -88,11 +106,11 @@ const updateCurrentlyAt = (state: video, milliseconds: number) => {
  * Treats the multitude of videos that may exist as one video
  */
 const videoSlice = createSlice({
-  name: 'videoState',
+  name: "videoState",
   initialState,
   reducers: {
     setTrackEnabled: (state, action) => {
-      for (let track of state.tracks) {
+      for (const track of state.tracks) {
         if (track.id === action.payload.id) {
           track.audio_stream.enabled = action.payload.enabled;
           track.video_stream.enabled = action.payload.enabled;
@@ -106,219 +124,238 @@ const videoSlice = createSlice({
     setIsPlayPreview: (state, action: PayloadAction<video["isPlaying"]>) => {
       state.isPlayPreview = action.payload;
     },
+    setIsMuted: (state, action: PayloadAction<video["isMuted"]>) => {
+      state.isMuted = action.payload;
+    },
+    setVolume: (state, action: PayloadAction<video["volume"]>) => {
+      state.volume = action.payload;
+    },
     setPreviewTriggered: (state, action) => {
-      state.previewTriggered = action.payload
+      state.previewTriggered = action.payload;
     },
     setClickTriggered: (state, action) => {
-      state.clickTriggered = action.payload
+      state.clickTriggered = action.payload;
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       updateCurrentlyAt(state, action.payload);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
-      updateCurrentlyAt(state, roundToDecimalPlace(action.payload * 1000, 0))
+      updateCurrentlyAt(state, roundToDecimalPlace(action.payload * 1000, 0));
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
-      state.segments.push(action.payload)
+      state.segments.push(action.payload);
     },
-    setAspectRatio: (state, action: PayloadAction<{dataKey: number} & {width: number, height: number}> ) => {
-      state.aspectRatios[action.payload.dataKey] = {width: action.payload.width, height: action.payload.height}
+    setAspectRatio: (state, action: PayloadAction<{ dataKey: number; } & { width: number, height: number; }>) => {
+      state.aspectRatios[action.payload.dataKey] = { width: action.payload.width, height: action.payload.height };
     },
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
-      state.hasChanges = action.payload
+      state.hasChanges = action.payload;
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
-      state.waveformImages = action.payload
+      state.waveformImages = action.payload;
     },
-    setThumbnail: (state, action: PayloadAction<{id: Track["id"], uri: Track["thumbnailUri"]}>) => {
-      setThumbnailHelper(state, action.payload.id, action.payload.uri)
+    setThumbnail: (state, action: PayloadAction<{ id: Track["id"], uri: Track["thumbnailUri"]; }>) => {
+      setThumbnailHelper(state, action.payload.id, action.payload.uri);
     },
-    setThumbnails: (state, action: PayloadAction<{id: Track["id"], uri: Track["thumbnailUri"]}[]>) => {
+    setThumbnails: (state, action: PayloadAction<{ id: Track["id"], uri: Track["thumbnailUri"]; }[]>) => {
       for (const element of action.payload) {
-        setThumbnailHelper(state, element.id, element.uri)
+        setThumbnailHelper(state, element.id, element.uri);
       }
     },
     removeThumbnail: (state, action: PayloadAction<string>) => {
-      const index = state.tracks.findIndex(t => t.id === action.payload)
-      state.tracks[index].thumbnailUri = undefined
+      const index = state.tracks.findIndex(t => t.id === action.payload);
+      state.tracks[index].thumbnailUri = undefined;
     },
-    cut: (state) => {
-      // If we're exactly between two segments, we can't split the current segment
+    setLock: (state, action: PayloadAction<video["lockState"]>) => {
+      state.lockState = action.payload;
+    },
+    cut: state => {
+      // If we"re exactly between two segments, we can"t split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
-          state.segments[state.activeSegmentIndex].end === state.currentlyAt ) {
-        return
+        state.segments[state.activeSegmentIndex].end === state.currentlyAt) {
+        return;
       }
 
       // Make two (new) segments out of it
-      let segmentA : Segment =  {id: nanoid(),
+      const segmentA: Segment = {
+        id: nanoid(),
         start: state.segments[state.activeSegmentIndex].start,
         end: state.currentlyAt,
-        deleted: state.segments[state.activeSegmentIndex].deleted}
-      let segmentB : Segment =  {id: nanoid(),
+        deleted: state.segments[state.activeSegmentIndex].deleted,
+      };
+      const segmentB: Segment = {
+        id: nanoid(),
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
-        deleted: state.segments[state.activeSegmentIndex].deleted}
+        deleted: state.segments[state.activeSegmentIndex].deleted,
+      };
 
       // Add the new segments and remove the old one
       state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
 
-      state.hasChanges = true
+      state.hasChanges = true;
     },
-    markAsDeletedOrAlive: (state) => {
-      state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted
-      state.hasChanges = true
+    markAsDeletedOrAlive: state => {
+      state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted;
+      state.hasChanges = true;
     },
     setSelectedWorkflowIndex: (state, action: PayloadAction<video["selectedWorkflowId"]>) => {
-      state.selectedWorkflowId = action.payload
+      state.selectedWorkflowId = action.payload;
     },
-    mergeLeft: (state) => {
-      mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex - 1)
-      state.hasChanges = true
+    mergeLeft: state => {
+      mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex - 1);
+      state.hasChanges = true;
     },
-    mergeRight: (state) => {
-      mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1)
-      state.hasChanges = true
+    mergeRight: state => {
+      mergeSegments(state, state.activeSegmentIndex, state.activeSegmentIndex + 1);
+      state.hasChanges = true;
+    },
+    mergeAll: state => {
+      mergeSegments(state, state.activeSegmentIndex, 0);
+      mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1);
+      state.hasChanges = true;
     },
   },
   // For Async Requests
   extraReducers: builder => {
     builder.addCase(
-      fetchVideoInformation.pending, (state, action) => {
-        state.status = 'loading'
-    })
+      fetchVideoInformation.pending, (state, _action) => {
+        state.status = "loading";
+      });
     builder.addCase(
       fetchVideoInformation.fulfilled, (state, action) => {
-        state.status = 'success'
+        state.status = "success";
 
-        // // Old API
-        // // eslint-disable-next-line no-sequences
-        // state.videoURLs = action.payload.previews.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        // state.videoCount = action.payload.previews.length
-        // state.duration = action.payload.duration
-        // state.title = action.payload.title
-        // state.presenters = action.payload.presenters
-        // state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        // state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
-        //   if (n1.displayOrder > n2.displayOrder) { return 1; }
-        //   if (n1.displayOrder < n2.displayOrder) { return -1; }
-        //   return 0;
-        // });
-
-        // New API
         if (action.payload.workflow_active) {
-          state.status = 'failed'
-          state.errorReason = 'workflowActive'
-          state.error = "An Opencast workflow is currently running, please wait until it is finished."
+          state.status = "failed";
+          state.errorReason = "workflowActive";
+          state.error = "This event is being processed. Please wait until the process is finished.";
         }
-        state.tracks = action.payload.tracks.sort((a: { thumbnailPriority: number; },b: { thumbnailPriority: number; }) => a.thumbnailPriority - b.thumbnailPriority)
-        const videos = state.tracks.filter((track: Track) => track.video_stream.available === true)
+        state.tracks = action.payload.tracks
+          .sort((a: { thumbnailPriority: number; }, b: { thumbnailPriority: number; }) => {
+            return a.thumbnailPriority - b.thumbnailPriority;
+          }).map((track: Track) => {
+            if (action.payload.local && settings.opencast.local) {
+              console.debug("Replacing track URL");
+              track.uri = track.uri.replace(/https?:\/\/[^/]*/g, window.location.origin);
+            }
+            return track;
+          });
+        const videos = state.tracks.filter((track: Track) => track.video_stream.available === true);
         // eslint-disable-next-line no-sequences
-        state.videoURLs = videos.reduce((a: string[], o: { uri: string }) => (a.push(o.uri), a), [])
-        state.videoCount = state.videoURLs.length
-        state.captions = action.payload.subtitles ? state.captions = action.payload.subtitles : []
-        state.duration = action.payload.duration
-        state.title = action.payload.title
-        state.presenters = []
-        state.segments = parseSegments(action.payload.segments, action.payload.duration)
-        state.workflows = action.payload.workflows.sort((n1: { displayOrder: number; },n2: { displayOrder: number; }) => {
-          return n1.displayOrder - n2.displayOrder;
-        });
-        state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages
-        state.originalThumbnails = state.tracks.map((track: Track) => { return {id: track.id, uri: track.thumbnailUri} })
+        state.videoURLs = videos.reduce((a: string[], o: { uri: string; }) => (a.push(o.uri), a), []);
+        state.videoCount = state.videoURLs.length;
+        state.subtitlesFromOpencast = action.payload.subtitles ?
+          state.subtitlesFromOpencast = action.payload.subtitles : [];
+        state.duration = action.payload.duration;
+        state.title = action.payload.title;
+        state.segments = parseSegments(action.payload.segments, action.payload.duration);
+        state.workflows = action.payload.workflows;
+        state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages;
+        state.originalThumbnails = state.tracks.map(
+          (track: Track) => { return { id: track.id, uri: track.thumbnailUri }; }
+        );
 
-        state.aspectRatios = new Array(state.videoCount)
-    })
+        state.aspectRatios = new Array(state.videoCount);
+        state.lockingActive = action.payload.locking_active;
+        state.lockRefresh = action.payload.lock_refresh;
+        state.lock.uuid = action.payload.lock_uuid;
+        state.lock.user = action.payload.lock_user;
+      });
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.error.message
-    })
-  }
-})
+        state.status = "failed";
+        state.error = action.error.message;
+      });
+  },
+});
 
 /**
  * Helper function to update the activeSegmentIndex
  * @param state
  */
-const updateActiveSegment = (state: WritableDraft<video>) => {
+const updateActiveSegment = (state: video) => {
   state.activeSegmentIndex = state.segments.findIndex(element =>
-    element.start <= state.currentlyAt && element.end >= state.currentlyAt)
+    element.start <= state.currentlyAt && element.end >= state.currentlyAt);
   // If there is an error, assume the first (the starting) segment
-  if(state.activeSegmentIndex < 0) {
-    state.activeSegmentIndex = 0
+  if (state.activeSegmentIndex < 0) {
+    state.activeSegmentIndex = 0;
   }
-}
+};
 
 /**
  * Helper Function for testing with current/old editor API
  */
 export const parseSegments = (segments: Segment[], duration: number) => {
-  let newSegments : Segment[] = []
+  const newSegments: Segment[] = [];
 
   if (segments.length === 0) {
-    newSegments.push({id: nanoid(), start: 0, end: duration, deleted: false})
+    newSegments.push({ id: nanoid(), start: 0, end: duration, deleted: false });
   }
 
   segments.forEach((segment: Segment) => {
-    newSegments.push({id: nanoid(), start: segment.start, end: segment.end, deleted: segment.deleted})
+    newSegments.push({ id: nanoid(), start: segment.start, end: segment.end, deleted: segment.deleted });
   });
-  return newSegments
-}
+  return newSegments;
+};
 
 /**
- * Helper function for merging two segments
+ * Helper function for merging segments
  */
-const mergeSegments = (state: WritableDraft<video>, activeSegmentIndex: number, mergeSegmentIndex: number) => {
+const mergeSegments = (state: video, startSegmentIndex: number, endSegmentIndex: number) => {
   // Check if mergeSegmentIndex is valid
-  if (mergeSegmentIndex < 0 || mergeSegmentIndex > state.segments.length - 1) {
-    return
+  if (endSegmentIndex < 0 || endSegmentIndex > state.segments.length - 1) {
+    return;
   }
 
   // Increase activeSegment length
-  state.segments[activeSegmentIndex].start = Math.min(
-    state.segments[activeSegmentIndex].start, state.segments[mergeSegmentIndex].start)
-  state.segments[activeSegmentIndex].end = Math.max(
-    state.segments[activeSegmentIndex].end, state.segments[mergeSegmentIndex].end)
+  state.segments[startSegmentIndex].start = Math.min(
+    state.segments[startSegmentIndex].start, state.segments[endSegmentIndex].start);
+  state.segments[startSegmentIndex].end = Math.max(
+    state.segments[startSegmentIndex].end, state.segments[endSegmentIndex].end);
 
-  // Remove the other segment
-  state.segments.splice(mergeSegmentIndex, 1);
+  // Remove the end segment and segments between
+  state.segments.splice(
+    startSegmentIndex < endSegmentIndex ? startSegmentIndex + 1 : endSegmentIndex,
+    Math.abs(endSegmentIndex - startSegmentIndex)
+  );
 
   // Update active segment
-  updateActiveSegment(state)
-}
+  updateActiveSegment(state);
+};
 
-const skipDeletedSegments = (state: WritableDraft<video>) => {
-  if(state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
-      let endTime = state.segments[state.activeSegmentIndex].end
+const skipDeletedSegments = (state: video) => {
+  if (state.isPlaying && state.segments[state.activeSegmentIndex].deleted && state.isPlayPreview) {
+    let endTime = state.segments[state.activeSegmentIndex].end;
 
-      for (let index = state.activeSegmentIndex; index < state.segments.length; index++) {
-        endTime = state.segments[index].end
+    for (let index = state.activeSegmentIndex; index < state.segments.length; index++) {
+      endTime = state.segments[index].end;
 
-        if (!state.segments[index].deleted) {
-          // Need to at +1 as start and end of neighbouring segments are identical
-          endTime = state.segments[index].start + 1
-          break
-        }
+      if (!state.segments[index].deleted) {
+        // Need to at +1 as start and end of neighbouring segments are identical
+        endTime = state.segments[index].start + 1;
+        break;
+      }
 
-        // If this is the last segment and it is deleted
-        if (index + 1 === state.segments.length) {
-          // Properly pause the player
-          state.isPlaying = false
-          // Jump to start of first non-deleted segment
-          for (let j = 0; j < state.segments.length; j++) {
-            if (!state.segments[j].deleted) {
-              endTime = state.segments[j].start
-              break
-            }
+      // If this is the last segment and it is deleted
+      if (index + 1 === state.segments.length) {
+        // Properly pause the player
+        state.isPlaying = false;
+        // Jump to start of first non-deleted segment
+        for (let j = 0; j < state.segments.length; j++) {
+          if (!state.segments[j].deleted) {
+            endTime = state.segments[j].start;
+            break;
           }
         }
       }
-
-      state.currentlyAt = endTime
-      state.previewTriggered = true
-      updateActiveSegment(state);
     }
-}
+
+    state.currentlyAt = endTime;
+    state.previewTriggered = true;
+    updateActiveSegment(state);
+  }
+};
 
 /**
  * Calculates a total aspect ratio for the video player wrappers,
@@ -329,83 +366,112 @@ const skipDeletedSegments = (state: WritableDraft<video>) => {
  * TODO: Improve calculation to handle multiple rows of videos
  */
 export const calculateTotalAspectRatio = (aspectRatios: video["aspectRatios"]) => {
-  let minHeight = Math.min.apply(Math, aspectRatios.map(function(o) { return o.height; }))
-  let minWidth = Math.min.apply(Math, aspectRatios.map(function(o) { return o.width; }))
-  minWidth *= aspectRatios.length
-  return Math.min((minHeight / minWidth) * 100, (9/32) * 100)
-}
-
-const setThumbnailHelper = (state:  WritableDraft<video>, id: Track["id"], uri: Track["thumbnailUri"]) => {
-  const index = state.tracks.findIndex(t => t.id === id)
-  if (index >= 0) {
-    state.tracks[index].thumbnailUri = uri
+  let minHeight = Math.min(...aspectRatios.map(o => o.height));
+  let minWidth = Math.min(...aspectRatios.map(o => o.width));
+  // Getting the aspect ratios of every video can take several seconds
+  // So we assume a default resolution until then
+  if (!minHeight || !minWidth) {
+    minHeight = 720;
+    minWidth = 1280;
   }
-}
+  minWidth *= aspectRatios.length;
+  return Math.min((minHeight / minWidth) * 100, (9 / 32) * 100);
+};
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setCurrentlyAt, setCurrentlyAtInSeconds,
-  addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail, removeThumbnail,
-  cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, setPreviewTriggered,
-  setClickTriggered } = videoSlice.actions
+const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnailUri"]) => {
+  const index = state.tracks.findIndex(t => t.id === id);
+  if (index >= 0) {
+    state.tracks[index].thumbnailUri = uri;
+  }
+};
+
+export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
+  setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
+  removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
+  setPreviewTriggered, setClickTriggered } = videoSlice.actions;
 
 // Export selectors
 // Selectors mainly pertaining to the video state
-export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"] }; }) =>
-  state.videoState.isPlaying
-export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"] }; }) =>
-  state.videoState.isPlayPreview
-export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"] } }) =>
-  state.videoState.previewTriggered
-export const selectClickTriggered = (state: { videoState: { clickTriggered: video["clickTriggered"] } }) =>
-  state.videoState.clickTriggered
+export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"]; }; }) =>
+  state.videoState.isPlaying;
+export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"]; }; }) =>
+  state.videoState.isPlayPreview;
+export const selectIsMuted = (state: { videoState: { isMuted: video["isMuted"]; }; }) =>
+  state.videoState.isMuted;
+export const selectVolume = (state: { videoState: { volume: video["volume"]; }; }) =>
+  state.videoState.volume;
+export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"]; }; }) =>
+  state.videoState.previewTriggered;
+export const selectClickTriggered = (state: { videoState: { clickTriggered: video["clickTriggered"]; }; }) =>
+  state.videoState.clickTriggered;
 export const selectCurrentlyAt = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
-  state.videoState.currentlyAt
+  state.videoState.currentlyAt;
 export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
-  state.videoState.currentlyAt / 1000
-export const selectSegments = (state: { videoState: { segments: video["segments"] } }) =>
-  state.videoState.segments
-export const selectActiveSegmentIndex = (state: { videoState: { activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
-  state.videoState.activeSegmentIndex
-export const selectIsCurrentSegmentAlive = (state: { videoState:
-  { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
-  !state.videoState.segments[state.videoState.activeSegmentIndex].deleted
-export const selectSelectedWorkflowId = (state: { videoState:
-    { selectedWorkflowId: video["selectedWorkflowId"]; }; }) =>
-    state.videoState.selectedWorkflowId
+  state.videoState.currentlyAt / 1000;
+export const selectSegments = (state: { videoState: { segments: video["segments"]; }; }) =>
+  state.videoState.segments;
+export const selectActiveSegmentIndex =
+  (state: { videoState: { activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
+    state.videoState.activeSegmentIndex;
+export const selectIsCurrentSegmentAlive = (state: {
+  videoState:
+  { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; };
+}) =>
+  !state.videoState.segments[state.videoState.activeSegmentIndex].deleted;
+export const selectSelectedWorkflowId = (state: {
+  videoState:
+  { selectedWorkflowId: video["selectedWorkflowId"]; };
+}) =>
+  state.videoState.selectedWorkflowId;
 export const selectHasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
-  state.videoState.hasChanges
+  state.videoState.hasChanges;
 export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
-  state.videoState.waveformImages
-export const selectOriginalThumbnails = (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
-  state.videoState.originalThumbnails
+  state.videoState.waveformImages;
+export const selectOriginalThumbnails =
+  (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
+    state.videoState.originalThumbnails;
 
 // Selectors mainly pertaining to the information fetched from Opencast
-export const selectVideos = (state: { videoState: { tracks: video["tracks"] } }) =>
-  state.videoState.tracks.filter((track: Track) => track.video_stream.available === true)
-export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"] } }) => state.videoState.videoURLs
-export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"] } }) => state.videoState.videoCount
-export const selectDuration = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration
-export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"] } }) => state.videoState.duration / 1000
-export const selectTitle = (state: { videoState: { title: video["title"] } }) => state.videoState.title
-export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) => state.videoState.presenters
-export const selectTracks = (state: { videoState: { tracks: video["tracks"] } }) => state.videoState.tracks
-export const selectWorkflows = (state: { videoState: { workflows: video["workflows"] } }) => state.videoState.workflows
-export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"] } }) =>
-  calculateTotalAspectRatio(state.videoState.aspectRatios)
-export const selectTracksByFlavor = (flavor: Flavor | undefined) => (state: { videoState: { tracks: video["tracks"]; }; }) => {
-  if (!flavor) {
-    return undefined
-  }
-  return state.videoState.tracks.filter((track: Track) => track.flavor.type === flavor.type && track.flavor.subtype === flavor.subtype)
-}
-export const selectCaptions = (state: { videoState: { captions: video["captions"]; }; }) =>
-  state.videoState.captions
-export const selectCaptionTrackByFlavor = (flavor: string) => (state: { videoState: { captions: video["captions"]; }; }) => {
-  for (const cap of state.videoState.captions) {
-    if (cap.flavor.type+"/"+cap.flavor.subtype === flavor) {
-      return cap
+export const selectVideos = (state: { videoState: { tracks: video["tracks"]; }; }) =>
+  state.videoState.tracks.filter((track: Track) => track.video_stream.available === true);
+export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"]; }; }) =>
+  state.videoState.videoURLs;
+export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"]; }; }) =>
+  state.videoState.videoCount;
+export const selectDuration = (state: { videoState: { duration: video["duration"]; }; }) =>
+  state.videoState.duration;
+export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"]; }; }) =>
+  state.videoState.duration / 1000;
+export const selectTitle = (state: { videoState: { title: video["title"]; }; }) =>
+  state.videoState.title;
+export const selectPresenters = (state: { videoState: { presenters: video["presenters"] } }) =>
+  state.videoState.presenters;
+export const selectTracks = (state: { videoState: { tracks: video["tracks"]; }; }) =>
+  state.videoState.tracks;
+export const selectWorkflows = (state: { videoState: { workflows: video["workflows"]; }; }) =>
+  state.videoState.workflows;
+export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"]; }; }) =>
+  calculateTotalAspectRatio(state.videoState.aspectRatios);
+export const selectTracksByFlavor = (flavor: Flavor | undefined) =>
+  (state: { videoState: { tracks: video["tracks"]; }; }) => {
+    if (!flavor) {
+      return undefined;
     }
-  }
-  return undefined
-}
+    return state.videoState.tracks.filter(
+      (track: Track) => track.flavor.type === flavor.type && track.flavor.subtype === flavor.subtype
+    );
+  };
+export const selectSubtitlesFromOpencast =
+  (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) =>
+    state.videoState.subtitlesFromOpencast;
+export const selectSubtitlesFromOpencastById = (id: string) =>
+  (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) => {
+    for (const cap of state.videoState.subtitlesFromOpencast) {
+      if (cap.id === id) {
+        return cap;
+      }
+    }
+    return undefined;
+  };
 
-export default videoSlice.reducer
+export default videoSlice.reducer;

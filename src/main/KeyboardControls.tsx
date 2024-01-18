@@ -1,168 +1,161 @@
 import { css } from "@emotion/react";
+import { ParseKeys } from "i18next";
+
 import React from "react";
 
-import { KeyMapDisplayOptions } from 'react-hotkeys';
-import { useTranslation, Trans} from "react-i18next";
-import { useSelector } from "react-redux";
+import { useTranslation, Trans } from "react-i18next";
 import { flexGapReplacementStyle } from "../cssStyles";
-import { getAllHotkeys } from "../globalKeys";
-import { selectTheme } from "../redux/themeSlice";
-import i18next from "./../i18n/config";
+import { getGroupName, KEYMAP, rewriteKeys } from "../globalKeys";
+import { useTheme } from "../themes";
+import { titleStyle, titleStyleBold } from "../cssStyles";
 
-const Group: React.FC<{name: string, entries: KeyMapDisplayOptions[]}> = ({name, entries}) => {
+const Group: React.FC<{ name: ParseKeys, entries: { [key: string]: string[][]; }; }> = ({ name, entries }) => {
 
-  const theme = useSelector(selectTheme);
+  const { t } = useTranslation();
+  const theme = useTheme();
 
   const groupStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
-    width: '420px',
-    maxWidth: '50vw',
+    display: "flex",
+    flexDirection: "column" as const,
+    width: "460px",
+    maxWidth: "50vw",
+
+    background: `${theme.menu_background}`,
+    borderRadius: "5px",
+    boxShadow: `${theme.boxShadow_tiles}`,
+    boxSizing: "border-box",
+    padding: "0px 20px 20px 20px",
   });
 
   const headingStyle = css({
-    borderBottom: `${theme.menuBorder}`
-  })
+    color: `${theme.text}`,
+  });
 
   return (
     <div css={groupStyle}>
-      <h3 css={headingStyle}>{i18next.t(name)}</h3>
-      {entries.map((entry: KeyMapDisplayOptions, index: number) => (
-        <Entry params={entry} key={index}></Entry>
-      ))}
+      <h3 css={headingStyle}>{t(name)}</h3>
+      {Object.entries(entries).map(([key, value], index) =>
+        <Entry name={key} sequences={value} key={index} />
+      )}
     </div>
-  )
-}
+  );
+};
 
-const Entry: React.FC<{params: KeyMapDisplayOptions}> = ({params}) => {
+const Entry: React.FC<{ name: string, sequences: string[][]; }> = ({ name, sequences }) => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const entryStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    width: '100%',
-    paddingBottom: '5px',
-    paddingTop: '5px',
+    display: "flex",
+    flexFlow: "column nowrap",
+    justifyContent: "left",
+    width: "100%",
+    padding: "10px 0px",
+    ...(flexGapReplacementStyle(10, true)),
   });
 
   const labelStyle = css({
-    alignSelf: 'center',
-    minWidth: '130px',
-    height: '5em',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    wordWrap: 'break-word',
-
-    // Center text vertically
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flexDirection: 'column',
-  })
+    fontWeight: "bold",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    wordWrap: "break-word",
+    color: `${theme.text}`,
+  });
 
   const sequenceStyle = css({
-    alignSelf: 'center',
-    marginLeft: '15px',
-    display: 'flex',
-    flexDirection: 'row' as const,
-    ...(flexGapReplacementStyle(10, true))
-  })
+    display: "flex",
+    flexDirection: "row",
+    ...(flexGapReplacementStyle(10, true)),
+  });
 
   const singleKeyStyle = css({
-    borderRadius: '5px',
-    borderWidth: '2px',
-    borderStyle: 'solid',
+    borderRadius: "4px",
+    borderWidth: "2px",
+    borderStyle: "solid",
     borderColor: `${theme.singleKey_border}`,
     background: `${theme.singleKey_bg}`,
-    padding: '10px',
-  })
+    boxShadow: `${theme.singleKey_boxShadow}`,
+    padding: "10px",
+    color: `${theme.text}`,
+  });
 
   const orStyle = css({
-    alignSelf: 'center',
-    lineHeight: '32px',
-  })
+    alignSelf: "center",
+    fontSize: "20px",
+    fontWeight: "bold",
+  });
 
   return (
     <div css={entryStyle}>
-      <div css={labelStyle}><Trans>{params.name || t("keyboardControls.missingLabel")}</Trans></div>
-      {params.sequences.map((sequence, index, arr) => (
+      <div css={labelStyle}><Trans>{name || t("keyboardControls.missingLabel")}</Trans></div>
+      {sequences.map((sequence, index, arr) => (
         <div css={sequenceStyle} key={index}>
-          {sequence.sequence.toString().split('+').map((singleKey, index) => (
-            <div css={singleKeyStyle} key={index}>{singleKey}</div>
+          {sequence.map((singleKey, index) => (
+            <>
+              <div css={singleKeyStyle} key={index}>{singleKey}</div>
+              {sequence.length - 1 !== index && <div css={orStyle}>+</div>}
+            </>
           ))}
-          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeperator")}</Trans></div>
+          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 
-const KeyboardControls: React.FC<{}> = () => {
+const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
-
-  const keyMap = getAllHotkeys()
+  const theme = useTheme();
 
   const groupsStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row" as const,
+    flexWrap: "wrap",
+    justifyContent: "center",
     ...(flexGapReplacementStyle(30, true)),
-  })
+  });
 
   const render = () => {
-    if (keyMap && Object.keys(keyMap).length > 0) {
-
-      var obj: Record<string,Array<KeyMapDisplayOptions>> = {}
-      obj[t("keyboardControls.defaultGroupName")] = []    // For keys without a group
-
-      // Sort by group
-      for (const [, value] of Object.entries(keyMap)) {
-        if (value.group) {
-          if (obj[value.group]) {
-            obj[value.group].push(value)
-          } else {
-            obj[value.group] = [value]
-          }
-        } else {
-          obj[t("keyboardControls.defaultGroupName")].push(value)
-        }
-      }
+    if (KEYMAP && Object.keys(KEYMAP).length > 0) {
 
       const groups: JSX.Element[] = [];
-      for (const key in obj) {
-        if (obj[key].length > 0) {
-          groups.push(<Group name={key} entries={obj[key]} key={key}/>);
-        }
-      }
+      Object.entries(KEYMAP).forEach(([groupName, group], index) => {
+        const entries: { [groupName: string]: string[][]; } = {};
+        Object.entries(group).forEach(([, action]) => {
+          const sequences = action.key.split(",").map(item => item.trim());
+          entries[action.name] = Object.entries(sequences).map(([, sequence]) => {
+            return sequence.split("+").map(item => rewriteKeys(item.trim()));
+          });
+        });
+        groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index} />);
+      });
 
       return (
         <div css={groupsStyle}>
           {groups}
         </div>
-      )
+      );
     }
 
     // No groups fallback
-    return <div>{t("keyboardControls.genericError")}</div>
-  }
+    return <div>{t("keyboardControls.genericError")}</div>;
+  };
 
   const keyboardControlsStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    width: '100%',
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
+    width: "100%",
   });
 
   return (
     <div css={keyboardControlsStyle}>
-      <h2>
+      <div css={[titleStyle(theme), titleStyleBold(theme)]}>
         {t("keyboardControls.header")}
-      </h2>
+      </div>
 
       {render()}
     </div>

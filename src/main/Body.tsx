@@ -1,32 +1,37 @@
 import React from "react";
 
-import MainMenu from './MainMenu';
-import MainContent from './MainContent';
-import TheEnd from './TheEnd';
-import Error from './Error';
+import MainMenu from "./MainMenu";
+import MainContent from "./MainContent";
+import TheEnd from "./TheEnd";
+import Error from "./Error";
 import Landing from "./Landing";
+import Lock from "./Lock";
 
-import { useSelector } from 'react-redux';
-import { selectIsEnd } from '../redux/endSlice'
+import { css } from "@emotion/react";
+
+import { useAppSelector } from "../redux/store";
+import { selectIsEnd } from "../redux/endSlice";
 import { selectIsError } from "../redux/errorSlice";
-import { settings } from '../config';
+import { settings } from "../config";
 
+const Body: React.FC = () => {
 
-const Body: React.FC<{}> = () => {
+  const isEnd = useAppSelector(selectIsEnd);
+  const isError = useAppSelector(selectIsError);
 
-  const isEnd = useSelector(selectIsEnd)
-  const isError = useSelector(selectIsError)
-
-  // If we're in a special state, display a special page
+  // If we"re in a special state, display a special page
   // Otherwise display the normal page
   const main = () => {
     if (!settings.id) {
       return (
         <Landing />
-      )
+      );
     } else if (isEnd) {
       return (
-        <TheEnd />
+        <div>
+          <Lock />
+          <TheEnd />
+        </div>
       );
     } else if (isError) {
       return (
@@ -35,18 +40,19 @@ const Body: React.FC<{}> = () => {
     } else {
       return (
         <div css={bodyStyle}>
+          <Lock />
           <MainMenu />
           <MainContent />
         </div>
       );
     }
-  }
-
-  const bodyStyle = {
-    display: 'flex',
-    flexDirection: 'row' as const,
-    height: '100%',
   };
+
+  const bodyStyle = css({
+    display: "flex",
+    flexDirection: "row",
+    height: "calc(100% - 64px)",
+  });
 
   return (
     <React.Fragment>

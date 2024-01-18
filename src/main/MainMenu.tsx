@@ -1,173 +1,167 @@
 import React from "react";
 
-import { css } from '@emotion/react'
+import { css, SerializedStyles } from "@emotion/react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCut, faFilm, faListUl, faPhotoVideo, faSignOutAlt, faGear } from "@fortawesome/free-solid-svg-icons";
-import { faClosedCaptioning } from "@fortawesome/free-regular-svg-icons";
+import { IconType } from "react-icons";
+import { LuScissors, LuFilm, LuFileText, LuCheckSquare } from "react-icons/lu";
+import { LuImage } from "react-icons/lu";
+import { ReactComponent as SubtitleIcon } from "../img/subtitle.svg";
 
-import { useDispatch, useSelector } from 'react-redux'
-import { setState, selectMainMenuState, mainMenu } from '../redux/mainMenuSlice'
-import { setPageNumber } from '../redux/finishSlice'
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { setState, selectMainMenuState, mainMenu } from "../redux/mainMenuSlice";
+import { setPageNumber } from "../redux/finishSlice";
 
-import { MainMenuStateNames } from '../types'
-import { settings } from '../config'
-import { basicButtonStyle, flexGapReplacementStyle } from '../cssStyles'
+import { MainMenuStateNames } from "../types";
+import { settings } from "../config";
+import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { setIsPlaying } from "../redux/videoSlice";
 
-import './../i18n/config';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
-import { selectTheme } from "../redux/themeSlice";
+import { useTheme } from "../themes";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
  */
-const MainMenu: React.FC<{}> = () => {
+const MainMenu: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme);
+  const theme = useTheme();
 
   const mainMenuStyle = css({
     borderRight: `${theme.menuBorder}`,
-    width: '100px',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    flexShrink: 0,
-    alignItems: 'center',
-    padding: '20px',
-    height: '100%',
-    position: 'fixed',
-    overflow: 'auto',
+    minWidth: "120px",
+    maxWidth: "140px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px",
+    overflowX: "hidden",
+    overflowY: "auto",
+    background: `${theme.menu_background}`,
     ...(flexGapReplacementStyle(30, false)),
   });
 
   return (
     <nav css={mainMenuStyle} role="navigation" aria-label={t("mainMenu.tooltip-aria")}>
       <MainMenuButton
-        iconName={faCut}
+        Icon={LuScissors}
         stateName={MainMenuStateNames.cutting}
         bottomText={t(MainMenuStateNames.cutting)}
         ariaLabelText={t(MainMenuStateNames.cutting)}
       />
       {settings.metadata.show && <MainMenuButton
-        iconName={faListUl}
+        Icon={LuFileText}
         stateName={MainMenuStateNames.metadata}
         bottomText={t(MainMenuStateNames.metadata)}
         ariaLabelText={t(MainMenuStateNames.metadata)}
       />}
       {settings.trackSelection.show && <MainMenuButton
-        iconName={faFilm}
+        Icon={LuFilm}
         stateName={MainMenuStateNames.trackSelection}
         bottomText={t(MainMenuStateNames.trackSelection)}
         ariaLabelText={t(MainMenuStateNames.trackSelection)}
       />}
       {settings.subtitles.show && <MainMenuButton
-        iconName={faClosedCaptioning}
+        Icon={SubtitleIcon}
         stateName={MainMenuStateNames.subtitles}
         bottomText={t(MainMenuStateNames.subtitles)}
         ariaLabelText={t(MainMenuStateNames.subtitles)}
       />}
       {settings.thumbnail.show && <MainMenuButton
-        iconName={faPhotoVideo}
+        Icon={LuImage}
         stateName={MainMenuStateNames.thumbnail}
         bottomText={t(MainMenuStateNames.thumbnail)}
         ariaLabelText={t(MainMenuStateNames.thumbnail)}
       />}
       <MainMenuButton
-        iconName={faSignOutAlt}
+        Icon={LuCheckSquare}
         stateName={MainMenuStateNames.finish}
         bottomText={t(MainMenuStateNames.finish)}
         ariaLabelText={t(MainMenuStateNames.finish)}
       />
-      {/* A space for buttons that would normally go in a header or footer */}
-      <div css={{flexGrow: 99, display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
-        <MainMenuButton
-          iconName={faGear}
-          stateName={MainMenuStateNames.keyboardControls}
-          bottomText={""}
-          ariaLabelText={t("keyboardControls.header")}
-          miniButton={true}
-        />
-      </div>
     </nav>
   );
 };
 
 interface mainMenuButtonInterface {
-  iconName: any, // Unfortunately, icons from different packages don't share the same IconDefinition type. Works anyway.
+  Icon: IconType | React.FunctionComponent,
   stateName: mainMenu["value"],
   bottomText: string,
   ariaLabelText: string;
-  miniButton?: boolean,
+  customCSS?: SerializedStyles,
+  iconCustomCSS?: SerializedStyles,
 }
 
 /**
  * A button to set the state of the app
  * @param param0
  */
-const MainMenuButton: React.FC<mainMenuButtonInterface> = ({iconName, stateName, bottomText, ariaLabelText, miniButton = false}) => {
+export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
+  Icon,
+  stateName,
+  bottomText,
+  ariaLabelText,
+  customCSS,
+  iconCustomCSS,
+}) => {
 
-  const dispatch = useDispatch();
-  const activeState = useSelector(selectMainMenuState)
-  const theme = useSelector(selectTheme);
+  const dispatch = useAppDispatch();
+  const activeState = useAppSelector(selectMainMenuState);
+  const theme = useTheme();
 
   const onMenuItemClicked = () => {
     dispatch(setState(stateName));
     // Reset multi-page content to their first page
     if (stateName === MainMenuStateNames.finish) {
-      dispatch(setPageNumber(0))
+      dispatch(setPageNumber(0));
     }
     if (stateName === MainMenuStateNames.subtitles) {
-      dispatch(setIsDisplayEditView(false))
+      dispatch(setIsDisplayEditView(false));
     }
     // Halt ongoing events
-    dispatch(setIsPlaying(false))
+    dispatch(setIsPlaying(false));
     // Reset states
-    dispatch(resetPostRequestState())
-    dispatch(metadataResetPostRequestState())
-  }
-
-  const buttonStyle = () => {
-    if (!miniButton) {
-      return mainMenuButtonStyle
-    } else {
-      return miniMenuButtonStyle
-    }
-  }
+    dispatch(resetPostRequestState());
+    dispatch(metadataResetPostRequestState());
+  };
 
   const mainMenuButtonStyle = css({
-    width: '100%',
-    height: '100px',
+    width: "100%",
+    height: "100px",
+    outline: `${theme.menuButton_outline}`,
     ...(activeState === stateName) && {
-      backgroundColor: `${theme.menuButton}`,
+      backgroundColor: `${theme.button_color}`,
+      color: `${theme.inverted_text}`,
+      boxShadow: `${theme.boxShadow}`,
     },
-    flexDirection: 'column' as const,
-  });
-
-  const miniMenuButtonStyle = css({
-    width: '75px',
-    height: '67px',
-    marginBottom: '35px',
-    ...(activeState === stateName) && {
-      backgroundColor: `${theme.menuButton}`,
+    "&:hover": {
+      backgroundColor: `${theme.button_color}`,
+      color: `${theme.inverted_text}`,
+      boxShadow: `${theme.boxShadow}`,
     },
-    flexDirection: 'column' as const,
+    flexDirection: "column",
   });
 
   return (
-    <li css={[basicButtonStyle, buttonStyle()]}
+    <li css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
       role="menuitem" tabIndex={0}
       aria-label={ariaLabelText}
-      onClick={ onMenuItemClicked }
-      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => { if (event.key === "Enter") {
-        onMenuItemClicked()
-      }}}
-      >
-      <FontAwesomeIcon icon={iconName} size={miniButton ? "1x" : "2x"}/>
+      onClick={onMenuItemClicked}
+      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => {
+        if (event.key === "Enter") {
+          onMenuItemClicked();
+        }
+      }}
+    >
+      <Icon css={iconCustomCSS ? iconCustomCSS : {
+        fontSize: 36,
+        width: "36px",
+        height: "auto",
+      }} />
       {bottomText && <div>{bottomText}</div>}
     </li>
   );

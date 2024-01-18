@@ -1,7 +1,7 @@
 import reducer, { initialState, setIsPlaying, selectIsPlaying, setCurrentlyAt,
   selectCurrentlyAt, selectActiveSegmentIndex, selectPreviewTriggered,
   selectDuration, video, cut, selectSegments, markAsDeletedOrAlive, mergeRight,
-  fetchVideoInformation, selectVideoURL, selectTitle, selectPresenters,
+  fetchVideoInformation, selectVideoURL, selectTitle,
   selectTracks, selectWorkflows } from '../videoSlice'
 import cloneDeep from 'lodash/cloneDeep';
 import { httpRequestState } from '../../types';
@@ -133,8 +133,8 @@ describe('Video reducer', () => {
 
     // Assert
     const rootState = { videoState: nextState };
-    expect(selectCurrentlyAt(rootState)).toEqual(20);
-    expect(selectActiveSegmentIndex(rootState)).toEqual(1);
+    expect(selectCurrentlyAt(rootState)).toEqual(21);
+    expect(selectActiveSegmentIndex(rootState)).toEqual(2);
     expect(selectPreviewTriggered(rootState)).toEqual(true);
   })
 
@@ -145,7 +145,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 5, deleted: false},
       {start: 5, end: 10, deleted: false}
     ]
@@ -165,7 +165,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -184,7 +184,7 @@ describe('Video reducer', () => {
     initState.segments = [
       {id: '0', start: 0, end: 10, deleted: false},
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -204,7 +204,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 5, deleted: false},
       {start: 5, end: 10, deleted: false}
     ]
@@ -218,7 +218,7 @@ describe('Video reducer', () => {
   })
 
   it('should mark a segment as deleted if alive', () => {
-    let resultSegments = [
+    const resultSegments = [
       {deleted: true},
     ]
 
@@ -235,7 +235,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: false},
     ]
 
@@ -253,7 +253,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {id: '0', start: 0, end: 5, deleted: false},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
@@ -271,7 +271,7 @@ describe('Video reducer', () => {
       {id: '0', start: 0, end: 5, deleted: true},
       {id: '0', start: 5, end: 10, deleted: false}
     ]
-    let resultSegments = [
+    const resultSegments = [
       {start: 0, end: 10, deleted: true},
     ]
 
@@ -286,7 +286,7 @@ describe('Video reducer', () => {
   it('should set loading when fetch is pending', () => {
     // Arrange
     const action = { type: fetchVideoInformation.pending.type };
-    const resultStatus: httpRequestState = { status: 'loading', error: undefined }
+    const resultStatus: httpRequestState = { status: 'loading', error: undefined, errorReason: "unknown" }
 
     // Act
     const nextState = reducer(initialState, action);
@@ -298,16 +298,20 @@ describe('Video reducer', () => {
 
   it('should set success when fetch is successful', () => {
     // Arrange
-    const resultStatus: httpRequestState = { status: 'success', error: undefined }
+    const resultStatus: httpRequestState = { status: 'success', error: undefined, errorReason: "unknown" }
     const segments = [{ start: 0, end: 42, deleted: false }]
-    const videoURLs: video["videoURLs"] = [ "video/url" ]
+    const videoURLs: video["videoURLs"] = ["video/url"]
     const dur: video["duration"] = 42
     const title: video["title"] = "Video Title"
     // const presenters: video["presenters"] = [ "Otto Opencast" ]    // Currently missing from the API
     const tracks: video["tracks"] = [{
       id: "id", uri: videoURLs[0], flavor: { subtype: "prepared", type: "presenter"},
-      videoStream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
-      audioStream: { available: true, enabled: true}
+      /* eslint-disable camelcase */
+      video_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
+      audio_stream: { available: true, enabled: true, thumbnail_uri: "thumb/url"},
+      /* eslint-enable camelcase */
+      thumbnailUri: undefined,
+      thumbnailPriority: 0,
     }]
     const workflows: video["workflows"] = [{ id: "id", name: "Name", displayOrder: 0, description: "Description"}]
     const action = {
@@ -332,7 +336,6 @@ describe('Video reducer', () => {
     expect(selectVideoURL(rootState)).toMatchObject(videoURLs);
     expect(selectDuration(rootState)).toEqual(dur);
     expect(selectTitle(rootState)).toEqual(title);
-    expect(selectPresenters(rootState)).toEqual([]);
     expect(selectTracks(rootState)).toMatchObject(tracks);
     expect(selectWorkflows(rootState)).toMatchObject(workflows);
   })
@@ -341,7 +344,7 @@ describe('Video reducer', () => {
     // Arrange
     const error = { message: "An error message" }
     const action = { type: fetchVideoInformation.rejected.type, error: error };
-    const resultStatus: httpRequestState = { status: 'failed', error: error.message }
+    const resultStatus: httpRequestState = { status: 'failed', error: error.message, errorReason: "unknown" }
 
     // Act
     const nextState = reducer(initialState, action);

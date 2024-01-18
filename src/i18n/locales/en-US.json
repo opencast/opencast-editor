@@ -12,11 +12,14 @@
 
     "cuttingActions": {
       "cut-button": "Cut",
-      "cut-tooltip": "Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}",
-      "cut-tooltip-aria": "Cut. Split the segment at the current scrubber position. Hotkey: {{hotkeyName}}.",
+      "cut-tooltip": "Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}",
+      "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
       "delete-button": "Delete",
       "delete-restore-tooltip": "Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}",
       "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotKeyName}}.",
+      "merge-all-button": "Merge All",
+      "merge-all-tooltip": "Combine all segments into a single segment.",
+      "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
       "restore-button": "Restore",
       "mergeLeft-button": "Merge Left",
       "mergeLeft-tooltip": "Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}",
@@ -30,15 +33,21 @@
       "previewButton": "Preview Mode",
       "previewButton-tooltip": "Skips deleted segments when playing the video. Currently {{status}}. Hotkey: {{hotkeyName}}",
       "previewButton-aria": "Enable or disable preview mode. Hotkey: {{hotkeyName}}.",
-      "playButton-tooltip": "Play Button",
-      "time-duration-tooltip": "Playback time and duration",
+      "playButton-tooltip": "Play video",
+      "pauseButton-tooltip": "Pause video",
+      "current-time-tooltip": "Current time",
+      "time-duration-tooltip": "Video duration",
       "duration-aria": "Duration",
       "time-aria": "Current time",
+      "mutebutton-tooltip": "Mute video",
+      "unmutebutton-tooltip": "Unmute video",
+      "volume-tooltip": "Adjust volume: {{current}}%",
+      "volumeSlider-aria": "Adjust the volume level of the video.",
       "comError-text": "A problem occurred during communication with Opencast.",
       "loadError-text": "An error has occurred loading this video.",
+      "durationError-text": "Opencast failed to provide the video duration.",
       "title-tooltip": "Video Title",
-      "presenter-tooltip": "Video Presenters",
-      "controls-tooltip": "Video Controls"
+      "presenter-tooltip": "Video Presenters"
     },
 
     "finishMenu": {
@@ -50,25 +59,25 @@
     "save": {
       "headline-text": "Save current project",
       "confirm-button": "Yes, save changes",
-      "confirmButton-default-tooltip": "Save Button",
       "confirmButton-attempting-tooltip": "Attempting to save",
       "confirmButton-success-tooltip": "Saved successfully",
       "confirmButton-failed-tooltip": "Save failed",
       "info-text": "The video will not be processed but all cutting information will be stored in Opencast. You can continue your edit later.",
       "success-text": "Changes saved successfully! You can now close the editor or continue working.",
       "success-tooltip-aria": "Saved successfully",
-      "saveArea-tooltip": "Save Area"
+      "saveArea-tooltip": "Save Area",
+      "confirm-success": "Okay",
+      "cancel-save": "Don't save"
     },
 
     "discard": {
       "headline-text": "Discard changes",
       "confirm-button": "Yes, discard changes",
-      "confirm-tooltip": "Discard changes button",
-      "info-text": "Discard all the changes you made? This cannot be undone!"
+      "info-text": "Are you sure you want to discard your changes? This cannot be undone!"
     },
 
     "theEnd": {
-      "discarded-text": "All your changes are now lost forever. You can now close the editor.",
+      "discarded-text": "Your changes have been discarded. You can now close the editor.",
       "startOver-button": "Let me start over!",
       "startOver-tooltip": "Reload the page to start over",
       "info-text": "Changes successfully saved to Opencast. Processing your changes may take quite some time so please be patient. You can now close the editor.\n"
@@ -77,7 +86,7 @@
     "workflowSelection": {
       "saveAndProcess-text": "Save and Process",
       "selectWF-text": "Select a workflow",
-      "noWorkflows-text": "A problem occurred, there are no workflows to process your changes with.<3/> Please save your changes and contact an Opencast Administrator.\n",
+      "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
       "oneWorkflow-text": "The video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
       "manyWorkflows-text": "Select which workflow Opencast should use for processing.",
       "startProcessing-button": "Start processing",
@@ -89,13 +98,12 @@
     "timeline": {
       "generateWaveform-text": "Generating Waveform",
       "segment-tooltip": "Segment {{segment}}",
-      "scrubber-text-aria": "Scrubber. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the scrubber. {{increase}} and {{decrease}} to increase/decrase the move delta.\n",
+      "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
       "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. End: {{end}}.\n"
     },
 
     "workflowConfig": {
       "headline-text": "Workflow Configuration",
-      "area-tooltip": "Workflow Configuration Area",
       "satisfied-text": "Satisfied with your configuration?",
       "confirm-button": "Yes, start processing"
     },
@@ -132,7 +140,7 @@
       },
       "language": {
         "LANGUAGES-SLOVENIAN": "Slovenian",
-        "LANGUAGES-PORTUGESE": "Portugese",
+        "LANGUAGES-PORTUGESE": "Portuguese",
         "LANGUAGES-ROMANSH": "Romansh",
         "LANGUAGES-ARABIC": "Arabic",
         "LANGUAGES-POLISH": "Polish",
@@ -163,29 +171,31 @@
         "EVENTS-LICENSE-CCBYSA": "CC-BY-SA",
         "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
         "EVENTS-LICENSE-CCBY": "CC-BY"
-      }
+      },
+      "calendar-prev": "Previous",
+      "calendar-next": "Next"
     },
 
     "thumbnail": {
       "title": "Thumbnail Editor",
-      "noThumbnailAvailable": "No Thumbnail set",
-      "previewImageAlt": "Thumbnail for",
+      "noThumbnailAvailable": "No Thumbnail available",
+      "previewImageAlt": "Thumbnail for track",
       "buttonGenerate": "Generate",
-      "buttonGenerate-tooltip": "Create a new thumbnail from the current scrubber position",
-      "buttonGenerate-tooltip-aria": "Create a new thumbnail from the current scrubber position",
+      "buttonGenerate-tooltip": "Generate a new thumbnail from the current timeline marker position",
+      "buttonGenerate-tooltip-aria": "Generate a new thumbnail from the current timeline marker position",
       "buttonUpload": "Upload",
       "buttonUpload-tooltip": "Upload an image",
       "buttonUpload-tooltip-aria": "Upload an image",
-      "buttonUseForOtherThumbnails": "Use for other thumbnails",
-      "buttonUseForOtherThumbnails-tooltip": "Use the thumbnail for all other videos",
-      "buttonUseForOtherThumbnails-tooltip-aria": "Use the thumbnail for all other videos",
+      "buttonUseForOtherThumbnails": "Use for all tracks",
+      "buttonUseForOtherThumbnails-tooltip": "Use the thumbnail for all tracks",
+      "buttonUseForOtherThumbnails-tooltip-aria": "Use the thumbnail for all tracks",
       "buttonDiscard": "Discard",
-      "buttonDiscard-tooltip": "Undo all changes made to this thumbnail",
-      "buttonDiscard-tooltip-aria": "Undo all changes made to this thumbnail",
+      "buttonDiscard-tooltip": "Discard the thumbnail for this track",
+      "buttonDiscard-tooltip-aria": "Discard the thumbnail for this track",
       "buttonGenerateAll": "Generate All",
-      "buttonGenerateAll-tooltip": "Create new thumbnails from the current scrubber position",
-      "buttonGenerateAll-tooltip-aria": "Create new thumbnails from the current scrubber position",
-      "explanation": "Here you can set the thumbnail for each video",
+      "buttonGenerateAll-tooltip": "Generate new thumbnails for all tracks from the current timeline marker position",
+      "buttonGenerateAll-tooltip-aria": "Generate new thumbnails for all tracks from the current timeline marker position",
+      "explanation": "Upload or generate a thumbnail for each track.",
       "primary": "Primary",
       "secondary": "Secondary"
     },
@@ -199,7 +209,7 @@
       "generic-message": "A critical error has occurred!",
       "details": "Details: ",
       "workflowActive-errorTitle": "Temporarily unavailable",
-      "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
+      "workflowActive-errorMessage": "This event is being processed. Please wait until the process is finished."
     },
 
     "landing": {
@@ -213,11 +223,13 @@
     "various": {
       "error-details-text": "Details: {{errorMessage}}\n",
       "error-text": "An error has occurred. Please wait a bit and try again.",
-      "goBack-button": "No, take me back"
+      "goBack-button": "No, take me back",
+      "callback-button-system": "Back to {{system}}",
+      "callback-button-generic": "Back to previous system"
     },
 
     "trackSelection": {
-      "description": "Select or deselect which tracks are used for processing and publication.",
+      "title": "Select track(s) for processing",
       "trackInactive": "inactive",
       "deleteTrackText": "Delete Track",
       "restoreTrackText": "Restore Track",
@@ -237,8 +249,12 @@
       "createSubtitleDropdown-label": "Pick a language",
       "backButton": "Back",
       "backButton-tooltip": "Return to subtitle selection",
+      "downloadButton-title": "Download",
+      "downloadButton-tooltip": "Download subtitle as vtt file",
       "editTitle": "Subtitle Editor - {{title}}",
-      "editTitle-loading": "Loading"
+      "editTitle-loading": "Loading",
+      "generic": "Generic",
+      "autoGenerated": "Auto-generated"
     },
 
     "subtitleList": {
@@ -257,27 +273,37 @@
       "selectVideoLabel": "Video Flavors"
     },
 
+    "subtitleTimeline": {
+      "overviewTimelineTooltip": "Timeline overview"
+    },
+
     "keyboardControls": {
-      "header": "Keyboard Controls",
+      "header": "Shortcuts",
       "defaultGroupName": "General",
       "missingLabel": "Unknown",
       "groupVideoPlayer": "Video Player",
       "groupCuttingView": "Cutting",
-      "groupCuttingViewScrubber": "Scrubbing",
+      "groupCuttingViewScrubber": "Timeline",
       "groupSubtitleList": "Subtitles",
-      "sequenceSeperator": "or",
+      "sequenceSeparator": "or",
       "genericError": "Failed to load overview",
       "videoPlayButton": "Play/Pause Video",
       "scrubberLeft": "Move left",
       "scrubberRight": "Move right",
-      "scubberIncrease": "Move faster",
+      "scrubberIncrease": "Move faster",
       "scrubberDecrease": "Move slower"
     },
 
     "theme": {
       "appearance": "Appearance",
-      "darkmode": "Dark mode",
-      "lightmode": "Light mode",
-      "system": "System design"
+      "dark": "Dark",
+      "light": "Light",
+      "auto": "Auto",
+      "dark-high-contrast": "Dark (High contrast)",
+      "light-high-contrast": "Light (High contrast)"
+    },
+
+    "language": {
+      "language": "Language"
     }
   }

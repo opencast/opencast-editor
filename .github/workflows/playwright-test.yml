@@ -2,6 +2,8 @@ name: Playwright UI-Test
 
 on:
   push:
+    branches-ignore:
+      - 'dependabot/**'
   pull_request:
     branches:
       - main
@@ -9,16 +11,16 @@ on:
 jobs:
   test:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Check out source code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install Node Dependency
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - name: Install dependencies
       run: npm ci
@@ -38,5 +40,19 @@ jobs:
     - name: Prepare mock files
       run: cp -r .github/mock/editor public/
 
+    - name: Build editor
+      run: |
+        npm run build
+        cp public/editor-settings.toml build/
+
+    - name: Use production build for testing
+      run: sed -i 's/npm run start/python -m http.server --bind 127.0.0.1 --directory build 3000/' playwright.config.ts
+
     - name: Run playwright-test
       run: npx playwright test --config=playwright.config.ts
+
+    - name: Upload tests results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: test-results/

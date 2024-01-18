@@ -3,6 +3,7 @@
         "cutting-button": "裁剪",
         "finish-button": "完成",
         "select-tracks-button": "影音軌道",
+        "subtitles-button": "Subtitles",
         "thumbnail-button": "縮圖",
         "metadata-button": "後設資料",
         "keyboard-controls-button": "鍵盤控制",
@@ -10,11 +11,14 @@
     },
     "cuttingActions": {
         "cut-button": "裁剪",
-        "cut-tooltip": "在當前清除器位置分割區段。 熱鍵：{{hotkeyName}}",
-        "cut-tooltip-aria": "裁剪。在當前清除器位置分割區段。 熱鍵：{{hotkeyName}}",
+        "cut-tooltip": "Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}",
+        "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
         "delete-button": "刪除",
         "delete-restore-tooltip": "在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotkeyName}}",
         "delete-restore-tooltip-aria": "刪除或還原。 在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotKeyName}}。",
+        "merge-all-button": "Merge All",
+        "merge-all-tooltip": "Combine all segments into a single segment.",
+        "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
         "restore-button": "還原",
         "mergeLeft-button": "左合併",
         "mergeLeft-tooltip": "將當前活動區段與其左側的區段合併。 熱鍵：{{hotkeyName}}",
@@ -27,15 +31,21 @@
         "previewButton": "預覽模式",
         "previewButton-tooltip": "播放影片時跳過已刪除的片段。 當前 {{status}}。 熱鍵：{{hotkeyName}}",
         "previewButton-aria": "啟用或禁用預覽模式。 熱鍵：{{hotkeyName}}。",
-        "playButton-tooltip": "播放按鈕",
-        "time-duration-tooltip": "播放時間和持續時間",
+        "playButton-tooltip": "Play video",
+        "pauseButton-tooltip": "Pause video",
+        "current-time-tooltip": "目前時間",
+        "time-duration-tooltip": "Video duration",
         "duration-aria": "持續時間",
         "time-aria": "目前時間",
+        "mutebutton-tooltip": "Mute video",
+        "unmutebutton-tooltip": "Unmute video",
+        "volume-tooltip": "Adjust volume: {{current}}%",
+        "volumeSlider-aria": "Adjust the volume level of the video.",
         "comError-text": "與 Opencast 通訊時出現問題。",
         "loadError-text": "載入此影片時出現錯誤。",
+        "durationError-text": "Opencast failed to provide the video duration.",
         "title-tooltip": "影片標題",
-        "presenter-tooltip": "影片簡報者",
-        "controls-tooltip": "影片控制"
+        "presenter-tooltip": "影片簡報者"
     },
     "finishMenu": {
         "save-button": "儲存變更",
@@ -45,23 +55,23 @@
     "save": {
         "headline-text": "儲存目前專案",
         "confirm-button": "是的，儲存變更",
-        "confirmButton-default-tooltip": "儲存按鈕",
         "confirmButton-attempting-tooltip": "嘗試儲存",
         "confirmButton-success-tooltip": "儲存成功",
         "confirmButton-failed-tooltip": "儲存失敗",
         "info-text": "影片不會被處理，但所有裁剪訊息都將存儲在 Opencast 中。 您可以稍後繼續編輯。",
-        "success-text": "變更儲存成功",
+        "success-text": "Changes saved successfully! You can now close the editor or continue working.",
         "success-tooltip-aria": "儲存成功",
-        "saveArea-tooltip": "儲存區域"
+        "saveArea-tooltip": "儲存區域",
+        "confirm-success": "Okay",
+        "cancel-save": "Don't save"
     },
     "discard": {
         "headline-text": "放棄變更",
         "confirm-button": "是的，放棄變更",
-        "confirm-tooltip": "放棄變更按鈕",
-        "info-text": "放棄您所做的所有更改？ 這不能被還原！"
+        "info-text": "Are you sure you want to discard your changes? This cannot be undone!"
     },
     "theEnd": {
-        "discarded-text": "您的所有更改現在都已經遺失。 您現在可以關閉編輯器。",
+        "discarded-text": "Your changes have been discarded. You can now close the editor.",
         "startOver-button": "讓我重新開始！",
         "startOver-tooltip": "重新載入頁面以重新開始",
         "info-text": "Changes successfully saved to Opencast. Processing your changes may take quite some time so please be patient. You can now close the editor.\n"
@@ -69,7 +79,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "儲存和處理",
         "selectWF-text": "選擇工作流程",
-        "noWorkflows-text": "出現問題，沒有用於處理您的更改的工作流程。<3/> 請儲存您的更改並聯繫 Opencast 管理員。\n",
+        "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
         "oneWorkflow-text": "影片將使用工作流程“{{workflow}}”進行裁剪和處理。 <3/> 這需要一些時間。\n",
         "manyWorkflows-text": "選擇 Opencast 應該使用哪個工作流程進行處理。",
         "startProcessing-button": "開始處理",
@@ -80,12 +90,11 @@
     "timeline": {
         "generateWaveform-text": "生成波形",
         "segment-tooltip": "片段{{segment}}",
-        "scrubber-text-aria": "清除器。 {{currentTime}}。 活動片段：{{segment}}。{{segmentStatus}}。 控制：{{moveLeft}} 和 {{moveRight}} 移動清除器。 {{increase}} 和 {{decrease}} 增加/減少移動增量。\n",
+        "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
         "segments-text-aria": "片段 {{index}}. {{segmentStatus}}. 開始: {{start}}. 結束: {{end}}.\n"
     },
     "workflowConfig": {
         "headline-text": "工作流程配置",
-        "area-tooltip": "工作流程配置區域",
         "satisfied-text": "對您的配置滿意嗎？",
         "confirm-button": "是的，開始處理"
     },
@@ -121,7 +130,7 @@
         },
         "language": {
             "LANGUAGES-SLOVENIAN": "斯洛文尼亞語",
-            "LANGUAGES-PORTUGESE": "葡萄牙語",
+            "LANGUAGES-PORTUGESE": "Portuguese",
             "LANGUAGES-ROMANSH": "羅曼什語",
             "LANGUAGES-ARABIC": "阿拉伯語",
             "LANGUAGES-POLISH": "波蘭語",
@@ -152,28 +161,30 @@
             "EVENTS-LICENSE-CCBYSA": "創作分享-姓名標示-相同方式分享",
             "EVENTS-LICENSE-CCBYNC": "創作分享-姓名標示-非商業性使用",
             "EVENTS-LICENSE-CCBY": "創作分享-姓名標示"
-        }
+        },
+        "calendar-prev": "Previous",
+        "calendar-next": "Next"
     },
     "thumbnail": {
         "title": "Thumbnail Editor",
-        "noThumbnailAvailable": "No Thumbnail set",
-        "previewImageAlt": "Thumbnail for",
+        "noThumbnailAvailable": "No Thumbnail available",
+        "previewImageAlt": "Thumbnail for track",
         "buttonGenerate": "Generate",
-        "buttonGenerate-tooltip": "Create a new thumbnail from the current scrubber position",
-        "buttonGenerate-tooltip-aria": "Create a new thumbnail from the current scrubber position",
+        "buttonGenerate-tooltip": "Generate a new thumbnail from the current timeline marker position",
+        "buttonGenerate-tooltip-aria": "Generate a new thumbnail from the current timeline marker position",
         "buttonUpload": "Upload",
         "buttonUpload-tooltip": "Upload an image",
         "buttonUpload-tooltip-aria": "Upload an image",
-        "buttonUseForOtherThumbnails": "Use for other thumbnails",
-        "buttonUseForOtherThumbnails-tooltip": "Use the thumbnail for all other videos",
-        "buttonUseForOtherThumbnails-tooltip-aria": "Use the thumbnail for all other videos",
+        "buttonUseForOtherThumbnails": "Use for all tracks",
+        "buttonUseForOtherThumbnails-tooltip": "Use the thumbnail for all tracks",
+        "buttonUseForOtherThumbnails-tooltip-aria": "Use the thumbnail for all tracks",
         "buttonDiscard": "Discard",
-        "buttonDiscard-tooltip": "Undo all changes made to this thumbnail",
-        "buttonDiscard-tooltip-aria": "Undo all changes made to this thumbnail",
+        "buttonDiscard-tooltip": "Discard the thumbnail for this track",
+        "buttonDiscard-tooltip-aria": "Discard the thumbnail for this track",
         "buttonGenerateAll": "Generate All",
-        "buttonGenerateAll-tooltip": "Create new thumbnails from the current scrubber position",
-        "buttonGenerateAll-tooltip-aria": "Create new thumbnails from the current scrubber position",
-        "explanation": "Here you can set the thumbnail for each video",
+        "buttonGenerateAll-tooltip": "Generate new thumbnails for all tracks from the current timeline marker position",
+        "buttonGenerateAll-tooltip-aria": "Generate new thumbnails for all tracks from the current timeline marker position",
+        "explanation": "Upload or generate a thumbnail for each track.",
         "primary": "Primary",
         "secondary": "Secondary"
     },
@@ -185,7 +196,7 @@
         "generic-message": "發生嚴重錯誤！",
         "details": "細節: ",
         "workflowActive-errorTitle": "Temporarily unavailable",
-        "workflowActive-errorMessage": "An Opencast workflow is currently running, please wait until it is finished."
+        "workflowActive-errorMessage": "This event is being processed. Please wait until the process is finished."
     },
     "landing": {
         "main-heading": "歡迎使用影片編輯器",
@@ -197,10 +208,12 @@
     "various": {
         "error-details-text": "詳細訊息：{{errorMessage}}",
         "error-text": "發生了錯誤。 請稍等，然後再重試。",
-        "goBack-button": "不，回到上一步"
+        "goBack-button": "不，回到上一步",
+        "callback-button-system": "Back to {{system}}",
+        "callback-button-generic": "Back to previous system"
     },
     "trackSelection": {
-        "description": "選擇或取消選擇用於處理和發佈的影音軌道。",
+        "title": "Select track(s) for processing",
         "trackInactive": "不活動的",
         "deleteTrackText": "刪除影音軌道",
         "restoreTrackText": "還原影音軌道",
@@ -209,24 +222,65 @@
         "restoreTrackTooltip": "編碼並發佈此影音軌道",
         "cannotDeleteTrackTooltip": "無法從發佈的影片中刪除此影音軌道。"
     },
+    "subtitles": {
+        "selectSubtitleButton-tooltip": "Edit subtitles for {{title}}",
+        "selectSubtitleButton-tooltip-aria": "Select {{title}} for subtitle editing",
+        "createSubtitleButton-tooltip": "Opens a dialog for creating new subtitles",
+        "createSubtitleButton-clicked-tooltip-aria": "Contains a dialog for creating new subtitles",
+        "createSubtitleButton-createButton": "Create",
+        "createSubtitleButton-createButton-tooltip": "Start a new subtitle file with the chosen title.",
+        "createSubtitleDropdown-label": "Pick a language",
+        "backButton": "Back",
+        "backButton-tooltip": "Return to subtitle selection",
+        "downloadButton-title": "Download",
+        "downloadButton-tooltip": "Download subtitle as vtt file",
+        "editTitle": "Subtitle Editor - {{title}}",
+        "editTitle-loading": "Loading",
+        "generic": "Generic",
+        "autoGenerated": "Auto-generated"
+    },
+    "subtitleList": {
+        "startTime-tooltip": "Beginning of the segment",
+        "startTime-tooltip-aria": "Beginning at",
+        "endTime-tooltip": "End of the segment",
+        "endTime-tooltip-aria": "Ending at",
+        "addSegmentAbove": "Add segment above",
+        "addSegmentBelow": "Add segment below",
+        "jumpToSegmentAbove": "Jump to segment above",
+        "jumpToSegmentBelow": "Jump to segment below",
+        "deleteSegment": "Delete segment"
+    },
+    "subtitleVideoArea": {
+        "selectVideoLabel": "Video Flavors"
+    },
+    "subtitleTimeline": {
+        "overviewTimelineTooltip": "Timeline overview"
+    },
     "keyboardControls": {
-        "header": "鍵盤控制",
+        "header": "Shortcuts",
         "defaultGroupName": "一般",
         "missingLabel": "未知",
-        "groupCuttingView": "Cutting View",
-        "groupCuttingViewScrubber": "Cutting View - Scrubber",
-        "sequenceSeperator": "或",
+        "groupVideoPlayer": "Video Player",
+        "groupCuttingView": "裁剪",
+        "groupCuttingViewScrubber": "Timeline",
+        "groupSubtitleList": "Subtitles",
+        "sequenceSeparator": "or",
         "genericError": "無法載入概觀資料",
         "videoPlayButton": "播放/暫停 影片",
         "scrubberLeft": "往左移",
         "scrubberRight": "往右移",
-        "scubberIncrease": "移動快一點",
+        "scrubberIncrease": "Move faster",
         "scrubberDecrease": "移動慢一點"
     },
     "theme": {
         "appearance": "Appearance",
-        "darkmode": "Dark mode",
-        "lightmode": "Light mode",
-        "system": "System design"
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Auto",
+        "dark-high-contrast": "Dark (High contrast)",
+        "light-high-contrast": "Light (High contrast)"
+    },
+    "language": {
+        "language": "語言"
     }
 }

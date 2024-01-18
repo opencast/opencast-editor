@@ -1,275 +1,348 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle, disableButtonAnimation } from "../cssStyles";
-import { settings } from '../config'
-import { selectSubtitles, setSelectedSubtitleFlavor, setSubtitle } from "../redux/subtitleSlice";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  basicButtonStyle,
+  flexGapReplacementStyle,
+  tileButtonStyle,
+  disableButtonAnimation,
+  subtitleSelectStyle,
+} from "../cssStyles";
+import { settings, subtitleTags } from "../config";
+import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/subtitleSlice";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { LuPlus } from "react-icons/lu";
 import { Form } from "react-final-form";
 import { Select } from "mui-rff";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { selectCaptions } from "../redux/videoSlice";
-import { selectTheme } from "../redux/themeSlice";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { selectSubtitlesFromOpencast } from "../redux/videoSlice";
+import { useTheme } from "../themes";
+import { ThemeProvider } from "@mui/material/styles";
+import { ThemedTooltip } from "./Tooltip";
+import { languageCodeToName } from "../util/utilityFunctions";
+import { v4 as uuidv4 } from "uuid";
+import { TFunction } from "i18next";
 
 /**
- * Displays buttons that allow the user to select the flavor/language they want to edit
+ * Displays buttons that allow the user to select the subtitle they want to edit
  */
- const SubtitleSelect : React.FC<{}> = () => {
+const SubtitleSelect: React.FC = () => {
 
-  const captionTracks = useSelector(selectCaptions) // track objects received from Opencast
-  const subtitles = useSelector(selectSubtitles)    // parsed subtitles stored in redux
+  const { t } = useTranslation();
+  const subtitlesFromOpencast = useAppSelector(selectSubtitlesFromOpencast); // track objects received from Opencast
+  const subtitles = useAppSelector(selectSubtitles);                         // parsed subtitles stored in redux
 
-  const [displayFlavors, setDisplayFlavors] = useState<{subFlavor: string, title: string}[]>([])
-  const [canBeAddedFlavors, setCanBeAddedFlavors] = useState<{subFlavor: string, title: string}[]>([])
+  const [displaySubtitles, setDisplaySubtitles] = useState<{ id: string, tags: string[]; }[]>([]);
+  const [canBeAddedSubtitles, setCanBeAddedSubtitles] = useState<{ id: string, tags: string[]; }[]>([]);
 
-  // Update the displayFlavors and canBeAddedFlavors
+  // Update the collections for the select and add buttons
   useEffect(() => {
-    let tempDisplayFlavors = []
-    let tempCanBeAddedFlavors = []
+    const languages = { ...settings.subtitles.languages };
 
-    for (let lan in settings.subtitles.languages) {
-      let found = false
-      let subFlavor = lan // left side
-      let name = settings.subtitles.languages[lan] // right side
+    // Get ids of already created tracks or exisiting subtitle tracks
+    let existingSubtitles = subtitlesFromOpencast
+      .filter(track => !subtitles[track.id])
+      .map(track => {
+        return { id: track.id, tags: track.tags };
+      });
 
-      // Check if flavor already exists in the tracks from Opencast
-      for (const cap of captionTracks) {
-        if (cap.flavor.type+"/"+cap.flavor.subtype === subFlavor) {
-          found = true
+    existingSubtitles = Object.entries(subtitles)
+      .map(track => {
+        return { id: track[0], tags: track[1].tags };
+      })
+      .concat(existingSubtitles);
+
+    // Looks for languages in existing subtitles
+    // so that those languages don"t show in the addSubtitles dropdown
+    const subtitlesFromOpencastLangs = subtitlesFromOpencast
+      .reduce((result: { id: string, lang: string; }[], track) => {
+        const lang = track.tags.find(e => e.startsWith("lang:"));
+        if (lang) {
+          result.push({ id: track.id, lang: lang.split(":")[1].trim() });
         }
-      }
+        return result;
+      }, []);
 
-      // Need to check this in case of added/deleted subtitles
-      // (aka changes) that are not yet published to Opencast
-      for (const identifier in subtitles) {
-        if (identifier === subFlavor) {
-          found = true
+    const subtitlesLangs = Object.entries(subtitles)
+      .reduce((result: { id: string, lang: string; }[], track) => {
+        const lang = track[1].tags.find(e => e.startsWith("lang:"));
+        if (lang) {
+          result.push({ id: track[0], lang: lang.split(":")[1].trim() });
         }
-      }
+        return result;
+      }, []);
 
-      if (found) {
-        tempDisplayFlavors.push({subFlavor: subFlavor, title: name})
-      } else {
-        tempCanBeAddedFlavors.push({subFlavor: subFlavor, title: name})
-      }
-    }
+    const existingLangs = subtitlesFromOpencastLangs.concat(subtitlesLangs);
 
-    setDisplayFlavors(tempDisplayFlavors)
-    setCanBeAddedFlavors(tempCanBeAddedFlavors)
-  }, [captionTracks, subtitles])
+    // Create list of subtitles that can be added
+    const canBeAddedSubtitles = Object.entries(languages)
+      .reduce((result: string[][], language) => {
+        if (!existingLangs.find(e => e.lang === language[1]["lang"])) {
+          result.push(convertTags(language[1]));
+        } else {
+          delete languages[language[0]];
+        }
+        return result;
+      }, [])
+      .map(tags => { return { id: uuidv4(), tags: tags }; });
 
-  // TODO: Make this function more robust
-  const parseCountryCode = (parseString: string) => {
-    return parseString.split("+").pop()?.slice(0, 2);
-  }
+    setDisplaySubtitles(existingSubtitles);
+    setCanBeAddedSubtitles(canBeAddedSubtitles);
+  }, [subtitlesFromOpencast, subtitles, t]);
+
+  // Converts tags from the config file format to opencast format
+  const convertTags = (tags: subtitleTags) => {
+    return Object.entries(tags)
+      .map(tag => `${tag[0]}: ${tag[1]}`)
+      .concat();
+  };
 
   const subtitleSelectStyle = css({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(20em, 1fr))',
-    gridRowGap: '30px',
-  })
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    ...(flexGapReplacementStyle(30, false)),
+  });
 
   const renderButtons = () => {
-    let buttons : JSX.Element[] = []
+    const buttons: JSX.Element[] = [];
     if (settings.subtitles.languages === undefined) {
-      return buttons
+      return buttons;
     }
 
-    for (let subFlavor of displayFlavors) {
+    for (const subtitle of displaySubtitles) {
+      let lang = subtitle.tags.find(e => e.startsWith("lang:"));
+      lang = lang ? lang.split(":")[1].trim() : undefined;
+      const icon = lang ? ((settings.subtitles || {}).icons || {})[lang] : undefined;
+
       buttons.push(
         <SubtitleSelectButton
-          title={subFlavor.title}
-          iconIdentifier={parseCountryCode(subFlavor.subFlavor)}
-          flavor={subFlavor.subFlavor}
-          key={subFlavor.subFlavor}
+          id={subtitle.id}
+          key={subtitle.id}
+          title={generateButtonTitle(subtitle.tags, t)}
+          icon={icon}
         />
-      )
+      );
     }
-    return buttons
-  }
+    return buttons.sort((dat1, dat2) => dat1.props["title"].localeCompare(dat2.props["title"]));
+  };
 
   return (
     <div css={subtitleSelectStyle}>
       {renderButtons()}
       {/* TODO: Only show the add button when there are still languages to add*/}
-      <SubtitleAddButton languages={canBeAddedFlavors} />
-    </div>
-  );
-}
-
-/**
- * A button that sets the flavor that should be edited
- */
-const SubtitleSelectButton: React.FC<{
-  title: string,
-  iconIdentifier: string | undefined,
-  flavor: string,
-}> = ({
-  title,
-  iconIdentifier,
-  flavor
-}) => {
-  const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
-  const dispatch = useDispatch()
-
-  /**
-   * Quick and dirty function to get a flag unicode character by country code
-   * @param countryCode
-   * @returns
-   */
-  function getFlagEmoji(countryCode: string) {
-    var flag = countryCode.toUpperCase().replace(/./g, char =>
-      String.fromCodePoint(127397 + char.charCodeAt(0))
-    );
-    const regexEscape = /[\u{1F1E6}-\u{1F1FF}]/u;
-    if (regexEscape.test(flag)) {
-      return flag
-    }
-  }
-
-  const flagStyle = css({
-    fontSize: '2em',
-  });
-
-  const titleStyle = css({
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    minWidth: 0,
-  })
-
-  return (
-    <div css={[basicButtonStyle, tileButtonStyle(theme)]}
-      role="button" tabIndex={0}
-      title={t("subtitles.selectSubtitleButton-tooltip", {title: title})}
-      aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", {title: title})}
-      onClick={ () => {
-        dispatch(setIsDisplayEditView(true))
-        dispatch(setSelectedSubtitleFlavor(flavor))
-      }}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        dispatch(setIsDisplayEditView(true))
-        dispatch(setSelectedSubtitleFlavor(flavor))
-      }}}>
-      {iconIdentifier && getFlagEmoji(iconIdentifier) && <div css={flagStyle}>{getFlagEmoji(iconIdentifier)}</div>}
-      <div css={titleStyle}>{title}</div>
+      <SubtitleAddButton subtitlesForDropdown={canBeAddedSubtitles} />
     </div>
   );
 };
 
 /**
- * Actually not a button, but a container for a form that allows creating new flavors for editing
+ * A button that sets the subtitle that should be edited
  */
-const SubtitleAddButton: React.FC<{languages: {subFlavor: string, title: string}[]}> = ({languages}) => {
-
+const SubtitleSelectButton: React.FC<{
+  id: string,
+  title: string,
+  icon: string | undefined,
+}> = ({
+  id,
+  title,
+  icon,
+}) => {
   const { t } = useTranslation();
-  const theme = useSelector(selectTheme)
-  const isDarkPreferred = document.documentElement.getAttribute('data-theme');
-  const dispatch = useDispatch()
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
 
-  const [isPlusDisplay, setIsPlusDisplay] = useState(true)
+  const flagStyle = css({
+    fontSize: "2.5em",
+    overflow: "hidden",
+
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: `${theme.background_finish_menu_icon}`,
+    color: `${theme.text}`,
+    borderRadius: "50%",
+    width: "90px",
+    height: "90px",
+  });
+
+  const titleStyle = css({
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    minWidth: 0,
+  });
+
+  return (
+    <ThemedTooltip title={t("subtitles.selectSubtitleButton-tooltip", { title: title })}>
+      <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
+        role="button" tabIndex={0}
+        aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", { title: title })}
+        onClick={() => {
+          dispatch(setIsDisplayEditView(true));
+          dispatch(setSelectedSubtitleId(id));
+        }}
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+          if (event.key === " " || event.key === "Enter") {
+            dispatch(setIsDisplayEditView(true));
+            dispatch(setSelectedSubtitleId(id));
+          }
+        }}>
+        {icon && <div css={flagStyle}>{icon}</div>}
+        <div css={titleStyle}>{title ?? t("subtitles.generic") + " " + id}</div>
+      </div>
+    </ThemedTooltip>
+  );
+};
+
+/**
+ * Actually not a button, but a container for a form that allows creating new subtitles for editing
+ */
+const SubtitleAddButton: React.FC<{
+  subtitlesForDropdown: { id: string, tags: string[]; }[];
+}> = ({
+  subtitlesForDropdown,
+}) => {
+  const { t } = useTranslation();
+  const theme = useTheme();
+
+  const dispatch = useAppDispatch();
+
+  const [isPlusDisplay, setIsPlusDisplay] = useState(true);
 
   // Parse language data into a format the dropdown understands
   const selectData = () => {
-    const data = []
-    for (const lan of languages) {
-      data.push({label: lan.title, value: lan.subFlavor})
+    const data = [];
+    for (const subtitle of subtitlesForDropdown) {
+      const lang = generateButtonTitle(subtitle.tags, t);
+      data.push({ label: lang ?? t("subtitles.generic") + " " + subtitle.id, value: subtitle.id });
     }
-    return data
-  }
+    data.sort((dat1, dat2) => dat1.label.localeCompare(dat2.label));
+    return data;
+  };
 
-  const onSubmit = (values: { languages: any; }) => {
-    // Create new subtitle for the given flavor
-    dispatch(setSubtitle({identifier: values.languages, subtitles: []}))
+  const onSubmit = (values: { selectedSubtitle: any; }) => {
+    // Create new subtitle for the given language
+    const id = values.selectedSubtitle;
+    const relatedSubtitle = subtitlesForDropdown.find(tag => tag.id === id);
+    const tags = relatedSubtitle ? relatedSubtitle.tags : [];
+    dispatch(setSubtitle({ identifier: id, subtitles: { cues: [], tags: tags } }));
 
     // Reset
-    setIsPlusDisplay(true)
+    setIsPlusDisplay(true);
 
     // Move to editor view
-    dispatch(setIsDisplayEditView(true))
-    dispatch(setSelectedSubtitleFlavor(values.languages))
-  }
-
-  const muiTheme = createTheme({
-    palette: {
-      mode: isDarkPreferred === 'dark' ? 'dark' : 'light',
-    },
-  });
+    dispatch(setIsDisplayEditView(true));
+    dispatch(setSelectedSubtitleId(id));
+  };
 
   const plusIconStyle = css({
-    display: isPlusDisplay ? 'block' : 'none'
+    display: isPlusDisplay ? "flex" : "none",
   });
 
   const subtitleAddFormStyle = css({
-    display: !isPlusDisplay ? 'flex' : 'none',
-    flexDirection: 'column' as const,
+    display: !isPlusDisplay ? "flex" : "none",
+    flexDirection: "column" as const,
     ...(flexGapReplacementStyle(30, false)),
-    padding: '20px',
+    width: "80%",
+    padding: "20px",
   });
 
   const createButtonStyle = css({
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-    fontSize: '0.75em',
-    background: 'snow',
-    border: '1px solid #ccc',
+    padding: "10px 5px",
+    width: "100%",
+    boxShadow: "",
+    border: `1px solid ${theme.text}`,
+    backgroundColor: `${theme.background}`,
+    color: `${theme.text}`,
 
     "&[disabled]": {
-      opacity: '0.6',
-      cursor: 'not-allowed',
+      opacity: "0.6",
+      cursor: "not-allowed",
     },
   });
 
   return (
-    <div css={[basicButtonStyle, tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
-      role="button" tabIndex={0}
-      title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}
-      aria-label={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : t("createSubtitleButton-clicked-tooltip-aria")}
-      onClick={ () => setIsPlusDisplay(false) }
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " " || event.key === "Enter") {
-        setIsPlusDisplay(false)
-      }}}
+    <ThemedTooltip title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}>
+      <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
+        role="button" tabIndex={0}
+        aria-label={isPlusDisplay ?
+          t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
+        onClick={() => setIsPlusDisplay(false)}
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+          if (event.key === " " || event.key === "Enter") {
+            setIsPlusDisplay(false);
+          }
+        }}
       >
-      <FontAwesomeIcon icon={faPlus} size="2x" css={plusIconStyle}/>
-      <Form
-        onSubmit={onSubmit}
-        subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
-        render={({ handleSubmit, form, submitting, pristine, values}) => (
-          <form onSubmit={event => {
-            handleSubmit(event)
-            // // Ugly fix for form not getting updated after submit. TODO: Find a better fix
-            // form.reset()
-          }} css={subtitleAddFormStyle}>
+        <LuPlus css={[plusIconStyle, { fontSize: 42 }]} />
+        <Form
+          onSubmit={onSubmit}
+          subscription={{ submitting: true, pristine: true }} // Hopefully causes less rerenders
+          render={({ handleSubmit, submitting, pristine }) => (
+            <form onSubmit={event => {
+              handleSubmit(event);
+              // // Ugly fix for form not getting updated after submit. TODO: Find a better fix
+              // form.reset()
+            }} css={subtitleAddFormStyle}>
               {/* TODO: Fix the following warning, caused by removing items from data:
                 MUI: You have provided an out-of-range value `undefined` for the select (name="languages") component.
               */}
-              <ThemeProvider theme={muiTheme}>
+              <ThemeProvider theme={subtitleSelectStyle(theme)}>
                 <Select
-                  label={t("subtitles.createSubtitleDropdown-label")}
-                  name="languages"
+                  css={{ backgroundColor: `${theme.background}` }}
+                  label={t("subtitles.createSubtitleDropdown-label") ?? undefined}
+                  name="selectedSubtitle"
                   data={selectData()}
                 >
                 </Select>
               </ThemeProvider>
 
-              <button css={[basicButtonStyle, createButtonStyle]}
-                type="submit"
-                title={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                disabled={submitting || pristine}>
+              {/* "By default disabled elements like <button> do not trigger user interactions
+                * so a Tooltip will not activate on normal events like hover. To accommodate
+                * disabled elements, add a simple wrapper element, such as a span."
+                * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
+              <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
+                <button css={[basicButtonStyle(theme), createButtonStyle]}
+                  type="submit"
+                  aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                  disabled={submitting || pristine}>
                   {t("subtitles.createSubtitleButton-createButton")}
-              </button>
+                </button>
+              </ThemedTooltip>
 
-          </form>
-        )}
-      />
-    </div>
+            </form>
+          )}
+        />
+      </div>
+    </ThemedTooltip>
   );
-}
+};
 
+/**
+ * Generates a title for the buttons from the tags
+ */
+export function generateButtonTitle(tags: string[], t: TFunction<"translation", undefined>) {
+  let lang = tags.find(e => e.startsWith("lang:"));
+  lang = lang ? lang.split(":")[1].trim() : undefined;
+  lang = languageCodeToName(lang?.trim()) ?? lang;
+
+  let cc = "";
+  const type = tags.find(e => e.startsWith("type:"));
+  const isCC = type ? type.split(":")[1].trim() === "closed-caption" : undefined;
+  if (isCC) {
+    cc = "[CC]";
+  }
+
+  let autoGen = "";
+  const genType = tags.find(e => e.startsWith("generator-type:"));
+  const isAutoGen = genType ? genType.split(":")[1].trim() === "auto" : undefined;
+  if (isAutoGen) {
+    autoGen = "(" + t("subtitles.autoGenerated") + ")";
+  }
+
+  return cc + " " + lang + " " + autoGen;
+}
 
 export default SubtitleSelect;

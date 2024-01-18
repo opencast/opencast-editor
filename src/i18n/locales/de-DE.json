@@ -3,6 +3,7 @@
         "cutting-button": "Schneiden",
         "finish-button": "Fertigstellen",
         "select-tracks-button": "Spuren",
+        "subtitles-button": "Untertitel",
         "thumbnail-button": "Vorschaubild",
         "metadata-button": "Metadaten",
         "keyboard-controls-button": "Tastatursteuerung",
@@ -10,11 +11,14 @@
     },
     "cuttingActions": {
         "cut-button": "Schneiden",
-        "cut-tooltip": "Teilen Sie das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}",
-        "cut-tooltip-aria": "Schnitt. Teilen Sie das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}.",
+        "cut-tooltip": "Segment an der aktuellen Position der Zeitleiste teilen. Hotkey: {{hotkeyName}}",
+        "cut-tooltip-aria": "Schneiden. Teilt das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}.",
         "delete-button": "Löschen",
         "delete-restore-tooltip": "Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotkeyName}}",
         "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
+        "merge-all-button": "Alle zusammenführen",
+        "merge-all-tooltip": "Alle Segmente in ein einziges Segment zusammenführen.",
+        "merge-all-tooltip-aria": "Alle Segmente in ein einziges Segment zusammenführen.",
         "restore-button": "Wiederherstellen",
         "mergeLeft-button": "Links zusammenfügen",
         "mergeLeft-tooltip": "Verbinde das aktuell aktive Segment mit dem Segment auf der linken Seite. Hotkey: {{hotkeyName}}",
@@ -27,15 +31,21 @@
         "previewButton": "Vorschaumodus",
         "previewButton-tooltip": "Überspringt gelöschte Segmente bei der Wiedergabe des Videos. Derzeit {{status}}. Hotkey: {{hotkeyName}}",
         "previewButton-aria": "Vorschaumodus aktivieren oder deaktivieren. Hotkey: {{hotkeyName}}.",
-        "playButton-tooltip": "Video abspielen",
+        "playButton-tooltip": "Video wiedergeben",
+        "pauseButton-tooltip": "Video pausieren",
+        "current-time-tooltip": "Aktuelle Zeit",
         "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",
         "time-aria": "Aktuelle Zeit",
+        "mutebutton-tooltip": "Video stumm schalten",
+        "unmutebutton-tooltip": "Videoton aktivieren",
+        "volume-tooltip": "Lautstärke anpassen: {{current}}%",
+        "volumeSlider-aria": "Lautstärke des Videos anpassen.",
         "comError-text": "Bei der Kommunikation mit Opencast ist ein Problem aufgetreten.",
         "loadError-text": "Beim Laden des Videos ist ein Fehler aufgetreten.",
+        "durationError-text": "Opencast konnte die Video-Dauer nicht angeben.",
         "title-tooltip": "Videotitel",
-        "presenter-tooltip": "Vortragende",
-        "controls-tooltip": "Videosteuerungen"
+        "presenter-tooltip": "Vortragende"
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
@@ -45,23 +55,23 @@
     "save": {
         "headline-text": "Aktuelles Projekt speichern",
         "confirm-button": "Ja, Änderungen speichern",
-        "confirmButton-default-tooltip": "Speichern-Button",
         "confirmButton-attempting-tooltip": "Versuche zu speichern",
         "confirmButton-success-tooltip": "Erfolgreich gespeichert",
         "confirmButton-failed-tooltip": "Speichern fehlgeschlagen",
         "info-text": "Das Video wird nicht verarbeitet, aber alle Schnittinformationen werden in Opencast gespeichert. Sie können Ihre Bearbeitung später fortsetzen.",
-        "success-text": "Änderungen erfolgreich gespeichert!",
+        "success-text": "Änderungen erfolgreich gespeichert! Sie können den Editor nun schließen oder weiter arbeiten.",
         "success-tooltip-aria": "Erfolgreich gespeichert",
-        "saveArea-tooltip": "Speicherbereich"
+        "saveArea-tooltip": "Speicherbereich",
+        "confirm-success": "Okay",
+        "cancel-save": "Nicht speichern"
     },
     "discard": {
         "headline-text": "Änderungen verwerfen",
         "confirm-button": "Ja, Änderungen verwerfen",
-        "confirm-tooltip": "Änderungen verwerfen Button",
-        "info-text": "Alle vorgenommenen Änderungen verwerfen? Dies kann nicht rückgängig gemacht werden!"
+        "info-text": "Sind Sie sicher, dass Sie diese Änderung verwerfen möchten? Dies kann nicht rückgängig gemacht werden!"
     },
     "theEnd": {
-        "discarded-text": "Alle Ihre Änderungen sind nun für immer verloren gegangen. Sie können nun den Editor schließen.",
+        "discarded-text": "Ihre Änderungen wurden verworfen. Sie können den Editor nun schließen.",
         "startOver-button": "Von neuem beginnen!",
         "startOver-tooltip": "Seite neu laden, um neu zu starten",
         "info-text": "Änderungen erfolgreich in Opencast gespeichert. Die Bearbeitung Ihrer Änderungen kann einige Zeit dauern, bitte haben Sie etwas Geduld. Sie können nun den Editor schließen.\n"
@@ -69,7 +79,7 @@
     "workflowSelection": {
         "saveAndProcess-text": "Speichern & verarbeiten",
         "selectWF-text": "Workflow wählen",
-        "noWorkflows-text": "Ein Problem ist aufgetreten, es gibt keine Workflows für die Verarbeitung Ihrer Änderungen mit.<3/> Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Opencast Administrator.\n",
+        "noWorkflows-text": "Es gibt keine Workflows zum Verarbeiten Ihrer Änderungen. Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Administrator.\n",
         "oneWorkflow-text": "Das Video wird mit dem Workflow \"{{workflow}}\" geschnitten und verarbeitet. <3/> Dies wird einige Zeit dauern.\n",
         "manyWorkflows-text": "Wählen Sie aus, welchen Workflow Opencast für die Verarbeitung verwenden soll.",
         "startProcessing-button": "Verarbeitung starten",
@@ -80,12 +90,11 @@
     "timeline": {
         "generateWaveform-text": "Waveform wird generiert",
         "segment-tooltip": "Segment {{segment}}",
-        "scrubber-text-aria": "Zeitmarker. {{currentTime}}. Aktives Segment: {{segment}}. {{segmentStatus}}. Kontrollen: {{moveLeft}} und {{moveRight}}, um den Zeitmarker zu bewegen. {{increase}} und {{decrease}}, um das Verschiebungdelta zu erhöhen/verringern.\n",
+        "scrubber-text-aria": "Zeitmarker. {{currentTime}}. Aktives Segment: {{segment}}. {{segmentStatus}}. Steuerung: {{moveLeft}} und {{moveRight}}, um den Zeitmarker zu bewegen. {{increase}} und {{decrease}}, um das Verschiebungdelta zu erhöhen/verringern.\n",
         "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. Ende: {{end}}.\n"
     },
     "workflowConfig": {
         "headline-text": "Workflow Konfiguration",
-        "area-tooltip": "Workflow-Konfigurationsbereich",
         "satisfied-text": "Sind Sie zufrieden mit Ihrer Konfiguration?",
         "confirm-button": "Ja, Verarbeitung starten"
     },
@@ -152,28 +161,30 @@
             "EVENTS-LICENSE-CCBYSA": "CC-BY-SA",
             "EVENTS-LICENSE-CCBYNC": "CC-BY-NC",
             "EVENTS-LICENSE-CCBY": "CC-BY"
-        }
+        },
+        "calendar-prev": "Vorherige",
+        "calendar-next": "Nächste"
     },
     "thumbnail": {
         "title": "Vorschaubildeditor",
-        "noThumbnailAvailable": "Kein Vorschaubild festgelegt",
-        "previewImageAlt": "Vorschaubild für",
+        "noThumbnailAvailable": "Kein Vorschaubild verfügbar",
+        "previewImageAlt": "Vorschaubild für Spur",
         "buttonGenerate": "Generieren",
-        "buttonGenerate-tooltip": "Erstelle ein neues Vorschaubild von der aktuellen Scrubber-Position",
-        "buttonGenerate-tooltip-aria": "Erstelle ein neues Vorschaubild von der aktuellen Scrubber-Position",
+        "buttonGenerate-tooltip": "Erstelle ein neues Vorschaubild aus der aktuellen Position des Zeitmarkers",
+        "buttonGenerate-tooltip-aria": "Erstelle ein neues Vorschaubild aus der aktuellen Position des Zeitmarkers",
         "buttonUpload": "Hochladen",
         "buttonUpload-tooltip": "Ein Bild hochladen",
         "buttonUpload-tooltip-aria": "Ein Bild hochladen",
-        "buttonUseForOtherThumbnails": "Für andere Vorschaubilder verwenden",
-        "buttonUseForOtherThumbnails-tooltip": "Benutze das Vorschaubild für alle anderen Videos",
-        "buttonUseForOtherThumbnails-tooltip-aria": "Benutze das Vorschaubild für alle anderen Videos",
+        "buttonUseForOtherThumbnails": "Für alle Spuren verwenden",
+        "buttonUseForOtherThumbnails-tooltip": "Benutze das Vorschaubild für alle Spuren",
+        "buttonUseForOtherThumbnails-tooltip-aria": "Benutze das Vorschaubild für alle Spuren",
         "buttonDiscard": "Verwerfen",
-        "buttonDiscard-tooltip": "Alle Änderungen an diesem Vorschaubild rückgängig machen",
-        "buttonDiscard-tooltip-aria": "Alle Änderungen an diesem Vorschaubild rückgängig machen",
+        "buttonDiscard-tooltip": "Verwerfe Vorschaubild für diese Spur",
+        "buttonDiscard-tooltip-aria": "Verwerfe Vorschaubild für diese Spur",
         "buttonGenerateAll": "Alle generieren",
-        "buttonGenerateAll-tooltip": "Erstelle neue Vorschaubilder von der aktuellen Scrubber-Position",
-        "buttonGenerateAll-tooltip-aria": "Erstelle neue Vorschaubilder von der aktuellen Scrubber-Position",
-        "explanation": "Hier können Sie die Vorschaubilder für jedes Video festlegen",
+        "buttonGenerateAll-tooltip": "Erstelle ein neues Vorschaubild für alle Spuren aus der aktuellen Position des Zeitmarkers",
+        "buttonGenerateAll-tooltip-aria": "Erstelle ein neues Vorschaubild für alle Spuren aus der aktuellen Position des Zeitmarkers",
+        "explanation": "Erstelle oder lade ein Vorschaubild für jede Spur hoch.",
         "primary": "Primär",
         "secondary": "Sekundär"
     },
@@ -185,7 +196,7 @@
         "generic-message": "Ein kritischer Fehler ist aufgetreten!",
         "details": "Details: ",
         "workflowActive-errorTitle": "Vorübergehend nicht verfügbar",
-        "workflowActive-errorMessage": "Ein Opencast Workflow wird gerade ausgeführt, bitte warten Sie, bis er beendet ist."
+        "workflowActive-errorMessage": "Dieses Video wird verarbeitet Bitte warten Sie, bis der Prozess abgeschlossen ist."
     },
     "landing": {
         "main-heading": "Willkommen im Video-Editor",
@@ -197,36 +208,79 @@
     "various": {
         "error-details-text": "Details: {{errorMessage}}\n",
         "error-text": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.",
-        "goBack-button": "Nein, zurück"
+        "goBack-button": "Nein, zurück",
+        "callback-button-system": "Zurück zu {{system}}",
+        "callback-button-generic": "Zurück zu vorherigem System"
     },
     "trackSelection": {
-        "description": "Wählen oder deaktivieren Sie die Spuren für die Verarbeitung und Veröffentlichung.",
+        "title": "Spur(en) für die Verarbeitung auswählen",
         "trackInactive": "inaktiv",
         "deleteTrackText": "Spur löschen",
         "restoreTrackText": "Spur wiederherstellen",
         "cannotDeleteTrackText": "Spur kann nicht gelöscht werden",
-        "deleteTrackTooltip": "Diesen Track nicht verarbeiten und veröffentlichen.",
-        "restoreTrackTooltip": "Diesen Track verarbeiten und veröffentlichen.",
-        "cannotDeleteTrackTooltip": "Dieser Track kann nicht entfernt werden."
+        "deleteTrackTooltip": "Diese Spur nicht verarbeiten und veröffentlichen.",
+        "restoreTrackTooltip": "Diese Spur verarbeiten und veröffentlichen.",
+        "cannotDeleteTrackTooltip": "Diese Spur kann nicht entfernt werden."
+    },
+    "subtitles": {
+        "selectSubtitleButton-tooltip": "Untertitel für {{title}} bearbeiten",
+        "selectSubtitleButton-tooltip-aria": "{{title}} zur Bearbeitung von Untertiteln auswählen",
+        "createSubtitleButton-tooltip": "Öffnet einen Dialog zum Erstellen neuer Untertitel",
+        "createSubtitleButton-clicked-tooltip-aria": "Enthält einen Dialog zum Erstellen neuer Untertitel",
+        "createSubtitleButton-createButton": "Erstellen",
+        "createSubtitleButton-createButton-tooltip": "Beginne eine neue Untertiteldatei mit dem ausgewählten Titel.",
+        "createSubtitleDropdown-label": "Wähle eine Sprache",
+        "backButton": "Zurück",
+        "backButton-tooltip": "Zurück zur Untertitelauswahl",
+        "downloadButton-title": "Herunterladen",
+        "downloadButton-tooltip": "Untertitel als vtt-Datei herunterladen",
+        "editTitle": "Untertitel-Editor - {{title}}",
+        "editTitle-loading": "Lädt",
+        "generic": "Unspezifiziert",
+        "autoGenerated": "Automatisch generiert"
+    },
+    "subtitleList": {
+        "startTime-tooltip": "Beginn des Segments",
+        "startTime-tooltip-aria": "Beginnt bei",
+        "endTime-tooltip": "Ende des Segments",
+        "endTime-tooltip-aria": "Endet bei",
+        "addSegmentAbove": "Segment oberhalb hinzufügen",
+        "addSegmentBelow": "Segment unterhalb hinzufügen",
+        "jumpToSegmentAbove": "Zum Segment oberhalb springen",
+        "jumpToSegmentBelow": "Zum Segment unterhalb springen",
+        "deleteSegment": "Segment löschen"
+    },
+    "subtitleVideoArea": {
+        "selectVideoLabel": "Video Flavors"
+    },
+    "subtitleTimeline": {
+        "overviewTimelineTooltip": "Zeitleiste-Übersicht"
     },
     "keyboardControls": {
-        "header": "Tastatursteuerung",
+        "header": "Tastenkürzel",
         "defaultGroupName": "Allgemein",
         "missingLabel": "Unbekannt",
-        "groupCuttingView": "Schnittansicht",
-        "groupCuttingViewScrubber": "Schnittansicht - Scrubber",
-        "sequenceSeperator": "oder",
+        "groupVideoPlayer": "Videoplayer",
+        "groupCuttingView": "Schneiden",
+        "groupCuttingViewScrubber": "Zeitleiste",
+        "groupSubtitleList": "Untertitel",
+        "sequenceSeparator": "oder",
         "genericError": "Fehler beim Laden der Übersicht",
         "videoPlayButton": "Video abspielen/pausieren",
         "scrubberLeft": "Nach links",
         "scrubberRight": "Nach rechts",
-        "scubberIncrease": "Schneller",
+        "scrubberIncrease": "Schneller bewegen",
         "scrubberDecrease": "Langsamer"
     },
     "theme": {
-        "appearance": "Erscheinungsbild",
-        "darkmode": "Dunkles Design",
-        "lightmode": "Helles Design",
-        "system": "System Design"
+        "appearance": "Aussehen",
+        "dark": "Dunkel",
+        "light": "Hell",
+        "auto": "Auto",
+        "dark-high-contrast": "Dunkel (hoher Kontrast)",
+        "light-high-contrast": "Hell (hoher Kontrast)"
+    },
+    "language": {
+        "language": "Sprache"
     }
 }

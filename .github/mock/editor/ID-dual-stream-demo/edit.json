@@ -53,5 +53,6 @@
     "id": null,
     "title": null
   },
-  "workflow_active": false
+  "workflow_active": false,
+  "locking_active": false
 }
