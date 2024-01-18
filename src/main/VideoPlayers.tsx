@@ -306,13 +306,19 @@ export const VideoPlayer = React.forwardRef(
       // eslint-disable-next-line array-callback-return
         playerConfig.file.tracks.map((t, trackIdx) => {
           const track = document.createElement('track');
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.kind = t.kind!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.label = t.label!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.srclang = t.srcLang!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.default = t.default!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.src = t.src!;
           track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
           track.addEventListener('error', (_e: Event) => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             console.warn(`Cannot load track ${t.src!}`)
           });
           track.addEventListener('load', (e: Event) => {
@@ -320,9 +326,11 @@ export const VideoPlayer = React.forwardRef(
             if (textTrack) {
               if (t.default === true) {
                 textTrack.track.mode = 'showing';
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               video!.textTracks[trackIdx].mode = 'showing'; // thanks Firefox
               } else {
                 textTrack.track.mode = 'hidden';
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               video!.textTracks[trackIdx].mode = 'hidden'; // thanks Firefox
               }
             }

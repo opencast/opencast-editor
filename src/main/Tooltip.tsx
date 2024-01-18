@@ -29,7 +29,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
           getBoundingClientRect: () => {
             return new DOMRect(
               positionRef.current.x,
-              areaRef.current!.getBoundingClientRect().y,
+              areaRef.current?.getBoundingClientRect().y,
               0,
               positionRef.current.y,
             );

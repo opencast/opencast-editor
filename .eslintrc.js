@@ -24,9 +24,6 @@ module.exports = {
     // same line as `{`.
     "brace-style": "off",
 
-    // A few of those are used.
-    "@typescript-eslint/no-non-null-assertion": "off",
-
     // Until we figure out how to get to React 18
     "react/no-deprecated": "off",
   },
