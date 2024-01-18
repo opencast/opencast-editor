@@ -86,7 +86,8 @@ export const lightMode: Theme = {
   singleKey_border: COLORS.neutral20,
   singleKey_boxShadow: `0 2px 2px 0px rgba(150, 150, 150, 0.2)`,
   invert_wave: 'invert(0%)',
-  inverted_text: COLORS.neutral90, // for "Generating waveform" text: in lightMode it's not inverted, so it has to be black
+  // for "Generating waveform" text: in lightMode it's not inverted, so it has to be black
+  inverted_text: COLORS.neutral90,
   tooltip: COLORS.neutral80,
   tooltip_text: COLORS.neutral05,
   element_outline: '2px solid transparent',
@@ -103,7 +104,8 @@ export const lightMode: Theme = {
   background_finish_menu_icon: COLORS.neutral15,
   background_play_icon: COLORS.neutral70,
   background_preview_icon: COLORS.neutral70,
-  waveform_filter: 'invert(44%) sepia(8%) saturate(3893%) hue-rotate(169deg) brightness(99%) contrast(90%)', // All this just to turn the black part of the waveform image blue. Generated with: https://isotropic.co/tool/hex-color-to-css-filter/
+  // All this just to turn the black part of the waveform image blue. Generated with: https://isotropic.co/tool/hex-color-to-css-filter/
+  waveform_filter: 'invert(44%) sepia(8%) saturate(3893%) hue-rotate(169deg) brightness(99%) contrast(90%)',
   waveform_bg: '',
   scrubber: COLORS.neutral60,
   scrubber_handle: COLORS.neutral05,
@@ -120,8 +122,10 @@ export const lightMode: Theme = {
   clock_hands: COLORS.neutral50,
   clock_focus: COLORS.neutral90,
   digit_selected: COLORS.neutral90,
-  text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15}, 0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
-               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15}, 1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
+  text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15},` +
+               `0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
+               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15},` +
+               `1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
 };
 
 export const darkMode: Theme = {
@@ -176,8 +180,10 @@ export const darkMode: Theme = {
   clock_hands: COLORS.neutral50,
   clock_focus: COLORS.neutral90,
   digit_selected: COLORS.neutral90,
-  text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15}, 0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
-               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15}, 1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
+  text_shadow: `2px 0 ${COLORS.neutral15}, -2px 0 ${COLORS.neutral15},` +
+               `0 2px ${COLORS.neutral15}, 0 -2px ${COLORS.neutral15},` +
+               `1px 1px ${COLORS.neutral15}, -1px -1px ${COLORS.neutral15},` +
+               `1px -1px ${COLORS.neutral15}, -1px 1px ${COLORS.neutral15}`,
 };
 
 export const highContrastDarkMode: Theme = {

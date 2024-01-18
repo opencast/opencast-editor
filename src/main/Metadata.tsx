@@ -5,8 +5,17 @@ import { calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleB
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  fetchMetadata, postMetadata, selectCatalogs,
-  Catalog, MetadataField, setFieldValue, selectGetError, selectGetStatus, selectPostError, selectPostStatus, setFieldReadonly
+  fetchMetadata,
+  postMetadata,
+  selectCatalogs,
+  Catalog,
+  MetadataField,
+  setFieldValue,
+  selectGetError,
+  selectGetStatus,
+  selectPostError,
+  selectPostStatus,
+  setFieldReadonly
 } from '../redux/metadataSlice'
 
 import { Form, Field, FieldInputProps } from 'react-final-form'
@@ -391,7 +400,8 @@ const Metadata: React.FC = () => {
     }
 
     // For these fields, the value needs to be inside an array
-    if (field && (field.type === "date" || field.type === "time") && Object.prototype.toString.call(returnValue) === '[object Date]') {
+    if (field && (field.type === "date" || field.type === "time") &&
+    Object.prototype.toString.call(returnValue) === '[object Date]') {
       // If invalid date
       if ((isNaN(returnValue.getTime()))) {
         // Do nothing
@@ -614,7 +624,8 @@ const Metadata: React.FC = () => {
       <Field key={fieldIndex}
         name={"catalog" + catalogIndex + "." + field.id}
         validate={getValidators(field)}
-        type={field.type === "boolean" ? "checkbox" : undefined}  // react-final-form complains if we don't specify checkboxes here
+        // react-final-form complains if we don't specify checkboxes here
+        type={field.type === "boolean" ? "checkbox" : undefined}
       >
         {({ input, meta }) => (
           <div css={fieldStyle} data-testid={field.id}>
@@ -699,7 +710,9 @@ const Metadata: React.FC = () => {
             })}
 
             {/*
-                <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>{t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}</div>
+                <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>
+                  {t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}
+                </div>
 
 
               <div title="buttons" css={buttonContainerStyle}>

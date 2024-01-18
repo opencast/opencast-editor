@@ -30,7 +30,9 @@ export const finishSlice = createSlice({
 export const { setState, setPageNumber } = finishSlice.actions
 
 // Export Selectors
-export const selectFinishState = (state: { finishState: { value: finish["value"]; }; }) => state.finishState.value
-export const selectPageNumber = (state: { finishState: { pageNumber: finish["pageNumber"]; }; }) => state.finishState.pageNumber
+export const selectFinishState = (state: { finishState: { value: finish["value"]; }; }) =>
+  state.finishState.value
+export const selectPageNumber = (state: { finishState: { pageNumber: finish["pageNumber"]; }; }) =>
+  state.finishState.pageNumber
 
 export default finishSlice.reducer

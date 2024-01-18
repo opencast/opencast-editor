@@ -353,7 +353,9 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     ...(flexGapReplacementStyle(10, false)),
     flexGrow: '0.5',
     minWidth: '20px',
-    height: '132px',    // Hackily moves buttons beyond the segment border. Specific value causes buttons from neighboring segments to overlay
+    // Hackily moves buttons beyond the segment border.
+    // Specific value causes buttons from neighboring segments to overlay.
+    height: '132px',
     visibility: 'hidden',
   })
 
@@ -382,8 +384,10 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     <div ref={hotkeyRef} tabIndex={-1} css={[segmentStyle, {
       ...props.style,
       // Used for padding in the VariableSizeList
-      top: props.style.top !== undefined ? `${parseFloat(props.style.top.toString()) + PADDING_SIZE}px` : '0px',
-      height: props.style.height !== undefined ? `${parseFloat(props.style.height.toString()) - PADDING_SIZE}px` : '0px',
+      top: props.style.top !== undefined ?
+        `${parseFloat(props.style.top.toString()) + PADDING_SIZE}px` : '0px',
+      height: props.style.height !== undefined ?
+        `${parseFloat(props.style.height.toString()) - PADDING_SIZE}px` : '0px',
       zIndex: '1000',
     }]}>
 

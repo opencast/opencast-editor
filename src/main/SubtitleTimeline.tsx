@@ -44,7 +44,8 @@ const SubtitleTimeline: React.FC = () => {
   const refTop = useRef<HTMLElement>(null);
   const { ref: refMini, width: widthMiniTimeline = 1 } = useResizeObserver<HTMLDivElement>();
 
-  const timelineCutoutInMs = 10000    // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
+  // How much of the timeline should be visible in milliseconds. Aka a specific zoom level
+  const timelineCutoutInMs = 10000
 
   const timelineStyle = css({
     position: 'relative',     // Need to set position for Draggable bounds to work
@@ -123,15 +124,22 @@ const SubtitleTimeline: React.FC = () => {
         vertical={false}
         horizontal={true}
         onEndScroll={onEndScroll}
-        ignoreElements={"#no-scrolling"}  // dom elements with this id in the container will not trigger scrolling when dragged
+        // dom elements with this id in the container will not trigger scrolling when dragged
+        ignoreElements={"#no-scrolling"}
       >
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle}>
-          <div css={{height: '10px'}} />    {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
+          {/* Fake padding. TODO: Figure out a better way to pad absolutely positioned elements*/}
+          <div css={{height: '10px'}} />
           <TimelineSubtitleSegmentsList timelineWidth={width}/>
           <div css={{position: 'relative', height: '100px'}} >
             <Waveforms timelineHeight={120}/>
-            <CuttingSegmentsList timelineWidth={width} timelineHeight={120} styleByActiveSegment={false} tabable={false}/>
+            <CuttingSegmentsList
+              timelineWidth={width}
+              timelineHeight={120}
+              styleByActiveSegment={false}
+              tabable={false}
+            />
           </div>
         </div>
       </ScrollContainer>
@@ -143,13 +151,21 @@ const SubtitleTimeline: React.FC = () => {
             position: 'relative',
             width: '100%',
             height: '15px',
-            background: `linear-gradient(to right, grey ${(currentlyAt / duration) * 100}%, lightgrey ${(currentlyAt / duration) * 100}%)`,
+            background: `linear-gradient(to right, grey ${(currentlyAt / duration) * 100}%,
+              lightgrey ${(currentlyAt / duration) * 100}%)`,
             borderRadius: '3px',
           }}
           ref={refMini}
         >
           <div
-            css={{position: 'absolute', width: '2px', height: '100%', left: (currentlyAt / duration) * (widthMiniTimeline), top: 0, background: 'black'}}
+            css={{
+              position: 'absolute',
+              width: '2px',
+              height: '100%',
+              left: (currentlyAt / duration) * (widthMiniTimeline),
+              top: 0,
+              background: 'black'
+            }}
           />
         </div>
       </ThemedTooltip>
@@ -190,7 +206,13 @@ const TimelineSubtitleSegmentsList: React.FC<{timelineWidth: number}> = ({timeli
     <div css={segmentsListStyle}>
       {subtitle?.cues?.map((item, i) => {
         return (
-          <TimelineSubtitleSegment timelineWidth={timelineWidth} cue={item} height={arbitraryHeight} key={item.idInternal} index={i}/>
+          <TimelineSubtitleSegment
+            timelineWidth={timelineWidth}
+            cue={item}
+            height={arbitraryHeight}
+            key={item.idInternal}
+            index={i}
+          />
         )
       })}
     </div>
@@ -449,7 +471,10 @@ const TimelineSubtitleSegment: React.FC<{
 //           margin: `${absoluteTop}px 0px 0px ${absoluteLeft}px`,
 //         }}
 //       >
-//         <span className="text">{"Raw use of <Resizable> element with controlled position. Resize and reposition in all directions" + absoluteLeft}</span>
+//         <span className="text">
+//           {"Raw use of <Resizable> element with controlled position.
+//           Resize and reposition in all directions" + absoluteLeft}
+//         </span>
 //       </div>
 //     </Resizable>
 //   );

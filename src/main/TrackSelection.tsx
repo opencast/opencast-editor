@@ -9,7 +9,15 @@ import ReactPlayer from 'react-player'
 import { Track } from '../types'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectVideos, setTrackEnabled } from '../redux/videoSlice'
-import { backgroundBoxStyle, basicButtonStyle, customIconStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold } from '../cssStyles'
+import {
+  backgroundBoxStyle,
+  basicButtonStyle,
+  customIconStyle,
+  deactivatedButtonStyle,
+  flexGapReplacementStyle,
+  titleStyle,
+  titleStyleBold
+} from '../cssStyles'
 
 import { useTranslation } from 'react-i18next';
 import { useTheme } from "../themes";

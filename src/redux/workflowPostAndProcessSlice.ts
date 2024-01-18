@@ -11,7 +11,8 @@ const initialState: httpRequestState = {
   errorReason: 'unknown',
 }
 
-export const postVideoInformationWithWorkflow = createAsyncThunk('video/postVideoInformationWithWorkflow', async (argument: PostAndProcessEditArgument) => {
+export const postVideoInformationWithWorkflow =
+createAsyncThunk('video/postVideoInformationWithWorkflow', async (argument: PostAndProcessEditArgument) => {
   if (!settings.id) {
     throw new Error("Missing media package identifier")
   }

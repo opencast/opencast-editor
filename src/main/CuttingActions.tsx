@@ -46,10 +46,30 @@ const CuttingActions: React.FC = () => {
   }
 
   // Maps functions to hotkeys
-  useHotkeys(KEYMAP.cutting.cut.key, () => dispatchAction(cut), {preventDefault: true}, [cut]);
-  useHotkeys(KEYMAP.cutting.delete.key, () => dispatchAction(markAsDeletedOrAlive), {preventDefault: true}, [markAsDeletedOrAlive]);
-  useHotkeys(KEYMAP.cutting.mergeLeft.key, () => dispatchAction(mergeLeft), {preventDefault: true}, [mergeLeft]);
-  useHotkeys(KEYMAP.cutting.mergeRight.key, () => dispatchAction(mergeRight), {preventDefault: true}, [mergeRight]);
+  useHotkeys(
+    KEYMAP.cutting.cut.key,
+    () => dispatchAction(cut),
+    {preventDefault: true},
+    [cut]
+  );
+  useHotkeys(
+    KEYMAP.cutting.delete.key,
+    () => dispatchAction(markAsDeletedOrAlive),
+    {preventDefault: true},
+    [markAsDeletedOrAlive]
+  );
+  useHotkeys(
+    KEYMAP.cutting.mergeLeft.key,
+    () => dispatchAction(mergeLeft),
+    {preventDefault: true},
+    [mergeLeft]
+  );
+  useHotkeys(
+    KEYMAP.cutting.mergeRight.key,
+    () => dispatchAction(mergeRight),
+    {preventDefault: true},
+    [mergeRight]
+  );
 
   const cuttingStyle = css({
     display: 'flex',
@@ -66,7 +86,9 @@ const CuttingActions: React.FC = () => {
   return (
     <div css={cuttingStyle}>
       <CuttingActionsButton Icon={LuScissors}
-        actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut}
+        actionName={t("cuttingActions.cut-button")}
+        actionHandler={dispatchAction}
+        action={cut}
         tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
         ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
       />
@@ -76,19 +98,29 @@ const CuttingActions: React.FC = () => {
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuChevronLeft}
-        actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft}
+        actionName={t("cuttingActions.mergeLeft-button")}
+        actionHandler={dispatchAction}
+        action={mergeLeft}
         tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
-        ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
+        ariaLabelText={
+          t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })
+        }
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuChevronRight}
-        actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight}
+        actionName={t("cuttingActions.mergeRight-button")}
+        actionHandler={dispatchAction}
+        action={mergeRight}
         tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key)})}
-        ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
+        ariaLabelText={
+          t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })
+        }
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuMoveHorizontal}
-        actionName={t("cuttingActions.merge-all-button")} actionHandler={dispatchAction} action={mergeAll}
+        actionName={t("cuttingActions.merge-all-button")}
+        actionHandler={dispatchAction}
+        action={mergeAll}
         tooltip={t('cuttingActions.merge-all-tooltip')}
         ariaLabelText={t('cuttingActions.merge-all-tooltip-aria')}
       />
@@ -126,7 +158,14 @@ interface cuttingActionsButtonInterface {
  * A button representing a single action a user can take while cutting
  * @param param0
  */
-const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, actionName, actionHandler, action, tooltip, ariaLabelText}) => {
+const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
+  Icon,
+  actionName,
+  actionHandler,
+  action,
+  tooltip,
+  ariaLabelText
+}) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const theme = useTheme();
 
@@ -156,7 +195,11 @@ interface markAsDeleteButtonInterface {
 /**
  * Button that changes its function based on context
  */
-const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHandler, action, hotKeyName}) => {
+const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({
+  actionHandler,
+  action,
+  hotKeyName
+}) => {
   const { t } = useTranslation();
   const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
   const ref = React.useRef<HTMLDivElement>(null)
