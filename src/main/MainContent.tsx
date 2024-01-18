@@ -1,22 +1,22 @@
 import React from "react";
 
-import Metadata from './Metadata';
-import TrackSelection from './TrackSelection';
+import Metadata from "./Metadata";
+import TrackSelection from "./TrackSelection";
 import Subtitle from "./Subtitle";
 import Finish from "./Finish";
 import KeyboardControls from "./KeyboardControls";
 
 import { LuWrench } from "react-icons/lu";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 import { useAppSelector } from "../redux/store";
-import { selectMainMenuState } from '../redux/mainMenuSlice';
+import { selectMainMenuState } from "../redux/mainMenuSlice";
 
-import { MainMenuStateNames } from '../types';
+import { MainMenuStateNames } from "../types";
 import { flexGapReplacementStyle } from "../cssStyles";
 
-import { useBeforeunload } from 'react-beforeunload';
+import { useBeforeunload } from "react-beforeunload";
 import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
 import { selectHasChanges as metadataSelectHasChanges } from "../redux/metadataSlice";
 import { selectHasChanges as selectSubtitleHasChanges } from "../redux/subtitleSlice";
@@ -44,50 +44,50 @@ const MainContent: React.FC = () => {
   });
 
   const mainContentStyle = css({
-    display: 'flex',
-    width: '100%',
-    paddingRight: '20px',
-    paddingLeft: '20px',
+    display: "flex",
+    width: "100%",
+    paddingRight: "20px",
+    paddingLeft: "20px",
     ...(flexGapReplacementStyle(20, false)),
     background: `${theme.background}`,
-    overflow: 'auto',
+    overflow: "auto",
   });
 
   const cuttingStyle = css({
-    flexDirection: 'column',
+    flexDirection: "column",
   });
 
   const metadataStyle = css({
   });
 
   const trackSelectStyle = css({
-    flexDirection: 'column',
-    alignContent: 'space-around',
+    flexDirection: "column",
+    alignContent: "space-around",
   });
 
   const subtitleSelectStyle = css({
-    flexDirection: 'column',
-    justifyContent: 'space-around',
+    flexDirection: "column",
+    justifyContent: "space-around",
   });
 
   const thumbnailSelectStyle = css({
-    flexDirection: 'column',
-    alignContent: 'space-around',
+    flexDirection: "column",
+    alignContent: "space-around",
   });
 
   const finishStyle = css({
-    flexDirection: 'column',
-    justifyContent: 'space-around',
+    flexDirection: "column",
+    justifyContent: "space-around",
   });
 
   const keyboardControlsStyle = css({
-    flexDirection: 'column',
+    flexDirection: "column",
   });
 
   const defaultStyle = css({
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px",
   });
 
   const render = () => {

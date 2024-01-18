@@ -2,19 +2,19 @@
  * Contains mappings for special keyboard controls, beyond what is usually expected of a webpage
  * Learn more about keymaps at https://github.com/greena13/react-hotkeys#defining-key-maps (12.03.2021)
  *
- * Additional global configuration settins are placed in './config.ts'
+ * Additional global configuration settins are placed in "./config.ts"
  * (They are not placed here, because that somehow makes the name fields of keymaps undefined for some reason)
  *
  * If you add a new keyMap, be sure to add it to the getAllHotkeys function
  */
-import { match } from '@opencast/appkit';
-import { ParseKeys } from 'i18next';
-import { isMacOs } from 'react-device-detect';
+import { match } from "@opencast/appkit";
+import { ParseKeys } from "i18next";
+import { isMacOs } from "react-device-detect";
 
 // Groups for displaying hotkeys in the overview page
 const groupVideoPlayer = "keyboardControls.groupVideoPlayer";
-const groupCuttingView = 'keyboardControls.groupCuttingView';
-const groupCuttingViewScrubber = 'keyboardControls.groupCuttingViewScrubber';
+const groupCuttingView = "keyboardControls.groupCuttingView";
+const groupCuttingViewScrubber = "keyboardControls.groupCuttingViewScrubber";
 const groupSubtitleList = "keyboardControls.groupSubtitleList";
 
 /**

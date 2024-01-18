@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
 import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
@@ -8,13 +8,13 @@ import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectDuration,
-} from '../redux/videoSlice';
+} from "../redux/videoSlice";
 
-import { convertMsToReadableString } from '../util/utilityFunctions';
+import { convertMsToReadableString } from "../util/utilityFunctions";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
 import { KEYMAP, rewriteKeys } from "../globalKeys";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
@@ -55,14 +55,14 @@ const VideoControls: React.FC<{
   const videoControlsRowStyle = css({
     background: `${theme.background}`,
     outline: `5px solid ${theme.background}`, // Fake the box bigger than it actually is
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-    width: '100%',
-    paddingTop: '10px',
-    paddingBottom: '10px',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    width: "100%",
+    paddingTop: "10px",
+    paddingBottom: "10px",
     ...(flexGapReplacementStyle(30, false)),
   });
 
@@ -128,20 +128,20 @@ const PreviewMode: React.FC<{
 
   const previewModeStyle = css({
     cursor: "pointer",
-    display: 'flex',
+    display: "flex",
     ...(flexGapReplacementStyle(10, false)),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   });
 
   const switchIconStyle = css({
     color: `${theme.background_preview_icon}`,
-    fontSize: '28px',
+    fontSize: "28px",
   });
 
   const previewModeTextStyle = (theme: Theme) => css({
-    display: 'inline-block',
-    flexWrap: 'nowrap',
+    display: "inline-block",
+    flexWrap: "nowrap",
     color: `${theme.text}`
   });
 
@@ -199,20 +199,20 @@ const PlayButton: React.FC<{
   useHotkeys(KEYMAP.videoPlayer.play.key, () => switchIsPlaying(), { preventDefault: true }, [isPlaying]);
 
   const playButtonStyle = css({
-    justifySelf: 'center',
-    outline: 'none',
+    justifySelf: "center",
+    outline: "none",
     color: `${theme.icon_color}`,
 
     background: `${theme.background_play_icon}`,
-    borderRadius: '50%',
-    width: '50px',
-    height: '50px',
+    borderRadius: "50%",
+    width: "50px",
+    height: "50px",
     boxShadow: `${theme.boxShadow_tiles}`,
   });
 
   const playIconStyle = css({
     fontSize: 24,
-    paddingLeft: '3px',
+    paddingLeft: "3px",
   });
 
   return (
@@ -251,12 +251,12 @@ const TimeDisplay: React.FC<{
   const theme = useTheme();
 
   const timeTextStyle = (theme: Theme) => css({
-    display: 'inline-block',
+    display: "inline-block",
     color: `${theme.text}`
   });
 
   return (
-    <div css={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
+    <div css={{ display: "flex", flexDirection: "row", gap: "5px" }}>
       <ThemedTooltip title={t("video.current-time-tooltip")}>
         <time css={timeTextStyle(theme)}
           tabIndex={0} role="timer" aria-label={t("video.time-aria") + ": " + convertMsToReadableString(currentlyAt)}>
@@ -324,15 +324,15 @@ const VolumeSlider: React.FC<{
   };
 
   const volumeStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    gap: '15px',
-    justifyContent: 'center',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "row",
+    gap: "15px",
+    justifyContent: "center",
+    alignItems: "center"
   });
 
   const sliderStyle = css({
-    width: '80px',
+    width: "80px",
     "& .MuiSlider-thumb": {
       color: `${theme.slider_thumb_color}`,
       "&:hover, &.Mui-focusVisible, &.Mui-active": {
@@ -349,7 +349,7 @@ const VolumeSlider: React.FC<{
 
   const volumeIconStyle = css({
     fontSize: 24,
-    paddingLeft: '3px',
+    paddingLeft: "3px",
   });
 
   return (

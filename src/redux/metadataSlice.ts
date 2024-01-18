@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { client } from '../util/client';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { client } from "../util/client";
 
-import { httpRequestState } from '../types';
-import { settings } from '../config';
+import { httpRequestState } from "../types";
+import { settings } from "../config";
 
 export interface Catalog {
   fields: MetadataField[],
@@ -49,26 +49,26 @@ interface metadata {
 }
 
 interface postRequestState {
-  postStatus: 'idle' | 'loading' | 'success' | 'failed',
+  postStatus: "idle" | "loading" | "success" | "failed",
   postError: string | undefined,
-  postErrorReason: 'unknown',
+  postErrorReason: "unknown",
 }
 
-// TODO: Create an 'httpRequestState' array or something
+// TODO: Create an "httpRequestState" array or something
 const initialState: metadata & httpRequestState & postRequestState = {
   catalogs: [],
   hasChanges: false,
 
-  status: 'idle',
+  status: "idle",
   error: undefined,
-  errorReason: 'unknown',
+  errorReason: "unknown",
 
-  postStatus: 'idle',
+  postStatus: "idle",
   postError: undefined,
-  postErrorReason: 'unknown',
+  postErrorReason: "unknown",
 };
 
-export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async () => {
+export const fetchMetadata = createAsyncThunk("metadata/fetchMetadata", async () => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
@@ -77,7 +77,7 @@ export const fetchMetadata = createAsyncThunk('metadata/fetchMetadata', async ()
   return JSON.parse(response);
 });
 
-export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, { getState }) => {
+export const postMetadata = createAsyncThunk("metadata/postMetadata", async (_, { getState }) => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
@@ -96,7 +96,7 @@ export const postMetadata = createAsyncThunk('metadata/postMetadata', async (_, 
  * Slice for managing a post request for saving current changes and starting a workflow
  */
 const metadataSlice = createSlice({
-  name: 'metadataState',
+  name: "metadataState",
   initialState,
   reducers: {
     setFieldValue: (state, action: PayloadAction<{ catalogIndex: number, fieldIndex: number, value: string; }>) => {
@@ -110,36 +110,36 @@ const metadataSlice = createSlice({
       state.hasChanges = action.payload;
     },
     resetPostRequestState: state => {
-      state.postStatus = 'idle';
+      state.postStatus = "idle";
     }
   },
   extraReducers: builder => {
     builder.addCase(
       fetchMetadata.pending, (state, _action) => {
-        state.status = 'loading';
+        state.status = "loading";
       });
     builder.addCase(
       fetchMetadata.fulfilled, (state, action) => {
         state.catalogs = action.payload;
 
-        state.status = 'success';
+        state.status = "success";
       });
     builder.addCase(
       fetchMetadata.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       });
     builder.addCase(
       postMetadata.pending, (state, _action) => {
-        state.postStatus = 'loading';
+        state.postStatus = "loading";
       });
     builder.addCase(
       postMetadata.fulfilled, (state, _action) => {
-        state.postStatus = 'success';
+        state.postStatus = "success";
       });
     builder.addCase(
       postMetadata.rejected, (state, action) => {
-        state.postStatus = 'failed';
+        state.postStatus = "failed";
         state.postError = action.error.message;
       });
   }

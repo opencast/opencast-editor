@@ -1,9 +1,9 @@
-import { createSlice, nanoid, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { client } from '../util/client';
+import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { client } from "../util/client";
 
-import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from '../types';
-import { roundToDecimalPlace } from '../util/utilityFunctions';
-import { settings } from '../config';
+import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
+import { roundToDecimalPlace } from "../util/utilityFunctions";
+import { settings } from "../config";
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
@@ -62,26 +62,26 @@ export const initialState: video & httpRequestState = {
   videoURLs: [],
   videoCount: 0,
   duration: 0,
-  title: '',
+  title: "",
   presenters: [],
   workflows: [],
 
   lockingActive: false,
   lockRefresh: null,
   lockState: false,
-  lock: { uuid: '', user: '' },
+  lock: { uuid: "", user: "" },
 
-  status: 'idle',
+  status: "idle",
   error: undefined,
-  errorReason: 'unknown',
+  errorReason: "unknown",
 };
 
-export const fetchVideoInformation = createAsyncThunk('video/fetchVideoInformation', async () => {
+export const fetchVideoInformation = createAsyncThunk("video/fetchVideoInformation", async () => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
 
-  // const response = await client.get('https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json')
+  // const response = await client.get("https://legacy.opencast.org/admin-ng/tools/ID-dual-stream-demo/editor.json")
   const response = await client.get(`${settings.opencast.url}/editor/${settings.id}/edit.json`);
   return JSON.parse(response);
 });
@@ -106,7 +106,7 @@ const updateCurrentlyAt = (state: video, milliseconds: number) => {
  * Treats the multitude of videos that may exist as one video
  */
 const videoSlice = createSlice({
-  name: 'videoState',
+  name: "videoState",
   initialState,
   reducers: {
     setTrackEnabled: (state, action) => {
@@ -170,7 +170,7 @@ const videoSlice = createSlice({
       state.lockState = action.payload;
     },
     cut: state => {
-      // If we're exactly between two segments, we can't split the current segment
+      // If we"re exactly between two segments, we can"t split the current segment
       if (state.segments[state.activeSegmentIndex].start === state.currentlyAt ||
         state.segments[state.activeSegmentIndex].end === state.currentlyAt) {
         return;
@@ -220,15 +220,15 @@ const videoSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(
       fetchVideoInformation.pending, (state, _action) => {
-        state.status = 'loading';
+        state.status = "loading";
       });
     builder.addCase(
       fetchVideoInformation.fulfilled, (state, action) => {
-        state.status = 'success';
+        state.status = "success";
 
         if (action.payload.workflow_active) {
-          state.status = 'failed';
-          state.errorReason = 'workflowActive';
+          state.status = "failed";
+          state.errorReason = "workflowActive";
           state.error = "This event is being processed. Please wait until the process is finished.";
         }
         state.tracks = action.payload.tracks
@@ -236,7 +236,7 @@ const videoSlice = createSlice({
             return a.thumbnailPriority - b.thumbnailPriority;
           }).map((track: Track) => {
             if (action.payload.local && settings.opencast.local) {
-              console.debug('Replacing track URL');
+              console.debug("Replacing track URL");
               track.uri = track.uri.replace(/https?:\/\/[^/]*/g, window.location.origin);
             }
             return track;
@@ -264,7 +264,7 @@ const videoSlice = createSlice({
       });
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       });
   }

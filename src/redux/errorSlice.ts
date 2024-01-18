@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IconType } from "react-icons";
 
 interface error {
@@ -21,7 +21,7 @@ const initialState: error = {
  * Slice for the error page state
  */
 export const errorSlice = createSlice({
-  name: 'errorState',
+  name: "errorState",
   initialState,
   reducers: {
     setError: (state, action: PayloadAction<{

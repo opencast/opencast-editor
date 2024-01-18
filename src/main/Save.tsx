@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import {
   basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
   navigationButtonStyle, flexGapReplacementStyle, spinningStyle
-} from '../cssStyles';
+} from "../cssStyles";
 
 import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck } from "react-icons/lu";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectFinishState } from '../redux/finishSlice';
+import { selectFinishState } from "../redux/finishSlice";
 import {
   selectHasChanges,
   selectSegments,
   selectTracks,
   setHasChanges as videoSetHasChanges
-} from '../redux/videoSlice';
-import { postVideoInformation, selectStatus, selectError } from '../redux/workflowPostSlice';
+} from "../redux/videoSlice";
+import { postVideoInformation, selectStatus, selectError } from "../redux/workflowPostSlice";
 
-import { CallbackButton, PageButton } from './Finish';
+import { CallbackButton, PageButton } from "./Finish";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import {
   postMetadata, selectPostError, selectPostStatus, setHasChanges as metadataSetHasChanges,
   selectHasChanges as metadataSelectHasChanges
@@ -53,16 +53,16 @@ const Save: React.FC = () => {
   const subtitleHasChanges = useAppSelector(selectSubtitleHasChanges);
 
   const saveStyle = css({
-    height: '100%',
-    display: finishState !== "Save changes" ? 'none' : 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
+    height: "100%",
+    display: finishState !== "Save changes" ? "none" : "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
     ...(flexGapReplacementStyle(30, false)),
   });
 
   const render = () => {
     // Post (successful) save
-    if (postWorkflowStatus === 'success' && postMetadataStatus === 'success'
+    if (postWorkflowStatus === "success" && postMetadataStatus === "success"
       && !hasChanges && !metadataHasChanges && !subtitleHasChanges) {
       return (
         <>
@@ -75,7 +75,7 @@ const Save: React.FC = () => {
     } else {
       return (
         <>
-          <span css={{ maxWidth: '500px' }}>
+          <span css={{ maxWidth: "500px" }}>
             {t("save.info-text")}
           </span>
           <div css={backOrContinueStyle}>
@@ -127,22 +127,22 @@ export const SaveButton: React.FC = () => {
   let Icon = LuSave;
   let spin = false;
   let tooltip = null;
-  if (workflowStatus === 'failed' || metadataStatus === 'failed') {
+  if (workflowStatus === "failed" || metadataStatus === "failed") {
     Icon = LuAlertCircle;
     spin = false;
     tooltip = t("save.confirmButton-failed-tooltip");
-  } else if (workflowStatus === 'success' && metadataStatus === 'success') {
+  } else if (workflowStatus === "success" && metadataStatus === "success") {
     Icon = LuCheck;
     spin = false;
     tooltip = t("save.confirmButton-success-tooltip");
-  } else if (workflowStatus === 'loading' || metadataStatus === 'loading') {
+  } else if (workflowStatus === "loading" || metadataStatus === "loading") {
     Icon = LuLoader;
     spin = true;
     tooltip = t("save.confirmButton-attempting-tooltip");
   }
 
   const ariaSaveUpdate = () => {
-    if (workflowStatus === 'success') {
+    if (workflowStatus === "success") {
       return t("save.success-tooltip-aria");
     }
   };
@@ -170,7 +170,7 @@ export const SaveButton: React.FC = () => {
 
   // Subsequent save request
   useEffect(() => {
-    if (metadataStatus === 'success' && metadataSaveStarted) {
+    if (metadataStatus === "success" && metadataSaveStarted) {
       setMetadataSaveStarted(false);
       dispatch(postVideoInformation({
         segments: segments,
@@ -184,7 +184,7 @@ export const SaveButton: React.FC = () => {
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
-    if (workflowStatus === 'success' && metadataStatus === 'success') {
+    if (workflowStatus === "success" && metadataStatus === "success") {
       dispatch(videoSetHasChanges(false));
       dispatch(metadataSetHasChanges(false));
       dispatch(subtitleSetHasChanges(false));

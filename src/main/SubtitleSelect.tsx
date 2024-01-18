@@ -7,7 +7,7 @@ import {
   disableButtonAnimation,
   subtitleSelectStyle
 } from "../cssStyles";
-import { settings, subtitleTags } from '../config';
+import { settings, subtitleTags } from "../config";
 import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/subtitleSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
@@ -18,10 +18,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { selectSubtitlesFromOpencast } from "../redux/videoSlice";
 import { useTheme } from "../themes";
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/material/styles";
 import { ThemedTooltip } from "./Tooltip";
 import { languageCodeToName } from "../util/utilityFunctions";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { TFunction } from "i18next";
 
 /**
@@ -54,21 +54,21 @@ const SubtitleSelect: React.FC = () => {
       .concat(existingSubtitles);
 
     // Looks for languages in existing subtitles
-    // so that those languages don't show in the addSubtitles dropdown
+    // so that those languages don"t show in the addSubtitles dropdown
     const subtitlesFromOpencastLangs = subtitlesFromOpencast
       .reduce((result: { id: string, lang: string; }[], track) => {
-        const lang = track.tags.find(e => e.startsWith('lang:'));
+        const lang = track.tags.find(e => e.startsWith("lang:"));
         if (lang) {
-          result.push({ id: track.id, lang: lang.split(':')[1].trim() });
+          result.push({ id: track.id, lang: lang.split(":")[1].trim() });
         }
         return result;
       }, []);
 
     const subtitlesLangs = Object.entries(subtitles)
       .reduce((result: { id: string, lang: string; }[], track) => {
-        const lang = track[1].tags.find(e => e.startsWith('lang:'));
+        const lang = track[1].tags.find(e => e.startsWith("lang:"));
         if (lang) {
-          result.push({ id: track[0], lang: lang.split(':')[1].trim() });
+          result.push({ id: track[0], lang: lang.split(":")[1].trim() });
         }
         return result;
       }, []);
@@ -99,10 +99,10 @@ const SubtitleSelect: React.FC = () => {
   };
 
   const subtitleSelectStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
     ...(flexGapReplacementStyle(30, false)),
   });
 
@@ -113,8 +113,8 @@ const SubtitleSelect: React.FC = () => {
     }
 
     for (const subtitle of displaySubtitles) {
-      let lang = subtitle.tags.find(e => e.startsWith('lang:'));
-      lang = lang ? lang.split(':')[1].trim() : undefined;
+      let lang = subtitle.tags.find(e => e.startsWith("lang:"));
+      lang = lang ? lang.split(":")[1].trim() : undefined;
       const icon = lang ? ((settings.subtitles || {}).icons || {})[lang] : undefined;
 
       buttons.push(
@@ -155,22 +155,22 @@ const SubtitleSelectButton: React.FC<{
   const dispatch = useAppDispatch();
 
   const flagStyle = css({
-    fontSize: '2.5em',
-    overflow: 'hidden',
+    fontSize: "2.5em",
+    overflow: "hidden",
 
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     background: `${theme.background_finish_menu_icon}`,
     color: `${theme.text}`,
-    borderRadius: '50%',
-    width: '90px',
-    height: '90px',
+    borderRadius: "50%",
+    width: "90px",
+    height: "90px",
   });
 
   const titleStyle = css({
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
+    overflow: "hidden",
+    textOverflow: "ellipsis",
     minWidth: 0,
   });
 
@@ -190,7 +190,7 @@ const SubtitleSelectButton: React.FC<{
           }
         }}>
         {icon && <div css={flagStyle}>{icon}</div>}
-        <div css={titleStyle}>{title ?? t('subtitles.generic') + " " + id}</div>
+        <div css={titleStyle}>{title ?? t("subtitles.generic") + " " + id}</div>
       </div>
     </ThemedTooltip>
   );
@@ -216,7 +216,7 @@ const SubtitleAddButton: React.FC<{
     const data = [];
     for (const subtitle of subtitlesForDropdown) {
       const lang = generateButtonTitle(subtitle.tags, t);
-      data.push({ label: lang ?? t('subtitles.generic') + " " + subtitle.id, value: subtitle.id });
+      data.push({ label: lang ?? t("subtitles.generic") + " " + subtitle.id, value: subtitle.id });
     }
     data.sort((dat1, dat2) => dat1.label.localeCompare(dat2.label));
     return data;
@@ -238,28 +238,28 @@ const SubtitleAddButton: React.FC<{
   };
 
   const plusIconStyle = css({
-    display: isPlusDisplay ? 'flex' : 'none'
+    display: isPlusDisplay ? "flex" : "none"
   });
 
   const subtitleAddFormStyle = css({
-    display: !isPlusDisplay ? 'flex' : 'none',
-    flexDirection: 'column' as const,
+    display: !isPlusDisplay ? "flex" : "none",
+    flexDirection: "column" as const,
     ...(flexGapReplacementStyle(30, false)),
-    width: '80%',
-    padding: '20px',
+    width: "80%",
+    padding: "20px",
   });
 
   const createButtonStyle = css({
-    padding: '10px 5px',
-    width: '100%',
-    boxShadow: '',
+    padding: "10px 5px",
+    width: "100%",
+    boxShadow: "",
     border: `1px solid ${theme.text}`,
     backgroundColor: `${theme.background}`,
     color: `${theme.text}`,
 
     "&[disabled]": {
-      opacity: '0.6',
-      cursor: 'not-allowed',
+      opacity: "0.6",
+      cursor: "not-allowed",
     },
   });
 
@@ -324,22 +324,22 @@ const SubtitleAddButton: React.FC<{
  * Generates a title for the buttons from the tags
  */
 export function generateButtonTitle(tags: string[], t: TFunction<"translation", undefined>) {
-  let lang = tags.find(e => e.startsWith('lang:'));
-  lang = lang ? lang.split(':')[1].trim() : undefined;
+  let lang = tags.find(e => e.startsWith("lang:"));
+  lang = lang ? lang.split(":")[1].trim() : undefined;
   lang = languageCodeToName(lang?.trim()) ?? lang;
 
-  let cc = '';
-  const type = tags.find(e => e.startsWith('type:'));
-  const isCC = type ? type.split(':')[1].trim() === 'closed-caption' : undefined;
+  let cc = "";
+  const type = tags.find(e => e.startsWith("type:"));
+  const isCC = type ? type.split(":")[1].trim() === "closed-caption" : undefined;
   if (isCC) {
-    cc = '[CC]';
+    cc = "[CC]";
   }
 
-  let autoGen = '';
-  const genType = tags.find(e => e.startsWith('generator-type:'));
-  const isAutoGen = genType ? genType.split(':')[1].trim() === 'auto' : undefined;
+  let autoGen = "";
+  const genType = tags.find(e => e.startsWith("generator-type:"));
+  const isAutoGen = genType ? genType.split(":")[1].trim() === "auto" : undefined;
   if (isAutoGen) {
-    autoGen = "(" + t('subtitles.autoGenerated') + ")";
+    autoGen = "(" + t("subtitles.autoGenerated") + ")";
   }
 
   return cc + " " + lang + " " + autoGen;

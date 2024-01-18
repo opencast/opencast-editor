@@ -8,13 +8,13 @@ import WorkflowConfiguration from "./WorkflowConfiguration";
 
 import { LuDoorOpen } from "react-icons/lu";
 
-import { css } from '@emotion/react';
-import { basicButtonStyle, navigationButtonStyle } from '../cssStyles';
+import { css } from "@emotion/react";
+import { basicButtonStyle, navigationButtonStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectPageNumber, setPageNumber } from '../redux/finishSlice';
+import { selectPageNumber, setPageNumber } from "../redux/finishSlice";
 import { useTheme } from "../themes";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
@@ -27,15 +27,15 @@ const Finish: React.FC = () => {
   const pageNumber = useAppSelector(selectPageNumber);
 
   const pageZeroStyle = css({
-    display: pageNumber !== 0 ? 'none' : 'block',
+    display: pageNumber !== 0 ? "none" : "block",
   });
 
   const pageOneStyle = css({
-    display: pageNumber !== 1 ? 'none' : 'block',
+    display: pageNumber !== 1 ? "none" : "block",
   });
 
   const pageTwoStyle = css({
-    display: pageNumber !== 2 ? 'none' : 'block',
+    display: pageNumber !== 2 ? "none" : "block",
   });
 
   return (
@@ -78,9 +78,9 @@ export const PageButton: React.FC<{
   };
 
   const pageButtonStyle = css({
-    minWidth: '100px',
-    padding: '16px',
-    justifyContent: 'center',
+    minWidth: "100px",
+    padding: "16px",
+    justifyContent: "center",
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
   });

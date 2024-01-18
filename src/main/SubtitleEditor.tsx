@@ -4,7 +4,7 @@ import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { LuChevronLeft, LuDownload } from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
-} from '../redux/videoSlice';
+} from "../redux/videoSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import SubtitleListEditor from "./SubtitleListEditor";
 import {
@@ -12,7 +12,7 @@ import {
   selectSelectedSubtitleById,
   selectSelectedSubtitleId,
   setSubtitle
-} from '../redux/subtitleSlice';
+} from "../redux/subtitleSlice";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
 import { useTranslation } from "react-i18next";
@@ -70,31 +70,31 @@ const SubtitleEditor: React.FC = () => {
   };
 
   const subtitleEditorStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: '20px',
-    paddingLeft: '20px',
-    gap: '20px',
-    height: '100%',
+    display: "flex",
+    flexDirection: "column",
+    paddingRight: "20px",
+    paddingLeft: "20px",
+    gap: "20px",
+    height: "100%",
   });
 
   const headerRowStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
   });
 
   const subAreaStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     flexGrow: 1,  // No fixed height, fill available space
-    justifyContent: 'space-between',
-    alignItems: 'top',
-    width: '100%',
-    paddingTop: '10px',
-    paddingBottom: '10px',
+    justifyContent: "space-between",
+    alignItems: "top",
+    width: "100%",
+    paddingTop: "10px",
+    paddingBottom: "10px",
     ...(flexGapReplacementStyle(30, true)),
     borderBottom: `${theme.menuBorder}`
   });
@@ -138,24 +138,24 @@ const DownloadButton: React.FC = () => {
 
   const downloadSubtitles = () => {
 
-    const vttFile = new Blob([serializeSubtitle(subtitle.cues)], { type: 'text/vtt' });
+    const vttFile = new Blob([serializeSubtitle(subtitle.cues)], { type: "text/vtt" });
 
     const vttFileLink = window.URL.createObjectURL(vttFile);
-    const vttHyperLink = document.createElement('a');
-    vttHyperLink.setAttribute('href', vttFileLink);
+    const vttHyperLink = document.createElement("a");
+    vttHyperLink.setAttribute("href", vttFileLink);
 
     const vttFileName = generateButtonTitle(subtitle.tags, t).trimEnd();
-    vttHyperLink.setAttribute('download', `${vttFileName}.vtt`);
+    vttHyperLink.setAttribute("download", `${vttFileName}.vtt`);
     vttHyperLink.click();
   };
 
   const { t } = useTranslation();
   const theme = useTheme();
   const style = css({
-    fontSize: '16px',
-    height: '10px',
-    padding: '16px',
-    justifyContent: 'space-around',
+    fontSize: "16px",
+    height: "10px",
+    padding: "16px",
+    justifyContent: "space-around",
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
   });
@@ -166,7 +166,7 @@ const DownloadButton: React.FC = () => {
         role="button"
         onClick={() => downloadSubtitles()}
       >
-        <LuDownload css={{ fontSize: '16px' }} />
+        <LuDownload css={{ fontSize: "16px" }} />
         <span>{t("subtitles.downloadButton-title")}</span>
       </div>
     </ThemedTooltip>
@@ -184,11 +184,11 @@ export const BackButton: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const backButtonStyle = css({
-    height: '10px',
-    padding: '16px',
+    height: "10px",
+    padding: "16px",
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
-    justifyContent: 'space-around'
+    justifyContent: "space-around"
   });
 
   return (

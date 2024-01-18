@@ -4,9 +4,6 @@ module.exports = {
     "react-app/jest"
   ],
   rules: {
-    // Both kinds of quotes are used a lot
-    "quotes": "off",
-
     // "always" gives 319 warning, "never" gives 991.
     "object-curly-spacing": "off",
 

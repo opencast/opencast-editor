@@ -1,14 +1,14 @@
 import React from "react";
 
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 import { LuFrown } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
-import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from '../redux/errorSlice';
+import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from "../redux/errorSlice";
 import { flexGapReplacementStyle } from "../cssStyles";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 /**
  * This page is to be displayed when the application has run into a critical error
@@ -25,17 +25,17 @@ const Error: React.FC = () => {
   const ErrorIcon = useAppSelector(selectErrorIcon);
 
   const detailsStyle = css({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   });
 
   const theEndStyle = css({
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     ...(flexGapReplacementStyle(10, false)),
   });
 

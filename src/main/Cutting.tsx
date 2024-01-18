@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import CuttingActions from "./CuttingActions";
-import Timeline from './Timeline';
+import Timeline from "./Timeline";
 import {
   fetchVideoInformation,
   selectCurrentlyAt,
@@ -16,13 +16,13 @@ import {
   setIsMuted,
   setVolume,
   setIsPlayPreview
-} from '../redux/videoSlice';
-import { useTranslation } from 'react-i18next';
+} from "../redux/videoSlice";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { httpRequestState } from '../types';
+import { httpRequestState } from "../types";
 import { useTheme } from "../themes";
-import { setError } from '../redux/errorSlice';
-import { selectTitleFromEpisodeDc } from '../redux/metadataSlice';
+import { setError } from "../redux/errorSlice";
+import { selectTitleFromEpisodeDc } from "../redux/metadataSlice";
 import { titleStyle, titleStyleBold, videosStyle } from "../cssStyles";
 import { LuMoreHorizontal } from "react-icons/lu";
 import { css } from "@emotion/react";
@@ -46,10 +46,10 @@ const Cutting: React.FC = () => {
 
   // Try to fetch URL from external API
   useEffect(() => {
-    if (videoURLStatus === 'idle') {
+    if (videoURLStatus === "idle") {
       dispatch(fetchVideoInformation());
-    } else if (videoURLStatus === 'failed') {
-      if (errorReason === 'workflowActive') {
+    } else if (videoURLStatus === "failed") {
+      if (errorReason === "workflowActive") {
         dispatch(setError({
           error: true,
           errorTitle: t("error.workflowActive-errorTitle"),
@@ -63,7 +63,7 @@ const Cutting: React.FC = () => {
           errorDetails: error
         }));
       }
-    } else if (videoURLStatus === 'success') {
+    } else if (videoURLStatus === "success") {
       if (duration === null) {
         dispatch(setError({
           error: true,
@@ -76,11 +76,11 @@ const Cutting: React.FC = () => {
 
   // Style
   const cuttingStyle = css({
-    display: 'flex',
-    width: 'auto',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    width: "auto",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   });
 
 

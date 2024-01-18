@@ -1,7 +1,7 @@
-import { nanoid } from '@reduxjs/toolkit';
-import { WebVTTParser, WebVTTSerializer } from 'webvtt-parser';
-import { ExtendedSubtitleCue, SubtitleCue } from '../types';
-import { useEffect, useRef } from 'react';
+import { nanoid } from "@reduxjs/toolkit";
+import { WebVTTParser, WebVTTSerializer } from "webvtt-parser";
+import { ExtendedSubtitleCue, SubtitleCue } from "../types";
+import { useEffect, useRef } from "react";
 
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
   const decimalFactor = Math.pow(10, decimalPlace);
@@ -52,15 +52,15 @@ export function checkFlexGapSupport() {
   }
 
   // Create a flex container with row-gap set
-  const flex = document.createElement('div');
-  flex.style.display = 'flex';
-  flex.style.flexDirection = 'column';
-  flex.style.rowGap = '1px';
-  flex.style.position = 'absolute';
+  const flex = document.createElement("div");
+  flex.style.display = "flex";
+  flex.style.flexDirection = "column";
+  flex.style.rowGap = "1px";
+  flex.style.position = "absolute";
 
   // Create two, elements inside it
-  flex.appendChild(document.createElement('div'));
-  flex.appendChild(document.createElement('div'));
+  flex.appendChild(document.createElement("div"));
+  flex.appendChild(document.createElement("div"));
 
   // Append to the DOM (needed to obtain scrollHeight)
   document.body.appendChild(flex);
@@ -100,7 +100,7 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
 
       // The serializer has a bug where some of the attributes like alignment are written to the VTT file
       // as `alignment: undefined` if they are not set. This then causes illegal parsing exceptions with the
-      // parser. That's why we set some acceptable defaults here.
+      // parser. That"s why we set some acceptable defaults here.
       alignment: "center",
       direction: "horizontal",
       lineAlign: "start",
@@ -127,13 +127,13 @@ export function parseSubtitle(subtitle: string): SubtitleCue[] {
   // - Cons: Parses timestamps in seconds, Maybe not maintained anymore
   // https://github.com/gsantiago/subtitle.js
   // - Pros: Parses styles, can also parse SRT, actively maintained
-  // - Cons: Uses node streaming library, can't polyfill without ejecting CreateReactApp
+  // - Cons: Uses node streaming library, can"t polyfill without ejecting CreateReactApp
   // TODO: Parse caption
   const parser = new WebVTTParser();
-  const tree = parser.parse(subtitle, 'metadata');
+  const tree = parser.parse(subtitle, "metadata");
   if (tree.errors.length !== 0) {
 
-    // state.status = 'failed'
+    // state.status = "failed"
     const errors = [];
     for (const er of tree.errors) {
       errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message);
