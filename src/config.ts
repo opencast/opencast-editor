@@ -7,18 +7,18 @@
  *
  * Also does some global hotkey configuration
  */
-import parseToml from '@iarna/toml/parse-string';
-import deepmerge from 'deepmerge';
-import { Flavor } from './types';
+import parseToml from "@iarna/toml/parse-string";
+import deepmerge from "deepmerge";
+import { Flavor } from "./types";
 
 /**
  * Local constants
  */
-const CONTEXT_SETTINGS_FILE = 'editor-settings.toml';
+const CONTEXT_SETTINGS_FILE = "editor-settings.toml";
 
 // Sources that values can come from.
-const SRC_SERVER = 'src-server';
-const SRC_URL = 'src-url';
+const SRC_SERVER = "src-server";
+const SRC_URL = "src-url";
 
 /**
  * Possible configuration values for a metadata catalog field
@@ -30,8 +30,8 @@ export interface configureFieldsAttributes {
 
 export interface subtitleTags {
   lang: string,
-  'auto-generated': string,
-  'auto-generator': string,
+  "auto-generated": string,
+  "auto-generator": string,
   type: string,
 }
 
@@ -51,7 +51,7 @@ interface iSettings {
   },
   metadata: {
     show: boolean,
-    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes } } | undefined,
+    configureFields: { [key: string]: { [key: string]: configureFieldsAttributes; }; } | undefined,
   },
   trackSelection: {
     show: boolean,
@@ -63,10 +63,10 @@ interface iSettings {
   subtitles: {
     show: boolean,
     mainFlavor: string,
-    languages: { [key: string]: subtitleTags } | undefined,
-    icons: { [key: string]: string } | undefined,
+    languages: { [key: string]: subtitleTags; } | undefined,
+    icons: { [key: string]: string; } | undefined,
     defaultVideoFlavor: Flavor | undefined,
-  }
+  };
 }
 
 /**
@@ -104,11 +104,11 @@ const defaultSettings: iSettings = {
     languages: {},
     icons: undefined,
     defaultVideoFlavor: undefined,
-  }
-}
-let configFileSettings: iSettings
-let urlParameterSettings: iSettings
-export let settings: iSettings
+  },
+};
+let configFileSettings: iSettings;
+let urlParameterSettings: iSettings;
+export let settings: iSettings;
 
 /**
  * Entry point. Loads values from settings into the exported variables
@@ -130,27 +130,27 @@ export const init = async () => {
 
   // Get settings from config file
   await loadContextSettings().then(result => {
-    configFileSettings = validate(result, false, SRC_SERVER, "from server settings file")
-  })
+    configFileSettings = validate(result, false, SRC_SERVER, "from server settings file");
+  });
 
   // Get settings from URL query.
   const urlParams = new URLSearchParams(window.location.search);
 
   const rawUrlSettings = {};
   urlParams.forEach((value, key) => {
-    // Create empty objects for full path (if the key contains '.') and set
+    // Create empty objects for full path (if the key contains ".") and set
     // the value at the end.
-    let obj : {[k: string]: any} = rawUrlSettings;
-    if (key.startsWith('opencast.') || key === 'allowedCallbackPrefixes') {
+    let obj: { [k: string]: any; } = rawUrlSettings;
+    if (key.startsWith("opencast.") || key === "allowedCallbackPrefixes") {
       return;
     }
 
     // Fallback for old parameter
-    if (key === 'mediaPackageId') {
-      key = 'id';
+    if (key === "mediaPackageId") {
+      key = "id";
     }
 
-    const segments = key.split('.');
+    const segments = key.split(".");
     segments.slice(0, -1).forEach(segment => {
       if (!(segment in obj)) {
         obj[segment] = {};
@@ -160,7 +160,7 @@ export const init = async () => {
     obj[segments[segments.length - 1]] = value;
   });
 
-  urlParameterSettings = validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
+  urlParameterSettings = validate(rawUrlSettings, true, SRC_URL, "given as URL GET parameter");
 
   // Combine results
   settings = merge.all([defaultSettings, configFileSettings, urlParameterSettings]) as iSettings;
@@ -180,47 +180,47 @@ export const init = async () => {
 const loadContextSettings = async () => {
 
   // Try to retrieve the context settings.
-  let basepath = process.env.PUBLIC_URL || '/';
-  if (!basepath.endsWith('/')) {
-    basepath += '/';
+  let basepath = process.env.PUBLIC_URL || "/";
+  if (!basepath.endsWith("/")) {
+    basepath += "/";
   }
 
   // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
-  // given and starts with '/', it is interpreted as absolute path from the
+  // given and starts with "/", it is interpreted as absolute path from the
   // server root.
   const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
-  const base = settingsPath.startsWith('/') ? '' : basepath;
+  const base = settingsPath.startsWith("/") ? "" : basepath;
   const url = `${window.location.origin}${base}${settingsPath}`;
   let response;
   try {
     response = await fetch(url);
   } catch (e) {
-    console.warn(`Could not access '${settingsPath}' due to network error!`, e || "");
+    console.warn(`Could not access "${settingsPath}" due to network error!`, e || "");
     return null;
   }
 
   if (response.status === 404) {
     // If the settings file was not found, we silently ignore the error. We
     // expect many installation to provide this file.
-    console.debug(`'${settingsPath}' returned 404: ignoring`);
+    console.debug(`"${settingsPath}" returned 404: ignoring`);
     return null;
   } else if (!response.ok) {
     console.error(
-      `Fetching '${settingsPath}' failed: ${response.status} ${response.statusText}`
+      `Fetching "${settingsPath}" failed: ${response.status} ${response.statusText}`
     );
     return null;
   }
 
-  if (response.headers.get('Content-Type')?.startsWith('text/html')) {
-    console.warn(`'${settingsPath}' request has 'Content-Type: text/html' -> ignoring...`);
+  if (response.headers.get("Content-Type")?.startsWith("text/html")) {
+    console.warn(`"${settingsPath}" request has "Content-Type: text/html" -> ignoring...`);
     return null;
   }
 
   try {
     return parseToml(await response.text());
   } catch (e) {
-    console.error(`Could not parse '${settingsPath}' as TOML: `, e);
-    throw new SyntaxError(`Could not parse '${settingsPath}' as TOML: ${e}`);
+    console.error(`Could not parse "${settingsPath}" as TOML: `, e);
+    throw new SyntaxError(`Could not parse "${settingsPath}" as TOML: ${e}`);
   }
 
 };
@@ -236,7 +236,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
   // Validates `obj` with `schema`. `path` is the current path used for error
   // messages.
   const validate = (schema: any, obj: Record<string, any> | null, path: string) => {
-    if (typeof schema === 'function') {
+    if (typeof schema === "function") {
       return validateValue(schema, obj, path);
     } else {
       return validateObj(schema, obj, path);
@@ -245,14 +245,18 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
 
   // Validate a settings value with a validation function. Returns the final
   // value of the setting or `null` if it should be ignored.
-  const validateValue = (validation: (arg0: any, arg1: boolean, arg2: string) => any, value: Record<string, any> | null, path: string) => {
+  const validateValue = (
+    validation: (arg0: any, arg1: boolean, arg2: string) => any,
+    value: Record<string, any> | null,
+    path: string
+  ) => {
     try {
       const newValue = validation(value, allowParse, src);
       return newValue === undefined ? value : newValue;
     } catch (e) {
       console.warn(
-        `Validation of setting '${path}' (${sourceDescription}) with value '${value}' failed: `
-          + `${e}. Ignoring.`
+        `Validation of setting "${path}" (${sourceDescription}) with value "${value}" failed: `
+        + `${e}. Ignoring.`
       );
       return null;
     }
@@ -263,7 +267,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
   const validateObj = (schema: any, obj: Record<string, any> | null, path: string) => {
     // We iterate through all keys of the given settings object, checking if
     // each key is valid and recursively validating the value of that key.
-    const out : {[k: string]: any} = {};
+    const out: { [k: string]: any; } = {};
     for (const key in obj) {
       const newPath = path ? `${path}.${key}` : key;
       if (key in schema) {
@@ -276,7 +280,7 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
         }
       } else {
         console.warn(
-          `'${newPath}' (${sourceDescription}) is not a valid settings key. Ignoring.`
+          `"${newPath}" (${sourceDescription}) is not a valid settings key. Ignoring.`
         );
       }
     }
@@ -285,76 +289,76 @@ const validate = (obj: Record<string, any> | null, allowParse: boolean, src: str
   };
 
   return validate(SCHEMA, obj, "");
-}
+};
 
 
 // Validation functions for different types.
 const types = {
-  'string': (v: any, _allowParse: any) => {
-    if (typeof v !== 'string') {
+  "string": (v: any, _allowParse: any) => {
+    if (typeof v !== "string") {
       throw new Error("is not a string, but should be");
     }
   },
-  'boolean': (v: string, allowParse: any) => {
-    if (typeof v === 'boolean') {
+  "boolean": (v: string, allowParse: any) => {
+    if (typeof v === "boolean") {
       return;
     }
 
     if (allowParse) {
-      if (v === 'true') {
+      if (v === "true") {
         return true;
       }
-      if (v === 'false') {
+      if (v === "false") {
         return false;
       }
-      throw new Error("can't be parsed as boolean");
+      throw new Error("cant be parsed as boolean");
     } else {
       throw new Error("is not a boolean");
     }
   },
-  'array': (v: any, _allowParse: any) => {
+  "array": (v: any, _allowParse: any) => {
     if (!Array.isArray(v)) {
       throw new Error("is not an array, but should be");
     }
     for (const entry in v) {
-      if (typeof entry !== 'string') {
+      if (typeof entry !== "string") {
         throw new Error("is not a string, but should be");
       }
     }
   },
-  'map': (v: any, _allowParse: any) => {
+  "map": (v: any, _allowParse: any) => {
     for (const key in v) {
-      if (typeof key !== 'string') {
+      if (typeof key !== "string") {
         throw new Error("is not a string, but should be");
       }
-      if (typeof v[key] !== 'string') {
+      if (typeof v[key] !== "string") {
         throw new Error("is not a string, but should be");
       }
     }
   },
-  'objectsWithinObjects': (v: any, _allowParse: any) => {
+  "objectsWithinObjects": (v: any, _allowParse: any) => {
     for (const catalogName in v) {
-      if (typeof catalogName !== 'string') {
+      if (typeof catalogName !== "string") {
         throw new Error("is not a string, but should be");
       }
       for (const fieldName in v[catalogName]) {
-        if (typeof fieldName !== 'string') {
+        if (typeof fieldName !== "string") {
           throw new Error("is not a string, but should be");
         }
         for (const attributeName in v[catalogName][fieldName]) {
-          if (typeof attributeName !== 'string') {
+          if (typeof attributeName !== "string") {
             throw new Error("is not a string, but should be");
           }
-          if (attributeName === 'show' && typeof v[catalogName][fieldName][attributeName] !== 'boolean') {
+          if (attributeName === "show" && typeof v[catalogName][fieldName][attributeName] !== "boolean") {
             throw new Error("is not a boolean");
           }
-          if (attributeName === 'readonly' && typeof v[catalogName][fieldName][attributeName] !== 'boolean') {
+          if (attributeName === "readonly" && typeof v[catalogName][fieldName][attributeName] !== "boolean") {
             throw new Error("is not a boolean");
           }
         }
       }
     }
-  }
+  },
 };
 
 // Defines all potential settings and their types.
@@ -394,11 +398,11 @@ const SCHEMA = {
   thumbnail: {
     show: types.boolean,
     simpleMode: types.boolean,
-  }
-}
+  },
+};
 
 const merge = (a: iSettings, b: iSettings) => {
   return deepmerge(a, b, { arrayMerge });
 };
-merge.all = (array: object[]) => deepmerge.all(array, { arrayMerge })
+merge.all = (array: object[]) => deepmerge.all(array, { arrayMerge });
 const arrayMerge = (_destinationArray: any, sourceArray: any, _options: any) => sourceArray;

@@ -1,73 +1,73 @@
 // A tiny wrapper around fetch(), borrowed from
 // https://kentcdodds.com/blog/replace-axios-with-a-simple-custom-fetch-wrapper
 
-import { settings } from '../config';
+import { settings } from "../config";
 
 /**
  * Client I stole this from a react tutorial
  */
 export async function client(endpoint, { body, ...customConfig } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
+  const headers = { "Content-Type": "application/json" };
 
   // Attempt Http basic auth if we got credentials
-  let authHeaders = {}
+  let authHeaders = {};
   if (settings.opencast.name && settings.opencast.password) {
     const encoded = btoa(unescape(encodeURIComponent(
-      settings.opencast.name + ":" + settings.opencast.password
+      settings.opencast.name + ":" + settings.opencast.password,
     )));
-    authHeaders = { 'Authorization': `Basic ${encoded}` };
+    authHeaders = { "Authorization": `Basic ${encoded}` };
   }
 
   const config = {
-    method: body ? 'POST' : 'GET',
+    method: body ? "POST" : "GET",
     ...customConfig,
     headers: {
       ...headers,
       ...customConfig.headers,
       ...authHeaders,
     },
-  }
+  };
 
   if (body) {
-    if (config.headers['Content-Type'].includes("urlencoded")) {
-      config.body = body
+    if (config.headers["Content-Type"].includes("urlencoded")) {
+      config.body = body;
     } else {
-      config.body = JSON.stringify(body)
+      config.body = JSON.stringify(body);
     }
   }
 
-  let data
-  let text
-  let response
+  let data;
+  let text;
+  let response;
   try {
-    response = await window.fetch(endpoint, config)
-    text = await response.text()
+    response = await window.fetch(endpoint, config);
+    text = await response.text();
 
     if (response.url.includes("login.html")) {
-      throw new Error("Got redirected to login page, authentification failed.")
+      throw new Error("Got redirected to login page, authentification failed.");
     }
 
     if (response.ok) {
-      data = text.length ? text : ''
-      return data
+      data = text.length ? text : "";
+      return data;
     }
-    throw new Error(response.statusText)
+    throw new Error(response.statusText);
   } catch (err) {
     return Promise.reject(response.status ?
       "Status " + response.status + ": " + text :
-      err.message
-    )
+      err.message,
+    );
   }
 }
 
 client.get = function (endpoint, customConfig = {}) {
-  return client(endpoint, { ...customConfig, method: 'GET' })
-}
+  return client(endpoint, { ...customConfig, method: "GET" });
+};
 
 client.post = function (endpoint, body, customConfig = {}) {
-  return client(endpoint, { ...customConfig, body })
-}
+  return client(endpoint, { ...customConfig, body });
+};
 
 client.delete = function (endpoint, customConfig = {}) {
-  return client(endpoint, { ...customConfig, method: 'DELETE' })
-}
+  return client(endpoint, { ...customConfig, method: "DELETE" });
+};
