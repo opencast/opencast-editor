@@ -157,7 +157,7 @@ const LanguageButton: React.FC = () => {
     checked: isCurrentLanguage(lng.value),
     children: <>{lng.label}</>,
     onClick: () => {
-      changeLanguage(lng!.value);
+      changeLanguage(lng?.value);
     },
   }));
 
