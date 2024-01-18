@@ -10,7 +10,7 @@ const resources: InitOptions["resources"] = {};
 for (const lang of locales) {
   const code = lang.replace(/\..*$/, '');
   const short = code.replace(/-.*$/, '');
-  const main = locales.filter(l => l.indexOf(short) === 0).length === 1
+  const main = locales.filter(l => l.indexOf(short) === 0).length === 1;
   /* eslint-disable-next-line @typescript-eslint/no-var-requires */
   const translations = require('./locales/' + lang);
   if (!main) {

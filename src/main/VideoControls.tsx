@@ -1,6 +1,6 @@
 import React from "react";
 
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
 import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
@@ -8,9 +8,9 @@ import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectDuration,
-} from '../redux/videoSlice'
+} from '../redux/videoSlice';
 
-import { convertMsToReadableString } from '../util/utilityFunctions'
+import { convertMsToReadableString } from '../util/utilityFunctions';
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 
 import { KEYMAP, rewriteKeys } from "../globalKeys";
@@ -64,7 +64,7 @@ const VideoControls: React.FC<{
     paddingTop: '10px',
     paddingBottom: '10px',
     ...(flexGapReplacementStyle(30, false)),
-  })
+  });
 
   return (
     <div css={videoControlsRowStyle}>
@@ -87,7 +87,7 @@ const VideoControls: React.FC<{
       />
     </div>
   );
-}
+};
 
 /**
  * Enable/Disable Preview Mode
@@ -101,28 +101,28 @@ const PreviewMode: React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const ref = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null);
 
   // Init redux variables
   const dispatch = useAppDispatch();
-  const isPlayPreview = useAppSelector(selectIsPlayPreview)
+  const isPlayPreview = useAppSelector(selectIsPlayPreview);
   const theme = useTheme();
 
   // Change preview mode from "on" to "off" and vice versa
   const switchPlayPreview = (ref: React.RefObject<HTMLDivElement> | undefined) => {
-    dispatch(setIsPlayPreview(!isPlayPreview))
+    dispatch(setIsPlayPreview(!isPlayPreview));
 
     // Lose focus if clicked by mouse
     if (ref) {
-      ref.current?.blur()
+      ref.current?.blur();
     }
-  }
+  };
 
   // Maps functions to hotkeys
   useHotkeys(
     KEYMAP.videoPlayer.preview.key,
     () => switchPlayPreview(undefined),
-    {preventDefault: true},
+    { preventDefault: true },
     [isPlayPreview]
   );
 
@@ -132,32 +132,36 @@ const PreviewMode: React.FC<{
     ...(flexGapReplacementStyle(10, false)),
     justifyContent: 'center',
     alignItems: 'center',
-  })
+  });
 
   const switchIconStyle = css({
     color: `${theme.background_preview_icon}`,
     fontSize: '28px',
-  })
+  });
 
   const previewModeTextStyle = (theme: Theme) => css({
     display: 'inline-block',
     flexWrap: 'nowrap',
     color: `${theme.text}`
-  })
+  });
 
   return (
     <ThemedTooltip
-      title={t("video.previewButton-tooltip", { status: (isPlayPreview ? "on" : "off"),
-        hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
+      title={t("video.previewButton-tooltip", {
+        status: (isPlayPreview ? "on" : "off"),
+        hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key)
+      })}
     >
       <div css={previewModeStyle}
         ref={ref}
         role="switch" aria-checked={isPlayPreview} tabIndex={0} aria-hidden={false}
         aria-label={t("video.previewButton-aria", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key) })}
         onClick={() => switchPlayPreview(ref)}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => { if (event.key === " ") {
-          switchPlayPreview(undefined)
-        } }}>
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+          if (event.key === " ") {
+            switchPlayPreview(undefined);
+          }
+        }}>
         <div css={previewModeTextStyle(theme)}>
           {t("video.previewButton")}
         </div>
@@ -166,13 +170,13 @@ const PreviewMode: React.FC<{
       </div>
     </ThemedTooltip>
   );
-}
+};
 
 /**
  * Start/Pause playing the videos
  */
 const PlayButton: React.FC<{
-  selectIsPlaying:(state: RootState) => boolean,
+  selectIsPlaying: (state: RootState) => boolean,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   selectIsPlaying,
@@ -183,16 +187,16 @@ const PlayButton: React.FC<{
 
   // Init redux variables
   const dispatch = useAppDispatch();
-  const isPlaying = useAppSelector(selectIsPlaying)
+  const isPlaying = useAppSelector(selectIsPlaying);
   const theme = useTheme();
 
   // Change play mode from "on" to "off" and vice versa
   const switchIsPlaying = () => {
-    dispatch(setIsPlaying(!isPlaying))
-  }
+    dispatch(setIsPlaying(!isPlaying));
+  };
 
   // Maps functions to hotkeys
-  useHotkeys(KEYMAP.videoPlayer.play.key, () => switchIsPlaying(), {preventDefault: true}, [isPlaying]);
+  useHotkeys(KEYMAP.videoPlayer.play.key, () => switchIsPlaying(), { preventDefault: true }, [isPlaying]);
 
   const playButtonStyle = css({
     justifySelf: 'center',
@@ -204,12 +208,12 @@ const PlayButton: React.FC<{
     width: '50px',
     height: '50px',
     boxShadow: `${theme.boxShadow_tiles}`,
-  })
+  });
 
   const playIconStyle = css({
     fontSize: 24,
     paddingLeft: '3px',
-  })
+  });
 
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
@@ -217,16 +221,18 @@ const PlayButton: React.FC<{
         <div css={[basicButtonStyle(theme), playButtonStyle]}
           role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
           aria-label={t("video.playButton-tooltip")}
-          onClick={() => { switchIsPlaying() }}
-          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === "Enter") { // "Space" is handled by global key
-            switchIsPlaying()
-          } }}>
+          onClick={() => { switchIsPlaying(); }}
+          onKeyDown={(event: React.KeyboardEvent) => {
+            if (event.key === "Enter") { // "Space" is handled by global key
+              switchIsPlaying();
+            }
+          }}>
           {isPlaying ? <LuPause css={playIconStyle} /> : <LuPlay css={playIconStyle} />}
         </div>
       </div>
     </ThemedTooltip>
   );
-}
+};
 
 /**
  * Live update for the current time
@@ -240,17 +246,17 @@ const TimeDisplay: React.FC<{
   const { t } = useTranslation();
 
   // Init redux variables
-  const currentlyAt = useAppSelector(selectCurrentlyAt)
-  const duration = useAppSelector(selectDuration)
-  const theme = useTheme()
+  const currentlyAt = useAppSelector(selectCurrentlyAt);
+  const duration = useAppSelector(selectDuration);
+  const theme = useTheme();
 
   const timeTextStyle = (theme: Theme) => css({
     display: 'inline-block',
     color: `${theme.text}`
-  })
+  });
 
   return (
-    <div css={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
+    <div css={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
       <ThemedTooltip title={t("video.current-time-tooltip")}>
         <time css={timeTextStyle(theme)}
           tabIndex={0} role="timer" aria-label={t("video.time-aria") + ": " + convertMsToReadableString(currentlyAt)}>
@@ -266,7 +272,7 @@ const TimeDisplay: React.FC<{
       </ThemedTooltip>
     </div>
   );
-}
+};
 
 const VolumeSlider: React.FC<{
   selectIsMuted: (state: RootState) => boolean,
@@ -284,8 +290,8 @@ const VolumeSlider: React.FC<{
 
   // Init redux variables
   const dispatch = useAppDispatch();
-  const isMuted = useAppSelector(selectIsMuted)
-  const volume = useAppSelector(selectVolume)
+  const isMuted = useAppSelector(selectIsMuted);
+  const volume = useAppSelector(selectVolume);
   const theme = useTheme();
 
   // Toggle video mute
@@ -296,7 +302,7 @@ const VolumeSlider: React.FC<{
     }
 
     dispatch(setIsMuted(!isMuted));
-  }
+  };
 
   const volumeOnChange = (_event: Event, newValue: number | number[]) => {
     // Disable mute when silder is moved
@@ -315,7 +321,7 @@ const VolumeSlider: React.FC<{
     }
 
     dispatch(setVolume(Number(newValue)));
-  }
+  };
 
   const volumeStyle = css({
     display: 'flex',
@@ -323,7 +329,7 @@ const VolumeSlider: React.FC<{
     gap: '15px',
     justifyContent: 'center',
     alignItems: 'center'
-  })
+  });
 
   const sliderStyle = css({
     width: '80px',
@@ -339,12 +345,12 @@ const VolumeSlider: React.FC<{
     "& .MuiSlider-track": {
       color: `${theme.slider_track_color}`,
     },
-  })
+  });
 
   const volumeIconStyle = css({
     fontSize: 24,
     paddingLeft: '3px',
-  })
+  });
 
   return (
     <div css={volumeStyle}>
@@ -370,6 +376,6 @@ const VolumeSlider: React.FC<{
       </ThemedTooltip>
     </div>
   );
-}
+};
 
-export default VideoControls
+export default VideoControls;

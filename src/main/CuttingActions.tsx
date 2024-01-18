@@ -1,17 +1,17 @@
 import React from "react";
 
-import { basicButtonStyle, customIconStyle } from '../cssStyles'
+import { basicButtonStyle, customIconStyle } from '../cssStyles';
 
 import { IconType } from "react-icons";
-import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal} from "react-icons/lu";
+import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal } from "react-icons/lu";
 import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
 
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll
-} from '../redux/videoSlice'
+} from '../redux/videoSlice';
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
@@ -37,37 +37,37 @@ const CuttingActions: React.FC = () => {
    * @param ref Pass a reference if the clicked element should lose focus
    */
   const dispatchAction = (action: ActionCreatorWithoutPayload<string>, ref?: React.RefObject<HTMLDivElement>) => {
-    dispatch(action())
+    dispatch(action());
 
     // Lose focus if clicked by mouse
     if (ref) {
-      ref.current?.blur()
+      ref.current?.blur();
     }
-  }
+  };
 
   // Maps functions to hotkeys
   useHotkeys(
     KEYMAP.cutting.cut.key,
     () => dispatchAction(cut),
-    {preventDefault: true},
+    { preventDefault: true },
     [cut]
   );
   useHotkeys(
     KEYMAP.cutting.delete.key,
     () => dispatchAction(markAsDeletedOrAlive),
-    {preventDefault: true},
+    { preventDefault: true },
     [markAsDeletedOrAlive]
   );
   useHotkeys(
     KEYMAP.cutting.mergeLeft.key,
     () => dispatchAction(mergeLeft),
-    {preventDefault: true},
+    { preventDefault: true },
     [mergeLeft]
   );
   useHotkeys(
     KEYMAP.cutting.mergeRight.key,
     () => dispatchAction(mergeRight),
-    {preventDefault: true},
+    { preventDefault: true },
     [mergeRight]
   );
 
@@ -76,12 +76,12 @@ const CuttingActions: React.FC = () => {
     flexDirection: 'row' as const,
     justifyContent: 'center',
     alignItems: 'center',
-  })
+  });
 
   const verticalLineStyle = css({
     borderLeft: '2px solid #DDD;',
     height: '32px',
-  })
+  });
 
   return (
     <div css={cuttingStyle}>
@@ -111,7 +111,7 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.mergeRight-button")}
         actionHandler={dispatchAction}
         action={mergeRight}
-        tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key)})}
+        tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
         ariaLabelText={
           t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })
         }
@@ -166,7 +166,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
   tooltip,
   ariaLabelText
 }) => {
-  const ref = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null);
   const theme = useTheme();
 
   return (
@@ -175,9 +175,11 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
         ref={ref}
         role="button" tabIndex={0} aria-label={ariaLabelText}
         onClick={() => actionHandler(action, ref)}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          actionHandler(action)
-        } }}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === " " || event.key === "Enter") {
+            actionHandler(action);
+          }
+        }}
       >
         <Icon />
         <span>{actionName}</span>
@@ -195,14 +197,14 @@ interface markAsDeleteButtonInterface {
 /**
  * Button that changes its function based on context
  */
-const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({
+const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
   actionHandler,
   action,
   hotKeyName
 }) => {
   const { t } = useTranslation();
-  const isCurrentSegmentAlive = useAppSelector(selectIsCurrentSegmentAlive)
-  const ref = React.useRef<HTMLDivElement>(null)
+  const isCurrentSegmentAlive = useAppSelector(selectIsCurrentSegmentAlive);
+  const ref = React.useRef<HTMLDivElement>(null);
 
   const theme = useTheme();
 
@@ -213,15 +215,17 @@ const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({
         role="button" tabIndex={0}
         aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}
         onClick={() => actionHandler(action, ref)}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          actionHandler(action)
-        } }}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === " " || event.key === "Enter") {
+            actionHandler(action);
+          }
+        }}
       >
-        {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} /> }
+        {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} />}
         <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>
   );
-}
+};
 
 export default CuttingActions;

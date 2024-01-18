@@ -2,20 +2,20 @@ import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { Provider } from 'react-redux'
-import store from './redux/store'
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
-import { init } from './config'
-import { sleep } from './util/utilityFunctions'
+import { init } from './config';
+import { sleep } from './util/utilityFunctions';
 
 import "@fontsource-variable/roboto-flex";
 
 import './i18n/config';
 
-import '@opencast/appkit/dist/colors.css'
+import '@opencast/appkit/dist/colors.css';
 import { ColorSchemeProvider } from '@opencast/appkit';
 
-const container = document.getElementById('root')
+const container = document.getElementById('root');
 if (!container) {
   throw new Error('Failed to find the root element');
 }

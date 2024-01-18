@@ -6,7 +6,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
   const theme = useTheme();
 
-  const positionRef = React.useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const positionRef = React.useRef<{ x: number; y: number; }>({ x: 0, y: 0 });
   const areaRef = React.useRef<HTMLDivElement>(null);
 
   return (
@@ -57,4 +57,4 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
     />
   );
-}
+};

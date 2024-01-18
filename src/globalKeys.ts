@@ -12,43 +12,43 @@ import { ParseKeys } from 'i18next';
 import { isMacOs } from 'react-device-detect';
 
 // Groups for displaying hotkeys in the overview page
-const groupVideoPlayer = "keyboardControls.groupVideoPlayer"
-const groupCuttingView = 'keyboardControls.groupCuttingView'
-const groupCuttingViewScrubber = 'keyboardControls.groupCuttingViewScrubber'
-const groupSubtitleList = "keyboardControls.groupSubtitleList"
+const groupVideoPlayer = "keyboardControls.groupVideoPlayer";
+const groupCuttingView = 'keyboardControls.groupCuttingView';
+const groupCuttingViewScrubber = 'keyboardControls.groupCuttingViewScrubber';
+const groupSubtitleList = "keyboardControls.groupSubtitleList";
 
 /**
  * Helper function that rewrites keys based on the OS
  */
 export const rewriteKeys = (key: string) => {
-  let newKey = key
+  let newKey = key;
   if (isMacOs) {
-    newKey = newKey.replace("Alt", "Option")
+    newKey = newKey.replace("Alt", "Option");
   }
 
-  return newKey
-}
+  return newKey;
+};
 
-export const getGroupName = (groupName: string) : ParseKeys => {
+export const getGroupName = (groupName: string): ParseKeys => {
   return match(groupName, {
     videoPlayer: () => groupVideoPlayer,
     cutting: () => groupCuttingView,
     timeline: () => groupCuttingViewScrubber,
     subtitleList: () => groupSubtitleList,
-  })
-}
+  });
+};
 
 export interface IKeyMap {
-  [property: string]: IKeyGroup
+  [property: string]: IKeyGroup;
 }
 
 export interface IKeyGroup {
-  [property: string]: IKey
+  [property: string]: IKey;
 }
 
 export interface IKey {
-  name: string
-  key: string
+  name: string;
+  key: string;
 }
 
 export const KEYMAP: IKeyMap = {
@@ -120,4 +120,4 @@ export const KEYMAP: IKeyMap = {
       key: "Shift+Alt+d",
     }
   }
-}
+};

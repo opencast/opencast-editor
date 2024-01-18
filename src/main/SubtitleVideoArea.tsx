@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { useAppSelector } from "../redux/store";
-import { selectCurrentlyAt,
+import {
+  selectCurrentlyAt,
   selectIsPlaying,
   setClickTriggered,
   setIsPlaying,
@@ -14,8 +15,9 @@ import { selectCurrentlyAt,
   selectSelectedSubtitleById,
   selectIsPlayPreview,
   setIsPlayPreview,
-  setCurrentlyAtAndTriggerPreview} from "../redux/subtitleSlice";
-import {selectIsMuted, selectVideos, selectVolume, setIsMuted, setVolume} from "../redux/videoSlice";
+  setCurrentlyAtAndTriggerPreview
+} from "../redux/subtitleSlice";
+import { selectIsMuted, selectVideos, selectVolume, setIsMuted, setVolume } from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
@@ -36,62 +38,62 @@ import { selectFieldStyle } from "../cssStyles";
  * coming up with a proper fix appears to be rather difficult
  * TODO: Come up with a proper fix and create a PR
  */
-const SubtitleVideoArea : React.FC = () => {
+const SubtitleVideoArea: React.FC = () => {
 
-  const tracks = useAppSelector(selectVideos)
-  const subtitle = useAppSelector(selectSelectedSubtitleById)
-  const [selectedFlavor, setSelectedFlavor] = useState<Flavor>()
-  const [subtitleUrl, setSubtitleUrl] = useState("")
+  const tracks = useAppSelector(selectVideos);
+  const subtitle = useAppSelector(selectSelectedSubtitleById);
+  const [selectedFlavor, setSelectedFlavor] = useState<Flavor>();
+  const [subtitleUrl, setSubtitleUrl] = useState("");
 
   // Decide on initial flavor on mount
   useEffect(() => {
     // Get default from settings
     if (settings.subtitles.defaultVideoFlavor !== undefined) {
-      setSelectedFlavor(settings.subtitles.defaultVideoFlavor)
-      return
+      setSelectedFlavor(settings.subtitles.defaultVideoFlavor);
+      return;
     }
     // If there is no default, just pick any
     if (tracks.length > 0) {
-      setSelectedFlavor(tracks[0].flavor)
-      return
+      setSelectedFlavor(tracks[0].flavor);
+      return;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Get the uri of a track the currently selected flavor
   const getTrackURIBySelectedFlavor = () => {
     for (const track of tracks) {
       if (track.flavor.type === selectedFlavor?.type && track.flavor.subtype === selectedFlavor?.subtype) {
-        return track.uri
+        return track.uri;
       }
     }
-  }
+  };
 
   // Get a track URI by any means necessary
   const getTrackURI = () => {
-    const trackURIByFlavor = getTrackURIBySelectedFlavor()
+    const trackURIByFlavor = getTrackURIBySelectedFlavor();
     if (trackURIByFlavor) {
-      return trackURIByFlavor
+      return trackURIByFlavor;
     }
     if (tracks.length > 0) {
-      return tracks[0].uri
+      return tracks[0].uri;
     }
-  }
+  };
 
   // Parse subtitles to something the video player understands
   useEffect(() => {
     if (subtitle?.cues) {
-      const serializedSubtitle = serializeSubtitle(subtitle?.cues)
-      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], {type: 'text/vtt'})))
+      const serializedSubtitle = serializeSubtitle(subtitle?.cues);
+      setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], { type: 'text/vtt' })));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subtitle?.cues])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtitle?.cues]);
 
   const areaWrapper = css({
     display: 'block',
     height: '100%',
     width: '40%',
-  })
+  });
 
   const videoPlayerAreaStyle = css({
     display: 'flex',
@@ -109,7 +111,7 @@ const SubtitleVideoArea : React.FC = () => {
         <div css={videoPlayerAreaStyle}>
           {selectedFlavor && <VideoSelectDropdown
             // eslint-disable-next-line no-sequences
-            flavors={tracks.reduce((a: Flavor[], o: { flavor: Flavor }) => (a.push(o.flavor), a), [])}
+            flavors={tracks.reduce((a: Flavor[], o: { flavor: Flavor; }) => (a.push(o.flavor), a), [])}
             changeFlavorcallback={setSelectedFlavor}
             defaultFlavor={selectedFlavor}
           />}
@@ -148,22 +150,22 @@ const SubtitleVideoArea : React.FC = () => {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <>
       {render()}
     </>
   );
-}
+};
 
 /**
  * Changes the selectedFlavor in SubtitleVideoArea
  */
-const VideoSelectDropdown : React.FC<{
+const VideoSelectDropdown: React.FC<{
   flavors: Flavor[],
   changeFlavorcallback: React.Dispatch<React.SetStateAction<Flavor | undefined>>,
-  defaultFlavor: Flavor
+  defaultFlavor: Flavor;
 }> = ({
   flavors,
   changeFlavorcallback,
@@ -171,23 +173,23 @@ const VideoSelectDropdown : React.FC<{
 }) => {
 
   const { t } = useTranslation();
-  const theme = useTheme()
+  const theme = useTheme();
 
-  const dropdownName = "flavors"
+  const dropdownName = "flavors";
 
   // Turn flavor into string
   const stringifyFlavor = (flavor: Flavor) => {
-    return flavor.type + "/" + flavor.subtype
-  }
+    return flavor.type + "/" + flavor.subtype;
+  };
 
   const getFlavorLabel = (flavor: Flavor) => {
     // Omit subtype if all flavour subtypes are equal
     if (flavors.every(f => f.subtype === flavors[0].subtype)) {
-      return flavor.type
+      return flavor.type;
     }
 
-    return stringifyFlavor(flavor)
-  }
+    return stringifyFlavor(flavor);
+  };
 
   // Data to populate the dropdown with
   const data = flavors.map(flavor => ({
@@ -207,20 +209,20 @@ const VideoSelectDropdown : React.FC<{
         styles={selectFieldStyle(theme)}
         css={subtitleAddFormStyle}
         options={data}
-        defaultValue={data.filter(({value}) => value === stringifyFlavor(defaultFlavor))}
+        defaultValue={data.filter(({ value }) => value === stringifyFlavor(defaultFlavor))}
         onChange={
           newValue => {
             if (newValue) {
               // Put flavor back together
-              const [type, subtype] = newValue.value.split("/")
-              const newFlavor: Flavor = { type, subtype }
-              changeFlavorcallback(newFlavor)
+              const [type, subtype] = newValue.value.split("/");
+              const newFlavor: Flavor = { type, subtype };
+              changeFlavorcallback(newFlavor);
             }
           }
         }
       />
     </>
-  )
-}
+  );
+};
 
 export default SubtitleVideoArea;

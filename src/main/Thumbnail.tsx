@@ -1,12 +1,14 @@
 import { css } from "@emotion/react";
 import { IconType } from "react-icons";
-import { LuCamera, LuCopy, LuXCircle, LuUpload} from "react-icons/lu";
+import { LuCamera, LuCopy, LuXCircle, LuUpload } from "react-icons/lu";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { settings } from "../config";
-import { basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
-  backgroundBoxStyle } from "../cssStyles";
+import {
+  basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
+  backgroundBoxStyle
+} from "../cssStyles";
 import { Theme, useTheme } from "../themes";
 import {
   selectOriginalThumbnails,
@@ -30,7 +32,7 @@ import {
   setIsMuted,
   setVolume,
   setCurrentlyAt
-} from '../redux/videoSlice'
+} from '../redux/videoSlice';
 import { ThemedTooltip } from "./Tooltip";
 import VideoPlayers from "./VideoPlayers";
 import VideoControls from "./VideoControls";
@@ -39,13 +41,13 @@ import VideoControls from "./VideoControls";
 /**
  * User interface for handling thumbnails
  */
-const Thumbnail : React.FC = () => {
+const Thumbnail: React.FC = () => {
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const theme = useTheme();
-  const originalThumbnails = useAppSelector(selectOriginalThumbnails)
+  const originalThumbnails = useAppSelector(selectOriginalThumbnails);
 
   // Generate Refs
   const generateRefs = React.useRef<any>([]);
@@ -56,15 +58,15 @@ const Thumbnail : React.FC = () => {
   //   *track: Generate to
   //   *index: Generate from
   const generate = (track: Track, index: number) => {
-    const uri = generateRefs.current[index].captureVideo()
-    dispatch(setThumbnail({id: track.id, uri: uri}))
-    dispatch(setHasChanges(true))
-  }
+    const uri = generateRefs.current[index].captureVideo();
+    dispatch(setThumbnail({ id: track.id, uri: uri }));
+    dispatch(setHasChanges(true));
+  };
 
   // Trigger file handler for upload input element
   const upload = (index: number) => {
     // open file input box on click of other element
-    const ref = inputRefs.current[index]
+    const ref = inputRefs.current[index];
     if (ref !== null) {
       ref.click();
     }
@@ -79,7 +81,7 @@ const Thumbnail : React.FC = () => {
 
     // Check if image
     if (fileObj.type.split('/')[0] !== 'image') {
-      return
+      return;
     }
 
     const reader = new FileReader();
@@ -87,16 +89,16 @@ const Thumbnail : React.FC = () => {
       // the result image data
       if (e.target && e.target.result) {
         const uri = e.target.result.toString();
-        dispatch(setThumbnail({id: track.id, uri: uri}))
-        dispatch(setHasChanges(true))
+        dispatch(setThumbnail({ id: track.id, uri: uri }));
+        dispatch(setHasChanges(true));
       }
-    }
+    };
     reader.readAsDataURL(fileObj);
   };
 
   const discardThumbnail = (id: string) => {
-    dispatch(setThumbnail({ id: id, uri: originalThumbnails.find(e => e.id === id)?.uri }))
-  }
+    dispatch(setThumbnail({ id: id, uri: originalThumbnails.find(e => e.id === id)?.uri }));
+  };
 
   const thumbnailStyle = css({
     display: 'flex',
@@ -104,14 +106,14 @@ const Thumbnail : React.FC = () => {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-  })
+  });
 
   const bottomStyle = css({
     display: 'flex',
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-  })
+  });
 
   return (
     <div css={thumbnailStyle}>
@@ -126,7 +128,7 @@ const Thumbnail : React.FC = () => {
       />
       <div css={bottomStyle}>
         {/* use maxHeightInPixel to make video players the same size*/}
-        <VideoPlayers refs={generateRefs} widthInPercent={100} maxHeightInPixel={420}/>
+        <VideoPlayers refs={generateRefs} widthInPercent={100} maxHeightInPixel={420} />
         <div css={videosStyle(theme)}>
           <Timeline
             timelineHeight={125}
@@ -152,21 +154,21 @@ const Thumbnail : React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 /**
  * A table for displaying thumbnails and associated actions
  */
-const ThumbnailTable : React.FC<{
+const ThumbnailTable: React.FC<{
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
   generateRefs: React.MutableRefObject<any>,
   generate: (track: Track, index: number) => void,
   upload: (index: number) => void,
   uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
   discard: (id: string) => void,
-}> = ({inputRefs, generateRefs, generate, upload, uploadCallback, discard}) => {
+}> = ({ inputRefs, generateRefs, generate, upload, uploadCallback, discard }) => {
 
-  const videoTracks = useAppSelector(selectVideos)
+  const videoTracks = useAppSelector(selectVideos);
 
   const thumbnailTableStyle = css({
     display: 'flex',
@@ -175,10 +177,10 @@ const ThumbnailTable : React.FC<{
     justifyContent: 'center',
     ...(flexGapReplacementStyle(10, false)),
     paddingBottom: '20px',
-  })
+  });
 
   const renderSingleOrMultiple = () => {
-    const primaryTrack = videoTracks.find(e => e.thumbnailPriority === 0)
+    const primaryTrack = videoTracks.find(e => e.thumbnailPriority === 0);
 
     if (settings.thumbnail.simpleMode && primaryTrack !== undefined) {
       return (
@@ -193,11 +195,11 @@ const ThumbnailTable : React.FC<{
             discard={discard}
           />
         </div>
-      )
+      );
     } else {
       return (<>
-        { videoTracks.length > 1 &&
-          <AffectAllRow tracks={videoTracks} generate={generate}/>
+        {videoTracks.length > 1 &&
+          <AffectAllRow tracks={videoTracks} generate={generate} />
         }
         <div css={thumbnailTableStyle}>
           {videoTracks.map((track: Track, index: number) => (
@@ -214,16 +216,16 @@ const ThumbnailTable : React.FC<{
             />
           ))}
         </div>
-      </>)
+      </>);
     }
-  }
+  };
 
   return (
     <>
       {renderSingleOrMultiple()}
     </>
-  )
-}
+  );
+};
 
 /**
  * A table entry for a single video+thumbnail pair
@@ -237,27 +239,27 @@ const ThumbnailTableRow: React.FC<{
   upload: (index: number) => void,
   uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
   discard: (id: string) => void,
-}> = ({track, index, inputRefs, generateRef, generate, upload, uploadCallback, discard}) => {
+}> = ({ track, index, inputRefs, generateRef, generate, upload, uploadCallback, discard }) => {
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const theme = useTheme();
 
   // The "+40" comes from padding that is not included in the "getWidth" function
-  const videoWidth = generateRef ? generateRef.getWidth() + 40 : undefined
+  const videoWidth = generateRef ? generateRef.getWidth() + 40 : undefined;
 
   const renderPriority = (thumbnailPriority: number) => {
     if (isNaN(thumbnailPriority)) {
-      return ""
+      return "";
     } else if (thumbnailPriority === 0) {
-      return " - " + t('thumbnail.primary')
+      return " - " + t('thumbnail.primary');
     } else if (thumbnailPriority === 1) {
-      return " - " + t('thumbnail.secondary')
+      return " - " + t('thumbnail.secondary');
     } else if (thumbnailPriority < 0) {
-      return ""
+      return "";
     } else {
-      return " - " + thumbnailPriority
+      return " - " + thumbnailPriority;
     }
-  }
+  };
 
   return (
     <div key={index} css={[backgroundBoxStyle(theme), thumbnailTableRowStyle(videoWidth)]}>
@@ -273,29 +275,29 @@ const ThumbnailTableRow: React.FC<{
           generate={generate}
           upload={upload}
           uploadCallback={uploadCallback}
-          discard={discard}/>
+          discard={discard} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 /**
  * Displays thumbnail associated with the given track
  * or a placeholder
  */
-const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
+const ThumbnailDisplayer: React.FC<{ track: Track; }> = ({ track }) => {
 
-  const { t } = useTranslation()
-  const theme = useTheme()
+  const { t } = useTranslation();
+  const theme = useTheme();
 
   const generalStyle = css({
     width: '100%',
     maxWidth: '457px',
     aspectRatio: '16/9',
-  })
+  });
 
   const imageStyle = css({
-  })
+  });
 
   const placeholderStyle = css({
     width: '100vw', // TODO: This is necessary to make the placeholder large enough, but prevents it from shrinking
@@ -304,7 +306,7 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
     justifyContent: 'center',
     alignItems: 'center',
     color: `${theme.text}`,
-  })
+  });
 
   return (
     <>
@@ -321,13 +323,13 @@ const ThumbnailDisplayer : React.FC<{track: Track}> = ({track}) => {
         </div>
       }
     </>
-  )
-}
+  );
+};
 
 /**
  * Buttons and actions related to thumbnails for a given track
  */
-const ThumbnailButtons : React.FC<{
+const ThumbnailButtons: React.FC<{
   track: Track,
   index: number,
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
@@ -335,35 +337,35 @@ const ThumbnailButtons : React.FC<{
   upload: (index: number) => void,
   uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
   discard: (id: string) => void,
-}> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
+}> = ({ track, index, inputRefs, generate, upload, uploadCallback, discard }) => {
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const tracks = useAppSelector(selectTracks)
+  const tracks = useAppSelector(selectTracks);
 
   // Set the given thumbnail for all tracks
   const setForOtherThumbnails = (uri: string | undefined) => {
     if (uri === undefined) {
-      return
+      return;
     }
-    const thumbnails = []
+    const thumbnails = [];
     for (const track of tracks) {
-      thumbnails.push({id: track.id, uri: uri})
+      thumbnails.push({ id: track.id, uri: uri });
     }
-    dispatch(setThumbnails(thumbnails))
-    dispatch(setHasChanges(true))
-  }
+    dispatch(setThumbnails(thumbnails));
+    dispatch(setHasChanges(true));
+  };
 
   const verticalLineStyle = css({
     borderTop: '1px solid #DDD;',
     width: '100%',
-  })
+  });
 
   return (
     <div css={thumbnailButtonsStyle}>
       <ThumbnailButton
-        handler={() => { generate(track, index) }}
+        handler={() => { generate(track, index); }}
         text={t('thumbnail.buttonGenerate')}
         tooltipText={t('thumbnail.buttonGenerate-tooltip')}
         ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
@@ -372,7 +374,7 @@ const ThumbnailButtons : React.FC<{
       />
       <div css={verticalLineStyle} />
       <ThumbnailButton
-        handler={() => { upload(index) }}
+        handler={() => { upload(index); }}
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
@@ -381,7 +383,7 @@ const ThumbnailButtons : React.FC<{
       />
       {/* Hidden input field for upload */}
       <input
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
         ref={el => {
           inputRefs.current[index] = el;
         }}
@@ -391,10 +393,10 @@ const ThumbnailButtons : React.FC<{
         aria-hidden="true"
       />
       <div css={verticalLineStyle} />
-      { tracks.length > 1 &&
+      {tracks.length > 1 &&
         <>
           <ThumbnailButton
-            handler={() => { setForOtherThumbnails(track.thumbnailUri) }}
+            handler={() => { setForOtherThumbnails(track.thumbnailUri); }}
             text={t('thumbnail.buttonUseForOtherThumbnails')}
             tooltipText={t('thumbnail.buttonUseForOtherThumbnails-tooltip')}
             ariaLabel={t('thumbnail.buttonUseForOtherThumbnails-tooltip-aria')}
@@ -405,7 +407,7 @@ const ThumbnailButtons : React.FC<{
         </>
       }
       <ThumbnailButton
-        handler={() => { discard(track.id) }}
+        handler={() => { discard(track.id); }}
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
@@ -413,22 +415,22 @@ const ThumbnailButtons : React.FC<{
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
-  )
-}
+  );
+};
 
-const ThumbnailButton : React.FC<{
+const ThumbnailButton: React.FC<{
   handler: () => void,
-  text: string
+  text: string;
   tooltipText: string,
   ariaLabel: string,
   Icon: IconType,
   active: boolean,
-}> = ({handler, text, tooltipText, ariaLabel, Icon, active}) => {
+}> = ({ handler, text, tooltipText, ariaLabel, Icon, active }) => {
   const theme = useTheme();
-  const ref = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null);
 
   const clickHandler = () => {
-    if (active) { handler() }
+    if (active) { handler(); }
     ref.current?.blur();
   };
   const keyHandler = (event: React.KeyboardEvent) => {
@@ -450,26 +452,26 @@ const ThumbnailButton : React.FC<{
         {text}
       </div>
     </ThemedTooltip>
-  )
-}
+  );
+};
 
 /**
  * Extra header/footer row
  * For e.g. buttons that affect all rows in the table
  */
-const AffectAllRow : React.FC<{
-  tracks: Track[]
-  generate: (track: Track, index: number) => void
-}> = ({generate, tracks}) => {
+const AffectAllRow: React.FC<{
+  tracks: Track[];
+  generate: (track: Track, index: number) => void;
+}> = ({ generate, tracks }) => {
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const generateAll = () => {
     for (let i = 0; i < tracks.length; i++) {
-      generate(tracks[i], i)
+      generate(tracks[i], i);
     }
-  }
+  };
 
   const rowStyle = css({
     display: 'flex',
@@ -480,14 +482,14 @@ const AffectAllRow : React.FC<{
     gap: '20px',
     justifyContent: 'center',
     alignItems: 'center',
-  })
+  });
 
   const buttonStyle = css({
     height: '100%',
     minWidth: '200px',
     boxShadow: `${theme.boxShadow}`,
     background: `${theme.element_bg}`,
-  })
+  });
 
   return (
     <div css={rowStyle}>
@@ -495,19 +497,21 @@ const AffectAllRow : React.FC<{
         <div css={[basicButtonStyle(theme), buttonStyle]}
           role="button" tabIndex={0} aria-label={t('thumbnail.buttonGenerateAll-tooltip-aria')}
           onClick={() => {
-            generateAll()
+            generateAll();
           }}
-          onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-            generateAll()
-          } }}
+          onKeyDown={(event: React.KeyboardEvent) => {
+            if (event.key === " " || event.key === "Enter") {
+              generateAll();
+            }
+          }}
         >
           <LuCamera />
           {t('thumbnail.buttonGenerateAll')}
         </div>
       </ThemedTooltip>
     </div>
-  )
-}
+  );
+};
 
 /**
  * Components for simple mode
@@ -525,7 +529,7 @@ const ThumbnailTableSingleRow: React.FC<{
   upload: (index: number) => void,
   uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
   discard: (id: string) => void,
-}> = ({track, index, inputRefs, generate, upload, uploadCallback, discard}) => {
+}> = ({ track, index, inputRefs, generate, upload, uploadCallback, discard }) => {
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -534,7 +538,7 @@ const ThumbnailTableSingleRow: React.FC<{
       <div css={thumbnailTableRowTitleStyle}>
         {t("thumbnailSimple.rowTitle")}
       </div>
-      <hr css={{width: '100%'}}></hr>
+      <hr css={{ width: '100%' }}></hr>
       <div css={thumbnailTableRowRowStyle} key={index}>
         <ThumbnailDisplayer track={track} />
         <ThumbnailButtonsSimple
@@ -544,16 +548,16 @@ const ThumbnailTableSingleRow: React.FC<{
           generate={generate}
           upload={upload}
           uploadCallback={uploadCallback}
-          discard={discard}/>
+          discard={discard} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 /**
  * Buttons for simple mode. Shows a generate button for each video
  */
-const ThumbnailButtonsSimple : React.FC<{
+const ThumbnailButtonsSimple: React.FC<{
   track: Track,
   index: number,
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
@@ -561,16 +565,16 @@ const ThumbnailButtonsSimple : React.FC<{
   upload: (index: number) => void,
   uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
   discard: (id: string) => void,
-}> = ({track, index, generate, inputRefs, upload, uploadCallback, discard}) => {
+}> = ({ track, index, generate, inputRefs, upload, uploadCallback, discard }) => {
 
-  const { t } = useTranslation()
-  const tracks = useAppSelector(selectTracks)
+  const { t } = useTranslation();
+  const tracks = useAppSelector(selectTracks);
 
   return (
     <div css={thumbnailButtonsStyle}>
       {tracks.map((generateTrack: Track, generateIndex: number) => (
         <ThumbnailButton
-          handler={() => { generate(track, generateIndex) }}
+          handler={() => { generate(track, generateIndex); }}
           text={t('thumbnail.buttonGenerate') + " " + t("thumbnailSimple.from") + " " + generateTrack.flavor.type}
           tooltipText={t('thumbnail.buttonGenerate-tooltip')}
           ariaLabel={t('thumbnail.buttonGenerate-tooltip-aria')}
@@ -580,7 +584,7 @@ const ThumbnailButtonsSimple : React.FC<{
         />
       ))}
       <ThumbnailButton
-        handler={() => { upload(index) }}
+        handler={() => { upload(index); }}
         text={t('thumbnail.buttonUpload')}
         tooltipText={t('thumbnail.buttonUpload-tooltip')}
         ariaLabel={t('thumbnail.buttonUpload-tooltip-aria')}
@@ -589,7 +593,7 @@ const ThumbnailButtonsSimple : React.FC<{
       />
       {/* Hidden input field for upload */}
       <input
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
         ref={el => {
           inputRefs.current[index] = el;
         }}
@@ -599,7 +603,7 @@ const ThumbnailButtonsSimple : React.FC<{
         aria-hidden="true"
       />
       <ThumbnailButton
-        handler={() => { discard(track.id) }}
+        handler={() => { discard(track.id); }}
         text={t('thumbnail.buttonDiscard')}
         tooltipText={t('thumbnail.buttonDiscard-tooltip')}
         ariaLabel={t('thumbnail.buttonDiscard-tooltip-aria')}
@@ -607,8 +611,8 @@ const ThumbnailButtonsSimple : React.FC<{
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
-  )
-}
+  );
+};
 
 /**
  * CSS shared between multi and simple display mode
@@ -618,7 +622,7 @@ const thumbnailTableRowStyle = (maxWidth: number) => css({
   flexDirection: 'column',
   width: '100%',
   maxWidth: `${maxWidth}px`,
-})
+});
 
 const thumbnailTableRowTitleStyle = css({
   textAlign: 'left',
@@ -627,7 +631,7 @@ const thumbnailTableRowTitleStyle = css({
   '&:first-letter': {
     textTransform: 'capitalize',
   },
-})
+});
 
 const thumbnailTableRowRowStyle = css({
   display: 'flex',
@@ -636,7 +640,7 @@ const thumbnailTableRowRowStyle = css({
 
   justifyContent: 'space-around',
   flexWrap: 'wrap',
-})
+});
 
 const thumbnailButtonsStyle = css({
   // TODO: Avoid hard-coding max-width
@@ -645,7 +649,7 @@ const thumbnailButtonsStyle = css({
   },
   display: 'flex',
   flexDirection: 'column',
-})
+});
 
 const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
   active ? basicButtonStyle(theme) : deactivatedButtonStyle,
