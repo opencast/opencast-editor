@@ -1,43 +1,64 @@
 import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
-import { css } from '@emotion/react'
+import { css } from "@emotion/react";
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
-  selectIsPlaying, selectCurrentlyAtInSeconds, setIsPlaying, selectIsMuted, selectVolume,
-  selectVideoURL, selectVideoCount, selectDurationInSeconds,
-  setPreviewTriggered, selectPreviewTriggered, setAspectRatio, selectAspectRatio, setClickTriggered, selectClickTriggered, setCurrentlyAt
-} from '../redux/videoSlice'
+  selectIsPlaying,
+  selectCurrentlyAtInSeconds,
+  setIsPlaying,
+  selectIsMuted,
+  selectVolume,
+  selectVideoURL,
+  selectVideoCount,
+  selectDurationInSeconds,
+  setPreviewTriggered,
+  selectPreviewTriggered,
+  setAspectRatio,
+  selectAspectRatio,
+  setClickTriggered,
+  selectClickTriggered,
+  setCurrentlyAt,
+} from "../redux/videoSlice";
 
-import ReactPlayer, { Config } from 'react-player'
+import ReactPlayer, { Config } from "react-player";
 
-import { roundToDecimalPlace } from '../util/utilityFunctions'
+import { roundToDecimalPlace } from "../util/utilityFunctions";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { sleep } from './../util/utilityFunctions'
+import { sleep } from "./../util/utilityFunctions";
 
 import { RootState } from "../redux/store";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { useTheme } from "../themes";
 
-import { backgroundBoxStyle, flexGapReplacementStyle } from '../cssStyles'
+import { backgroundBoxStyle, flexGapReplacementStyle } from "../cssStyles";
+import { BaseReactPlayerProps } from "react-player/base";
 
-const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, widthInPercent = 100}) => {
+const VideoPlayers: React.FC<{
+  refs?: React.MutableRefObject<any>,
+  widthInPercent?: number,
+  maxHeightInPixel?: number;
+}> = ({
+  refs,
+  widthInPercent = 100,
+  maxHeightInPixel = 300,
+}) => {
 
-  const videoURLs = useSelector(selectVideoURL)
-  const videoCount = useSelector(selectVideoCount)
+  const videoURLs = useAppSelector(selectVideoURL);
+  const videoCount = useAppSelector(selectVideoCount);
 
   const videoPlayerAreaStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: widthInPercent + '%',
-    borderRadius: '5px',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: widthInPercent + "%",
+    borderRadius: "5px",
     ...(flexGapReplacementStyle(10, false)),
 
-    maxHeight: '300px',
+    maxHeight: maxHeightInPixel + "px",
   });
 
   // Initialize video players
@@ -65,8 +86,8 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
         setCurrentlyAt={setCurrentlyAt}
         setAspectRatio={setAspectRatio}
         ref={el => {
-          if (refs === undefined) { return }
-          (refs.current[i] = el)
+          if (refs === undefined) { return; }
+          (refs.current[i] = el);
         }}
       />
     );
@@ -77,7 +98,7 @@ const VideoPlayers: React.FC<{refs: any, widthInPercent?: number}> = ({refs, wid
       {videoPlayers}
     </div>
   );
-}
+};
 
 /**
  * A single video player
@@ -92,18 +113,18 @@ export const VideoPlayer = React.forwardRef(
     subtitleUrl: string,
     first: boolean,
     last: boolean,
-    selectIsPlaying:(state: RootState) => boolean,
-    selectIsMuted:(state: RootState) => boolean,
-    selectVolume:(state: RootState) => number,
+    selectIsPlaying: (state: RootState) => boolean,
+    selectIsMuted: (state: RootState) => boolean,
+    selectVolume: (state: RootState) => number,
     selectCurrentlyAtInSeconds: (state: RootState) => number,
-    selectPreviewTriggered:(state: RootState) => boolean,
-    selectClickTriggered:(state: RootState) => boolean,
+    selectPreviewTriggered: (state: RootState) => boolean,
+    selectClickTriggered: (state: RootState) => boolean,
     selectAspectRatio: (state: RootState) => number,
     setIsPlaying: ActionCreatorWithPayload<boolean, string>,
     setPreviewTriggered: ActionCreatorWithPayload<any, string>,
     setClickTriggered: ActionCreatorWithPayload<any, string>,
     setCurrentlyAt: any,
-    setAspectRatio: ActionCreatorWithPayload<{dataKey: number} & {width: number, height: number}, string>,
+    setAspectRatio: ActionCreatorWithPayload<{ dataKey: number; } & { width: number, height: number; }, string>,
   },
   forwardRefThing
   ) => {
@@ -126,22 +147,22 @@ export const VideoPlayer = React.forwardRef(
       setClickTriggered,
       setCurrentlyAt,
       setAspectRatio,
-    } = props
+    } = props;
 
     const { t } = useTranslation();
 
     // Init redux variables
-    const dispatch = useDispatch();
-    const isPlaying = useSelector(selectIsPlaying)
-    const isMuted = useSelector(selectIsMuted)
-    const volume = useSelector(selectVolume)
-    const currentlyAt = useSelector(selectCurrentlyAtInSeconds)
-    const duration = useSelector(selectDurationInSeconds)
-    const previewTriggered = useSelector(selectPreviewTriggered)
-    const clickTriggered = useSelector(selectClickTriggered)
+    const dispatch = useAppDispatch();
+    const isPlaying = useAppSelector(selectIsPlaying);
+    const isMuted = useAppSelector(selectIsMuted);
+    const volume = useAppSelector(selectVolume);
+    const currentlyAt = useAppSelector(selectCurrentlyAtInSeconds);
+    const duration = useAppSelector(selectDurationInSeconds);
+    const previewTriggered = useAppSelector(selectPreviewTriggered);
+    const clickTriggered = useAppSelector(selectClickTriggered);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const aspectRatio = useSelector(selectAspectRatio)
-    const theme = useTheme()
+    const aspectRatio = useAppSelector(selectAspectRatio);
+    const theme = useTheme();
 
     // Init state variables
     const ref = useRef<ReactPlayer>(null);
@@ -150,116 +171,119 @@ export const VideoPlayer = React.forwardRef(
     const [isAspectRatioUpdated, setIsAspectRatioUpdated] = useState(false);
 
     // Callback for when the video is playing
-    const onProgressCallback = (state: { played: number, playedSeconds: number, loaded: number, loadedSeconds: number }) => {
+    const onProgressCallback = (state: {
+      played: number, playedSeconds: number, loaded: number, loadedSeconds: number;
+    }) => {
       if (isPrimary) {
-      // Only update redux if there was a substantial change
+        // Only update redux if there was a substantial change
         if (roundToDecimalPlace(currentlyAt, 3) !== roundToDecimalPlace(state.playedSeconds, 3) &&
           state.playedSeconds !== 0 &&
           // Avoid overwriting video restarts
           state.playedSeconds < duration) {
-          dispatch(setCurrentlyAt(state.playedSeconds * 1000))
+          dispatch(setCurrentlyAt(state.playedSeconds * 1000));
         }
       }
-    }
+    };
 
     // Tries to get video dimensions from the HTML5 elements until they are not 0,
     // then updates the store
     async function updateAspectRatio() {
       if (ref.current && ref.current.getInternalPlayer()) {
-        let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
-        let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+        let w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth;
+        let h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight;
         while (w === 0 || h === 0) {
           await sleep(100);
-          w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth
-          h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight
+          w = (ref.current.getInternalPlayer() as HTMLVideoElement).videoWidth;
+          h = (ref.current.getInternalPlayer() as HTMLVideoElement).videoHeight;
         }
-        dispatch(setAspectRatio({dataKey, width: w, height: h}))
-        setIsAspectRatioUpdated(true)
+        dispatch(setAspectRatio({ dataKey, width: w, height: h }));
+        setIsAspectRatioUpdated(true);
       }
     }
 
     // Callback for checking whether the video element is ready
     const onReadyCallback = () => {
       setReady(true);
-    }
+    };
 
     const onPlay = () => {
-    // Restart the video from the beginning when at the end
+      // Restart the video from the beginning when at the end
       if (isPrimary && currentlyAt >= duration) {
-        dispatch(setCurrentlyAt(0))
-        // Flip-flop the "isPlaying" switch, or else the video won't start playing
+        dispatch(setCurrentlyAt(0));
+        // Flip-flop the "isPlaying" switch, or else the video won"t start playing
         dispatch(setIsPlaying(false));
         dispatch(setIsPlaying(true));
       }
-    }
+    };
 
     const onEndedCallback = () => {
       if (isPrimary && currentlyAt !== 0) {
         dispatch(setIsPlaying(false));
-        dispatch(setCurrentlyAt(duration * 1000)); // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+        // It seems onEnded is called before the full duration is reached, so we set currentlyAt to the very end
+        dispatch(setCurrentlyAt(duration * 1000));
       }
-    }
+    };
 
-    const onErrorCallback = (_e: any) => {
-      setError(true)
-    }
+    const onErrorCallback: BaseReactPlayerProps["onError"] = _e => {
+      setError(true);
+    };
 
     useEffect(() => {
       // Seek if the position in the video got changed externally
       if (!isPlaying && ref.current && ready) {
-        ref.current.seekTo(currentlyAt, "seconds")
+        ref.current.seekTo(currentlyAt, "seconds");
       }
       if (previewTriggered && ref.current && ready) {
-        ref.current.seekTo(currentlyAt, "seconds")
-        dispatch(setPreviewTriggered(false))
+        ref.current.seekTo(currentlyAt, "seconds");
+        dispatch(setPreviewTriggered(false));
       }
       if (clickTriggered && ref.current && ready) {
-        ref.current.seekTo(currentlyAt, "seconds")
-        dispatch(setClickTriggered(false))
+        ref.current.seekTo(currentlyAt, "seconds");
+        dispatch(setClickTriggered(false));
       }
-    })
+    });
 
     useEffect(() => {
       if (!isAspectRatioUpdated && ready) {
-      // Update the store with video dimensions for rendering purposes
+        // Update the store with video dimensions for rendering purposes
         updateAspectRatio();
       }
-    }, [isAspectRatioUpdated, ready])
+    }, [isAspectRatioUpdated, ready]);
 
     // Callback specifically for the subtitle editor view
-    // When changing urls while the player is playing, don't reset to 0
+    // When changing urls while the player is playing, don"t reset to 0
     // (due to onProgressCallback resetting to 0),
     // but keep the current currentlyAt
     useEffect(() => {
       if (ref.current && ready) {
-        ref.current.seekTo(currentlyAt, "seconds")
+        ref.current.seekTo(currentlyAt, "seconds");
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [url])
+    }, [url]);
 
     // Trigger a workaround for subtitles not being displayed in the video in Firefox
     useEffect(() => {
       // Only trigger workaround in Firefox, as it will cause issues in Chrome
       /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
       // @ts-ignore
-      if (typeof InstallTrigger !== 'undefined') {
-        reAddTrack()
+      if (typeof InstallTrigger !== "undefined") {
+        reAddTrack();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [subtitleUrl])
+    }, [subtitleUrl]);
 
     const playerConfig: Config = {
       file: {
         attributes: {
-        // Skip player when navigating page with keyboard
-          tabIndex: '-1',
-          crossOrigin: "anonymous"    // allow thumbnail generation
+          // Skip player when navigating page with keyboard
+          tabIndex: "-1",
+          crossOrigin: "anonymous",    // allow thumbnail generation
         },
         tracks: [
-          {kind: 'subtitles', src: subtitleUrl, srcLang: 'en', default: true, label: 'I am irrelevant'}
-        ]
-      }
-    }
+          { kind: "subtitles", src: subtitleUrl, srcLang: "en", default: true, label: "I am irrelevant" },
+        ],
+      },
+    };
 
     /**
    * Workaround for subtitles not appearing in Firefox (or only appearing on inital mount, then disappearing
@@ -269,41 +293,49 @@ export const VideoPlayer = React.forwardRef(
    * https://github.com/CookPete/react-player/issues/490
    */
     function reAddTrack() {
-      const video = document.querySelector('video');
+      const video = document.querySelector("video");
 
       if (video) {
-        const oldTracks = video.querySelectorAll('track');
+        const oldTracks = video.querySelectorAll("track");
         oldTracks.forEach(oldTrack => {
           video.removeChild(oldTrack);
         });
       }
 
       if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
-      // eslint-disable-next-line array-callback-return
+        // eslint-disable-next-line array-callback-return
         playerConfig.file.tracks.map((t, trackIdx) => {
-          const track = document.createElement('track');
+          const track = document.createElement("track");
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.kind = t.kind!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.label = t.label!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.srclang = t.srcLang!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.default = t.default!;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.src = t.src!;
-          track.track.mode = 'showing'    // Because the load callback may sometimes not execute properly
-          track.addEventListener('error', (_e: Event) => {
-            console.warn(`Cannot load track ${t.src!}`)
+          track.track.mode = "showing";    // Because the load callback may sometimes not execute properly
+          track.addEventListener("error", (_e: Event) => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            console.warn(`Cannot load track ${t.src!}`);
           });
-          track.addEventListener('load', (e: Event) => {
+          track.addEventListener("load", (e: Event) => {
             const textTrack = e.currentTarget as HTMLTrackElement;
             if (textTrack) {
               if (t.default === true) {
-                textTrack.track.mode = 'showing';
-              video!.textTracks[trackIdx].mode = 'showing'; // thanks Firefox
+                textTrack.track.mode = "showing";
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                video!.textTracks[trackIdx].mode = "showing"; // thanks Firefox
               } else {
-                textTrack.track.mode = 'hidden';
-              video!.textTracks[trackIdx].mode = 'hidden'; // thanks Firefox
+                textTrack.track.mode = "hidden";
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                video!.textTracks[trackIdx].mode = "hidden"; // thanks Firefox
               }
             }
           });
-          const video = document.querySelector('video');
+          const video = document.querySelector("video");
           if (video) {
             video.appendChild(track);
           }
@@ -313,38 +345,41 @@ export const VideoPlayer = React.forwardRef(
 
     // External functions
     useImperativeHandle(forwardRefThing, () => ({
-    // Renders the current frame in the video element to a canvas
-    // Returns the data url
+      // Renders the current frame in the video element to a canvas
+      // Returns the data url
       captureVideo() {
-        const video = ref.current?.getInternalPlayer() as HTMLVideoElement
+        const video = ref.current?.getInternalPlayer() as HTMLVideoElement;
         const canvas = document.createElement("canvas");
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         const canvasContext = canvas.getContext("2d");
         if (canvasContext !== null) {
           canvasContext.drawImage(video, 0, 0);
-          return canvas.toDataURL('image/png')
+          return canvas.toDataURL("image/png");
         }
-      }
+      },
+      getWidth() {
+        return (ref.current?.getInternalPlayer() as HTMLVideoElement).clientWidth;
+      },
     }));
 
     const errorBoxStyle = css({
-      ...(!errorState) && {display: "none"},
+      ...(!errorState) && { display: "none" },
       borderColor: `${theme.error}`,
-      borderStyle: 'dashed',
-      fontWeight: 'bold',
-      padding: '10px',
-    })
+      borderStyle: "dashed",
+      fontWeight: "bold",
+      padding: "10px",
+    });
 
     const reactPlayerStyle = css({
-      aspectRatio: '16 / 9',    // Hard-coded for now because there are problems with updating this value at runtime
+      aspectRatio: "16 / 9",    // Hard-coded for now because there are problems with updating this value at runtime
 
-      overflow: 'hidden', // Required for borderRadius to show
-      ...(first) && {borderTopLeftRadius: '5px'},
-      ...(first) && {borderBottomLeftRadius: '5px'},
-      ...(last) && {borderTopRightRadius: '5px'},
-      ...(last) && {borderBottomRightRadius: '5px'},
-    })
+      overflow: "hidden", // Required for borderRadius to show
+      ...(first) && { borderTopLeftRadius: "5px" },
+      ...(first) && { borderBottomLeftRadius: "5px" },
+      ...(last) && { borderTopRightRadius: "5px" },
+      ...(last) && { borderBottomRightRadius: "5px" },
+    });
 
     const render = () => {
       if (!errorState) {
@@ -375,7 +410,7 @@ export const VideoPlayer = React.forwardRef(
           </div>
         );
       }
-    }
+    };
 
     return (
       <>
@@ -383,14 +418,14 @@ export const VideoPlayer = React.forwardRef(
       </>
     );
 
-  // return (
-  //   <div title="Video Player">
-  //     <video width="320" height="240" controls ref={vidRef}>
-  //     <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4" type="video/mp4" />
-  //     Your browser does not support the video tag.
-  //     </video>
-  //   </div>
-  // );
+    // return (
+    //   <div title="Video Player">
+    //     <video width="320" height="240" controls ref={vidRef}>
+    //     <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190616234019/Canvas.move_.mp4" type="video/mp4" />
+    //     Your browser does not support the video tag.
+    //     </video>
+    //   </div>
+    // );
   });
 
-export default VideoPlayers
+export default VideoPlayers;

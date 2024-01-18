@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 import { useTheme } from "../themes";
-import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
+import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
 
 export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
 
   const theme = useTheme();
 
-  const positionRef = React.useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const positionRef = React.useRef<{ x: number; y: number; }>({ x: 0, y: 0 });
   const areaRef = React.useRef<HTMLDivElement>(null);
 
   return (
@@ -29,7 +29,7 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
           getBoundingClientRect: () => {
             return new DOMRect(
               positionRef.current.x,
-              areaRef.current!.getBoundingClientRect().y,
+              areaRef.current?.getBoundingClientRect().y,
               0,
               positionRef.current.y,
             );
@@ -41,20 +41,20 @@ export const ThemedTooltip = ({ className, ...props }: TooltipProps) => {
         tooltip: {
           sx: {
             backgroundColor: `${theme.tooltip}`,
-            outline: '2px solid transparent',
+            outline: "2px solid transparent",
             color: `${theme.tooltip_text}`,
-            fontSize: '16px',
-            lineHeight: 'normal',
-            fontFamily: 'Roboto Flex Variable',
-          }
+            fontSize: "16px",
+            lineHeight: "normal",
+            fontFamily: "Roboto Flex Variable",
+          },
         },
         arrow: {
           sx: {
             color: `${theme.tooltip}`,
-          }
-        }
+          },
+        },
       }}
 
     />
   );
-}
+};

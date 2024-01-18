@@ -1,12 +1,12 @@
-import { nanoid } from '@reduxjs/toolkit';
-import { WebVTTParser, WebVTTSerializer } from 'webvtt-parser';
-import { ExtendedSubtitleCue, SubtitleCue } from '../types';
-import { useEffect, useRef } from 'react';
+import { nanoid } from "@reduxjs/toolkit";
+import { WebVTTParser, WebVTTSerializer } from "webvtt-parser";
+import { ExtendedSubtitleCue, SubtitleCue } from "../types";
+import { useEffect, useRef } from "react";
 
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
-  const decimalFactor = Math.pow(10, decimalPlace)
-  return Math.round((num + Number.EPSILON) * decimalFactor) / decimalFactor
-}
+  const decimalFactor = Math.pow(10, decimalPlace);
+  return Math.round((num + Number.EPSILON) * decimalFactor) / decimalFactor;
+};
 
 
 // Returns a promise that resolves after `ms` milliseconds.
@@ -15,23 +15,23 @@ export const sleep = (ms: number) => new Promise((resolve, _reject) => setTimeou
 
 // Get an understandable time string for ARIA
 export const convertMsToReadableString = (ms: number): string => {
-  const hours = new Date((ms ? ms : 0)).toISOString().substr(11, 2)
-  const minutes = new Date((ms ? ms : 0)).toISOString().substr(14, 2)
-  const seconds = new Date((ms ? ms : 0)).toISOString().substr(17, 2)
+  const hours = new Date((ms ? ms : 0)).toISOString().substr(11, 2);
+  const minutes = new Date((ms ? ms : 0)).toISOString().substr(14, 2);
+  const seconds = new Date((ms ? ms : 0)).toISOString().substr(17, 2);
 
-  const result = []
-  if (parseInt(hours) > 0) { result.push(hours + " hours, ") }
-  if (parseInt(minutes) > 0 || parseInt(hours) > 0) { result.push(minutes + " minutes, ") }
-  result.push(seconds + " seconds")
+  const result = [];
+  if (parseInt(hours) > 0) { result.push(hours + " hours, "); }
+  if (parseInt(minutes) > 0 || parseInt(hours) > 0) { result.push(minutes + " minutes, "); }
+  result.push(seconds + " seconds");
 
-  return result.join("")
-}
+  return result.join("");
+};
 
 /**
  * Parses JSON. Returns [err, result]
  * @param str string that should be parsed
  */
-export function safeJsonParse(str : string) {
+export function safeJsonParse(str: string) {
   try {
     return [null, JSON.parse(str)];
   } catch (err) {
@@ -48,32 +48,32 @@ let flexGapIsSupported: boolean | undefined;
 export function checkFlexGapSupport() {
   // Use the cached value if it has been defined
   if (flexGapIsSupported !== undefined) {
-    return flexGapIsSupported
+    return flexGapIsSupported;
   }
 
   // Create a flex container with row-gap set
-  const flex = document.createElement('div')
-  flex.style.display = 'flex'
-  flex.style.flexDirection = 'column'
-  flex.style.rowGap = '1px'
-  flex.style.position = 'absolute'
+  const flex = document.createElement("div");
+  flex.style.display = "flex";
+  flex.style.flexDirection = "column";
+  flex.style.rowGap = "1px";
+  flex.style.position = "absolute";
 
   // Create two, elements inside it
-  flex.appendChild(document.createElement('div'))
-  flex.appendChild(document.createElement('div'))
+  flex.appendChild(document.createElement("div"));
+  flex.appendChild(document.createElement("div"));
 
   // Append to the DOM (needed to obtain scrollHeight)
-  document.body.appendChild(flex)
+  document.body.appendChild(flex);
 
   // Flex container should be 1px high due to the row-gap
-  flexGapIsSupported = flex.scrollHeight === 1
+  flexGapIsSupported = flex.scrollHeight === 1;
 
   // Remove element from the DOM after you are done with it
   if (flex.parentNode) {
-    flex.parentNode.removeChild(flex)
+    flex.parentNode.removeChild(flex);
   }
 
-  return flexGapIsSupported
+  return flexGapIsSupported;
 }
 
 /**
@@ -83,14 +83,14 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
   const seri = new WebVTTSerializer();
 
   // Fix cues to work with serialize
-  let cueIndex = 0
+  let cueIndex = 0;
   const cues = [...subtitle];
   for (let cue of subtitle) {
-    cue = {...cue}
-    cue.startTime = cue.startTime / 1000
-    cue.endTime = cue.endTime / 1000
+    cue = { ...cue };
+    cue.startTime = cue.startTime / 1000;
+    cue.endTime = cue.endTime / 1000;
 
-    const extendedCue : ExtendedSubtitleCue = {
+    const extendedCue: ExtendedSubtitleCue = {
       id: cue.id ? cue.id : undefined,
       idInternal: cue.idInternal,
       text: cue.text,
@@ -100,7 +100,7 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
 
       // The serializer has a bug where some of the attributes like alignment are written to the VTT file
       // as `alignment: undefined` if they are not set. This then causes illegal parsing exceptions with the
-      // parser. That's why we set some acceptable defaults here.
+      // parser. That"s why we set some acceptable defaults here.
       alignment: "center",
       direction: "horizontal",
       lineAlign: "start",
@@ -108,14 +108,14 @@ export function serializeSubtitle(subtitle: SubtitleCue[]) {
       positionAlign: "auto",
       size: 100,
       textPosition: "auto",
-    }
-    cue = extendedCue
+    };
+    cue = extendedCue;
 
-    cues[cueIndex] = cue
+    cues[cueIndex] = cue;
 
-    cueIndex++
+    cueIndex++;
   }
-  return seri.serialize(cues)
+  return seri.serialize(cues);
 }
 
 export function parseSubtitle(subtitle: string): SubtitleCue[] {
@@ -127,39 +127,39 @@ export function parseSubtitle(subtitle: string): SubtitleCue[] {
   // - Cons: Parses timestamps in seconds, Maybe not maintained anymore
   // https://github.com/gsantiago/subtitle.js
   // - Pros: Parses styles, can also parse SRT, actively maintained
-  // - Cons: Uses node streaming library, can't polyfill without ejecting CreateReactApp
+  // - Cons: Uses node streaming library, can"t polyfill without ejecting CreateReactApp
   // TODO: Parse caption
   const parser = new WebVTTParser();
-  const tree = parser.parse(subtitle, 'metadata');
+  const tree = parser.parse(subtitle, "metadata");
   if (tree.errors.length !== 0) {
 
-    // state.status = 'failed'
-    const errors = []
+    // state.status = "failed"
+    const errors = [];
     for (const er of tree.errors) {
-      errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message)
+      errors.push("On line: " + er.line + " col: " + er.col + " error occured: " + er.message);
     }
-    throw new Error(errors.join("\n"))
+    throw new Error(errors.join("\n"));
     // setError(state, action.payload.identifier, errors.join("\n"))
   }
 
   // Attach a unique id to each segment/cue
   // This is used by React to keep track of cues between changes (e.g. addition, deletion)
-  let index = 0
+  let index = 0;
   for (const cue of tree.cues) {
     if (!cue.id) {
-      cue.idInternal = nanoid()
-      tree.cues[index] = cue
+      cue.idInternal = nanoid();
+      tree.cues[index] = cue;
     }
 
     // Turn times into milliseconds
-    cue.startTime = cue.startTime * 1000
-    cue.endTime = cue.endTime * 1000
-    tree.cues[index] = cue
+    cue.startTime = cue.startTime * 1000;
+    cue.endTime = cue.endTime * 1000;
+    tree.cues[index] = cue;
 
-    index++
+    index++;
   }
 
-  return tree.cues
+  return tree.cues;
 }
 
 /**
@@ -170,39 +170,39 @@ export function parseSubtitle(subtitle: string): SubtitleCue[] {
  */
 export function languageCodeToName(lang: string | undefined): string | undefined {
   if (!lang) {
-    return undefined
+    return undefined;
   }
   const browserLang = window.navigator.language;
   const languageNames = new Intl.DisplayNames(browserLang, { type: "language" });
   try {
     return languageNames.of(lang.trim());
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
-    return undefined
+    return undefined;
   }
 }
 
 // Runs a callback every delay milliseconds
 // Pass delay = null to stop
 // Based off: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-type IntervalFunction = () => (unknown | void)
+type IntervalFunction = () => (unknown | void);
 export function useInterval(callback: IntervalFunction, delay: number | null) {
 
-  const savedCallback = useRef<IntervalFunction | null>(null)
+  const savedCallback = useRef<IntervalFunction | null>(null);
 
   useEffect(() => {
-    savedCallback.current = callback
-  })
+    savedCallback.current = callback;
+  });
 
   useEffect(() => {
     function tick() {
       if (savedCallback.current !== null) {
-        savedCallback.current()
+        savedCallback.current();
       }
     }
     if (delay !== null) {
-      const id = setInterval(tick, delay)
-      return () => { clearInterval(id) }
+      const id = setInterval(tick, delay);
+      return () => { clearInterval(id); };
     }
   }, [callback, delay]);
 }
@@ -210,7 +210,7 @@ export function useInterval(callback: IntervalFunction, delay: number | null) {
 // Returns true if the given index is out of bounds on the given array
 export function outOfBounds(array: any[], index: number) {
   if (index >= array.length) {
-    return true
+    return true;
   }
-  return false
+  return false;
 }

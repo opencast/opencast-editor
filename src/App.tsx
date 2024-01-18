@@ -1,6 +1,6 @@
-import Body from './main/Body';
-import Header from './main/Header';
-import { GlobalStyle } from './cssStyles';
+import Body from "./main/Body";
+import Header from "./main/Header";
+import { GlobalStyle } from "./cssStyles";
 
 function App() {
   return (
