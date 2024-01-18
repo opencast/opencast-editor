@@ -3,33 +3,33 @@ import { ParseKeys } from "i18next";
 
 import React from "react";
 
-import { useTranslation, Trans} from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { flexGapReplacementStyle } from "../cssStyles";
 import { getGroupName, KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTheme } from "../themes";
-import { titleStyle, titleStyleBold } from '../cssStyles'
+import { titleStyle, titleStyleBold } from "../cssStyles";
 
-const Group: React.FC<{name: ParseKeys, entries: { [key: string]: string[][] }}> = ({name, entries}) => {
+const Group: React.FC<{ name: ParseKeys, entries: { [key: string]: string[][]; }; }> = ({ name, entries }) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
 
   const groupStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
-    width: '460px',
-    maxWidth: '50vw',
+    display: "flex",
+    flexDirection: "column" as const,
+    width: "460px",
+    maxWidth: "50vw",
 
     background: `${theme.menu_background}`,
-    borderRadius: '5px',
+    borderRadius: "5px",
     boxShadow: `${theme.boxShadow_tiles}`,
     boxSizing: "border-box",
-    padding: '0px 20px 20px 20px',
+    padding: "0px 20px 20px 20px",
   });
 
   const headingStyle = css({
     color: `${theme.text}`,
-  })
+  });
 
   return (
     <div css={groupStyle}>
@@ -38,53 +38,53 @@ const Group: React.FC<{name: ParseKeys, entries: { [key: string]: string[][] }}>
         <Entry name={key} sequences={value} key={index} />
       )}
     </div>
-  )
-}
+  );
+};
 
-const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequences}) => {
+const Entry: React.FC<{ name: string, sequences: string[][]; }> = ({ name, sequences }) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
 
   const entryStyle = css({
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    justifyContent: 'left',
-    width: '100%',
-    padding: '10px 0px',
-    ...(flexGapReplacementStyle(10, true))
+    display: "flex",
+    flexFlow: "column nowrap",
+    justifyContent: "left",
+    width: "100%",
+    padding: "10px 0px",
+    ...(flexGapReplacementStyle(10, true)),
   });
 
   const labelStyle = css({
-    fontWeight: 'bold',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    wordWrap: 'break-word',
+    fontWeight: "bold",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    wordWrap: "break-word",
     color: `${theme.text}`,
-  })
+  });
 
   const sequenceStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    ...(flexGapReplacementStyle(10, true))
-  })
+    display: "flex",
+    flexDirection: "row",
+    ...(flexGapReplacementStyle(10, true)),
+  });
 
   const singleKeyStyle = css({
-    borderRadius: '4px',
-    borderWidth: '2px',
-    borderStyle: 'solid',
+    borderRadius: "4px",
+    borderWidth: "2px",
+    borderStyle: "solid",
     borderColor: `${theme.singleKey_border}`,
     background: `${theme.singleKey_bg}`,
     boxShadow: `${theme.singleKey_boxShadow}`,
-    padding: '10px',
+    padding: "10px",
     color: `${theme.text}`,
-  })
+  });
 
   const orStyle = css({
-    alignSelf: 'center',
-    fontSize: '20px',
-    fontWeight: 'bold',
-  })
+    alignSelf: "center",
+    fontSize: "20px",
+    fontWeight: "bold",
+  });
 
   return (
     <div css={entryStyle}>
@@ -101,55 +101,55 @@ const Entry: React.FC<{name: string, sequences: string[][] }> = ({name, sequence
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 
 const KeyboardControls: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useTheme()
+  const theme = useTheme();
 
   const groupsStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row" as const,
+    flexWrap: "wrap",
+    justifyContent: "center",
     ...(flexGapReplacementStyle(30, true)),
-  })
+  });
 
   const render = () => {
     if (KEYMAP && Object.keys(KEYMAP).length > 0) {
 
       const groups: JSX.Element[] = [];
       Object.entries(KEYMAP).forEach(([groupName, group], index) => {
-        const entries : { [groupName: string]: string[][] } = {}
+        const entries: { [groupName: string]: string[][]; } = {};
         Object.entries(group).forEach(([, action]) => {
-          const sequences = action.key.split(",").map(item => item.trim())
-          const sequenceCombinationkey = action.combinationKey ? action.combinationKey : "+"
+          const sequences = action.key.split(",").map(item => item.trim());
+          const sequenceCombinationkey = action.combinationKey ? action.combinationKey : "+";
           entries[action.name] = Object.entries(sequences).map(([, sequence]) => {
-            return sequence.split(sequenceCombinationkey).map(item => rewriteKeys(item.trim()))
-          })
-        })
-        groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index}/>)
-      })
+            return sequence.split(sequenceCombinationkey).map(item => rewriteKeys(item.trim()));
+          });
+        });
+        groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index}/>);
+      });
 
       return (
         <div css={groupsStyle}>
           {groups}
         </div>
-      )
+      );
     }
 
     // No groups fallback
-    return <div>{t("keyboardControls.genericError")}</div>
-  }
+    return <div>{t("keyboardControls.genericError")}</div>;
+  };
 
   const keyboardControlsStyle = css({
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    width: '100%',
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
+    width: "100%",
   });
 
   return (

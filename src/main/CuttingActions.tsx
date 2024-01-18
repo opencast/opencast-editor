@@ -1,22 +1,22 @@
 import React from "react";
 
-import { basicButtonStyle, customIconStyle } from '../cssStyles'
+import { basicButtonStyle, customIconStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
-import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal} from "react-icons/lu";
-import { ReactComponent as TrashRestore } from '../img/trash-restore.svg';
+import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal } from "react-icons/lu";
+import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
 
-import { css } from '@emotion/react'
+import { css } from "@emotion/react";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll, setTimelineZoom,
-  timelineZoomIn, timelineZoomOut
-} from '../redux/videoSlice'
+  timelineZoomIn, timelineZoomOut,
+} from "../redux/videoSlice";
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { Slider } from "@mui/material";
@@ -30,7 +30,7 @@ const CuttingActions: React.FC = () => {
   const { t } = useTranslation();
 
   // Init redux variables
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   /**
    * General action callback for cutting actions
@@ -45,45 +45,78 @@ const CuttingActions: React.FC = () => {
     ref?: React.RefObject<HTMLDivElement>
   ) => {
     if (action) {
-      dispatch(action())
+      dispatch(action());
     }
     if (actionWithPayload) {
-      dispatch(actionWithPayload(payload))
+      dispatch(actionWithPayload(payload));
     }
 
     // Lose focus if clicked by mouse
     if (ref) {
-      ref.current?.blur()
+      ref.current?.blur();
     }
-  }
+  };
 
   // Maps functions to hotkeys
-  useHotkeys(KEYMAP.cutting.cut.key, () => dispatchAction(cut, undefined, undefined), {preventDefault: true}, [cut]);
-  useHotkeys(KEYMAP.cutting.delete.key, () => dispatchAction(markAsDeletedOrAlive, undefined, undefined), {preventDefault: true}, [markAsDeletedOrAlive]);
-  useHotkeys(KEYMAP.cutting.mergeLeft.key, () => dispatchAction(mergeLeft, undefined, undefined), {preventDefault: true}, [mergeLeft]);
-  useHotkeys(KEYMAP.cutting.mergeRight.key, () => dispatchAction(mergeRight, undefined, undefined), {preventDefault: true}, [mergeRight]);
-  useHotkeys(KEYMAP.cutting.zoomIn.key, () => dispatchAction(timelineZoomIn, undefined, undefined), {preventDefault: true, combinationKey: KEYMAP.cutting.zoomIn.combinationKey}, [timelineZoomIn]);
-  useHotkeys(KEYMAP.cutting.zoomOut.key, () => dispatchAction(timelineZoomOut, undefined, undefined), {preventDefault: true}, [timelineZoomOut]);
-
+  useHotkeys(
+    KEYMAP.cutting.cut.key,
+    () => dispatchAction(cut, undefined, undefined),
+    { preventDefault: true },
+    [cut]
+  );
+  useHotkeys(
+    KEYMAP.cutting.delete.key,
+    () => dispatchAction(markAsDeletedOrAlive, undefined, undefined),
+    { preventDefault: true },
+    [markAsDeletedOrAlive]
+  );
+  useHotkeys(
+    KEYMAP.cutting.mergeLeft.key,
+    () => dispatchAction(mergeLeft, undefined, undefined),
+    { preventDefault: true },
+    [mergeLeft]
+  );
+  useHotkeys(
+    KEYMAP.cutting.mergeRight.key,
+    () => dispatchAction(mergeRight, undefined, undefined),
+    { preventDefault: true },
+    [mergeRight]
+  );
+  useHotkeys(
+    KEYMAP.cutting.zoomIn.key,
+    () => dispatchAction(timelineZoomIn, undefined, undefined),
+    { preventDefault: true, combinationKey: KEYMAP.cutting.zoomIn.combinationKey },
+    [timelineZoomIn]
+  );
+  useHotkeys(
+    KEYMAP.cutting.zoomOut.key,
+    () => dispatchAction(timelineZoomOut, undefined, undefined),
+    { preventDefault: true },
+    [timelineZoomOut]
+  );
 
   const cuttingStyle = css({
-    display: 'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-  })
+    display: "flex",
+    flexDirection: "row" as const,
+    justifyContent: "center",
+    alignItems: "center",
+  });
 
   const verticalLineStyle = css({
-    borderLeft: '2px solid #DDD;',
-    height: '32px',
-  })
+    borderLeft: "2px solid #DDD;",
+    height: "32px",
+  });
 
   return (
     <div css={cuttingStyle}>
       <CuttingActionsButton Icon={LuScissors}
-        actionName={t("cuttingActions.cut-button")} actionHandler={dispatchAction} action={cut} actionWithPayload={undefined} payload={undefined}
-        tooltip={t('cuttingActions.cut-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
-        ariaLabelText={t('cuttingActions.cut-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
+        actionName={t("cuttingActions.cut-button")}
+        actionHandler={dispatchAction}
+        action={cut}
+        actionWithPayload={undefined}
+        payload={undefined}
+        tooltip={t("cuttingActions.cut-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
+        ariaLabelText={t("cuttingActions.cut-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
       />
       <div css={verticalLineStyle} />
       <MarkAsDeletedButton actionHandler={dispatchAction} action={markAsDeletedOrAlive}
@@ -91,21 +124,37 @@ const CuttingActions: React.FC = () => {
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuChevronLeft}
-        actionName={t("cuttingActions.mergeLeft-button")} actionHandler={dispatchAction} action={mergeLeft} actionWithPayload={undefined} payload={undefined}
-        tooltip={t('cuttingActions.mergeLeft-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
-        ariaLabelText={t('cuttingActions.mergeLeft-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
+        actionName={t("cuttingActions.mergeLeft-button")}
+        actionHandler={dispatchAction}
+        action={mergeLeft}
+        actionWithPayload={undefined}
+        payload={undefined}
+        tooltip={t("cuttingActions.mergeLeft-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
+        ariaLabelText={
+          t("cuttingActions.mergeLeft-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })
+        }
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuChevronRight}
-        actionName={t("cuttingActions.mergeRight-button")} actionHandler={dispatchAction} action={mergeRight} actionWithPayload={undefined} payload={undefined}
-        tooltip={t('cuttingActions.mergeRight-tooltip', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key)})}
-        ariaLabelText={t('cuttingActions.mergeRight-tooltip-aria', { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
+        actionName={t("cuttingActions.mergeRight-button")}
+        actionHandler={dispatchAction}
+        action={mergeRight}
+        actionWithPayload={undefined}
+        payload={undefined}
+        tooltip={t("cuttingActions.mergeRight-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
+        ariaLabelText={
+          t("cuttingActions.mergeRight-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })
+        }
       />
       <div css={verticalLineStyle} />
       <CuttingActionsButton Icon={LuMoveHorizontal}
-        actionName={t("cuttingActions.merge-all-button")} actionHandler={dispatchAction} action={mergeAll} actionWithPayload={undefined} payload={undefined}
-        tooltip={t('cuttingActions.merge-all-tooltip')}
-        ariaLabelText={t('cuttingActions.merge-all-tooltip-aria')}
+        actionName={t("cuttingActions.merge-all-button")}
+        actionHandler={dispatchAction}
+        action={mergeAll}
+        actionWithPayload={undefined}
+        payload={undefined}
+        tooltip={t("cuttingActions.merge-all-tooltip")}
+        ariaLabelText={t("cuttingActions.merge-all-tooltip-aria")}
       />
       <div css={verticalLineStyle} />
       <ZoomSlider actionHandler={dispatchAction}/>
@@ -125,7 +174,7 @@ const CuttingActions: React.FC = () => {
  * CSS for cutting buttons
  */
 const cuttingActionButtonStyle = css({
-  padding: '16px',
+  padding: "16px",
   // boxShadow: `${theme.boxShadow}`,
   // background: `${theme.element_bg}`
 });
@@ -150,8 +199,17 @@ interface cuttingActionsButtonInterface {
  * A button representing a single action a user can take while cutting
  * @param param0
  */
-const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, actionName, actionHandler, action, actionWithPayload, payload, tooltip, ariaLabelText}) => {
-  const ref = React.useRef<HTMLDivElement>(null)
+const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
+  Icon,
+  actionName,
+  actionHandler,
+  action,
+  actionWithPayload,
+  payload,
+  tooltip,
+  ariaLabelText,
+}) => {
+  const ref = React.useRef<HTMLDivElement>(null);
   const theme = useTheme();
 
   return (
@@ -160,9 +218,11 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({Icon, ac
         ref={ref}
         role="button" tabIndex={0} aria-label={ariaLabelText}
         onClick={() => actionHandler(action, actionWithPayload, payload, ref)}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          actionHandler(action, actionWithPayload, payload)
-        } }}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === " " || event.key === "Enter") {
+            actionHandler(action, actionWithPayload, payload);
+          }
+        }}
       >
         <Icon />
         <span>{actionName}</span>
@@ -185,30 +245,36 @@ interface markAsDeleteButtonInterface {
 /**
  * Button that changes its function based on context
  */
-const MarkAsDeletedButton : React.FC<markAsDeleteButtonInterface> = ({actionHandler, action, hotKeyName}) => {
+const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
+  actionHandler,
+  action,
+  hotKeyName,
+}) => {
   const { t } = useTranslation();
-  const isCurrentSegmentAlive = useSelector(selectIsCurrentSegmentAlive)
-  const ref = React.useRef<HTMLDivElement>(null)
+  const isCurrentSegmentAlive = useAppSelector(selectIsCurrentSegmentAlive);
+  const ref = React.useRef<HTMLDivElement>(null);
 
   const theme = useTheme();
 
   return (
-    <ThemedTooltip title={t('cuttingActions.delete-restore-tooltip', { hotkeyName: hotKeyName })}>
+    <ThemedTooltip title={t("cuttingActions.delete-restore-tooltip", { hotkeyName: hotKeyName })}>
       <div css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
         ref={ref}
         role="button" tabIndex={0}
-        aria-label={t('cuttingActions.delete-restore-tooltip-aria', { hotkeyName: hotKeyName })}
+        aria-label={t("cuttingActions.delete-restore-tooltip-aria", { hotkeyName: hotKeyName })}
         onClick={() => actionHandler(action, undefined, undefined, ref)}
-        onKeyDown={(event: React.KeyboardEvent) => { if (event.key === " " || event.key === "Enter") {
-          actionHandler(action, undefined, undefined)
-        } }}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === " " || event.key === "Enter") {
+            actionHandler(action, undefined, undefined);
+          }
+        }}
       >
-        {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} /> }
-        <div>{isCurrentSegmentAlive ? t('cuttingActions.delete-button') : t("cuttingActions.restore-button")}</div>
+        {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} />}
+        <div>{isCurrentSegmentAlive ? t("cuttingActions.delete-button") : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>
   );
-}
+};
 
 interface ZoomSliderInterface {
   actionHandler: (
@@ -219,7 +285,7 @@ interface ZoomSliderInterface {
   ) => void,
 }
 
-const ZoomSlider : React.FC<ZoomSliderInterface> = ({actionHandler}) => {
+const ZoomSlider : React.FC<ZoomSliderInterface> = ({ actionHandler }) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
@@ -227,22 +293,22 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({actionHandler}) => {
   // Callback for the zoom slider
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const zoomSliderOnChange = (event: Event, newValue: number | number[]) => {
-    actionHandler(undefined, setTimelineZoom, newValue, undefined)
-  }
+    actionHandler(undefined, setTimelineZoom, newValue, undefined);
+  };
 
   const zoomStyle = css({
-    display: 'flex',
-    flexDirection: 'row',
-    paddingLeft: '16px',
-    paddingRight: '16px',
-    gap: '15px',
-    justifyContent: 'center',
-    alignItems: 'center'
-  })
+    display: "flex",
+    flexDirection: "row",
+    paddingLeft: "16px",
+    paddingRight: "16px",
+    gap: "15px",
+    justifyContent: "center",
+    alignItems: "center",
+  });
 
 
   const sliderStyle = css({
-    width: '100px',
+    width: "100px",
     "& .MuiSlider-thumb": {
       color: `${theme.slider_thumb_color}`,
       "&:hover, &.Mui-focusVisible, &.Mui-active": {
@@ -255,7 +321,7 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({actionHandler}) => {
     "& .MuiSlider-track": {
       color: `${theme.slider_track_color}`,
     },
-  })
+  });
 
   return (
     <div css={zoomStyle}>
@@ -272,6 +338,6 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({actionHandler}) => {
       />
     </div>
   );
-}
+};
 
 export default CuttingActions;
