@@ -68,7 +68,7 @@ export function Waveform(opts) {
 
         _completeFuncs.push(fn);
       }
-    }
+    },
   });
 
   var _error = "";
@@ -86,7 +86,7 @@ export function Waveform(opts) {
       }
 
       _errorFuncs.push(fn);
-    }
+    },
   });
 }
 
@@ -192,5 +192,5 @@ Waveform.prototype = {
     this.svgPath.setAttribute("stroke-width", "0.5px");
 
     this.oncomplete.forEach(fn => fn(this.svgPath, this.svgLength));
-  }
+  },
 };

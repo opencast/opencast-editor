@@ -37,7 +37,7 @@ export const errorSlice = createSlice({
       state.errorDetails = action.payload.errorDetails;
       state.errorIcon = action.payload.errorIcon;
     },
-  }
+  },
 });
 
 export const { setError } = errorSlice.actions;

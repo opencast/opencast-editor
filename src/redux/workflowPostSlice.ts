@@ -19,7 +19,7 @@ export const postVideoInformation =
       {
         segments: convertSegments(argument.segments),
         tracks: argument.tracks,
-        subtitles: argument.subtitles
+        subtitles: argument.subtitles,
       }
     );
     return response;
@@ -35,7 +35,7 @@ const workflowPostSlice = createSlice({
   reducers: {
     resetPostRequestState: state => {
       state.status = "idle";
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(
@@ -51,7 +51,7 @@ const workflowPostSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       });
-  }
+  },
 });
 
 interface segmentAPI {

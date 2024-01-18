@@ -16,7 +16,7 @@ import {
   deactivatedButtonStyle,
   flexGapReplacementStyle,
   titleStyle,
-  titleStyleBold
+  titleStyleBold,
 } from "../cssStyles";
 
 import { useTranslation } from "react-i18next";
@@ -138,12 +138,12 @@ const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, e
   const deleteText = [
     t("trackSelection.deleteTrackText", "Delete Track"),
     t("trackSelection.cannotDeleteTrackText", "Cannot Delete Track"),
-    t("trackSelection.restoreTrackText", "Restore Track")
+    t("trackSelection.restoreTrackText", "Restore Track"),
   ][deleteStatus];
   const deleteTooltip = [
     t("trackSelection.deleteTrackTooltip", "Do not encode and publish this track."),
     t("trackSelection.cannotDeleteTrackTooltip", "Cannot remove this track from publication."),
-    t("trackSelection.restoreTrackTooltip", "Encode and publish this track.")
+    t("trackSelection.restoreTrackTooltip", "Encode and publish this track."),
   ][deleteStatus];
   const deleteIcon = [LuTrash, LuTrash, TrashRestore][deleteStatus];
   const trackEnabledChange = () => {

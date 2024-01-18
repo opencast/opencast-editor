@@ -34,7 +34,7 @@ function Header() {
   const headerStyleThemed = scheme.includes("high-contrast-")
     ? css({
       height: "62px",
-      borderBottom: "2px solid white"
+      borderBottom: "2px solid white",
     })
     : css({
       height: "64px",
@@ -65,7 +65,7 @@ function Header() {
     ":hover, :active": {
       outline: `2px solid ${theme.metadata_highlight}`,
       backgroundColor: theme.header_button_hover_bg,
-      color: `${theme.header_text}`
+      color: `${theme.header_text}`,
     },
   });
 
@@ -137,7 +137,7 @@ const LanguageButton: React.FC = () => {
 
   const languageNames = (language: string) => {
     return new Intl.DisplayNames([language], {
-      type: "language"
+      type: "language",
     }).of(language);
   };
 
@@ -227,16 +227,16 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
       ":hover, :active": {
         outline: `2px solid ${theme.metadata_highlight}`,
         backgroundColor: theme.header_button_hover_bg,
-        color: `${theme.header_text}`
+        color: `${theme.header_text}`,
       },
       ":focus": {
         backgroundColor: "inherit",
-        color: `${theme.header_text}`
+        color: `${theme.header_text}`,
       },
       ":focus:hover": {
         backgroundColor: theme.header_button_hover_bg,
-        color: `${theme.header_text}`
-      }
+        color: `${theme.header_text}`,
+      },
     });
 
     const iconStyle = css({

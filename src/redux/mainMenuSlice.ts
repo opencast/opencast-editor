@@ -19,8 +19,8 @@ export const mainMenuSlice = createSlice({
   reducers: {
     setState: (state, action: PayloadAction<mainMenu["value"]>) => {
       state.value = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setState } = mainMenuSlice.actions;

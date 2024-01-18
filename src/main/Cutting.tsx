@@ -15,7 +15,7 @@ import {
   setIsPlaying,
   setIsMuted,
   setVolume,
-  setIsPlayPreview
+  setIsPlayPreview,
 } from "../redux/videoSlice";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
@@ -54,13 +54,13 @@ const Cutting: React.FC = () => {
           error: true,
           errorTitle: t("error.workflowActive-errorTitle"),
           errorMessage: t("error.workflowActive-errorMessage"),
-          errorIcon: LuMoreHorizontal
+          errorIcon: LuMoreHorizontal,
         }));
       } else {
         dispatch(setError({
           error: true,
           errorMessage: t("video.comError-text"),
-          errorDetails: error
+          errorDetails: error,
         }));
       }
     } else if (videoURLStatus === "success") {
@@ -68,7 +68,7 @@ const Cutting: React.FC = () => {
         dispatch(setError({
           error: true,
           errorMessage: t("video.durationError-text"),
-          errorDetails: error
+          errorDetails: error,
         }));
       }
     }

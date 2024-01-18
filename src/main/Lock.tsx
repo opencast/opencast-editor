@@ -27,8 +27,8 @@ const Lock: React.FC = () => {
     const form = `user=${lock.user}&uuid=${lock.uuid}`;
     client.post(endpoint, form, {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-      }
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
     })
       .then(() => dispatch(setLock(true)))
       .catch((error: string) => {
@@ -38,7 +38,7 @@ const Lock: React.FC = () => {
           errorDetails: error,
           errorIcon: LuLock,
           errorTitle: "Video editing locked",
-          errorMessage: "This video is currently being edited by another user"
+          errorMessage: "This video is currently being edited by another user",
         }));
       });
   }

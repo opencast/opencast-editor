@@ -47,7 +47,7 @@ const VideoControls: React.FC<{
   setIsPlaying,
   setIsMuted,
   setVolume,
-  setIsPlayPreview
+  setIsPlayPreview,
 }) => {
 
   const theme = useTheme();
@@ -97,7 +97,7 @@ const PreviewMode: React.FC<{
   setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
 }> = ({
   selectIsPlayPreview,
-  setIsPlayPreview
+  setIsPlayPreview,
 }) => {
 
   const { t } = useTranslation();
@@ -142,14 +142,14 @@ const PreviewMode: React.FC<{
   const previewModeTextStyle = (theme: Theme) => css({
     display: "inline-block",
     flexWrap: "nowrap",
-    color: `${theme.text}`
+    color: `${theme.text}`,
   });
 
   return (
     <ThemedTooltip
       title={t("video.previewButton-tooltip", {
         status: (isPlayPreview ? "on" : "off"),
-        hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key)
+        hotkeyName: rewriteKeys(KEYMAP.videoPlayer.preview.key),
       })}
     >
       <div css={previewModeStyle}
@@ -252,7 +252,7 @@ const TimeDisplay: React.FC<{
 
   const timeTextStyle = (theme: Theme) => css({
     display: "inline-block",
-    color: `${theme.text}`
+    color: `${theme.text}`,
   });
 
   return (
@@ -283,7 +283,7 @@ const VolumeSlider: React.FC<{
   selectIsMuted,
   setIsMuted,
   selectVolume,
-  setVolume
+  setVolume,
 }) => {
 
   const { t } = useTranslation();
@@ -328,7 +328,7 @@ const VolumeSlider: React.FC<{
     flexDirection: "row",
     gap: "15px",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   });
 
   const sliderStyle = css({

@@ -13,7 +13,7 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   let authHeaders = {};
   if (settings.opencast.name && settings.opencast.password) {
     const encoded = btoa(unescape(encodeURIComponent(
-      settings.opencast.name + ":" + settings.opencast.password
+      settings.opencast.name + ":" + settings.opencast.password,
     )));
     authHeaders = { "Authorization": `Basic ${encoded}` };
   }
@@ -55,7 +55,7 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   } catch (err) {
     return Promise.reject(response.status ?
       "Status " + response.status + ": " + text :
-      err.message
+      err.message,
     );
   }
 }

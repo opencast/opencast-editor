@@ -7,9 +7,6 @@ module.exports = {
     // "always" gives 319 warning, "never" gives 991.
     "object-curly-spacing": "off",
 
-    // Many multiline lists do not have a trailing comma right now
-    "comma-dangle": ["warn", "only-multiline"],
-
     // Currently 120 warnings.
     "@typescript-eslint/no-explicit-any": "off",
 

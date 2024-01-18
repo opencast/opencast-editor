@@ -160,7 +160,7 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
       <Icon css={iconCustomCSS ? iconCustomCSS : {
         fontSize: 36,
         width: "36px",
-        height: "auto"
+        height: "auto",
       }} />
       {bottomText && <div>{bottomText}</div>}
     </li>

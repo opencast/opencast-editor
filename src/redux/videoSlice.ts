@@ -181,13 +181,13 @@ const videoSlice = createSlice({
         id: nanoid(),
         start: state.segments[state.activeSegmentIndex].start,
         end: state.currentlyAt,
-        deleted: state.segments[state.activeSegmentIndex].deleted
+        deleted: state.segments[state.activeSegmentIndex].deleted,
       };
       const segmentB: Segment = {
         id: nanoid(),
         start: state.currentlyAt,
         end: state.segments[state.activeSegmentIndex].end,
-        deleted: state.segments[state.activeSegmentIndex].deleted
+        deleted: state.segments[state.activeSegmentIndex].deleted,
       };
 
       // Add the new segments and remove the old one
@@ -267,7 +267,7 @@ const videoSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       });
-  }
+  },
 });
 
 /**

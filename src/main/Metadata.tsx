@@ -15,7 +15,7 @@ import {
   selectGetStatus,
   selectPostError,
   selectPostStatus,
-  setFieldReadonly
+  setFieldReadonly,
 } from "../redux/metadataSlice";
 
 import { Form, Field, FieldInputProps } from "react-final-form";
@@ -77,7 +77,7 @@ const Metadata: React.FC = () => {
                   if ("readonly" in configureFieldsCatalog[catalog.fields[fieldIndex].id]) {
                     dispatch(setFieldReadonly({
                       catalogIndex: catalogIndex, fieldIndex: fieldIndex,
-                      value: configureFieldsCatalog[catalog.fields[fieldIndex].id].readonly
+                      value: configureFieldsCatalog[catalog.fields[fieldIndex].id].readonly,
                     }));
                   }
                 }
@@ -354,7 +354,7 @@ const Metadata: React.FC = () => {
         // Update the field in the redux catalog
         dispatch(setFieldValue({
           catalogIndex: catalogIndex, fieldIndex: fieldIndex,
-          value: parseValue(catalogs[catalogIndex].fields[fieldIndex], value)
+          value: parseValue(catalogs[catalogIndex].fields[fieldIndex], value),
         }));
         break;
       }
@@ -436,7 +436,7 @@ const Metadata: React.FC = () => {
             // Update the field in the redux catalog
             dispatch(setFieldValue({
               catalogIndex: catalogIndex, fieldIndex: fieldIndex,
-              value: parseValue(catalogs[catalogIndex].fields[fieldIndex], values[formCatalogName][formFieldName])
+              value: parseValue(catalogs[catalogIndex].fields[fieldIndex], values[formCatalogName][formFieldName]),
             }));
             break;
           }
@@ -488,7 +488,7 @@ const Metadata: React.FC = () => {
         library.push({
           value: key,
           label: descLabel ? descLabel : value,
-          submitValue: value
+          submitValue: value,
         });
       });
       return library;
@@ -546,7 +546,7 @@ const Metadata: React.FC = () => {
             css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
               {
                 resize: "none",
-              }
+              },
             ]}
             data-testid="dateTimePicker"
           />
@@ -564,7 +564,7 @@ const Metadata: React.FC = () => {
             css={[fieldTypeStyle(field.readOnly), inputFieldTypeStyle(field.readOnly),
               {
                 resize: "none",
-              }
+              },
             ]}
           />
         </ThemeProvider>

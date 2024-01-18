@@ -104,7 +104,7 @@ const defaultSettings: iSettings = {
     languages: {},
     icons: undefined,
     defaultVideoFlavor: undefined,
-  }
+  },
 };
 let configFileSettings: iSettings;
 let urlParameterSettings: iSettings;
@@ -358,7 +358,7 @@ const types = {
         }
       }
     }
-  }
+  },
 };
 
 // Defines all potential settings and their types.
@@ -398,7 +398,7 @@ const SCHEMA = {
   thumbnail: {
     show: types.boolean,
     simpleMode: types.boolean,
-  }
+  },
 };
 
 const merge = (a: iSettings, b: iSettings) => {

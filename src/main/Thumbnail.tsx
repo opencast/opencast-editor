@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import { settings } from "../config";
 import {
   basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
-  backgroundBoxStyle
+  backgroundBoxStyle,
 } from "../cssStyles";
 import { Theme, useTheme } from "../themes";
 import {
@@ -16,7 +16,7 @@ import {
   selectTracks,
   setHasChanges,
   setThumbnail,
-  setThumbnails
+  setThumbnails,
 } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
@@ -31,7 +31,7 @@ import {
   setClickTriggered,
   setIsMuted,
   setVolume,
-  setCurrentlyAt
+  setCurrentlyAt,
 } from "../redux/videoSlice";
 import { ThemedTooltip } from "./Tooltip";
 import VideoPlayers from "./VideoPlayers";
@@ -659,8 +659,8 @@ const thumbnailButtonStyle = (active: boolean, theme: Theme) => [
     background: `${theme.element_bg}`,
     justifySelf: "center",
     alignSelf: "center",
-    padding: "0px 4px"
-  }
+    padding: "0px 4px",
+  },
 ];
 
 
