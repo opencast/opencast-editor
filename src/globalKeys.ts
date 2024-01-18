@@ -2,53 +2,53 @@
  * Contains mappings for special keyboard controls, beyond what is usually expected of a webpage
  * Learn more about keymaps at https://github.com/greena13/react-hotkeys#defining-key-maps (12.03.2021)
  *
- * Additional global configuration settins are placed in './config.ts'
+ * Additional global configuration settins are placed in "./config.ts"
  * (They are not placed here, because that somehow makes the name fields of keymaps undefined for some reason)
  *
  * If you add a new keyMap, be sure to add it to the getAllHotkeys function
  */
-import { match } from '@opencast/appkit';
-import { ParseKeys } from 'i18next';
-import { isMacOs } from 'react-device-detect';
+import { match } from "@opencast/appkit";
+import { ParseKeys } from "i18next";
+import { isMacOs } from "react-device-detect";
 
 // Groups for displaying hotkeys in the overview page
-const groupVideoPlayer = "keyboardControls.groupVideoPlayer"
-const groupCuttingView = 'keyboardControls.groupCuttingView'
-const groupCuttingViewScrubber = 'keyboardControls.groupCuttingViewScrubber'
-const groupSubtitleList = "keyboardControls.groupSubtitleList"
+const groupVideoPlayer = "keyboardControls.groupVideoPlayer";
+const groupCuttingView = "keyboardControls.groupCuttingView";
+const groupCuttingViewScrubber = "keyboardControls.groupCuttingViewScrubber";
+const groupSubtitleList = "keyboardControls.groupSubtitleList";
 
 /**
  * Helper function that rewrites keys based on the OS
  */
 export const rewriteKeys = (key: string) => {
-  let newKey = key
+  let newKey = key;
   if (isMacOs) {
-    newKey = newKey.replace("Alt", "Option")
+    newKey = newKey.replace("Alt", "Option");
   }
 
-  return newKey
-}
+  return newKey;
+};
 
-export const getGroupName = (groupName: string) : ParseKeys => {
+export const getGroupName = (groupName: string): ParseKeys => {
   return match(groupName, {
     videoPlayer: () => groupVideoPlayer,
     cutting: () => groupCuttingView,
     timeline: () => groupCuttingViewScrubber,
     subtitleList: () => groupSubtitleList,
-  })
-}
+  });
+};
 
 export interface IKeyMap {
-  [property: string]: IKeyGroup
+  [property: string]: IKeyGroup;
 }
 
 export interface IKeyGroup {
-  [property: string]: IKey
+  [property: string]: IKey;
 }
 
 export interface IKey {
-  name: string
-  key: string
+  name: string;
+  key: string;
 }
 
 export const KEYMAP: IKeyMap = {
@@ -60,7 +60,7 @@ export const KEYMAP: IKeyMap = {
     preview: {
       name: "video.previewButton",
       key: "Shift+Alt+p",
-    }
+    },
   },
   cutting: {
     cut: {
@@ -118,6 +118,6 @@ export const KEYMAP: IKeyMap = {
     delete: {
       name: "subtitleList.deleteSegment",
       key: "Shift+Alt+d",
-    }
-  }
-}
+    },
+  },
+};

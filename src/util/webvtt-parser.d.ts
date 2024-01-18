@@ -1,2 +1,2 @@
 // webvtt-parser.d.ts
-declare module 'webvtt-parser';
+declare module "webvtt-parser";

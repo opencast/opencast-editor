@@ -6,23 +6,23 @@
 
 /* eslint-disable space-before-function-paren */
 
-import { AudioContext } from 'standardized-audio-context';
+import { AudioContext } from "standardized-audio-context";
 
 export function Waveform(opts) {
   this.audioContext = new AudioContext();
-  this.oCanvas = document.createElement('canvas');
+  this.oCanvas = document.createElement("canvas");
   this.buffer = {};
   this.WIDTH = 0;
   this.HEIGHT = 0;
   this.channelData = [];
-  this.waveformImage = '';
+  this.waveformImage = "";
   this.audioBuffer = null;
 
   this.aveRMS = 0;
   this.peakRMS = 0;
 
   this.numberSamples = 100000;
-  this.waveformType = 'img';
+  this.waveformType = "img";
   this.drawWaveform = this.drawCanvasWaveform;
 
   if (opts.width && opts.height) {
@@ -31,8 +31,8 @@ export function Waveform(opts) {
   if (opts.samples) {
     this.numberSamples = opts.samples;
   }
-  if (opts.type && opts.type === 'svg') {
-    this.waveformType = 'svg';
+  if (opts.type && opts.type === "svg") {
+    this.waveformType = "svg";
     this.drawWaveform = this.delegateToWorker;
     this.worker = null;
   }
@@ -41,7 +41,7 @@ export function Waveform(opts) {
       .then(() => {
         this.getAudioData();
         this.drawWaveform();
-        if (this.waveformType !== 'svg') {
+        if (this.waveformType !== "svg") {
           _completeFuncs.forEach(fn => {
             fn(this.waveformImage || this.svgPath, this.waveformType);
           });
@@ -49,18 +49,18 @@ export function Waveform(opts) {
       })
       .catch(e => {
         console.log("Waveform Worker: " + e);
-        this._error = e.toString()
+        this._error = e.toString();
         this.onerror.forEach(fn => fn(e.toString()));
       });
   }
 
   var _completeFuncs = [];
-  Object.defineProperty(this, 'oncomplete', {
+  Object.defineProperty(this, "oncomplete", {
     get: function() {
       return _completeFuncs;
     },
     set: function(fn, _opt) {
-      if (typeof fn == 'function') {
+      if (typeof fn == "function") {
         if (this.waveformImage || this.svgPath) {
           fn(this.waveformImage || this.svgPath, this.svgLength);
           return;
@@ -68,17 +68,17 @@ export function Waveform(opts) {
 
         _completeFuncs.push(fn);
       }
-    }
+    },
   });
 
   var _error = "";
   var _errorFuncs = [];
-  Object.defineProperty(this, 'onerror', {
+  Object.defineProperty(this, "onerror", {
     get: function() {
       return _errorFuncs;
     },
     set: function(fn, _opt) {
-      if (typeof fn == 'function') {
+      if (typeof fn == "function") {
         if (this._error && this._error !== "") {
           fn(_error);
           return;
@@ -86,7 +86,7 @@ export function Waveform(opts) {
       }
 
       _errorFuncs.push(fn);
-    }
+    },
   });
 }
 
@@ -97,7 +97,7 @@ Waveform.prototype = {
     this.WIDTH = width;
     this.oCanvas.height = height;
     this.HEIGHT = height;
-    this.ocCtx = this.oCanvas.getContext('2d');
+    this.ocCtx = this.oCanvas.getContext("2d");
   },
   decodeAudioData: function(arraybuffer) {
     return new Promise((resolve, reject) => {
@@ -108,7 +108,7 @@ Waveform.prototype = {
           let reader = new FileReader();
           reader.onload = function() {
             res(reader.result);
-          }
+          };
           reader.readAsArrayBuffer(arraybuffer);
         }
       })
@@ -120,12 +120,12 @@ Waveform.prototype = {
           })
           .catch(e => {
             reject(e);
-          })
+          });
       })
       .catch(e => {
         reject(e);
-      })
-    })
+      });
+    });
   },
   getAudioData: function(buffer) {
     buffer = buffer || this.buffer;
@@ -133,10 +133,10 @@ Waveform.prototype = {
   },
   drawCanvasWaveform: function(amp) {
     amp = amp || 1;
-    this.ocCtx.fillStyle = '#FFFFFF00'; // '#b7d8f9';
+    this.ocCtx.fillStyle = "#FFFFFF00"; // "#b7d8f9";
     this.ocCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
     this.ocCtx.lineWidth = 1;
-    this.ocCtx.strokeStyle = 'black'; // '#38597a';
+    this.ocCtx.strokeStyle = "black"; // "#38597a";
     let sliceWidth = this.WIDTH * 1.0 / this.channelData.length;
     let x = 0;
 
@@ -166,16 +166,16 @@ Waveform.prototype = {
   },
   delegateToWorker: function() {
     if (!this.worker) {
-      this.worker = new Worker('../util/svgworker.js');
-      this.worker.addEventListener('message', this.workerCommunication.bind(this), false);
+      this.worker = new Worker("../util/svgworker.js");
+      this.worker.addEventListener("message", this.workerCommunication.bind(this), false);
       this.worker.postMessage(this.channelData);
     }
   },
   workerCommunication: function(e) {
     switch (e.data.type) {
-      case 'path':
+      case "path":
         this.setSVGpath(e.data.path, e.data.length);
-        this.worker.removeEventListener('message', this.workerCommunication.bind(this), false);
+        this.worker.removeEventListener("message", this.workerCommunication.bind(this), false);
         this.worker.terminate();
         this.worker = null;
         break;
@@ -184,13 +184,13 @@ Waveform.prototype = {
     }
   },
   setSVGpath: function(path, len) {
-    this.svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.svgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
     this.svgLength = len;
 
-    this.svgPath.setAttribute('d', path);
-    this.svgPath.setAttribute('vector-effect', 'non-scaling-stroke');
-    this.svgPath.setAttribute('stroke-width', '0.5px');
+    this.svgPath.setAttribute("d", path);
+    this.svgPath.setAttribute("vector-effect", "non-scaling-stroke");
+    this.svgPath.setAttribute("stroke-width", "0.5px");
 
     this.oncomplete.forEach(fn => fn(this.svgPath, this.svgLength));
-  }
+  },
 };
