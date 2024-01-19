@@ -1,7 +1,7 @@
 import { Segment, SubtitleCue, SubtitlesInEditor } from "./../types";
-import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { roundToDecimalPlace } from "../util/utilityFunctions";
-import type { AppDispatch, RootState } from "../redux/store";
+import type { RootState } from "../redux/store";
 import { video } from "./videoSlice";
 
 export interface subtitle {
@@ -63,7 +63,7 @@ export const subtitleSlice = createSlice({
     setIsPlayPreview: (state, action: PayloadAction<subtitle["isPlaying"]>) => {
       state.isPlayPreview = action.payload;
     },
-    setPreviewTriggered: (state, action) => {
+    setPreviewTriggered: (state, action: PayloadAction<subtitle["previewTriggered"]>) => {
       state.previewTriggered = action.payload;
     },
     setCurrentlyAt: (state, action: PayloadAction<subtitle["currentlyAt"]>) => {
@@ -252,8 +252,45 @@ export const selectHasChanges = (state: { subtitleState: { hasChanges: subtitle[
  * Will grab the state from videoState to skip past deleted segment if preview
  * mode is active.
  */
-export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
-  return (dispatch: AppDispatch, getState: () => RootState) => {
+// export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
+//   return (dispatch: AppDispatch, getState: () => RootState) => {
+//     milliseconds = roundToDecimalPlace(milliseconds, 0);
+
+//     if (milliseconds < 0) {
+//       milliseconds = 0;
+//     }
+
+//     const allStates = getState() as { videoState: video, subtitleState: subtitle; };
+//     const segments: Segment[] = allStates.videoState.segments;
+//     let triggered = false;
+
+//     if (allStates.subtitleState.isPlayPreview) {
+//       for (let i = 0; i < segments.length; i++) {
+//         if (segments[i].start < milliseconds && segments[i].end > milliseconds) {
+//           if (segments[i].deleted) {
+//             milliseconds = segments[i].end + 1;
+//             for (let j = i; j < segments.length; j++) {
+//               if (segments[j].deleted) {
+//                 milliseconds = segments[j].end + 1;
+//               } else {
+//                 break;
+//               }
+//             }
+//             triggered = true;
+//           }
+//           break;
+//         }
+//       }
+//     }
+
+//     dispatch(setCurrentlyAt(milliseconds));
+//     if (triggered) {
+//       dispatch(setPreviewTriggered(true));
+//     }
+//   };
+// }
+export const setCurrentlyAtAndTriggerPreview = createAsyncThunk("subtitleState/setCurrentlyAtAndTriggerPreview",
+  async (milliseconds: number, { getState, dispatch }) => {
     milliseconds = roundToDecimalPlace(milliseconds, 0);
 
     if (milliseconds < 0) {
@@ -287,7 +324,6 @@ export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
     if (triggered) {
       dispatch(setPreviewTriggered(true));
     }
-  };
-}
+  });
 
 export default subtitleSlice.reducer;

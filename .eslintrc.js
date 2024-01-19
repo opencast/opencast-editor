@@ -4,8 +4,7 @@ module.exports = {
     "react-app/jest",
   ],
   rules: {
-    // Currently 120 warnings.
-    "@typescript-eslint/no-explicit-any": "off",
+
   },
   overrides: [
     {

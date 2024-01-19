@@ -12,7 +12,7 @@ import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/su
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 import { LuPlus } from "react-icons/lu";
-import { Form } from "react-final-form";
+import { withTypes } from "react-final-form";
 import { Select } from "mui-rff";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -211,6 +211,12 @@ const SubtitleAddButton: React.FC<{
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true);
 
+  // Form types
+  interface FormSubmitValues {
+    selectedSubtitle: string;
+  }
+  const { Form } = withTypes<FormSubmitValues>();
+
   // Parse language data into a format the dropdown understands
   const selectData = () => {
     const data = [];
@@ -222,7 +228,7 @@ const SubtitleAddButton: React.FC<{
     return data;
   };
 
-  const onSubmit = (values: { selectedSubtitle: any; }) => {
+  const onSubmit = (values: FormSubmitValues) => {
     // Create new subtitle for the given language
     const id = values.selectedSubtitle;
     const relatedSubtitle = subtitlesForDropdown.find(tag => tag.id === id);
