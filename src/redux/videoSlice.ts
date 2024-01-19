@@ -268,6 +268,43 @@ const videoSlice = createSlice({
         state.error = action.error.message;
       });
   },
+  selectors: {
+    // Selectors mainly pertaining to the video state
+    selectIsPlaying: state => state.isPlaying,
+    selectIsPlayPreview: state => state.isPlayPreview,
+    selectIsMuted: state => state.isMuted,
+    selectVolume: state => state.volume,
+    selectPreviewTriggered: state => state.previewTriggered,
+    selectClickTriggered: state => state.clickTriggered,
+    selectCurrentlyAt: state => state.currentlyAt,
+    selectCurrentlyAtInSeconds: state => state.currentlyAt / 1000,
+    selectSegments: state => state.segments,
+    selectActiveSegmentIndex: state => state.activeSegmentIndex,
+    selectIsCurrentSegmentAlive: state => !state.segments[state.activeSegmentIndex].deleted,
+    selectSelectedWorkflowId: state => state.selectedWorkflowId,
+    selectHasChanges: state => state.hasChanges,
+    selectWaveformImages: state => state.waveformImages,
+    selectOriginalThumbnails: state => state.originalThumbnails,
+    // Selectors mainly pertaining to the information fetched from Opencast
+    selectVideos: state => state.tracks.filter((track: Track) => track.video_stream.available === true),
+    selectVideoURL: state => state.videoURLs,
+    selectVideoCount: state => state.videoCount,
+    selectDuration: state => state.duration,
+    selectDurationInSeconds: state => state.duration / 1000,
+    selectTitle: state => state.title,
+    selectTracks: state => state.tracks,
+    selectWorkflows: state => state.workflows,
+    selectAspectRatio: state => calculateTotalAspectRatio(state.aspectRatios),
+    selectSubtitlesFromOpencast: state => state.subtitlesFromOpencast,
+    selectSubtitlesFromOpencastById: (state, id: string) => {
+      for (const cap of state.subtitlesFromOpencast) {
+        if (cap.id === id) {
+          return cap;
+        }
+      }
+      return undefined;
+    },
+  },
 });
 
 /**
@@ -391,76 +428,33 @@ export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setV
   setPreviewTriggered, setClickTriggered } = videoSlice.actions;
 
 // Export selectors
-// Selectors mainly pertaining to the video state
-export const selectIsPlaying = (state: { videoState: { isPlaying: video["isPlaying"]; }; }) =>
-  state.videoState.isPlaying;
-export const selectIsPlayPreview = (state: { videoState: { isPlayPreview: video["isPlayPreview"]; }; }) =>
-  state.videoState.isPlayPreview;
-export const selectIsMuted = (state: { videoState: { isMuted: video["isMuted"]; }; }) =>
-  state.videoState.isMuted;
-export const selectVolume = (state: { videoState: { volume: video["volume"]; }; }) =>
-  state.videoState.volume;
-export const selectPreviewTriggered = (state: { videoState: { previewTriggered: video["previewTriggered"]; }; }) =>
-  state.videoState.previewTriggered;
-export const selectClickTriggered = (state: { videoState: { clickTriggered: video["clickTriggered"]; }; }) =>
-  state.videoState.clickTriggered;
-export const selectCurrentlyAt = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
-  state.videoState.currentlyAt;
-export const selectCurrentlyAtInSeconds = (state: { videoState: { currentlyAt: video["currentlyAt"]; }; }) =>
-  state.videoState.currentlyAt / 1000;
-export const selectSegments = (state: { videoState: { segments: video["segments"]; }; }) =>
-  state.videoState.segments;
-export const selectActiveSegmentIndex =
-  (state: { videoState: { activeSegmentIndex: video["activeSegmentIndex"]; }; }) =>
-    state.videoState.activeSegmentIndex;
-export const selectIsCurrentSegmentAlive = (state: {
-  videoState:
-  { segments: { [x: number]: { deleted: boolean; }; }; activeSegmentIndex: video["activeSegmentIndex"]; };
-}) =>
-  !state.videoState.segments[state.videoState.activeSegmentIndex].deleted;
-export const selectSelectedWorkflowId = (state: {
-  videoState:
-  { selectedWorkflowId: video["selectedWorkflowId"]; };
-}) =>
-  state.videoState.selectedWorkflowId;
-export const selectHasChanges = (state: { videoState: { hasChanges: video["hasChanges"]; }; }) =>
-  state.videoState.hasChanges;
-export const selectWaveformImages = (state: { videoState: { waveformImages: video["waveformImages"]; }; }) =>
-  state.videoState.waveformImages;
-export const selectOriginalThumbnails =
-  (state: { videoState: { originalThumbnails: video["originalThumbnails"]; }; }) =>
-    state.videoState.originalThumbnails;
-
-// Selectors mainly pertaining to the information fetched from Opencast
-export const selectVideos = (state: { videoState: { tracks: video["tracks"]; }; }) =>
-  state.videoState.tracks.filter((track: Track) => track.video_stream.available === true);
-export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"]; }; }) =>
-  state.videoState.videoURLs;
-export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"]; }; }) =>
-  state.videoState.videoCount;
-export const selectDuration = (state: { videoState: { duration: video["duration"]; }; }) =>
-  state.videoState.duration;
-export const selectDurationInSeconds = (state: { videoState: { duration: video["duration"]; }; }) =>
-  state.videoState.duration / 1000;
-export const selectTitle = (state: { videoState: { title: video["title"]; }; }) =>
-  state.videoState.title;
-export const selectTracks = (state: { videoState: { tracks: video["tracks"]; }; }) =>
-  state.videoState.tracks;
-export const selectWorkflows = (state: { videoState: { workflows: video["workflows"]; }; }) =>
-  state.videoState.workflows;
-export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"]; }; }) =>
-  calculateTotalAspectRatio(state.videoState.aspectRatios);
-export const selectSubtitlesFromOpencast =
-  (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) =>
-    state.videoState.subtitlesFromOpencast;
-export const selectSubtitlesFromOpencastById = (id: string) =>
-  (state: { videoState: { subtitlesFromOpencast: video["subtitlesFromOpencast"]; }; }) => {
-    for (const cap of state.videoState.subtitlesFromOpencast) {
-      if (cap.id === id) {
-        return cap;
-      }
-    }
-    return undefined;
-  };
+export const {
+  selectIsPlaying,
+  selectIsPlayPreview,
+  selectIsMuted,
+  selectVolume,
+  selectPreviewTriggered,
+  selectClickTriggered,
+  selectCurrentlyAt,
+  selectCurrentlyAtInSeconds,
+  selectSegments,
+  selectActiveSegmentIndex,
+  selectIsCurrentSegmentAlive,
+  selectSelectedWorkflowId,
+  selectHasChanges,
+  selectWaveformImages,
+  selectOriginalThumbnails,
+  selectVideos,
+  selectVideoURL,
+  selectVideoCount,
+  selectDuration,
+  selectDurationInSeconds,
+  selectTitle,
+  selectTracks,
+  selectWorkflows,
+  selectAspectRatio,
+  selectSubtitlesFromOpencast,
+  selectSubtitlesFromOpencastById,
+} = videoSlice.selectors;
 
 export default videoSlice.reducer;
