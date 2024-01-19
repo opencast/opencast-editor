@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
@@ -432,8 +432,10 @@ export const selectOriginalThumbnails =
     state.videoState.originalThumbnails;
 
 // Selectors mainly pertaining to the information fetched from Opencast
-export const selectVideos = (state: { videoState: { tracks: video["tracks"]; }; }) =>
-  state.videoState.tracks.filter((track: Track) => track.video_stream.available === true);
+export const selectVideos = createSelector(
+  [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
+  tracks => tracks.filter((track: Track) => track.video_stream.available === true)
+);
 export const selectVideoURL = (state: { videoState: { videoURLs: video["videoURLs"]; }; }) =>
   state.videoState.videoURLs;
 export const selectVideoCount = (state: { videoState: { videoCount: video["videoCount"]; }; }) =>
