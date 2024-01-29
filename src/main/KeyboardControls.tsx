@@ -92,12 +92,18 @@ const Entry: React.FC<{ name: string, sequences: string[][]; }> = ({ name, seque
       {sequences.map((sequence, index, arr) => (
         <div css={sequenceStyle} key={index}>
           {sequence.map((singleKey, index) => (
-            <>
-              <div css={singleKeyStyle} key={index}>{singleKey}</div>
-              {sequence.length - 1 !== index && <div css={orStyle}>+</div>}
-            </>
+            <div key={index} css={sequenceStyle}>
+              <div css={singleKeyStyle}>
+                {singleKey}
+              </div>
+              {sequence.length - 1 !== index &&
+                <div css={orStyle}>+</div>
+              }
+            </div>
           ))}
-          <div css={orStyle}><Trans>{arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}</Trans></div>
+          <div css={orStyle}><Trans>
+            {arr.length - 1 !== index && t("keyboardControls.sequenceSeparator")}
+          </Trans></div>
         </div>
       ))}
     </div>
