@@ -192,6 +192,25 @@ export const subtitleSlice = createSlice({
       state.hasChanges = action.payload;
     },
   },
+  selectors: {
+    selectIsDisplayEditView: state => state.isDisplayEditView,
+    selectIsPlaying: state => state.isPlaying,
+    selectIsPlayPreview: state => state.isPlayPreview,
+    selectPreviewTriggered: state => state.previewTriggered,
+    selectCurrentlyAt: state => state.currentlyAt,
+    selectCurrentlyAtInSeconds: state => state.currentlyAt / 1000,
+    selectClickTriggered: state => state.clickTriggered,
+    selectFocusSegmentTriggered: state => state.focusSegmentTriggered,
+    selectFocusSegmentId: state => state.focusSegmentId,
+    selectFocusSegmentTriggered2: state => state.focusSegmentTriggered2,
+    // Hardcoding this value to achieve a desired size for the video player
+    // TODO: Don"t hardcode this value, instead make the video player component more flexible
+    selectAspectRatio: () => 50,
+    selectSubtitles: state => state.subtitles,
+    selectSelectedSubtitleId: state => state.selectedSubtitleId,
+    selectSelectedSubtitleById: state => state.subtitles[state.selectedSubtitleId],
+    selectHasChanges: state => state.hasChanges,
+  },
 });
 
 // Sort a subtitle array by startTime
@@ -205,47 +224,23 @@ export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewT
   setSelectedSubtitleId, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
   setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio, setHasChanges } = subtitleSlice.actions;
 
-// Export Selectors
-export const selectIsDisplayEditView = (state: RootState) =>
-  state.subtitleState.isDisplayEditView;
-export const selectIsPlaying = (state: RootState) =>
-  state.subtitleState.isPlaying;
-export const selectIsPlayPreview = (state: { subtitleState: { isPlayPreview: subtitle["isPlayPreview"]; }; }) =>
-  state.subtitleState.isPlayPreview;
-export const selectPreviewTriggered =
-  (state: { subtitleState: { previewTriggered: subtitle["previewTriggered"]; }; }) =>
-    state.subtitleState.previewTriggered;
-export const selectCurrentlyAt = (state: RootState) =>
-  state.subtitleState.currentlyAt;
-export const selectCurrentlyAtInSeconds = (state: { subtitleState: { currentlyAt: subtitle["currentlyAt"]; }; }) =>
-  state.subtitleState.currentlyAt / 1000;
-export const selectClickTriggered = (state: { subtitleState: { clickTriggered: subtitle["clickTriggered"]; }; }) =>
-  state.subtitleState.clickTriggered;
-export const selectFocusSegmentTriggered =
-  (state: { subtitleState: { focusSegmentTriggered: subtitle["focusSegmentTriggered"]; }; }) =>
-    state.subtitleState.focusSegmentTriggered;
-export const selectFocusSegmentId = (state: { subtitleState: { focusSegmentId: subtitle["focusSegmentId"]; }; }) =>
-  state.subtitleState.focusSegmentId;
-export const selectFocusSegmentTriggered2 =
-  (state: { subtitleState: { focusSegmentTriggered2: subtitle["focusSegmentTriggered2"]; }; }) =>
-    state.subtitleState.focusSegmentTriggered2;
-// Hardcoding this value to achieve a desired size for the video player
-// TODO: Don"t hardcode this value, instead make the video player component more flexible
-export const selectAspectRatio = (_state: { subtitleState: { aspectRatios: subtitle["aspectRatios"]; }; }) =>
-  50;
-
-export const selectSubtitles = (state: { subtitleState: { subtitles: subtitle["subtitles"]; }; }) =>
-  state.subtitleState.subtitles;
-export const selectSelectedSubtitleId =
-  (state: { subtitleState: { selectedSubtitleId: subtitle["selectedSubtitleId"]; }; }) =>
-    state.subtitleState.selectedSubtitleId;
-export const selectSelectedSubtitleById = (state: {
-  subtitleState:
-  { subtitles: subtitle["subtitles"]; selectedSubtitleId: subtitle["selectedSubtitleId"]; };
-}) =>
-  state.subtitleState.subtitles[state.subtitleState.selectedSubtitleId];
-export const selectHasChanges = (state: { subtitleState: { hasChanges: subtitle["hasChanges"]; }; }) =>
-  state.subtitleState.hasChanges;
+export const {
+  selectIsDisplayEditView,
+  selectIsPlaying,
+  selectIsPlayPreview,
+  selectPreviewTriggered,
+  selectCurrentlyAt,
+  selectCurrentlyAtInSeconds,
+  selectClickTriggered,
+  selectFocusSegmentTriggered,
+  selectFocusSegmentId,
+  selectFocusSegmentTriggered2,
+  selectAspectRatio,
+  selectSubtitles,
+  selectSelectedSubtitleId,
+  selectSelectedSubtitleById,
+  selectHasChanges,
+} = subtitleSlice.selectors;
 
 /**
  * Alternative middleware to setCurrentlyAt.
