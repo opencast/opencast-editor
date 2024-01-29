@@ -52,6 +52,10 @@ const workflowPostSlice = createSlice({
         state.error = action.error.message;
       });
   },
+  selectors: {
+    selectStatus: state => state.status,
+    selectError: state => state.error,
+  },
 });
 
 interface segmentAPI {
@@ -80,9 +84,6 @@ export const convertSegments = (segments: Segment[]) => {
 
 export const { resetPostRequestState } = workflowPostSlice.actions;
 
-export const selectStatus = (state: { workflowPostState: { status: httpRequestState["status"]; }; }) =>
-  state.workflowPostState.status;
-export const selectError = (state: { workflowPostAndProcessState: { error: httpRequestState["error"]; }; }) =>
-  state.workflowPostAndProcessState.error;
+export const { selectStatus, selectError } = workflowPostSlice.selectors;
 
 export default workflowPostSlice.reducer;
