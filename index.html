@@ -4,7 +4,7 @@
     <meta name="git-commit" content="%REACT_APP_GIT_SHA%">
     <meta name="build-date" content="%REACT_APP_BUILD_DATE%">
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description"
@@ -13,7 +13,7 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <title>Opencast Editor</title>
     <style>
       /* These styles are only used for the initial loading indicator */
@@ -52,11 +52,12 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script type="module" src="/src/index.tsx"></script>
     <div id="root">
       <!-- Loading indicator, shown until React starts rendering -->
       <div class="loading-indicator">
         <svg viewbox="0 0 100 100">
-          <circle cx="50"cy="50"r="40" />
+          <circle cx="50" cy="50" r="40" />
         </svg>
       </div>
     </div>

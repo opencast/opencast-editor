@@ -3,7 +3,7 @@ import { PlaywrightTestConfig, devices } from '@playwright/test';
 const config: PlaywrightTestConfig = {
 
   reporter: [
-    [process.env.CI ? 'github' : 'list'],
+    [import.meta.env.CI ? 'github' : 'list'],
     ['html', { outputFolder: 'playwright-report' }],
   ],
   testIgnore: '**/redux/**',
@@ -20,7 +20,7 @@ const config: PlaywrightTestConfig = {
     command: 'npm run start',
     port: 3000,
     timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !import.meta.env.CI,
   },
 
   projects: [

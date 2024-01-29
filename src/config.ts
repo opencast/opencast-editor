@@ -180,7 +180,7 @@ export const init = async () => {
 const loadContextSettings = async () => {
 
   // Try to retrieve the context settings.
-  let basepath = process.env.PUBLIC_URL || "/";
+  let basepath = import.meta.env.PUBLIC_URL || "/";
   if (!basepath.endsWith("/")) {
     basepath += "/";
   }
@@ -188,7 +188,7 @@ const loadContextSettings = async () => {
   // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
   // given and starts with "/", it is interpreted as absolute path from the
   // server root.
-  const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
+  const settingsPath = import.meta.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
   const base = settingsPath.startsWith("/") ? "" : basepath;
   const url = `${window.location.origin}${base}${settingsPath}`;
   let response;
