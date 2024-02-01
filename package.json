@@ -43,7 +43,7 @@
     "react-resizable": "^3.0.5",
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
-    "react-virtualized-auto-sizer": "^1.0.20",
+    "react-virtualized-auto-sizer": "^1.0.21",
     "react-window": "^1.8.10",
     "redux": "^5.0.1",
     "standardized-audio-context": "^25.3.61",
