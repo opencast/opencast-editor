@@ -1,6 +1,6 @@
 import React from "react";
 
-import { basicButtonStyle, customIconStyle } from "../cssStyles";
+import { BREAKPOINTS, basicButtonStyle, customIconStyle, undisplay } from "../cssStyles";
 
 import { IconType } from "react-icons";
 import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal } from "react-icons/lu";
@@ -76,6 +76,8 @@ const CuttingActions: React.FC = () => {
     flexDirection: "row" as const,
     justifyContent: "center",
     alignItems: "center",
+
+    flexWrap: "wrap",
   });
 
   const verticalLineStyle = css({
@@ -182,7 +184,7 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
         }}
       >
         <Icon />
-        <span>{actionName}</span>
+        <span css={undisplay(BREAKPOINTS.medium)}>{actionName}</span>
       </div>
     </ThemedTooltip>
   );
@@ -221,8 +223,10 @@ const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
           }
         }}
       >
-        {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} />}
-        <div>{isCurrentSegmentAlive ? t("cuttingActions.delete-button") : t("cuttingActions.restore-button")}</div>
+        {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} /> }
+        <span css={undisplay(BREAKPOINTS.medium)}>
+          {isCurrentSegmentAlive ? t("cuttingActions.delete-button") : t("cuttingActions.restore-button")}
+        </span>
       </div>
     </ThemedTooltip>
   );

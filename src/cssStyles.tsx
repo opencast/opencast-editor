@@ -7,6 +7,9 @@ import emotionNormalize from "emotion-normalize";
 import { checkFlexGapSupport } from "./util/utilityFunctions";
 import { createTheme } from "@mui/material/styles";
 import { Theme, useTheme } from "./themes";
+import {
+  DEFAULT_CONFIG as APPKIT_CONFIG,
+} from "@opencast/appkit";
 
 /**
  * An emotion component that inserts styles globally
@@ -35,8 +38,8 @@ export const globalStyle = (theme: Theme) => css({
 
 
 // When to switch behaviour based on screen width
-export const BREAKPOINT_SMALL = 450;
-export const BREAKPOINT_MEDIUM = 650;
+/** Breakpoint values */
+export const BREAKPOINTS = APPKIT_CONFIG.breakpoints;
 
 
 /**
@@ -463,3 +466,9 @@ export const backgroundBoxStyle = (theme: Theme) => css(({
   padding: "20px",
   ...(flexGapReplacementStyle(25, false)),
 }));
+
+export const undisplay = (maxWidth: number) => css({
+  [`@media (max-width: ${maxWidth}px)`]: {
+    display: "none",
+  },
+});

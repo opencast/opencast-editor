@@ -11,7 +11,7 @@ import {
 } from "../redux/videoSlice";
 
 import { convertMsToReadableString } from "../util/utilityFunctions";
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { BREAKPOINTS, basicButtonStyle, flexGapReplacementStyle, undisplay } from "../cssStyles";
 
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTranslation } from "react-i18next";
@@ -161,8 +161,9 @@ const PreviewMode: React.FC<{
           if (event.key === " ") {
             switchPlayPreview(undefined);
           }
-        }}>
-        <div css={previewModeTextStyle(theme)}>
+        }}
+      >
+        <div css={[previewModeTextStyle(theme), undisplay(BREAKPOINTS.medium)]}>
           {t("video.previewButton")}
         </div>
         {isPlayPreview ? <FaToggleOn css={[basicButtonStyle(theme), switchIconStyle]} />
@@ -263,9 +264,9 @@ const TimeDisplay: React.FC<{
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 10)}
         </time>
       </ThemedTooltip>
-      {" / "}
+      <div css={undisplay(BREAKPOINTS.medium)}>{" / "}</div>
       <ThemedTooltip title={t("video.time-duration-tooltip")}>
-        <div css={timeTextStyle(theme)}
+        <div css={[timeTextStyle(theme), undisplay(BREAKPOINTS.medium)]}
           tabIndex={0} aria-label={t("video.duration-aria") + ": " + convertMsToReadableString(duration)}>
           {new Date((duration ? duration : 0)).toISOString().substr(11, 10)}
         </div>
