@@ -81,7 +81,7 @@ export const subtitleSlice = createSlice({
     setCueAtIndex: (state, action: PayloadAction<{ identifier: string, cueIndex: number, newCue: SubtitleCue; }>) => {
       if (action.payload.cueIndex < 0 ||
         action.payload.cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
-        console.log("WARNING: Tried to set segment for subtitle " + action.payload.identifier +
+        console.warn("Tried to set segment for subtitle " + action.payload.identifier +
           " but was out of range");
         return;
       }
@@ -93,6 +93,9 @@ export const subtitleSlice = createSlice({
       cue.startTime = Math.round(action.payload.newCue.startTime);
       cue.endTime = Math.round(action.payload.newCue.endTime);
 
+      if (cue.tree.children.length <= 0) {
+        cue.tree.children[0] = { type: "text", value: action.payload.newCue.text };
+      }
       cue.tree.children[0].value = action.payload.newCue.text;
 
       state.subtitles[action.payload.identifier].cues[action.payload.cueIndex] = cue;
