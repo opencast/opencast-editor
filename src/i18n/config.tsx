@@ -7,16 +7,25 @@ import locales from "./locales/locales.json";
 const debug = Boolean(new URLSearchParams(window.location.search).get("debug"));
 
 const resources: InitOptions["resources"] = {};
-for (const lang of locales) {
-  const code = lang.replace(/\..*$/, "");
+
+const data = import.meta.glob("./locales/*.json");
+
+for (const path in data) {
+  const code = path.replace(/^.*[\\/]/, "").replace(/\..*$/, "");
+  if (!locales.some(e => e.includes(code))) {
+    continue;
+  }
   const short = code.replace(/-.*$/, "");
   const main = locales.filter(l => l.indexOf(short) === 0).length === 1;
-  /* eslint-disable-next-line @typescript-eslint/no-var-requires */
-  const translations = require("./locales/" + lang);
-  if (!main) {
-    resources[code] = { translation: translations };
-  }
-  resources[short] = { translation: translations };
+
+  data[path]().then(mod => {
+    const translation = JSON.parse(JSON.stringify(mod));
+
+    if (!main) {
+      resources[code] = { translation: translation };
+    }
+    resources[short] = { translation: translation };
+  });
 }
 
 i18next
