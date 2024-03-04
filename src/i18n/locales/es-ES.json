@@ -229,6 +229,7 @@
         "createSubtitleButton-clicked-tooltip-aria": "Contiene un diálogo para crear nuevos subtítulos",
         "createSubtitleButton-createButton": "Crear",
         "createSubtitleButton-createButton-tooltip": "Inicia un nuevo archivo de subtítulos con el título elegido.",
+        "createSubtitleButton-createButton-disabled-tooltip": "Please pick a language from the dropdown above.",
         "createSubtitleDropdown-label": "Seleccione un idioma",
         "backButton": "Atras",
         "backButton-tooltip": "Volver a la selección de subtítulos",

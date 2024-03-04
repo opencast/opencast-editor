@@ -229,6 +229,7 @@
         "createSubtitleButton-clicked-tooltip-aria": "Περιέχει ένα διάλογο για τη δημιουργία νέων υποτίτλων",
         "createSubtitleButton-createButton": "Δημιουργία",
         "createSubtitleButton-createButton-tooltip": "Ξεκινήστε ένα νέο αρχείο υποτίτλων με τον επιλεγμένο τίτλο.",
+        "createSubtitleButton-createButton-disabled-tooltip": "Please pick a language from the dropdown above.",
         "createSubtitleDropdown-label": "Επιλέξτε μια γλώσσα",
         "backButton": "Επιστροφή",
         "backButton-tooltip": "Επιστροφή στην επιλογή υποτίτλων",
