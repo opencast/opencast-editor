@@ -180,7 +180,7 @@ export const init = async () => {
 const loadContextSettings = async () => {
 
   // Try to retrieve the context settings.
-  let basepath = import.meta.env.PUBLIC_URL || "/";
+  let basepath = import.meta.env.BASE_URL || "/";
   if (!basepath.endsWith("/")) {
     basepath += "/";
   }
