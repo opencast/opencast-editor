@@ -94,7 +94,7 @@ const SubtitleSelect: React.FC = () => {
   // Converts tags from the config file format to opencast format
   const convertTags = (tags: subtitleTags) => {
     return Object.entries(tags)
-      .map(tag => `${tag[0]}: ${tag[1]}`)
+      .map(tag => `${tag[0]}:${tag[1]}`)
       .concat();
   };
 
