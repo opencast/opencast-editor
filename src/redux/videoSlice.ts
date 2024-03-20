@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
@@ -286,7 +286,6 @@ const videoSlice = createSlice({
     selectWaveformImages: state => state.waveformImages,
     selectOriginalThumbnails: state => state.originalThumbnails,
     // Selectors mainly pertaining to the information fetched from Opencast
-    selectVideos: state => state.tracks.filter((track: Track) => track.video_stream.available === true),
     selectVideoURL: state => state.videoURLs,
     selectVideoCount: state => state.videoCount,
     selectDuration: state => state.duration,
@@ -427,6 +426,11 @@ export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setV
   removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
   setPreviewTriggered, setClickTriggered } = videoSlice.actions;
 
+export const selectVideos = createSelector(
+  [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
+  tracks => tracks.filter((track: Track) => track.video_stream.available === true)
+);
+
 // Export selectors
 export const {
   selectIsPlaying,
@@ -444,7 +448,6 @@ export const {
   selectHasChanges,
   selectWaveformImages,
   selectOriginalThumbnails,
-  selectVideos,
   selectVideoURL,
   selectVideoCount,
   selectDuration,
