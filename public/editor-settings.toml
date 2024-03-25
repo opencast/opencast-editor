@@ -22,6 +22,19 @@ url = 'https://develop.opencast.org'
 name = "admin"
 password = "opencast"
 
+# For visualization purposes, the editor generates a waveform image for the
+# cutting view. Per default the image is generated from one of the videos.
+# For large videos, this can take a lot of time, bandwidth and in case of very
+# large videos even cause the editor to crash.
+# This setting allows you to specify an Opencast flavor from which to generate
+# the waveform image instead. For example, your workflow in Opencast could
+# include an operation that generates a small audio file from one of the videos
+# and adds that audio file to the internal publication.
+# Example:
+[opencast.audioFileFlavor]
+"type" = "presenter"
+"subtype" = "audio"
+
 
 [metadata]
 show = true

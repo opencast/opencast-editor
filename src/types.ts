@@ -9,8 +9,8 @@ export interface Track {
   id: string,
   uri: string,
   flavor: Flavor,
-  audio_stream: {available: boolean, enabled: boolean, thumbnail_uri: string},
-  video_stream: {available: boolean, enabled: boolean, thumbnail_uri: string},
+  audio_stream: TrackStream,
+  video_stream: TrackStream,
   thumbnailUri: string | undefined,
   thumbnailPriority: number,
 }
@@ -18,6 +18,12 @@ export interface Track {
 export interface Flavor {
   type: string,
   subtype: string,
+}
+
+interface TrackStream {
+  available: boolean,
+  enabled: boolean,
+  thumbnail_uri: string,
 }
 
 export interface Workflow {
