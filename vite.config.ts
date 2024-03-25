@@ -6,6 +6,7 @@ import eslint from "vite-plugin-eslint";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
+    base: process.env.PUBLIC_URL || "",
     server: {
       open: true,
     },

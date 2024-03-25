@@ -71,7 +71,7 @@ test.describe('Test Metadata-Page', () => {
 });
 
 const input = ['title', 'subject', 'rightsHolder', 'duration', 'location', 'source'];
-const iValue = ['Dual-Stream Demo', '', '', '00:00:00', '', ''];
+const iValue = ['Dual-Stream Demo', '', '', '00:01:04', '', ''];
 const iFill = ['Test-Title', 'Test-Subject', 'Test-Rights', '00:02:45', 'Test-Location', 'Test-Source'];
 
 const dropdown = ['language', 'license', 'isPartOf', 'creator', 'contributor'];
