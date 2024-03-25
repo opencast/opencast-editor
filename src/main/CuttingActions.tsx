@@ -10,14 +10,16 @@ import { css } from "@emotion/react";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll,
+  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll, setTimelineZoom,
+  timelineZoomIn, timelineZoomOut,
 } from "../redux/videoSlice";
 import { KEYMAP, rewriteKeys } from "../globalKeys";
-import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { Slider } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
 
 /**
@@ -36,8 +38,18 @@ const CuttingActions: React.FC = () => {
    * @param action redux event to dispatch
    * @param ref Pass a reference if the clicked element should lose focus
    */
-  const dispatchAction = (action: ActionCreatorWithoutPayload<string>, ref?: React.RefObject<HTMLDivElement>) => {
-    dispatch(action());
+  const dispatchAction = (
+    action: ActionCreatorWithoutPayload<string> | undefined,
+    actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    payload: any,
+    ref?: React.RefObject<HTMLDivElement>
+  ) => {
+    if (action) {
+      dispatch(action());
+    }
+    if (actionWithPayload) {
+      dispatch(actionWithPayload(payload));
+    }
 
     // Lose focus if clicked by mouse
     if (ref) {
@@ -48,27 +60,39 @@ const CuttingActions: React.FC = () => {
   // Maps functions to hotkeys
   useHotkeys(
     KEYMAP.cutting.cut.key,
-    () => dispatchAction(cut),
+    () => dispatchAction(cut, undefined, undefined),
     { preventDefault: true },
     [cut]
   );
   useHotkeys(
     KEYMAP.cutting.delete.key,
-    () => dispatchAction(markAsDeletedOrAlive),
+    () => dispatchAction(markAsDeletedOrAlive, undefined, undefined),
     { preventDefault: true },
     [markAsDeletedOrAlive]
   );
   useHotkeys(
     KEYMAP.cutting.mergeLeft.key,
-    () => dispatchAction(mergeLeft),
+    () => dispatchAction(mergeLeft, undefined, undefined),
     { preventDefault: true },
     [mergeLeft]
   );
   useHotkeys(
     KEYMAP.cutting.mergeRight.key,
-    () => dispatchAction(mergeRight),
+    () => dispatchAction(mergeRight, undefined, undefined),
     { preventDefault: true },
     [mergeRight]
+  );
+  useHotkeys(
+    KEYMAP.cutting.zoomIn.key,
+    () => dispatchAction(timelineZoomIn, undefined, undefined),
+    { preventDefault: true, combinationKey: KEYMAP.cutting.zoomIn.combinationKey },
+    [timelineZoomIn]
+  );
+  useHotkeys(
+    KEYMAP.cutting.zoomOut.key,
+    () => dispatchAction(timelineZoomOut, undefined, undefined),
+    { preventDefault: true },
+    [timelineZoomOut]
   );
 
   const cuttingStyle = css({
@@ -89,6 +113,8 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.cut-button")}
         actionHandler={dispatchAction}
         action={cut}
+        actionWithPayload={undefined}
+        payload={undefined}
         tooltip={t("cuttingActions.cut-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
         ariaLabelText={t("cuttingActions.cut-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.cut.key) })}
       />
@@ -101,6 +127,8 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.mergeLeft-button")}
         actionHandler={dispatchAction}
         action={mergeLeft}
+        actionWithPayload={undefined}
+        payload={undefined}
         tooltip={t("cuttingActions.mergeLeft-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })}
         ariaLabelText={
           t("cuttingActions.mergeLeft-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeLeft.key) })
@@ -111,6 +139,8 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.mergeRight-button")}
         actionHandler={dispatchAction}
         action={mergeRight}
+        actionWithPayload={undefined}
+        payload={undefined}
         tooltip={t("cuttingActions.mergeRight-tooltip", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })}
         ariaLabelText={
           t("cuttingActions.mergeRight-tooltip-aria", { hotkeyName: rewriteKeys(KEYMAP.cutting.mergeRight.key) })
@@ -121,9 +151,13 @@ const CuttingActions: React.FC = () => {
         actionName={t("cuttingActions.merge-all-button")}
         actionHandler={dispatchAction}
         action={mergeAll}
+        actionWithPayload={undefined}
+        payload={undefined}
         tooltip={t("cuttingActions.merge-all-tooltip")}
         ariaLabelText={t("cuttingActions.merge-all-tooltip-aria")}
       />
+      <div css={verticalLineStyle} />
+      <ZoomSlider actionHandler={dispatchAction}/>
       {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
         tooltip="Not implemented"
         ariaLabelText="Reset changes. Not implemented"
@@ -148,8 +182,15 @@ const cuttingActionButtonStyle = css({
 interface cuttingActionsButtonInterface {
   Icon: IconType,
   actionName: string,
-  actionHandler: (action: ActionCreatorWithoutPayload<string>, ref?: React.RefObject<HTMLDivElement>) => void,
+  actionHandler: (
+    action: ActionCreatorWithoutPayload<string>,
+    actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    payload: any,
+    ref?: React.RefObject<HTMLDivElement>,
+  ) => void,
   action: ActionCreatorWithoutPayload<string>,
+  actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+  payload: any,
   tooltip: string,
   ariaLabelText: string,
 }
@@ -163,6 +204,8 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
   actionName,
   actionHandler,
   action,
+  actionWithPayload,
+  payload,
   tooltip,
   ariaLabelText,
 }) => {
@@ -174,10 +217,10 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
       <div css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
         ref={ref}
         role="button" tabIndex={0} aria-label={ariaLabelText}
-        onClick={() => actionHandler(action, ref)}
+        onClick={() => actionHandler(action, actionWithPayload, payload, ref)}
         onKeyDown={(event: React.KeyboardEvent) => {
           if (event.key === " " || event.key === "Enter") {
-            actionHandler(action);
+            actionHandler(action, actionWithPayload, payload);
           }
         }}
       >
@@ -189,7 +232,12 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
 };
 
 interface markAsDeleteButtonInterface {
-  actionHandler: (action: ActionCreatorWithoutPayload<string>, ref?: React.RefObject<HTMLDivElement>) => void,
+  actionHandler: (
+    action: ActionCreatorWithoutPayload<string> | undefined,
+    actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    payload: any,
+    ref?: React.RefObject<HTMLDivElement>
+  ) => void,
   action: ActionCreatorWithoutPayload<string>,
   hotKeyName: string,
 }
@@ -214,10 +262,10 @@ const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
         ref={ref}
         role="button" tabIndex={0}
         aria-label={t("cuttingActions.delete-restore-tooltip-aria", { hotkeyName: hotKeyName })}
-        onClick={() => actionHandler(action, ref)}
+        onClick={() => actionHandler(action, undefined, undefined, ref)}
         onKeyDown={(event: React.KeyboardEvent) => {
           if (event.key === " " || event.key === "Enter") {
-            actionHandler(action);
+            actionHandler(action, undefined, undefined);
           }
         }}
       >
@@ -225,6 +273,70 @@ const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
         <div>{isCurrentSegmentAlive ? t("cuttingActions.delete-button") : t("cuttingActions.restore-button")}</div>
       </div>
     </ThemedTooltip>
+  );
+};
+
+interface ZoomSliderInterface {
+  actionHandler: (
+    action: ActionCreatorWithoutPayload<string> | undefined,
+    actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    payload: any,
+    ref?: React.RefObject<HTMLDivElement>,
+  ) => void,
+}
+
+const ZoomSlider : React.FC<ZoomSliderInterface> = ({ actionHandler }) => {
+
+  const { t } = useTranslation();
+  const theme = useTheme();
+
+  // Callback for the zoom slider
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const zoomSliderOnChange = (event: Event, newValue: number | number[]) => {
+    actionHandler(undefined, setTimelineZoom, newValue, undefined);
+  };
+
+  const zoomStyle = css({
+    display: "flex",
+    flexDirection: "row",
+    paddingLeft: "16px",
+    paddingRight: "16px",
+    gap: "15px",
+    justifyContent: "center",
+    alignItems: "center",
+  });
+
+
+  const sliderStyle = css({
+    width: "100px",
+    "& .MuiSlider-thumb": {
+      color: `${theme.slider_thumb_color}`,
+      "&:hover, &.Mui-focusVisible, &.Mui-active": {
+        boxShadow: `${theme.slider_thumb_shadow}`,
+      },
+    },
+    "& .MuiSlider-rail": {
+      color: `${theme.slider_track_color}`,
+    },
+    "& .MuiSlider-track": {
+      color: `${theme.slider_track_color}`,
+    },
+  });
+
+  return (
+    <div css={zoomStyle}>
+      <span>{t("cuttingActions.zoom")}</span>
+      <Slider
+        css={sliderStyle}
+        min={1}
+        max={10}
+        step={0.1}
+        defaultValue={1}
+        onChange={zoomSliderOnChange}
+        aria-label={t("cuttingActions.zoomSlider-aria")}
+        valueLabelDisplay="off"
+      />
+    </div>
   );
 };
 

@@ -20,6 +20,7 @@ export interface video {
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: { width: number, height: number; }[],  // Aspect ratios of every video
   hasChanges: boolean,             // Did user make changes in cutting view since last save
+  timelineZoom: number,           // Zoom multiplicator for the timeline,
   waveformImages: string[];
   originalThumbnails: { id: Track["id"], uri: Track["thumbnailUri"]; }[];
 
@@ -56,6 +57,7 @@ export const initialState: video & httpRequestState = {
   clickTriggered: false,
   aspectRatios: [],
   hasChanges: false,
+  timelineZoom: 1,
   waveformImages: [],
   originalThumbnails: [],
 
@@ -151,6 +153,9 @@ const videoSlice = createSlice({
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
       state.hasChanges = action.payload;
     },
+    setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
+      state.timelineZoom = action.payload > 1 ? action.payload : 1;
+    },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload;
     },
@@ -214,6 +219,12 @@ const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, 0);
       mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1);
       state.hasChanges = true;
+    },
+    timelineZoomIn: state => {
+      state.timelineZoom = state.timelineZoom + 1 <= 10 ? state.timelineZoom + 1 : state.timelineZoom;
+    },
+    timelineZoomOut: state => {
+      state.timelineZoom = state.timelineZoom - 1 >= 1 ? state.timelineZoom - 1 : state.timelineZoom;
     },
   },
   // For Async Requests
@@ -283,6 +294,7 @@ const videoSlice = createSlice({
     selectIsCurrentSegmentAlive: state => !state.segments[state.activeSegmentIndex].deleted,
     selectSelectedWorkflowId: state => state.selectedWorkflowId,
     selectHasChanges: state => state.hasChanges,
+    selectTimelineZoom: state => state.timelineZoom,
     selectWaveformImages: state => state.waveformImages,
     selectOriginalThumbnails: state => state.originalThumbnails,
     // Selectors mainly pertaining to the information fetched from Opencast
@@ -424,7 +436,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
   setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
   removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
-  setPreviewTriggered, setClickTriggered } = videoSlice.actions;
+  setPreviewTriggered, setClickTriggered, setTimelineZoom, timelineZoomIn, timelineZoomOut } = videoSlice.actions;
 
 export const selectVideos = createSelector(
   [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
@@ -446,6 +458,7 @@ export const {
   selectIsCurrentSegmentAlive,
   selectSelectedWorkflowId,
   selectHasChanges,
+  selectTimelineZoom,
   selectWaveformImages,
   selectOriginalThumbnails,
   selectVideoURL,
