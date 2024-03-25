@@ -3,9 +3,6 @@ module.exports = {
     "@opencast/eslint-config-ts-react",
     "react-app/jest",
   ],
-  rules: {
-
-  },
   overrides: [
     {
       files: ["./*.js"],
