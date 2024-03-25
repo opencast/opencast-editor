@@ -37,7 +37,7 @@ const Timeline: React.FC<{
   styleByActiveSegment?: boolean,
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying: (state: RootState) => boolean,
-  setClickTriggered: ActionCreatorWithPayload<any, string>,
+  setClickTriggered: ActionCreatorWithPayload<boolean, string>,
   setCurrentlyAt: ActionCreatorWithPayload<number, string>,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
@@ -440,6 +440,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
           const file = new File([blob], blob);
 
           // Start waveform worker with blob
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const waveformWorker: any = new Waveform({
             type: "img", width: "2000", height: "230", samples: 100000, media: file,
           });
@@ -450,7 +451,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
           };
 
           // When done, save path to generated waveform img
-          waveformWorker.oncomplete = (image: any, _numSamples: any) => {
+          waveformWorker.oncomplete = (image: string, _numSamples: number) => {
             newImages.push(image);
             waveformsProcessed++;
             // If all images are generated, rerender

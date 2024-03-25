@@ -130,10 +130,10 @@ const videoSlice = createSlice({
     setVolume: (state, action: PayloadAction<video["volume"]>) => {
       state.volume = action.payload;
     },
-    setPreviewTriggered: (state, action) => {
+    setPreviewTriggered: (state, action: PayloadAction<video["previewTriggered"]>) => {
       state.previewTriggered = action.payload;
     },
-    setClickTriggered: (state, action) => {
+    setClickTriggered: (state, action: PayloadAction<video["clickTriggered"]>) => {
       state.clickTriggered = action.payload;
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
