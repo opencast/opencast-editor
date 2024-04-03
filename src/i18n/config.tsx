@@ -2,7 +2,7 @@ import i18next, { InitOptions } from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-import locales from "./locales/locales.json";
+import locales from "./locales.json";
 
 const debug = Boolean(new URLSearchParams(window.location.search).get("debug"));
 

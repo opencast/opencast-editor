@@ -190,7 +190,7 @@ const loadContextSettings = async () => {
   // server root.
   const settingsPath = import.meta.env.VITE_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
   const base = settingsPath.startsWith("/") ? "" : basepath;
-  const url = `${window.location.origin}${base}${settingsPath}`;
+  const url = new URL(base.concat(settingsPath), window.location.origin);
   let response;
   try {
     response = await fetch(url);
