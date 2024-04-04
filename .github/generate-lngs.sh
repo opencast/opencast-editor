@@ -4,7 +4,7 @@ declare -A country_language_map
 declare -a order
 
 # Loop through each file in the directory
-for file in *.json; do
+for file in ??-??.json; do
     if [ -f "$file" ]; then
         # Extract country name and language code from the filename
         country=$(basename "$file" .json | cut -d '-' -f 1)
