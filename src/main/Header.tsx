@@ -17,7 +17,7 @@ import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
-import { locales } from "../i18n/config";
+import { languages as lngs } from "../i18n/lngs-generated";
 
 function Header() {
   const theme = useTheme();
@@ -143,8 +143,8 @@ const LanguageButton: React.FC = () => {
     }).of(language);
   };
 
-  const languages = locales?.map(entry => {
-    return { value: entry, label: languageNames(entry) };
+  const languages = Array.from(lngs, ([key, value]) => {
+    return { value: value, label: languageNames(key) };
   });
 
   // menuItems can"t deal with languages being undefined, so we return early
