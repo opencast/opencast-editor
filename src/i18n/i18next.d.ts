@@ -2,7 +2,7 @@
 import 'i18next';
 
 // import all namespaces (for the default language, only)
-import translation from '../i18n/locales/en-US.json';
+import translation from './locales/en.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {

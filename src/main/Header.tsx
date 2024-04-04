@@ -17,6 +17,7 @@ import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
+import { locales } from "../i18n/config";
 
 function Header() {
   const theme = useTheme();
@@ -142,9 +143,7 @@ const LanguageButton: React.FC = () => {
     }).of(language);
   };
 
-  const resourcesArray: string[] | undefined = i18next.options.resources && Object.keys(i18next.options.resources);
-
-  const languages = resourcesArray?.map(entry => {
+  const languages = locales?.map(entry => {
     return { value: entry, label: languageNames(entry) };
   });
 
