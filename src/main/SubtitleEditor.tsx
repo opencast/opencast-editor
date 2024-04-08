@@ -33,7 +33,7 @@ const SubtitleEditor: React.FC = () => {
   const [getError, setGetError] = useState<string | undefined>(undefined);
   const subtitle = useAppSelector(selectSelectedSubtitleById);
   const selectedId = useAppSelector(selectSelectedSubtitleId);
-  const captionTrack = useAppSelector(selectSubtitlesFromOpencastById(selectedId));
+  const captionTrack = useAppSelector(state => selectSubtitlesFromOpencastById(state, selectedId));
   const theme = useTheme();
 
   // Prepare subtitle in redux

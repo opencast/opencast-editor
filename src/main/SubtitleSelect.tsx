@@ -94,7 +94,7 @@ const SubtitleSelect: React.FC = () => {
   // Converts tags from the config file format to opencast format
   const convertTags = (tags: subtitleTags) => {
     return Object.entries(tags)
-      .map(tag => `${tag[0]}: ${tag[1]}`)
+      .map(tag => `${tag[0]}:${tag[1]}`)
       .concat();
   };
 
@@ -299,17 +299,18 @@ const SubtitleAddButton: React.FC<{
                 </Select>
               </ThemeProvider>
 
-              {/* "By default disabled elements like <button> do not trigger user interactions
-                * so a Tooltip will not activate on normal events like hover. To accommodate
-                * disabled elements, add a simple wrapper element, such as a span."
-                * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
-              <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
-                <button css={[basicButtonStyle(theme), createButtonStyle]}
-                  type="submit"
-                  aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                  disabled={submitting || pristine}>
-                  {t("subtitles.createSubtitleButton-createButton")}
-                </button>
+              <ThemedTooltip title={submitting || pristine ?
+                t("subtitles.createSubtitleButton-createButton-disabled-tooltip") :
+                t("subtitles.createSubtitleButton-createButton-tooltip")
+              }>
+                <span>
+                  <button css={[basicButtonStyle(theme), createButtonStyle]}
+                    type="submit"
+                    aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                    disabled={submitting || pristine}>
+                    {t("subtitles.createSubtitleButton-createButton")}
+                  </button>
+                </span>
               </ThemedTooltip>
 
             </form>

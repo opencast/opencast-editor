@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useAppSelector } from "../redux/store";
 import { useTheme } from "../themes";
@@ -11,7 +12,7 @@ import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from "../cssStyles";
 
-import { ReactComponent as LogoSvg } from "../img/opencast-editor.svg";
+import LogoSvg from "../img/opencast-editor.svg?react";
 import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
