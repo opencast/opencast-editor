@@ -12,7 +12,7 @@ import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from "../cssStyles";
 
-import LogoSvg from "../img/opencast-editor.svg?react";
+
 import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
@@ -91,19 +91,49 @@ function Header() {
   );
 }
 
+const LogoPicture: React.FC = () => {
+  /*Should I import defines plugin, like it is in studio? How?*/
+  const path = (filename:string) => "/" + filename;
+
+  return (
+      <div>
+        <picture css={{
+          height: "100%",
+          display: "flex",
+          opacity: useColorScheme().scheme === "dark" ? 0.8 : 1.0,
+          paddingLeft: 8,
+          alignItems: "center",
+          "> *": {
+            height: "calc(100% - 0.5px)",
+          },
+        }}>
+          <source srcSet={path("editor-logo.svg")}></source>
+          <img src={path("editor-logo.svg")} alt="Opencast Editor Logo"/>
+        </picture>
+        ;
+      </div>
+  )
+}
+
 const Logo: React.FC = () => {
 
-  const { t } = useTranslation();
+  const {t } = useTranslation();
   const { scheme } = useColorScheme();
+
+
 
   const logo = css({
     paddingLeft: "8px",
     opacity: scheme === "dark" ? "0.8" : "1",
 
+    display: "flex",
+
     height: "100%",
     "> *": {
       height: "calc(100% - 12px)",
     },
+
+    alignItems: "center",
 
     // Unset a bunch of CSS to keep the logo clean
     outline: "unset",
@@ -117,7 +147,7 @@ const Logo: React.FC = () => {
 
   return (
     <MainMenuButton
-      Icon={LogoSvg}
+      Icon={LogoPicture}
       stateName={MainMenuStateNames.cutting}
       bottomText={""}
       ariaLabelText={t("mainMenu.cutting-button")}
