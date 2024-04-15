@@ -135,7 +135,8 @@ const WorkflowSelection: React.FC = () => {
         render(
           t("workflowSelection.saveAndProcess-text"),
           <Trans i18nKey="workflowSelection.oneWorkflow-text">
-            The video will be cut and processed with the workflow {{ workflow: workflows[0].name }}.<br />
+            The changes will be saved and the video will be cut and processed with
+            the workflow {{ workflow: workflows[0].name }}.<br />
             This will take some time.
           </Trans>,
           false,
