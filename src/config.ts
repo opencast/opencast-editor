@@ -180,7 +180,7 @@ export const init = async () => {
 const loadContextSettings = async () => {
 
   // Try to retrieve the context settings.
-  let basepath = import.meta.env.PUBLIC_URL || "/";
+  let basepath = import.meta.env.BASE_URL || "/";
   if (!basepath.endsWith("/")) {
     basepath += "/";
   }
@@ -190,7 +190,7 @@ const loadContextSettings = async () => {
   // server root.
   const settingsPath = import.meta.env.VITE_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
   const base = settingsPath.startsWith("/") ? "" : basepath;
-  const url = `${window.location.origin}${base}${settingsPath}`;
+  const url = new URL(base.concat(settingsPath), window.location.origin);
   let response;
   try {
     response = await fetch(url);
