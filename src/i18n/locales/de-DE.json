@@ -95,7 +95,8 @@
         "generateWaveform-text": "Waveform wird generiert",
         "segment-tooltip": "Segment {{segment}}",
         "scrubber-text-aria": "Zeitmarker. {{currentTime}}. Aktives Segment: {{segment}}. {{segmentStatus}}. Steuerung: {{moveLeft}} und {{moveRight}}, um den Zeitmarker zu bewegen. {{increase}} und {{decrease}}, um das Verschiebungdelta zu erhöhen/verringern.\n",
-        "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. Ende: {{end}}.\n"
+        "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. Ende: {{end}}.\n",
+        "cut-text-aria": "Schnittmarker. {{time}}. Zwischen Segment {{leftSegment}} und {{rightSegment}}.\n"
     },
     "workflowConfig": {
         "headline-text": "Workflow Konfiguration",
