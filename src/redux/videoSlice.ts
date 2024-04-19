@@ -233,28 +233,29 @@ const videoSlice = createSlice({
     ) => {
       const leftSegmentIndex = action.payload.leftSegmentIndex;
       const rightSegmentIndex = action.payload.leftSegmentIndex + 1;
+      const time = roundToDecimalPlace(action.payload.time, 0);
 
       if (leftSegmentIndex < 0 || rightSegmentIndex >= state.segments.length) {
         return;
       }
 
       // Merge overlapping left cut
-      if (action.payload.time <= state.segments[leftSegmentIndex].start) {
+      if (time <= state.segments[leftSegmentIndex].start) {
         mergeSegments(state, rightSegmentIndex, leftSegmentIndex);
         state.hasChanges = true;
         return;
       }
 
       // Merge overlapping right cut
-      if (action.payload.time >= state.segments[rightSegmentIndex].end) {
+      if (time >= state.segments[rightSegmentIndex].end) {
         mergeSegments(state, leftSegmentIndex, rightSegmentIndex);
         state.hasChanges = true;
         return;
       }
 
       // Move segment edges
-      state.segments[leftSegmentIndex].end = action.payload.time;
-      state.segments[rightSegmentIndex].start = action.payload.time;
+      state.segments[leftSegmentIndex].end = time;
+      state.segments[rightSegmentIndex].start = time;
       state.hasChanges = true;
     },
     markAsDeletedOrAlive: state => {
