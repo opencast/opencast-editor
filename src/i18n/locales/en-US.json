@@ -52,7 +52,7 @@
 
     "finishMenu": {
       "save-button": "Save changes",
-      "start-button": "Save and publish changes",
+      "start-button": "Save and process changes",
       "discard-button": "Discard changes"
     },
 
@@ -84,7 +84,7 @@
     },
 
     "workflowSelection": {
-      "saveAndProcess-text": "Save and Publish",
+      "saveAndProcess-text": "Save and Process",
       "selectWF-text": "Select a workflow",
       "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
       "oneWorkflow-text": "The changes will be saved and the video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
