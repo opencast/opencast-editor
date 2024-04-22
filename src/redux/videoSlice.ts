@@ -142,6 +142,26 @@ const videoSlice = createSlice({
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
       updateCurrentlyAt(state, roundToDecimalPlace(action.payload * 1000, 0));
     },
+    jumpToPreviousSegment: state => {
+      let previousSegmentIndex = state.activeSegmentIndex - 1;
+
+      if (state.activeSegmentIndex == 0) {
+        // Jump to start of first segment
+        previousSegmentIndex = state.activeSegmentIndex;
+      }
+
+      updateCurrentlyAt(state, state.segments[previousSegmentIndex].start);
+    },
+    jumpToNextSegment: state => {
+      let nextSegmentIndex = state.activeSegmentIndex + 1;
+
+      if (state.activeSegmentIndex + 1 >= state.segments.length) {
+        // Jump to start of last segment
+        nextSegmentIndex = state.activeSegmentIndex;
+      }
+
+      updateCurrentlyAt(state, state.segments[nextSegmentIndex].start);
+    },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload);
     },
@@ -311,7 +331,7 @@ const videoSlice = createSlice({
  * @param state
  */
 const updateActiveSegment = (state: video) => {
-  state.activeSegmentIndex = state.segments.findIndex(element =>
+  state.activeSegmentIndex = state.segments.findLastIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt);
   // If there is an error, assume the first (the starting) segment
   if (state.activeSegmentIndex < 0) {
@@ -424,7 +444,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
   setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
   removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
-  setPreviewTriggered, setClickTriggered } = videoSlice.actions;
+  setPreviewTriggered, setClickTriggered, jumpToPreviousSegment, jumpToNextSegment } = videoSlice.actions;
 
 export const selectVideos = createSelector(
   [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
