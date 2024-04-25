@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
         "delete-button": "Verwijder",
         "delete-restore-tooltip": "Markeer of verwijder het segment op de huidige positie om te worden verwijderd. Sneltoets: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Verwijderen en herstellen. Markeer of verwijder het segment op de huidige positie om te worden verwijderd. Sneltoets: {{hotKeyName}}.",
+        "delete-restore-tooltip-aria": "Verwijderen en herstellen. Markeer of verwijder het segment op de huidige positie om te worden verwijderd. Sneltoets: {{hotkeyName}}.",
         "merge-all-button": "Merge All",
         "merge-all-tooltip": "Combine all segments into a single segment.",
         "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",

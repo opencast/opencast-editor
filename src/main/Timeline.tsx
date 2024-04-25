@@ -23,6 +23,7 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { RootState } from "../redux/store";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import CuttingActionsContextMenu from "./CuttingActionsContextMenu";
 import { useHotkeys } from "react-hotkeys-hook";
 import { spinningStyle } from "../cssStyles";
 
@@ -71,25 +72,27 @@ const Timeline: React.FC<{
   };
 
   return (
-    <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
-      <Scrubber
-        timelineWidth={width}
-        timelineHeight={timelineHeight}
-        selectCurrentlyAt={selectCurrentlyAt}
-        selectIsPlaying={selectIsPlaying}
-        setCurrentlyAt={setCurrentlyAt}
-        setIsPlaying={setIsPlaying}
-      />
-      <div css={{ position: "relative", height: timelineHeight + "px" }} >
-        <Waveforms timelineHeight={timelineHeight} />
-        <SegmentsList
+    <CuttingActionsContextMenu>
+      <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
+        <Scrubber
           timelineWidth={width}
           timelineHeight={timelineHeight}
-          styleByActiveSegment={styleByActiveSegment}
-          tabable={true}
+          selectCurrentlyAt={selectCurrentlyAt}
+          selectIsPlaying={selectIsPlaying}
+          setCurrentlyAt={setCurrentlyAt}
+          setIsPlaying={setIsPlaying}
         />
+        <div css={{ position: "relative", height: timelineHeight + "px" }}>
+          <Waveforms timelineHeight={timelineHeight}/>
+          <SegmentsList
+            timelineWidth={width}
+            timelineHeight={timelineHeight}
+            styleByActiveSegment={styleByActiveSegment}
+            tabable={true}
+          />
+        </div>
       </div>
-    </div>
+    </CuttingActionsContextMenu>
   );
 };
 

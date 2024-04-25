@@ -34,6 +34,7 @@ export interface Theme {
   inverted_text: string;
   tooltip: string;
   tooltip_text: string;
+  contextMenu: string;
   element_outline: string;
   selected_text: string;
   dropdown_border: string;
@@ -90,6 +91,7 @@ export const lightMode: Theme = {
   inverted_text: COLORS.neutral90,
   tooltip: COLORS.neutral80,
   tooltip_text: COLORS.neutral05,
+  contextMenu: COLORS.neutral10,
   element_outline: "2px solid transparent",
   selected_text: COLORS.neutral90,
   dropdown_border: `1px solid ${COLORS.neutral40}`,
@@ -149,6 +151,7 @@ export const darkMode: Theme = {
   inverted_text: COLORS.neutral90,
   tooltip: COLORS.neutral80,
   tooltip_text: COLORS.neutral05,
+  contextMenu: COLORS.neutral20,
   element_outline: "2px solid transparent",
   selected_text: COLORS.neutral90,
   dropdown_border: `1px solid ${COLORS.neutral40}`,
@@ -207,6 +210,7 @@ export const highContrastDarkMode: Theme = {
   inverted_text: "#000",
   tooltip: "#fff",
   tooltip_text: "#000",
+  contextMenu: "#000",
   element_outline: "2px solid #fff",
   selected_text: "#000",
   dropdown_border: "2px solid #fff",
@@ -263,6 +267,7 @@ export const highContrastLightMode: Theme = {
   inverted_text: "#fff",
   tooltip: "#000",
   tooltip_text: "#fff",
+  contextMenu: "snow",
   element_outline: "2px solid #000",
   selected_text: "#fff",
   dropdown_border: "2px solid #000",
