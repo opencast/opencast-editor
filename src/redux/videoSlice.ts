@@ -12,6 +12,7 @@ export interface video {
   volume: number,                 // Video playback volume
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   clickTriggered: boolean,        // Another video player callback
+  jumpTriggered: boolean,         // Another video player callback
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
@@ -54,6 +55,7 @@ export const initialState: video & httpRequestState = {
   selectedWorkflowId: "",
   previewTriggered: false,
   clickTriggered: false,
+  jumpTriggered: false,
   aspectRatios: [],
   hasChanges: false,
   waveformImages: [],
@@ -136,6 +138,9 @@ const videoSlice = createSlice({
     setClickTriggered: (state, action: PayloadAction<video["clickTriggered"]>) => {
       state.clickTriggered = action.payload;
     },
+    setJumpTriggered: (state, action) => {
+      state.jumpTriggered = action.payload;
+    },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       updateCurrentlyAt(state, action.payload);
     },
@@ -145,12 +150,18 @@ const videoSlice = createSlice({
     jumpToPreviousSegment: state => {
       let previousSegmentIndex = state.activeSegmentIndex - 1;
 
+      // Jump to start of active segment if current time is in interval [start + 3s, end)
+      if (state.currentlyAt >= state.segments[state.activeSegmentIndex].start + 3000) {
+        previousSegmentIndex = state.activeSegmentIndex;
+      }
+
       if (state.activeSegmentIndex == 0) {
         // Jump to start of first segment
         previousSegmentIndex = state.activeSegmentIndex;
       }
 
       updateCurrentlyAt(state, state.segments[previousSegmentIndex].start);
+      state.jumpTriggered = true;
     },
     jumpToNextSegment: state => {
       let nextSegmentIndex = state.activeSegmentIndex + 1;
@@ -161,6 +172,7 @@ const videoSlice = createSlice({
       }
 
       updateCurrentlyAt(state, state.segments[nextSegmentIndex].start);
+      state.jumpTriggered = true;
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload);
@@ -296,6 +308,7 @@ const videoSlice = createSlice({
     selectVolume: state => state.volume,
     selectPreviewTriggered: state => state.previewTriggered,
     selectClickTriggered: state => state.clickTriggered,
+    selectJumpTriggered: state => state.jumpTriggered,
     selectCurrentlyAt: state => state.currentlyAt,
     selectCurrentlyAtInSeconds: state => state.currentlyAt / 1000,
     selectSegments: state => state.segments,
@@ -441,10 +454,34 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
-  setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
-  removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
-  setPreviewTriggered, setClickTriggered, jumpToPreviousSegment, jumpToNextSegment } = videoSlice.actions;
+export const {
+  setTrackEnabled,
+  setIsPlaying,
+  setIsPlayPreview,
+  setIsMuted,
+  setVolume,
+  setCurrentlyAt,
+  setCurrentlyAtInSeconds,
+  addSegment,
+  setAspectRatio,
+  setHasChanges,
+  setWaveformImages,
+  setThumbnails,
+  setThumbnail,
+  removeThumbnail,
+  setLock,
+  cut,
+  markAsDeletedOrAlive,
+  setSelectedWorkflowIndex,
+  mergeLeft,
+  mergeRight,
+  mergeAll,
+  setPreviewTriggered,
+  setClickTriggered,
+  setJumpTriggered,
+  jumpToPreviousSegment,
+  jumpToNextSegment
+} = videoSlice.actions;
 
 export const selectVideos = createSelector(
   [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
@@ -459,6 +496,7 @@ export const {
   selectVolume,
   selectPreviewTriggered,
   selectClickTriggered,
+  selectJumpTriggered,
   selectCurrentlyAt,
   selectCurrentlyAtInSeconds,
   selectSegments,
