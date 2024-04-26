@@ -1,7 +1,7 @@
 import { Segment, SubtitleCue, SubtitlesInEditor } from "./../types";
-import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { roundToDecimalPlace } from "../util/utilityFunctions";
-import type { AppDispatch, RootState } from "../redux/store";
+import type { RootState } from "../redux/store";
 import { video } from "./videoSlice";
 
 export interface subtitle {
@@ -63,7 +63,7 @@ export const subtitleSlice = createSlice({
     setIsPlayPreview: (state, action: PayloadAction<subtitle["isPlaying"]>) => {
       state.isPlayPreview = action.payload;
     },
-    setPreviewTriggered: (state, action) => {
+    setPreviewTriggered: (state, action: PayloadAction<subtitle["previewTriggered"]>) => {
       state.previewTriggered = action.payload;
     },
     setCurrentlyAt: (state, action: PayloadAction<subtitle["currentlyAt"]>) => {
@@ -250,8 +250,8 @@ export const {
  * Will grab the state from videoState to skip past deleted segment if preview
  * mode is active.
  */
-export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
-  return (dispatch: AppDispatch, getState: () => RootState) => {
+export const setCurrentlyAtAndTriggerPreview = createAsyncThunk("subtitleState/setCurrentlyAtAndTriggerPreview",
+  async (milliseconds: number, { getState, dispatch }) => {
     milliseconds = roundToDecimalPlace(milliseconds, 0);
 
     if (milliseconds < 0) {
@@ -285,7 +285,6 @@ export function setCurrentlyAtAndTriggerPreview(milliseconds: number) {
     if (triggered) {
       dispatch(setPreviewTriggered(true));
     }
-  };
-}
+  });
 
 export default subtitleSlice.reducer;
