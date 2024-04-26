@@ -1,41 +1,36 @@
-import i18next, { InitOptions } from "i18next";
+import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import ChainedBackend, { ChainedBackendOptions } from "i18next-chained-backend";
+import resourcesToBackend from "i18next-resources-to-backend";
 
-import locales from "./locales.json";
+import { languages } from "./lngs-generated";
+import LazyLoadingPlugin from "./LazyLoadingPlugin";
+
 
 const debug = Boolean(new URLSearchParams(window.location.search).get("debug"));
 
-const resources: InitOptions["resources"] = {};
-
-const data = import.meta.glob("./locales/*.json");
-
-for (const path in data) {
-  const code = path.replace(/^.*[\\/]/, "").replace(/\..*$/, "");
-  if (!locales.some(e => e.includes(code))) {
-    continue;
-  }
-  const short = code.replace(/-.*$/, "");
-  const main = locales.filter(l => l.indexOf(short) === 0).length === 1;
-
-  data[path]().then(mod => {
-    const translation = JSON.parse(JSON.stringify(mod));
-
-    if (!main) {
-      resources[code] = { translation: translation };
-    }
-    resources[short] = { translation: translation };
-  });
-}
+const bundledResources = {
+  en: {
+    translation: import("./locales/en-US.json"),
+  },
+};
 
 i18next
+  .use(ChainedBackend)
   .use(initReactI18next)
   .use(LanguageDetector)
-  .init({
-    resources,
-    fallbackLng: ["en-US", "en"],
-    nonExplicitSupportedLngs: true,
+  .init<ChainedBackendOptions>({
+    supportedLngs: Array.from(languages.keys()),
+    fallbackLng: ["en", "en-US"],
+    nonExplicitSupportedLngs: false,
     debug: debug,
+    backend: {
+      backends: [
+        LazyLoadingPlugin,
+        resourcesToBackend(bundledResources),
+      ],
+    },
   });
 
 if (debug) {
