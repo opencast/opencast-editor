@@ -128,7 +128,7 @@ interface VideoPlayerProps {
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
   setPreviewTriggered: ActionCreatorWithPayload<boolean, string>,
   setClickTriggered: ActionCreatorWithPayload<boolean, string>,
-  setJumpTriggered: ActionCreatorWithPayload<any, string>,
+  setJumpTriggered: ActionCreatorWithPayload<boolean, string>,
   setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, AsyncThunkConfig>,
   setAspectRatio: ActionCreatorWithPayload<{ dataKey: number; } & { width: number, height: number; }, string>,
 }

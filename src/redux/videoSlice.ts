@@ -138,7 +138,7 @@ const videoSlice = createSlice({
     setClickTriggered: (state, action: PayloadAction<video["clickTriggered"]>) => {
       state.clickTriggered = action.payload;
     },
-    setJumpTriggered: (state, action) => {
+    setJumpTriggered: (state, action: PayloadAction<video["jumpTriggered"]>) => {
       state.jumpTriggered = action.payload;
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
@@ -480,7 +480,7 @@ export const {
   setClickTriggered,
   setJumpTriggered,
   jumpToPreviousSegment,
-  jumpToNextSegment
+  jumpToNextSegment,
 } = videoSlice.actions;
 
 export const selectVideos = createSelector(
