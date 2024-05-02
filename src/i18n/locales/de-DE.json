@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Schneiden. Teilt das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}.",
         "delete-button": "Löschen",
         "delete-restore-tooltip": "Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotkeyName}}.",
+        "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
         "merge-all-button": "Alle zusammenführen",
         "merge-all-tooltip": "Alle Segmente in ein einziges Segment zusammenführen.",
         "merge-all-tooltip-aria": "Alle Segmente in ein einziges Segment zusammenführen.",

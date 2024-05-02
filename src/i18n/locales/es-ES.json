@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Cortar. Dividir el segmento en la posición actual del marcador en la línea de tiempo. Acceso Rápido: {{hotkeyName}}.",
         "delete-button": "Borrar",
         "delete-restore-tooltip": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido:: {{hotkeyName}}.",
+        "delete-restore-tooltip-aria": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido:: {{hotKeyName}}.",
         "merge-all-button": "Combinarlo todo",
         "merge-all-tooltip": "Combina todos los segmentos en un solo segmento.",
         "merge-all-tooltip-aria": "Combinarlo todo. Combina todos los segmentos en un solo segmento.",
