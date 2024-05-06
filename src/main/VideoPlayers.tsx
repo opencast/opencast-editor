@@ -18,6 +18,8 @@ import {
   selectAspectRatio,
   setClickTriggered,
   selectClickTriggered,
+  setJumpTriggered,
+  selectJumpTriggered,
   setCurrentlyAt,
 } from "../redux/videoSlice";
 
@@ -80,10 +82,12 @@ const VideoPlayers: React.FC<{
         selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
         selectPreviewTriggered={selectPreviewTriggered}
         selectClickTriggered={selectClickTriggered}
+        selectJumpTriggered={selectJumpTriggered}
         selectAspectRatio={selectAspectRatio}
         setIsPlaying={setIsPlaying}
         setPreviewTriggered={setPreviewTriggered}
         setClickTriggered={setClickTriggered}
+        setJumpTriggered={setJumpTriggered}
         setCurrentlyAt={setCurrentlyAt}
         setAspectRatio={setAspectRatio}
         ref={el => {
@@ -119,10 +123,12 @@ interface VideoPlayerProps {
   selectCurrentlyAtInSeconds: (state: RootState) => number,
   selectPreviewTriggered: (state: RootState) => boolean,
   selectClickTriggered: (state: RootState) => boolean,
+  selectJumpTriggered: (state: RootState) => boolean,
   selectAspectRatio: (state: RootState) => number,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
   setPreviewTriggered: ActionCreatorWithPayload<boolean, string>,
   setClickTriggered: ActionCreatorWithPayload<boolean, string>,
+  setJumpTriggered: ActionCreatorWithPayload<boolean, string>,
   setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, AsyncThunkConfig>,
   setAspectRatio: ActionCreatorWithPayload<{ dataKey: number; } & { width: number, height: number; }, string>,
 }
@@ -147,6 +153,7 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       selectCurrentlyAtInSeconds,
       selectPreviewTriggered,
       selectClickTriggered,
+      selectJumpTriggered,
       selectAspectRatio,
       setIsPlaying,
       setPreviewTriggered,
@@ -166,6 +173,7 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
     const duration = useAppSelector(selectDurationInSeconds);
     const previewTriggered = useAppSelector(selectPreviewTriggered);
     const clickTriggered = useAppSelector(selectClickTriggered);
+    const jumpTriggered = useAppSelector(selectJumpTriggered);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const aspectRatio = useAppSelector(selectAspectRatio);
     const theme = useTheme();
@@ -246,6 +254,10 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       if (clickTriggered && ref.current && ready) {
         ref.current.seekTo(currentlyAt, "seconds");
         dispatch(setClickTriggered(false));
+      }
+      if (jumpTriggered && ref.current && ready) {
+        ref.current.seekTo(currentlyAt, "seconds");
+        dispatch(setJumpTriggered(false));
       }
     });
 

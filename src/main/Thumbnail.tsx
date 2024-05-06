@@ -32,6 +32,8 @@ import {
   setIsMuted,
   setVolume,
   setCurrentlyAt,
+  jumpToPreviousSegment,
+  jumpToNextSegment,
 } from "../redux/videoSlice";
 import { ThemedTooltip } from "./Tooltip";
 import VideoPlayers, { VideoPlayerForwardRef } from "./VideoPlayers";
@@ -149,6 +151,8 @@ const Thumbnail: React.FC = () => {
             setIsMuted={setIsMuted}
             setVolume={setVolume}
             setIsPlayPreview={setIsPlayPreview}
+            jumpToPreviousSegment={jumpToPreviousSegment}
+            jumpToNextSegment={jumpToNextSegment}
           />
         </div>
       </div>
