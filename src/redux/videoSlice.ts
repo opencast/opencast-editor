@@ -1,7 +1,7 @@
 import { createSlice, nanoid, createAsyncThunk, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
-import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
+import { Segment, httpRequestState, Track, Workflow, Flavor, SubtitlesFromOpencast } from "../types";
 import { roundToDecimalPlace } from "../util/utilityFunctions";
 import { settings } from "../config";
 
@@ -324,9 +324,18 @@ const videoSlice = createSlice({
     selectDuration: state => state.duration,
     selectDurationInSeconds: state => state.duration / 1000,
     selectTitle: state => state.title,
+    selectPresenters: state => state.presenters,
     selectTracks: state => state.tracks,
     selectWorkflows: state => state.workflows,
     selectAspectRatio: state => calculateTotalAspectRatio(state.aspectRatios),
+    selectTracksByFlavor: (state, flavor: Flavor | undefined) => {
+      if (!flavor) {
+        return undefined;
+      }
+      return state.tracks.filter(
+        (track: Track) => track.flavor.type === flavor.type && track.flavor.subtype === flavor.subtype
+      );
+    },
     selectSubtitlesFromOpencast: state => state.subtitlesFromOpencast,
     selectSubtitlesFromOpencastById: (state, id: string) => {
       for (const cap of state.subtitlesFromOpencast) {
@@ -511,9 +520,11 @@ export const {
   selectDuration,
   selectDurationInSeconds,
   selectTitle,
+  selectPresenters,
   selectTracks,
   selectWorkflows,
   selectAspectRatio,
+  selectTracksByFlavor,
   selectSubtitlesFromOpencast,
   selectSubtitlesFromOpencastById,
 } = videoSlice.selectors;

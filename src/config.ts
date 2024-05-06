@@ -47,6 +47,7 @@ interface iSettings {
     url: string,
     name: string | undefined,
     password: string | undefined,
+    audioFileFlavor: Flavor | undefined,
     local: boolean,
   },
   metadata: {
@@ -85,6 +86,7 @@ const defaultSettings: iSettings = {
     url: window.location.origin,
     name: undefined,
     password: undefined,
+    audioFileFlavor: undefined,
     local: true,
   },
   metadata: {
@@ -396,6 +398,7 @@ const SCHEMA = {
     url: types.string,
     name: types.string,
     password: types.string,
+    audioFileFlavor: types.map,
   },
   metadata: {
     show: types.boolean,

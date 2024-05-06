@@ -5,9 +5,15 @@ import Draggable, { DraggableEventHandler } from "react-draggable";
 import { css } from "@emotion/react";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { Segment, httpRequestState } from "../types";
+import { Segment, httpRequestState, Track } from "../types";
 import {
-  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages,
+  selectSegments,
+  selectActiveSegmentIndex,
+  selectDuration,
+  selectTracksByFlavor,
+  selectTracks,
+  selectWaveformImages,
+  setWaveformImages,
 } from "../redux/videoSlice";
 
 import { LuMenu, LuLoader } from "react-icons/lu";
@@ -26,6 +32,7 @@ import { ThemedTooltip } from "./Tooltip";
 import CuttingActionsContextMenu from "./CuttingActionsContextMenu";
 import { useHotkeys } from "react-hotkeys-hook";
 import { spinningStyle } from "../cssStyles";
+import { settings } from "../config";
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -392,9 +399,13 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
-  const videoURLs = useAppSelector(selectVideoURL);
   const videoURLStatus = useAppSelector((state: { videoState: { status: httpRequestState["status"]; }; }) =>
     state.videoState.status);
+  const tracks = useAppSelector(selectTracks);
+  const tracksByFlavor = useAppSelector(selectTracksByFlavor(settings.opencast.audioFileFlavor ?
+    settings.opencast.audioFileFlavor :
+    undefined
+  ));
   const theme = useTheme();
 
   // Update based on current fetching status
@@ -430,7 +441,24 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
       let waveformsProcessed = 0;  // Counter for checking if all workers are done
 
       // Only display the waveform of the first video we get
-      const onlyOneURL = [videoURLs[0]];
+      let onlyOneURL = undefined;
+      // If a track was specified in the settings, use that one
+      if (tracksByFlavor && tracksByFlavor.length > 0) {
+        console.log("FOund audo");
+        onlyOneURL = [tracksByFlavor[0].uri];
+      }
+      // Else use the first track with audio
+      if (!onlyOneURL) {
+        console.log("Fallback 1");
+        const track = tracks.find((t: Track) => t.audio_stream.available);
+        onlyOneURL = track ? [track.uri] : undefined;
+      }
+      // Else use whatever
+      if (!onlyOneURL) {
+        console.log("Fallback 2");
+        onlyOneURL = [tracks[0].uri];
+      }
+      console.log(onlyOneURL);
 
       onlyOneURL.forEach((videoURL, _index, array) => {
         // Set up blob request
@@ -467,7 +495,9 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
         xhr.send();
       });
     }
-  }, [dispatch, images, videoURLStatus, videoURLs]);
+  // Only run this hook once
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoURLStatus]);
 
 
   const renderImages = () => {
