@@ -150,14 +150,18 @@ const videoSlice = createSlice({
     jumpToPreviousSegment: state => {
       let previousSegmentIndex = state.activeSegmentIndex - 1;
 
-      // Jump to start of active segment if current time is in interval [start + 3s, end)
-      if (state.currentlyAt >= state.segments[state.activeSegmentIndex].start + 3000) {
+      // Calculate the threshold for “being on a cut mark”.
+      // It is based on the video length, but in between 0.5s and 3.0s.
+      const threshold = Math.max(Math.min(state.duration / 100, 3000), 500);
+
+      // Jump to start of active segment if current time is in interval [start + threshold, end)
+      if (state.currentlyAt >= state.segments[state.activeSegmentIndex].start + threshold) {
         previousSegmentIndex = state.activeSegmentIndex;
       }
 
+      // Jump to start of first segment if we are anywhere in the first segment
       if (state.activeSegmentIndex == 0) {
-        // Jump to start of first segment
-        previousSegmentIndex = state.activeSegmentIndex;
+        previousSegmentIndex = 0;
       }
 
       updateCurrentlyAt(state, state.segments[previousSegmentIndex].start);
