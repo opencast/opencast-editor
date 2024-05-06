@@ -49,7 +49,7 @@
     },
     "finishMenu": {
         "save-button": "Αποθήκευση αλλαγών",
-        "start-button": "Έναρξη επεξεργασίας",
+        "start-button": "Save and process changes",
         "discard-button": "Απόρριψη αλλαγών"
     },
     "save": {
@@ -80,7 +80,7 @@
         "saveAndProcess-text": "Αποθήκευση & επεξεργασία",
         "selectWF-text": "Επιλέξτε ροή εργασίας",
         "noWorkflows-text": "Δεν υπάρχουν ροές εργασίας για να επεξεργαστείτε τις αλλαγές σας. Παρακαλώ αποθηκεύστε τις αλλαγές σας και επικοινωνήστε με έναν διαχειριστή.\n",
-        "oneWorkflow-text": "Το βίντεο θα κοπεί και θα επεξεργαστεί με τη ροή εργασίας \"{{workflow}}\". <3/> Αυτό θα πάρει κάποιο χρόνο.\n",
+        "oneWorkflow-text": "The changes will be saved and the video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
         "manyWorkflows-text": "Επιλέξτε ποια ροή εργασίας θα χρησιμοποιηθεί για επεξεργασία.",
         "startProcessing-button": "Έναρξη επεξεργασίας",
         "back-button": "Πήγαινε με πίσω",

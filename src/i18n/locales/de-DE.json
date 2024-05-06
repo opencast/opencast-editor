@@ -49,7 +49,7 @@
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
-        "start-button": "Verarbeitung starten",
+        "start-button": "Save and process changes",
         "discard-button": "Änderungen verwerfen"
     },
     "save": {
@@ -80,7 +80,7 @@
         "saveAndProcess-text": "Speichern & verarbeiten",
         "selectWF-text": "Workflow wählen",
         "noWorkflows-text": "Es gibt keine Workflows zum Verarbeiten Ihrer Änderungen. Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Administrator.\n",
-        "oneWorkflow-text": "Das Video wird mit dem Workflow \"{{workflow}}\" geschnitten und verarbeitet. <3/> Dies wird einige Zeit dauern.\n",
+        "oneWorkflow-text": "The changes will be saved and the video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
         "manyWorkflows-text": "Wählen Sie aus, welchen Workflow Opencast für die Verarbeitung verwenden soll.",
         "startProcessing-button": "Verarbeitung starten",
         "back-button": "Zurück",
