@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Cortar. Dividir el segmento en la posición actual del marcador en la línea de tiempo. Acceso Rápido: {{hotkeyName}}.",
         "delete-button": "Borrar",
         "delete-restore-tooltip": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Marcar o desmarcar el segmento en la posición actual para ser eliminado. Acceso Rápido:: {{hotKeyName}}.",
+        "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}.",
         "merge-all-button": "Combinarlo todo",
         "merge-all-tooltip": "Combina todos los segmentos en un solo segmento.",
         "merge-all-tooltip-aria": "Combinarlo todo. Combina todos los segmentos en un solo segmento.",
@@ -33,6 +33,10 @@
         "previewButton-aria": "Activa o desactiva el modo de vista previa. Tecla de acceso: {{hotkeyName}}.",
         "playButton-tooltip": "Reproducir vídeo",
         "pauseButton-tooltip": "Pausar vídeo",
+        "previousButton": "Atras",
+        "previousButton-tooltip": "Back. Hotkey: {{hotkeyName}}.",
+        "nextButton": "Forward",
+        "nextButton-tooltip": "Forward. Hotkey: {{hotkeyName}}.",
         "current-time-tooltip": "Tiempo actual",
         "time-duration-tooltip": "Duración del vídeo",
         "duration-aria": "Duración",
@@ -91,7 +95,8 @@
         "generateWaveform-text": "Generando forma de onda",
         "segment-tooltip": "Segmento {{segment}}",
         "scrubber-text-aria": "Marca de tiempo. {{currentTime}}. Segmento activo: {{segment}}. {{segmentStatus}}. Controles: {{moveLeft}} y {{moveRight}} para mover la marca de tiempo. {{increase}} y {{decrease}} para incrementar/decrementar el movimiento delta.\n",
-        "segments-text-aria": "Segmento {{index}}. {{segmentStatus}}. Inicio: {{start}}. Final: {{end}}.\n"
+        "segments-text-aria": "Segmento {{index}}. {{segmentStatus}}. Inicio: {{start}}. Final: {{end}}.\n",
+        "cut-text-aria": "Cut marker. {{time}}. Between segment {{leftSegment}} and {{rightSegment}}.\n"
     },
     "workflowConfig": {
         "headline-text": "Configuración del flujo de trabajo",

@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Αποκοπή. Διαχωρίστε το τμήμα στην τρέχουσα θέση του χρονοδιαγράμματος. Πλήκτρο συντόμευσης: {{hotkeyName}}.",
         "delete-button": "Διαγραφή",
         "delete-restore-tooltip": "Σήμανση ή κατάργηση του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Διαγραφή και Επαναφορά. Σήμανση ή κατάργηση επισήμανσης του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotKeyName}}.",
+        "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}.",
         "merge-all-button": "Συγχώνευση Όλων",
         "merge-all-tooltip": "Συνδυάστε όλα τα τμήματα σε ένα μόνο τμήμα.",
         "merge-all-tooltip-aria": "Συγχώνευση Όλων. Συνδυάστε όλα τα τμήματα σε ένα μόνο τμήμα.",
@@ -33,6 +33,10 @@
         "previewButton-aria": "Ενεργοποίηση ή απενεργοποίηση λειτουργίας προεπισκόπησης. Πλήκτρο συντόμευσης: {{hotkeyName}}.",
         "playButton-tooltip": "Αναπαραγωγή βίντεο",
         "pauseButton-tooltip": "Παύση του βίντεο",
+        "previousButton": "Επιστροφή",
+        "previousButton-tooltip": "Back. Hotkey: {{hotkeyName}}.",
+        "nextButton": "Forward",
+        "nextButton-tooltip": "Forward. Hotkey: {{hotkeyName}}.",
         "current-time-tooltip": "Τρέχουσα ώρα",
         "time-duration-tooltip": "Διάρκεια βίντεο",
         "duration-aria": "Διάρκεια",
@@ -91,7 +95,8 @@
         "generateWaveform-text": "Δημιουργία Κυματομορφής",
         "segment-tooltip": "Τμήμα {{segment}}",
         "scrubber-text-aria": "Δείκτης χρονοδιαγράμματος. {{currentTime}}. Ενεργό τμήμα: {{segment}}. {{segmentStatus}}. Έλεγχοι: {{moveLeft}} και {{moveRight}} για να μετακινήσετε το δείκτη χρονολογίου. {{increase}} και {{decrease}} για να αυξήσει/μειώσετε το δέλτα της κίνησης.\n",
-        "segments-text-aria": "Τμήμα {{index}}. {{segmentStatus}}. Έναρξη: {{start}}. Τέλος: {{end}}.\n"
+        "segments-text-aria": "Τμήμα {{index}}. {{segmentStatus}}. Έναρξη: {{start}}. Τέλος: {{end}}.\n",
+        "cut-text-aria": "Cut marker. {{time}}. Between segment {{leftSegment}} and {{rightSegment}}.\n"
     },
     "workflowConfig": {
         "headline-text": "Ρύθμισεις παραμέτρων ροής εργασίας",
