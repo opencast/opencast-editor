@@ -227,6 +227,37 @@ const videoSlice = createSlice({
 
       state.hasChanges = true;
     },
+    moveCut: (
+      state,
+      action: PayloadAction<{ leftSegmentIndex: number, time: Segment["start"] }>
+    ) => {
+      const leftSegmentIndex = action.payload.leftSegmentIndex;
+      const rightSegmentIndex = action.payload.leftSegmentIndex + 1;
+      const time = roundToDecimalPlace(action.payload.time, 0);
+
+      if (leftSegmentIndex < 0 || rightSegmentIndex >= state.segments.length) {
+        return;
+      }
+
+      // Merge overlapping left cut
+      if (time <= state.segments[leftSegmentIndex].start) {
+        mergeSegments(state, rightSegmentIndex, leftSegmentIndex);
+        state.hasChanges = true;
+        return;
+      }
+
+      // Merge overlapping right cut
+      if (time >= state.segments[rightSegmentIndex].end) {
+        mergeSegments(state, leftSegmentIndex, rightSegmentIndex);
+        state.hasChanges = true;
+        return;
+      }
+
+      // Move segment edges
+      state.segments[leftSegmentIndex].end = time;
+      state.segments[rightSegmentIndex].start = time;
+      state.hasChanges = true;
+    },
     markAsDeletedOrAlive: state => {
       state.segments[state.activeSegmentIndex].deleted = !state.segments[state.activeSegmentIndex].deleted;
       state.hasChanges = true;
@@ -471,6 +502,7 @@ export const {
   removeThumbnail,
   setLock,
   cut,
+  moveCut,
   markAsDeletedOrAlive,
   setSelectedWorkflowIndex,
   mergeLeft,

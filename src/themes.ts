@@ -51,6 +51,7 @@ export interface Theme {
   background_preview_icon: string;
   waveform_filter: string;
   waveform_bg: string;
+  cut: string;
   scrubber: string;
   scrubber_handle: string;
   scrubber_icon: string;
@@ -109,6 +110,7 @@ export const lightMode: Theme = {
   // All this just to turn the black part of the waveform image blue. Generated with: https://isotropic.co/tool/hex-color-to-css-filter/
   waveform_filter: "invert(44%) sepia(8%) saturate(3893%) hue-rotate(169deg) brightness(99%) contrast(90%)",
   waveform_bg: "",
+  cut: COLORS.neutral60,
   scrubber: COLORS.neutral60,
   scrubber_handle: COLORS.neutral05,
   scrubber_icon: COLORS.neutral60,
@@ -168,6 +170,7 @@ export const darkMode: Theme = {
   background_preview_icon: COLORS.neutral70,
   waveform_filter: "invert(11%)",
   waveform_bg: "#fff",
+  cut: COLORS.neutral60,
   scrubber: COLORS.neutral60,
   scrubber_handle: COLORS.neutral70,
   scrubber_icon: COLORS.neutral20,
@@ -227,6 +230,7 @@ export const highContrastDarkMode: Theme = {
   background_preview_icon: "#fff",
   waveform_filter: "invert(100%)",
   waveform_bg: "#80B8AC",
+  cut: "#fff",
   scrubber: "#fff",
   scrubber_handle: "#fff",
   scrubber_icon: "#000",
@@ -284,6 +288,7 @@ export const highContrastLightMode: Theme = {
   background_preview_icon: "#000",
   waveform_filter: "invert(0%)",
   waveform_bg: "#fff",
+  cut: "#000",
   scrubber: "#000",
   scrubber_handle: "#000",
   scrubber_icon: "#fff",
