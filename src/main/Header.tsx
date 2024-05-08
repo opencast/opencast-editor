@@ -12,12 +12,10 @@ import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from "../cssStyles";
 
-
 import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
-import {defineConfig} from "vite";
 
 function Header() {
   const theme = useTheme();
@@ -94,7 +92,6 @@ function Header() {
 
 const LogoPicture: React.FC = () => {
   const path = (filename:string) => import.meta.env.BASE_URL + filename;
-
   return (
       <div>
         <picture css={{
@@ -116,22 +113,17 @@ const LogoPicture: React.FC = () => {
 
 const Logo: React.FC = () => {
 
-  const {t } = useTranslation();
+  const { t } = useTranslation();
   const { scheme } = useColorScheme();
-
-
 
   const logo = css({
     paddingLeft: "8px",
     opacity: scheme === "dark" ? "0.8" : "1",
-
     display: "flex",
-
     height: "100%",
     "> *": {
       height: "calc(100% - 12px)",
     },
-
     alignItems: "center",
 
     // Unset a bunch of CSS to keep the logo clean
