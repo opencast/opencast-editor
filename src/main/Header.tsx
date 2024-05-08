@@ -17,6 +17,7 @@ import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
+import {defineConfig} from "vite";
 
 function Header() {
   const theme = useTheme();
@@ -92,8 +93,7 @@ function Header() {
 }
 
 const LogoPicture: React.FC = () => {
-  /*Should I import defines plugin, like it is in studio? How?*/
-  const path = (filename:string) => "/" + filename;
+  const path = (filename:string) => import.meta.env.BASE_URL + filename;
 
   return (
       <div>
@@ -110,7 +110,6 @@ const LogoPicture: React.FC = () => {
           <source srcSet={path("editor-logo.svg")}></source>
           <img src={path("editor-logo.svg")} alt="Opencast Editor Logo"/>
         </picture>
-        ;
       </div>
   )
 }
