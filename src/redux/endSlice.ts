@@ -22,12 +22,14 @@ export const endSlice = createSlice({
       state.value = action.payload.value;
     },
   },
+  selectors: {
+    selectIsEnd: state => state.end,
+    selectEndState: state => state.value,
+  },
 });
 
 export const { setEnd } = endSlice.actions;
 
-// Export Selectors
-export const selectIsEnd = (state: { endState: { end: end["end"]; }; }) => state.endState.end;
-export const selectEndState = (state: { endState: { value: end["value"]; }; }) => state.endState.value;
+export const { selectIsEnd, selectEndState } = endSlice.selectors;
 
 export default endSlice.reducer;

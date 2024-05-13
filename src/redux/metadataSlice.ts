@@ -17,7 +17,8 @@ export interface MetadataField {
   type: string;    // irrelevant?
   value: string,
   required: boolean,
-  collection: any | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  collection: { [key: string]: any } | undefined,
 }
 
 // interface metadata {
@@ -143,35 +144,39 @@ const metadataSlice = createSlice({
         state.postError = action.error.message;
       });
   },
+  selectors: {
+    selectCatalogs: state => state.catalogs,
+    selectHasChanges: state => state.hasChanges,
+    selectGetStatus: state => state.status,
+    selectGetError: state => state.error,
+    selectPostStatus: state => state.postStatus,
+    selectPostError: state => state.postError,
+    selectTitleFromEpisodeDc: state => {
+      for (const catalog of state.catalogs) {
+        if (catalog.flavor === "dublincore/episode") {
+          for (const field of catalog.fields) {
+            if (field.id === "title") {
+              return field.value;
+            }
+          }
+        }
+      }
+
+      return undefined;
+    },
+  },
 });
 
 export const { setFieldValue, setHasChanges, setFieldReadonly, resetPostRequestState } = metadataSlice.actions;
 
-export const selectCatalogs = (state: { metadataState: { catalogs: metadata["catalogs"]; }; }) =>
-  state.metadataState.catalogs;
-export const selectHasChanges = (state: { metadataState: { hasChanges: metadata["hasChanges"]; }; }) =>
-  state.metadataState.hasChanges;
-export const selectGetStatus = (state: { metadataState: { status: httpRequestState["status"]; }; }) =>
-  state.metadataState.status;
-export const selectGetError = (state: { metadataState: { error: httpRequestState["error"]; }; }) =>
-  state.metadataState.error;
-export const selectPostStatus = (state: { metadataState: { postStatus: postRequestState["postStatus"]; }; }) =>
-  state.metadataState.postStatus;
-export const selectPostError = (state: { metadataState: { postError: postRequestState["postError"]; }; }) =>
-  state.metadataState.postError;
-
-export const selectTitleFromEpisodeDc = (state: { metadataState: { catalogs: metadata["catalogs"]; }; }) => {
-  for (const catalog of state.metadataState.catalogs) {
-    if (catalog.flavor === "dublincore/episode") {
-      for (const field of catalog.fields) {
-        if (field.id === "title") {
-          return field.value;
-        }
-      }
-    }
-  }
-
-  return undefined;
-};
+export const {
+  selectCatalogs,
+  selectHasChanges,
+  selectGetStatus,
+  selectGetError,
+  selectPostStatus,
+  selectPostError,
+  selectTitleFromEpisodeDc,
+} = metadataSlice.selectors;
 
 export default metadataSlice.reducer;

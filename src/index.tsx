@@ -27,7 +27,7 @@ const root = ReactDOMClient.createRoot(container);
 // server.
 const initialize = Promise.race([
   init(),
-  sleep(300),
+  sleep(600),
 ]);
 
 initialize.then(

@@ -3,7 +3,7 @@ import React from "react";
 import { css } from "@emotion/react";
 
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
-import { LuPlay, LuPause, LuVolume2, LuVolumeX } from "react-icons/lu";
+import { LuPlay, LuPause, LuVolume2, LuVolumeX, LuSkipBack, LuSkipForward } from "react-icons/lu";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -17,7 +17,7 @@ import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTranslation } from "react-i18next";
 
 import { RootState } from "../redux/store";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 import { ThemedTooltip } from "./Tooltip";
 import { Theme, useTheme } from "../themes";
@@ -38,6 +38,8 @@ const VideoControls: React.FC<{
   setIsMuted: ActionCreatorWithPayload<boolean, string>,
   setVolume: ActionCreatorWithPayload<number, string>,
   setIsPlayPreview: ActionCreatorWithPayload<boolean, string>,
+  jumpToPreviousSegment?: ActionCreatorWithoutPayload<string>,
+  jumpToNextSegment?: ActionCreatorWithoutPayload<string>,
 }> = ({
   selectCurrentlyAt,
   selectIsPlaying,
@@ -48,6 +50,8 @@ const VideoControls: React.FC<{
   setIsMuted,
   setVolume,
   setIsPlayPreview,
+  jumpToPreviousSegment = undefined,
+  jumpToNextSegment = undefined,
 }) => {
 
   const theme = useTheme();
@@ -71,10 +75,20 @@ const VideoControls: React.FC<{
       <TimeDisplay
         selectCurrentlyAt={selectCurrentlyAt}
       />
+      {jumpToPreviousSegment && (
+        <PreviousButton
+          jumpToPreviousSegment={jumpToPreviousSegment}
+        />
+      )}
       <PlayButton
         selectIsPlaying={selectIsPlaying}
         setIsPlaying={setIsPlaying}
       />
+      {jumpToNextSegment && (
+        <NextButton
+          jumpToNextSegment={jumpToNextSegment}
+        />
+      )}
       <VolumeSlider
         selectIsMuted={selectIsMuted}
         setIsMuted={setIsMuted}
@@ -230,6 +244,89 @@ const PlayButton: React.FC<{
           }}>
           {isPlaying ? <LuPause css={playIconStyle} /> : <LuPlay css={playIconStyle} />}
         </div>
+      </div>
+    </ThemedTooltip>
+  );
+};
+
+/**
+ * Jump to previous segment
+ */
+const PreviousButton: React.FC<{
+  jumpToPreviousSegment: ActionCreatorWithoutPayload<string>,
+}> = ({
+  jumpToPreviousSegment,
+}) => {
+
+  const { t } = useTranslation();
+
+  const dispatch = useAppDispatch();
+  const theme = useTheme();
+
+  const jumpToPrevious = () => {
+    dispatch(jumpToPreviousSegment());
+  };
+
+  useHotkeys(KEYMAP.videoPlayer.previous.key, () => jumpToPrevious(), { preventDefault: true });
+
+  const previousIconStyle = css({
+    fontSize: 24,
+  });
+
+  return (
+    <ThemedTooltip title={t("video.previousButton-tooltip", {
+      hotkeyName: rewriteKeys(KEYMAP.videoPlayer.previous.key),
+    })}>
+      <div css={[basicButtonStyle(theme)]}
+        role="button" tabIndex={0} aria-hidden={false}
+        aria-label={t("video.previousButton-tooltip", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.previous.key) })}
+        onClick={jumpToPrevious}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === "Enter") {
+            jumpToPrevious();
+          }
+        }}>
+        <LuSkipBack css={previousIconStyle} />
+      </div>
+    </ThemedTooltip>
+  );
+};
+
+/**
+ * Jump to next segment
+ */
+const NextButton: React.FC<{
+  jumpToNextSegment: ActionCreatorWithoutPayload<string>,
+}> = ({
+  jumpToNextSegment,
+}) => {
+  const { t } = useTranslation();
+
+  const dispatch = useAppDispatch();
+  const theme = useTheme();
+
+  const jumpToNext = () => {
+    dispatch(jumpToNextSegment());
+  };
+
+  useHotkeys(KEYMAP.videoPlayer.next.key, () => jumpToNext(), { preventDefault: true });
+
+  const nextIconStyle = css({
+    fontSize: 24,
+  });
+
+  return (
+    <ThemedTooltip title={t("video.nextButton-tooltip", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.next.key) })}>
+      <div css={[basicButtonStyle(theme)]}
+        role="button" tabIndex={0} aria-hidden={false}
+        aria-label={t("video.nextButton-tooltip", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.next.key) })}
+        onClick={jumpToNext}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === "Enter") {
+            jumpToNext();
+          }
+        }}>
+        <LuSkipForward css={nextIconStyle} />
       </div>
     </ThemedTooltip>
   );

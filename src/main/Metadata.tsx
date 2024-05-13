@@ -223,9 +223,11 @@ const Metadata: React.FC = () => {
     * @param input
     * @param output
     */
-  const helperHandleArrays = (library: any[] | null, input: any, output: any[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const helperHandleArrays = (library: any[] | null, input: string, output: any[]) => {
     // If the value is hid inside an array, we need to extract it
     if (Array.isArray(input)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       input.forEach((subArray: any) => {
         output.push(helperHandleArrays(library, subArray, output));
       });
@@ -240,6 +242,7 @@ const Metadata: React.FC = () => {
    * @param catalogs
    */
   const getInitialValues = (catalogs: Catalog[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const initValues: { [n: string]: any; } = {};
 
     catalogs.forEach((catalog: Catalog, catalogIndex: number) => {
@@ -251,9 +254,11 @@ const Metadata: React.FC = () => {
         // Since react-select creates different values
         if (field.collection) {
           const library = generateReactSelectLibrary(field);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           let searchValue: any = field.value;
 
           if (Array.isArray(searchValue)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result: any[] = [];
             helperHandleArrays(library, field.value, result);
             searchValue = result;
@@ -277,13 +282,13 @@ const Metadata: React.FC = () => {
    * Validator for required fields
    * @param value
    */
-  const required = (value: any) => (value ? undefined : t("metadata.validation.required"));
+  const required = (value: string) => (value ? undefined : t("metadata.validation.required"));
 
   /**
    * Validator for the duration field
    * @param value
    */
-  const duration = (value: any) => {
+  const duration = (value: string) => {
     const re = /^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/;
     return re.test(value) ? undefined : t("metadata.validation.duration-format");
   };
@@ -292,7 +297,7 @@ const Metadata: React.FC = () => {
    * Validator for the date time fields
    * @param date
    */
-  const dateTimeValidator = (date: any) => {
+  const dateTimeValidator = (date: Date | string) => {
     // Empty field is valid value in Opencast
     if (!date) {
       return undefined;
@@ -300,7 +305,7 @@ const Metadata: React.FC = () => {
 
     let dt = undefined;
     if (Object.prototype.toString.call(date) === "[object Date]") {
-      dt = LuxonDateTime.fromJSDate(date);
+      dt = LuxonDateTime.fromJSDate(date as Date);
     }
     if (typeof date === "string") {
       dt = LuxonDateTime.fromISO(date);
@@ -344,6 +349,7 @@ const Metadata: React.FC = () => {
     * @param value value for the field
     * @param fieldId String of the form "catalog{catalogIndex}.name"
     */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submitSingleField = (value: any, fieldId: string) => {
     const catalogIndexString = fieldId.substring(
       fieldId.indexOf("g") + 1,
@@ -373,7 +379,11 @@ const Metadata: React.FC = () => {
    * @param e
    * @param input
    */
-  const blurWithSubmit = (e: any, input: any) => {
+  const blurWithSubmit = (
+    e: React.FocusEvent<HTMLInputElement, Element> | React.FocusEvent<HTMLTextAreaElement, Element>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input: any
+  ) => {
     input.onBlur(e);
     submitSingleField(input.value, input.name);
   };
@@ -384,12 +394,15 @@ const Metadata: React.FC = () => {
    * @param field
    * @param value
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const parseValue = (field: MetadataField | null, value: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let returnValue: any = value;
 
     // Parse values out react-multi-select and put them in an array
     if (Array.isArray(value)) {
       returnValue = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       value.forEach((subValue: any) => {
         returnValue.push(parseValue(null, subValue));  // Pass field as null to avoid each value into an array later on
       });
@@ -430,12 +443,14 @@ const Metadata: React.FC = () => {
    * Saves values in redux state and sends them to Opencast
    * @param values
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (values: { [x: string]: { [x: string]: any; }; }) => {
     // For each submitted value, get the catalog it belongs to
     Object.keys(values).forEach((formCatalogName: string) => {
       const catalogIndex = parseInt(formCatalogName.replace("catalog", ""));
 
       // For each field in the submitted values
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Object.keys(values[formCatalogName]).forEach((formFieldName: any) => {
         // Find the corresponding field index in the redux catalog
         for (let fieldIndex = 0; fieldIndex < catalogs[catalogIndex].fields.length; fieldIndex++) {
@@ -467,7 +482,8 @@ const Metadata: React.FC = () => {
   const generateReactSelectLibrary = (field: MetadataField) => {
     if (field.collection) {
       // For whatever reason react-select uses "value" as their key, which is not at all confusing
-      const library: [{ value: any, label: any, submitValue: any; }] =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const library: [{ value: any, label: string, submitValue: any; }] =
         [{ value: "", label: "No value", submitValue: "" }];
       Object.entries(field.collection).forEach(([key, value]) => {
         // // Parse License
@@ -509,6 +525,7 @@ const Metadata: React.FC = () => {
    * @param field
    * @param input
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const generateComponent = (field: MetadataField, input: any) => {
     input.id = input.name;
     if (field.collection) {
@@ -609,6 +626,7 @@ const Metadata: React.FC = () => {
      * can"t handle empty string as a value (which is what Opencast uses to
      * represent no date/time)
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const generateComponentWithModifiedInput = (field: MetadataField, input: FieldInputProps<any, HTMLElement>) => {
       if ((field.type === "date" || field.type === "time") && input.value === "") {
         const { value, ...other } = input;
