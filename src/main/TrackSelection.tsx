@@ -2,13 +2,13 @@ import React from "react";
 import { css } from "@emotion/react";
 
 import { IconType } from "react-icons";
-import { LuTrash } from "react-icons/lu";
+import { LuTrash, LuInfo } from "react-icons/lu";
 import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
 import ReactPlayer from "react-player";
 
 import { Track } from "../types";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectVideos, setTrackEnabled } from "../redux/videoSlice";
+import { selectVideoCount, selectVideos, setTrackEnabled } from "../redux/videoSlice";
 import {
   backgroundBoxStyle,
   basicButtonStyle,
@@ -27,6 +27,8 @@ import { ThemedTooltip } from "./Tooltip";
  * Creates the track selection.
  */
 const TrackSelection: React.FC = () => {
+
+  const videoCount = useAppSelector(selectVideoCount);
 
   // Generate list of tracks
   const tracks: Track[] = useAppSelector(selectVideos);
@@ -56,9 +58,12 @@ const TrackSelection: React.FC = () => {
   return (
     <div css={trackSelectionStyle}>
       <Header />
-      <div css={trackAreaStyle}>
-        {trackItems}
-      </div>
+      {videoCount > 1 ?
+        <div css={trackAreaStyle}>
+          {trackItems}
+        </div>
+        : <InfoBox />
+      }
     </div>
   );
 };
@@ -77,6 +82,19 @@ const Header: React.FC = () => {
     </div>
   );
 };
+
+const InfoBox: React.FC = () => {
+
+  const { t } = useTranslation();
+  const theme = useTheme();
+
+  return (
+    <div css={backgroundBoxStyle(theme)}>
+      <LuInfo />
+      <span css={{marginLeft: "10px"}}>{t("trackSelection.noSelectionPossible")}</span>
+    </div>
+  )
+}
 
 
 const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, enabledCount }) => {

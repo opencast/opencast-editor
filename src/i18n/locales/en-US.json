@@ -236,7 +236,8 @@
       "cannotDeleteTrackText": "Cannot Delete Track",
       "deleteTrackTooltip": "Do not encode and publish this track.",
       "restoreTrackTooltip": "Encode and publish this track.",
-      "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
+      "cannotDeleteTrackTooltip": "Cannot remove this track from publication.",
+      "noSelectionPossible": "Track selection is disabled for this video, because there are not enough tracks to deselect any."
     },
 
     "subtitles": {

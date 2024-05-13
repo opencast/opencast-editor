@@ -14,7 +14,7 @@ import { setPageNumber } from "../redux/finishSlice";
 import { MainMenuStateNames } from "../types";
 import { settings } from "../config";
 import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
-import { selectVideoCount, setIsPlaying } from "../redux/videoSlice";
+import { setIsPlaying } from "../redux/videoSlice";
 
 import { useTranslation } from "react-i18next";
 import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
@@ -30,8 +30,6 @@ const MainMenu: React.FC = () => {
 
   const { t } = useTranslation();
   const theme = useTheme();
-
-  const videoCount = useAppSelector(selectVideoCount);
 
   const mainMenuStyle = css({
     borderRight: `${theme.menuBorder}`,
@@ -61,7 +59,7 @@ const MainMenu: React.FC = () => {
         bottomText={t(MainMenuStateNames.metadata)}
         ariaLabelText={t(MainMenuStateNames.metadata)}
       />}
-      {settings.trackSelection.show && videoCount > 1 && <MainMenuButton
+      {settings.trackSelection.show && <MainMenuButton
         Icon={LuFilm}
         stateName={MainMenuStateNames.trackSelection}
         bottomText={t(MainMenuStateNames.trackSelection)}
