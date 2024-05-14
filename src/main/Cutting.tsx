@@ -16,6 +16,8 @@ import {
   setIsMuted,
   setVolume,
   setIsPlayPreview,
+  jumpToPreviousSegment,
+  jumpToNextSegment,
 } from "../redux/videoSlice";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
@@ -108,6 +110,8 @@ const Cutting: React.FC = () => {
           setIsMuted={setIsMuted}
           setVolume={setVolume}
           setIsPlayPreview={setIsPlayPreview}
+          jumpToPreviousSegment={jumpToPreviousSegment}
+          jumpToNextSegment={jumpToNextSegment}
         />
       </div>
     </div>

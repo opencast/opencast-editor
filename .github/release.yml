@@ -13,6 +13,7 @@ changelog:
     - title: New Features
       labels:
         - type:feature
+        - type:enhancement
 
     - title: Usability and Accessibility
       labels:
@@ -30,4 +31,4 @@ changelog:
 
     - title: Other Changes
       labels:
-        - "type:*"
+        - "*"

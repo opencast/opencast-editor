@@ -12,7 +12,7 @@ import { selectSubtitles, setSelectedSubtitleId, setSubtitle } from "../redux/su
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 import { LuPlus } from "react-icons/lu";
-import { Form } from "react-final-form";
+import { withTypes } from "react-final-form";
 import { Select } from "mui-rff";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -94,7 +94,7 @@ const SubtitleSelect: React.FC = () => {
   // Converts tags from the config file format to opencast format
   const convertTags = (tags: subtitleTags) => {
     return Object.entries(tags)
-      .map(tag => `${tag[0]}: ${tag[1]}`)
+      .map(tag => `${tag[0]}:${tag[1]}`)
       .concat();
   };
 
@@ -211,6 +211,12 @@ const SubtitleAddButton: React.FC<{
 
   const [isPlusDisplay, setIsPlusDisplay] = useState(true);
 
+  // Form types
+  interface FormSubmitValues {
+    selectedSubtitle: string;
+  }
+  const { Form } = withTypes<FormSubmitValues>();
+
   // Parse language data into a format the dropdown understands
   const selectData = () => {
     const data = [];
@@ -222,7 +228,7 @@ const SubtitleAddButton: React.FC<{
     return data;
   };
 
-  const onSubmit = (values: { selectedSubtitle: any; }) => {
+  const onSubmit = (values: FormSubmitValues) => {
     // Create new subtitle for the given language
     const id = values.selectedSubtitle;
     const relatedSubtitle = subtitlesForDropdown.find(tag => tag.id === id);
@@ -299,17 +305,18 @@ const SubtitleAddButton: React.FC<{
                 </Select>
               </ThemeProvider>
 
-              {/* "By default disabled elements like <button> do not trigger user interactions
-                * so a Tooltip will not activate on normal events like hover. To accommodate
-                * disabled elements, add a simple wrapper element, such as a span."
-                * see: https://mui.com/material-ui/react-tooltip/#disabled-elements */}
-              <ThemedTooltip title={t("subtitles.createSubtitleButton-createButton-tooltip")}>
-                <button css={[basicButtonStyle(theme), createButtonStyle]}
-                  type="submit"
-                  aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
-                  disabled={submitting || pristine}>
-                  {t("subtitles.createSubtitleButton-createButton")}
-                </button>
+              <ThemedTooltip title={submitting || pristine ?
+                t("subtitles.createSubtitleButton-createButton-disabled-tooltip") :
+                t("subtitles.createSubtitleButton-createButton-tooltip")
+              }>
+                <span>
+                  <button css={[basicButtonStyle(theme), createButtonStyle]}
+                    type="submit"
+                    aria-label={t("subtitles.createSubtitleButton-createButton-tooltip")}
+                    disabled={submitting || pristine}>
+                    {t("subtitles.createSubtitleButton-createButton")}
+                  </button>
+                </span>
               </ThemedTooltip>
 
             </form>

@@ -5,7 +5,7 @@ import { css, SerializedStyles } from "@emotion/react";
 import { IconType } from "react-icons";
 import { LuScissors, LuFilm, LuFileText, LuCheckSquare } from "react-icons/lu";
 import { LuImage } from "react-icons/lu";
-import { ReactComponent as SubtitleIcon } from "../img/subtitle.svg";
+import SubtitleIcon from "../img/subtitle.svg?react";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { setState, selectMainMenuState, mainMenu } from "../redux/mainMenuSlice";

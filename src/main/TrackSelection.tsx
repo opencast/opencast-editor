@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 
 import { IconType } from "react-icons";
 import { LuTrash, LuInfo } from "react-icons/lu";
-import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
+import TrashRestore from "../img/trash-restore.svg?react";
 import ReactPlayer from "react-player";
 
 import { Track } from "../types";

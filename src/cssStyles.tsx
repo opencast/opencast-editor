@@ -7,6 +7,7 @@ import emotionNormalize from "emotion-normalize";
 import { checkFlexGapSupport } from "./util/utilityFunctions";
 import { createTheme } from "@mui/material/styles";
 import { Theme, useTheme } from "./themes";
+import { StylesConfig } from "react-select";
 
 /**
  * An emotion component that inserts styles globally
@@ -212,9 +213,16 @@ export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
   );
 };
 
-export function selectFieldStyle(theme: Theme) {
+type MyOptionType = {
+  label: string;
+  value: string;
+};
+
+type IsMulti = false;
+
+export function selectFieldStyle(theme: Theme): StylesConfig<MyOptionType, IsMulti> {
   return {
-    control: (provided: any, state: any) => ({
+    control: (provided, state) => ({
       ...provided,
       background: theme.menu_background,
       ...(state.isFocused && { borderColor: theme.metadata_highlight }),
@@ -224,28 +232,28 @@ export function selectFieldStyle(theme: Theme) {
         boxShadow: `0 0 0 1px ${theme.metadata_highlight}`,
       },
     }),
-    menu: (provided: any) => ({
+    menu: provided => ({
       ...provided,
       background: theme.menu_background,
       outline: theme.dropdown_border,
       // kill the gap
       marginTop: 0,
     }),
-    singleValue: (provided: any) => ({
+    singleValue: provided => ({
       ...provided,
       color: theme.text,
     }),
-    multiValue: (provided: any) => ({
+    multiValue: provided => ({
       ...provided,
       color: theme.inverted_text,
       background: theme.multiValue,
       cursor: "default",
     }),
-    multiValueLabel: (provided: any) => ({
+    multiValueLabel: provided => ({
       ...provided,
       color: theme.inverted_text,
     }),
-    option: (provided: any, state: any) => ({
+    option: (provided, state) => ({
       ...provided,
       background: state.isFocused ? theme.focused : theme.menu_background
         && state.isSelected ? theme.selected : theme.menu_background,
@@ -253,23 +261,23 @@ export function selectFieldStyle(theme: Theme) {
       color: state.isFocused ? theme.focus_text : theme.text
         && state.isSelected ? theme.selected_text : theme.text,
     }),
-    placeholder: (provided: any) => ({
+    placeholder: provided => ({
       ...provided,
       color: theme.text,
     }),
-    clearIndicator: (provided: any) => ({
+    clearIndicator: provided => ({
       ...provided,
       color: theme.indicator_color,
     }),
-    dropdownIndicator: (provided: any) => ({
+    dropdownIndicator: provided => ({
       ...provided,
       color: theme.indicator_color,
     }),
-    valueContainer: (provided: any) => ({
+    valueContainer: provided => ({
       ...provided,
       cursor: "text",
     }),
-    input: (provided: any) => ({
+    input: provided => ({
       ...provided,
       color: theme.text,
     }),

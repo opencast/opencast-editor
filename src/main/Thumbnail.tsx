@@ -32,9 +32,11 @@ import {
   setIsMuted,
   setVolume,
   setCurrentlyAt,
+  jumpToPreviousSegment,
+  jumpToNextSegment,
 } from "../redux/videoSlice";
 import { ThemedTooltip } from "./Tooltip";
-import VideoPlayers from "./VideoPlayers";
+import VideoPlayers, { VideoPlayerForwardRef } from "./VideoPlayers";
 import VideoControls from "./VideoControls";
 
 
@@ -50,7 +52,7 @@ const Thumbnail: React.FC = () => {
   const originalThumbnails = useAppSelector(selectOriginalThumbnails);
 
   // Generate Refs
-  const generateRefs = React.useRef<any>([]);
+  const generateRefs = React.useRef<(VideoPlayerForwardRef | null)[]>([]);
   // Upload Refs
   const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
 
@@ -58,7 +60,7 @@ const Thumbnail: React.FC = () => {
   //   *track: Generate to
   //   *index: Generate from
   const generate = (track: Track, index: number) => {
-    const uri = generateRefs.current[index].captureVideo();
+    const uri = generateRefs.current[index]?.captureVideo();
     dispatch(setThumbnail({ id: track.id, uri: uri }));
     dispatch(setHasChanges(true));
   };
@@ -149,6 +151,8 @@ const Thumbnail: React.FC = () => {
             setIsMuted={setIsMuted}
             setVolume={setVolume}
             setIsPlayPreview={setIsPlayPreview}
+            jumpToPreviousSegment={jumpToPreviousSegment}
+            jumpToNextSegment={jumpToNextSegment}
           />
         </div>
       </div>
@@ -161,7 +165,7 @@ const Thumbnail: React.FC = () => {
  */
 const ThumbnailTable: React.FC<{
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
-  generateRefs: React.MutableRefObject<any>,
+  generateRefs: React.MutableRefObject<(VideoPlayerForwardRef | null)[]>,
   generate: (track: Track, index: number) => void,
   upload: (index: number) => void,
   uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
@@ -234,7 +238,7 @@ const ThumbnailTableRow: React.FC<{
   track: Track,
   index: number,
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
-  generateRef: any,
+  generateRef: VideoPlayerForwardRef | null,
   generate: (track: Track, index: number) => void,
   upload: (index: number) => void,
   uploadCallback: (event: React.ChangeEvent<HTMLInputElement>, track: Track) => void,
@@ -244,8 +248,11 @@ const ThumbnailTableRow: React.FC<{
   const { t } = useTranslation();
   const theme = useTheme();
 
-  // The "+40" comes from padding that is not included in the "getWidth" function
-  const videoWidth = generateRef ? generateRef.getWidth() + 40 : undefined;
+  const videoWidth = generateRef ?
+    // The "+40" comes from padding that is not included in the "getWidth" function
+    generateRef.getWidth() + 40 :
+    // Random default
+    440;
 
   const renderPriority = (thumbnailPriority: number) => {
     if (isNaN(thumbnailPriority)) {
