@@ -104,8 +104,8 @@ const LogoPicture: React.FC = () => {
             height: "calc(100% - 0.5px)",
           },
         }}>
-          <source srcSet={path("editor-logo.svg")}></source>
-          <img src={path("editor-logo.svg")} alt="Opencast Editor Logo"/>
+          <source srcSet={path("opencast-editor.svg")}></source>
+          <img src={path("opencast-editor.svg")} alt="Opencast Editor Logo"/>
         </picture>
       </div>
   )
