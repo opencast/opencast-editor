@@ -213,7 +213,7 @@ const UploadButton: React.FC = () => {
       return;
     }
 
-    // Check if image
+    // Check if not text
     if (fileObj.type.split("/")[0] !== "text") {
       setErrorState(true);
       setErrorMessage(t("subtitles.uploadButton-error-filetype"));
@@ -222,8 +222,7 @@ const UploadButton: React.FC = () => {
 
     const reader = new FileReader();
     reader.onload = e => {
-      // the result image data
-      if (e.target && e.target.result) {
+      if (e.target && (e.target.result || e.target.result === "")) {
         try {
           const text = e.target.result.toString();
           const subtitleParsed = parseSubtitle(text);
