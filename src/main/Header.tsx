@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useAppSelector } from "../redux/store";
 import { useTheme } from "../themes";
@@ -11,11 +12,12 @@ import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from "../cssStyles";
 
-import { ReactComponent as LogoSvg } from "../img/opencast-editor.svg";
+import LogoSvg from "../img/opencast-editor.svg?react";
 import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
+import { languages as lngs } from "../i18n/lngs-generated";
 
 function Header() {
   const theme = useTheme();
@@ -141,10 +143,8 @@ const LanguageButton: React.FC = () => {
     }).of(language);
   };
 
-  const resourcesArray: string[] | undefined = i18next.options.resources && Object.keys(i18next.options.resources);
-
-  const languages = resourcesArray?.map(entry => {
-    return { value: entry, label: languageNames(entry) };
+  const languages = Array.from(lngs, ([key, value]) => {
+    return { value: value, label: languageNames(key) };
   });
 
   // menuItems can"t deal with languages being undefined, so we return early

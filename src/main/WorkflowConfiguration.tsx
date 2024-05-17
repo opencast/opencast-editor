@@ -30,7 +30,10 @@ import {
   selectPostStatus,
   setHasChanges as metadataSetHasChanges,
 } from "../redux/metadataSlice";
-import { selectSubtitles } from "../redux/subtitleSlice";
+import {
+  selectSubtitles,
+  setHasChanges as subtitleSetHasChanges,
+} from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
 
@@ -105,6 +108,7 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
       dispatch(setEnd({ hasEnded: true, value: "success" }));
       dispatch(videoSetHasChanges(false));
       dispatch(metadataSetHasChanges(false));
+      dispatch(subtitleSetHasChanges(false));
     }
   }, [dispatch, metadataStatus, workflowStatus]);
 

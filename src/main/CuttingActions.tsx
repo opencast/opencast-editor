@@ -4,7 +4,7 @@ import { basicButtonStyle, customIconStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
 import { LuScissors, LuChevronLeft, LuChevronRight, LuTrash, LuMoveHorizontal } from "react-icons/lu";
-import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
+import TrashRestore from "../img/trash-restore.svg?react";
 
 import { css } from "@emotion/react";
 

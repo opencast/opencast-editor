@@ -58,6 +58,14 @@ export const KEYMAP: IKeyMap = {
       name: "keyboardControls.videoPlayButton",
       key: "Shift+Alt+Space, Space",
     },
+    previous: {
+      name: "video.previousButton",
+      key: "Shift+Alt+Left",
+    },
+    next: {
+      name: "video.nextButton",
+      key: "Shift+Alt+Right",
+    },
     preview: {
       name: "video.previewButton",
       key: "Shift+Alt+p",

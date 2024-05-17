@@ -14,6 +14,7 @@ import {
   selectWaveformImages,
   setWaveformImages,
   selectTimelineZoom,
+  moveCut,
 } from "../redux/videoSlice";
 
 import { LuMenu, LuLoader } from "react-icons/lu";
@@ -30,6 +31,7 @@ import { RootState } from "../redux/store";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import ScrollContainer from "react-indiana-drag-scroll";
+import CuttingActionsContextMenu from "./CuttingActionsContextMenu";
 import { useHotkeys } from "react-hotkeys-hook";
 import { spinningStyle } from "../cssStyles";
 
@@ -52,7 +54,7 @@ const Timeline: React.FC<{
   styleByActiveSegment?: boolean,
   selectCurrentlyAt: (state: RootState) => number,
   selectIsPlaying: (state: RootState) => boolean,
-  setClickTriggered: ActionCreatorWithPayload<any, string>,
+  setClickTriggered: ActionCreatorWithPayload<boolean, string>,
   setCurrentlyAt: ActionCreatorWithPayload<number, string>,
   setIsPlaying: ActionCreatorWithPayload<boolean, string>,
 }> = ({
@@ -133,27 +135,27 @@ const Timeline: React.FC<{
       hideScrollbars={false}            // ScrollContainer hides scrollbars per default
       onEndScroll={updateScroll}
     >
-      <div ref={ref} css={timelineStyle} onMouseUp={e => setCurrentlyAtToClick(e)}>
-        <Scrubber
-          timelineWidth={width}
-          timelineHeight={timelineHeight}
-          selectCurrentlyAt={selectCurrentlyAt}
-          selectIsPlaying={selectIsPlaying}
-          setCurrentlyAt={setCurrentlyAt}
-          setIsPlaying={setIsPlaying}
-        />
-
-        <div css={{ position: "relative", height: timelineHeight + "px" }} >
-          <Waveforms timelineHeight={timelineHeight}/>
-          <SegmentsList
+      <CuttingActionsContextMenu>
+        <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
+          <Scrubber
             timelineWidth={width}
             timelineHeight={timelineHeight}
-            styleByActiveSegment={styleByActiveSegment}
-            tabable={true}
+            selectCurrentlyAt={selectCurrentlyAt}
+            selectIsPlaying={selectIsPlaying}
+            setCurrentlyAt={setCurrentlyAt}
+            setIsPlaying={setIsPlaying}
           />
+          <div css={{ position: "relative", height: timelineHeight + "px" }}>
+            <Waveforms timelineHeight={timelineHeight}/>
+            <SegmentsList
+              timelineWidth={width}
+              timelineHeight={timelineHeight}
+              styleByActiveSegment={styleByActiveSegment}
+              tabable={true}
+            />
+          </div>
         </div>
-
-      </div>
+      </CuttingActionsContextMenu>
     </ScrollContainer>
   );
 };
@@ -340,7 +342,8 @@ export const Scrubber: React.FC<{
         <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
           aria-label={t("timeline.scrubber-text-aria",
             {
-              currentTime: convertMsToReadableString(currentlyAt), segment: activeSegmentIndex,
+              currentTime: convertMsToReadableString(currentlyAt),
+              segment: activeSegmentIndex,
               segmentStatus: (segments[activeSegmentIndex].deleted ? "Deleted" : "Alive"),
               moveLeft: rewriteKeys(KEYMAP.timeline.left.key),
               moveRight: rewriteKeys(KEYMAP.timeline.right.key),
@@ -364,6 +367,7 @@ export const SegmentsList: React.FC<{
   styleByActiveSegment?: boolean,
   tabable?: boolean,
 }> = ({
+  timelineWidth,
   timelineHeight,
   styleByActiveSegment = true,
   tabable = true,
@@ -406,28 +410,37 @@ export const SegmentsList: React.FC<{
   const renderedSegments = () => {
     return (
       segments.map((segment: Segment, index: number) => (
-        <ThemedTooltip title={t("timeline.segment-tooltip", { segment: index })} key={segment.id}>
-          <div
-            aria-label={t("timeline.segments-text-aria",
-              {
-                segment: index,
-                segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
-                start: convertMsToReadableString(segment.start),
-                end: convertMsToReadableString(segment.end),
-              })}
-            tabIndex={tabable ? 0 : -1}
-            css={{
-              background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
-              borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? "dashed" : "solid") : "solid",
-              borderColor: "white",
-              borderWidth: "1px",
-              boxSizing: "border-box",
-              width: ((segment.end - segment.start) / duration) * 100 + "%",
-              height: timelineHeight + "px",     // CHECK IF 100%
-              zIndex: 1,
-            }}>
-          </div>
-        </ThemedTooltip>
+        <React.Fragment key={segment.id}>
+          <ThemedTooltip title={t("timeline.segment-tooltip", { segment: index })}>
+            <div
+              aria-label={t("timeline.segments-text-aria",
+                {
+                  segment: index,
+                  segmentStatus: (segment.deleted ? "Deleted" : "Alive"),
+                  start: convertMsToReadableString(segment.start),
+                  end: convertMsToReadableString(segment.end),
+                })}
+              tabIndex={tabable ? 0 : -1}
+              css={{
+                background: bgColor(segment.deleted, styleByActiveSegment ? activeSegmentIndex === index : false),
+                borderStyle: styleByActiveSegment ? (activeSegmentIndex === index ? "dashed" : "solid") : "solid",
+                borderColor: "white",
+                borderWidth: "1px",
+                boxSizing: "border-box",
+                width: ((segment.end - segment.start) / duration) * 100 + "%",
+                height: timelineHeight + "px",     // CHECK IF 100%
+                zIndex: 1,
+              }}>
+            </div>
+          </ThemedTooltip>
+          {index + 1 < segments.length &&    // Check if not rightmost section
+            <CutMark
+              leftSegmentIndex={index}
+              timelineWidth={timelineWidth}
+              timelineHeight={timelineHeight}
+            />
+          }
+        </React.Fragment>
       ))
     );
   };
@@ -443,6 +456,117 @@ export const SegmentsList: React.FC<{
     <div css={segmentsStyle}>
       {renderedSegments()}
     </div>
+  );
+};
+
+export const CutMark: React.FC<{
+  leftSegmentIndex: number,
+  timelineWidth: number,
+  timelineHeight: number,
+}> = ({
+  leftSegmentIndex,
+  timelineWidth,
+  timelineHeight,
+}) => {
+
+  // Init redux variables
+  const dispatch = useAppDispatch();
+  const segments = useAppSelector(selectSegments);
+  const duration = useAppSelector(selectDuration);
+  const rightSegmentIndex = leftSegmentIndex + 1;
+  const leftSegment = segments[leftSegmentIndex];
+  const rightSegment = segments[rightSegmentIndex];
+  const theme = useTheme();
+
+  // Init state variables
+  const [controlledPosition, setControlledPosition] = useState({ x: 0, y: 0 });
+  const [currentTime, setCurrentTime] = useState(rightSegment.start);
+  const [isGrabbed, setIsGrabbed] = useState(false);
+  const nodeRef = React.useRef(null); // For supressing "ReactDOM.findDOMNode() is deprecated" warning
+
+  const { t } = useTranslation();
+
+  const updateCurrentTime = (x: number) => {
+    setCurrentTime(rightSegment.start + (x * duration) / timelineWidth);
+  };
+
+  // Callback for when the cut gets dragged by the user
+  const onControlledDrag: DraggableEventHandler = (_e, position) => {
+    // Update time
+    const { x } = position;
+    updateCurrentTime(x);
+  };
+
+  const onStartDrag: DraggableEventHandler = () => {
+    setIsGrabbed(true);
+  };
+
+  const onStopDrag: DraggableEventHandler = (_e, position) => {
+    // Move cut to new position
+    const { x } = position;
+    updateCurrentTime(x);
+
+    dispatch(moveCut({
+      leftSegmentIndex: leftSegmentIndex,
+      time: currentTime,
+    }));
+
+    // Reset position to origin
+    setControlledPosition({ x: 0, y: 0 });
+
+    setIsGrabbed(false);
+  };
+
+  const cutStyle = css({
+    height: timelineHeight,
+    width: "2px",
+    zIndex: 3,
+    cursor: "col-resize",
+    position: "absolute",
+    left: (leftSegment.end / duration) * timelineWidth - 1 + "px",
+    background: isGrabbed ? `repeating-linear-gradient(
+        180deg, ${theme.cut},
+        ${theme.scrubber} 4px,
+        transparent 4px,
+        transparent 8px)`
+      : "transparent",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  });
+
+  const cutDragAreaStyle = css({
+    width: "10px",
+    height: "100%",
+  });
+
+  return (
+    <Draggable
+      onDrag={onControlledDrag}
+      onStart={onStartDrag}
+      onStop={onStopDrag}
+      onMouseDown={e => e.stopPropagation()}  // Prevent timeline click
+
+      axis="x"
+      bounds={{
+        left: -((leftSegment.end - leftSegment.start) / duration) * timelineWidth,
+        right: ((rightSegment.end - rightSegment.start) / duration) * timelineWidth,
+      }}
+      position={controlledPosition}
+      nodeRef={nodeRef}
+    >
+      <div
+        ref={nodeRef}
+        css={cutStyle}
+        aria-label={t("timeline.cut-text-aria",
+          {
+            time: convertMsToReadableString(currentTime),
+            leftSegment: leftSegmentIndex,
+            rightSegment: rightSegmentIndex,
+          })}>
+        <div css={cutDragAreaStyle} />
+      </div>
+    </Draggable>
   );
 };
 
@@ -505,6 +629,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
           const file = new File([blob], blob);
 
           // Start waveform worker with blob
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const waveformWorker: any = new Waveform({
             type: "img", width: "2000", height: "230", samples: 100000, media: file,
           });
@@ -515,7 +640,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
           };
 
           // When done, save path to generated waveform img
-          waveformWorker.oncomplete = (image: any, _numSamples: any) => {
+          waveformWorker.oncomplete = (image: string, _numSamples: number) => {
             newImages.push(image);
             waveformsProcessed++;
             // If all images are generated, rerender

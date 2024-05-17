@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Αποκοπή. Διαχωρίστε το τμήμα στην τρέχουσα θέση του χρονοδιαγράμματος. Πλήκτρο συντόμευσης: {{hotkeyName}}.",
         "delete-button": "Διαγραφή",
         "delete-restore-tooltip": "Σήμανση ή κατάργηση του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Διαγραφή και Επαναφορά. Σήμανση ή κατάργηση επισήμανσης του τμήματος στην τρέχουσα θέση ως διαγραφή. Πλήκτρο συντόμευσης: {{hotKeyName}}.",
+        "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}.",
         "merge-all-button": "Συγχώνευση Όλων",
         "merge-all-tooltip": "Συνδυάστε όλα τα τμήματα σε ένα μόνο τμήμα.",
         "merge-all-tooltip-aria": "Συγχώνευση Όλων. Συνδυάστε όλα τα τμήματα σε ένα μόνο τμήμα.",
@@ -33,6 +33,10 @@
         "previewButton-aria": "Ενεργοποίηση ή απενεργοποίηση λειτουργίας προεπισκόπησης. Πλήκτρο συντόμευσης: {{hotkeyName}}.",
         "playButton-tooltip": "Αναπαραγωγή βίντεο",
         "pauseButton-tooltip": "Παύση του βίντεο",
+        "previousButton": "Επιστροφή",
+        "previousButton-tooltip": "Back. Hotkey: {{hotkeyName}}.",
+        "nextButton": "Forward",
+        "nextButton-tooltip": "Forward. Hotkey: {{hotkeyName}}.",
         "current-time-tooltip": "Τρέχουσα ώρα",
         "time-duration-tooltip": "Διάρκεια βίντεο",
         "duration-aria": "Διάρκεια",
@@ -49,7 +53,7 @@
     },
     "finishMenu": {
         "save-button": "Αποθήκευση αλλαγών",
-        "start-button": "Έναρξη επεξεργασίας",
+        "start-button": "Save and process changes",
         "discard-button": "Απόρριψη αλλαγών"
     },
     "save": {
@@ -80,7 +84,7 @@
         "saveAndProcess-text": "Αποθήκευση & επεξεργασία",
         "selectWF-text": "Επιλέξτε ροή εργασίας",
         "noWorkflows-text": "Δεν υπάρχουν ροές εργασίας για να επεξεργαστείτε τις αλλαγές σας. Παρακαλώ αποθηκεύστε τις αλλαγές σας και επικοινωνήστε με έναν διαχειριστή.\n",
-        "oneWorkflow-text": "Το βίντεο θα κοπεί και θα επεξεργαστεί με τη ροή εργασίας \"{{workflow}}\". <3/> Αυτό θα πάρει κάποιο χρόνο.\n",
+        "oneWorkflow-text": "The changes will be saved and the video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
         "manyWorkflows-text": "Επιλέξτε ποια ροή εργασίας θα χρησιμοποιηθεί για επεξεργασία.",
         "startProcessing-button": "Έναρξη επεξεργασίας",
         "back-button": "Πήγαινε με πίσω",
@@ -91,7 +95,8 @@
         "generateWaveform-text": "Δημιουργία Κυματομορφής",
         "segment-tooltip": "Τμήμα {{segment}}",
         "scrubber-text-aria": "Δείκτης χρονοδιαγράμματος. {{currentTime}}. Ενεργό τμήμα: {{segment}}. {{segmentStatus}}. Έλεγχοι: {{moveLeft}} και {{moveRight}} για να μετακινήσετε το δείκτη χρονολογίου. {{increase}} και {{decrease}} για να αυξήσει/μειώσετε το δέλτα της κίνησης.\n",
-        "segments-text-aria": "Τμήμα {{index}}. {{segmentStatus}}. Έναρξη: {{start}}. Τέλος: {{end}}.\n"
+        "segments-text-aria": "Τμήμα {{index}}. {{segmentStatus}}. Έναρξη: {{start}}. Τέλος: {{end}}.\n",
+        "cut-text-aria": "Cut marker. {{time}}. Between segment {{leftSegment}} and {{rightSegment}}.\n"
     },
     "workflowConfig": {
         "headline-text": "Ρύθμισεις παραμέτρων ροής εργασίας",
@@ -229,6 +234,7 @@
         "createSubtitleButton-clicked-tooltip-aria": "Περιέχει ένα διάλογο για τη δημιουργία νέων υποτίτλων",
         "createSubtitleButton-createButton": "Δημιουργία",
         "createSubtitleButton-createButton-tooltip": "Ξεκινήστε ένα νέο αρχείο υποτίτλων με τον επιλεγμένο τίτλο.",
+        "createSubtitleButton-createButton-disabled-tooltip": "Please pick a language from the dropdown above.",
         "createSubtitleDropdown-label": "Επιλέξτε μια γλώσσα",
         "backButton": "Επιστροφή",
         "backButton-tooltip": "Επιστροφή στην επιλογή υποτίτλων",

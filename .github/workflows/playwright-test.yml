@@ -20,7 +20,7 @@ jobs:
     - name: Install Node Dependency
       uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: 20
 
     - name: Install dependencies
       run: npm ci
@@ -34,7 +34,7 @@ jobs:
     - name: Prepare configuration
       run: >
         sed -i
-        's_https://develop.opencast.org_http://localhost:3000_'
+        's_https://develop.opencast.org_http://localhost:5173_'
         public/editor-settings.toml
 
     - name: Prepare mock files
@@ -46,7 +46,7 @@ jobs:
         cp public/editor-settings.toml build/
 
     - name: Use production build for testing
-      run: sed -i 's/npm run start/python -m http.server --bind 127.0.0.1 --directory build 3000/' playwright.config.ts
+      run: sed -i 's/npm run start/python -m http.server --bind 127.0.0.1 --directory build 5173/' playwright.config.ts
 
     - name: Run playwright-test
       run: npx playwright test --config=playwright.config.ts

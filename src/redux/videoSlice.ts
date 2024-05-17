@@ -1,5 +1,5 @@
 import { clamp } from "lodash";
-import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
@@ -13,6 +13,7 @@ export interface video {
   volume: number,                 // Video playback volume
   previewTriggered: boolean,      // Basically acts as a callback for the video players.
   clickTriggered: boolean,        // Another video player callback
+  jumpTriggered: boolean,         // Another video player callback
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
@@ -56,6 +57,7 @@ export const initialState: video & httpRequestState = {
   selectedWorkflowId: "",
   previewTriggered: false,
   clickTriggered: false,
+  jumpTriggered: false,
   aspectRatios: [],
   hasChanges: false,
   timelineZoom: 1,
@@ -133,17 +135,51 @@ const videoSlice = createSlice({
     setVolume: (state, action: PayloadAction<video["volume"]>) => {
       state.volume = action.payload;
     },
-    setPreviewTriggered: (state, action) => {
+    setPreviewTriggered: (state, action: PayloadAction<video["previewTriggered"]>) => {
       state.previewTriggered = action.payload;
     },
-    setClickTriggered: (state, action) => {
+    setClickTriggered: (state, action: PayloadAction<video["clickTriggered"]>) => {
       state.clickTriggered = action.payload;
+    },
+    setJumpTriggered: (state, action: PayloadAction<video["jumpTriggered"]>) => {
+      state.jumpTriggered = action.payload;
     },
     setCurrentlyAt: (state, action: PayloadAction<video["currentlyAt"]>) => {
       updateCurrentlyAt(state, action.payload);
     },
     setCurrentlyAtInSeconds: (state, action: PayloadAction<video["currentlyAt"]>) => {
       updateCurrentlyAt(state, roundToDecimalPlace(action.payload * 1000, 0));
+    },
+    jumpToPreviousSegment: state => {
+      let previousSegmentIndex = state.activeSegmentIndex - 1;
+
+      // Calculate the threshold for “being on a cut mark”.
+      // It is based on the video length, but in between 0.5s and 3.0s.
+      const threshold = Math.max(Math.min(state.duration / 100, 3000), 500);
+
+      // Jump to start of active segment if current time is in interval [start + threshold, end)
+      if (state.currentlyAt >= state.segments[state.activeSegmentIndex].start + threshold) {
+        previousSegmentIndex = state.activeSegmentIndex;
+      }
+
+      // Jump to start of first segment if we are anywhere in the first segment
+      if (state.activeSegmentIndex == 0) {
+        previousSegmentIndex = 0;
+      }
+
+      updateCurrentlyAt(state, state.segments[previousSegmentIndex].start);
+      state.jumpTriggered = true;
+    },
+    jumpToNextSegment: state => {
+      let nextSegmentIndex = state.activeSegmentIndex + 1;
+
+      if (state.activeSegmentIndex + 1 >= state.segments.length) {
+        // Jump to start of last segment
+        nextSegmentIndex = state.activeSegmentIndex;
+      }
+
+      updateCurrentlyAt(state, state.segments[nextSegmentIndex].start);
+      state.jumpTriggered = true;
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
       state.segments.push(action.payload);
@@ -199,6 +235,37 @@ const videoSlice = createSlice({
       // Add the new segments and remove the old one
       state.segments.splice(state.activeSegmentIndex, 1, segmentA, segmentB);
 
+      state.hasChanges = true;
+    },
+    moveCut: (
+      state,
+      action: PayloadAction<{ leftSegmentIndex: number, time: Segment["start"] }>
+    ) => {
+      const leftSegmentIndex = action.payload.leftSegmentIndex;
+      const rightSegmentIndex = action.payload.leftSegmentIndex + 1;
+      const time = roundToDecimalPlace(action.payload.time, 0);
+
+      if (leftSegmentIndex < 0 || rightSegmentIndex >= state.segments.length) {
+        return;
+      }
+
+      // Merge overlapping left cut
+      if (time <= state.segments[leftSegmentIndex].start) {
+        mergeSegments(state, rightSegmentIndex, leftSegmentIndex);
+        state.hasChanges = true;
+        return;
+      }
+
+      // Merge overlapping right cut
+      if (time >= state.segments[rightSegmentIndex].end) {
+        mergeSegments(state, leftSegmentIndex, rightSegmentIndex);
+        state.hasChanges = true;
+        return;
+      }
+
+      // Move segment edges
+      state.segments[leftSegmentIndex].end = time;
+      state.segments[rightSegmentIndex].start = time;
       state.hasChanges = true;
     },
     markAsDeletedOrAlive: state => {
@@ -288,6 +355,7 @@ const videoSlice = createSlice({
     selectVolume: state => state.volume,
     selectPreviewTriggered: state => state.previewTriggered,
     selectClickTriggered: state => state.clickTriggered,
+    selectJumpTriggered: state => state.jumpTriggered,
     selectCurrentlyAt: state => state.currentlyAt,
     selectCurrentlyAtInSeconds: state => state.currentlyAt / 1000,
     selectSegments: state => state.segments,
@@ -299,7 +367,6 @@ const videoSlice = createSlice({
     selectWaveformImages: state => state.waveformImages,
     selectOriginalThumbnails: state => state.originalThumbnails,
     // Selectors mainly pertaining to the information fetched from Opencast
-    selectVideos: state => state.tracks.filter((track: Track) => track.video_stream.available === true),
     selectVideoURL: state => state.videoURLs,
     selectVideoCount: state => state.videoCount,
     selectDuration: state => state.duration,
@@ -325,7 +392,7 @@ const videoSlice = createSlice({
  * @param state
  */
 const updateActiveSegment = (state: video) => {
-  state.activeSegmentIndex = state.segments.findIndex(element =>
+  state.activeSegmentIndex = state.segments.findLastIndex(element =>
     element.start <= state.currentlyAt && element.end >= state.currentlyAt);
   // If there is an error, assume the first (the starting) segment
   if (state.activeSegmentIndex < 0) {
@@ -435,10 +502,43 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
-export const { setTrackEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
-  setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
-  removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
-  setPreviewTriggered, setClickTriggered, setTimelineZoom, timelineZoomIn, timelineZoomOut } = videoSlice.actions;
+export const {
+  setTrackEnabled,
+  setIsPlaying,
+  setIsPlayPreview,
+  setIsMuted,
+  setVolume,
+  setCurrentlyAt,
+  setCurrentlyAtInSeconds,
+  addSegment,
+  setAspectRatio,
+  setHasChanges,
+  setWaveformImages,
+  setThumbnails,
+  setThumbnail,
+  removeThumbnail,
+  setLock,
+  cut,
+  moveCut,
+  markAsDeletedOrAlive,
+  setSelectedWorkflowIndex,
+  mergeLeft,
+  mergeRight,
+  mergeAll,
+  setPreviewTriggered,
+  setClickTriggered,
+  setTimelineZoom,
+  timelineZoomIn,
+  timelineZoomOut,
+  setJumpTriggered,
+  jumpToPreviousSegment,
+  jumpToNextSegment,
+} = videoSlice.actions;
+
+export const selectVideos = createSelector(
+  [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
+  tracks => tracks.filter((track: Track) => track.video_stream.available === true)
+);
 
 // Export selectors
 export const {
@@ -448,6 +548,7 @@ export const {
   selectVolume,
   selectPreviewTriggered,
   selectClickTriggered,
+  selectJumpTriggered,
   selectCurrentlyAt,
   selectCurrentlyAtInSeconds,
   selectSegments,
@@ -458,7 +559,6 @@ export const {
   selectTimelineZoom,
   selectWaveformImages,
   selectOriginalThumbnails,
-  selectVideos,
   selectVideoURL,
   selectVideoCount,
   selectDuration,
