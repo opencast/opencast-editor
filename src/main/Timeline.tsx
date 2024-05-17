@@ -33,6 +33,14 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import { useHotkeys } from "react-hotkeys-hook";
 import { spinningStyle } from "../cssStyles";
 
+const usePrevious = (value) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
+
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
  * the current position in the video
@@ -58,6 +66,7 @@ const Timeline: React.FC<{
 }) => {
 
   // Init redux variables
+  const currentlyAt = useAppSelector(selectCurrentlyAt);
   const dispatch = useAppDispatch();
   const duration = useAppSelector(selectDuration);
   const timelineZoom = useAppSelector(selectTimelineZoom);
@@ -65,6 +74,38 @@ const Timeline: React.FC<{
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
   const scrollContainerRef = useRef(null);
   const topOffset = 20;
+
+  const currentlyScrolling = useRef(false);
+  const previous = usePrevious({ timelineZoom });
+  const zoomCenter = useRef(0);
+
+  const updateScroll = () => {
+    if (currentlyScrolling.current) {
+      currentlyScrolling.current = false;
+      return;
+    }
+    const scrollLeft = scrollContainerRef.current?.scrollLeft ?? 0;
+    const clientWidth = scrollContainerRef.current?.clientWidth ?? 0;
+    const centerPosition = scrollLeft + 0.5 * clientWidth;
+    const scrubberPosition = duration ? (currentlyAt / duration) * width : 0;
+    const scrubberVisible = scrollLeft <= scrubberPosition && scrubberPosition <= scrollLeft + clientWidth;
+
+    zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
+  };
+
+  useEffect(updateScroll, [currentlyAt, timelineZoom, width]);
+
+  useEffect(() => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+    const clientWidth = scrollContainerRef.current.clientWidth ?? 0;
+    const newWidth = (width / (previous?.timelineZoom ?? 1)) * timelineZoom;
+    const left = zoomCenter.current * newWidth - 0.5 * clientWidth;
+
+    currentlyScrolling.current = true;
+    scrollContainerRef.current.scrollLeft = left;
+  }, [timelineZoom]);
 
   const timelineStyle = css({
     position: "relative",     // Need to set position for Draggable bounds to work
@@ -90,6 +131,7 @@ const Timeline: React.FC<{
       // dom elements with this id in the container will not trigger scrolling when dragged
       ignoreElements={"#no-scrolling"}
       hideScrollbars={false}            // ScrollContainer hides scrollbars per default
+      onEndScroll={updateScroll}
     >
       <div ref={ref} css={timelineStyle} onMouseUp={e => setCurrentlyAtToClick(e)}>
         <Scrubber

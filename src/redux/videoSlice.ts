@@ -1,3 +1,4 @@
+import { clamp } from "lodash";
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
@@ -19,7 +20,7 @@ export interface video {
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: { width: number, height: number; }[],  // Aspect ratios of every video
-  hasChanges: boolean,             // Did user make changes in cutting view since last save
+  hasChanges: boolean,            // Did user make changes in cutting view since last save
   timelineZoom: number,           // Zoom multiplicator for the timeline,
   waveformImages: string[];
   originalThumbnails: { id: Track["id"], uri: Track["thumbnailUri"]; }[];
@@ -154,7 +155,7 @@ const videoSlice = createSlice({
       state.hasChanges = action.payload;
     },
     setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
-      state.timelineZoom = action.payload > 1 ? action.payload : 1;
+      state.timelineZoom = clamp(action.payload, 1, 10);
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload;
@@ -221,10 +222,10 @@ const videoSlice = createSlice({
       state.hasChanges = true;
     },
     timelineZoomIn: state => {
-      state.timelineZoom = state.timelineZoom + 1 <= 10 ? state.timelineZoom + 1 : state.timelineZoom;
+      state.timelineZoom = clamp(state.timelineZoom + 1, 1, 10);
     },
     timelineZoomOut: state => {
-      state.timelineZoom = state.timelineZoom - 1 >= 1 ? state.timelineZoom - 1 : state.timelineZoom;
+      state.timelineZoom = clamp(state.timelineZoom - 1, 1, 10);
     },
   },
   // For Async Requests

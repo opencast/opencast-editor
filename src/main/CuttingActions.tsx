@@ -11,7 +11,7 @@ import { css } from "@emotion/react";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll, setTimelineZoom,
-  timelineZoomIn, timelineZoomOut,
+  selectTimelineZoom, timelineZoomIn, timelineZoomOut,
 } from "../redux/videoSlice";
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
@@ -289,6 +289,7 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({ actionHandler }) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
+  const timelineZoom = useAppSelector(selectTimelineZoom);
 
   // Callback for the zoom slider
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -331,7 +332,7 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({ actionHandler }) => {
         min={1}
         max={10}
         step={0.1}
-        defaultValue={1}
+        value={timelineZoom}
         onChange={zoomSliderOnChange}
         aria-label={t("cuttingActions.zoomSlider-aria")}
         valueLabelDisplay="off"
