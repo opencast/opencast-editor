@@ -40,8 +40,9 @@ const CuttingActions: React.FC = () => {
    */
   const dispatchAction = (
     action: ActionCreatorWithoutPayload<string> | undefined,
-    actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
-    payload: any,
+    actionWithPayload?: ActionCreatorWithPayload<number, string> | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    payload?: any,
     ref?: React.RefObject<HTMLDivElement>
   ) => {
     if (action) {
@@ -60,37 +61,37 @@ const CuttingActions: React.FC = () => {
   // Maps functions to hotkeys
   useHotkeys(
     KEYMAP.cutting.cut.key,
-    () => dispatchAction(cut, undefined, undefined),
+    () => dispatchAction(cut),
     { preventDefault: true },
     [cut]
   );
   useHotkeys(
     KEYMAP.cutting.delete.key,
-    () => dispatchAction(markAsDeletedOrAlive, undefined, undefined),
+    () => dispatchAction(markAsDeletedOrAlive),
     { preventDefault: true },
     [markAsDeletedOrAlive]
   );
   useHotkeys(
     KEYMAP.cutting.mergeLeft.key,
-    () => dispatchAction(mergeLeft, undefined, undefined),
+    () => dispatchAction(mergeLeft),
     { preventDefault: true },
     [mergeLeft]
   );
   useHotkeys(
     KEYMAP.cutting.mergeRight.key,
-    () => dispatchAction(mergeRight, undefined, undefined),
+    () => dispatchAction(mergeRight),
     { preventDefault: true },
     [mergeRight]
   );
   useHotkeys(
     KEYMAP.cutting.zoomIn.key,
-    () => dispatchAction(timelineZoomIn, undefined, undefined),
+    () => dispatchAction(timelineZoomIn),
     { preventDefault: true, combinationKey: KEYMAP.cutting.zoomIn.combinationKey },
     [timelineZoomIn]
   );
   useHotkeys(
     KEYMAP.cutting.zoomOut.key,
-    () => dispatchAction(timelineZoomOut, undefined, undefined),
+    () => dispatchAction(timelineZoomOut, undefined),
     { preventDefault: true },
     [timelineZoomOut]
   );
@@ -185,11 +186,13 @@ interface cuttingActionsButtonInterface {
   actionHandler: (
     action: ActionCreatorWithoutPayload<string>,
     actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
     ref?: React.RefObject<HTMLDivElement>,
   ) => void,
   action: ActionCreatorWithoutPayload<string>,
   actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any,
   tooltip: string,
   ariaLabelText: string,
@@ -235,6 +238,7 @@ interface markAsDeleteButtonInterface {
   actionHandler: (
     action: ActionCreatorWithoutPayload<string> | undefined,
     actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
     ref?: React.RefObject<HTMLDivElement>
   ) => void,
@@ -280,6 +284,7 @@ interface ZoomSliderInterface {
   actionHandler: (
     action: ActionCreatorWithoutPayload<string> | undefined,
     actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
     ref?: React.RefObject<HTMLDivElement>,
   ) => void,

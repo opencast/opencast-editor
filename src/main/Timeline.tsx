@@ -35,8 +35,8 @@ import CuttingActionsContextMenu from "./CuttingActionsContextMenu";
 import { useHotkeys } from "react-hotkeys-hook";
 import { spinningStyle } from "../cssStyles";
 
-const usePrevious = (value) => {
-  const ref = useRef();
+const usePrevious = (value: { timelineZoom: number; } | undefined) => {
+  const ref = useRef<{ timelineZoom: number; } | undefined>();
   useEffect(() => {
     ref.current = value;
   });
@@ -74,7 +74,7 @@ const Timeline: React.FC<{
   const timelineZoom = useAppSelector(selectTimelineZoom);
 
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
-  const scrollContainerRef = useRef(null);
+  const scrollContainerRef = useRef<HTMLElement>(null);
   const topOffset = 20;
 
   const currentlyScrolling = useRef(false);
