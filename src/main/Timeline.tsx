@@ -1,3 +1,4 @@
+import { debounce } from "lodash";
 import React, { useState, useRef, useEffect } from "react";
 
 import Draggable, { DraggableEventHandler } from "react-draggable";
@@ -35,14 +36,6 @@ import CuttingActionsContextMenu from "./CuttingActionsContextMenu";
 import { useHotkeys } from "react-hotkeys-hook";
 import { spinningStyle } from "../cssStyles";
 
-const usePrevious = (value: { timelineZoom: number; } | undefined) => {
-  const ref = useRef<{ timelineZoom: number; } | undefined>();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-};
-
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
  * the current position in the video
@@ -78,7 +71,6 @@ const Timeline: React.FC<{
   const topOffset = 20;
 
   const currentlyScrolling = useRef(false);
-  const previous = usePrevious({ timelineZoom });
   const zoomCenter = useRef(0);
 
   const updateScroll = () => {
@@ -102,8 +94,7 @@ const Timeline: React.FC<{
       return;
     }
     const clientWidth = scrollContainerRef.current.clientWidth ?? 0;
-    const newWidth = (width / (previous?.timelineZoom ?? 1)) * timelineZoom;
-    const left = zoomCenter.current * newWidth - 0.5 * clientWidth;
+    const left = zoomCenter.current * timelineZoom * clientWidth - 0.5 * clientWidth;
 
     currentlyScrolling.current = true;
     scrollContainerRef.current.scrollLeft = left;
@@ -210,17 +201,17 @@ export const Scrubber: React.FC<{
   // Reposition scrubber when the timeline width changes
   useEffect(() => {
     if (currentlyAt && duration) {
-      setControlledPosition({ x: (currentlyAt / duration) * (timelineWidth), y: 0 });
+      updateXPos();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineWidth]);
 
   // Callback for when the scrubber gets dragged by the user
-  const onControlledDrag: DraggableEventHandler = (_e, position) => {
+  const onControlledDrag: DraggableEventHandler = debounce((_e, position) => {
     // Update position
     const { x } = position;
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
-  };
+  }, 200);
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {

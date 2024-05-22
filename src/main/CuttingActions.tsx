@@ -158,7 +158,16 @@ const CuttingActions: React.FC = () => {
         ariaLabelText={t("cuttingActions.merge-all-tooltip-aria")}
       />
       <div css={verticalLineStyle} />
-      <ZoomSlider actionHandler={dispatchAction}/>
+      <ZoomSlider actionHandler={dispatchAction}
+        tooltip={t("cuttingActions.zoomSlider-tooltip", {
+          hotkeyNameIn: rewriteKeys(KEYMAP.cutting.zoomIn),
+          hotkeyNameOut: rewriteKeys(KEYMAP.cutting.zoomOut),
+        })}
+        ariaLabelText={t("cuttingActions.zoomSlider-aria", {
+          hotkeyNameIn: rewriteKeys(KEYMAP.cutting.zoomIn),
+          hotkeyNameOut: rewriteKeys(KEYMAP.cutting.zoomOut),
+        })}
+      />
       {/* <CuttingActionsButton Icon={faQuestion} actionName="Reset changes" action={null}
         tooltip="Not implemented"
         ariaLabelText="Reset changes. Not implemented"
@@ -288,9 +297,15 @@ interface ZoomSliderInterface {
     payload: any,
     ref?: React.RefObject<HTMLDivElement>,
   ) => void,
+  tooltip: string,
+  ariaLabelText: string,
 }
 
-const ZoomSlider : React.FC<ZoomSliderInterface> = ({ actionHandler }) => {
+const ZoomSlider : React.FC<ZoomSliderInterface> = ({
+  actionHandler,
+  tooltip,
+  ariaLabelText,
+}) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
@@ -314,7 +329,7 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({ actionHandler }) => {
 
 
   const sliderStyle = css({
-    width: "100px",
+    width: "150px",
     "& .MuiSlider-thumb": {
       color: `${theme.slider_thumb_color}`,
       "&:hover, &.Mui-focusVisible, &.Mui-active": {
@@ -330,19 +345,21 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({ actionHandler }) => {
   });
 
   return (
-    <div css={zoomStyle}>
-      <span>{t("cuttingActions.zoom")}</span>
-      <Slider
-        css={sliderStyle}
-        min={1}
-        max={10}
-        step={0.1}
-        value={timelineZoom}
-        onChange={zoomSliderOnChange}
-        aria-label={t("cuttingActions.zoomSlider-aria")}
-        valueLabelDisplay="off"
-      />
-    </div>
+    <ThemedTooltip title={tooltip}>
+      <div css={zoomStyle}>
+        <span>{t("cuttingActions.zoom")}</span>
+        <Slider
+          css={sliderStyle}
+          min={1}
+          max={10}
+          step={0.1}
+          value={timelineZoom}
+          onChange={zoomSliderOnChange}
+          aria-label={ariaLabelText}
+          valueLabelDisplay="off"
+        />
+      </div>
+    </ThemedTooltip>
   );
 };
 
