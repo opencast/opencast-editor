@@ -21,6 +21,7 @@ import { parseSubtitle, serializeSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
 import { generateButtonTitle } from "./SubtitleSelect";
+import { ConfirmationModal, ConfirmationModalHandle } from "@opencast/appkit";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -189,22 +190,27 @@ const UploadButton: React.FC = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
+  const [isFileUploadTriggered, setisFileUploadTriggered] = useState(false);
   const [errorState, setErrorState] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const subtitle = useAppSelector(selectSelectedSubtitleById);
   const selectedId = useAppSelector(selectSelectedSubtitleId);
   // Upload Ref
   const inputRef = React.useRef<HTMLInputElement>(null);
+  // Modal Ref
+  const modalRef = React.useRef<ConfirmationModalHandle>(null);
 
-  const uploadSubtitles = () => {
-    // open file input box on click of other element
-    const ref = inputRef.current;
-    if (ref !== null) {
-      if (confirm(t("subtitles.uploadButton-warning"))) {
-        ref.click();
-      }
-    }
+  const triggerFileUpload = () => {
+    modalRef.current?.done();
+    setisFileUploadTriggered(true);
   };
+
+  useEffect(() => {
+    if (isFileUploadTriggered) {
+      inputRef.current?.click();
+      setisFileUploadTriggered(false);
+    }
+  }, [isFileUploadTriggered]);
 
   // Save uploaded file in redux
   const uploadCallback = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,7 +249,7 @@ const UploadButton: React.FC = () => {
       <ThemedTooltip title={t("subtitles.uploadButton-tooltip")}>
         <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
           role="button"
-          onClick={() => uploadSubtitles()}
+          onClick={() => modalRef.current?.open()}
         >
           <LuUpload css={{ fontSize: "16px" }}/>
           <span>{t("subtitles.uploadButton-title")}</span>
@@ -262,6 +268,19 @@ const UploadButton: React.FC = () => {
         onChange={event => uploadCallback(event)}
         aria-hidden="true"
       />
+      <ConfirmationModal
+        title={t("subtitles.uploadButton-warning-header")}
+        buttonContent={t("modal.confirm")}
+        onSubmit={triggerFileUpload}
+        ref={modalRef}
+        text={{
+          generalActionCancel: t("modal.cancel"),
+          generalActionClose: t("modal.close"),
+          manageAreYouSure: t("modal.areYouSure"),
+        }}
+      >
+        {t("subtitles.uploadButton-warning")}
+      </ConfirmationModal>
     </>
   );
 };
