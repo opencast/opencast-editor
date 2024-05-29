@@ -274,9 +274,9 @@ const UploadButton: React.FC = () => {
         onSubmit={triggerFileUpload}
         ref={modalRef}
         text={{
-          generalActionCancel: t("modal.cancel"),
-          generalActionClose: t("modal.close"),
-          manageAreYouSure: t("modal.areYouSure"),
+          cancel: t("modal.cancel"),
+          close: t("modal.close"),
+          areYouSure: t("modal.areYouSure"),
         }}
       >
         {t("subtitles.uploadButton-warning")}
