@@ -42,7 +42,7 @@
     "react-window": "^1.8.10",
     "redux": "^5.0.1",
     "standardized-audio-context": "^25.3.71",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.5",
     "uuid": "^9.0.1",
     "webvtt-parser": "^2.2.0"
   },
