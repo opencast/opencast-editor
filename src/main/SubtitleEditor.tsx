@@ -21,7 +21,7 @@ import { parseSubtitle, serializeSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
 import { generateButtonTitle } from "./SubtitleSelect";
-import { ConfirmationModal, ConfirmationModalHandle } from "@opencast/appkit";
+import { ConfirmationModal, ConfirmationModalHandle, Modal, ModalHandle, boxError } from "@opencast/appkit";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -36,6 +36,8 @@ const SubtitleEditor: React.FC = () => {
   const selectedId = useAppSelector(selectSelectedSubtitleId);
   const captionTrack = useAppSelector(state => selectSubtitlesFromOpencastById(state, selectedId));
   const theme = useTheme();
+  const modalRef = React.useRef<ModalHandle>(null);
+  const [uploadErrorMessage, setUploadErrorMessage] = useState<string | undefined>(undefined);
 
   // Prepare subtitle in redux
   useEffect(() => {
@@ -62,6 +64,17 @@ const SubtitleEditor: React.FC = () => {
     }
   }, [dispatch, captionTrack, subtitle, selectedId]);
 
+  // Display error modal
+  useEffect(() => {
+    if (modalRef.current && uploadErrorMessage) {
+      modalRef.current?.open();
+    }
+    if (modalRef.current && modalRef.current.close && !uploadErrorMessage) {
+      setUploadErrorMessage(undefined);
+      modalRef.current.close();
+    }
+  }, [uploadErrorMessage]);
+
   const getTitle = () => {
     if (subtitle) {
       return generateButtonTitle(subtitle.tags, t);
@@ -85,6 +98,8 @@ const SubtitleEditor: React.FC = () => {
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
+    ...(flexGapReplacementStyle(10, false)),
+    padding: "15px",
   });
 
   const topRightButtons = css({
@@ -106,7 +121,6 @@ const SubtitleEditor: React.FC = () => {
     borderBottom: `${theme.menuBorder}`,
   });
 
-
   const render = () => {
     if (getError !== undefined) {
       return (
@@ -117,12 +131,19 @@ const SubtitleEditor: React.FC = () => {
         <>
           <div css={headerRowStyle}>
             <BackButton />
-            <div css={[titleStyle(theme), titleStyleBold(theme)]}>
+            <div css={[titleStyle(theme), titleStyleBold(theme), { padding: "0px" }]}>
               {t("subtitles.editTitle", { title: getTitle() })}
             </div>
             <div css={topRightButtons}>
-              <UploadButton />
+              <UploadButton setErrorMessage={setUploadErrorMessage} />
               <DownloadButton />
+              <Modal
+                ref={modalRef}
+                title={t("subtitles.uploadButton-error")}
+                text={{ close: t("modal.close") }}
+              >
+                {uploadErrorMessage}
+              </Modal>
             </div>
           </div>
           <div css={subAreaStyle}>
@@ -184,15 +205,17 @@ const DownloadButton: React.FC = () => {
   );
 };
 
-const UploadButton: React.FC = () => {
+const UploadButton: React.FC<{
+  setErrorMessage: React.Dispatch<React.SetStateAction<string | undefined>>,
+}> = ({
+  setErrorMessage,
+}) => {
 
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const [isFileUploadTriggered, setisFileUploadTriggered] = useState(false);
-  const [errorState, setErrorState] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const subtitle = useAppSelector(selectSelectedSubtitleById);
   const selectedId = useAppSelector(selectSelectedSubtitleId);
   // Upload Ref
@@ -221,7 +244,6 @@ const UploadButton: React.FC = () => {
 
     // Check if not text
     if (fileObj.type.split("/")[0] !== "text") {
-      setErrorState(true);
       setErrorMessage(t("subtitles.uploadButton-error-filetype"));
       return;
     }
@@ -233,10 +255,8 @@ const UploadButton: React.FC = () => {
           const text = e.target.result.toString();
           const subtitleParsed = parseSubtitle(text);
           dispatch(setSubtitle({ identifier: selectedId, subtitles: { cues: subtitleParsed, tags: subtitle.tags } }));
-          setErrorState(false);
         } catch (e) {
           console.error(e);
-          setErrorState(true);
           setErrorMessage(t("subtitles.uploadButton-error-parse"));
         }
       }
@@ -255,10 +275,6 @@ const UploadButton: React.FC = () => {
           <span>{t("subtitles.uploadButton-title")}</span>
         </div>
       </ThemedTooltip>
-      <div css={errorBoxStyle(errorState, theme)} role="alert">
-        <span>{t("subtitles.uploadButton-error")}</span><br />
-        {errorMessage ? t("various.error-details-text", { errorMessage: errorMessage }) : t("various.error-text")}<br/>
-      </div>
       {/* Hidden input field for upload */}
       <input
         style={{ display: "none" }}
