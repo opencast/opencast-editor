@@ -272,7 +272,8 @@
       "addSegmentBelow": "Add segment below",
       "jumpToSegmentAbove": "Jump to segment above",
       "jumpToSegmentBelow": "Jump to segment below",
-      "deleteSegment": "Delete segment"
+      "deleteSegment": "Delete segment",
+      "addCue": "Add segment at current time"
     },
 
     "subtitleVideoArea": {

@@ -1,7 +1,6 @@
 import { Segment, SubtitleCue, SubtitlesInEditor } from "./../types";
 import { createAsyncThunk, createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { roundToDecimalPlace } from "../util/utilityFunctions";
-import type { RootState } from "../redux/store";
 import { video } from "./videoSlice";
 
 export interface subtitle {
@@ -126,7 +125,7 @@ export const subtitleSlice = createSlice({
         state.subtitles[action.payload.identifier].cues.splice(0, 0, cue);
       }
 
-      if (action.payload.cueIndex >= 0 ||
+      if (action.payload.cueIndex >= 0 &&
         action.payload.cueIndex < state.subtitles[action.payload.identifier].cues.length) {
         state.subtitles[action.payload.identifier].cues.splice(action.payload.cueIndex, 0, cue);
       }
