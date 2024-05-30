@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, errorBoxStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
 import { LuChevronLeft, LuDownload, LuUpload } from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
@@ -21,7 +21,7 @@ import { parseSubtitle, serializeSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
 import { generateButtonTitle } from "./SubtitleSelect";
-import { ConfirmationModal, ConfirmationModalHandle, Modal, ModalHandle, boxError } from "@opencast/appkit";
+import { ConfirmationModal, ConfirmationModalHandle, Modal, ModalHandle } from "@opencast/appkit";
 
 /**
  * Displays an editor view for a selected subtitle file
