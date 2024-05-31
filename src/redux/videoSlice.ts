@@ -15,6 +15,7 @@ export interface video {
   currentlyAt: number,            // Position in the video in milliseconds
   segments: Segment[],
   tracks: Track[],
+  customizedTrackSelection: boolean, // Did user select tracks for processing
   subtitlesFromOpencast: SubtitlesFromOpencast[],
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
@@ -49,6 +50,7 @@ export const initialState: video & httpRequestState = {
   currentlyAt: 0,   // Position in the video in milliseconds
   segments: [{ id: nanoid(), start: 0, end: 1, deleted: false }],
   tracks: [],
+  customizedTrackSelection: false,
   subtitlesFromOpencast: [],
   activeSegmentIndex: 0,
   selectedWorkflowId: "",
@@ -222,6 +224,9 @@ const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1);
       state.hasChanges = true;
     },
+    setCustomizedTrackSelection: (state, action: PayloadAction<video["customizedTrackSelection"]>) => {
+      state.customizedTrackSelection = action.payload;
+    },
   },
   // For Async Requests
   extraReducers: builder => {
@@ -392,10 +397,33 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
-export const { setVideoEnabled, setAudioEnabled, setIsPlaying, setIsPlayPreview, setIsMuted, setVolume, setCurrentlyAt,
-  setCurrentlyAtInSeconds, addSegment, setAspectRatio, setHasChanges, setWaveformImages, setThumbnails, setThumbnail,
-  removeThumbnail, setLock, cut, markAsDeletedOrAlive, setSelectedWorkflowIndex, mergeLeft, mergeRight, mergeAll,
-  setPreviewTriggered, setClickTriggered } = videoSlice.actions;
+export const {
+  addSegment,
+  cut,
+  markAsDeletedOrAlive,
+  mergeAll,
+  mergeLeft,
+  mergeRight,
+  removeThumbnail,
+  setAspectRatio,
+  setAudioEnabled,
+  setClickTriggered,
+  setCurrentlyAt,
+  setCurrentlyAtInSeconds,
+  setCustomizedTrackSelection,
+  setHasChanges,
+  setIsMuted,
+  setIsPlayPreview,
+  setIsPlaying,
+  setLock,
+  setPreviewTriggered,
+  setSelectedWorkflowIndex,
+  setThumbnail,
+  setThumbnails,
+  setVideoEnabled,
+  setVolume,
+  setWaveformImages,
+} = videoSlice.actions;
 
 // Export selectors
 // Selectors mainly pertaining to the video state
@@ -453,6 +481,8 @@ export const selectTitle = (state: { videoState: { title: video["title"]; }; }) 
   state.videoState.title;
 export const selectTracks = (state: { videoState: { tracks: video["tracks"]; }; }) =>
   state.videoState.tracks;
+export const selectCustomizedTrackSelection = (state: { videoState: { tracks: video["customizedTrackSelection"]; }; }) =>
+  state.videoState.customizedTrackSelection;
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"]; }; }) =>
   state.videoState.workflows;
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"]; }; }) =>

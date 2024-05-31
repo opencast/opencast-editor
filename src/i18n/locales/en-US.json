@@ -230,19 +230,19 @@
 
     "trackSelection": {
       "title": "Select track(s) for processing",
-      "trackInactive": "inactive",
-      "deleteVideoText": "Delete Video",
-      "restoreVideoText": "Restore Video",
-      "cannotDeleteVideoText": "Cannot Delete Video",
-      "deleteVideoTooltip": "Do not encode and publish this video.",
-      "restoreVideoTooltip": "Encode and publish this video.",
-      "cannotDeleteVideoTooltip": "Cannot remove this video from publication.",
-      "deleteAudioText": "Delete Audio",
-      "noAudioText": "No Audio available",
-      "restoreAudioText": "Restore Audio",
-      "deleteAudioTooltip": "Do not encode and publish this audio.",
-      "noAudioTooltip": "This track does not have any audio.",
-      "restoreAudioTooltip": "Encode and publish this audio."
+      "help": "At least one track has to be selected.",
+      "customizeLabel": "Customize track selection",
+      "videoTracksHeader": "Video tracks",
+      "audioTracksHeader": "Audio tracks",
+      "confirmText": "Confirm selection",
+      "confirmTooltip": "Confirm selected tracks",
+      "selectionAlertInfoVideo_zero": "You have not selected any video track.",
+      "selectionAlertInfoVideo_one": "You have selected 1 video track.",
+      "selectionAlertInfoVideo_other": "You have selected {{count}} video tracks.",
+      "selectionAlertInfoAudio_zero": "You have not selected any audio track.",
+      "selectionAlertInfoAudio_one": "You have selected 1 audio track.",
+      "selectionAlertInfoAudio_other": "You have selected {{count}} audio tracks that will be mixed into one.",
+      "selectionAlertError": "At least one video or audio track has to be selected."
     },
 
     "subtitles": {

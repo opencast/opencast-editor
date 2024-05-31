@@ -1,18 +1,20 @@
 import React from "react";
 import { css } from "@emotion/react";
-
-import { IconType } from "react-icons";
-import { LuTrash, LuXCircle } from "react-icons/lu";
-import { ReactComponent as TrashRestore } from "../img/trash-restore.svg";
+import { Alert, Checkbox, FormControlLabel } from "@mui/material";
 import ReactPlayer from "react-player";
 
 import { Track } from "../types";
-import { selectVideos, selectWaveformImages, setAudioEnabled, setVideoEnabled } from "../redux/videoSlice";
+import {
+  selectCustomizedTrackSelection,
+  selectVideos,
+  selectWaveformImages,
+  setAudioEnabled,
+  setCustomizedTrackSelection,
+  setVideoEnabled,
+} from "../redux/videoSlice";
 import {
   backgroundBoxStyle,
-  basicButtonStyle,
-  customIconStyle,
-  deactivatedButtonStyle,
+  checkboxStyle,
   flexGapReplacementStyle,
   titleStyle,
   titleStyleBold,
@@ -20,7 +22,6 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
-import { ThemedTooltip } from "./Tooltip";
 import { outOfBounds } from "../util/utilityFunctions";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 
@@ -28,54 +29,133 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
  * Creates the track selection.
  */
 const TrackSelection: React.FC = () => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   // Generate list of tracks
   const tracks: Track[] = useAppSelector(selectVideos);
-  const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
+  const enabledCount = tracks.reduce(
+    (memo: number, track: Track) => memo + !!track.video_stream.enabled + !!track.audio_stream.enabled,
+    0
+  );
   const images = useAppSelector(selectWaveformImages);
-  const trackItems: JSX.Element[] = tracks.map((track: Track, index: number) =>
-    <TrackItem
-      key={track.id}
-      track={track}
-      enabledCount={enabledCount}
-      waveform={outOfBounds(images, index) ? undefined : images[index]}
-    />
+  const customizedTrackSelection: boolean = useAppSelector(selectCustomizedTrackSelection);
+
+  const videoTrackItems: JSX.Element[] = tracks.map(
+    (track: Track) => (
+      <VideoTrackItem
+        key={track.id}
+        track={track}
+        enabledCount={enabledCount}
+        customizable={customizedTrackSelection}
+      />)
   );
 
-  const trackSelectionStyle = css({
-    display: "flex",
-    width: "auto",
-    height: "100%",
-    flexDirection: "column",
-    alignItems: "center",
-  });
+  const audioTrackItems: JSX.Element[] = tracks.map(
+    (track: Track, index: number) => (
+      <AudioTrackItem
+        key={track.id}
+        track={track}
+        waveform={outOfBounds(images, index) ? undefined : images[index]}
+        enabledCount={enabledCount}
+        customizable={customizedTrackSelection}
+      />
+    )
+  );
 
-  const trackAreaStyle = css({
-    display: "flex",
-    width: "100%",
-    height: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    ...(flexGapReplacementStyle(10, false)),
-  });
+  const onChange = () => {
+    if (customizedTrackSelection) {
+      tracks.forEach(track => {
+        if (track.video_stream.available) {
+          dispatch(setVideoEnabled({
+            trackId: track.id,
+            enabled: true,
+          }));
+        }
+        if (track.audio_stream.available) {
+          dispatch(setAudioEnabled({
+            trackId: track.id,
+            enabled: true,
+          }));
+        }
+      });
+    }
+
+    dispatch(setCustomizedTrackSelection(!customizedTrackSelection));
+  };
+
+  const styles = {
+    trackSelection: css({
+      display: "flex",
+      width: "max-content",
+      height: "100%",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "2rem",
+      alignSelf: "center",
+    }),
+
+    trackArea: css({
+      display: "flex",
+      width: "100%",
+      height: "100%",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      ...(flexGapReplacementStyle(10, false)),
+    }),
+
+    leftAlignedSection: css({
+      alignSelf: "start",
+    }),
+
+    selectionSection: css({
+      transition: "all 0.05s",
+      ...(
+        customizedTrackSelection
+          ? {}
+          : {
+            opacity: "0.7",
+            pointerEvents: "none",
+            filter: "grayscale(80%) blur(1.5px) brightness(80%)",
+          }
+      ),
+    }),
+
+    trackSection: css({
+      "& h3": {
+        marginBlock: "0",
+      },
+    }),
+  };
 
   return (
-    <div css={trackSelectionStyle}>
+    <div css={styles.trackSelection}>
       <Header />
-      <div css={trackAreaStyle}>
-        {trackItems}
-      </div>
+      <section css={styles.leftAlignedSection}>
+        <TrackSelectionEnabler
+          customizable={customizedTrackSelection}
+          onChange={onChange}
+        />
+      </section>
+      <section css={[styles.selectionSection, styles.leftAlignedSection]}>
+        <SelectionAlert tracks={tracks} customizable={customizedTrackSelection} />
+      </section>
+      <section css={[styles.selectionSection, styles.trackSection]}>
+        <header><h3>{t("trackSelection.videoTracksHeader")}</h3></header>
+        <div css={styles.trackArea}>{ videoTrackItems }</div>
+      </section>
+      <section css={[styles.selectionSection, styles.trackSection]}>
+        <header><h3>{t("trackSelection.audioTracksHeader")}</h3></header>
+        <div css={styles.trackArea}>{ audioTrackItems }</div>
+      </section>
     </div>
   );
 };
 
-
 const Header: React.FC = () => {
-
   const { t } = useTranslation();
   const theme = useTheme();
-
   const description: string = t("trackSelection.title");
 
   return (
@@ -85,97 +165,53 @@ const Header: React.FC = () => {
   );
 };
 
+const TrackSelectionEnabler: React.FC<{
+  customizable: boolean,
+  onChange: () => void,
+}> = ({
+  customizable,
+  onChange,
+}) => {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const label = t("trackSelection.customizeLabel");
 
-const TrackItem: React.FC<{
+  return (
+    <FormControlLabel control={
+      <Checkbox
+        css={checkboxStyle(theme)}
+        checked={customizable}
+        onChange={onChange}
+      />
+    } label={label} />
+  );
+};
+
+const VideoTrackItem: React.FC<{
   track: Track,
   enabledCount: number,
-  waveform: string | undefined
+  customizable: boolean,
 }> = ({
   track,
   enabledCount,
-  waveform,
+  customizable,
 }) => {
-
-  const theme = useTheme();
-
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const header = track.flavor.type;
-
-  const imagesMaxWidth = 475;
-
-  const trackItemStyle = css({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "left",
-  });
-
-  const trackitemSubStyle = css({
-    display: "flex",
-    flexDirection: "row",
-    ...(flexGapReplacementStyle(20, true)),
-
-    justifyContent: "space-around",
-    flexWrap: "wrap",
-  });
-
-  const imagesStyle = css({
-    display: "flex",
-    flexDirection: "column",
-    ...(flexGapReplacementStyle(20, true)),
-  });
+  const imagesMaxWidth = 300;
+  const disabled = !customizable || (track.video_stream.enabled && enabledCount === 1);
 
   const playerStyle = css({
     aspectRatio: "16 / 9",
     width: "100%",
     maxWidth: `${imagesMaxWidth}px`,
+    opacity: track.video_stream.enabled ? "1" : "0.5",
   });
 
-  const imgStyle = css({
-    height: "54px",   // Keep height consistent in case the image does not render
-    width: "100%",
-    maxWidth: `${imagesMaxWidth}px`,
+  const playerRootStyle = {
+    filter: track.video_stream.enabled ? "none" : "grayscale(80%) blur(1.5px) brightness(80%)",
+    opacity: track.video_stream.enabled ? "1" : "0.5",
+  };
 
-    filter: `${theme.invert_wave}`,
-    color: `${theme.inverted_text}`,
-  });
-
-  const headerStyle = css({
-    fontWeight: "bold",
-    fontSize: "larger",
-    color: `${theme.text}`,
-    "&:first-letter": {
-      textTransform: "capitalize",
-    },
-  });
-
-  const buttonsStyle = css({
-    // TODO: Avoid hard-coding max-width
-    "@media (max-width: 1550px)": {
-      width: "100%",
-    },
-    display: "flex",
-    flexDirection: "column",
-  });
-
-  // What state is the video stream in and can it be deactivated?
-  // We do not permit deactivating the last remaining video
-  // 2 -> Video is enabled and can be deactivated
-  // 1 -> Video is enabled but is the last and cannot be deactivated
-  // 0 -> Video is disabled and can be restored
-  const deleteStatus = track.video_stream.enabled ? (enabledCount > 1 ? 0 : 1) : 2;
-  const deleteEnabled = deleteStatus !== 1;
-  const deleteTextVideo = [
-    t("trackSelection.deleteVideoText"),
-    t("trackSelection.cannotDeleteVideoText"),
-    t("trackSelection.restoreVideoText"),
-  ][deleteStatus];
-  const deleteTooltipVideo = [
-    t("trackSelection.deleteVideoTooltip"),
-    t("trackSelection.cannotDeleteVideoTooltip"),
-    t("trackSelection.restoreVideoTooltip"),
-  ][deleteStatus];
-  const deleteIcon = [LuTrash, LuXCircle, TrashRestore][deleteStatus];
   const videoEnabledChange = () => {
     dispatch(setVideoEnabled({
       trackId: track.id,
@@ -183,23 +219,49 @@ const TrackItem: React.FC<{
     }));
   };
 
-  // What state is the audio stream in and can it be deactivated?
-  // 2 -> Audio is enabled and can be deactivated
-  // 1 -> Audio is not available on this track and thus cannot be de-/activated
-  // 0 -> Audio is disabled and can be restored
-  const deleteStatusAudio = track.audio_stream.available ? (track.audio_stream.enabled ? 0 : 2) : 1;
-  const deleteEnabledAudio = deleteStatusAudio !== 1;
-  const deleteTextAudio = [
-    t("trackSelection.deleteAudioText"),
-    t("trackSelection.noAudioText"),
-    t("trackSelection.restoreAudioText"),
-  ][deleteStatusAudio];
-  const deleteTooltipAudio = [
-    t("trackSelection.deleteAudioTooltip"),
-    t("trackSelection.noAudioTooltip"),
-    t("trackSelection.restoreAudioTooltip"),
-  ][deleteStatusAudio];
-  const deleteIconAudio = [LuTrash, LuXCircle, TrashRestore][deleteStatusAudio];
+  return (
+    <TrackItem
+      header={track.flavor.type}
+      checked={track.video_stream.enabled}
+      disabled={disabled}
+      onChange={videoEnabledChange}
+    >
+      <ReactPlayer
+        width="unset"
+        height="unset"
+        css={playerStyle}
+        style={playerRootStyle}
+        url={track.uri}
+        config={{ attributes: { tabIndex: "-1" } }}
+      />
+    </TrackItem>
+  );
+};
+
+const AudioTrackItem: React.FC<{
+  track: Track,
+  waveform: string | undefined
+  enabledCount: number,
+  customizable: boolean,
+}> = ({
+  track,
+  waveform,
+  enabledCount,
+  customizable,
+}) => {
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const imagesMaxWidth = 300;
+  const disabled = !customizable || (track.audio_stream.enabled && enabledCount === 1);
+
+  const imgStyle = css({
+    height: "54px",   // Keep height consistent in case the image does not render
+    width: "100%",
+    maxWidth: `${imagesMaxWidth}px`,
+    filter: `${theme.invert_wave}`,
+    color: `${theme.inverted_text}`,
+  });
+
   const audioEnabledChange = () => {
     dispatch(setAudioEnabled({
       trackId: track.id,
@@ -208,107 +270,123 @@ const TrackItem: React.FC<{
   };
 
   return (
-    <div css={[backgroundBoxStyle(theme), trackItemStyle]}>
-      <div css={headerStyle}>{header}</div>
-      <div css={trackitemSubStyle}>
-        <div css={imagesStyle}>
-          <ReactPlayer
-            width="unset"
-            height="unset"
-            css={playerStyle}
-            style={{ opacity: track.video_stream.enabled ? "1" : "0.5" }}
-            url={track.uri}
-          />
-          {track.audio_stream.available ?
-            <img
-              src={waveform ?? "/placeholder-waveform.png"}
-              css={imgStyle}
-              style={{ opacity: track.audio_stream.enabled ? "1" : "0.5" }}
-              alt="placeholder for audio stream"
-            />
-            :
-            <img
-              src="/placeholder-waveform-empty.png"
-              css={imgStyle}
-              style={{ opacity: "0.5" }}
-              alt="placeholder for unavailable audio stream"
-            />
-          }
-        </div>
-        <div css={buttonsStyle}>
-          <SelectButton
-            text={deleteTextVideo}
-            tooltip={deleteTooltipVideo}
-            handler={videoEnabledChange}
-            Icon={deleteIcon}
-            active={deleteEnabled}
-            positionAtEnd={false}
-          />
-          <SelectButton
-            text={deleteTextAudio}
-            tooltip={deleteTooltipAudio}
-            handler={audioEnabledChange}
-            Icon={deleteIconAudio}
-            active={deleteEnabledAudio}
-            positionAtEnd={true}
-          />
-        </div>
-      </div>
-    </div>
+    <TrackItem
+      header={track.flavor.type}
+      checked={track.audio_stream.enabled}
+      disabled={!track.audio_stream.available || disabled}
+      onChange={audioEnabledChange}
+    >
+      {track.audio_stream.available ?
+        <img
+          src={waveform ?? "/placeholder-waveform.png"}
+          css={imgStyle}
+          style={{ opacity: track.audio_stream.enabled ? "1" : "0.5" }}
+          alt="placeholder for audio stream"
+        />
+        :
+        <img
+          src="/placeholder-waveform-empty.png"
+          css={imgStyle}
+          style={{ opacity: "0.5" }}
+          alt="placeholder for unavailable audio stream"
+        />
+      }
+    </TrackItem>
   );
 };
 
-interface selectButtonInterface {
-  handler: () => void,
-  text: string,
-  Icon: IconType | React.FunctionComponent,
-  tooltip: string,
-  active: boolean,
-  positionAtEnd: boolean,   // Just here to align the audio button with the corresponding image
-}
-
-const SelectButton : React.FC<selectButtonInterface> = ({ handler, text, Icon, tooltip, active, positionAtEnd }) => {
-
+const TrackItem: React.FC<{
+  header: string,
+  checked: boolean,
+  disabled: boolean,
+  onChange: () => void,
+  children: React.ReactNode,
+}> = ({
+  header,
+  checked,
+  disabled,
+  onChange,
+  children,
+}) => {
   const theme = useTheme();
 
-  const buttonStyle = [
-    active ? basicButtonStyle(theme) : deactivatedButtonStyle,
-    {
-      padding: "16px",
-      maxHeight: "21px",
-      boxShadow: "",
-      background: `${theme.element_bg}`,
-      textWrap: "nowrap",
-      ...(positionAtEnd && { marginTop: "auto" }),
-    }];
+  const styles = {
+    trackItem: css({
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "left",
+      cursor: disabled ? "not-allowed" : "pointer",
+    }),
 
-  const clickHandler = () => {
-    if (active) { handler(); }
-    ref.current?.blur();
+    trackitemSub: css({
+      display: "flex",
+      flexDirection: "row",
+      ...(flexGapReplacementStyle(20, true)),
+      justifyContent: "space-around",
+      flexWrap: "wrap",
+    }),
+
+    images: css({
+      display: "flex",
+      flexDirection: "column",
+      ...(flexGapReplacementStyle(20, true)),
+    }),
+
+    header: css({
+      fontWeight: "bold",
+      textTransform: "capitalize",
+      display: "flex",
+      alignItems: "center",
+      gap: "0.5em",
+    }),
   };
-
-  const keyHandler = (event: React.KeyboardEvent) => {
-    if (active && (event.key === " " || event.key === "Enter")) {
-      handler();
-    }
-  };
-
-  const ref = React.useRef<HTMLDivElement>(null);
 
   return (
-    <ThemedTooltip title={tooltip}>
-      <div
-        css={buttonStyle}
-        tabIndex={0}
-        ref={ref}
-        role="button"
-        aria-label={tooltip}
-        onClick={clickHandler}
-        onKeyDown={keyHandler} >
-        <Icon css={customIconStyle} />
-        {text}
+    <label css={[backgroundBoxStyle(theme), styles.trackItem]}>
+      <div css={styles.header}>
+        <Checkbox
+          css={checkboxStyle(theme)}
+          checked={checked}
+          onChange={onChange}
+          disabled={disabled} />
+        {header}
       </div>
-    </ThemedTooltip>
+      <div css={styles.trackitemSub}>
+        <div css={styles.images}>
+          {children}
+        </div>
+      </div>
+    </label>
+  );
+};
+
+interface selectionAlertInterface {
+  tracks: Track[],
+  customizable: boolean,
+}
+
+const SelectionAlert: React.FC<selectionAlertInterface> = ({
+  tracks,
+  customizable,
+}) => {
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const video = tracks.filter(t => t.video_stream.enabled).length;
+  const audio = tracks.filter(t => t.audio_stream.enabled).length;
+
+  const lines = customizable ? [
+    t("trackSelection.selectionAlertInfoVideo", { count: video }),
+    t("trackSelection.selectionAlertInfoAudio", { count: audio }),
+  ] : [];
+
+  return (
+    <Alert variant="outlined" severity="info" css={css({ color: theme.inverted_text })}>
+      <div css={css({ marginBlockEnd: customizable ? "1em" : "0" })}>
+        {t("trackSelection.help")}
+      </div>
+
+      {lines.map((line, index) => (<div key={index}>{line}</div>))}
+    </Alert>
   );
 };
 
