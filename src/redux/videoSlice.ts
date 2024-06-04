@@ -235,19 +235,19 @@ const videoSlice = createSlice({
         state.status = "loading";
       });
     builder.addCase(
-      fetchVideoInformation.fulfilled, (state, action) => {
+      fetchVideoInformation.fulfilled, (state, { payload }) => {
         state.status = "success";
 
-        if (action.payload.workflow_active) {
+        if (payload.workflow_active) {
           state.status = "failed";
           state.errorReason = "workflowActive";
           state.error = "This event is being processed. Please wait until the process is finished.";
         }
-        state.tracks = action.payload.tracks
+        state.tracks = payload.tracks
           .sort((a: { thumbnailPriority: number; }, b: { thumbnailPriority: number; }) => {
             return a.thumbnailPriority - b.thumbnailPriority;
           }).map((track: Track) => {
-            if (action.payload.local && settings.opencast.local) {
+            if (payload.local && settings.opencast.local) {
               console.debug("Replacing track URL");
               track.uri = track.uri.replace(/https?:\/\/[^/]*/g, window.location.origin);
             }
@@ -257,22 +257,23 @@ const videoSlice = createSlice({
         // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string; }) => (a.push(o.uri), a), []);
         state.videoCount = state.videoURLs.length;
-        state.subtitlesFromOpencast = action.payload.subtitles ?
-          state.subtitlesFromOpencast = action.payload.subtitles : [];
-        state.duration = action.payload.duration;
-        state.title = action.payload.title;
-        state.segments = parseSegments(action.payload.segments, action.payload.duration);
-        state.workflows = action.payload.workflows;
-        state.waveformImages = action.payload.waveformURIs ? action.payload.waveformURIs : state.waveformImages;
+        state.subtitlesFromOpencast = payload.subtitles ?
+          state.subtitlesFromOpencast = payload.subtitles : [];
+        state.duration = payload.duration;
+        state.title = payload.title;
+        state.segments = parseSegments(payload.segments, payload.duration);
+        state.workflows = payload.workflows;
+        state.waveformImages = payload.waveformURIs ? payload.waveformURIs : state.waveformImages;
         state.originalThumbnails = state.tracks.map(
           (track: Track) => { return { id: track.id, uri: track.thumbnailUri }; }
         );
 
         state.aspectRatios = new Array(state.videoCount);
-        state.lockingActive = action.payload.locking_active;
-        state.lockRefresh = action.payload.lock_refresh;
-        state.lock.uuid = action.payload.lock_uuid;
-        state.lock.user = action.payload.lock_user;
+        state.lockingActive = payload.locking_active;
+        state.lockRefresh = payload.lock_refresh;
+        state.lock.uuid = payload.lock_uuid;
+        state.lock.user = payload.lock_user;
+        state.customizedTrackSelection = payload.customizedTrackSelection;
       });
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
@@ -481,8 +482,9 @@ export const selectTitle = (state: { videoState: { title: video["title"]; }; }) 
   state.videoState.title;
 export const selectTracks = (state: { videoState: { tracks: video["tracks"]; }; }) =>
   state.videoState.tracks;
-export const selectCustomizedTrackSelection = (state: { videoState: { tracks: video["customizedTrackSelection"]; }; }) =>
-  state.videoState.customizedTrackSelection;
+export const selectCustomizedTrackSelection = (
+  state: { videoState: { tracks: video["customizedTrackSelection"]; }; }
+) => state.videoState.customizedTrackSelection;
 export const selectWorkflows = (state: { videoState: { workflows: video["workflows"]; }; }) =>
   state.videoState.workflows;
 export const selectAspectRatio = (state: { videoState: { aspectRatios: video["aspectRatios"]; }; }) =>
