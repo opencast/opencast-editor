@@ -53,12 +53,13 @@ const workflowPostAndProcessSlice = createSlice({
         state.error = action.error.message;
       });
   },
+  selectors: {
+    selectStatus: state => state.status,
+    selectError: state => state.error,
+  },
 });
 
-export const selectStatus = (state: { workflowPostAndProcessState: { status: httpRequestState["status"]; }; }) =>
-  state.workflowPostAndProcessState.status;
-export const selectError = (state: { workflowPostAndProcessState: { error: httpRequestState["error"]; }; }) =>
-  state.workflowPostAndProcessState.error;
+export const { selectStatus, selectError } = workflowPostAndProcessSlice.selectors;
 
 
 export default workflowPostAndProcessSlice.reducer;
