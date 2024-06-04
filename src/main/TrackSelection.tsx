@@ -13,6 +13,7 @@ import {
   setVideoEnabled,
 } from "../redux/videoSlice";
 import {
+  BREAKPOINT_MEDIUM,
   backgroundBoxStyle,
   checkboxStyle,
   flexGapReplacementStyle,
@@ -87,7 +88,6 @@ const TrackSelection: React.FC = () => {
   const styles = {
     trackSelection: css({
       display: "flex",
-      width: "max-content",
       height: "100%",
       flexDirection: "column",
       alignItems: "center",
@@ -100,6 +100,7 @@ const TrackSelection: React.FC = () => {
       width: "100%",
       height: "100%",
       flexDirection: "row",
+      flexWrap: "wrap",
       justifyContent: "center",
       alignItems: "center",
       ...(flexGapReplacementStyle(10, false)),
@@ -198,13 +199,17 @@ const VideoTrackItem: React.FC<{
 }) => {
   const dispatch = useAppDispatch();
   const imagesMaxWidth = 300;
+  const imagesMaxWidthMedium = 150;
   const disabled = !customizable || (track.video_stream.enabled && enabledCount === 1);
 
   const playerStyle = css({
     aspectRatio: "16 / 9",
     width: "100%",
-    maxWidth: `${imagesMaxWidth}px`,
     opacity: track.video_stream.enabled ? "1" : "0.5",
+    maxWidth: `${imagesMaxWidthMedium}px`,
+    [`@media (min-width: ${BREAKPOINT_MEDIUM}px)`]: {
+      "&": { maxWidth: `${imagesMaxWidth}px` },
+    },
   });
 
   const playerRootStyle = {
@@ -252,14 +257,18 @@ const AudioTrackItem: React.FC<{
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const imagesMaxWidth = 300;
+  const imagesMaxWidthMedium = 150;
   const disabled = !customizable || (track.audio_stream.enabled && enabledCount === 1);
 
   const imgStyle = css({
     height: "54px",   // Keep height consistent in case the image does not render
     width: "100%",
-    maxWidth: `${imagesMaxWidth}px`,
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,
+    maxWidth: `${imagesMaxWidthMedium}px`,
+    [`@media (min-width: ${BREAKPOINT_MEDIUM}px)`]: {
+      "&": { maxWidth: `${imagesMaxWidth}px` },
+    },
   });
 
   const audioEnabledChange = () => {
