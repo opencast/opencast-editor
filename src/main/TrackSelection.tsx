@@ -2,9 +2,6 @@ import React from "react";
 import { css } from "@emotion/react";
 import { Alert, Checkbox, FormControlLabel } from "@mui/material";
 
-import { IconType } from "react-icons";
-import { LuTrash } from "react-icons/lu";
-import TrashRestore from "../img/trash-restore.svg?react";
 import ReactPlayer from "react-player";
 
 import { Track } from "../types";
