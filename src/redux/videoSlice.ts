@@ -340,7 +340,7 @@ const videoSlice = createSlice({
         state.lockRefresh = payload.lock_refresh;
         state.lock.uuid = payload.lock_uuid;
         state.lock.user = payload.lock_user;
-        state.customizedTrackSelection = payload.customized_track_selection;
+        state.customizedTrackSelection = payload.customizedTrackSelection;
       });
     builder.addCase(
       fetchVideoInformation.rejected, (state, action) => {
