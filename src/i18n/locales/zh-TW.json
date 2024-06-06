@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
         "delete-button": "刪除",
         "delete-restore-tooltip": "在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotkeyName}}",
-        "delete-restore-tooltip-aria": "刪除或還原。 在當前位置標記或取消標記要刪除的區段。 熱鍵：{{hotKeyName}}。",
+        "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}.",
         "merge-all-button": "Merge All",
         "merge-all-tooltip": "Combine all segments into a single segment.",
         "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
@@ -33,6 +33,10 @@
         "previewButton-aria": "啟用或禁用預覽模式。 熱鍵：{{hotkeyName}}。",
         "playButton-tooltip": "Play video",
         "pauseButton-tooltip": "Pause video",
+        "previousButton": "Back",
+        "previousButton-tooltip": "Back. Hotkey: {{hotkeyName}}.",
+        "nextButton": "Forward",
+        "nextButton-tooltip": "Forward. Hotkey: {{hotkeyName}}.",
         "current-time-tooltip": "目前時間",
         "time-duration-tooltip": "Video duration",
         "duration-aria": "持續時間",
@@ -49,7 +53,7 @@
     },
     "finishMenu": {
         "save-button": "儲存變更",
-        "start-button": "開始處理",
+        "start-button": "Save and process changes",
         "discard-button": "放棄變更"
     },
     "save": {
@@ -80,7 +84,7 @@
         "saveAndProcess-text": "儲存和處理",
         "selectWF-text": "選擇工作流程",
         "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
-        "oneWorkflow-text": "影片將使用工作流程“{{workflow}}”進行裁剪和處理。 <3/> 這需要一些時間。\n",
+        "oneWorkflow-text": "The changes will be saved and the video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
         "manyWorkflows-text": "選擇 Opencast 應該使用哪個工作流程進行處理。",
         "startProcessing-button": "開始處理",
         "back-button": "回到上一步",
@@ -91,7 +95,8 @@
         "generateWaveform-text": "生成波形",
         "segment-tooltip": "片段{{segment}}",
         "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
-        "segments-text-aria": "片段 {{index}}. {{segmentStatus}}. 開始: {{start}}. 結束: {{end}}.\n"
+        "segments-text-aria": "片段 {{index}}. {{segmentStatus}}. 開始: {{start}}. 結束: {{end}}.\n",
+        "cut-text-aria": "Cut marker. {{time}}. Between segment {{leftSegment}} and {{rightSegment}}.\n"
     },
     "workflowConfig": {
         "headline-text": "工作流程配置",

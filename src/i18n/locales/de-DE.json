@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Schneiden. Teilt das Segment an der aktuellen Position des Zeitmarkers. Hotkey: {{hotkeyName}}.",
         "delete-button": "Löschen",
         "delete-restore-tooltip": "Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Löschen und Wiederherstellen. Markieren oder entfernen Sie das Segment an der aktuellen Position zur Löschung. Hotkey: {{hotKeyName}}.",
+        "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}.",
         "merge-all-button": "Alle zusammenführen",
         "merge-all-tooltip": "Alle Segmente in ein einziges Segment zusammenführen.",
         "merge-all-tooltip-aria": "Alle Segmente in ein einziges Segment zusammenführen.",
@@ -33,6 +33,10 @@
         "previewButton-aria": "Vorschaumodus aktivieren oder deaktivieren. Hotkey: {{hotkeyName}}.",
         "playButton-tooltip": "Video wiedergeben",
         "pauseButton-tooltip": "Video pausieren",
+        "previousButton": "Zurück",
+        "previousButton-tooltip": "Zurück. Hotkey: {{hotkeyName}}.",
+        "nextButton": "Vorwärts",
+        "nextButton-tooltip": "Vorwärts. Hotkey: {{hotkeyName}}.",
         "current-time-tooltip": "Aktuelle Zeit",
         "time-duration-tooltip": "Videodauer",
         "duration-aria": "Dauer",
@@ -49,7 +53,7 @@
     },
     "finishMenu": {
         "save-button": "Änderungen speichern",
-        "start-button": "Verarbeitung starten",
+        "start-button": "Speichern und Änderungen verarbeiten",
         "discard-button": "Änderungen verwerfen"
     },
     "save": {
@@ -80,7 +84,7 @@
         "saveAndProcess-text": "Speichern & verarbeiten",
         "selectWF-text": "Workflow wählen",
         "noWorkflows-text": "Es gibt keine Workflows zum Verarbeiten Ihrer Änderungen. Bitte speichern Sie Ihre Änderungen und kontaktieren Sie einen Administrator.\n",
-        "oneWorkflow-text": "Das Video wird mit dem Workflow \"{{workflow}}\" geschnitten und verarbeitet. <3/> Dies wird einige Zeit dauern.\n",
+        "oneWorkflow-text": "The changes will be saved and the video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
         "manyWorkflows-text": "Wählen Sie aus, welchen Workflow Opencast für die Verarbeitung verwenden soll.",
         "startProcessing-button": "Verarbeitung starten",
         "back-button": "Zurück",
@@ -91,7 +95,8 @@
         "generateWaveform-text": "Waveform wird generiert",
         "segment-tooltip": "Segment {{segment}}",
         "scrubber-text-aria": "Zeitmarker. {{currentTime}}. Aktives Segment: {{segment}}. {{segmentStatus}}. Steuerung: {{moveLeft}} und {{moveRight}}, um den Zeitmarker zu bewegen. {{increase}} und {{decrease}}, um das Verschiebungdelta zu erhöhen/verringern.\n",
-        "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. Ende: {{end}}.\n"
+        "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Start: {{start}}. Ende: {{end}}.\n",
+        "cut-text-aria": "Cut marker. {{time}}. Between segment {{leftSegment}} and {{rightSegment}}.\n"
     },
     "workflowConfig": {
         "headline-text": "Workflow Konfiguration",
@@ -229,7 +234,7 @@
         "createSubtitleButton-clicked-tooltip-aria": "Enthält einen Dialog zum Erstellen neuer Untertitel",
         "createSubtitleButton-createButton": "Erstellen",
         "createSubtitleButton-createButton-tooltip": "Beginne eine neue Untertiteldatei mit dem ausgewählten Titel.",
-        "createSubtitleButton-createButton-disabled-tooltip": "Please pick a language from the dropdown above.",
+        "createSubtitleButton-createButton-disabled-tooltip": "Bitte wählen Sie eine Sprache aus der Dropdown-Liste.",
         "createSubtitleDropdown-label": "Wähle eine Sprache",
         "backButton": "Zurück",
         "backButton-tooltip": "Zurück zur Untertitelauswahl",

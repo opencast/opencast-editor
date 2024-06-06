@@ -9,6 +9,7 @@ const commitHash = child.execSync("git rev-parse HEAD").toString().trim();
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
+    base: process.env.PUBLIC_URL || "",
     server: {
       open: true,
     },

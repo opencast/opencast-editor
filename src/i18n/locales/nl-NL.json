@@ -15,7 +15,7 @@
         "cut-tooltip-aria": "Cut. Split the segment at the current timeline marker position. Hotkey: {{hotkeyName}}.",
         "delete-button": "Verwijder",
         "delete-restore-tooltip": "Markeer of verwijder het segment op de huidige positie om te worden verwijderd. Sneltoets: {{hotkeyName}}",
-        "delete-restore-tooltip-aria": "Verwijderen en herstellen. Markeer of verwijder het segment op de huidige positie om te worden verwijderd. Sneltoets: {{hotKeyName}}.",
+        "delete-restore-tooltip-aria": "Delete and Restore. Mark or unmark the segment at the current position as to be deleted. Hotkey: {{hotkeyName}}.",
         "merge-all-button": "Merge All",
         "merge-all-tooltip": "Combine all segments into a single segment.",
         "merge-all-tooltip-aria": "Merge All. Combine all segments into a single segment.",
@@ -33,6 +33,10 @@
         "previewButton-aria": "In- of uitschakelen voorvertoning modus. Sneltoets: {{hotkeyName}}.",
         "playButton-tooltip": "Play video",
         "pauseButton-tooltip": "Pause video",
+        "previousButton": "Back",
+        "previousButton-tooltip": "Back. Hotkey: {{hotkeyName}}.",
+        "nextButton": "Forward",
+        "nextButton-tooltip": "Forward. Hotkey: {{hotkeyName}}.",
         "current-time-tooltip": "Actuele tijd",
         "time-duration-tooltip": "Video duration",
         "duration-aria": "Duur",
@@ -49,7 +53,7 @@
     },
     "finishMenu": {
         "save-button": "Wijzigingen opslaan",
-        "start-button": "Start verwerking",
+        "start-button": "Save and process changes",
         "discard-button": "Annuleren"
     },
     "save": {
@@ -80,7 +84,7 @@
         "saveAndProcess-text": "Opslaan en verwerken",
         "selectWF-text": "Selecteer een workflow",
         "noWorkflows-text": "There are no workflows to process your changes with. Please save your changes and contact an administrator.\n",
-        "oneWorkflow-text": "De video wordt geknipt en verwerkt met de workflow \"{{workflow}}\". <3/> Dit kost enige tijd.\n",
+        "oneWorkflow-text": "The changes will be saved and the video will be cut and processed with the workflow \"{{workflow}}\". <3/> This will take some time.\n",
         "manyWorkflows-text": "Selecteer welke workflow Opencast moet gebruiken voor verwerking.",
         "startProcessing-button": "Start verwerking",
         "back-button": "Breng me terug",
@@ -91,7 +95,8 @@
         "generateWaveform-text": "Waveform genereren",
         "segment-tooltip": "Segment {{segment}}",
         "scrubber-text-aria": "Timeline marker. {{currentTime}}. Active segment: {{segment}}. {{segmentStatus}}. Controls: {{moveLeft}} and {{moveRight}} to move the timeline marker. {{increase}} and {{decrease}} to increase/decrease the move delta.\n",
-        "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Begin: {{start}}. Eindigt: {{end}}.\n"
+        "segments-text-aria": "Segment {{index}}. {{segmentStatus}}. Begin: {{start}}. Eindigt: {{end}}.\n",
+        "cut-text-aria": "Cut marker. {{time}}. Between segment {{leftSegment}} and {{rightSegment}}.\n"
     },
     "workflowConfig": {
         "headline-text": "Workflow configuratie",

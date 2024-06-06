@@ -17,7 +17,15 @@ import {
   setIsPlayPreview,
   setCurrentlyAtAndTriggerPreview,
 } from "../redux/subtitleSlice";
-import { selectIsMuted, selectVideos, selectVolume, setIsMuted, setVolume } from "../redux/videoSlice";
+import {
+  selectIsMuted,
+  selectVideos,
+  selectVolume,
+  selectJumpTriggered,
+  setIsMuted,
+  setVolume,
+  setJumpTriggered,
+} from "../redux/videoSlice";
 import { Flavor } from "../types";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
@@ -128,11 +136,13 @@ const SubtitleVideoArea: React.FC = () => {
             selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
             selectPreviewTriggered={selectPreviewTriggered}
             selectClickTriggered={selectClickTriggered}
+            selectJumpTriggered={selectJumpTriggered}
             selectAspectRatio={selectAspectRatio}
             setIsPlaying={setIsPlaying}
             selectVolume={selectVolume}
             setPreviewTriggered={setPreviewTriggered}
             setClickTriggered={setClickTriggered}
+            setJumpTriggered={setJumpTriggered}
             setCurrentlyAt={setCurrentlyAtAndTriggerPreview}
             setAspectRatio={setAspectRatio}
           />

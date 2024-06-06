@@ -17,7 +17,8 @@ export interface MetadataField {
   type: string;    // irrelevant?
   value: string,
   required: boolean,
-  collection: any | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  collection: { [key: string]: any } | undefined,
 }
 
 // interface metadata {
