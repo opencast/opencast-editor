@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk, PayloadAction, createSelector } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
@@ -536,12 +536,6 @@ export const {
   setWaveformImages,
 } = videoSlice.actions;
 
-
-export const selectVideos = createSelector(
-  [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
-  tracks => tracks.filter((track: Track) => track.video_stream.available === true)
-);
-
 // Export selectors
 export const {
   selectIsPlaying,
@@ -571,6 +565,7 @@ export const {
   selectAspectRatio,
   selectSubtitlesFromOpencast,
   selectSubtitlesFromOpencastById,
+  selectVideos,
 } = videoSlice.selectors;
 
 export default videoSlice.reducer;

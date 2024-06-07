@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import { Alert, Checkbox, FormControlLabel } from "@mui/material";
 
@@ -43,7 +43,7 @@ const TrackSelection: React.FC = () => {
   const images = useAppSelector(selectWaveformImages);
   const customizedTrackSelection = useAppSelector(selectCustomizedTrackSelection);
 
-  const videoTrackItems: JSX.Element[] = tracks.map(
+  const videoTrackItems = tracks.map(
     (track: Track) => (
       <VideoTrackItem
         key={track.id}
@@ -53,7 +53,7 @@ const TrackSelection: React.FC = () => {
       />)
   );
 
-  const audioTrackItems: JSX.Element[] = tracks.map(
+  const audioTrackItems = tracks.map(
     (track: Track, index: number) => (
       <AudioTrackItem
         key={track.id}
@@ -278,6 +278,15 @@ const AudioTrackItem: React.FC<{
       enabled: !track.audio_stream.enabled,
     }));
   };
+
+  useEffect(() => {
+    if (!track.audio_stream.available) {
+      dispatch(setAudioEnabled({
+        trackId: track.id,
+        enabled: false,
+      }));
+    }
+  }, [track.audio_stream.available]);
 
   return (
     <TrackItem
