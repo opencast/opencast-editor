@@ -35,13 +35,13 @@ const TrackSelection: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // Generate list of tracks
-  const tracks: Track[] = useAppSelector(selectVideos);
+  const tracks = useAppSelector(selectVideos);
   const enabledCount = tracks.reduce(
     (memo: number, track: Track) => memo + !!track.video_stream.enabled + !!track.audio_stream.enabled,
     0
   );
   const images = useAppSelector(selectWaveformImages);
-  const customizedTrackSelection: boolean = useAppSelector(selectCustomizedTrackSelection);
+  const customizedTrackSelection = useAppSelector(selectCustomizedTrackSelection);
 
   const videoTrackItems: JSX.Element[] = tracks.map(
     (track: Track) => (
