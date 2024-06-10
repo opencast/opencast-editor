@@ -129,6 +129,10 @@ export function parseSubtitle(subtitle: string): SubtitleCue[] {
   // - Pros: Parses styles, can also parse SRT, actively maintained
   // - Cons: Uses node streaming library, can"t polyfill without ejecting CreateReactApp
   // TODO: Parse caption
+  if (subtitle === "") {
+    throw new Error("File is empty");
+  }
+
   const parser = new WebVTTParser();
   const tree = parser.parse(subtitle, "metadata");
   if (tree.errors.length !== 0) {
