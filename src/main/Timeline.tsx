@@ -122,7 +122,7 @@ const Timeline: React.FC<{
       vertical={false}
       horizontal={true}
       // dom elements with this id in the container will not trigger scrolling when dragged
-      ignoreElements={"#no-scrolling"}
+      ignoreElements={".prevent-drag-scroll"}
       hideScrollbars={false}            // ScrollContainer hides scrollbars per default
       onEndScroll={updateScroll}
     >
@@ -329,7 +329,7 @@ export const Scrubber: React.FC<{
       position={controlledPosition}
       nodeRef={nodeRef}
     >
-      <div ref={nodeRef} css={scrubberStyle} id="no-scrolling">
+      <div ref={nodeRef} css={scrubberStyle} className="prevent-drag-scroll">
         <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
           aria-label={t("timeline.scrubber-text-aria",
             {
@@ -477,9 +477,9 @@ export const CutMark: React.FC<{
 
   const { t } = useTranslation();
 
-  const updateCurrentTime = (x: number) => {
+  const updateCurrentTime = debounce((x: number) => {
     setCurrentTime(rightSegment.start + (x * duration) / timelineWidth);
-  };
+  }, 100);
 
   // Callback for when the cut gets dragged by the user
   const onControlledDrag: DraggableEventHandler = (_e, position) => {
@@ -547,6 +547,7 @@ export const CutMark: React.FC<{
       nodeRef={nodeRef}
     >
       <div
+        className="prevent-drag-scroll"
         ref={nodeRef}
         css={cutStyle}
         aria-label={t("timeline.cut-text-aria",
