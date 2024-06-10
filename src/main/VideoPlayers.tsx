@@ -403,9 +403,18 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       height: "100%",
       width: "100%",
       display: "flex",
-      ...(first && first != last) && { justifyContent: "end" },
-      ...(last && first != last) && { justifyContent: "start" },
-      ...(first == last) && { justifyContent: "center" },
+
+      // For single video, center!
+      ...(first && last) && { justifyContent: "center" },
+
+      // For multi videos, first from right side, sitting on end
+      ...(first && !last) && { justifyContent: "end" },
+
+      // For multi videos, last from right side, sitting on start
+      ...(last && !first) && { justifyContent: "start" },
+
+      // For multi videos, in between, occupy only the content!
+      ...(!first && !last) && { justifyContent: "center", flexBasis: "fit-content" },
     });
 
     const render = () => {
