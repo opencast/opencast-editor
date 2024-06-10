@@ -10,8 +10,17 @@ import { css } from "@emotion/react";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
-  cut, markAsDeletedOrAlive, selectIsCurrentSegmentAlive, mergeLeft, mergeRight, mergeAll, setTimelineZoom,
-  selectTimelineZoom, timelineZoomIn, timelineZoomOut,
+  cut,
+  markAsDeletedOrAlive,
+  mergeAll,
+  mergeLeft,
+  mergeRight,
+  selectIsCurrentSegmentAlive,
+  selectTimelineZoom,
+  selectTimelineZoomMax,
+  setTimelineZoom,
+  timelineZoomIn,
+  timelineZoomOut,
 } from "../redux/videoSlice";
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
@@ -310,6 +319,7 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({
   const { t } = useTranslation();
   const theme = useTheme();
   const timelineZoom = useAppSelector(selectTimelineZoom);
+  const timelineZoomMax = useAppSelector(selectTimelineZoomMax);
 
   // Callback for the zoom slider
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -351,7 +361,7 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({
         <Slider
           css={sliderStyle}
           min={1}
-          max={10}
+          max={timelineZoomMax}
           step={0.1}
           value={timelineZoom}
           onChange={zoomSliderOnChange}

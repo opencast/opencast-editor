@@ -191,7 +191,7 @@ const videoSlice = createSlice({
       state.hasChanges = action.payload;
     },
     setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
-      state.timelineZoom = clamp(action.payload, 1, 10);
+      state.timelineZoom = clamp(action.payload, 1, timelineZoomMax(state));
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload;
@@ -289,10 +289,10 @@ const videoSlice = createSlice({
       state.hasChanges = true;
     },
     timelineZoomIn: state => {
-      state.timelineZoom = clamp(state.timelineZoom + 1, 1, 10);
+      state.timelineZoom = clamp(state.timelineZoom + 1, 1, timelineZoomMax(state));
     },
     timelineZoomOut: state => {
-      state.timelineZoom = clamp(state.timelineZoom - 1, 1, 10);
+      state.timelineZoom = clamp(state.timelineZoom - 1, 1, timelineZoomMax(state));
     },
   },
   // For Async Requests
@@ -364,6 +364,7 @@ const videoSlice = createSlice({
     selectSelectedWorkflowId: state => state.selectedWorkflowId,
     selectHasChanges: state => state.hasChanges,
     selectTimelineZoom: state => state.timelineZoom,
+    selectTimelineZoomMax: timelineZoomMax,
     selectWaveformImages: state => state.waveformImages,
     selectOriginalThumbnails: state => state.originalThumbnails,
     // Selectors mainly pertaining to the information fetched from Opencast
@@ -502,6 +503,15 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
+const ZOOM_SECONDS_VISIBLE = 20 * 1000;
+
+function timelineZoomMax(state) {
+  const maxZoom = state.duration / ZOOM_SECONDS_VISIBLE;
+
+  // now round it up to the nearest multiple of 5
+  return Math.max(1, Math.ceil(maxZoom / 5) * 5);
+}
+
 export const {
   setTrackEnabled,
   setIsPlaying,
@@ -557,6 +567,7 @@ export const {
   selectSelectedWorkflowId,
   selectHasChanges,
   selectTimelineZoom,
+  selectTimelineZoomMax,
   selectWaveformImages,
   selectOriginalThumbnails,
   selectVideoURL,
