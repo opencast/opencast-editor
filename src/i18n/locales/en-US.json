@@ -247,7 +247,7 @@
     "subtitles": {
       "selectSubtitleButton-tooltip": "Edit subtitles for {{title}}",
       "selectSubtitleButton-tooltip-aria": "Select {{title}} for subtitle editing",
-      "createSubtitleButton-tooltip": "Opens a dialog for creating new subtitles",
+      "createSubtitleButton-tooltip": "Opens a dialog for creating/uploading new subtitles",
       "createSubtitleButton-clicked-tooltip-aria": "Contains a dialog for creating new subtitles",
       "createSubtitleButton-createButton": "Create",
       "createSubtitleButton-createButton-tooltip": "Start a new subtitle file with the chosen title.",
