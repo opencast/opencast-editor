@@ -399,27 +399,38 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       ...(last) && { borderBottomRightRadius: "5px" },
     });
 
+    const videoPlayerWrapperStyles = css({
+      height: "100%",
+      width: "100%",
+      display: "flex",
+      ...(first && first != last) && { justifyContent: "end" },
+      ...(last && first != last) && { justifyContent: "start" },
+      ...(first == last) && { justifyContent: "center" },
+    });
+
     const render = () => {
       if (!errorState) {
         return (
-          <ReactPlayer url={url}
-            css={[backgroundBoxStyle(theme), reactPlayerStyle]}
-            ref={ref}
-            width="unset"
-            height="unset"
-            playing={isPlaying}
-            volume={volume}
-            muted={!isPrimary || isMuted}
-            onProgress={onProgressCallback}
-            progressInterval={100}
-            onReady={onReadyCallback}
-            onPlay={onPlay}
-            onEnded={onEndedCallback}
-            onError={onErrorCallback}
-            tabIndex={-1}
-            config={playerConfig}
-            disablePictureInPicture
-          />
+          <div css={videoPlayerWrapperStyles}>
+            <ReactPlayer url={url}
+              css={[backgroundBoxStyle(theme), reactPlayerStyle]}
+              ref={ref}
+              width="unset"
+              height="100%"
+              playing={isPlaying}
+              volume={volume}
+              muted={!isPrimary || isMuted}
+              onProgress={onProgressCallback}
+              progressInterval={100}
+              onReady={onReadyCallback}
+              onPlay={onPlay}
+              onEnded={onEndedCallback}
+              onError={onErrorCallback}
+              tabIndex={-1}
+              config={playerConfig}
+              disablePictureInPicture
+            />
+          </div>
         );
       } else {
         return (
