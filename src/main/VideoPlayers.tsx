@@ -413,7 +413,7 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       // For multi videos, last from right side, sitting on start
       ...(last && !first) && { justifyContent: "start" },
 
-      // For multi videos, in between, occupy only the content!
+      // For multi videos, in between, fit content and center!
       ...(!first && !last) && { justifyContent: "center", flexBasis: "fit-content" },
     });
 
