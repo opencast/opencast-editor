@@ -477,9 +477,9 @@ export const CutMark: React.FC<{
 
   const { t } = useTranslation();
 
-  const updateCurrentTime = debounce((x: number) => {
+  const updateCurrentTime = (x: number) => {
     setCurrentTime(rightSegment.start + (x * duration) / timelineWidth);
-  }, 100);
+  };
 
   // Callback for when the cut gets dragged by the user
   const onControlledDrag: DraggableEventHandler = (_e, position) => {
