@@ -94,19 +94,15 @@ const LogoPicture: React.FC = () => {
   const path = (filename:string) => import.meta.env.BASE_URL + filename;
   return (
       <div>
-        <picture css={{
-          height: "100%",
-          display: "flex",
-          opacity: useColorScheme().scheme === "dark" ? 0.8 : 1.0,
-          paddingLeft: 8,
-          alignItems: "center",
-          "> *": {
-            height: "calc(100% - 0.5px)",
-          },
-        }}>
-          <source srcSet={path("opencast-editor.svg")}></source>
-          <img src={path("opencast-editor.svg")} alt="Opencast Editor Logo"/>
-        </picture>
+      <picture css={{
+        height: "100%",
+        "> *": {
+          height: "calc(100% - 0.5px)",
+        },
+      }}>
+        <source srcSet={path("opencast-editor.svg")}></source>
+        <img src={path("opencast-editor.svg")} alt="Opencast Editor Logo"/>
+      </picture>
       </div>
   )
 }
