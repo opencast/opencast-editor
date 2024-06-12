@@ -109,7 +109,6 @@ const SubtitleVideoArea: React.FC = () => {
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    // width: "40%",
     ...(flexGapReplacementStyle(10, false)),
   });
 

@@ -93,21 +93,6 @@ const SubtitleListEditor: React.FC = () => {
     ...(flexGapReplacementStyle(20, false)),
   });
 
-  // Old CSS for not yet implemented buttons
-  // const headerStyle = css({
-  //   display: "flex",
-  //   flexDirection: "row",
-  //   justifyContent: "flex-end",
-  //   flexWrap: "wrap",
-  //   ...(flexGapReplacementStyle(20, false)),
-  //   paddingRight: "20px",
-  // })
-
-  // const cuttingActionButtonStyle = {
-  //   padding: "16px",
-  //   boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-  // };
-
   const calcEstimatedSize = React.useCallback(() => {
     return segmentHeight;
   }, []);
