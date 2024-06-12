@@ -105,7 +105,7 @@ const LogoPicture: React.FC = () => {
       </picture>
       </div>
   )
-}
+};
 
 const Logo: React.FC = () => {
 
