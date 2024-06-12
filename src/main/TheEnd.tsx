@@ -6,7 +6,7 @@ import { LuCheckCircle, LuXCircle } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
 import { selectEndState } from "../redux/endSlice";
-import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
+import { basicButtonStyle, navigationButtonStyle } from "../cssStyles";
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
@@ -39,13 +39,13 @@ const TheEnd: React.FC = () => {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
   });
 
   const restartOrBackStyle = css({
     display: "flex",
     flexDirection: "row",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
   });
 
   return (

@@ -36,7 +36,7 @@ import { ActionCreatorWithPayload, AsyncThunk } from "@reduxjs/toolkit";
 
 import { useTheme } from "../themes";
 
-import { backgroundBoxStyle, flexGapReplacementStyle } from "../cssStyles";
+import { backgroundBoxStyle } from "../cssStyles";
 import { BaseReactPlayerProps } from "react-player/base";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
 
@@ -59,7 +59,7 @@ const VideoPlayers: React.FC<{
     justifyContent: "center",
     width: widthInPercent + "%",
     borderRadius: "5px",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
 
     maxHeight: maxHeightInPixel + "px",
   });

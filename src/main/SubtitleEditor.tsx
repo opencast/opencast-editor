@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle } from "../cssStyles";
 import { LuChevronLeft, LuDownload, LuUpload } from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
@@ -98,14 +98,14 @@ const SubtitleEditor: React.FC = () => {
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
     padding: "15px",
   });
 
   const topRightButtons = css({
     display: "flex",
     flexDirection: "row",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
   });
 
   const subAreaStyle = css({
@@ -117,7 +117,7 @@ const SubtitleEditor: React.FC = () => {
     width: "100%",
     paddingTop: "10px",
     paddingBottom: "10px",
-    ...(flexGapReplacementStyle(30, true)),
+    gap: "30px",
     borderBottom: `${theme.menuBorder}`,
   });
 
