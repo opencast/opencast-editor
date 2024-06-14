@@ -41,7 +41,7 @@ const TrackSelection: React.FC = () => {
     0
   );
   const images = useAppSelector(selectWaveformImages);
-  const customizedTrackSelection = useAppSelector(selectCustomizedTrackSelection);
+  const customizedTrackSelection = !!useAppSelector(selectCustomizedTrackSelection);
 
   const videoTrackItems = tracks.map(
     (track: Track) => (
@@ -99,11 +99,13 @@ const TrackSelection: React.FC = () => {
     trackArea: css({
       display: "flex",
       width: "100%",
-      height: "100%",
       flexDirection: "row",
       flexWrap: "wrap",
       justifyContent: "center",
-      alignItems: "center",
+      alignItems: "stretch",
+      "& > *" : {
+        flex: "1 1 0px",
+      },
       ...(flexGapReplacementStyle(10, false)),
     }),
 
@@ -113,6 +115,7 @@ const TrackSelection: React.FC = () => {
 
     selectionSection: css({
       transition: "all 0.05s",
+      width: "100%",
       ...(
         customizedTrackSelection
           ? {}
@@ -126,7 +129,7 @@ const TrackSelection: React.FC = () => {
 
     trackSection: css({
       "& h3": {
-        marginBlock: "0",
+        marginBlock: "1rem",
       },
     }),
   };
@@ -255,6 +258,7 @@ const AudioTrackItem: React.FC<{
   enabledCount,
   customizable,
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const imagesMaxWidth = 300;
@@ -303,12 +307,7 @@ const AudioTrackItem: React.FC<{
           alt="placeholder for audio stream"
         />
         :
-        <img
-          src="/placeholder-waveform-empty.png"
-          css={imgStyle}
-          style={{ opacity: "0.5" }}
-          alt="placeholder for unavailable audio stream"
-        />
+        <span css={css({})}>{t("trackSelection.noAudioAvailable")}</span>
       }
     </TrackItem>
   );
@@ -343,6 +342,8 @@ const TrackItem: React.FC<{
       ...(flexGapReplacementStyle(20, true)),
       justifyContent: "space-around",
       flexWrap: "wrap",
+      flexGrow: "1",
+      alignItems: "center",
     }),
 
     images: css({

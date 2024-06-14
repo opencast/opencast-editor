@@ -241,6 +241,7 @@
       "audioTracksHeader": "Audio tracks",
       "confirmText": "Confirm selection",
       "confirmTooltip": "Confirm selected tracks",
+      "noAudioAvailable": "No audio available",
       "selectionAlertInfoVideo_zero": "You have not selected any video track.",
       "selectionAlertInfoVideo_one": "You have selected 1 video track.",
       "selectionAlertInfoVideo_other": "You have selected {{count}} video tracks.",
