@@ -230,7 +230,7 @@
     "subtitles": {
         "selectSubtitleButton-tooltip": "Editar subtítulos para {{title}}",
         "selectSubtitleButton-tooltip-aria": "Seleccionar {{title}} para editar subtítulos",
-        "createSubtitleButton-tooltip": "Abre un diálogo para crear nuevos subtítulos",
+        "createSubtitleButton-tooltip": "Opens a dialog for creating/uploading new subtitles",
         "createSubtitleButton-clicked-tooltip-aria": "Contiene un diálogo para crear nuevos subtítulos",
         "createSubtitleButton-createButton": "Crear",
         "createSubtitleButton-createButton-tooltip": "Inicia un nuevo archivo de subtítulos con el título elegido.",
@@ -240,6 +240,13 @@
         "backButton-tooltip": "Volver a la selección de subtítulos",
         "downloadButton-title": "Descargar",
         "downloadButton-tooltip": "Descargar subtítulo como un archivo vtt",
+        "uploadButton-title": "Cargar",
+        "uploadButton-tooltip": "Upload subtitle as vtt file",
+        "uploadButton-warning-header": "Caution!",
+        "uploadButton-warning": "Uploading will overwrite the current subtitle. This cannot be undone. Are you sure?",
+        "uploadButton-error": "Upload failed.",
+        "uploadButton-error-filetype": "Wrong file type.",
+        "uploadButton-error-parse": "Could not parse subtitle file. Please ensure that the file contains valid WebVTT.",
         "editTitle": "Editor de subtítulos - {{title}}",
         "editTitle-loading": "Cargando",
         "generic": "Generico",
@@ -288,5 +295,11 @@
     },
     "language": {
         "language": "Idioma"
+    },
+    "modal": {
+        "areYouSure": "Are you sure?",
+        "cancel": "Cancel",
+        "close": "Close",
+        "confirm": "Confirm"
     }
 }
