@@ -508,7 +508,7 @@ const ZOOM_SECONDS_VISIBLE = 20 * 1000;
 function timelineZoomMax(state) {
   const maxZoom = state.duration / ZOOM_SECONDS_VISIBLE;
 
-  return Math.max(1, Math.ceil(maxZoom));
+  return Math.max(2, Math.ceil(maxZoom));
 }
 
 export const {
