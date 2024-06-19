@@ -26,6 +26,7 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { outOfBounds } from "../util/utilityFunctions";
 import { useAppDispatch, useAppSelector } from "../redux/store";
+import PlaceholderWaveform from "../img/placeholder-waveform.png";
 
 /**
  * Creates the track selection.
@@ -301,7 +302,7 @@ const AudioTrackItem: React.FC<{
     >
       {track.audio_stream.available ?
         <img
-          src={waveform ?? "/placeholder-waveform.png"}
+          src={waveform ?? PlaceholderWaveform}
           css={imgStyle}
           style={{ opacity: track.audio_stream.enabled ? "1" : "0.5" }}
           alt="placeholder for audio stream"
