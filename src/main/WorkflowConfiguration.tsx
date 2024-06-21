@@ -5,7 +5,6 @@ import {
   basicButtonStyle,
   backOrContinueStyle,
   errorBoxStyle,
-  flexGapReplacementStyle,
   spinningStyle,
 } from "../cssStyles";
 
@@ -56,7 +55,7 @@ const WorkflowConfiguration: React.FC = () => {
     flexDirection: "column" as const,
     alignItems: "center",
     padding: "20px",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (

@@ -14,7 +14,6 @@ import { useAppSelector } from "../redux/store";
 import { selectMainMenuState } from "../redux/mainMenuSlice";
 
 import { MainMenuStateNames } from "../types";
-import { flexGapReplacementStyle } from "../cssStyles";
 
 import { useBeforeunload } from "react-beforeunload";
 import { selectHasChanges as videoSelectHasChanges } from "../redux/videoSlice";
@@ -48,7 +47,7 @@ const MainContent: React.FC = () => {
     width: "100%",
     paddingRight: "20px",
     paddingLeft: "20px",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
     background: `${theme.background}`,
     overflow: "auto",
   });

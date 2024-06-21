@@ -17,7 +17,6 @@ import {
   BREAKPOINT_MEDIUM,
   backgroundBoxStyle,
   checkboxStyle,
-  flexGapReplacementStyle,
   titleStyle,
   titleStyleBold,
 } from "../cssStyles";
@@ -107,7 +106,7 @@ const TrackSelection: React.FC = () => {
       "& > *" : {
         flex: "1 1 0px",
       },
-      ...(flexGapReplacementStyle(10, false)),
+      gap: "10px",
     }),
 
     leftAlignedSection: css({
@@ -340,7 +339,7 @@ const TrackItem: React.FC<{
     trackitemSub: css({
       display: "flex",
       flexDirection: "row",
-      ...(flexGapReplacementStyle(20, true)),
+      gap: "20px",
       justifyContent: "space-around",
       flexWrap: "wrap",
       flexGrow: "1",
@@ -350,7 +349,7 @@ const TrackItem: React.FC<{
     images: css({
       display: "flex",
       flexDirection: "column",
-      ...(flexGapReplacementStyle(20, true)),
+      gap: "20px",
     }),
 
     header: css({

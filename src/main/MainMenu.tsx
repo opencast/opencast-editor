@@ -13,7 +13,7 @@ import { setPageNumber } from "../redux/finishSlice";
 
 import { MainMenuStateNames } from "../types";
 import { settings } from "../config";
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle } from "../cssStyles";
 import { setIsPlaying } from "../redux/videoSlice";
 
 import { useTranslation } from "react-i18next";
@@ -42,7 +42,7 @@ const MainMenu: React.FC = () => {
     overflowX: "hidden",
     overflowY: "auto",
     background: `${theme.menu_background}`,
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import {
   basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
-  navigationButtonStyle, flexGapReplacementStyle, spinningStyle,
+  navigationButtonStyle, spinningStyle,
 } from "../cssStyles";
 
 import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck } from "react-icons/lu";
@@ -58,7 +58,7 @@ const Save: React.FC = () => {
     display: finishState !== "Save changes" ? "none" : "flex",
     flexDirection: "column" as const,
     alignItems: "center",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   const render = () => {
