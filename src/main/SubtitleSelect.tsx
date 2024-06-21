@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import {
   basicButtonStyle,
-  flexGapReplacementStyle,
   tileButtonStyle,
   disableButtonAnimation,
   subtitleSelectStyle,
@@ -103,7 +102,7 @@ const SubtitleSelect: React.FC = () => {
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   const renderButtons = () => {
@@ -250,7 +249,7 @@ const SubtitleAddButton: React.FC<{
   const subtitleAddFormStyle = css({
     display: !isPlusDisplay ? "flex" : "none",
     flexDirection: "column" as const,
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
     width: "80%",
     padding: "20px",
   });

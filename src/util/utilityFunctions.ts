@@ -40,43 +40,6 @@ export function safeJsonParse(str: string) {
 }
 
 /**
- * Checks whether the css property gap for flexbox is supported by the browser.
- * Currently, this cannot be checked with "@support", so we use this workaround
- * instead.
- */
-let flexGapIsSupported: boolean | undefined;
-export function checkFlexGapSupport() {
-  // Use the cached value if it has been defined
-  if (flexGapIsSupported !== undefined) {
-    return flexGapIsSupported;
-  }
-
-  // Create a flex container with row-gap set
-  const flex = document.createElement("div");
-  flex.style.display = "flex";
-  flex.style.flexDirection = "column";
-  flex.style.rowGap = "1px";
-  flex.style.position = "absolute";
-
-  // Create two, elements inside it
-  flex.appendChild(document.createElement("div"));
-  flex.appendChild(document.createElement("div"));
-
-  // Append to the DOM (needed to obtain scrollHeight)
-  document.body.appendChild(flex);
-
-  // Flex container should be 1px high due to the row-gap
-  flexGapIsSupported = flex.scrollHeight === 1;
-
-  // Remove element from the DOM after you are done with it
-  if (flex.parentNode) {
-    flex.parentNode.removeChild(flex);
-  }
-
-  return flexGapIsSupported;
-}
-
-/**
  * Converts a working subtitle representation into a string
  */
 export function serializeSubtitle(subtitle: SubtitleCue[]) {

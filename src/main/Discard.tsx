@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from "@emotion/react";
-import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle } from "../cssStyles";
 
 import { LuChevronLeft, LuXCircle } from "react-icons/lu";
 
@@ -28,7 +28,7 @@ const Discard: React.FC = () => {
     display: finishState !== "Discard changes" ? "none" : "flex",
     flexDirection: "column" as const,
     alignItems: "center",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (

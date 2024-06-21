@@ -14,7 +14,6 @@ import {
   basicButtonStyle,
   customIconStyle,
   deactivatedButtonStyle,
-  flexGapReplacementStyle,
   titleStyle,
   titleStyleBold,
 } from "../cssStyles";
@@ -50,7 +49,7 @@ const TrackSelection: React.FC = () => {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
   });
 
   return (
@@ -98,7 +97,7 @@ const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, e
   const trackitemSubStyle = css({
     display: "flex",
     flexDirection: "row",
-    ...(flexGapReplacementStyle(20, true)),
+    gap: "20px",
 
     justifyContent: "space-around",
     flexWrap: "wrap",
