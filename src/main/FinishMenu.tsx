@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from "../cssStyles";
+import { basicButtonStyle, tileButtonStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
 import { LuSave, LuDatabase, LuXCircle } from "react-icons/lu";
@@ -22,7 +22,7 @@ const FinishMenu: React.FC = () => {
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (

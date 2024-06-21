@@ -4,7 +4,6 @@
 import { css, Global, keyframes } from "@emotion/react";
 import React from "react";
 import emotionNormalize from "emotion-normalize";
-import { checkFlexGapSupport } from "./util/utilityFunctions";
 import { createTheme } from "@mui/material/styles";
 import { Theme, useTheme } from "./themes";
 import {
@@ -42,43 +41,6 @@ export const globalStyle = (theme: Theme) => css({
 /** Breakpoint values */
 export const BREAKPOINTS = APPKIT_CONFIG.breakpoints;
 
-
-/**
- * CSS for replacing flexbox gap in browers that do not support it
- * Does not return a css prop, but is meant as a direct replacement for "gap"
- * Example: ...(flexGapReplacementStyle(30, false))
- */
-export const flexGapReplacementStyle = (flexGapValue: number, flexDirectionIsRow: boolean) => {
-
-  const half = flexGapValue / 2;
-  const quarter = flexGapValue / 4;
-
-  return (
-    {
-      // Use gap if supported
-      ...(checkFlexGapSupport()) && { gap: `${flexGapValue}px` },
-      // Else use margins
-      ...(!checkFlexGapSupport()) &&
-      {
-        ">*": { // For each child
-          marginTop: `${quarter}px`,
-          marginBottom: `${quarter}px`,
-          marginRight: `${half}px`,
-          marginLeft: `${half}px`,
-        },
-        ...(flexDirectionIsRow) && {
-          ">*:first-of-type": {
-            marginLeft: "0px",
-          },
-          ">*:last-child": {
-            marginRight: "0px",
-          },
-        },
-      },
-    }
-  );
-};
-
 /**
  * CSS for buttons
  */
@@ -97,7 +59,7 @@ export const basicButtonStyle = (theme: Theme) => css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  ...(flexGapReplacementStyle(10, false)),
+  gap: "10px",
   textAlign: "center" as const,
   outline: `${theme.button_outline}`,
 });
@@ -113,7 +75,7 @@ export const deactivatedButtonStyle = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  ...(flexGapReplacementStyle(10, false)),
+  gap: "10px",
   textAlign: "center" as const,
 });
 
@@ -134,7 +96,7 @@ export const navigationButtonStyle = (theme: Theme) => css({
 export const backOrContinueStyle = css(({
   display: "flex",
   flexDirection: "row",
-  ...(flexGapReplacementStyle(20, false)),
+  gap: "20px",
 }));
 
 /**
@@ -146,7 +108,7 @@ export const tileButtonStyle = (theme: Theme) => css({
   display: "flex",
   flexDirection: "column",
   fontWeight: "bold",
-  ...(flexGapReplacementStyle(30, false)),
+  gap: "30px",
   boxShadow: `${theme.boxShadow_tiles}`,
   background: `${theme.element_bg}`,
   placeSelf: "center",
@@ -463,7 +425,7 @@ export const videosStyle = (theme: Theme) => css(({
   marginTop: "24px",
   boxSizing: "border-box",
   padding: "10px",
-  ...(flexGapReplacementStyle(10, false)),
+  gap: "10px",
 }));
 
 export const backgroundBoxStyle = (theme: Theme) => css(({
@@ -472,7 +434,7 @@ export const backgroundBoxStyle = (theme: Theme) => css(({
   boxShadow: `${theme.boxShadow_tiles}`,
   boxSizing: "border-box",
   padding: "20px",
-  ...(flexGapReplacementStyle(25, false)),
+  gap: "25px",
 }));
 
 export const undisplay = (maxWidth: number) => css({

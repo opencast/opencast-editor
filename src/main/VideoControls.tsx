@@ -11,7 +11,7 @@ import {
 } from "../redux/videoSlice";
 
 import { convertMsToReadableString } from "../util/utilityFunctions";
-import { BREAKPOINTS, basicButtonStyle, flexGapReplacementStyle, undisplay } from "../cssStyles";
+import { BREAKPOINTS, basicButtonStyle, undisplay } from "../cssStyles";
 
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTranslation } from "react-i18next";
@@ -67,7 +67,7 @@ const VideoControls: React.FC<{
     width: "100%",
     paddingTop: "10px",
     paddingBottom: "10px",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (
@@ -143,7 +143,7 @@ const PreviewMode: React.FC<{
   const previewModeStyle = css({
     cursor: "pointer",
     display: "flex",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
     justifyContent: "center",
     alignItems: "center",
   });

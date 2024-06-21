@@ -10,7 +10,7 @@ import { LuMoon, LuSun } from "react-icons/lu";
 import { HiOutlineTranslate } from "react-icons/hi";
 import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
-import { basicButtonStyle, BREAKPOINTS, flexGapReplacementStyle, undisplay } from "../cssStyles";
+import { basicButtonStyle, BREAKPOINTS, undisplay } from "../cssStyles";
 
 import LogoSvg from "../img/opencast-editor.svg?react";
 import LogoSvgNarrow from "../img/opencast-editor-narrow.svg?react";
@@ -57,14 +57,14 @@ function Header() {
     height: "100%",
     alignItems: "center",
     paddingRight: "24px",
-    ...(flexGapReplacementStyle(16, false)),
+    gap: "16px",
   });
 
   const settingsButtonCSS = css({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    ...(flexGapReplacementStyle(8, false)),
+    gap: "8px",
 
     fontSize: 16,
     fontFamily: "inherit",
@@ -229,7 +229,7 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
     const themeSelectorButtonStyle = css({
       display: "flex",
       alignItems: "center",
-      ...(flexGapReplacementStyle(8, false)),
+      gap: "8px",
 
       fontSize: 16,
       fontFamily: "inherit",

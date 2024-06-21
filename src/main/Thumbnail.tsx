@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { settings } from "../config";
 import {
-  basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
+  basicButtonStyle, deactivatedButtonStyle, titleStyle, titleStyleBold, videosStyle,
   backgroundBoxStyle,
 } from "../cssStyles";
 import { Theme, useTheme } from "../themes";
@@ -179,7 +179,7 @@ const ThumbnailTable: React.FC<{
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
     paddingBottom: "20px",
   });
 
@@ -643,7 +643,7 @@ const thumbnailTableRowTitleStyle = css({
 const thumbnailTableRowRowStyle = css({
   display: "flex",
   flexDirection: "row",
-  ...(flexGapReplacementStyle(20, true)),
+  gap: "20px",
 
   justifyContent: "space-around",
   flexWrap: "wrap",

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { shallowEqual } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle } from "../cssStyles";
 import { KEYMAP } from "../globalKeys";
 import {
   addCueAtIndex,
@@ -90,23 +90,8 @@ const SubtitleListEditor: React.FC = () => {
     flexDirection: "column",
     height: "100%",
     width: "60%",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
   });
-
-  // Old CSS for not yet implemented buttons
-  // const headerStyle = css({
-  //   display: "flex",
-  //   flexDirection: "row",
-  //   justifyContent: "flex-end",
-  //   flexWrap: "wrap",
-  //   ...(flexGapReplacementStyle(20, false)),
-  //   paddingRight: "20px",
-  // })
-
-  // const cuttingActionButtonStyle = {
-  //   padding: "16px",
-  //   boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-  // };
 
   const calcEstimatedSize = React.useCallback(() => {
     return segmentHeight;
@@ -320,7 +305,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
     // Make function buttons visible when hovered or focused
     "&:hover": {
       "& .functionButtonAreaStyle": {
@@ -353,7 +338,7 @@ const SubtitleListSegment = React.memo((props: subtitleListSegmentProps) => {
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
     flexGrow: "0.5",
     minWidth: "20px",
     // Hackily moves buttons beyond the segment border.
