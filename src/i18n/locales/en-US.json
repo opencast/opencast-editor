@@ -26,7 +26,12 @@
       "mergeLeft-tooltip-aria": "Merge Left. Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}.",
       "mergeRight-button": "Merge Right",
       "mergeRight-tooltip": "Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}",
-      "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}."
+      "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}.",
+      "zoom": "Zoom",
+      "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+      "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
     },
 
     "video": {

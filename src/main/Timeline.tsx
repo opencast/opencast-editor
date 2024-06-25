@@ -1,3 +1,4 @@
+import { debounce } from "lodash";
 import React, { useState, useRef, useEffect } from "react";
 
 import Draggable, { DraggableEventHandler } from "react-draggable";
@@ -7,7 +8,13 @@ import { css } from "@emotion/react";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { Segment, httpRequestState } from "../types";
 import {
-  selectSegments, selectActiveSegmentIndex, selectDuration, selectVideoURL, selectWaveformImages, setWaveformImages,
+  selectSegments,
+  selectActiveSegmentIndex,
+  selectDuration,
+  selectVideoURL,
+  selectWaveformImages,
+  setWaveformImages,
+  selectTimelineZoom,
   moveCut,
 } from "../redux/videoSlice";
 
@@ -24,6 +31,7 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { RootState } from "../redux/store";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import ScrollContainer from "react-indiana-drag-scroll";
 import CuttingActionsContextMenu from "./CuttingActionsContextMenu";
 import { useHotkeys } from "react-hotkeys-hook";
 import { spinningStyle } from "../cssStyles";
@@ -53,15 +61,50 @@ const Timeline: React.FC<{
 }) => {
 
   // Init redux variables
+  const currentlyAt = useAppSelector(selectCurrentlyAt);
   const dispatch = useAppDispatch();
   const duration = useAppSelector(selectDuration);
+  const timelineZoom = useAppSelector(selectTimelineZoom);
 
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
+  const scrollContainerRef = useRef<HTMLElement>(null);
+  const topOffset = 20;
+
+  const currentlyScrolling = useRef(false);
+  const zoomCenter = useRef(0);
+
+  const updateScroll = () => {
+    if (currentlyScrolling.current) {
+      currentlyScrolling.current = false;
+      return;
+    }
+    const scrollLeft = scrollContainerRef.current?.scrollLeft ?? 0;
+    const clientWidth = scrollContainerRef.current?.clientWidth ?? 0;
+    const centerPosition = scrollLeft + 0.5 * clientWidth;
+    const scrubberPosition = duration ? (currentlyAt / duration) * width : 0;
+    const scrubberVisible = scrollLeft <= scrubberPosition && scrubberPosition <= scrollLeft + clientWidth;
+
+    zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
+  };
+
+  useEffect(updateScroll, [currentlyAt, timelineZoom, width]);
+
+  useEffect(() => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+    const clientWidth = scrollContainerRef.current.clientWidth ?? 0;
+    const left = zoomCenter.current * timelineZoom * clientWidth - 0.5 * clientWidth;
+
+    currentlyScrolling.current = true;
+    scrollContainerRef.current.scrollLeft = left;
+  }, [timelineZoom]);
 
   const timelineStyle = css({
     position: "relative",     // Need to set position for Draggable bounds to work
     height: timelineHeight + "px",
-    width: "100%",
+    width: (timelineZoom) * 100 + "%",    // Width modified by zoom
+    top: `${topOffset}px`,
   });
 
   // Update the current time based on the position clicked on the timeline
@@ -73,27 +116,38 @@ const Timeline: React.FC<{
   };
 
   return (
-    <CuttingActionsContextMenu>
-      <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
-        <Scrubber
-          timelineWidth={width}
-          timelineHeight={timelineHeight}
-          selectCurrentlyAt={selectCurrentlyAt}
-          selectIsPlaying={selectIsPlaying}
-          setCurrentlyAt={setCurrentlyAt}
-          setIsPlaying={setIsPlaying}
-        />
-        <div css={{ position: "relative", height: timelineHeight + "px" }}>
-          <Waveforms timelineHeight={timelineHeight}/>
-          <SegmentsList
+    <ScrollContainer
+      innerRef={scrollContainerRef}
+      css={{ overflowY: "hidden", width: "100%", height: `${timelineHeight + topOffset}px` }}
+      vertical={false}
+      horizontal={true}
+      // dom elements with this id in the container will not trigger scrolling when dragged
+      ignoreElements={".prevent-drag-scroll"}
+      hideScrollbars={false}            // ScrollContainer hides scrollbars per default
+      onEndScroll={updateScroll}
+    >
+      <CuttingActionsContextMenu>
+        <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
+          <Scrubber
             timelineWidth={width}
             timelineHeight={timelineHeight}
-            styleByActiveSegment={styleByActiveSegment}
-            tabable={true}
+            selectCurrentlyAt={selectCurrentlyAt}
+            selectIsPlaying={selectIsPlaying}
+            setCurrentlyAt={setCurrentlyAt}
+            setIsPlaying={setIsPlaying}
           />
+          <div css={{ position: "relative", height: timelineHeight + "px" }}>
+            <Waveforms timelineHeight={timelineHeight}/>
+            <SegmentsList
+              timelineWidth={width}
+              timelineHeight={timelineHeight}
+              styleByActiveSegment={styleByActiveSegment}
+              tabable={true}
+            />
+          </div>
         </div>
-      </div>
-    </CuttingActionsContextMenu>
+      </CuttingActionsContextMenu>
+    </ScrollContainer>
   );
 };
 
@@ -147,17 +201,17 @@ export const Scrubber: React.FC<{
   // Reposition scrubber when the timeline width changes
   useEffect(() => {
     if (currentlyAt && duration) {
-      setControlledPosition({ x: (currentlyAt / duration) * (timelineWidth), y: 0 });
+      updateXPos();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineWidth]);
 
   // Callback for when the scrubber gets dragged by the user
-  const onControlledDrag: DraggableEventHandler = (_e, position) => {
+  const onControlledDrag: DraggableEventHandler = debounce((_e, position) => {
     // Update position
     const { x } = position;
     dispatch(setCurrentlyAt((x / timelineWidth) * (duration)));
-  };
+  }, 200);
 
   // Callback for when the position changes by something other than dragging
   const updateXPos = () => {
@@ -275,7 +329,7 @@ export const Scrubber: React.FC<{
       position={controlledPosition}
       nodeRef={nodeRef}
     >
-      <div ref={nodeRef} css={scrubberStyle}>
+      <div ref={nodeRef} css={scrubberStyle} className="prevent-drag-scroll">
         <div css={scrubberDragHandleStyle} aria-grabbed={isGrabbed}
           aria-label={t("timeline.scrubber-text-aria",
             {
@@ -493,6 +547,7 @@ export const CutMark: React.FC<{
       nodeRef={nodeRef}
     >
       <div
+        className="prevent-drag-scroll"
         ref={nodeRef}
         css={cutStyle}
         aria-label={t("timeline.cut-text-aria",
