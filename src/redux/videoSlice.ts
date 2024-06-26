@@ -1,3 +1,4 @@
+import { clamp } from "lodash";
 import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
@@ -21,7 +22,8 @@ export interface video {
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: { width: number, height: number; }[],  // Aspect ratios of every video
-  hasChanges: boolean,             // Did user make changes in cutting view since last save
+  hasChanges: boolean,            // Did user make changes in cutting view since last save
+  timelineZoom: number,           // Zoom multiplicator for the timeline,
   waveformImages: string[];
   originalThumbnails: { id: Track["id"], uri: Track["thumbnailUri"]; }[];
 
@@ -60,6 +62,7 @@ export const initialState: video & httpRequestState = {
   jumpTriggered: false,
   aspectRatios: [],
   hasChanges: false,
+  timelineZoom: 1,
   waveformImages: [],
   originalThumbnails: [],
 
@@ -196,6 +199,9 @@ const videoSlice = createSlice({
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
       state.hasChanges = action.payload;
     },
+    setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
+      state.timelineZoom = clamp(action.payload, 1, timelineZoomMax(state));
+    },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload;
     },
@@ -294,6 +300,12 @@ const videoSlice = createSlice({
     setCustomizedTrackSelection: (state, action: PayloadAction<video["customizedTrackSelection"]>) => {
       state.customizedTrackSelection = action.payload;
     },
+    timelineZoomIn: state => {
+      state.timelineZoom = clamp(state.timelineZoom + 1, 1, timelineZoomMax(state));
+    },
+    timelineZoomOut: state => {
+      state.timelineZoom = clamp(state.timelineZoom - 1, 1, timelineZoomMax(state));
+    },
   },
   // For Async Requests
   extraReducers: builder => {
@@ -364,6 +376,8 @@ const videoSlice = createSlice({
     selectIsCurrentSegmentAlive: state => !state.segments[state.activeSegmentIndex].deleted,
     selectSelectedWorkflowId: state => state.selectedWorkflowId,
     selectHasChanges: state => state.hasChanges,
+    selectTimelineZoom: state => state.timelineZoom,
+    selectTimelineZoomMax: timelineZoomMax,
     selectWaveformImages: state => state.waveformImages,
     selectOriginalThumbnails: state => state.originalThumbnails,
     // Selectors mainly pertaining to the information fetched from Opencast
@@ -504,9 +518,20 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
+const ZOOM_SECONDS_VISIBLE = 20 * 1000;
+
+function timelineZoomMax(state) {
+  const maxZoom = state.duration / ZOOM_SECONDS_VISIBLE;
+
+  return Math.max(2, Math.ceil(maxZoom));
+}
+
 export const {
   addSegment,
   cut,
+  setTimelineZoom,
+  timelineZoomIn,
+  timelineZoomOut,
   jumpToPreviousSegment,
   jumpToNextSegment,
   markAsDeletedOrAlive,
@@ -553,6 +578,8 @@ export const {
   selectIsCurrentSegmentAlive,
   selectSelectedWorkflowId,
   selectHasChanges,
+  selectTimelineZoom,
+  selectTimelineZoomMax,
   selectWaveformImages,
   selectOriginalThumbnails,
   selectVideoURL,
