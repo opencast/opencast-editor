@@ -253,8 +253,8 @@
       "selectionAlertInfoVideo_one": "You have selected 1 video track.",
       "selectionAlertInfoVideo_other": "You have selected {{count}} video tracks.",
       "selectionAlertInfoAudio_zero": "You have not selected any audio track.",
-      "selectionAlertInfoAudio_one": "You have selected 1 audio track.",
-      "selectionAlertInfoAudio_other": "You have selected {{count}} audio tracks that will be mixed into one.",
+      "selectionAlertInfoAudio_one": "You have selected 1 audio track. It will be duplicated onto all videos.",
+      "selectionAlertInfoAudio_other": "You have selected {{count}} audio tracks.",
       "selectionAlertError": "At least one video or audio track has to be selected."
     },
 
