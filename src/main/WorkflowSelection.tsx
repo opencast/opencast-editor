@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from "@emotion/react";
-import { backOrContinueStyle, errorBoxStyle } from "../cssStyles";
+import { backOrContinueStyle } from "../cssStyles";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectWorkflows, setSelectedWorkflowIndex } from "../redux/videoSlice";
@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useTheme } from "../themes";
+import { ErrorBox } from "@opencast/appkit";
 
 /**
  * Allows the user to select a workflow
@@ -39,7 +40,6 @@ const WorkflowSelection: React.FC = () => {
 
   const finishState = useAppSelector(selectFinishState);
   const pageNumber = useAppSelector(selectPageNumber);
-  const theme = useTheme();
 
   const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
   const postAndProcessError = useAppSelector(selectError);
@@ -104,12 +104,16 @@ const WorkflowSelection: React.FC = () => {
           {/* <PageButton pageNumber={2} label="Continue" iconName={faChevronRight}/> */}
           {nextButton}
         </div>
-        <div css={errorBoxStyle(errorStatus === "failed", theme)} role="alert">
-          <span>{t("various.error-text")}</span><br />
-          {errorMessage ?
-            t("various.error-details-text", { errorMessage: postAndProcessError }) :
-            t("various.error-text")}<br />
-        </div>
+        {errorStatus === "failed" &&
+          <ErrorBox>
+            <span css={{ whiteSpace: "pre-line" }}>
+              {t("various.error-text") + "\n"}
+              {errorMessage ?
+                t("various.error-details-text", { errorMessage: postAndProcessError }) : undefined
+              }
+            </span>
+          </ErrorBox>
+        }
       </div>
     );
   };
