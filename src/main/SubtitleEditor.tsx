@@ -21,7 +21,7 @@ import { parseSubtitle, serializeSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
 import { generateButtonTitle } from "./SubtitleSelect";
-import { ConfirmationModal, ConfirmationModalHandle, Modal, ModalHandle } from "@opencast/appkit";
+import { ConfirmationModal, ConfirmationModalHandle, Modal, ModalHandle, ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -194,13 +194,13 @@ const DownloadButton: React.FC = () => {
 
   return (
     <ThemedTooltip title={t("subtitles.downloadButton-tooltip")}>
-      <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
-        role="button"
+      <ProtoButton
         onClick={() => downloadSubtitles()}
+        css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
       >
         <LuDownload css={{ fontSize: "16px" }} />
         <span>{t("subtitles.downloadButton-title")}</span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -267,13 +267,13 @@ const UploadButton: React.FC<{
   return (
     <>
       <ThemedTooltip title={t("subtitles.uploadButton-tooltip")}>
-        <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
-          role="button"
+        <ProtoButton
           onClick={() => modalRef.current?.open()}
+          css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
         >
           <LuUpload css={{ fontSize: "16px" }}/>
           <span>{t("subtitles.uploadButton-title")}</span>
-        </div>
+        </ProtoButton>
       </ThemedTooltip>
       {/* Hidden input field for upload */}
       <input
@@ -313,18 +313,14 @@ export const BackButton: React.FC = () => {
 
   return (
     <ThemedTooltip title={t("subtitles.backButton-tooltip")}>
-      <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
-        role="button" tabIndex={0}
+      <ProtoButton
         aria-label={t("subtitles.backButton-tooltip")}
         onClick={() => dispatch(setIsDisplayEditView(false))}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            dispatch(setIsDisplayEditView(false));
-          }
-        }}>
+        css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
+      >
         <LuChevronLeft css={{ fontSize: 24 }} />
         <span>{t("subtitles.backButton")}</span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };

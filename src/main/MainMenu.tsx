@@ -22,6 +22,7 @@ import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -147,15 +148,11 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
   });
 
   return (
-    <li css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
-      role="menuitem" tabIndex={0}
+    <ProtoButton
+      role="menuitem"
       aria-label={ariaLabelText}
       onClick={onMenuItemClicked}
-      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => {
-        if (event.key === "Enter") {
-          onMenuItemClicked();
-        }
-      }}
+      css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
     >
       <Icon css={iconCustomCSS ? iconCustomCSS : {
         fontSize: 36,
@@ -163,7 +160,7 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
         height: "auto",
       }} />
       {bottomText && <div>{bottomText}</div>}
-    </li>
+    </ProtoButton>
   );
 };
 
