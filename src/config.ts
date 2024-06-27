@@ -55,6 +55,7 @@ interface iSettings {
   },
   trackSelection: {
     show: boolean,
+    atLeastOneVideo: boolean,
   },
   thumbnail: {
     show: boolean,
@@ -93,6 +94,7 @@ const defaultSettings: iSettings = {
   },
   trackSelection: {
     show: true,
+    atLeastOneVideo: true,
   },
   thumbnail: {
     show: false,

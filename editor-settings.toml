@@ -79,6 +79,13 @@
 # Default: true
 #show = true
 
+# Ensure that at least one video stream remains selected
+# Typically, the track selection ensures that at least one video stream
+# remains selected. If you would like your users to create selections with
+# only audio streams, set this to false.
+# Default: true
+#atLeastOneVideo = true
+
 ####
 # Subtitles
 ##

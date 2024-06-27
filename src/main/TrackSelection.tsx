@@ -26,6 +26,7 @@ import { useTheme } from "../themes";
 import { outOfBounds } from "../util/utilityFunctions";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import PlaceholderWaveform from "../img/placeholder-waveform.png";
+import { settings } from "../config";
 
 /**
  * Creates the track selection.
@@ -36,10 +37,20 @@ const TrackSelection: React.FC = () => {
 
   // Generate list of tracks
   const tracks = useAppSelector(selectVideos);
-  const enabledCount = tracks.reduce(
-    (memo: number, track: Track) => memo + !!track.video_stream.enabled + !!track.audio_stream.enabled,
-    0
-  );
+  let enabledCount = 0;
+  if (settings.trackSelection.atLeastOneVideo) {
+    // Only care about at least one video stream being enabled
+    enabledCount = tracks.reduce(
+      (memo: number, track: Track) => memo + !!track.video_stream.enabled,
+      0
+    );
+  } else {
+    // Make sure that at least one track remains enabled
+    enabledCount = tracks.reduce(
+      (memo: number, track: Track) => memo + !!track.video_stream.enabled + !!track.audio_stream.enabled,
+      0
+    );
+  }
   const images = useAppSelector(selectWaveformImages);
   const customizedTrackSelection = !!useAppSelector(selectCustomizedTrackSelection);
 
@@ -263,7 +274,8 @@ const AudioTrackItem: React.FC<{
   const dispatch = useAppDispatch();
   const imagesMaxWidth = 300;
   const imagesMaxWidthMedium = 150;
-  const disabled = !customizable || (track.audio_stream.enabled && enabledCount === 1);
+  const disabled = !customizable ||
+    (!settings.trackSelection.atLeastOneVideo && track.audio_stream.enabled && enabledCount === 1);
 
   const imgStyle = css({
     height: "54px",   // Keep height consistent in case the image does not render
@@ -402,7 +414,7 @@ const SelectionAlert: React.FC<selectionAlertInterface> = ({
   return (
     <Alert variant="outlined" severity="info" css={css({ color: theme.inverted_text })}>
       <div css={css({ marginBlockEnd: customizable ? "1em" : "0" })}>
-        {t("trackSelection.help")}
+        {settings.trackSelection.atLeastOneVideo ? t("trackSelection.helpAtLeastOneVideo") : t("trackSelection.help")}
       </div>
 
       {lines.map((line, index) => (<div key={index}>{line}</div>))}
