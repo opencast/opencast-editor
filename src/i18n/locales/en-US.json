@@ -242,6 +242,7 @@
       "title": "Select track(s) for processing",
       "help": "At least one track has to be selected.",
       "helpAtLeastOneVideo": "At least one video track has to be selected.",
+      "atMostTwoVideos": "Track Selection is disabled for events with more than two videos",
       "customizeLabel": "Customize track selection",
       "videoTracksHeader": "Video tracks",
       "audioTracksHeader": "Audio tracks",

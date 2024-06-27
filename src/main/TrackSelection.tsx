@@ -33,6 +33,7 @@ import { settings } from "../config";
  */
 const TrackSelection: React.FC = () => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   // Generate list of tracks
@@ -97,6 +98,13 @@ const TrackSelection: React.FC = () => {
     dispatch(setCustomizedTrackSelection(!customizedTrackSelection));
   };
 
+  const isDisabledBecauseMoreThanTwoVideos = () => {
+    if (settings.trackSelection.atMostTwoVideos && tracks.length > 2) {
+      return true;
+    }
+    return false;
+  }
+
   const styles = {
     trackSelection: css({
       display: "flex",
@@ -128,7 +136,7 @@ const TrackSelection: React.FC = () => {
       transition: "all 0.05s",
       width: "100%",
       ...(
-        customizedTrackSelection
+        customizedTrackSelection || isDisabledBecauseMoreThanTwoVideos()
           ? {}
           : {
             opacity: "0.7",
@@ -144,6 +152,19 @@ const TrackSelection: React.FC = () => {
       },
     }),
   };
+
+  if (isDisabledBecauseMoreThanTwoVideos()) {
+    return (
+      <div css={styles.trackSelection}>
+        <Header />
+        <section css={[styles.selectionSection, styles.leftAlignedSection]}>
+          <Alert variant="outlined" severity="info" css={css({ color: theme.inverted_text })}>
+            <span>{t("trackSelection.atMostTwoVideos")}</span>
+          </Alert>
+        </section>
+      </div>
+    )
+  }
 
   return (
     <div css={styles.trackSelection}>
