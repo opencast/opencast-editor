@@ -25,7 +25,12 @@
         "mergeLeft-tooltip-aria": "Links samenvoegen. Combineer het momenteel actieve segment met het segment aan de linkerkant. Sneltoets: {{hotkeyName}}.",
         "mergeRight-button": "Rechts samenvoegen",
         "mergeRight-tooltip": "Combineer het momenteel actieve segment met het segment aan de rechterkant. Sneltoets: {{hotkeyName}}",
-        "mergeRight-tooltip-aria": "Rechts samenvoegen. Combineer het momenteel actieve segment met het segment aan de rechterkant. Sneltoets: {{hotkeyName}}."
+        "mergeRight-tooltip-aria": "Rechts samenvoegen. Combineer het momenteel actieve segment met het segment aan de rechterkant. Sneltoets: {{hotkeyName}}.",
+        "zoom": "Zoom",
+        "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out"
     },
     "video": {
         "previewButton": "Voorvertoningsmodus",
