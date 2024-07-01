@@ -52,7 +52,7 @@ jobs:
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
     - name: Wait for previous workflows to finish
-      uses: softprops/turnstyle@v1
+      uses: softprops/turnstyle@v2
       with:
         same-branch-only: false
       env:
