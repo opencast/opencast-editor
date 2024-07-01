@@ -10,13 +10,22 @@ import { LuMoon, LuSun } from "react-icons/lu";
 import { HiOutlineTranslate } from "react-icons/hi";
 import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
-import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL } from "../cssStyles";
+import { basicButtonStyle, BREAKPOINTS, undisplay } from "../cssStyles";
 
 import LogoSvg from "../img/opencast-editor.svg?react";
+import LogoSvgNarrow from "../img/opencast-editor-narrow.svg?react";
 import { selectIsEnd } from "../redux/endSlice";
-import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
+import {
+  checkboxMenuItem,
+  HeaderMenuItemDef,
+  ProtoButton,
+  screenWidthAtMost,
+  useColorScheme,
+  WithHeaderMenu,
+} from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
+import useWindowDimensions from "../util/utilityFunctions";
 import { languages as lngs } from "../i18n/lngs-generated";
 
 function Header() {
@@ -69,6 +78,10 @@ function Header() {
       backgroundColor: theme.header_button_hover_bg,
       color: `${theme.header_text}`,
     },
+
+    [screenWidthAtMost(BREAKPOINTS.medium)]: {
+      fontSize: 0,
+    },
   });
 
   return (
@@ -96,6 +109,7 @@ const Logo: React.FC = () => {
 
   const { t } = useTranslation();
   const { scheme } = useColorScheme();
+  const { width } = useWindowDimensions();
 
   const logo = css({
     paddingLeft: "8px",
@@ -118,7 +132,7 @@ const Logo: React.FC = () => {
 
   return (
     <MainMenuButton
-      Icon={LogoSvg}
+      Icon={width > 920 ? LogoSvg : LogoSvgNarrow}
       stateName={MainMenuStateNames.cutting}
       bottomText={""}
       ariaLabelText={t("mainMenu.cutting-button")}
@@ -167,7 +181,7 @@ const LanguageButton: React.FC = () => {
       menu={{
         label,
         items: menuItems,
-        breakpoint: BREAKPOINT_SMALL,
+        breakpoint: BREAKPOINTS.small,
       }}
     >
       <HeaderButton Icon={HiOutlineTranslate} label={label} />
@@ -193,7 +207,7 @@ const ThemeButton: React.FC = () => {
       menu={{
         label: t("theme.appearance"),
         items: menuItems,
-        breakpoint: BREAKPOINT_MEDIUM,
+        breakpoint: BREAKPOINTS.medium,
       }}>
       <HeaderButton
         Icon={scheme === "light" || scheme === "light-high-contrast" ? LuMoon : LuSun}
@@ -251,11 +265,7 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
         css={[basicButtonStyle(theme), themeSelectorButtonStyle]}
       >
         <Icon css={iconStyle} />
-        <span css={{
-          [`@media (max-width: ${BREAKPOINT_MEDIUM}px)`]: {
-            display: "none",
-          },
-        }}>{label}</span>
+        <span css={undisplay(BREAKPOINTS.medium)}>{label}</span>
       </ProtoButton>
     );
   });
