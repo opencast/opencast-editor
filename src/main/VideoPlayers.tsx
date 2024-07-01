@@ -39,6 +39,7 @@ import { useTheme } from "../themes";
 import { backgroundBoxStyle } from "../cssStyles";
 import { BaseReactPlayerProps } from "react-player/base";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
+import { ErrorBox } from "@opencast/appkit";
 
 const VideoPlayers: React.FC<{
   refs?: React.MutableRefObject<(VideoPlayerForwardRef | null)[]>,
@@ -381,14 +382,6 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       },
     }));
 
-    const errorBoxStyle = css({
-      ...(!errorState) && { display: "none" },
-      borderColor: `${theme.error}`,
-      borderStyle: "dashed",
-      fontWeight: "bold",
-      padding: "10px",
-    });
-
     const reactPlayerStyle = css({
       aspectRatio: "16 / 9",    // Hard-coded for now because there are problems with updating this value at runtime
 
@@ -447,9 +440,9 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
         );
       } else {
         return (
-          <div css={errorBoxStyle} role="alert">
-            <span>{t("video.loadError-text")} </span>
-          </div>
+          <ErrorBox>
+            {t("video.loadError-text")}
+          </ErrorBox>
         );
       }
     };
