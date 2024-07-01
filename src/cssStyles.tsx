@@ -433,3 +433,8 @@ export const backgroundBoxStyle = (theme: Theme) => css(({
   padding: "20px",
   gap: "25px",
 }));
+
+export const checkboxStyle = (theme: Theme) => css({
+  color: theme.text,
+  "&.Mui-disabled": { color: theme.disabled },
+});
