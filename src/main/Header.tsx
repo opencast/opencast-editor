@@ -12,8 +12,6 @@ import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINTS, undisplay } from "../cssStyles";
 
-import LogoSvg from "../img/opencast-editor.svg?react";
-import LogoSvgNarrow from "../img/opencast-editor-narrow.svg?react";
 import { selectIsEnd } from "../redux/endSlice";
 import {
   checkboxMenuItem,
@@ -105,6 +103,23 @@ function Header() {
   );
 }
 
+const LogoPicture: React.FC = () => {
+  const path = (filename:string) => import.meta.env.BASE_URL + filename;
+  return (
+    <div>
+      <picture css={{
+        height: "100%",
+        "> *": {
+          height: "calc(100% - 0.5px)",
+        },
+      }}>
+        <source srcSet={path("opencast-editor.svg")}></source>
+        <img src={path("opencast-editor.svg")} alt="Opencast Editor Logo"/>
+      </picture>
+    </div>
+  );
+};
+
 const Logo: React.FC = () => {
 
   const { t } = useTranslation();
@@ -114,11 +129,12 @@ const Logo: React.FC = () => {
   const logo = css({
     paddingLeft: "8px",
     opacity: scheme === "dark" ? "0.8" : "1",
-
+    display: "flex",
     height: "100%",
     "> *": {
       height: "calc(100% - 12px)",
     },
+    alignItems: "center",
 
     // Unset a bunch of CSS to keep the logo clean
     outline: "unset",
@@ -132,7 +148,7 @@ const Logo: React.FC = () => {
 
   return (
     <MainMenuButton
-      Icon={width > 920 ? LogoSvg : LogoSvgNarrow}
+      Icon={LogoPicture}
       stateName={MainMenuStateNames.cutting}
       bottomText={""}
       ariaLabelText={t("mainMenu.cutting-button")}
