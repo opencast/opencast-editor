@@ -28,10 +28,10 @@ const Body: React.FC = () => {
       );
     } else if (isEnd) {
       return (
-        <div>
+        <>
           <Lock />
           <TheEnd />
-        </div>
+        </>
       );
     } else if (isError) {
       return (
