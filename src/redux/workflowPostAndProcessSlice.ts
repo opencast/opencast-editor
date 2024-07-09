@@ -1,9 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 import { PostAndProcessEditArgument, httpRequestState } from "../types";
 
 import { convertSegments } from "./workflowPostSlice";
 import { settings } from "../config";
+import { createAppAsyncThunk } from "./createAsyncThunkWithTypes";
 
 const initialState: httpRequestState = {
   status: "idle",
@@ -12,7 +13,7 @@ const initialState: httpRequestState = {
 };
 
 export const postVideoInformationWithWorkflow =
-  createAsyncThunk("video/postVideoInformationWithWorkflow", async (argument: PostAndProcessEditArgument) => {
+  createAppAsyncThunk("video/postVideoInformationWithWorkflow", async (argument: PostAndProcessEditArgument) => {
     if (!settings.id) {
       throw new Error("Missing media package identifier");
     }
