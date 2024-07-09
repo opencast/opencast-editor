@@ -9,10 +9,10 @@ import {
 import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck } from "react-icons/lu";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectFinishState } from "../redux/finishSlice";
 import {
   selectHasChanges,
   selectSegments,
+  selectSelectedWorkflowId,
   selectTracks,
   setHasChanges as videoSetHasChanges,
 } from "../redux/videoSlice";
@@ -32,6 +32,8 @@ import {
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { IconType } from "react-icons";
+import { setEnd } from "../redux/endSlice";
 
 /**
  * Shown if the user wishes to save.
@@ -40,8 +42,6 @@ import { ThemedTooltip } from "./Tooltip";
 const Save: React.FC = () => {
 
   const { t } = useTranslation();
-
-  const finishState = useAppSelector(selectFinishState);
 
   const postWorkflowStatus = useAppSelector(selectStatus);
   const postError = useAppSelector(selectError);
@@ -53,9 +53,9 @@ const Save: React.FC = () => {
   const subtitleHasChanges = useAppSelector(selectSubtitleHasChanges);
 
   const saveStyle = css({
-    height: "100%",
-    display: finishState !== "Save changes" ? "none" : "flex",
-    flexDirection: "column" as const,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
     gap: "30px",
   });
@@ -108,8 +108,15 @@ const Save: React.FC = () => {
 /**
  * Button that sends a post request to save current changes
  */
-export const SaveButton: React.FC = () => {
-
+export const SaveButton: React.FC<{
+  basicIcon?: IconType
+  text?: string
+  isTransitionToEnd?: boolean
+}> = ({
+  basicIcon = LuSave,
+  text,
+  isTransitionToEnd = false,
+}) => {
   const { t } = useTranslation();
 
   // Initialize redux variables
@@ -120,11 +127,12 @@ export const SaveButton: React.FC = () => {
   const subtitles = useAppSelector(selectSubtitles);
   const workflowStatus = useAppSelector(selectStatus);
   const metadataStatus = useAppSelector(selectPostStatus);
+  const selectedWorkflowId = useAppSelector(selectSelectedWorkflowId);
   const theme = useTheme();
   const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
 
   // Update based on current fetching status
-  let Icon = LuSave;
+  let Icon = basicIcon;
   let spin = false;
   let tooltip = null;
   if (workflowStatus === "failed" || metadataStatus === "failed") {
@@ -176,6 +184,7 @@ export const SaveButton: React.FC = () => {
         segments: segments,
         tracks: tracks,
         subtitles: prepareSubtitles(),
+        workflow: selectedWorkflowId ? [{ id: selectedWorkflowId }] : undefined,
       }));
 
     }
@@ -185,6 +194,9 @@ export const SaveButton: React.FC = () => {
   // Let users leave the page without warning after a successful save
   useEffect(() => {
     if (workflowStatus === "success" && metadataStatus === "success") {
+      if (isTransitionToEnd) {
+        dispatch(setEnd({ hasEnded: true, value: "success" }));
+      }
       dispatch(videoSetHasChanges(false));
       dispatch(metadataSetHasChanges(false));
       dispatch(subtitleSetHasChanges(false));
@@ -202,7 +214,7 @@ export const SaveButton: React.FC = () => {
           }
         }}>
         <Icon css={spin ? spinningStyle : undefined} />
-        <span>{t("save.confirm-button")}</span>
+        <span>{text ?? t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
       </div>
     </ThemedTooltip>
