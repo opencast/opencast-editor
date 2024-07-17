@@ -92,7 +92,7 @@ function Header() {
 }
 
 const LogoPicture: React.FC = () => {
-  const path = (filename:string) => import.meta.env.BASE_URL + filename;
+  const imgUrl = new URL("/public/opencast-editor.svg", import.meta.url).href;
   return (
     <div>
       <picture css={{
@@ -101,8 +101,8 @@ const LogoPicture: React.FC = () => {
           height: "calc(100% - 0.5px)",
         },
       }}>
-        <source srcSet={path("opencast-editor.svg")}></source>
-        <img src={path("opencast-editor.svg")} alt="Opencast Editor Logo"/>
+        <source srcSet={imgUrl}></source>
+        <img src={imgUrl} alt="Opencast Editor Logo"/>
       </picture>
     </div>
   );
