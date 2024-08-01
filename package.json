@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.11.5",
     "@fontsource-variable/roboto-flex": "^5.0.15",
     "@iarna/toml": "^2.2.5",
-    "@mui/material": "^5.15.21",
+    "@mui/material": "^5.16.6",
     "@opencast/appkit": "^0.3.0",
     "@reduxjs/toolkit": "^2.2.6",
     "@testing-library/jest-dom": "^6.4.6",
