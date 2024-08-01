@@ -41,7 +41,7 @@
     "react-virtualized-auto-sizer": "^1.0.24",
     "react-window": "^1.8.10",
     "redux": "^5.0.1",
-    "standardized-audio-context": "^25.3.72",
+    "standardized-audio-context": "^25.3.75",
     "typescript": "^5.5.2",
     "uuid": "^10.0.0",
     "webvtt-parser": "^2.2.0"
