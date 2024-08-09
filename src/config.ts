@@ -7,7 +7,7 @@
  *
  * Also does some global hotkey configuration
  */
-import parseToml from "@iarna/toml/parse-string";
+import { parse } from "smol-toml";
 import deepmerge from "deepmerge";
 import { Flavor } from "./types";
 
@@ -222,7 +222,7 @@ const loadContextSettings = async () => {
   }
 
   try {
-    return parseToml(await response.text());
+    return parse(await response.text());
   } catch (e) {
     console.error(`Could not parse "${settingsPath}" as TOML: `, e);
     throw new SyntaxError(`Could not parse "${settingsPath}" as TOML: ${e}`);
