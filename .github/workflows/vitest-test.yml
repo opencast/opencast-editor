@@ -1,0 +1,28 @@
+name: Vitest tests
+
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v4
+
+    - name: Install Node Dependency
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Execute Vitest tests
+      run: npm run test
