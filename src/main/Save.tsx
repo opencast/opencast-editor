@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { css } from "@emotion/react";
 import {
-  basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
+  basicButtonStyle, backOrContinueStyle, ariaLive,
   navigationButtonStyle, spinningStyle,
 } from "../cssStyles";
 
@@ -32,6 +32,7 @@ import {
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { ErrorBox } from "@opencast/appkit";
 
 /**
  * Shown if the user wishes to save.
@@ -47,7 +48,6 @@ const Save: React.FC = () => {
   const postError = useAppSelector(selectError);
   const postMetadataStatus = useAppSelector(selectPostStatus);
   const postMetadataError = useAppSelector(selectPostError);
-  const theme = useTheme();
   const metadataHasChanges = useAppSelector(metadataSelectHasChanges);
   const hasChanges = useAppSelector(selectHasChanges);
   const subtitleHasChanges = useAppSelector(selectSubtitleHasChanges);
@@ -91,16 +91,26 @@ const Save: React.FC = () => {
     <div css={saveStyle}>
       <h1>{t("save.headline-text")}</h1>
       {render()}
-      <div css={errorBoxStyle(postWorkflowStatus === "failed", theme)} role="alert">
-        <span>{t("various.error-text")}</span><br />
-        {postError ? t("various.error-details-text", { errorMessage: postError }) : t("various.error-text")}<br />
-      </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
-        <span>{t("various.error-text")}</span><br />
-        {postMetadataError ?
-          t("various.error-details-text", { errorMessage: postMetadataError }) : t("various.error-text")
-        }<br />
-      </div>
+      {postWorkflowStatus === "failed" &&
+        <ErrorBox>
+          <span css={{ whiteSpace: "pre-line" }}>
+            {t("various.error-text") + "\n"}
+            {postError ?
+              t("various.error-details-text", { errorMessage: postError }) : undefined
+            }
+          </span>
+        </ErrorBox>
+      }
+      {postMetadataStatus === "failed" &&
+        <ErrorBox>
+          <span css={{ whiteSpace: "pre-line" }}>
+            {t("various.error-text") + "\n"}
+            {postMetadataError ?
+              t("various.error-details-text", { errorMessage: postMetadataError }) : undefined
+            }
+          </span>
+        </ErrorBox>
+      }
     </div>
   );
 };

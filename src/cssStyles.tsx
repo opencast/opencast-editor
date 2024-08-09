@@ -160,21 +160,6 @@ export const ariaLive = css({
   overflow: "hidden",
 });
 
-/**
- * CSS for displaying of errors
- */
-export const errorBoxStyle = (errorStatus: boolean, theme: Theme) => {
-  return (
-    css({
-      ...(!errorStatus) && { display: "none" },
-      borderColor: `${theme.error}`,
-      borderStyle: "dashed",
-      fontWeight: "bold",
-      padding: "10px",
-    })
-  );
-};
-
 type MyOptionType = {
   label: string;
   value: string;
