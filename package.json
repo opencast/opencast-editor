@@ -5,7 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@fontsource-variable/roboto-flex": "^5.0.15",
+    "@fontsource-variable/roboto-flex": "^5.1.0",
     "@iarna/toml": "^2.2.5",
     "@mui/material": "^5.16.7",
     "@opencast/appkit": "^0.3.1",
