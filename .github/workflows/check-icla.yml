@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Python module
-        run: pip install apereocla
+        run: pip install --break-system-packages apereocla
 
       - name: Check Apereo ICLA for GitHub user
         run: apereocla -g "${{ github.event.pull_request.user.login }}"
