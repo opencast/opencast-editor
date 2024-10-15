@@ -1,3 +1,5 @@
+import { Catalog } from "./redux/metadataSlice";
+
 export interface Segment {
   id: string,
   start: number,
@@ -68,6 +70,7 @@ export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
   subtitles: SubtitlesFromOpencast[]
+  metadata: Catalog[]
 }
 
 export interface PostAndProcessEditArgument extends PostEditArgument{
