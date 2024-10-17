@@ -191,13 +191,13 @@ const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, to
 
   const buttonStyle = [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
-    {
+    css({
       padding: "16px",
       maxHeight: "21px",
       boxShadow: "",
       background: `${theme.element_bg}`,
       textWrap: "nowrap",
-    }];
+    })];
 
   const clickHandler = () => {
     if (active) { handler(); }
