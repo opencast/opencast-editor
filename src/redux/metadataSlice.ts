@@ -1,8 +1,9 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { httpRequestState } from "../types";
 import { settings } from "../config";
+import { createAppAsyncThunk } from "./createAsyncThunkWithTypes";
 
 export interface Catalog {
   fields: MetadataField[],
@@ -69,7 +70,7 @@ const initialState: metadata & httpRequestState & postRequestState = {
   postErrorReason: "unknown",
 };
 
-export const fetchMetadata = createAsyncThunk("metadata/fetchMetadata", async () => {
+export const fetchMetadata = createAppAsyncThunk("metadata/fetchMetadata", async () => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
@@ -78,13 +79,12 @@ export const fetchMetadata = createAsyncThunk("metadata/fetchMetadata", async ()
   return JSON.parse(response);
 });
 
-export const postMetadata = createAsyncThunk("metadata/postMetadata", async (_, { getState }) => {
+export const postMetadata = createAppAsyncThunk("metadata/postMetadata", async (_, { getState }) => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
 
-  // TODO: Get only metadataState instead of all states
-  const allStates = getState() as { metadataState: { catalogs: metadata["catalogs"]; }; };
+  const allStates = getState();
 
   await client.post(`${settings.opencast.url}/editor/${settings.id}/metadata.json`,
     allStates.metadataState.catalogs
