@@ -18,6 +18,7 @@ import { selectPageNumber, setPageNumber } from "../redux/finishSlice";
 import { useTheme } from "../themes";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -86,17 +87,13 @@ export const PageButton: React.FC<{
   });
 
   return (
-    <div css={[basicButtonStyle(theme), pageButtonStyle]}
-      role="button" tabIndex={0}
+    <ProtoButton
       onClick={onPageChange}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === " " || event.key === "Enter") {
-          onPageChange();
-        }
-      }}>
+      css={[basicButtonStyle(theme), pageButtonStyle]}
+    >
       <Icon />
       <span>{label}</span>
-    </div>
+    </ProtoButton>
   );
 };
 
@@ -116,14 +113,10 @@ export const CallbackButton: React.FC = () => {
   return (
     <>
       {settings.callbackUrl !== undefined &&
-        <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
-          role="button" tabIndex={0}
+        <ProtoButton
           onClick={openCallbackUrl}
-          onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-            if (event.key === " " || event.key === "Enter") {
-              openCallbackUrl();
-            }
-          }}>
+          css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+        >
           <LuDoorOpen />
           <span>
             {settings.callbackSystem ?
@@ -131,7 +124,7 @@ export const CallbackButton: React.FC = () => {
               t("various.callback-button-generic")
             }
           </span>
-        </div>
+        </ProtoButton>
       }
     </>
   );

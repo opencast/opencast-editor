@@ -35,6 +35,7 @@ import {
 } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -168,17 +169,13 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
   });
 
   return (
-    <div css={[basicButtonStyle(theme), saveButtonStyle]}
-      role="button" tabIndex={0}
+    <ProtoButton
       onClick={saveAndProcess}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === " " || event.key === "Enter") {
-          saveAndProcess();
-        }
-      }}>
+      css={[basicButtonStyle(theme), saveButtonStyle]}
+    >
       <Icon css={spin ? spinningStyle : undefined} />
       <span>{text}</span>
-    </div>
+    </ProtoButton>
   );
 };
 
