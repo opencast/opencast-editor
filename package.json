@@ -70,7 +70,7 @@
     "@types/lodash": "^4.17.10",
     "@types/luxon": "^3.4.2",
     "@types/react-beforeunload": "^2.1.5",
-    "@types/react-resizable": "^3.0.7",
+    "@types/react-resizable": "^3.0.8",
     "@types/react-virtualized-auto-sizer": "^1.0.4",
     "@types/react-window": "^1.8.8",
     "@types/uuid": "^10.0.0",
