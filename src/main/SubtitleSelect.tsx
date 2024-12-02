@@ -32,7 +32,7 @@ const SubtitleSelect: React.FC = () => {
   const subtitlesFromOpencast = useAppSelector(selectSubtitlesFromOpencast); // track objects received from Opencast
   const subtitles = useAppSelector(selectSubtitles);                         // parsed subtitles stored in redux
 
-  const [displaySubtitles, setDisplaySubtitles] = useState<{ id: string, tags: string[]; }[]>([]);
+  const [displaySubtitles, setDisplaySubtitles] = useState<{ id: string, tags: string[], deleted: boolean; }[]>([]);
   const [canBeAddedSubtitles, setCanBeAddedSubtitles] = useState<{ id: string, tags: string[]; }[]>([]);
 
   // Update the collections for the select and add buttons
@@ -43,12 +43,12 @@ const SubtitleSelect: React.FC = () => {
     let existingSubtitles = subtitlesFromOpencast
       .filter(track => !subtitles[track.id])
       .map(track => {
-        return { id: track.id, tags: track.tags };
+        return { id: track.id, tags: track.tags, deleted: false };
       });
 
     existingSubtitles = Object.entries(subtitles)
       .map(track => {
-        return { id: track[0], tags: track[1].tags };
+        return { id: track[0], tags: track[1].tags, deleted: track[1].deleted };
       })
       .concat(existingSubtitles);
 
@@ -57,7 +57,7 @@ const SubtitleSelect: React.FC = () => {
     const subtitlesFromOpencastLangs = subtitlesFromOpencast
       .reduce((result: { id: string, lang: string; }[], track) => {
         const lang = track.tags.find(e => e.startsWith("lang:"));
-        if (lang) {
+        if (lang && !subtitles[track.id]?.deleted) {
           result.push({ id: track.id, lang: lang.split(":")[1].trim() });
         }
         return result;
@@ -66,7 +66,7 @@ const SubtitleSelect: React.FC = () => {
     const subtitlesLangs = Object.entries(subtitles)
       .reduce((result: { id: string, lang: string; }[], track) => {
         const lang = track[1].tags.find(e => e.startsWith("lang:"));
-        if (lang) {
+        if (lang && !subtitles[track[0]]?.deleted) {
           result.push({ id: track[0], lang: lang.split(":")[1].trim() });
         }
         return result;
@@ -112,6 +112,9 @@ const SubtitleSelect: React.FC = () => {
     }
 
     for (const subtitle of displaySubtitles) {
+      if (subtitle.deleted) {
+        continue;
+      }
       let lang = subtitle.tags.find(e => e.startsWith("lang:"));
       lang = lang ? lang.split(":")[1].trim() : undefined;
       const icon = lang ? ((settings.subtitles || {}).icons || {})[lang] : undefined;
