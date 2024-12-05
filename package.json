@@ -42,7 +42,7 @@
     "smol-toml": "^1.2.2",
     "standardized-audio-context": "^25.3.77",
     "typescript": "^5.7.2",
-    "uuid": "^11.0.2",
+    "uuid": "^11.0.3",
     "webvtt-parser": "^2.2.0"
   },
   "scripts": {
