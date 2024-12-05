@@ -100,18 +100,13 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
     }
   }, [dispatch, workflowStatus]);
 
-  const prepareSubtitles = () => {
-    const subtitlesForPosting = [];
-
-    for (const identifier in subtitles) {
-      subtitlesForPosting.push({
-        id: identifier,
-        subtitle: serializeSubtitle(subtitles[identifier].cues),
-        tags: subtitles[identifier].tags,
-      });
-    }
-    return subtitlesForPosting;
-  };
+  const prepareSubtitles = () =>
+    Object.entries(subtitles).map(([id, { deleted, cues, tags }]) => ({
+      id,
+      subtitle: deleted ? "" : serializeSubtitle(cues),
+      tags: deleted ? [] : tags,
+      deleted,
+    }));
 
   const saveAndProcess = () => {
     dispatch(postVideoInformationWithWorkflow({
