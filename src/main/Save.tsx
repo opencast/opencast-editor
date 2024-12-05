@@ -144,6 +144,7 @@ export const SaveButton: React.FC<{
       return t("save.success-tooltip-aria");
     }
   };
+
   const prepareSubtitles = () =>
     Object.entries(subtitles).map(([id, { deleted, cues, tags }]) => ({
       id,

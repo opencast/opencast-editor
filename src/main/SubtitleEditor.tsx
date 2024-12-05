@@ -48,7 +48,7 @@ const SubtitleEditor: React.FC = () => {
       try {
         dispatch(setSubtitle({
           identifier: selectedId,
-          subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags },
+          subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags, deleted: false },
         }));
       } catch (error) {
         if (error instanceof Error) {
