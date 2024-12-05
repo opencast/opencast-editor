@@ -20,6 +20,7 @@ export const postVideoInformation =
         segments: convertSegments(argument.segments),
         tracks: argument.tracks,
         subtitles: argument.subtitles,
+        metadataJSON: JSON.stringify(argument.metadata),
       }
     );
     return response;
