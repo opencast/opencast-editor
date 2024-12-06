@@ -70,11 +70,8 @@ export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
   subtitles: SubtitlesFromOpencast[]
+  workflow?: [{id: string}]
   metadata: Catalog[]
-}
-
-export interface PostAndProcessEditArgument extends PostEditArgument{
-  workflow: [{id: string}]
 }
 
 // Use respective i18n keys as values
