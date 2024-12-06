@@ -12,7 +12,6 @@ import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
 import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL } from "../cssStyles";
 
-import LogoSvg from "../img/opencast-editor.svg?react";
 import { selectIsEnd } from "../redux/endSlice";
 import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
 import { IconType } from "react-icons";
@@ -92,6 +91,23 @@ function Header() {
   );
 }
 
+const LogoPicture: React.FC = () => {
+  const imgUrl = new URL("/public/opencast-editor.svg", import.meta.url).href;
+  return (
+    <div>
+      <picture css={{
+        height: "100%",
+        "> *": {
+          height: "calc(100% - 0.5px)",
+        },
+      }}>
+        <source srcSet={imgUrl}></source>
+        <img src={imgUrl} alt="Opencast Editor Logo"/>
+      </picture>
+    </div>
+  );
+};
+
 const Logo: React.FC = () => {
 
   const { t } = useTranslation();
@@ -100,11 +116,12 @@ const Logo: React.FC = () => {
   const logo = css({
     paddingLeft: "8px",
     opacity: scheme === "dark" ? "0.8" : "1",
-
+    display: "flex",
     height: "100%",
     "> *": {
       height: "calc(100% - 12px)",
     },
+    alignItems: "center",
 
     // Unset a bunch of CSS to keep the logo clean
     outline: "unset",
@@ -118,7 +135,7 @@ const Logo: React.FC = () => {
 
   return (
     <MainMenuButton
-      Icon={LogoSvg}
+      Icon={LogoPicture}
       stateName={MainMenuStateNames.cutting}
       bottomText={""}
       ariaLabelText={t("mainMenu.cutting-button")}

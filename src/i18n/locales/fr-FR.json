@@ -25,7 +25,12 @@
         "mergeLeft-tooltip-aria": "Fusionner à gauche. Combiner le segment actif avec le segment à gauche. Raccourci : {{hotkeyName}}.",
         "mergeRight-button": "Fusionner à droite",
         "mergeRight-tooltip": "Combine le segment actif avec le segment à sa droite. Raccourci : {{hotkeyName}}",
-        "mergeRight-tooltip-aria": "Fusionner à droite. Combiner le segment actif avec le segment à droite. Raccourci : {{hotkeyName}}."
+        "mergeRight-tooltip-aria": "Fusionner à droite. Combiner le segment actif avec le segment à droite. Raccourci : {{hotkeyName}}.",
+        "zoom": "Zoom",
+        "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out"
     },
     "video": {
         "previewButton": "Mode aperçu",

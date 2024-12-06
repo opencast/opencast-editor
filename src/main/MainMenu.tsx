@@ -17,7 +17,6 @@ import { basicButtonStyle } from "../cssStyles";
 import { setIsPlaying } from "../redux/videoSlice";
 
 import { useTranslation } from "react-i18next";
-import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
@@ -127,7 +126,6 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
     dispatch(setIsPlaying(false));
     // Reset states
     dispatch(resetPostRequestState());
-    dispatch(metadataResetPostRequestState());
   };
 
   const mainMenuButtonStyle = css({

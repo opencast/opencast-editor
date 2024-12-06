@@ -35,7 +35,7 @@ const TheEnd: React.FC = () => {
 
   const theEndStyle = css({
     width: "100%",
-    height: "calc(100% - 64px)",
+    height: "calc(100vh - 64px)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

@@ -25,7 +25,12 @@
         "mergeLeft-tooltip-aria": "左合併。 將當前活動區段與其左側的區段合併。 熱鍵：{{hotkeyName}}。",
         "mergeRight-button": "右合併",
         "mergeRight-tooltip": "將當前活動區段與其右側的區段合併。 熱鍵：{{hotkeyName}}",
-        "mergeRight-tooltip-aria": "右合併。將當前活動區段與其右側的區段合併。 熱鍵：{{hotkeyName}}"
+        "mergeRight-tooltip-aria": "右合併。將當前活動區段與其右側的區段合併。 熱鍵：{{hotkeyName}}",
+        "zoom": "Zoom",
+        "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out"
     },
     "video": {
         "previewButton": "預覽模式",
