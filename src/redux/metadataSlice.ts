@@ -1,8 +1,9 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { httpRequestState } from "../types";
 import { settings } from "../config";
+import { createAppAsyncThunk } from "./createAsyncThunkWithTypes";
 
 export interface Catalog {
   fields: MetadataField[],
@@ -36,7 +37,7 @@ const initialState: metadata & httpRequestState = {
   errorReason: "unknown",
 };
 
-export const fetchMetadata = createAsyncThunk("metadata/fetchMetadata", async () => {
+export const fetchMetadata = createAppAsyncThunk("metadata/fetchMetadata", async () => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
