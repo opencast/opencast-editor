@@ -6,15 +6,12 @@ import { calendarStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   fetchMetadata,
-  postMetadata,
   selectCatalogs,
   Catalog,
   MetadataField,
   setFieldValue,
   selectGetError,
   selectGetStatus,
-  selectPostError,
-  selectPostStatus,
   setFieldReadonly,
 } from "../redux/metadataSlice";
 
@@ -50,8 +47,6 @@ const Metadata: React.FC = () => {
   const catalogs = useAppSelector(selectCatalogs);
   const getStatus = useAppSelector(selectGetStatus);
   const getError = useAppSelector(selectGetError);
-  const postStatus = useAppSelector(selectPostStatus);
-  const postError = useAppSelector(selectPostError);
   const theme = useTheme();
 
   // Try to fetch URL from external API
@@ -434,7 +429,7 @@ const Metadata: React.FC = () => {
 
   /**
    * Callback for when the form is submitted
-   * Saves values in redux state and sends them to Opencast
+   * Saves values in redux state
    * @param values
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -459,8 +454,6 @@ const Metadata: React.FC = () => {
         }
       });
 
-      // Send updated values to Opencast
-      dispatch(postMetadata());
     });
   };
 
@@ -736,42 +729,6 @@ const Metadata: React.FC = () => {
               // If there are no settings for a given catalog, just render it completely
               return renderCatalog(catalog, i, {});
             })}
-
-            {/*
-                <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>
-                  {t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}
-                </div>
-
-
-              <div title="buttons" css={buttonContainerStyle}>
-                <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
-                  type="submit"
-                  title={t("metadata.submit-button-tooltip")}
-                  aria-label={t("metadata.submit-button-tooltip")}
-                  disabled={submitting || pristine}>
-                    {t("metadata.submit-button")}
-                </button>
-                <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
-                  type="button"
-                  title={t("metadata.reset-button-tooltip")}
-                  aria-label={t("metadata.reset-button-tooltip")}
-                  onClick={() => {form.reset()}}
-                  disabled={submitting || pristine}>
-                    {t("metadata.reset-button")}
-                </button>
-              </div> */}
-
-            {postStatus === "failed" &&
-              <ErrorBox>
-                <span css={{ whiteSpace: "pre-line" }}>
-                  {"A problem occurred during communication with Opencast. \n"
-                  + "Changes could not be saved to Opencast." + "\n"}
-                  {postError ?
-                    t("various.error-details-text", { errorMessage: postError }) : undefined
-                  }
-                </span>
-              </ErrorBox>
-            }
 
             {/* For debugging the forms current values*/}
             {/* <FormSpy subscription={{ values: true }}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { css } from "@emotion/react";
 import {
@@ -23,10 +23,8 @@ import { setEnd } from "../redux/endSlice";
 
 import { useTranslation } from "react-i18next";
 import {
-  postMetadata,
-  selectPostError,
-  selectPostStatus,
   setHasChanges as metadataSetHasChanges,
+  selectCatalogs,
 } from "../redux/metadataSlice";
 import {
   selectSubtitles,
@@ -45,8 +43,6 @@ const WorkflowConfiguration: React.FC = () => {
 
   const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
   const postAndProcessError = useAppSelector(selectError);
-  const postMetadataStatus = useAppSelector(selectPostStatus);
-  const postMetadataError = useAppSelector(selectPostError);
 
   const workflowConfigurationStyle = css({
     display: "flex",
@@ -76,16 +72,6 @@ const WorkflowConfiguration: React.FC = () => {
           </span>
         </ErrorBox>
       }
-      {postMetadataStatus === "failed" &&
-        <ErrorBox>
-          <span css={{ whiteSpace: "pre-line" }}>
-            {t("various.error-text") + "\n"}
-            {postMetadataError ?
-              t("various.error-details-text", { errorMessage: postMetadataError }) : undefined
-            }
-          </span>
-        </ErrorBox>
-      }
     </div>
   );
 };
@@ -103,20 +89,19 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
   const segments = useAppSelector(selectSegments);
   const tracks = useAppSelector(selectTracks);
   const subtitles = useAppSelector(selectSubtitles);
+  const metadata = useAppSelector(selectCatalogs);
   const workflowStatus = useAppSelector(selectStatus);
-  const metadataStatus = useAppSelector(selectPostStatus);
-  const [metadataSaveStarted, setMetadataSaveStarted] = useState(false);
   const theme = useTheme();
 
   // Let users leave the page without warning after a successful save
   useEffect(() => {
-    if (workflowStatus === "success" && metadataStatus === "success") {
+    if (workflowStatus === "success") {
       dispatch(setEnd({ hasEnded: true, value: "success" }));
       dispatch(videoSetHasChanges(false));
       dispatch(metadataSetHasChanges(false));
       dispatch(subtitleSetHasChanges(false));
     }
-  }, [dispatch, metadataStatus, workflowStatus]);
+  }, [dispatch, workflowStatus]);
 
   const prepareSubtitles = () => {
     const subtitlesForPosting = [];
@@ -131,38 +116,26 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
     return subtitlesForPosting;
   };
 
-  // Dispatches first save request
-  // Subsequent save requests should be wrapped in useEffect hooks,
-  // so they are only sent after the previous one has finished
   const saveAndProcess = () => {
-    setMetadataSaveStarted(true);
-    dispatch(postMetadata());
+    dispatch(postVideoInformationWithWorkflow({
+      segments: segments,
+      tracks: tracks,
+      workflow: [{ id: selectedWorkflowId }],
+      subtitles: prepareSubtitles(),
+      metadata: metadata,
+    }));
   };
-
-  // Subsequent save request
-  useEffect(() => {
-    if (metadataStatus === "success" && metadataSaveStarted) {
-      setMetadataSaveStarted(false);
-      dispatch(postVideoInformationWithWorkflow({
-        segments: segments,
-        tracks: tracks,
-        workflow: [{ id: selectedWorkflowId }],
-        subtitles: prepareSubtitles(),
-      }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadataStatus]);
 
   // Update based on current fetching status
   let Icon = LuDatabase;
   let spin = false;
-  if (workflowStatus === "failed" || metadataStatus === "failed") {
+  if (workflowStatus === "failed") {
     Icon = LuAlertCircle;
     spin = false;
-  } else if (workflowStatus === "success" && metadataStatus === "success") {
+  } else if (workflowStatus === "success") {
     Icon = LuCheck;
     spin = false;
-  } else if (workflowStatus === "loading" || metadataStatus === "loading") {
+  } else if (workflowStatus === "loading") {
     Icon = LuLoader;
     spin = true;
 

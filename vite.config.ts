@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import eslint from "vite-plugin-eslint";
 import child from "child_process";
+import { configDefaults } from 'vitest/config'
 
 const commitHash = child.execSync("git rev-parse HEAD").toString().trim();
 
@@ -35,7 +36,11 @@ export default defineConfig(() => {
     },
     test: {
       globals: true,
-      environment: "jsdom",
+      environment: 'jsdom',
+      exclude: [
+        ...configDefaults.exclude,
+        './tests',
+      ],
     },
   };
 });

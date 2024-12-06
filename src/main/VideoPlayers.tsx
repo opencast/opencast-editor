@@ -21,6 +21,7 @@ import {
   setJumpTriggered,
   selectJumpTriggered,
   setCurrentlyAt,
+  selectVideos,
 } from "../redux/videoSlice";
 
 import ReactPlayer, { Config } from "react-player";
@@ -51,7 +52,9 @@ const VideoPlayers: React.FC<{
   maxHeightInPixel = 300,
 }) => {
 
-  const videoURLs = useAppSelector(selectVideoURL);
+  const videos = useAppSelector(selectVideos);
+  let primaryIndex = videos.findIndex(e => e.audio_stream.available === true);
+  primaryIndex = primaryIndex < 0 ? 0 : primaryIndex;
   const videoCount = useAppSelector(selectVideoCount);
 
   const videoPlayerAreaStyle = css({
@@ -72,8 +75,8 @@ const VideoPlayers: React.FC<{
       <VideoPlayer
         key={i}
         dataKey={i}
-        url={videoURLs[i]}
-        isPrimary={i === 0}
+        url={videos[i].uri}
+        isPrimary={i === primaryIndex}
         subtitleUrl={""}
         first={i === 0}
         last={i === videoCount - 1}
