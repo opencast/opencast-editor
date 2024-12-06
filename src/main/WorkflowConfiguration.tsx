@@ -12,6 +12,7 @@ import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHori
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
+  selectCustomizedTrackSelection,
   selectSegments,
   selectTracks,
   setHasChanges as videoSetHasChanges,
@@ -85,6 +86,7 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
   const selectedWorkflowId = useAppSelector(selectSelectedWorkflowId);
   const segments = useAppSelector(selectSegments);
   const tracks = useAppSelector(selectTracks);
+  const customizedTrackSelection = useAppSelector(selectCustomizedTrackSelection);
   const subtitles = useAppSelector(selectSubtitles);
   const metadata = useAppSelector(selectCatalogs);
   const workflowStatus = useAppSelector(selectStatus);
@@ -117,6 +119,7 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
     dispatch(postVideoInformationWithWorkflow({
       segments: segments,
       tracks: tracks,
+      customizedTrackSelection,
       workflow: [{ id: selectedWorkflowId }],
       subtitles: prepareSubtitles(),
       metadata: metadata,
