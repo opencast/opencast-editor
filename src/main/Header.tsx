@@ -23,7 +23,6 @@ import {
 } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
-import useWindowDimensions from "../util/utilityFunctions";
 import { languages as lngs } from "../i18n/lngs-generated";
 
 function Header() {
@@ -124,7 +123,6 @@ const Logo: React.FC = () => {
 
   const { t } = useTranslation();
   const { scheme } = useColorScheme();
-  const { width } = useWindowDimensions();
 
   const logo = css({
     paddingLeft: "8px",
