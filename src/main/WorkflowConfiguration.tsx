@@ -13,10 +13,6 @@ import { useAppSelector } from "../redux/store";
 import { PageButton } from "./Finish";
 
 import { useTranslation } from "react-i18next";
-import {
-  selectPostError,
-  selectPostStatus,
-} from "../redux/metadataSlice";
 import { useTheme } from "../themes";
 import { selectError, selectStatus } from "../redux/workflowPostSlice";
 import { SaveButton } from "./Save";
@@ -30,8 +26,6 @@ const WorkflowConfiguration: React.FC = () => {
 
   const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
   const postAndProcessError = useAppSelector(selectError);
-  const postMetadataStatus = useAppSelector(selectPostStatus);
-  const postMetadataError = useAppSelector(selectPostError);
   const theme = useTheme();
 
   const workflowConfigurationStyle = css({
@@ -60,12 +54,6 @@ const WorkflowConfiguration: React.FC = () => {
         <span>{t("various.error-text")}</span><br />
         {postAndProcessError ? t("various.error-details-text",
           { errorMessage: postAndProcessError }) :
-          t("various.error-text")}<br />
-      </div>
-      <div css={errorBoxStyle(postMetadataStatus === "failed", theme)} role="alert">
-        <span>{t("various.error-text")}</span><br />
-        {postMetadataError ? t("various.error-details-text",
-          { errorMessage: postMetadataError }) :
           t("various.error-text")}<br />
       </div>
     </div>
