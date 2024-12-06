@@ -5,10 +5,9 @@ import {
   basicButtonStyle,
   backOrContinueStyle,
   errorBoxStyle,
-  spinningStyle,
 } from "../cssStyles";
 
-import { LuLoader, LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
+import { LuCheck, LuAlertCircle, LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -33,6 +32,7 @@ import {
 } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
+import { Spinner } from "@opencast/appkit";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -124,19 +124,16 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
   };
 
   // Update based on current fetching status
-  let Icon = LuDatabase;
-  let spin = false;
-  if (workflowStatus === "failed") {
-    Icon = LuAlertCircle;
-    spin = false;
-  } else if (workflowStatus === "success") {
-    Icon = LuCheck;
-    spin = false;
-  } else if (workflowStatus === "loading") {
-    Icon = LuLoader;
-    spin = true;
-
-  }
+  const Icon = () => {
+    if (workflowStatus === "failed") {
+      return <LuAlertCircle />;
+    } else if (workflowStatus === "success") {
+      return <LuCheck />;
+    } else if (workflowStatus === "loading") {
+      return <Spinner />;
+    }
+    return <LuDatabase />;
+  };
 
   const saveButtonStyle = css({
     padding: "16px",
@@ -153,7 +150,7 @@ export const SaveAndProcessButton: React.FC<{ text: string; }> = ({ text }) => {
           saveAndProcess();
         }
       }}>
-      <Icon css={spin ? spinningStyle : undefined} />
+      {Icon()}
       <span>{text}</span>
     </div>
   );
