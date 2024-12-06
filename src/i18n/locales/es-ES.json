@@ -25,7 +25,12 @@
         "mergeLeft-tooltip-aria": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}.",
         "mergeRight-button": "Fusionar a la derecha",
         "mergeRight-tooltip": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}",
-        "mergeRight-tooltip-aria": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}."
+        "mergeRight-tooltip-aria": "Combina el segmento actualmente activo con el segmento a su izquierda. Acceso rápido: {{hotkeyName}}.",
+        "zoom": "Zoom",
+        "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out"
     },
     "video": {
         "previewButton": "Vista previa",
