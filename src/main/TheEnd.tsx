@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { CallbackButton } from "./Finish";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -72,16 +73,12 @@ const StartOverButton: React.FC = () => {
 
   return (
     <ThemedTooltip title={t("theEnd.startOver-tooltip")}>
-      <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
-        role="button" tabIndex={0}
+      <ProtoButton
         onClick={reloadPage}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            reloadPage();
-          }
-        }}>
+        css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+      >
         <span>{t("theEnd.startOver-button")}</span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
