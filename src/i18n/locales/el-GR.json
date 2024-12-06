@@ -25,7 +25,12 @@
         "mergeLeft-tooltip-aria": "Συγχώνευση αριστερά. Συνδυάστε το τρέχον ενεργό τμήμα με το τμήμα στα αριστερά. Hotkey: {{hotkeyName}}.",
         "mergeRight-button": "Συγχώνευση Δεξιά",
         "mergeRight-tooltip": "Συνδυάστε το τρέχον ενεργό τμήμα με το τμήμα προς τα δεξιά. Πλήκτρο συντόμευσης: {{hotkeyName}}",
-        "mergeRight-tooltip-aria": "Συγχώνευση Δεξιά. Συνδυάστε το τρέχον ενεργό τμήμα με το τμήμα στα δεξιά. Πλήκτρο συντόμευσης: {{hotkeyName}}."
+        "mergeRight-tooltip-aria": "Συγχώνευση Δεξιά. Συνδυάστε το τρέχον ενεργό τμήμα με το τμήμα στα δεξιά. Πλήκτρο συντόμευσης: {{hotkeyName}}.",
+        "zoom": "Zoom",
+        "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out"
     },
     "video": {
         "previewButton": "Λειτουργία προεπισκόπησης",
