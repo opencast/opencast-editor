@@ -4,7 +4,6 @@ import { css } from "@emotion/react";
 import {
   basicButtonStyle,
   backOrContinueStyle,
-  errorBoxStyle,
   spinningStyle,
 } from "../cssStyles";
 
@@ -33,6 +32,7 @@ import {
 } from "../redux/subtitleSlice";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
+import { ErrorBox } from "@opencast/appkit";
 
 /**
  * Will eventually display settings based on the selected workflow index
@@ -43,7 +43,6 @@ const WorkflowConfiguration: React.FC = () => {
 
   const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
   const postAndProcessError = useAppSelector(selectError);
-  const theme = useTheme();
 
   const workflowConfigurationStyle = css({
     display: "flex",
@@ -63,12 +62,16 @@ const WorkflowConfiguration: React.FC = () => {
         <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={LuChevronLeft} />
         <SaveAndProcessButton text={t("workflowConfig.confirm-button")} />
       </div>
-      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
-        <span>{t("various.error-text")}</span><br />
-        {postAndProcessError ? t("various.error-details-text",
-          { errorMessage: postAndProcessError }) :
-          t("various.error-text")}<br />
-      </div>
+      {postAndProcessWorkflowStatus === "failed" &&
+        <ErrorBox>
+          <span css={{ whiteSpace: "pre-line" }}>
+            {t("various.error-text") + "\n"}
+            {postAndProcessError ?
+              t("various.error-details-text", { errorMessage: postAndProcessError }) : undefined
+            }
+          </span>
+        </ErrorBox>
+      }
     </div>
   );
 };
