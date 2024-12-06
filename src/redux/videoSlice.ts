@@ -506,7 +506,7 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
 
 const ZOOM_SECONDS_VISIBLE = 20 * 1000;
 
-function timelineZoomMax(state) {
+function timelineZoomMax(state: { duration: number }) {
   const maxZoom = state.duration / ZOOM_SECONDS_VISIBLE;
 
   return Math.max(2, Math.ceil(maxZoom));
