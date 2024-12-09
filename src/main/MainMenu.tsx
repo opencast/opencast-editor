@@ -13,7 +13,7 @@ import { setPageNumber } from "../redux/finishSlice";
 
 import { MainMenuStateNames } from "../types";
 import { settings } from "../config";
-import { basicButtonStyle } from "../cssStyles";
+import { basicButtonStyle, BREAKPOINTS } from "../cssStyles";
 import { setIsPlaying } from "../redux/videoSlice";
 
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 import { useTheme } from "../themes";
+import { screenWidthAtMost } from "@opencast/appkit";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -42,6 +43,10 @@ const MainMenu: React.FC = () => {
     overflowY: "auto",
     background: `${theme.menu_background}`,
     gap: "30px",
+    [screenWidthAtMost(BREAKPOINTS.large)]: {
+      minWidth: "60px",
+      padding: "20px 10px",
+    },
   });
 
   return (
@@ -142,6 +147,10 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
       boxShadow: `${theme.boxShadow}`,
     },
     flexDirection: "column",
+    [screenWidthAtMost(BREAKPOINTS.large)]: {
+      height: "60px",
+      minHeight: "40px",
+    },
   });
 
   return (
@@ -159,8 +168,15 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
         fontSize: 36,
         width: "36px",
         height: "auto",
-      }} />
-      {bottomText && <div>{bottomText}</div>}
+      }}/>
+      {bottomText &&
+      <div css={{
+        [screenWidthAtMost(BREAKPOINTS.large)]: {
+          display: "none",
+        },
+      }}>
+        {bottomText}
+      </div>}
     </li>
   );
 };
