@@ -180,14 +180,17 @@ const videoSlice = createSlice({
       state.jumpTriggered = true;
     },
     jumpToNextSegment: state => {
-      let nextSegmentIndex = state.activeSegmentIndex + 1;
+      const nextSegmentIndex = state.activeSegmentIndex + 1;
+      let jumpTarget = 0;
 
       if (state.activeSegmentIndex + 1 >= state.segments.length) {
-        // Jump to start of last segment
-        nextSegmentIndex = state.activeSegmentIndex;
+        // Jump to end of last segment
+        jumpTarget = state.segments[state.activeSegmentIndex].end;
+      } else {
+        jumpTarget = state.segments[nextSegmentIndex].start;
       }
 
-      updateCurrentlyAt(state, state.segments[nextSegmentIndex].start);
+      updateCurrentlyAt(state, jumpTarget);
       state.jumpTriggered = true;
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {

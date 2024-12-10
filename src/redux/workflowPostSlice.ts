@@ -21,6 +21,7 @@ export const postVideoInformation =
         tracks: argument.tracks,
         customizedTrackSelection: argument.customizedTrackSelection,
         subtitles: argument.subtitles,
+        workflows: argument.workflow,
         metadataJSON: JSON.stringify(argument.metadata),
       }
     );
