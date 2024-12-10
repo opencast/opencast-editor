@@ -21,6 +21,7 @@ export const postVideoInformation =
         segments: convertSegments(argument.segments),
         tracks: argument.tracks,
         subtitles: argument.subtitles,
+        workflows: argument.workflow,
         metadataJSON: JSON.stringify(argument.metadata),
       }
     );

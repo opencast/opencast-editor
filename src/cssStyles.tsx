@@ -6,6 +6,9 @@ import React from "react";
 import emotionNormalize from "emotion-normalize";
 import { createTheme } from "@mui/material/styles";
 import { Theme, useTheme } from "./themes";
+import {
+  DEFAULT_CONFIG as APPKIT_CONFIG,
+} from "@opencast/appkit";
 import { StylesConfig } from "react-select";
 
 /**
@@ -35,8 +38,8 @@ export const globalStyle = (theme: Theme) => css({
 
 
 // When to switch behaviour based on screen width
-export const BREAKPOINT_SMALL = 450;
-export const BREAKPOINT_MEDIUM = 650;
+/** Breakpoint values */
+export const BREAKPOINTS = APPKIT_CONFIG.breakpoints;
 
 /**
  * CSS for buttons
@@ -433,3 +436,9 @@ export const backgroundBoxStyle = (theme: Theme) => css(({
   padding: "20px",
   gap: "25px",
 }));
+
+export const undisplay = (maxWidth: number) => css({
+  [`@media (max-width: ${maxWidth}px)`]: {
+    display: "none",
+  },
+});
