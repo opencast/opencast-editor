@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from "@emotion/react";
-import { calendarStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
+import { BREAKPOINTS, calendarStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -28,6 +28,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { cloneDeep } from "lodash";
 import { ParseKeys } from "i18next";
 import { ErrorBox } from "@opencast/appkit";
+import { screenWidthAtMost } from "@opencast/appkit";
 
 /**
  * Creates a Metadata form
@@ -97,6 +98,12 @@ const Metadata: React.FC = () => {
     marginRight: "auto",
     minWidth: "50%",
     display: "grid",
+    [screenWidthAtMost(1550)]: {
+      minWidth: "70%",
+    },
+    [screenWidthAtMost(BREAKPOINTS.medium)]: {
+      minWidth: "90%",
+    },
   });
 
   const catalogStyle = css({

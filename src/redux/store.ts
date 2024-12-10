@@ -3,7 +3,6 @@ import mainMenuStateReducer from "./mainMenuSlice";
 import finishStateReducer from "./finishSlice";
 import videoReducer from "./videoSlice";
 import workflowPostReducer from "./workflowPostSlice";
-import workflowPostAndProcessReducer from "./workflowPostAndProcessSlice";
 import endReducer from "./endSlice";
 import metadataReducer from "./metadataSlice";
 import subtitleReducer from "./subtitleSlice";
@@ -16,7 +15,6 @@ export const store = configureStore({
     finishState: finishStateReducer,
     videoState: videoReducer,
     workflowPostState: workflowPostReducer,
-    workflowPostAndProcessState: workflowPostAndProcessReducer,
     endState: endReducer,
     metadataState: metadataReducer,
     subtitleState: subtitleReducer,
