@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import {
   basicButtonStyle, backOrContinueStyle, ariaLive, errorBoxStyle,
-  navigationButtonStyle, spinningStyle,
+  navigationButtonStyle,
 } from "../cssStyles";
 
-import { LuLoader, LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck } from "react-icons/lu";
+import { LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck } from "react-icons/lu";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -32,7 +32,7 @@ import {
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
-import { IconType } from "react-icons";
+import { Spinner } from "@opencast/appkit";
 import { setEnd } from "../redux/endSlice";
 
 /**
@@ -101,11 +101,9 @@ const Save: React.FC = () => {
  * Button that sends a post request to save current changes
  */
 export const SaveButton: React.FC<{
-  basicIcon?: IconType
   text?: string
   isTransitionToEnd?: boolean
 }> = ({
-  basicIcon = LuSave,
   text,
   isTransitionToEnd = false,
 }) => {
@@ -122,22 +120,20 @@ export const SaveButton: React.FC<{
   const theme = useTheme();
 
   // Update based on current fetching status
-  let Icon = basicIcon;
-  let spin = false;
   let tooltip = null;
-  if (workflowStatus === "failed") {
-    Icon = LuAlertCircle;
-    spin = false;
-    tooltip = t("save.confirmButton-failed-tooltip");
-  } else if (workflowStatus === "success") {
-    Icon = LuCheck;
-    spin = false;
-    tooltip = t("save.confirmButton-success-tooltip");
-  } else if (workflowStatus === "loading") {
-    Icon = LuLoader;
-    spin = true;
-    tooltip = t("save.confirmButton-attempting-tooltip");
-  }
+  const Icon = () => {
+    if (workflowStatus === "failed") {
+      tooltip = t("save.confirmButton-failed-tooltip");
+      return <LuAlertCircle />;
+    } else if (workflowStatus === "success") {
+      tooltip = t("save.confirmButton-success-tooltip");
+      return <LuCheck />;
+    } else if (workflowStatus === "loading") {
+      tooltip = t("save.confirmButton-attempting-tooltip");
+      return <Spinner />;
+    }
+    <LuSave />;
+  };
 
   const ariaSaveUpdate = () => {
     if (workflowStatus === "success") {
@@ -189,7 +185,7 @@ export const SaveButton: React.FC<{
             save();
           }
         }}>
-        <Icon css={spin ? spinningStyle : undefined} />
+        {Icon()}
         <span>{text ?? t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
       </div>

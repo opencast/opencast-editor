@@ -18,7 +18,7 @@ import {
   moveCut,
 } from "../redux/videoSlice";
 
-import { LuMenu, LuLoader } from "react-icons/lu";
+import { LuMenu } from "react-icons/lu";
 
 import useResizeObserver from "use-resize-observer";
 
@@ -34,7 +34,7 @@ import { ThemedTooltip } from "./Tooltip";
 import ScrollContainer from "react-indiana-drag-scroll";
 import CuttingActionsContextMenu from "./CuttingActionsContextMenu";
 import { useHotkeys } from "react-hotkeys-hook";
-import { spinningStyle } from "../cssStyles";
+import { Spinner } from "@opencast/appkit";
 
 /**
  * A container for visualizing the cutting of the video, as well as for controlling
@@ -664,7 +664,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
     } else {
       return (
         <>
-          <LuLoader css={[spinningStyle, { fontSize: 40 }]} />
+          <Spinner size={40} />
           <div>{t("timeline.generateWaveform-text")}</div>
         </>
       );
