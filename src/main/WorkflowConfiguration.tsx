@@ -5,13 +5,9 @@ import {
   backOrContinueStyle,
   errorBoxStyle,
 } from "../cssStyles";
-
 import { LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
-
 import { useAppSelector } from "../redux/store";
-
 import { PageButton } from "./Finish";
-
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { selectError, selectStatus } from "../redux/workflowPostSlice";
