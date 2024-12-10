@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { css } from "@emotion/react";
-import { BREAKPOINTS, calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
+import { BREAKPOINTS, calendarStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -27,6 +27,7 @@ import { useTheme } from "../themes";
 import { ThemeProvider } from "@mui/material/styles";
 import { cloneDeep } from "lodash";
 import { ParseKeys } from "i18next";
+import { ErrorBox } from "@opencast/appkit";
 import { screenWidthAtMost } from "@opencast/appkit";
 
 /**
@@ -710,10 +711,16 @@ const Metadata: React.FC = () => {
             form.reset();
           }} css={metadataStyle}>
 
-            <div css={errorBoxStyle(getStatus === "failed", theme)} role="alert">
-              <span>A problem occurred during communication with Opencast.</span><br />
-              {getError ? "Details: " + getError : "No error details are available."}<br />
-            </div>
+            {getStatus === "failed" &&
+              <ErrorBox>
+                <span css={{ whiteSpace: "pre-line" }}>
+                  {"A problem occurred during communication with Opencast. \n"}
+                  {getError ?
+                    t("various.error-details-text", { errorMessage: getError }) : undefined
+                  }
+                </span>
+              </ErrorBox>
+            }
 
             {catalogs.map((catalog, i) => {
               if (settings.metadata.configureFields) {
