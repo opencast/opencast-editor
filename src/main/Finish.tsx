@@ -14,7 +14,7 @@ import { basicButtonStyle, navigationButtonStyle } from "../cssStyles";
 import { IconType } from "react-icons";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectPageNumber, setPageNumber } from "../redux/finishSlice";
+import { selectFinishState, selectPageNumber, setPageNumber } from "../redux/finishSlice";
 import { useTheme } from "../themes";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
@@ -26,33 +26,36 @@ import { ProtoButton } from "@opencast/appkit";
 const Finish: React.FC = () => {
 
   const pageNumber = useAppSelector(selectPageNumber);
+  const finishState = useAppSelector(selectFinishState);
 
-  const pageZeroStyle = css({
-    display: pageNumber !== 0 ? "none" : "block",
-  });
-
-  const pageOneStyle = css({
-    display: pageNumber !== 1 ? "none" : "block",
-  });
-
-  const pageTwoStyle = css({
-    display: pageNumber !== 2 ? "none" : "block",
-  });
+  const render = () => {
+    if (pageNumber === 0) {
+      return (
+        <FinishMenu />
+      );
+    } else if (pageNumber === 1) {
+      if (finishState === "Save changes") {
+        return (
+          <Save />
+        );
+      } else if (finishState === "Start processing") {
+        return (
+          <WorkflowSelection />
+        );
+      } else if (finishState === "Discard changes") {
+        return (
+          <Discard />
+        );
+      }
+    } else if (pageNumber === 2) {
+      return (
+        <WorkflowConfiguration />
+      );
+    }
+  };
 
   return (
-    <div>
-      <div css={pageZeroStyle} >
-        <FinishMenu />
-      </div>
-      <div css={pageOneStyle} >
-        <Save />
-        <WorkflowSelection />
-        <Discard />
-      </div>
-      <div css={pageTwoStyle} >
-        <WorkflowConfiguration />
-      </div>
-    </div>
+    <>{render()}</>
   );
 };
 

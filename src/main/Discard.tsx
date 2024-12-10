@@ -5,8 +5,7 @@ import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle } from "..
 
 import { LuChevronLeft, LuXCircle } from "react-icons/lu";
 
-import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectFinishState } from "../redux/finishSlice";
+import { useAppDispatch } from "../redux/store";
 import { setEnd } from "../redux/endSlice";
 
 import { PageButton } from "./Finish";
@@ -23,10 +22,8 @@ const Discard: React.FC = () => {
 
   const { t } = useTranslation();
 
-  const finishState = useAppSelector(selectFinishState);
-
   const cancelStyle = css({
-    display: finishState !== "Discard changes" ? "none" : "flex",
+    display: "flex",
     flexDirection: "column" as const,
     alignItems: "center",
     gap: "30px",
