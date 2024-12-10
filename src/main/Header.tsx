@@ -275,7 +275,9 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
     });
 
     return (
-      <ProtoButton {...rest} ref={ref}
+      <ProtoButton
+        {...rest}
+        ref={ref}
         css={[basicButtonStyle(theme), themeSelectorButtonStyle]}
       >
         <Icon css={iconStyle} />

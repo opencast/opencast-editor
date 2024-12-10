@@ -30,6 +30,7 @@ import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { Slider } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Defines the different actions a user can perform while in cutting mode
@@ -52,7 +53,7 @@ const CuttingActions: React.FC = () => {
     actionWithPayload?: ActionCreatorWithPayload<number, string> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload?: any,
-    ref?: React.RefObject<HTMLDivElement>
+    ref?: React.RefObject<HTMLButtonElement>
   ) => {
     if (action) {
       dispatch(action());
@@ -196,8 +197,6 @@ const CuttingActions: React.FC = () => {
  */
 const cuttingActionButtonStyle = css({
   padding: "16px",
-  // boxShadow: `${theme.boxShadow}`,
-  // background: `${theme.element_bg}`
 });
 
 interface cuttingActionsButtonInterface {
@@ -208,7 +207,7 @@ interface cuttingActionsButtonInterface {
     actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
-    ref?: React.RefObject<HTMLDivElement>,
+    ref?: React.RefObject<HTMLButtonElement>,
   ) => void,
   action: ActionCreatorWithoutPayload<string>,
   actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
@@ -232,24 +231,20 @@ const CuttingActionsButton: React.FC<cuttingActionsButtonInterface> = ({
   tooltip,
   ariaLabelText,
 }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLButtonElement>(null);
   const theme = useTheme();
 
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
-        ref={ref}
-        role="button" tabIndex={0} aria-label={ariaLabelText}
+      <ProtoButton
+        {...{ ref }}
+        aria-label={ariaLabelText}
         onClick={() => actionHandler(action, actionWithPayload, payload, ref)}
-        onKeyDown={(event: React.KeyboardEvent) => {
-          if (event.key === " " || event.key === "Enter") {
-            actionHandler(action, actionWithPayload, payload);
-          }
-        }}
+        css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
       >
         <Icon />
         <span css={undisplay(BREAKPOINTS.medium)}>{actionName}</span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -260,7 +255,7 @@ interface markAsDeleteButtonInterface {
     actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
-    ref?: React.RefObject<HTMLDivElement>
+    ref?: React.RefObject<HTMLButtonElement>
   ) => void,
   action: ActionCreatorWithoutPayload<string>,
   hotKeyName: string,
@@ -276,28 +271,23 @@ const MarkAsDeletedButton: React.FC<markAsDeleteButtonInterface> = ({
 }) => {
   const { t } = useTranslation();
   const isCurrentSegmentAlive = useAppSelector(selectIsCurrentSegmentAlive);
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLButtonElement>(null);
 
   const theme = useTheme();
 
   return (
     <ThemedTooltip title={t("cuttingActions.delete-restore-tooltip", { hotkeyName: hotKeyName })}>
-      <div css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
-        ref={ref}
-        role="button" tabIndex={0}
+      <ProtoButton
+        {...{ ref }}
         aria-label={t("cuttingActions.delete-restore-tooltip-aria", { hotkeyName: hotKeyName })}
         onClick={() => actionHandler(action, undefined, undefined, ref)}
-        onKeyDown={(event: React.KeyboardEvent) => {
-          if (event.key === " " || event.key === "Enter") {
-            actionHandler(action, undefined, undefined);
-          }
-        }}
+        css={[basicButtonStyle(theme), cuttingActionButtonStyle]}
       >
         {isCurrentSegmentAlive ? <LuTrash /> : <TrashRestore css={customIconStyle} /> }
         <span css={undisplay(BREAKPOINTS.medium)}>
           {isCurrentSegmentAlive ? t("cuttingActions.delete-button") : t("cuttingActions.restore-button")}
         </span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -308,7 +298,7 @@ interface ZoomSliderInterface {
     actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
-    ref?: React.RefObject<HTMLDivElement>,
+    ref?: React.RefObject<HTMLButtonElement>,
   ) => void,
   tooltip: string,
   ariaLabelText: string,

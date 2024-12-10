@@ -32,7 +32,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { useHotkeys } from "react-hotkeys-hook";
-import { useColorScheme } from "@opencast/appkit";
+import { ProtoButton, useColorScheme } from "@opencast/appkit";
 
 /**
  * Displays everything needed to edit subtitles
@@ -482,15 +482,14 @@ const FunctionButton: React.FC<{
 
   return (
     <ThemedTooltip title={tooltip}>
-      <div css={[basicButtonStyle(theme), addSegmentButtonStyle]}
-        role="button"
-        tabIndex={0}
+      <ProtoButton
         aria-label={tooltipAria}
         onClick={onClick}
         onKeyDown={onKeyDown}
+        css={[basicButtonStyle(theme), addSegmentButtonStyle]}
       >
         <Icon />
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
