@@ -1,8 +1,7 @@
 import { Segment, SubtitleCue, SubtitlesInEditor } from "./../types";
-import { createAsyncThunk, createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { roundToDecimalPlace } from "../util/utilityFunctions";
-import type { RootState } from "../redux/store";
-import { video } from "./videoSlice";
+import { createAppAsyncThunk } from "./createAsyncThunkWithTypes";
 
 export interface subtitle {
   isDisplayEditView: boolean;    // Should the edit view be displayed
@@ -250,7 +249,7 @@ export const {
  * Will grab the state from videoState to skip past deleted segment if preview
  * mode is active.
  */
-export const setCurrentlyAtAndTriggerPreview = createAsyncThunk("subtitleState/setCurrentlyAtAndTriggerPreview",
+export const setCurrentlyAtAndTriggerPreview = createAppAsyncThunk("subtitleState/setCurrentlyAtAndTriggerPreview",
   async (milliseconds: number, { getState, dispatch }) => {
     milliseconds = roundToDecimalPlace(milliseconds, 0);
 
@@ -258,7 +257,7 @@ export const setCurrentlyAtAndTriggerPreview = createAsyncThunk("subtitleState/s
       milliseconds = 0;
     }
 
-    const allStates = getState() as { videoState: video, subtitleState: subtitle; };
+    const allStates = getState();
     const segments: Segment[] = allStates.videoState.segments;
     let triggered = false;
 
