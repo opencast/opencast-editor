@@ -77,6 +77,10 @@ export const subtitleSlice = createSlice({
     setSubtitle: (state, action: PayloadAction<{ identifier: string, subtitles: SubtitlesInEditor; }>) => {
       state.subtitles[action.payload.identifier] = action.payload.subtitles;
     },
+    removeSubtitle: (state, action: PayloadAction<{ identifier: string; }>) => {
+      state.subtitles[action.payload.identifier].deleted = true;
+      state.hasChanges = true;
+    },
     setCueAtIndex: (state, action: PayloadAction<{ identifier: string, cueIndex: number, newCue: SubtitleCue; }>) => {
       if (action.payload.cueIndex < 0 ||
         action.payload.cueIndex >= state.subtitles[action.payload.identifier].cues.length) {
@@ -222,7 +226,7 @@ const sortSubtitle = (state: subtitle, identifier: string) => {
 
 // Export Actions
 export const { setIsDisplayEditView, setIsPlaying, setIsPlayPreview, setPreviewTriggered, setCurrentlyAt,
-  setCurrentlyAtInSeconds, setClickTriggered, setSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
+  setCurrentlyAtInSeconds, setClickTriggered, setSubtitle, removeSubtitle, setCueAtIndex, addCueAtIndex, removeCue,
   setSelectedSubtitleId, setFocusSegmentTriggered, setFocusSegmentId, setFocusSegmentTriggered2,
   setFocusToSegmentAboveId, setFocusToSegmentBelowId, setAspectRatio, setHasChanges } = subtitleSlice.actions;
 
