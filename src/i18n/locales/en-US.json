@@ -76,7 +76,9 @@
       "success-tooltip-aria": "Saved successfully",
       "saveArea-tooltip": "Save Area",
       "confirm-success": "Okay",
-      "cancel-save": "Don't save"
+      "cancel-save": "Don't save",
+      "invalid-headline-text": "Invalid Edits",
+      "invalid-text": "The segments do not create a valid video. Either change or discard your edits if you wish to proceed. If you wanted to delete this video use the Opencast Admin UI. Contact an adminstrator for further help."
     },
 
     "discard": {
