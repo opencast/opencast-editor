@@ -14,7 +14,7 @@ import {
   setVideoEnabled,
 } from "../redux/videoSlice";
 import {
-  BREAKPOINT_MEDIUM,
+  BREAKPOINTS,
   backgroundBoxStyle,
   checkboxStyle,
   titleStyle,
@@ -243,7 +243,7 @@ const VideoTrackItem: React.FC<{
     width: "100%",
     opacity: track.video_stream.enabled ? "1" : "0.5",
     maxWidth: `${imagesMaxWidthMedium}px`,
-    [`@media (min-width: ${BREAKPOINT_MEDIUM}px)`]: {
+    [`@media (min-width: ${BREAKPOINTS.medium}px)`]: {
       "&": { maxWidth: `${imagesMaxWidth}px` },
     },
   });
@@ -304,7 +304,7 @@ const AudioTrackItem: React.FC<{
     filter: `${theme.invert_wave}`,
     color: `${theme.inverted_text}`,
     maxWidth: `${imagesMaxWidthMedium}px`,
-    [`@media (min-width: ${BREAKPOINT_MEDIUM}px)`]: {
+    [`@media (min-width: ${BREAKPOINTS.medium}px)`]: {
       "&": { maxWidth: `${imagesMaxWidth}px` },
     },
   });
