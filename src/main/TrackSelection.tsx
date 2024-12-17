@@ -103,7 +103,7 @@ const TrackSelection: React.FC = () => {
       return true;
     }
     return false;
-  }
+  };
 
   const styles = {
     trackSelection: css({
@@ -122,7 +122,7 @@ const TrackSelection: React.FC = () => {
       flexWrap: "wrap",
       justifyContent: "center",
       alignItems: "stretch",
-      "& > *" : {
+      "& > *": {
         flex: "1 1 0px",
       },
       gap: "10px",
@@ -163,7 +163,7 @@ const TrackSelection: React.FC = () => {
           </Alert>
         </section>
       </div>
-    )
+    );
   }
 
   return (

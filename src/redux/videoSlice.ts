@@ -1,10 +1,11 @@
 import { clamp } from "lodash";
-import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
 import { roundToDecimalPlace } from "../util/utilityFunctions";
 import { settings } from "../config";
+import { createAppAsyncThunk } from "./createAsyncThunkWithTypes";
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
@@ -83,7 +84,7 @@ export const initialState: video & httpRequestState = {
   errorReason: "unknown",
 };
 
-export const fetchVideoInformation = createAsyncThunk("video/fetchVideoInformation", async () => {
+export const fetchVideoInformation = createAppAsyncThunk("video/fetchVideoInformation", async () => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
