@@ -6,7 +6,7 @@ import {
   errorBoxStyle,
 } from "../cssStyles";
 
-import { LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronLeft, LuMoreHorizontal } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
 
@@ -45,7 +45,6 @@ const WorkflowConfiguration: React.FC = () => {
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={LuChevronLeft} />
         <SaveButton
-          basicIcon={LuDatabase}
           isTransitionToEnd={true}
           text={t("workflowConfig.confirm-button")}
         />
