@@ -32,6 +32,7 @@ import {
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { ProtoButton } from "@opencast/appkit";
 import { IconType } from "react-icons";
 import { setEnd } from "../redux/endSlice";
 
@@ -176,18 +177,14 @@ export const SaveButton: React.FC<{
 
   return (
     <ThemedTooltip title={tooltip == null ? tooltip = "" : tooltip}>
-      <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
-        role="button" tabIndex={0}
+      <ProtoButton
         onClick={save}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            save();
-          }
-        }}>
+        css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+      >
         <Icon css={spin ? spinningStyle : undefined} />
         <span>{text ?? t("save.confirm-button")}</span>
         <div css={ariaLive} aria-live="polite" aria-atomic="true">{ariaSaveUpdate()}</div>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
