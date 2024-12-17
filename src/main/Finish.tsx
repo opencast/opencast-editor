@@ -14,10 +14,11 @@ import { basicButtonStyle, navigationButtonStyle } from "../cssStyles";
 import { IconType } from "react-icons";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectPageNumber, setPageNumber } from "../redux/finishSlice";
+import { selectFinishState, selectPageNumber, setPageNumber } from "../redux/finishSlice";
 import { useTheme } from "../themes";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -25,33 +26,36 @@ import { useTranslation } from "react-i18next";
 const Finish: React.FC = () => {
 
   const pageNumber = useAppSelector(selectPageNumber);
+  const finishState = useAppSelector(selectFinishState);
 
-  const pageZeroStyle = css({
-    display: pageNumber !== 0 ? "none" : "block",
-  });
-
-  const pageOneStyle = css({
-    display: pageNumber !== 1 ? "none" : "block",
-  });
-
-  const pageTwoStyle = css({
-    display: pageNumber !== 2 ? "none" : "block",
-  });
+  const render = () => {
+    if (pageNumber === 0) {
+      return (
+        <FinishMenu />
+      );
+    } else if (pageNumber === 1) {
+      if (finishState === "Save changes") {
+        return (
+          <Save />
+        );
+      } else if (finishState === "Start processing") {
+        return (
+          <WorkflowSelection />
+        );
+      } else if (finishState === "Discard changes") {
+        return (
+          <Discard />
+        );
+      }
+    } else if (pageNumber === 2) {
+      return (
+        <WorkflowConfiguration />
+      );
+    }
+  };
 
   return (
-    <div>
-      <div css={pageZeroStyle} >
-        <FinishMenu />
-      </div>
-      <div css={pageOneStyle} >
-        <Save />
-        <WorkflowSelection />
-        <Discard />
-      </div>
-      <div css={pageTwoStyle} >
-        <WorkflowConfiguration />
-      </div>
-    </div>
+    <>{render()}</>
   );
 };
 
@@ -86,17 +90,13 @@ export const PageButton: React.FC<{
   });
 
   return (
-    <div css={[basicButtonStyle(theme), pageButtonStyle]}
-      role="button" tabIndex={0}
+    <ProtoButton
       onClick={onPageChange}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === " " || event.key === "Enter") {
-          onPageChange();
-        }
-      }}>
+      css={[basicButtonStyle(theme), pageButtonStyle]}
+    >
       <Icon />
       <span>{label}</span>
-    </div>
+    </ProtoButton>
   );
 };
 
@@ -116,14 +116,10 @@ export const CallbackButton: React.FC = () => {
   return (
     <>
       {settings.callbackUrl !== undefined &&
-        <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
-          role="button" tabIndex={0}
+        <ProtoButton
           onClick={openCallbackUrl}
-          onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-            if (event.key === " " || event.key === "Enter") {
-              openCallbackUrl();
-            }
-          }}>
+          css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+        >
           <LuDoorOpen />
           <span>
             {settings.callbackSystem ?
@@ -131,7 +127,7 @@ export const CallbackButton: React.FC = () => {
               t("various.callback-button-generic")
             }
           </span>
-        </div>
+        </ProtoButton>
       }
     </>
   );

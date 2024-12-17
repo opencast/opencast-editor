@@ -29,7 +29,6 @@ import {
 import { Flavor } from "../types";
 import { settings } from "../config";
 import { useTranslation } from "react-i18next";
-import { flexGapReplacementStyle } from "../cssStyles";
 import { serializeSubtitle } from "../util/utilityFunctions";
 import { useTheme } from "../themes";
 import { VideoPlayer } from "./VideoPlayers";
@@ -109,8 +108,7 @@ const SubtitleVideoArea: React.FC = () => {
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    // width: "40%",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
   });
 
   const render = () => {

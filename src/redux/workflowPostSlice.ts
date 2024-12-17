@@ -1,7 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 import { Segment, PostEditArgument, httpRequestState } from "../types";
 import { settings } from "../config";
+import { createAppAsyncThunk } from "./createAsyncThunkWithTypes";
 
 const initialState: httpRequestState = {
   status: "idle",
@@ -10,7 +11,7 @@ const initialState: httpRequestState = {
 };
 
 export const postVideoInformation =
-  createAsyncThunk("video/postVideoInformation", async (argument: PostEditArgument) => {
+  createAppAsyncThunk("video/postVideoInformation", async (argument: PostEditArgument) => {
     if (!settings.id) {
       throw new Error("Missing media package id");
     }
@@ -20,6 +21,8 @@ export const postVideoInformation =
         segments: convertSegments(argument.segments),
         tracks: argument.tracks,
         subtitles: argument.subtitles,
+        workflows: argument.workflow,
+        metadataJSON: JSON.stringify(argument.metadata),
       }
     );
     return response;

@@ -14,14 +14,14 @@ import {
   basicButtonStyle,
   customIconStyle,
   deactivatedButtonStyle,
-  flexGapReplacementStyle,
   titleStyle,
   titleStyleBold,
 } from "../cssStyles";
 
 import { useTranslation } from "react-i18next";
-import { useTheme } from "../themes";
+import { Theme, useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Creates the track selection.
@@ -50,7 +50,7 @@ const TrackSelection: React.FC = () => {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
   });
 
   return (
@@ -98,7 +98,7 @@ const TrackItem: React.FC<{ track: Track, enabledCount: number; }> = ({ track, e
   const trackitemSubStyle = css({
     display: "flex",
     flexDirection: "row",
-    ...(flexGapReplacementStyle(20, true)),
+    gap: "20px",
 
     justifyContent: "space-around",
     flexWrap: "wrap",
@@ -190,15 +190,15 @@ const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, to
 
   const theme = useTheme();
 
-  const buttonStyle = [
+  const buttonStyle = (theme: Theme) => [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
-    {
+    css({
       padding: "16px",
       maxHeight: "21px",
       boxShadow: "",
       background: `${theme.element_bg}`,
       textWrap: "nowrap",
-    }];
+    })];
 
   const clickHandler = () => {
     if (active) { handler(); }
@@ -215,17 +215,16 @@ const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, to
 
   return (
     <ThemedTooltip title={tooltip}>
-      <div
-        css={buttonStyle}
-        tabIndex={0}
-        ref={ref}
-        role="button"
+      <ProtoButton
+        {...{ ref }}
         aria-label={tooltip}
         onClick={clickHandler}
-        onKeyDown={keyHandler} >
+        onKeyDown={keyHandler}
+        css={buttonStyle(theme)}
+      >
         <Icon css={customIconStyle} />
         {text}
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };

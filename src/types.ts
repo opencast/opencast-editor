@@ -1,3 +1,5 @@
+import { Catalog } from "./redux/metadataSlice";
+
 export interface Segment {
   id: string,
   start: number,
@@ -41,6 +43,7 @@ export interface SubtitlesFromOpencast {
 export interface SubtitlesInEditor {
   cues: SubtitleCue[],
   tags: string[],
+  deleted: boolean,
 }
 
 export interface SubtitleCue {
@@ -68,10 +71,8 @@ export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
   subtitles: SubtitlesFromOpencast[]
-}
-
-export interface PostAndProcessEditArgument extends PostEditArgument{
-  workflow: [{id: string}]
+  workflow?: [{id: string}]
+  metadata: Catalog[]
 }
 
 // Use respective i18n keys as values

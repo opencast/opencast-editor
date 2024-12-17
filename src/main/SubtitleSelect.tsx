@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import {
   basicButtonStyle,
-  flexGapReplacementStyle,
   tileButtonStyle,
   disableButtonAnimation,
   subtitleSelectStyle,
@@ -23,6 +22,7 @@ import { ThemedTooltip } from "./Tooltip";
 import { languageCodeToName } from "../util/utilityFunctions";
 import { v4 as uuidv4 } from "uuid";
 import { TFunction } from "i18next";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays buttons that allow the user to select the subtitle they want to edit
@@ -33,7 +33,7 @@ const SubtitleSelect: React.FC = () => {
   const subtitlesFromOpencast = useAppSelector(selectSubtitlesFromOpencast); // track objects received from Opencast
   const subtitles = useAppSelector(selectSubtitles);                         // parsed subtitles stored in redux
 
-  const [displaySubtitles, setDisplaySubtitles] = useState<{ id: string, tags: string[]; }[]>([]);
+  const [displaySubtitles, setDisplaySubtitles] = useState<{ id: string, tags: string[], deleted: boolean; }[]>([]);
   const [canBeAddedSubtitles, setCanBeAddedSubtitles] = useState<{ id: string, tags: string[]; }[]>([]);
 
   // Update the collections for the select and add buttons
@@ -44,12 +44,12 @@ const SubtitleSelect: React.FC = () => {
     let existingSubtitles = subtitlesFromOpencast
       .filter(track => !subtitles[track.id])
       .map(track => {
-        return { id: track.id, tags: track.tags };
+        return { id: track.id, tags: track.tags, deleted: false };
       });
 
     existingSubtitles = Object.entries(subtitles)
       .map(track => {
-        return { id: track[0], tags: track[1].tags };
+        return { id: track[0], tags: track[1].tags, deleted: track[1].deleted };
       })
       .concat(existingSubtitles);
 
@@ -58,7 +58,7 @@ const SubtitleSelect: React.FC = () => {
     const subtitlesFromOpencastLangs = subtitlesFromOpencast
       .reduce((result: { id: string, lang: string; }[], track) => {
         const lang = track.tags.find(e => e.startsWith("lang:"));
-        if (lang) {
+        if (lang && !subtitles[track.id]?.deleted) {
           result.push({ id: track.id, lang: lang.split(":")[1].trim() });
         }
         return result;
@@ -67,7 +67,7 @@ const SubtitleSelect: React.FC = () => {
     const subtitlesLangs = Object.entries(subtitles)
       .reduce((result: { id: string, lang: string; }[], track) => {
         const lang = track[1].tags.find(e => e.startsWith("lang:"));
-        if (lang) {
+        if (lang && !subtitles[track[0]]?.deleted) {
           result.push({ id: track[0], lang: lang.split(":")[1].trim() });
         }
         return result;
@@ -103,7 +103,7 @@ const SubtitleSelect: React.FC = () => {
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   const renderButtons = () => {
@@ -113,6 +113,9 @@ const SubtitleSelect: React.FC = () => {
     }
 
     for (const subtitle of displaySubtitles) {
+      if (subtitle.deleted) {
+        continue;
+      }
       let lang = subtitle.tags.find(e => e.startsWith("lang:"));
       lang = lang ? lang.split(":")[1].trim() : undefined;
       const icon = lang ? ((settings.subtitles || {}).icons || {})[lang] : undefined;
@@ -154,6 +157,11 @@ const SubtitleSelectButton: React.FC<{
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
+  const onClickHandler = () => {
+    dispatch(setIsDisplayEditView(true));
+    dispatch(setSelectedSubtitleId(id));
+  };
+
   const flagStyle = css({
     fontSize: "2.5em",
     overflow: "hidden",
@@ -176,22 +184,14 @@ const SubtitleSelectButton: React.FC<{
 
   return (
     <ThemedTooltip title={t("subtitles.selectSubtitleButton-tooltip", { title: title })}>
-      <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-        role="button" tabIndex={0}
+      <ProtoButton
         aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", { title: title })}
-        onClick={() => {
-          dispatch(setIsDisplayEditView(true));
-          dispatch(setSelectedSubtitleId(id));
-        }}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            dispatch(setIsDisplayEditView(true));
-            dispatch(setSelectedSubtitleId(id));
-          }
-        }}>
+        onClick={onClickHandler}
+        css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
+      >
         {icon && <div css={flagStyle}>{icon}</div>}
         <div css={titleStyle}>{title ?? t("subtitles.generic") + " " + id}</div>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -233,7 +233,7 @@ const SubtitleAddButton: React.FC<{
     const id = values.selectedSubtitle;
     const relatedSubtitle = subtitlesForDropdown.find(tag => tag.id === id);
     const tags = relatedSubtitle ? relatedSubtitle.tags : [];
-    dispatch(setSubtitle({ identifier: id, subtitles: { cues: [], tags: tags } }));
+    dispatch(setSubtitle({ identifier: id, subtitles: { cues: [], tags: tags, delete: false } }));
 
     // Reset
     setIsPlusDisplay(true);
@@ -250,7 +250,7 @@ const SubtitleAddButton: React.FC<{
   const subtitleAddFormStyle = css({
     display: !isPlusDisplay ? "flex" : "none",
     flexDirection: "column" as const,
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
     width: "80%",
     padding: "20px",
   });
@@ -271,16 +271,11 @@ const SubtitleAddButton: React.FC<{
 
   return (
     <ThemedTooltip title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}>
-      <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
-        role="button" tabIndex={0}
+      <ProtoButton
         aria-label={isPlusDisplay ?
           t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
         onClick={() => setIsPlusDisplay(false)}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            setIsPlusDisplay(false);
-          }
-        }}
+        css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
       >
         <LuPlus css={[plusIconStyle, { fontSize: 42 }]} />
         <Form
@@ -322,7 +317,7 @@ const SubtitleAddButton: React.FC<{
             </form>
           )}
         />
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };

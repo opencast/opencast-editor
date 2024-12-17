@@ -1,9 +1,11 @@
-import { createSlice, nanoid, createAsyncThunk, PayloadAction, createSelector } from "@reduxjs/toolkit";
+import { clamp } from "lodash";
+import { createSlice, nanoid, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
 import { roundToDecimalPlace } from "../util/utilityFunctions";
 import { settings } from "../config";
+import { createAppAsyncThunk } from "./createAsyncThunkWithTypes";
 
 export interface video {
   isPlaying: boolean,             // Are videos currently playing?
@@ -20,7 +22,8 @@ export interface video {
   activeSegmentIndex: number,     // Index of the segment that is currenlty hovered
   selectedWorkflowId: string,     // Id of the currently selected workflow
   aspectRatios: { width: number, height: number; }[],  // Aspect ratios of every video
-  hasChanges: boolean,             // Did user make changes in cutting view since last save
+  hasChanges: boolean,            // Did user make changes in cutting view since last save
+  timelineZoom: number,           // Zoom multiplicator for the timeline,
   waveformImages: string[];
   originalThumbnails: { id: Track["id"], uri: Track["thumbnailUri"]; }[];
 
@@ -58,6 +61,7 @@ export const initialState: video & httpRequestState = {
   jumpTriggered: false,
   aspectRatios: [],
   hasChanges: false,
+  timelineZoom: 1,
   waveformImages: [],
   originalThumbnails: [],
 
@@ -78,7 +82,7 @@ export const initialState: video & httpRequestState = {
   errorReason: "unknown",
 };
 
-export const fetchVideoInformation = createAsyncThunk("video/fetchVideoInformation", async () => {
+export const fetchVideoInformation = createAppAsyncThunk("video/fetchVideoInformation", async () => {
   if (!settings.id) {
     throw new Error("Missing media package identifier");
   }
@@ -168,14 +172,17 @@ const videoSlice = createSlice({
       state.jumpTriggered = true;
     },
     jumpToNextSegment: state => {
-      let nextSegmentIndex = state.activeSegmentIndex + 1;
+      const nextSegmentIndex = state.activeSegmentIndex + 1;
+      let jumpTarget = 0;
 
       if (state.activeSegmentIndex + 1 >= state.segments.length) {
-        // Jump to start of last segment
-        nextSegmentIndex = state.activeSegmentIndex;
+        // Jump to end of last segment
+        jumpTarget = state.segments[state.activeSegmentIndex].end;
+      } else {
+        jumpTarget = state.segments[nextSegmentIndex].start;
       }
 
-      updateCurrentlyAt(state, state.segments[nextSegmentIndex].start);
+      updateCurrentlyAt(state, jumpTarget);
       state.jumpTriggered = true;
     },
     addSegment: (state, action: PayloadAction<video["segments"][0]>) => {
@@ -186,6 +193,9 @@ const videoSlice = createSlice({
     },
     setHasChanges: (state, action: PayloadAction<video["hasChanges"]>) => {
       state.hasChanges = action.payload;
+    },
+    setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
+      state.timelineZoom = clamp(action.payload, 1, timelineZoomMax(state));
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload;
@@ -282,6 +292,12 @@ const videoSlice = createSlice({
       mergeSegments(state, state.activeSegmentIndex, state.segments.length - 1);
       state.hasChanges = true;
     },
+    timelineZoomIn: state => {
+      state.timelineZoom = clamp(state.timelineZoom + 1, 1, timelineZoomMax(state));
+    },
+    timelineZoomOut: state => {
+      state.timelineZoom = clamp(state.timelineZoom - 1, 1, timelineZoomMax(state));
+    },
   },
   // For Async Requests
   extraReducers: builder => {
@@ -351,6 +367,8 @@ const videoSlice = createSlice({
     selectIsCurrentSegmentAlive: state => !state.segments[state.activeSegmentIndex].deleted,
     selectSelectedWorkflowId: state => state.selectedWorkflowId,
     selectHasChanges: state => state.hasChanges,
+    selectTimelineZoom: state => state.timelineZoom,
+    selectTimelineZoomMax: timelineZoomMax,
     selectWaveformImages: state => state.waveformImages,
     selectOriginalThumbnails: state => state.originalThumbnails,
     // Selectors mainly pertaining to the information fetched from Opencast
@@ -489,6 +507,14 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
+const ZOOM_SECONDS_VISIBLE = 20 * 1000;
+
+function timelineZoomMax(state: { duration: number }) {
+  const maxZoom = state.duration / ZOOM_SECONDS_VISIBLE;
+
+  return Math.max(2, Math.ceil(maxZoom));
+}
+
 export const {
   setTrackEnabled,
   setIsPlaying,
@@ -514,6 +540,9 @@ export const {
   mergeAll,
   setPreviewTriggered,
   setClickTriggered,
+  setTimelineZoom,
+  timelineZoomIn,
+  timelineZoomOut,
   setJumpTriggered,
   jumpToPreviousSegment,
   jumpToNextSegment,
@@ -540,6 +569,8 @@ export const {
   selectIsCurrentSegmentAlive,
   selectSelectedWorkflowId,
   selectHasChanges,
+  selectTimelineZoom,
+  selectTimelineZoomMax,
   selectWaveformImages,
   selectOriginalThumbnails,
   selectVideoURL,

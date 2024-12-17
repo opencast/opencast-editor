@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 
 import { css } from "@emotion/react";
-import { backOrContinueStyle, errorBoxStyle, flexGapReplacementStyle } from "../cssStyles";
+import { backOrContinueStyle, errorBoxStyle } from "../cssStyles";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectWorkflows, setSelectedWorkflowIndex } from "../redux/videoSlice";
-import { selectFinishState, selectPageNumber } from "../redux/finishSlice";
 
 import { PageButton } from "./Finish";
-import { LuChevronLeft } from "react-icons/lu";
-import { SaveAndProcessButton } from "./WorkflowConfiguration";
-import { selectStatus, selectError } from "../redux/workflowPostAndProcessSlice";
+import { LuChevronLeft, LuDatabase } from "react-icons/lu";
 import { selectStatus as saveSelectStatus, selectError as saveSelectError } from "../redux/workflowPostSlice";
 import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
@@ -37,29 +34,25 @@ const WorkflowSelection: React.FC = () => {
     return (b.displayOrder - a.displayOrder);
   });
 
-  const finishState = useAppSelector(selectFinishState);
-  const pageNumber = useAppSelector(selectPageNumber);
   const theme = useTheme();
 
-  const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
-  const postAndProcessError = useAppSelector(selectError);
   const saveStatus = useAppSelector(saveSelectStatus);
   const saveError = useAppSelector(saveSelectError);
 
   const workflowSelectionStyle = css({
     padding: "20px",
-    display: (finishState === "Start processing" && pageNumber === 1) ? "flex" : "none",
+    display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   const workflowSelectionSelectionStyle = css({
     display: "flex",
     flexDirection: "column",
     alignItems: "left",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
     flexWrap: "wrap",
     maxHeight: "50vh",
   });
@@ -107,7 +100,7 @@ const WorkflowSelection: React.FC = () => {
         <div css={errorBoxStyle(errorStatus === "failed", theme)} role="alert">
           <span>{t("various.error-text")}</span><br />
           {errorMessage ?
-            t("various.error-details-text", { errorMessage: postAndProcessError }) :
+            t("various.error-details-text", { errorMessage: saveError }) :
             t("various.error-text")}<br />
         </div>
       </div>
@@ -140,9 +133,13 @@ const WorkflowSelection: React.FC = () => {
             This will take some time.
           </Trans>,
           false,
-          <SaveAndProcessButton text={t("workflowSelection.startProcessing-button")} />,
-          postAndProcessWorkflowStatus,
-          postAndProcessError
+          <SaveButton
+            basicIcon={LuDatabase}
+            isTransitionToEnd={true}
+            text={t("workflowSelection.startProcessing-button")}
+          />,
+          saveStatus,
+          saveError
         )
       );
     } else {
@@ -153,9 +150,13 @@ const WorkflowSelection: React.FC = () => {
             {t("workflowSelection.manyWorkflows-text")}
           </div>,
           true,
-          <SaveAndProcessButton text={t("workflowSelection.startProcessing-button")} />,
-          postAndProcessWorkflowStatus,
-          postAndProcessError
+          <SaveButton
+            basicIcon={LuDatabase}
+            isTransitionToEnd={true}
+            text={t("workflowSelection.startProcessing-button")}
+          />,
+          saveStatus,
+          saveError
         )
       );
     }

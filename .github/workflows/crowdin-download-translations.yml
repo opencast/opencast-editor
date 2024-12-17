@@ -1,4 +1,4 @@
-name: Update translations
+name: Crowdin » Download translations
 
 on:
   schedule:
@@ -28,13 +28,13 @@ jobs:
         run: |
           crowdin download --config .crowdin.yaml -b main
 
-      - name: add new translations
-        run: |
-          git add src/i18n/locales
-
       - name: update language list
         working-directory: src/i18n/locales
         run: $GITHUB_WORKSPACE/.github/generate-lngs.sh > ../lngs-generated.ts
+
+      - name: add new translations
+        run: |
+          git add src/i18n/
 
       - name: upload translations
         run: |

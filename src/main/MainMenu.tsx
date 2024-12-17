@@ -13,15 +13,16 @@ import { setPageNumber } from "../redux/finishSlice";
 
 import { MainMenuStateNames } from "../types";
 import { settings } from "../config";
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, BREAKPOINTS } from "../cssStyles";
 import { setIsPlaying } from "../redux/videoSlice";
 
 import { useTranslation } from "react-i18next";
-import { resetPostRequestState as metadataResetPostRequestState } from "../redux/metadataSlice";
 import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
+import { screenWidthAtMost } from "@opencast/appkit";
 
 /**
  * A container for selecting the functionality shown in the main part of the app
@@ -42,7 +43,11 @@ const MainMenu: React.FC = () => {
     overflowX: "hidden",
     overflowY: "auto",
     background: `${theme.menu_background}`,
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
+    [screenWidthAtMost(BREAKPOINTS.large)]: {
+      minWidth: "60px",
+      padding: "20px 10px",
+    },
   });
 
   return (
@@ -126,7 +131,6 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
     dispatch(setIsPlaying(false));
     // Reset states
     dispatch(resetPostRequestState());
-    dispatch(metadataResetPostRequestState());
   };
 
   const mainMenuButtonStyle = css({
@@ -144,26 +148,33 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
       boxShadow: `${theme.boxShadow}`,
     },
     flexDirection: "column",
+    [screenWidthAtMost(BREAKPOINTS.large)]: {
+      height: "60px",
+      minHeight: "40px",
+    },
   });
 
   return (
-    <li css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
-      role="menuitem" tabIndex={0}
+    <ProtoButton
+      role="menuitem"
       aria-label={ariaLabelText}
       onClick={onMenuItemClicked}
-      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => {
-        if (event.key === "Enter") {
-          onMenuItemClicked();
-        }
-      }}
+      css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
     >
       <Icon css={iconCustomCSS ? iconCustomCSS : {
         fontSize: 36,
         width: "36px",
         height: "auto",
-      }} />
-      {bottomText && <div>{bottomText}</div>}
-    </li>
+      }}/>
+      {bottomText &&
+      <div css={{
+        [screenWidthAtMost(BREAKPOINTS.large)]: {
+          display: "none",
+        },
+      }}>
+        {bottomText}
+      </div>}
+    </ProtoButton>
   );
 };
 

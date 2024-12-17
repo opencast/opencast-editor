@@ -152,7 +152,7 @@ const SubtitleTimeline: React.FC = () => {
         horizontal={true}
         onEndScroll={onEndScroll}
         // dom elements with this id in the container will not trigger scrolling when dragged
-        ignoreElements={"#no-scrolling"}
+        ignoreElements={".prevent-drag-scroll"}
       >
         {/* Container. Overflows. Width based on parent times zoom level*/}
         <div ref={ref} css={timelineStyle}>
@@ -314,24 +314,13 @@ const TimelineSubtitleSegment: React.FC<{
   const onResizeAbsolute: ResizableProps["onResize"] = (_event, { size, handle }) => {
     // Possible TODO: Find a way to stop resizing a segment beyond 0ms here instead of later
     let newLeft = absoluteLeft;
-    let newTop = absoluteTop;
-    const deltaHeight = size.height - absoluteHeight;
-    const deltaWidth = size.width - absoluteWidth;
-    if (handle[0] === "n") {
-      newTop -= deltaHeight;
-    } else if (handle[0] === "s") {
-      newTop += deltaHeight;
-    }
+
     if (handle[handle.length - 1] === "w") {
-      newLeft -= deltaWidth;
-    } else if (handle[handle.length - 1] === "e") {
-      newLeft += deltaWidth;
+      newLeft -= size.width - absoluteWidth;
     }
 
     setAbsoluteWidth(size.width);
-    setAbsoluteHeight(size.height);
     setAbsoluteLeft(newLeft);
-    setAbsoluteTop(newTop);
   };
 
   // Update redux state based on the resize
@@ -350,7 +339,7 @@ const TimelineSubtitleSegment: React.FC<{
     }
     // if handle === right, update endTime
     if (handle === "e") {
-      newEndTime = props.cue.endTime + timeDiff;
+      newEndTime = props.cue.endTime - timeDiff;
     }
 
     dispatchNewTimes(newStartTime, newEndTime);
@@ -434,13 +423,9 @@ const TimelineSubtitleSegment: React.FC<{
         width={absoluteWidth}
         onResize={onResizeAbsolute}
         onResizeStop={onResizeStop}
-        // TODO: The "e" handle is currently NOT WORKING CORRECTLY!
-        //  The errounous behaviour can already be seens with a minimal
-        //  draggable + resizable example.
-        //  Fix most likely requires changes in one of those modules
-        resizeHandles={["w"]}
+        resizeHandles={["w", "e"]}
       >
-        <div css={segmentStyle} ref={nodeRef} onClick={onClick} id="no-scrolling">
+        <div css={segmentStyle} ref={nodeRef} onClick={onClick} className="prevent-drag-scroll">
           <span css={textStyle}>{props.cue.text}</span>
         </div>
       </Resizable>

@@ -25,7 +25,12 @@
         "mergeLeft-tooltip-aria": "Links samenvoegen. Combineer het momenteel actieve segment met het segment aan de linkerkant. Sneltoets: {{hotkeyName}}.",
         "mergeRight-button": "Rechts samenvoegen",
         "mergeRight-tooltip": "Combineer het momenteel actieve segment met het segment aan de rechterkant. Sneltoets: {{hotkeyName}}",
-        "mergeRight-tooltip-aria": "Rechts samenvoegen. Combineer het momenteel actieve segment met het segment aan de rechterkant. Sneltoets: {{hotkeyName}}."
+        "mergeRight-tooltip-aria": "Rechts samenvoegen. Combineer het momenteel actieve segment met het segment aan de rechterkant. Sneltoets: {{hotkeyName}}.",
+        "zoom": "Zoom",
+        "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out"
     },
     "video": {
         "previewButton": "Voorvertoningsmodus",
@@ -230,7 +235,7 @@
     "subtitles": {
         "selectSubtitleButton-tooltip": "Edit subtitles for {{title}}",
         "selectSubtitleButton-tooltip-aria": "Select {{title}} for subtitle editing",
-        "createSubtitleButton-tooltip": "Opens a dialog for creating new subtitles",
+        "createSubtitleButton-tooltip": "Opens a dialog for creating/uploading new subtitles",
         "createSubtitleButton-clicked-tooltip-aria": "Contains a dialog for creating new subtitles",
         "createSubtitleButton-createButton": "Create",
         "createSubtitleButton-createButton-tooltip": "Start a new subtitle file with the chosen title.",
@@ -238,8 +243,19 @@
         "createSubtitleDropdown-label": "Pick a language",
         "backButton": "Back",
         "backButton-tooltip": "Return to subtitle selection",
+        "deleteButton-title": "Verwijder",
+        "deleteButton-tooltip": "Delete subtitle",
+        "deleteButton-warning-header": "Caution!",
+        "deleteButton-warning": "You will remove the current subtitle. This cannot be undone. Are you sure?",
         "downloadButton-title": "Download",
         "downloadButton-tooltip": "Download subtitle as vtt file",
+        "uploadButton-title": "Upload",
+        "uploadButton-tooltip": "Upload subtitle as vtt file",
+        "uploadButton-warning-header": "Caution!",
+        "uploadButton-warning": "Uploading will overwrite the current subtitle. This cannot be undone. Are you sure?",
+        "uploadButton-error": "Upload failed.",
+        "uploadButton-error-filetype": "Wrong file type.",
+        "uploadButton-error-parse": "Could not parse subtitle file. Please ensure that the file contains valid WebVTT.",
         "editTitle": "Subtitle Editor - {{title}}",
         "editTitle-loading": "Loading",
         "generic": "Generic",
@@ -288,5 +304,11 @@
     },
     "language": {
         "language": "Taal"
+    },
+    "modal": {
+        "areYouSure": "Are you sure?",
+        "cancel": "Cancel",
+        "close": "Close",
+        "confirm": "Confirm"
     }
 }

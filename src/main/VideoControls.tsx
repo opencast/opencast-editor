@@ -11,7 +11,7 @@ import {
 } from "../redux/videoSlice";
 
 import { convertMsToReadableString } from "../util/utilityFunctions";
-import { basicButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { BREAKPOINTS, basicButtonStyle, undisplay } from "../cssStyles";
 
 import { KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTranslation } from "react-i18next";
@@ -23,6 +23,7 @@ import { ThemedTooltip } from "./Tooltip";
 import { Theme, useTheme } from "../themes";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Slider } from "@mui/material";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Contains controls for manipulating multiple video players at once
@@ -67,7 +68,7 @@ const VideoControls: React.FC<{
     width: "100%",
     paddingTop: "10px",
     paddingBottom: "10px",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (
@@ -143,7 +144,7 @@ const PreviewMode: React.FC<{
   const previewModeStyle = css({
     cursor: "pointer",
     display: "flex",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
     justifyContent: "center",
     alignItems: "center",
   });
@@ -175,8 +176,9 @@ const PreviewMode: React.FC<{
           if (event.key === " ") {
             switchPlayPreview(undefined);
           }
-        }}>
-        <div css={previewModeTextStyle(theme)}>
+        }}
+      >
+        <div css={[previewModeTextStyle(theme), undisplay(BREAKPOINTS.medium)]}>
           {t("video.previewButton")}
         </div>
         {isPlayPreview ? <FaToggleOn css={[basicButtonStyle(theme), switchIconStyle]} />
@@ -231,19 +233,15 @@ const PlayButton: React.FC<{
 
   return (
     <ThemedTooltip title={isPlaying ? t("video.pauseButton-tooltip") : t("video.playButton-tooltip")}>
-      <div>
-        <div css={[basicButtonStyle(theme), playButtonStyle]}
-          role="button" aria-pressed={isPlaying} tabIndex={0} aria-hidden={false}
-          aria-label={t("video.playButton-tooltip")}
-          onClick={() => { switchIsPlaying(); }}
-          onKeyDown={(event: React.KeyboardEvent) => {
-            if (event.key === "Enter") { // "Space" is handled by global key
-              switchIsPlaying();
-            }
-          }}>
-          {isPlaying ? <LuPause css={playIconStyle} /> : <LuPlay css={playIconStyle} />}
-        </div>
-      </div>
+      <ProtoButton
+        aria-label={t("video.playButton-tooltip")}
+        aria-pressed={isPlaying}
+        aria-hidden={false}
+        onClick={() => { switchIsPlaying(); }}
+        css={[basicButtonStyle(theme), playButtonStyle]}
+      >
+        {isPlaying ? <LuPause css={playIconStyle} /> : <LuPlay css={playIconStyle} />}
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -316,17 +314,14 @@ const NextButton: React.FC<{
 
   return (
     <ThemedTooltip title={t("video.nextButton-tooltip", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.next.key) })}>
-      <div css={[basicButtonStyle(theme)]}
-        role="button" tabIndex={0} aria-hidden={false}
+      <ProtoButton
         aria-label={t("video.nextButton-tooltip", { hotkeyName: rewriteKeys(KEYMAP.videoPlayer.next.key) })}
+        aria-hidden={false}
         onClick={jumpToNext}
-        onKeyDown={(event: React.KeyboardEvent) => {
-          if (event.key === "Enter") {
-            jumpToNext();
-          }
-        }}>
+        css={[basicButtonStyle(theme)]}
+      >
         <LuSkipForward css={nextIconStyle} />
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -360,9 +355,9 @@ const TimeDisplay: React.FC<{
           {new Date((currentlyAt ? currentlyAt : 0)).toISOString().substr(11, 10)}
         </time>
       </ThemedTooltip>
-      {" / "}
+      <div css={undisplay(BREAKPOINTS.medium)}>{" / "}</div>
       <ThemedTooltip title={t("video.time-duration-tooltip")}>
-        <div css={timeTextStyle(theme)}
+        <div css={[timeTextStyle(theme), undisplay(BREAKPOINTS.medium)]}
           tabIndex={0} aria-label={t("video.duration-aria") + ": " + convertMsToReadableString(duration)}>
           {new Date((duration ? duration : 0)).toISOString().substr(11, 10)}
         </div>
@@ -452,12 +447,15 @@ const VolumeSlider: React.FC<{
   return (
     <div css={volumeStyle}>
       <ThemedTooltip title={isMuted ? t("video.unmutebutton-tooltip") : t("video.mutebutton-tooltip")}>
-        <div css={[basicButtonStyle(theme)]}
-          role="button" aria-pressed={isMuted} tabIndex={0} aria-hidden={false}
+        <ProtoButton
           aria-label={t("video.mutebutton-tooltip")}
-          onClick={switchIsMuted}>
+          aria-pressed={isMuted}
+          aria-hidden={false}
+          onClick={switchIsMuted}
+          css={[basicButtonStyle(theme)]}
+        >
           {isMuted ? <LuVolumeX css={volumeIconStyle} /> : <LuVolume2 css={volumeIconStyle} />}
-        </div>
+        </ProtoButton>
       </ThemedTooltip>
       <ThemedTooltip title={t("video.volume-tooltip", { current: Math.trunc(volume * 100) })}>
         <Slider
