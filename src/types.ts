@@ -70,6 +70,7 @@ export interface ExtendedSubtitleCue extends SubtitleCue {
 export interface PostEditArgument {
   segments: Segment[]
   tracks: Track[]
+  customizedTrackSelection: boolean
   subtitles: SubtitlesFromOpencast[]
   workflow?: [{id: string}]
   metadata: Catalog[]
