@@ -1,7 +1,7 @@
 /**
  * This file contains general css stylings
  */
-import { css, Global, keyframes } from "@emotion/react";
+import { css, Global } from "@emotion/react";
 import React from "react";
 import emotionNormalize from "emotion-normalize";
 import { createTheme } from "@mui/material/styles";
@@ -388,13 +388,6 @@ export const subtitleSelectStyle = (theme: Theme) => createTheme({
       },
     },
   },
-});
-
-export const spinningStyle = css({
-  animation: `2s linear infinite none ${keyframes({
-    "0%": { transform: "rotate(0)" },
-    "100%": { transform: "rotate(360deg)" },
-  })}`,
 });
 
 export const customIconStyle = css(({
