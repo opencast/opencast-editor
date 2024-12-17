@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle } from "../cssStyles";
-import { LuChevronLeft, LuDownload, LuUpload } from "react-icons/lu";
+import { LuChevronLeft, LuDownload, LuTrash2, LuUpload } from "react-icons/lu";
 import {
   selectSubtitlesFromOpencastById,
 } from "../redux/videoSlice";
@@ -12,6 +12,7 @@ import {
   selectSelectedSubtitleById,
   selectSelectedSubtitleId,
   setSubtitle,
+  removeSubtitle,
 } from "../redux/subtitleSlice";
 import SubtitleVideoArea from "./SubtitleVideoArea";
 import SubtitleTimeline from "./SubtitleTimeline";
@@ -21,7 +22,7 @@ import { parseSubtitle, serializeSubtitle } from "../util/utilityFunctions";
 import { ThemedTooltip } from "./Tooltip";
 import { titleStyle, titleStyleBold } from "../cssStyles";
 import { generateButtonTitle } from "./SubtitleSelect";
-import { ConfirmationModal, ConfirmationModalHandle, Modal, ModalHandle } from "@opencast/appkit";
+import { ConfirmationModal, ConfirmationModalHandle, Modal, ModalHandle, ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays an editor view for a selected subtitle file
@@ -47,7 +48,7 @@ const SubtitleEditor: React.FC = () => {
       try {
         dispatch(setSubtitle({
           identifier: selectedId,
-          subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags },
+          subtitles: { cues: parseSubtitle(captionTrack.subtitle), tags: captionTrack.tags, deleted: false },
         }));
       } catch (error) {
         if (error instanceof Error) {
@@ -60,7 +61,7 @@ const SubtitleEditor: React.FC = () => {
       // Or create a new subtitle instead
     } else if (subtitle?.cues === undefined && captionTrack === undefined && selectedId) {
       // Create an empty subtitle
-      dispatch(setSubtitle({ identifier: selectedId, subtitles: { cues: [], tags: [] } }));
+      dispatch(setSubtitle({ identifier: selectedId, subtitles: { cues: [], tags: [], deleted: false } }));
     }
   }, [dispatch, captionTrack, subtitle, selectedId]);
 
@@ -135,6 +136,7 @@ const SubtitleEditor: React.FC = () => {
               {t("subtitles.editTitle", { title: getTitle() })}
             </div>
             <div css={topRightButtons}>
+              <DeleteButton />
               <UploadButton setErrorMessage={setUploadErrorMessage} />
               <DownloadButton />
               <Modal
@@ -172,6 +174,49 @@ const subtitleButtonStyle = (theme: Theme) => css({
   background: `${theme.element_bg}`,
 });
 
+const DeleteButton: React.FC = () => {
+
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const selectedId = useAppSelector(selectSelectedSubtitleId);
+
+  // Modal Ref
+  const modalRef = React.useRef<ConfirmationModalHandle>(null);
+
+  return (
+    <>
+      <ThemedTooltip title={t("subtitles.deleteButton-tooltip")}>
+        <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
+          role="button"
+          onClick={() => modalRef.current?.open()}
+        >
+          <LuTrash2 css={{ fontSize: "16px" }}/>
+          <span>{t("subtitles.deleteButton-title")}</span>
+        </div>
+      </ThemedTooltip>
+      {/* Hidden input field for upload */}
+      <ConfirmationModal
+        title={t("subtitles.deleteButton-warning-header")}
+        buttonContent={t("modal.confirm")}
+        onSubmit={() => {
+          modalRef.current?.done();
+          dispatch(removeSubtitle({ identifier: selectedId }));
+          dispatch(setIsDisplayEditView(false));
+        }}
+        ref={modalRef}
+        text={{
+          cancel: t("modal.cancel"),
+          close: t("modal.close"),
+          areYouSure: t("modal.areYouSure"),
+        }}
+      >
+        {t("subtitles.deleteButton-warning")}
+      </ConfirmationModal>
+    </>
+  );
+};
 const DownloadButton: React.FC = () => {
 
   const subtitle = useAppSelector(selectSelectedSubtitleById);
@@ -194,13 +239,13 @@ const DownloadButton: React.FC = () => {
 
   return (
     <ThemedTooltip title={t("subtitles.downloadButton-tooltip")}>
-      <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
-        role="button"
+      <ProtoButton
         onClick={() => downloadSubtitles()}
+        css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
       >
         <LuDownload css={{ fontSize: "16px" }} />
         <span>{t("subtitles.downloadButton-title")}</span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -267,13 +312,13 @@ const UploadButton: React.FC<{
   return (
     <>
       <ThemedTooltip title={t("subtitles.uploadButton-tooltip")}>
-        <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
-          role="button"
+        <ProtoButton
           onClick={() => modalRef.current?.open()}
+          css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
         >
           <LuUpload css={{ fontSize: "16px" }}/>
           <span>{t("subtitles.uploadButton-title")}</span>
-        </div>
+        </ProtoButton>
       </ThemedTooltip>
       {/* Hidden input field for upload */}
       <input
@@ -313,18 +358,14 @@ export const BackButton: React.FC = () => {
 
   return (
     <ThemedTooltip title={t("subtitles.backButton-tooltip")}>
-      <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
-        role="button" tabIndex={0}
+      <ProtoButton
         aria-label={t("subtitles.backButton-tooltip")}
         onClick={() => dispatch(setIsDisplayEditView(false))}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            dispatch(setIsDisplayEditView(false));
-          }
-        }}>
+        css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
+      >
         <LuChevronLeft css={{ fontSize: 24 }} />
         <span>{t("subtitles.backButton")}</span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };

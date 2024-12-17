@@ -19,8 +19,9 @@ import {
 } from "../cssStyles";
 
 import { useTranslation } from "react-i18next";
-import { useTheme } from "../themes";
+import { Theme, useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Creates the track selection.
@@ -189,7 +190,7 @@ const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, to
 
   const theme = useTheme();
 
-  const buttonStyle = [
+  const buttonStyle = (theme: Theme) => [
     active ? basicButtonStyle(theme) : deactivatedButtonStyle,
     css({
       padding: "16px",
@@ -214,17 +215,16 @@ const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, to
 
   return (
     <ThemedTooltip title={tooltip}>
-      <div
-        css={buttonStyle}
-        tabIndex={0}
-        ref={ref}
-        role="button"
+      <ProtoButton
+        {...{ ref }}
         aria-label={tooltip}
         onClick={clickHandler}
-        onKeyDown={keyHandler} >
+        onKeyDown={keyHandler}
+        css={buttonStyle(theme)}
+      >
         <Icon css={customIconStyle} />
         {text}
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };

@@ -43,6 +43,7 @@ export interface SubtitlesFromOpencast {
 export interface SubtitlesInEditor {
   cues: SubtitleCue[],
   tags: string[],
+  deleted: boolean,
 }
 
 export interface SubtitleCue {
