@@ -12,6 +12,7 @@ import { PageButton } from "./Finish";
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Shown if the user wishes to abort.
@@ -58,17 +59,13 @@ const DiscardButton: React.FC = () => {
   };
 
   return (
-    <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
-      role="button" tabIndex={0}
+    <ProtoButton
       onClick={discard}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === " " || event.key === "Enter") {
-          discard();
-        }
-      }}>
+      css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+    >
       <LuXCircle />
       <span>{t("discard.confirm-button")}</span>
-    </div>
+    </ProtoButton>
   );
 };
 

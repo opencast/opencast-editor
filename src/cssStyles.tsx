@@ -34,6 +34,10 @@ export const globalStyle = (theme: Theme) => css({
     // Makes the body span to the bottom of the page
     minHeight: "100vh",
   },
+  // Some elements not inheriting fonts is a really confusing browser default.
+  "input, button, textarea, select": {
+    font: "inherit",
+  },
 });
 
 
@@ -46,7 +50,6 @@ export const BREAKPOINTS = APPKIT_CONFIG.breakpoints;
  */
 export const basicButtonStyle = (theme: Theme) => css({
   borderRadius: "5px",
-  cursor: "pointer",
   "&:hover": {
     backgroundColor: `${theme.button_color}`,
     color: `${theme.inverted_text}`,

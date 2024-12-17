@@ -21,6 +21,7 @@ import { resetPostRequestState } from "../redux/workflowPostSlice";
 import { setIsDisplayEditView } from "../redux/subtitleSlice";
 
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
 import { screenWidthAtMost } from "@opencast/appkit";
 
 /**
@@ -154,15 +155,11 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
   });
 
   return (
-    <li css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
-      role="menuitem" tabIndex={0}
+    <ProtoButton
+      role="menuitem"
       aria-label={ariaLabelText}
       onClick={onMenuItemClicked}
-      onKeyDown={(event: React.KeyboardEvent<HTMLLIElement>) => {
-        if (event.key === "Enter") {
-          onMenuItemClicked();
-        }
-      }}
+      css={[basicButtonStyle(theme), customCSS ? customCSS : mainMenuButtonStyle]}
     >
       <Icon css={iconCustomCSS ? iconCustomCSS : {
         fontSize: 36,
@@ -177,7 +174,7 @@ export const MainMenuButton: React.FC<mainMenuButtonInterface> = ({
       }}>
         {bottomText}
       </div>}
-    </li>
+    </ProtoButton>
   );
 };
 

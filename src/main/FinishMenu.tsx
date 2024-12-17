@@ -11,6 +11,7 @@ import { setState, setPageNumber, finish } from "../redux/finishSlice";
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -81,19 +82,15 @@ const FinishMenuButton: React.FC<{ Icon: IconType, stateName: finish["value"]; }
   });
 
   return (
-    <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-      role="button" tabIndex={0}
+    <ProtoButton
       onClick={finish}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === " " || event.key === "Enter") {
-          finish();
-        }
-      }}>
+      css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
+    >
       <div css={iconStyle}>
         <Icon css={{ fontSize: 36 }} />
       </div>
       <div css={labelStyle}>{buttonString}</div>
-    </div>
+    </ProtoButton>
   );
 };
 
