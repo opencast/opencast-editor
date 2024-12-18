@@ -22,6 +22,7 @@ import { ThemedTooltip } from "./Tooltip";
 import { languageCodeToName } from "../util/utilityFunctions";
 import { v4 as uuidv4 } from "uuid";
 import { TFunction } from "i18next";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays buttons that allow the user to select the subtitle they want to edit
@@ -156,6 +157,11 @@ const SubtitleSelectButton: React.FC<{
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
+  const onClickHandler = () => {
+    dispatch(setIsDisplayEditView(true));
+    dispatch(setSelectedSubtitleId(id));
+  };
+
   const flagStyle = css({
     fontSize: "2.5em",
     overflow: "hidden",
@@ -178,22 +184,14 @@ const SubtitleSelectButton: React.FC<{
 
   return (
     <ThemedTooltip title={t("subtitles.selectSubtitleButton-tooltip", { title: title })}>
-      <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-        role="button" tabIndex={0}
+      <ProtoButton
         aria-label={t("subtitles.selectSubtitleButton-tooltip-aria", { title: title })}
-        onClick={() => {
-          dispatch(setIsDisplayEditView(true));
-          dispatch(setSelectedSubtitleId(id));
-        }}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            dispatch(setIsDisplayEditView(true));
-            dispatch(setSelectedSubtitleId(id));
-          }
-        }}>
+        onClick={onClickHandler}
+        css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
+      >
         {icon && <div css={flagStyle}>{icon}</div>}
         <div css={titleStyle}>{title ?? t("subtitles.generic") + " " + id}</div>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -273,16 +271,11 @@ const SubtitleAddButton: React.FC<{
 
   return (
     <ThemedTooltip title={isPlusDisplay ? t("subtitles.createSubtitleButton-tooltip") : ""}>
-      <div css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
-        role="button" tabIndex={0}
+      <ProtoButton
         aria-label={isPlusDisplay ?
           t("subtitles.createSubtitleButton-tooltip") : t("subtitles.createSubtitleButton-clicked-tooltip-aria")}
         onClick={() => setIsPlusDisplay(false)}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            setIsPlusDisplay(false);
-          }
-        }}
+        css={[basicButtonStyle(theme), tileButtonStyle(theme), !isPlusDisplay && disableButtonAnimation]}
       >
         <LuPlus css={[plusIconStyle, { fontSize: 42 }]} />
         <Form
@@ -324,7 +317,7 @@ const SubtitleAddButton: React.FC<{
             </form>
           )}
         />
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page, baseURL }) => {
   await page.goto(baseURL);
-  await page.click('li[role="menuitem"]:has-text("Metadata")');
+  await page.click('button[role="menuitem"]:has-text("Metadata")');
 });
 
 test.describe('Test Metadata-Page', () => {

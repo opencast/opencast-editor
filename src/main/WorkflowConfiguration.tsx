@@ -3,17 +3,16 @@ import React from "react";
 import { css } from "@emotion/react";
 import {
   backOrContinueStyle,
-  errorBoxStyle,
 } from "../cssStyles";
 
-import { LuChevronLeft, LuDatabase, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronLeft, LuMoreHorizontal } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
 
 import { PageButton } from "./Finish";
 
 import { useTranslation } from "react-i18next";
-import { useTheme } from "../themes";
+import { ErrorBox } from "@opencast/appkit";
 import { selectError, selectStatus } from "../redux/workflowPostSlice";
 import { SaveButton } from "./Save";
 
@@ -26,7 +25,6 @@ const WorkflowConfiguration: React.FC = () => {
 
   const postAndProcessWorkflowStatus = useAppSelector(selectStatus);
   const postAndProcessError = useAppSelector(selectError);
-  const theme = useTheme();
 
   const workflowConfigurationStyle = css({
     display: "flex",
@@ -45,17 +43,20 @@ const WorkflowConfiguration: React.FC = () => {
       <div css={backOrContinueStyle}>
         <PageButton pageNumber={1} label={t("various.goBack-button")} Icon={LuChevronLeft} />
         <SaveButton
-          basicIcon={LuDatabase}
           isTransitionToEnd={true}
           text={t("workflowConfig.confirm-button")}
         />
       </div>
-      <div css={errorBoxStyle(postAndProcessWorkflowStatus === "failed", theme)} role="alert">
-        <span>{t("various.error-text")}</span><br />
-        {postAndProcessError ? t("various.error-details-text",
-          { errorMessage: postAndProcessError }) :
-          t("various.error-text")}<br />
-      </div>
+      {postAndProcessWorkflowStatus === "failed" &&
+        <ErrorBox>
+          <span css={{ whiteSpace: "pre-line" }}>
+            {t("various.error-text") + "\n"}
+            {postAndProcessError ?
+              t("various.error-details-text", { errorMessage: postAndProcessError }) : undefined
+            }
+          </span>
+        </ErrorBox>
+      }
     </div>
   );
 };
