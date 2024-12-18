@@ -14,8 +14,7 @@ import {
   selectSegments,
   selectTracks,
   setHasChanges as videoSetHasChanges,
-  selectValidSegments,
-  validateSegments,
+  selectValidCutting,
 } from "../redux/videoSlice";
 import { postVideoInformation, selectStatus, selectError } from "../redux/workflowPostSlice";
 
@@ -52,10 +51,7 @@ const Save: React.FC = () => {
   const metadataHasChanges = useAppSelector(metadataSelectHasChanges);
   const hasChanges = useAppSelector(selectHasChanges);
   const subtitleHasChanges = useAppSelector(selectSubtitleHasChanges);
-
-  const dispatch = useAppDispatch();
-  dispatch(validateSegments());
-  const validSegments = useAppSelector(selectValidSegments);
+  const validCutting = useAppSelector(selectValidCutting);
 
   const saveStyle = css({
     display: "flex",
@@ -80,7 +76,7 @@ const Save: React.FC = () => {
     } else {
       return (
         <>
-          {validSegments ? <span>
+          {validCutting ? <span>
             {t("save.info-text")}
           </span> : <ErrorBox>
             <span css={{ whiteSpace: "pre-line" }}>
@@ -90,7 +86,7 @@ const Save: React.FC = () => {
           }
           <div css={backOrContinueStyle}>
             <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={LuChevronLeft} />
-            {validSegments && <SaveButton />}
+            {validCutting && <SaveButton />}
           </div>
         </>
       );
