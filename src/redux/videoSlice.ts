@@ -1,5 +1,5 @@
-import { clamp } from "lodash";
-import { createSlice, nanoid, PayloadAction, createSelector } from "@reduxjs/toolkit";
+import { clamp, forEach } from "lodash";
+import { createSlice, nanoid, createAsyncThunk, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { client } from "../util/client";
 
 import { Segment, httpRequestState, Track, Workflow, SubtitlesFromOpencast } from "../types";
@@ -188,9 +188,15 @@ const videoSlice = createSlice({
       state.jumpTriggered = true;
     },
     validateSegments: state => {
+      let allDeleted = true;
+
       // Test if whole video has been deleted
-      if (state.segments.length === 1 && state.segments[0].deleted && state.segments[0].start === 0 &&
-          state.segments[0].end === state.duration) {
+      state.segments.forEach(segment => {
+        if(!segment.deleted) {
+          allDeleted = false;
+        }
+      })
+      if(allDeleted) {
         state.validSegments = false;
       } else {
         state.validSegments = true;
