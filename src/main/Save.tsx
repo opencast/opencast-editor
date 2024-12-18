@@ -80,9 +80,14 @@ const Save: React.FC = () => {
     } else {
       return (
         <>
-          <span css={{ maxWidth: "500px" }}>
-            {validSegments ? t("save.info-text") : t("save.invalid-text")}
-          </span>
+          {validSegments ? <span>
+            {t("save.info-text")}
+          </span> : <ErrorBox>
+            <span css={{ whiteSpace: "pre-line" }}>
+              {t("save.invalid-text")}
+            </span>
+          </ErrorBox>
+          }
           <div css={backOrContinueStyle}>
             <PageButton pageNumber={0} label={t("various.goBack-button")} Icon={LuChevronLeft} />
             {validSegments && <SaveButton />}
@@ -94,7 +99,7 @@ const Save: React.FC = () => {
 
   return (
     <div css={saveStyle}>
-      <h1>{validSegments ? t("save.headline-text") : t("save.invalid-headline-text")}</h1>
+      <h1>{t("save.headline-text")}</h1>
       {render()}
       {postWorkflowStatus === "failed" &&
         <ErrorBox>

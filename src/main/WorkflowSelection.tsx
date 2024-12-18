@@ -116,8 +116,12 @@ const WorkflowSelection: React.FC = () => {
     if (!validSegments) {
       return (
         render(
-          t("save.invalid-headline-text"),
-          <span css={{ maxWidth: "500px" }}>{t("save.invalid-text")}</span>,
+          t("workflowSelection.saveAndProcess-text"),
+          <ErrorBox>
+            <span css={{ whiteSpace: "pre-line" }}>
+              {t("save.invalid-text")}
+            </span>
+          </ErrorBox>,
           false,
           <div/>,
           saveStatus,

@@ -77,7 +77,6 @@
       "saveArea-tooltip": "Save Area",
       "confirm-success": "Okay",
       "cancel-save": "Don't save",
-      "invalid-headline-text": "Invalid Edits",
       "invalid-text": "The segments do not create a valid video. Either change or discard your edits if you wish to proceed. Contact an adminstrator for further help."
     },
 
