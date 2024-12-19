@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectHasChanges,
   selectSegments,
+  selectSelectedWorkflowId,
   selectTracks,
   setHasChanges as videoSetHasChanges,
 } from "../redux/videoSlice";
@@ -123,6 +124,7 @@ export const SaveButton: React.FC<{
   const tracks = useAppSelector(selectTracks);
   const subtitles = useAppSelector(selectSubtitles);
   const metadata = useAppSelector(selectCatalogs);
+  const selectedWorkflowId = useAppSelector(selectSelectedWorkflowId);
   const workflowStatus = useAppSelector(selectStatus);
   const theme = useTheme();
 
@@ -162,6 +164,7 @@ export const SaveButton: React.FC<{
       tracks: tracks,
       subtitles: prepareSubtitles(),
       metadata: metadata,
+      workflow: selectedWorkflowId ? [{ id: selectedWorkflowId }] : undefined,
     }));
   };
 
