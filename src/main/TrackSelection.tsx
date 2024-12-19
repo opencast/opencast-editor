@@ -211,7 +211,7 @@ const SelectButton: React.FC<selectButtonInterface> = ({ handler, text, Icon, to
     }
   };
 
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLButtonElement>(null);
 
   return (
     <ThemedTooltip title={tooltip}>
