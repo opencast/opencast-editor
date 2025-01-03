@@ -8,13 +8,13 @@ import { selectWorkflows, setSelectedWorkflowIndex } from "../redux/videoSlice";
 
 import { PageButton } from "./Finish";
 import { LuChevronLeft, LuDatabase } from "react-icons/lu";
+import { selectValidCutting } from "../redux/videoSlice";
 import { selectStatus as saveSelectStatus, selectError as saveSelectError } from "../redux/workflowPostSlice";
 import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 
-import { useTranslation } from "react-i18next";
-import { Trans } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useTheme } from "../themes";
 import { ErrorBox } from "@opencast/appkit";
@@ -37,6 +37,7 @@ const WorkflowSelection: React.FC = () => {
 
   const saveStatus = useAppSelector(saveSelectStatus);
   const saveError = useAppSelector(saveSelectError);
+  const validCutting = useAppSelector(selectValidCutting);
 
   const workflowSelectionStyle = css({
     padding: "20px",
@@ -110,7 +111,22 @@ const WorkflowSelection: React.FC = () => {
 
   // Fills the layout template with values based on how many workflows are available
   const renderSelection = () => {
-    if (workflows.length <= 0) {
+    if (!validCutting) {
+      return (
+        render(
+          t("workflowSelection.saveAndProcess-text"),
+          <ErrorBox>
+            <span css={{ whiteSpace: "pre-line" }}>
+              {t("save.invalid-text")}
+            </span>
+          </ErrorBox>,
+          false,
+          <div/>,
+          saveStatus,
+          saveError
+        )
+      );
+    } else if (workflows.length <= 0) {
       return (
         render(
           t("workflowSelection.saveAndProcess-text"),
