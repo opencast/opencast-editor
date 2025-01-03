@@ -10,6 +10,7 @@ import { LuCheckCircle, LuAlertCircle, LuChevronLeft, LuSave, LuCheck } from "re
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
+  selectCustomizedTrackSelection,
   selectHasChanges,
   selectSegments,
   selectTracks,
@@ -121,6 +122,7 @@ export const SaveButton: React.FC<{
 
   const segments = useAppSelector(selectSegments);
   const tracks = useAppSelector(selectTracks);
+  const customizedTrackSelection = useAppSelector(selectCustomizedTrackSelection);
   const subtitles = useAppSelector(selectSubtitles);
   const metadata = useAppSelector(selectCatalogs);
   const workflowStatus = useAppSelector(selectStatus);
@@ -160,6 +162,7 @@ export const SaveButton: React.FC<{
     dispatch(postVideoInformation({
       segments: segments,
       tracks: tracks,
+      customizedTrackSelection,
       subtitles: prepareSubtitles(),
       metadata: metadata,
     }));
