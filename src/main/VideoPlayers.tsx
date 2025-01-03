@@ -2,14 +2,13 @@ import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { css } from "@emotion/react";
 
-import { useAppDispatch, useAppSelector } from "../redux/store";
+import { AppDispatch, useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectIsPlaying,
   selectCurrentlyAtInSeconds,
   setIsPlaying,
   selectIsMuted,
   selectVolume,
-  selectVideoURL,
   selectVideoCount,
   selectDurationInSeconds,
   setPreviewTriggered,
@@ -39,7 +38,6 @@ import { useTheme } from "../themes";
 
 import { backgroundBoxStyle } from "../cssStyles";
 import { BaseReactPlayerProps } from "react-player/base";
-import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
 import { ErrorBox } from "@opencast/appkit";
 
 const VideoPlayers: React.FC<{
@@ -133,7 +131,16 @@ interface VideoPlayerProps {
   setPreviewTriggered: ActionCreatorWithPayload<boolean, string>,
   setClickTriggered: ActionCreatorWithPayload<boolean, string>,
   setJumpTriggered: ActionCreatorWithPayload<boolean, string>,
-  setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, AsyncThunkConfig>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, {
+    state: RootState;
+    dispatch: AppDispatch;
+    extra?: unknown;
+    rejectValue?: unknown;
+    serializedErrorType?: unknown;
+    pendingMeta?: unknown;
+    fulfilledMeta?: unknown;
+    rejectedMeta?: unknown;
+  }>,
   setAspectRatio: ActionCreatorWithPayload<{ dataKey: number; } & { width: number, height: number; }, string>,
 }
 

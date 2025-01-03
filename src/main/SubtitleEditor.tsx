@@ -299,7 +299,10 @@ const UploadButton: React.FC<{
         try {
           const text = e.target.result.toString();
           const subtitleParsed = parseSubtitle(text);
-          dispatch(setSubtitle({ identifier: selectedId, subtitles: { cues: subtitleParsed, tags: subtitle.tags } }));
+          dispatch(setSubtitle({
+            identifier: selectedId,
+            subtitles: { cues: subtitleParsed, tags: subtitle.tags, deleted: false },
+          }));
         } catch (e) {
           console.error(e);
           setErrorMessage(t("subtitles.uploadButton-error-parse"));
