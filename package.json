@@ -9,7 +9,7 @@
     "@iarna/toml": "^2.2.5",
     "@mui/material": "^5.16.13",
     "@opencast/appkit": "^0.3.1",
-    "@reduxjs/toolkit": "^2.4.0",
+    "@reduxjs/toolkit": "^2.5.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "deepmerge": "^4.3.1",
