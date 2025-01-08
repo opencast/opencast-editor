@@ -2,12 +2,12 @@ import reducer, { initialState, setIsPlaying, selectIsPlaying, setCurrentlyAt,
   selectCurrentlyAt, selectActiveSegmentIndex, selectPreviewTriggered,
   selectDuration, video, cut, selectSegments, markAsDeletedOrAlive, mergeRight,
   fetchVideoInformation, selectVideoURL, selectTitle,
-  selectTracks, selectWorkflows } from '../videoSlice'
-import cloneDeep from 'lodash/cloneDeep';
-import { httpRequestState } from '../../types';
+  selectTracks, selectWorkflows } from "../videoSlice";
+import cloneDeep from "lodash/cloneDeep";
+import { httpRequestState } from "../../types";
 
 
-describe('Video reducer', () => {
+describe("Video reducer", () => {
 
   let initState: (video & httpRequestState);
 
@@ -15,23 +15,23 @@ describe('Video reducer', () => {
     initState = cloneDeep(initialState);
   });
 
-  it('should return the initial state on first run', () => {
+  it("should return the initial state on first run", () => {
     // Arrange
     const nextState = initialState;
 
     // Act
-    const result = reducer(undefined, { type: ''});
+    const result = reducer(undefined, { type: "" });
 
     // Assert
     expect(result).toEqual(nextState);
   });
 
-  it('should set isPlaying', () => {
+  it("should set isPlaying", () => {
     // Arrange
-    const isPlaying = true
+    const isPlaying = true;
 
     // Act
-    const nextState = reducer(initState, setIsPlaying(isPlaying))
+    const nextState = reducer(initState, setIsPlaying(isPlaying));
 
     // Assert
     const rootState = { videoState: nextState };
