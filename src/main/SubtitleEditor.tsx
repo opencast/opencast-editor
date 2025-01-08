@@ -167,7 +167,7 @@ const SubtitleEditor: React.FC = () => {
 
 const subtitleButtonStyle = (theme: Theme) => css({
   fontSize: "16px",
-  height: "10px",
+  height: "42px",
   padding: "16px",
   justifyContent: "space-around",
   boxShadow: `${theme.boxShadow}`,
@@ -188,13 +188,13 @@ const DeleteButton: React.FC = () => {
   return (
     <>
       <ThemedTooltip title={t("subtitles.deleteButton-tooltip")}>
-        <div css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
-          role="button"
+        <ProtoButton
           onClick={() => modalRef.current?.open()}
+          css={[basicButtonStyle(theme), subtitleButtonStyle(theme)]}
         >
           <LuTrash2 css={{ fontSize: "16px" }}/>
           <span>{t("subtitles.deleteButton-title")}</span>
-        </div>
+        </ProtoButton>
       </ThemedTooltip>
       {/* Hidden input field for upload */}
       <ConfirmationModal
@@ -299,7 +299,10 @@ const UploadButton: React.FC<{
         try {
           const text = e.target.result.toString();
           const subtitleParsed = parseSubtitle(text);
-          dispatch(setSubtitle({ identifier: selectedId, subtitles: { cues: subtitleParsed, tags: subtitle.tags } }));
+          dispatch(setSubtitle({
+            identifier: selectedId,
+            subtitles: { cues: subtitleParsed, tags: subtitle.tags, deleted: false },
+          }));
         } catch (e) {
           console.error(e);
           setErrorMessage(t("subtitles.uploadButton-error-parse"));

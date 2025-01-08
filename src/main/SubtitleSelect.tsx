@@ -233,7 +233,7 @@ const SubtitleAddButton: React.FC<{
     const id = values.selectedSubtitle;
     const relatedSubtitle = subtitlesForDropdown.find(tag => tag.id === id);
     const tags = relatedSubtitle ? relatedSubtitle.tags : [];
-    dispatch(setSubtitle({ identifier: id, subtitles: { cues: [], tags: tags, delete: false } }));
+    dispatch(setSubtitle({ identifier: id, subtitles: { cues: [], tags: tags, deleted: false } }));
 
     // Reset
     setIsPlusDisplay(true);

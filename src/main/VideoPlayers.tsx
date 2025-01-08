@@ -2,14 +2,13 @@ import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { css } from "@emotion/react";
 
-import { useAppDispatch, useAppSelector } from "../redux/store";
+import { AppDispatch, useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectIsPlaying,
   selectCurrentlyAtInSeconds,
   setIsPlaying,
   selectIsMuted,
   selectVolume,
-  selectVideoURL,
   selectVideoCount,
   selectDurationInSeconds,
   setPreviewTriggered,
@@ -39,7 +38,7 @@ import { useTheme } from "../themes";
 
 import { backgroundBoxStyle } from "../cssStyles";
 import { BaseReactPlayerProps } from "react-player/base";
-import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
+import { ErrorBox } from "@opencast/appkit";
 
 const VideoPlayers: React.FC<{
   refs?: React.MutableRefObject<(VideoPlayerForwardRef | null)[]>,
@@ -132,7 +131,16 @@ interface VideoPlayerProps {
   setPreviewTriggered: ActionCreatorWithPayload<boolean, string>,
   setClickTriggered: ActionCreatorWithPayload<boolean, string>,
   setJumpTriggered: ActionCreatorWithPayload<boolean, string>,
-  setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, AsyncThunkConfig>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, {
+    state: RootState;
+    dispatch: AppDispatch;
+    extra?: unknown;
+    rejectValue?: unknown;
+    serializedErrorType?: unknown;
+    pendingMeta?: unknown;
+    fulfilledMeta?: unknown;
+    rejectedMeta?: unknown;
+  }>,
   setAspectRatio: ActionCreatorWithPayload<{ dataKey: number; } & { width: number, height: number; }, string>,
 }
 
@@ -384,14 +392,6 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       },
     }));
 
-    const errorBoxStyle = css({
-      ...(!errorState) && { display: "none" },
-      borderColor: `${theme.error}`,
-      borderStyle: "dashed",
-      fontWeight: "bold",
-      padding: "10px",
-    });
-
     const reactPlayerStyle = css({
       aspectRatio: "16 / 9",    // Hard-coded for now because there are problems with updating this value at runtime
 
@@ -450,9 +450,9 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
         );
       } else {
         return (
-          <div css={errorBoxStyle} role="alert">
-            <span>{t("video.loadError-text")} </span>
-          </div>
+          <ErrorBox>
+            {t("video.loadError-text")}
+          </ErrorBox>
         );
       }
     };
