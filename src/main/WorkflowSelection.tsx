@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import { selectWorkflows, setSelectedWorkflowIndex } from "../redux/videoSlice";
 
 import { PageButton } from "./Finish";
-import { LuChevronLeft, LuDatabase } from "react-icons/lu";
+import { LuChevronLeft } from "react-icons/lu";
 import { selectStatus as saveSelectStatus, selectError as saveSelectError } from "../redux/workflowPostSlice";
 import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
@@ -135,7 +135,6 @@ const WorkflowSelection: React.FC = () => {
           </Trans>,
           false,
           <SaveButton
-            basicIcon={LuDatabase}
             isTransitionToEnd={true}
             text={t("workflowSelection.startProcessing-button")}
           />,
@@ -152,7 +151,6 @@ const WorkflowSelection: React.FC = () => {
           </div>,
           true,
           <SaveButton
-            basicIcon={LuDatabase}
             isTransitionToEnd={true}
             text={t("workflowSelection.startProcessing-button")}
           />,
