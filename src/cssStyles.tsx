@@ -418,6 +418,11 @@ export const backgroundBoxStyle = (theme: Theme) => css(({
   gap: "25px",
 }));
 
+export const checkboxStyle = (theme: Theme) => css({
+  color: theme.text,
+  "&.Mui-disabled": { color: theme.disabled },
+});
+
 export const undisplay = (maxWidth: number) => css({
   [`@media (max-width: ${maxWidth}px)`]: {
     display: "none",
