@@ -6,7 +6,6 @@ import { LuFrown } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
 import { selectErrorDetails, selectErrorIcon, selectErrorMessage, selectErrorTitle } from "../redux/errorSlice";
-import { flexGapReplacementStyle } from "../cssStyles";
 
 import { useTranslation } from "react-i18next";
 
@@ -36,7 +35,7 @@ const Error: React.FC = () => {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
   });
 
   return (

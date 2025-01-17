@@ -1,7 +1,7 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { WebVTTParser, WebVTTSerializer } from "webvtt-parser";
 import { ExtendedSubtitleCue, SubtitleCue } from "../types";
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export const roundToDecimalPlace = (num: number, decimalPlace: number) => {
   const decimalFactor = Math.pow(10, decimalPlace);
@@ -37,43 +37,6 @@ export function safeJsonParse(str: string) {
   } catch (err) {
     return [err];
   }
-}
-
-/**
- * Checks whether the css property gap for flexbox is supported by the browser.
- * Currently, this cannot be checked with "@support", so we use this workaround
- * instead.
- */
-let flexGapIsSupported: boolean | undefined;
-export function checkFlexGapSupport() {
-  // Use the cached value if it has been defined
-  if (flexGapIsSupported !== undefined) {
-    return flexGapIsSupported;
-  }
-
-  // Create a flex container with row-gap set
-  const flex = document.createElement("div");
-  flex.style.display = "flex";
-  flex.style.flexDirection = "column";
-  flex.style.rowGap = "1px";
-  flex.style.position = "absolute";
-
-  // Create two, elements inside it
-  flex.appendChild(document.createElement("div"));
-  flex.appendChild(document.createElement("div"));
-
-  // Append to the DOM (needed to obtain scrollHeight)
-  document.body.appendChild(flex);
-
-  // Flex container should be 1px high due to the row-gap
-  flexGapIsSupported = flex.scrollHeight === 1;
-
-  // Remove element from the DOM after you are done with it
-  if (flex.parentNode) {
-    flex.parentNode.removeChild(flex);
-  }
-
-  return flexGapIsSupported;
 }
 
 /**
@@ -129,6 +92,10 @@ export function parseSubtitle(subtitle: string): SubtitleCue[] {
   // - Pros: Parses styles, can also parse SRT, actively maintained
   // - Cons: Uses node streaming library, can"t polyfill without ejecting CreateReactApp
   // TODO: Parse caption
+  if (subtitle === "") {
+    throw new Error("File is empty");
+  }
+
   const parser = new WebVTTParser();
   const tree = parser.parse(subtitle, "metadata");
   if (tree.errors.length !== 0) {
@@ -182,6 +149,36 @@ export function languageCodeToName(lang: string | undefined): string | undefined
   }
 }
 
+/**
+ * @returns the current window width and height
+ */
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+/**
+ * A hook for window dimensions
+ */
+export default function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowDimensions;
+
+}
+
 // Runs a callback every delay milliseconds
 // Pass delay = null to stop
 // Based off: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
@@ -205,4 +202,12 @@ export function useInterval(callback: IntervalFunction, delay: number | null) {
       return () => { clearInterval(id); };
     }
   }, [callback, delay]);
+}
+
+// Returns true if the given index is out of bounds on the given array
+export function outOfBounds(array: unknown[], index: number) {
+  if (index >= array.length) {
+    return true;
+  }
+  return false;
 }

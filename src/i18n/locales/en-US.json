@@ -26,7 +26,12 @@
       "mergeLeft-tooltip-aria": "Merge Left. Combine the currently active segment with the segment to its left. Hotkey: {{hotkeyName}}.",
       "mergeRight-button": "Merge Right",
       "mergeRight-tooltip": "Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}",
-      "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}."
+      "mergeRight-tooltip-aria": "Merge Right. Combine the currently active segment with the segment to its right. Hotkey: {{hotkeyName}}.",
+      "zoom": "Zoom",
+      "zoomSlider-aria": "Zoom. Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+      "zoomSlider-tooltip": "Zoom in or out of the timeline. Hotkey for Zoom in: {{hotkeyNameIn}}. Hotkey for Zoom out: {{hotkeyNameOut}}.",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
     },
 
     "video": {
@@ -242,13 +247,29 @@
       "deleteTrackTooltip": "Do not encode and publish this track.",
       "restoreTrackTooltip": "Encode and publish this track.",
       "cannotDeleteTrackTooltip": "Cannot remove this track from publication.",
-      "noSelectionPossible": "Track selection is disabled for this video, because there are not enough tracks to deselect any."
+      "noSelectionPossible": "Track selection is disabled for this video, because there are not enough tracks to deselect any.",
+      "help": "At least one track has to be selected.",
+      "helpAtLeastOneVideo": "At least one video track has to be selected.",
+      "atMostTwoVideos": "Track Selection is disabled for events with more than two videos",
+      "customizeLabel": "Customize track selection",
+      "videoTracksHeader": "Video tracks",
+      "audioTracksHeader": "Audio tracks",
+      "confirmText": "Confirm selection",
+      "confirmTooltip": "Confirm selected tracks",
+      "noAudioAvailable": "No audio available",
+      "selectionAlertInfoVideo_zero": "You have not selected any video track.",
+      "selectionAlertInfoVideo_one": "You have selected 1 video track.",
+      "selectionAlertInfoVideo_other": "You have selected {{count}} video tracks.",
+      "selectionAlertInfoAudio_zero": "You have not selected any audio track.",
+      "selectionAlertInfoAudio_one": "You have selected 1 audio track. It will be duplicated onto all videos.",
+      "selectionAlertInfoAudio_other": "You have selected {{count}} audio tracks.",
+      "selectionAlertError": "At least one video or audio track has to be selected."
     },
 
     "subtitles": {
       "selectSubtitleButton-tooltip": "Edit subtitles for {{title}}",
       "selectSubtitleButton-tooltip-aria": "Select {{title}} for subtitle editing",
-      "createSubtitleButton-tooltip": "Opens a dialog for creating new subtitles",
+      "createSubtitleButton-tooltip": "Opens a dialog for creating/uploading new subtitles",
       "createSubtitleButton-clicked-tooltip-aria": "Contains a dialog for creating new subtitles",
       "createSubtitleButton-createButton": "Create",
       "createSubtitleButton-createButton-tooltip": "Start a new subtitle file with the chosen title.",
@@ -256,8 +277,19 @@
       "createSubtitleDropdown-label": "Pick a language",
       "backButton": "Back",
       "backButton-tooltip": "Return to subtitle selection",
+      "deleteButton-title": "Delete",
+      "deleteButton-tooltip": "Delete subtitle",
+      "deleteButton-warning-header": "Caution!",
+      "deleteButton-warning": "You will remove the current subtitle. This cannot be undone. Are you sure?",
       "downloadButton-title": "Download",
       "downloadButton-tooltip": "Download subtitle as vtt file",
+      "uploadButton-title": "Upload",
+      "uploadButton-tooltip": "Upload subtitle as vtt file",
+      "uploadButton-warning-header": "Caution!",
+      "uploadButton-warning": "Uploading will overwrite the current subtitle. This cannot be undone. Are you sure?",
+      "uploadButton-error": "Upload failed.",
+      "uploadButton-error-filetype": "Wrong file type.",
+      "uploadButton-error-parse": "Could not parse subtitle file. Please ensure that the file contains valid WebVTT.",
       "editTitle": "Subtitle Editor - {{title}}",
       "editTitle-loading": "Loading",
       "generic": "Generic",
@@ -312,5 +344,12 @@
 
     "language": {
       "language": "Language"
+    },
+
+    "modal": {
+      "areYouSure": "Are you sure?",
+      "cancel": "Cancel",
+      "close": "Close",
+      "confirm": "Confirm"
     }
   }

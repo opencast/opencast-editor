@@ -79,6 +79,19 @@
 # Default: true
 #show = true
 
+# Ensure that at least one video stream remains selected
+# Typically, the track selection ensures that at least one video stream
+# remains selected. If you would like your users to be able to create selections
+# with only audio streams, set this to false.
+# Default: true
+#atLeastOneVideo = true
+
+# Disables track selection for events with more than two videos
+# If your Opencast can handle track selection for more than two videos, set this
+# to false.
+# Default: true
+#atMostTwoVideos = true
+
 ####
 # Subtitles
 ##
@@ -101,7 +114,8 @@
 [subtitles.languages]
 ## A list of languages for which new subtitles can be created
 # For each language, various tags can be specified
-# A list of officially recommended tags can be found at: TODO: link to opencast documentation for subtitle tags
+# A list of officially recommended tags can be found at
+# https://docs.opencast.org/develop/admin/#configuration/subtitles/#tags
 # At least the "lang" tag MUST be specified
 german = { lang = "de-DE" }
 english = { lang = "en-US", type = "closed-caption" }

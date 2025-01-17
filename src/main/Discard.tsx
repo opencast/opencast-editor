@@ -1,18 +1,18 @@
 import React from "react";
 
 import { css } from "@emotion/react";
-import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle } from "../cssStyles";
 
 import { LuChevronLeft, LuXCircle } from "react-icons/lu";
 
-import { useAppDispatch, useAppSelector } from "../redux/store";
-import { selectFinishState } from "../redux/finishSlice";
+import { useAppDispatch } from "../redux/store";
 import { setEnd } from "../redux/endSlice";
 
 import { PageButton } from "./Finish";
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Shown if the user wishes to abort.
@@ -22,13 +22,11 @@ const Discard: React.FC = () => {
 
   const { t } = useTranslation();
 
-  const finishState = useAppSelector(selectFinishState);
-
   const cancelStyle = css({
-    display: finishState !== "Discard changes" ? "none" : "flex",
+    display: "flex",
     flexDirection: "column" as const,
     alignItems: "center",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (
@@ -61,17 +59,13 @@ const DiscardButton: React.FC = () => {
   };
 
   return (
-    <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
-      role="button" tabIndex={0}
+    <ProtoButton
       onClick={discard}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === " " || event.key === "Enter") {
-          discard();
-        }
-      }}>
+      css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+    >
       <LuXCircle />
       <span>{t("discard.confirm-button")}</span>
-    </div>
+    </ProtoButton>
   );
 };
 

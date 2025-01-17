@@ -1,7 +1,7 @@
 import React from "react";
 
 import { css } from "@emotion/react";
-import { basicButtonStyle, flexGapReplacementStyle, tileButtonStyle } from "../cssStyles";
+import { basicButtonStyle, tileButtonStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
 import { LuSave, LuDatabase, LuXCircle } from "react-icons/lu";
@@ -11,6 +11,7 @@ import { setState, setPageNumber, finish } from "../redux/finishSlice";
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * Displays a menu for selecting what should be done with the current changes
@@ -22,7 +23,7 @@ const FinishMenu: React.FC = () => {
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    ...(flexGapReplacementStyle(30, false)),
+    gap: "30px",
   });
 
   return (
@@ -81,19 +82,15 @@ const FinishMenuButton: React.FC<{ Icon: IconType, stateName: finish["value"]; }
   });
 
   return (
-    <div css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
-      role="button" tabIndex={0}
+    <ProtoButton
       onClick={finish}
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === " " || event.key === "Enter") {
-          finish();
-        }
-      }}>
+      css={[basicButtonStyle(theme), tileButtonStyle(theme)]}
+    >
       <div css={iconStyle}>
         <Icon css={{ fontSize: 36 }} />
       </div>
       <div css={labelStyle}>{buttonString}</div>
-    </div>
+    </ProtoButton>
   );
 };
 

@@ -10,11 +10,17 @@ import { LuMoon, LuSun } from "react-icons/lu";
 import { HiOutlineTranslate } from "react-icons/hi";
 import { LuKeyboard } from "react-icons/lu";
 import { MainMenuStateNames } from "../types";
-import { basicButtonStyle, BREAKPOINT_MEDIUM, BREAKPOINT_SMALL, flexGapReplacementStyle } from "../cssStyles";
+import { basicButtonStyle, BREAKPOINTS, undisplay } from "../cssStyles";
 
-import LogoSvg from "../img/opencast-editor.svg?react";
 import { selectIsEnd } from "../redux/endSlice";
-import { checkboxMenuItem, HeaderMenuItemDef, ProtoButton, useColorScheme, WithHeaderMenu } from "@opencast/appkit";
+import {
+  checkboxMenuItem,
+  HeaderMenuItemDef,
+  ProtoButton,
+  screenWidthAtMost,
+  useColorScheme,
+  WithHeaderMenu,
+} from "@opencast/appkit";
 import { IconType } from "react-icons";
 import i18next from "i18next";
 import { languages as lngs } from "../i18n/lngs-generated";
@@ -48,14 +54,14 @@ function Header() {
     height: "100%",
     alignItems: "center",
     paddingRight: "24px",
-    ...(flexGapReplacementStyle(16, false)),
+    gap: "16px",
   });
 
   const settingsButtonCSS = css({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    ...(flexGapReplacementStyle(8, false)),
+    gap: "8px",
 
     fontSize: 16,
     fontFamily: "inherit",
@@ -68,6 +74,10 @@ function Header() {
       outline: `2px solid ${theme.metadata_highlight}`,
       backgroundColor: theme.header_button_hover_bg,
       color: `${theme.header_text}`,
+    },
+
+    [screenWidthAtMost(BREAKPOINTS.medium)]: {
+      fontSize: 0,
     },
   });
 
@@ -92,6 +102,23 @@ function Header() {
   );
 }
 
+const LogoPicture: React.FC = () => {
+  const imgUrl = new URL("/public/opencast-editor.svg", import.meta.url).href;
+  return (
+    <div>
+      <picture css={{
+        height: "100%",
+        "> *": {
+          height: "calc(100% - 0.5px)",
+        },
+      }}>
+        <source srcSet={imgUrl}></source>
+        <img src={imgUrl} alt="Opencast Editor Logo"/>
+      </picture>
+    </div>
+  );
+};
+
 const Logo: React.FC = () => {
 
   const { t } = useTranslation();
@@ -100,11 +127,12 @@ const Logo: React.FC = () => {
   const logo = css({
     paddingLeft: "8px",
     opacity: scheme === "dark" ? "0.8" : "1",
-
+    display: "flex",
     height: "100%",
     "> *": {
       height: "calc(100% - 12px)",
     },
+    alignItems: "center",
 
     // Unset a bunch of CSS to keep the logo clean
     outline: "unset",
@@ -118,7 +146,7 @@ const Logo: React.FC = () => {
 
   return (
     <MainMenuButton
-      Icon={LogoSvg}
+      Icon={LogoPicture}
       stateName={MainMenuStateNames.cutting}
       bottomText={""}
       ariaLabelText={t("mainMenu.cutting-button")}
@@ -167,7 +195,7 @@ const LanguageButton: React.FC = () => {
       menu={{
         label,
         items: menuItems,
-        breakpoint: BREAKPOINT_SMALL,
+        breakpoint: BREAKPOINTS.small,
       }}
     >
       <HeaderButton Icon={HiOutlineTranslate} label={label} />
@@ -193,7 +221,7 @@ const ThemeButton: React.FC = () => {
       menu={{
         label: t("theme.appearance"),
         items: menuItems,
-        breakpoint: BREAKPOINT_MEDIUM,
+        breakpoint: BREAKPOINTS.medium,
       }}>
       <HeaderButton
         Icon={scheme === "light" || scheme === "light-high-contrast" ? LuMoon : LuSun}
@@ -215,7 +243,7 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
     const themeSelectorButtonStyle = css({
       display: "flex",
       alignItems: "center",
-      ...(flexGapReplacementStyle(8, false)),
+      gap: "8px",
 
       fontSize: 16,
       fontFamily: "inherit",
@@ -247,15 +275,13 @@ const HeaderButton = React.forwardRef<HTMLButtonElement, HeaderButtonProps>(
     });
 
     return (
-      <ProtoButton {...rest} ref={ref}
+      <ProtoButton
+        {...rest}
+        ref={ref}
         css={[basicButtonStyle(theme), themeSelectorButtonStyle]}
       >
         <Icon css={iconStyle} />
-        <span css={{
-          [`@media (max-width: ${BREAKPOINT_MEDIUM}px)`]: {
-            display: "none",
-          },
-        }}>{label}</span>
+        <span css={undisplay(BREAKPOINTS.medium)}>{label}</span>
       </ProtoButton>
     );
   });

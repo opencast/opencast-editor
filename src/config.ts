@@ -7,7 +7,7 @@
  *
  * Also does some global hotkey configuration
  */
-import parseToml from "@iarna/toml/parse-string";
+import { parse } from "smol-toml";
 import deepmerge from "deepmerge";
 import { Flavor } from "./types";
 
@@ -55,6 +55,8 @@ interface iSettings {
   },
   trackSelection: {
     show: boolean,
+    atLeastOneVideo: boolean,
+    atMostTwoVideos: boolean,
   },
   thumbnail: {
     show: boolean,
@@ -93,6 +95,8 @@ const defaultSettings: iSettings = {
   },
   trackSelection: {
     show: true,
+    atLeastOneVideo: true,
+    atMostTwoVideos: true,
   },
   thumbnail: {
     show: false,
@@ -222,7 +226,7 @@ const loadContextSettings = async () => {
   }
 
   try {
-    return parseToml(await response.text());
+    return parse(await response.text());
   } catch (e) {
     console.error(`Could not parse "${settingsPath}" as TOML: `, e);
     throw new SyntaxError(`Could not parse "${settingsPath}" as TOML: ${e}`);
@@ -403,6 +407,8 @@ const SCHEMA = {
   },
   trackSelection: {
     show: types.boolean,
+    atLeastOneVideo: types.boolean,
+    atMostTwoVideos: types.boolean,
   },
   subtitles: {
     show: types.boolean,

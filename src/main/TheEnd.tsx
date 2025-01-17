@@ -6,12 +6,13 @@ import { LuCheckCircle, LuXCircle } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
 import { selectEndState } from "../redux/endSlice";
-import { basicButtonStyle, flexGapReplacementStyle, navigationButtonStyle } from "../cssStyles";
+import { basicButtonStyle, navigationButtonStyle } from "../cssStyles";
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes";
 import { ThemedTooltip } from "./Tooltip";
 import { CallbackButton } from "./Finish";
+import { ProtoButton } from "@opencast/appkit";
 
 /**
  * This page is to be displayed when the user is "done" with the editor
@@ -34,18 +35,18 @@ const TheEnd: React.FC = () => {
 
   const theEndStyle = css({
     width: "100%",
-    height: "calc(100% - 64px)",
+    height: "calc(100vh - 64px)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
   });
 
   const restartOrBackStyle = css({
     display: "flex",
     flexDirection: "row",
-    ...(flexGapReplacementStyle(20, false)),
+    gap: "20px",
   });
 
   return (
@@ -72,16 +73,12 @@ const StartOverButton: React.FC = () => {
 
   return (
     <ThemedTooltip title={t("theEnd.startOver-tooltip")}>
-      <div css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
-        role="button" tabIndex={0}
+      <ProtoButton
         onClick={reloadPage}
-        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-          if (event.key === " " || event.key === "Enter") {
-            reloadPage();
-          }
-        }}>
+        css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
+      >
         <span>{t("theEnd.startOver-button")}</span>
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };

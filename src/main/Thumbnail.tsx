@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { settings } from "../config";
 import {
-  basicButtonStyle, deactivatedButtonStyle, flexGapReplacementStyle, titleStyle, titleStyleBold, videosStyle,
+  basicButtonStyle, deactivatedButtonStyle, titleStyle, titleStyleBold, videosStyle,
   backgroundBoxStyle,
 } from "../cssStyles";
 import { Theme, useTheme } from "../themes";
@@ -38,6 +38,7 @@ import {
 import { ThemedTooltip } from "./Tooltip";
 import VideoPlayers, { VideoPlayerForwardRef } from "./VideoPlayers";
 import VideoControls from "./VideoControls";
+import { ProtoButton } from "@opencast/appkit";
 
 
 /**
@@ -179,7 +180,7 @@ const ThumbnailTable: React.FC<{
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
     paddingBottom: "20px",
   });
 
@@ -434,7 +435,7 @@ const ThumbnailButton: React.FC<{
   active: boolean,
 }> = ({ handler, text, tooltipText, ariaLabel, Icon, active }) => {
   const theme = useTheme();
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLButtonElement>(null);
 
   const clickHandler = () => {
     if (active) { handler(); }
@@ -448,16 +449,16 @@ const ThumbnailButton: React.FC<{
 
   return (
     <ThemedTooltip title={tooltipText}>
-      <div
-        css={thumbnailButtonStyle(active, theme)}
-        ref={ref}
-        role="button" tabIndex={0} aria-label={ariaLabel}
+      <ProtoButton
+        {...{ ref }}
+        aria-label={ariaLabel}
         onClick={clickHandler}
         onKeyDown={keyHandler}
+        css={thumbnailButtonStyle(active, theme)}
       >
         <Icon />
         {text}
-      </div>
+      </ProtoButton>
     </ThemedTooltip>
   );
 };
@@ -501,20 +502,16 @@ const AffectAllRow: React.FC<{
   return (
     <div css={rowStyle}>
       <ThemedTooltip title={t("thumbnail.buttonGenerateAll-tooltip")}>
-        <div css={[basicButtonStyle(theme), buttonStyle]}
-          role="button" tabIndex={0} aria-label={t("thumbnail.buttonGenerateAll-tooltip-aria")}
+        <ProtoButton
+          aria-label={t("thumbnail.buttonGenerateAll-tooltip-aria")}
           onClick={() => {
             generateAll();
           }}
-          onKeyDown={(event: React.KeyboardEvent) => {
-            if (event.key === " " || event.key === "Enter") {
-              generateAll();
-            }
-          }}
+          css={[basicButtonStyle(theme), buttonStyle]}
         >
           <LuCamera />
           {t("thumbnail.buttonGenerateAll")}
-        </div>
+        </ProtoButton>
       </ThemedTooltip>
     </div>
   );
@@ -643,7 +640,7 @@ const thumbnailTableRowTitleStyle = css({
 const thumbnailTableRowRowStyle = css({
   display: "flex",
   flexDirection: "row",
-  ...(flexGapReplacementStyle(20, true)),
+  gap: "20px",
 
   justifyContent: "space-around",
   flexWrap: "wrap",

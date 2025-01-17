@@ -2,14 +2,13 @@ import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import { css } from "@emotion/react";
 
-import { useAppDispatch, useAppSelector } from "../redux/store";
+import { AppDispatch, useAppDispatch, useAppSelector } from "../redux/store";
 import {
   selectIsPlaying,
   selectCurrentlyAtInSeconds,
   setIsPlaying,
   selectIsMuted,
   selectVolume,
-  selectVideoURL,
   selectVideoCount,
   selectDurationInSeconds,
   setPreviewTriggered,
@@ -21,6 +20,7 @@ import {
   setJumpTriggered,
   selectJumpTriggered,
   setCurrentlyAt,
+  selectVideos,
 } from "../redux/videoSlice";
 
 import ReactPlayer, { Config } from "react-player";
@@ -36,9 +36,9 @@ import { ActionCreatorWithPayload, AsyncThunk } from "@reduxjs/toolkit";
 
 import { useTheme } from "../themes";
 
-import { backgroundBoxStyle, flexGapReplacementStyle } from "../cssStyles";
+import { backgroundBoxStyle } from "../cssStyles";
 import { BaseReactPlayerProps } from "react-player/base";
-import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
+import { ErrorBox } from "@opencast/appkit";
 
 const VideoPlayers: React.FC<{
   refs?: React.MutableRefObject<(VideoPlayerForwardRef | null)[]>,
@@ -50,7 +50,9 @@ const VideoPlayers: React.FC<{
   maxHeightInPixel = 300,
 }) => {
 
-  const videoURLs = useAppSelector(selectVideoURL);
+  const videos = useAppSelector(selectVideos);
+  let primaryIndex = videos.findIndex(e => e.audio_stream.available === true);
+  primaryIndex = primaryIndex < 0 ? 0 : primaryIndex;
   const videoCount = useAppSelector(selectVideoCount);
 
   const videoPlayerAreaStyle = css({
@@ -59,7 +61,7 @@ const VideoPlayers: React.FC<{
     justifyContent: "center",
     width: widthInPercent + "%",
     borderRadius: "5px",
-    ...(flexGapReplacementStyle(10, false)),
+    gap: "10px",
 
     maxHeight: maxHeightInPixel + "px",
   });
@@ -71,8 +73,8 @@ const VideoPlayers: React.FC<{
       <VideoPlayer
         key={i}
         dataKey={i}
-        url={videoURLs[i]}
-        isPrimary={i === 0}
+        url={videos[i].uri}
+        isPrimary={i === primaryIndex}
         subtitleUrl={""}
         first={i === 0}
         last={i === videoCount - 1}
@@ -129,7 +131,16 @@ interface VideoPlayerProps {
   setPreviewTriggered: ActionCreatorWithPayload<boolean, string>,
   setClickTriggered: ActionCreatorWithPayload<boolean, string>,
   setJumpTriggered: ActionCreatorWithPayload<boolean, string>,
-  setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, AsyncThunkConfig>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string> | AsyncThunk<void, number, {
+    state: RootState;
+    dispatch: AppDispatch;
+    extra?: unknown;
+    rejectValue?: unknown;
+    serializedErrorType?: unknown;
+    pendingMeta?: unknown;
+    fulfilledMeta?: unknown;
+    rejectedMeta?: unknown;
+  }>,
   setAspectRatio: ActionCreatorWithPayload<{ dataKey: number; } & { width: number, height: number; }, string>,
 }
 
@@ -304,12 +315,12 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
     };
 
     /**
-   * Workaround for subtitles not appearing in Firefox (or only appearing on inital mount, then disappearing
-   * when changed). Removes old tracks and readds them, because letting React to it does not seem
-   * to work properly.
-   * Fairly hacky, currently only works for a page with only one video
-   * https://github.com/CookPete/react-player/issues/490
-   */
+     * Workaround for subtitles not appearing in Firefox (or only appearing on inital mount, then disappearing
+     * when changed). Removes old tracks and readds them, because letting React to it does not seem
+     * to work properly.
+     * Fairly hacky, currently only works for a page with only one video
+     * https://github.com/CookPete/react-player/issues/490
+     */
     function reAddTrack() {
       const video = document.querySelector("video");
 
@@ -381,51 +392,67 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       },
     }));
 
-    const errorBoxStyle = css({
-      ...(!errorState) && { display: "none" },
-      borderColor: `${theme.error}`,
-      borderStyle: "dashed",
-      fontWeight: "bold",
-      padding: "10px",
-    });
-
     const reactPlayerStyle = css({
       aspectRatio: "16 / 9",    // Hard-coded for now because there are problems with updating this value at runtime
 
       overflow: "hidden", // Required for borderRadius to show
-      ...(first) && { borderTopLeftRadius: "5px" },
-      ...(first) && { borderBottomLeftRadius: "5px" },
-      ...(last) && { borderTopRightRadius: "5px" },
-      ...(last) && { borderBottomRightRadius: "5px" },
+      ...first && {
+        borderTopLeftRadius: "5px",
+        borderBottomLeftRadius: "5px",
+      },
+      ...last && {
+        borderTopLeftRadius: "5px",
+        borderBottomRightRadius: "5px",
+      },
+    });
+
+    const videoPlayerWrapperStyles = css({
+      height: "100%",
+      width: "100%",
+      display: "flex",
+
+      // For single video, center!
+      ...(first && last) && { justifyContent: "center" },
+
+      // For multi videos, first from right side, sitting on end
+      ...(first && !last) && { justifyContent: "end" },
+
+      // For multi videos, last from right side, sitting on start
+      ...(last && !first) && { justifyContent: "start" },
+
+      // For multi videos, in between, fit content and center!
+      ...(!first && !last) && { justifyContent: "center", flexBasis: "fit-content" },
     });
 
     const render = () => {
       if (!errorState) {
         return (
-          <ReactPlayer url={url}
-            css={[backgroundBoxStyle(theme), reactPlayerStyle]}
-            ref={ref}
-            width="unset"
-            height="unset"
-            playing={isPlaying}
-            volume={volume}
-            muted={!isPrimary || isMuted}
-            onProgress={onProgressCallback}
-            progressInterval={100}
-            onReady={onReadyCallback}
-            onPlay={onPlay}
-            onEnded={onEndedCallback}
-            onError={onErrorCallback}
-            tabIndex={-1}
-            config={playerConfig}
-            disablePictureInPicture
-          />
+          <div css={videoPlayerWrapperStyles}>
+            <ReactPlayer url={url}
+              css={[backgroundBoxStyle(theme), reactPlayerStyle]}
+              ref={ref}
+              width="unset"
+              height="100%"
+              playing={isPlaying}
+              volume={volume}
+              muted={!isPrimary || isMuted}
+              onProgress={onProgressCallback}
+              progressInterval={100}
+              onReady={onReadyCallback}
+              onPlay={onPlay}
+              onEnded={onEndedCallback}
+              onError={onErrorCallback}
+              tabIndex={-1}
+              config={playerConfig}
+              disablePictureInPicture
+            />
+          </div>
         );
       } else {
         return (
-          <div css={errorBoxStyle} role="alert">
-            <span>{t("video.loadError-text")} </span>
-          </div>
+          <ErrorBox>
+            {t("video.loadError-text")}
+          </ErrorBox>
         );
       }
     };

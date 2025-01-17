@@ -4,7 +4,6 @@ import { ParseKeys } from "i18next";
 import React from "react";
 
 import { useTranslation, Trans } from "react-i18next";
-import { flexGapReplacementStyle } from "../cssStyles";
 import { getGroupName, KEYMAP, rewriteKeys } from "../globalKeys";
 import { useTheme } from "../themes";
 import { titleStyle, titleStyleBold } from "../cssStyles";
@@ -52,7 +51,7 @@ const Entry: React.FC<{ name: string, sequences: string[][]; }> = ({ name, seque
     justifyContent: "left",
     width: "100%",
     padding: "10px 0px",
-    ...(flexGapReplacementStyle(10, true)),
+    gap: "10px",
   });
 
   const labelStyle = css({
@@ -66,7 +65,7 @@ const Entry: React.FC<{ name: string, sequences: string[][]; }> = ({ name, seque
   const sequenceStyle = css({
     display: "flex",
     flexDirection: "row",
-    ...(flexGapReplacementStyle(10, true)),
+    gap: "10px",
   });
 
   const singleKeyStyle = css({
@@ -121,7 +120,7 @@ const KeyboardControls: React.FC = () => {
     flexDirection: "row" as const,
     flexWrap: "wrap",
     justifyContent: "center",
-    ...(flexGapReplacementStyle(30, true)),
+    gap: "30px",
   });
 
   const render = () => {
@@ -132,11 +131,12 @@ const KeyboardControls: React.FC = () => {
         const entries: { [groupName: string]: string[][]; } = {};
         Object.entries(group).forEach(([, action]) => {
           const sequences = action.key.split(",").map(item => item.trim());
+          const sequenceCombinationkey = action.combinationKey ? action.combinationKey : "+";
           entries[action.name] = Object.entries(sequences).map(([, sequence]) => {
-            return sequence.split("+").map(item => rewriteKeys(item.trim()));
+            return sequence.split(sequenceCombinationkey).map(item => rewriteKeys(item.trim()));
           });
         });
-        groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index} />);
+        groups.push(<Group name={getGroupName(groupName)} entries={entries} key={index}/>);
       });
 
       return (

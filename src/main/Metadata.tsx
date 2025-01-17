@@ -1,20 +1,17 @@
 import React, { useEffect } from "react";
 
 import { css } from "@emotion/react";
-import { calendarStyle, errorBoxStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
+import { BREAKPOINTS, calendarStyle, selectFieldStyle, titleStyle, titleStyleBold } from "../cssStyles";
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   fetchMetadata,
-  postMetadata,
   selectCatalogs,
   Catalog,
   MetadataField,
   setFieldValue,
   selectGetError,
   selectGetStatus,
-  selectPostError,
-  selectPostStatus,
   setFieldReadonly,
 } from "../redux/metadataSlice";
 
@@ -30,6 +27,8 @@ import { useTheme } from "../themes";
 import { ThemeProvider } from "@mui/material/styles";
 import { cloneDeep } from "lodash";
 import { ParseKeys } from "i18next";
+import { ErrorBox } from "@opencast/appkit";
+import { screenWidthAtMost } from "@opencast/appkit";
 
 /**
  * Creates a Metadata form
@@ -49,8 +48,6 @@ const Metadata: React.FC = () => {
   const catalogs = useAppSelector(selectCatalogs);
   const getStatus = useAppSelector(selectGetStatus);
   const getError = useAppSelector(selectGetError);
-  const postStatus = useAppSelector(selectPostStatus);
-  const postError = useAppSelector(selectPostError);
   const theme = useTheme();
 
   // Try to fetch URL from external API
@@ -101,6 +98,12 @@ const Metadata: React.FC = () => {
     marginRight: "auto",
     minWidth: "50%",
     display: "grid",
+    [screenWidthAtMost(1550)]: {
+      minWidth: "70%",
+    },
+    [screenWidthAtMost(BREAKPOINTS.medium)]: {
+      minWidth: "90%",
+    },
   });
 
   const catalogStyle = css({
@@ -433,7 +436,7 @@ const Metadata: React.FC = () => {
 
   /**
    * Callback for when the form is submitted
-   * Saves values in redux state and sends them to Opencast
+   * Saves values in redux state
    * @param values
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -458,8 +461,6 @@ const Metadata: React.FC = () => {
         }
       });
 
-      // Send updated values to Opencast
-      dispatch(postMetadata());
     });
   };
 
@@ -710,10 +711,16 @@ const Metadata: React.FC = () => {
             form.reset();
           }} css={metadataStyle}>
 
-            <div css={errorBoxStyle(getStatus === "failed", theme)} role="alert">
-              <span>A problem occurred during communication with Opencast.</span><br />
-              {getError ? "Details: " + getError : "No error details are available."}<br />
-            </div>
+            {getStatus === "failed" &&
+              <ErrorBox>
+                <span css={{ whiteSpace: "pre-line" }}>
+                  {"A problem occurred during communication with Opencast. \n"}
+                  {getError ?
+                    t("various.error-details-text", { errorMessage: getError }) : undefined
+                  }
+                </span>
+              </ErrorBox>
+            }
 
             {catalogs.map((catalog, i) => {
               if (settings.metadata.configureFields) {
@@ -729,36 +736,6 @@ const Metadata: React.FC = () => {
               // If there are no settings for a given catalog, just render it completely
               return renderCatalog(catalog, i, {});
             })}
-
-            {/*
-                <div css={{display: "block", wordWrap: "normal", whiteSpace: "pre"}}>
-                  {t("metadata.submit-helpertext", { buttonName: t("metadata.submit-button") })}
-                </div>
-
-
-              <div title="buttons" css={buttonContainerStyle}>
-                <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
-                  type="submit"
-                  title={t("metadata.submit-button-tooltip")}
-                  aria-label={t("metadata.submit-button-tooltip")}
-                  disabled={submitting || pristine}>
-                    {t("metadata.submit-button")}
-                </button>
-                <button css={[basicButtonStyleCOPY, nagivationButtonStyle, submitButtonStyle]}
-                  type="button"
-                  title={t("metadata.reset-button-tooltip")}
-                  aria-label={t("metadata.reset-button-tooltip")}
-                  onClick={() => {form.reset()}}
-                  disabled={submitting || pristine}>
-                    {t("metadata.reset-button")}
-                </button>
-              </div> */}
-
-            <div css={errorBoxStyle(postStatus === "failed", theme)} role="alert">
-              <span>A problem occurred during communication with Opencast. <br />
-                Changes could not be saved to Opencast.</span><br />
-              {postError ? "Details: " + postError : "No error details are available."}<br />
-            </div>
 
             {/* For debugging the forms current values*/}
             {/* <FormSpy subscription={{ values: true }}>
