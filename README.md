@@ -104,6 +104,7 @@ How to cut a release for Opencast
    workflow to finish
     - It will create a new [GitHub release draft](https://github.com/opencast/opencast-editor/releases)
     - Review and publish the draft
+        - By selecting the previous release, Github can generate release notes automatically
 1. Submit a pull request against Opencast
     - [Update the release](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/modules/editor/pom.xml#L16-L17)
     - [Adjust the documentation](https://github.com/opencast/opencast/blob/b2bea8822b95b8692bb5bbbdf75c9931c2b7298a/docs/guides/admin/docs/modules/editor.md)
