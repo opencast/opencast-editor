@@ -16,3 +16,8 @@ updates:
     open-pull-requests-limit: 15
     labels:
       - type:dependencies
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
