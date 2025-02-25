@@ -8,7 +8,6 @@
  * If you add a new keyMap, be sure to add it to the getAllHotkeys function
  */
 import { match } from "@opencast/appkit";
-import { isString } from "lodash";
 import { ParseKeys } from "i18next";
 import { isMacOs } from "react-device-detect";
 
@@ -22,7 +21,9 @@ const groupSubtitleList = "keyboardControls.groupSubtitleList";
  * Helper function that rewrites keys based on the OS
  */
 export const rewriteKeys = (key: string | IKey) => {
-  const newKey = isString(key) ? key : key.key.replaceAll(key.combinationKey, "+");
+  const newKey = typeof key === "string" ?
+    key : key.combinationKey ?
+      key.key.replaceAll(key.combinationKey, "+") : key.key;
 
   return isMacOs ? newKey.replace("Alt", "Option") : newKey;
 };

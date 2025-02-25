@@ -34,7 +34,7 @@ const Group: React.FC<{ name: ParseKeys, entries: { [key: string]: string[][]; }
     <div css={groupStyle}>
       <h3 css={headingStyle}>{t(name)}</h3>
       {Object.entries(entries).map(([key, value], index) =>
-        <Entry name={key} sequences={value} key={index} />
+        <Entry name={key} sequences={value} key={index} />,
       )}
     </div>
   );

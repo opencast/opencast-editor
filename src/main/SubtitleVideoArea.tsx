@@ -93,7 +93,6 @@ const SubtitleVideoArea: React.FC = () => {
       const serializedSubtitle = serializeSubtitle(subtitle?.cues);
       setSubtitleUrl(window.URL.createObjectURL(new Blob([serializedSubtitle], { type: "text/vtt" })));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtitle?.cues]);
 
   const areaWrapper = css({
@@ -116,7 +115,6 @@ const SubtitleVideoArea: React.FC = () => {
       <div css={areaWrapper}>
         <div css={videoPlayerAreaStyle}>
           {selectedFlavor && <VideoSelectDropdown
-            // eslint-disable-next-line no-sequences
             flavors={tracks.reduce((a: Flavor[], o: { flavor: Flavor; }) => (a.push(o.flavor), a), [])}
             changeFlavorcallback={setSelectedFlavor}
             defaultFlavor={selectedFlavor}
