@@ -50,7 +50,7 @@ const CuttingActions: React.FC = () => {
    */
   const dispatchAction = (
     action: ActionCreatorWithoutPayload<string> | undefined,
-    actionWithPayload?: ActionCreatorWithPayload<number, string> | undefined,
+    actionWithPayload?: ActionCreatorWithPayload<number, string>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload?: any,
     ref?: React.RefObject<HTMLButtonElement>,

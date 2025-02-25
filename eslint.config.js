@@ -11,9 +11,7 @@ export default [
   {
     rules: {
       // // TODO: We want to turn these on eventually
-      "@typescript-eslint/prefer-promise-reject-errors": "off",
       "@typescript-eslint/no-base-to-string": "off",
-      "@typescript-eslint/no-duplicate-type-constituents": "off",
       "@typescript-eslint/no-floating-promises": "off",
       "@typescript-eslint/no-for-in-array": "off",
       "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
