@@ -653,7 +653,7 @@ const Metadata: React.FC = () => {
           <div css={fieldStyle} data-testid={field.id}>
             <label css={fieldLabelStyle} htmlFor={input.name}>{
               i18n.exists(`metadata.labels.${field.id}`) ?
-                t(`metadata.labels.${field.id}` as ParseKeys) as string : field.id
+                t(`metadata.labels.${field.id}` as ParseKeys) : field.id
             }</label>
 
             {generateComponentWithModifiedInput(field, input)}
@@ -675,7 +675,7 @@ const Metadata: React.FC = () => {
       <div key={catalogIndex} css={catalogStyle}>
         <div css={[titleStyle(theme), titleStyleBold(theme)]}>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
-            t(`metadata.${catalog.title.replaceAll(".", "-")}` as ParseKeys) as string : catalog.title
+            t(`metadata.${catalog.title.replaceAll(".", "-")}` as ParseKeys) : catalog.title
           }
         </div>
 

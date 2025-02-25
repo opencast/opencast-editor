@@ -348,7 +348,7 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
           track.src = t.src!;
           track.track.mode = "showing";    // Because the load callback may sometimes not execute properly
           track.addEventListener("error", (_e: Event) => {
-            console.warn(`Cannot load track ${t.src!}`);
+            console.warn(`Cannot load track ${t.src}`);
           });
           track.addEventListener("load", (e: Event) => {
             const textTrack = e.currentTarget as HTMLTrackElement;
