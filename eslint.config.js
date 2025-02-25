@@ -11,7 +11,6 @@ export default [
   {
     rules: {
       // // TODO: We want to turn these on eventually
-      "max-len": "off",
       "no-undef": "off",
       "quotes": "off",
       "react-hooks/rules-of-hooks": "off",

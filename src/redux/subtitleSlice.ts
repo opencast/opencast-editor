@@ -108,7 +108,13 @@ export const subtitleSlice = createSlice({
     },
     addCueAtIndex: (
       state,
-      action: PayloadAction<{ identifier: string, cueIndex: number, text: string, startTime: number, endTime: number; }>,
+      action: PayloadAction<{
+        identifier: string,
+        cueIndex: number,
+        text: string,
+        startTime: number,
+        endTime: number,
+      }>,
     ) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0;
       const cue: SubtitleCue = {
