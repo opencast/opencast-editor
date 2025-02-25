@@ -62,7 +62,7 @@ const Lock: React.FC = () => {
   }, [lockingActive]);
 
   // Refresh lock
-  useInterval(async () => {
+  useInterval(() => {
     requestLock();
   }, lockingActive ? lockRefresh : null);
 

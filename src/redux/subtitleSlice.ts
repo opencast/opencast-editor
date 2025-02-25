@@ -260,7 +260,7 @@ export const {
  * mode is active.
  */
 export const setCurrentlyAtAndTriggerPreview = createAppAsyncThunk("subtitleState/setCurrentlyAtAndTriggerPreview",
-  async (milliseconds: number, { getState, dispatch }) => {
+  (milliseconds: number, { getState, dispatch }) => {
     milliseconds = roundToDecimalPlace(milliseconds, 0);
 
     if (milliseconds < 0) {
