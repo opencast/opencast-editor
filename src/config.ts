@@ -338,6 +338,7 @@ const types = {
     if (!Array.isArray(v)) {
       throw new Error("is not an array, but should be");
     }
+    // eslint-disable-next-line @typescript-eslint/no-for-in-array
     for (const entry in v) {
       if (typeof entry !== "string") {
         throw new Error("is not a string, but should be");

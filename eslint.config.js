@@ -13,7 +13,6 @@ export default [
       // // TODO: We want to turn these on eventually
       "@typescript-eslint/no-base-to-string": "off",
       "@typescript-eslint/no-floating-promises": "off",
-      "@typescript-eslint/no-for-in-array": "off",
       "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
       "@typescript-eslint/no-redundant-type-constituents": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
