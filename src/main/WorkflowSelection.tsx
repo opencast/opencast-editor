@@ -11,7 +11,7 @@ import { LuChevronLeft } from "react-icons/lu";
 import { selectStatus as saveSelectStatus, selectError as saveSelectError } from "../redux/workflowPostSlice";
 import { httpRequestState, Workflow } from "../types";
 import { SaveButton } from "./Save";
-import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
+import { EmotionJSX } from "@emotion/react/dist/declarations/src/jsx-namespace";
 
 import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";

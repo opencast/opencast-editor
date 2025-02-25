@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
-import eslint from "vite-plugin-eslint";
 import child from "child_process";
 import { configDefaults } from 'vitest/config'
 
@@ -26,7 +25,6 @@ export default defineConfig(() => {
       }),
       // svgr options: https://react-svgr.com/docs/options/
       svgr({ svgrOptions: { } }),
-      eslint(),
     ],
     // Workaround, see https://github.com/vitejs/vite/discussions/5912#discussioncomment-6115736
     define: {

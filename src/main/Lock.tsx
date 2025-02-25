@@ -58,6 +58,7 @@ const Lock: React.FC = () => {
     if (lockingActive) {
       requestLock();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lockingActive]);
 
   // Refresh lock
@@ -75,6 +76,7 @@ const Lock: React.FC = () => {
     if (isEnd) {
       releaseLock();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEnd]);
 
   return (<></>);

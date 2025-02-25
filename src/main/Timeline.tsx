@@ -87,6 +87,7 @@ const Timeline: React.FC<{
     zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(updateScroll, [currentlyAt, timelineZoom, width]);
 
   useEffect(() => {

@@ -337,7 +337,6 @@ const videoSlice = createSlice({
             return track;
           });
         const videos = state.tracks.filter((track: Track) => track.video_stream.available === true);
-        // eslint-disable-next-line no-sequences
         state.videoURLs = videos.reduce((a: string[], o: { uri: string; }) => (a.push(o.uri), a), []);
         state.videoCount = state.videoURLs.length;
         state.subtitlesFromOpencast = payload.subtitles ?

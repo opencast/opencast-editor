@@ -42,13 +42,13 @@ const TrackSelection: React.FC = () => {
   if (settings.trackSelection.atLeastOneVideo) {
     // Only care about at least one video stream being enabled
     enabledCount = tracks.reduce(
-      (memo: number, track: Track) => memo + !!track.video_stream.enabled,
+      (memo: number, track: Track) => memo + (track.video_stream.enabled ? 1 : 0),
       0
     );
   } else {
     // Make sure that at least one track remains enabled
     enabledCount = tracks.reduce(
-      (memo: number, track: Track) => memo + !!track.video_stream.enabled + !!track.audio_stream.enabled,
+      (memo: number, track: Track) => memo + (track.video_stream.enabled ? 1 : 0) + (track.audio_stream.enabled ? 1 : 0),
       0
     );
   }
@@ -273,7 +273,7 @@ const VideoTrackItem: React.FC<{
         css={playerStyle}
         style={playerRootStyle}
         url={track.uri}
-        config={{ attributes: { tabIndex: "-1" } }}
+        config={{ file: { attributes: { tabIndex: "-1" } } }}
       />
     </TrackItem>
   );
@@ -323,6 +323,7 @@ const AudioTrackItem: React.FC<{
         enabled: false,
       }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [track.audio_stream.available]);
 
   return (
