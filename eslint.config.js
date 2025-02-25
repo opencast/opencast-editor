@@ -5,13 +5,12 @@ export default [
 
   // Fully ignore some files
   {
-    ignores: ["build/", "*.ts", "tests/**"],
+    ignores: ["build/", "**/*.js", "*.ts", "tests/**"],
   },
 
   {
     rules: {
       // // TODO: We want to turn these on eventually
-      "no-undef": "off",
       "quotes": "off",
       "react-hooks/rules-of-hooks": "off",
       "@typescript-eslint/prefer-promise-reject-errors": "off",
