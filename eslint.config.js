@@ -11,7 +11,6 @@ export default [
   {
     rules: {
       // // TODO: We want to turn these on eventually
-      "react-hooks/rules-of-hooks": "off",
       "@typescript-eslint/prefer-promise-reject-errors": "off",
       "@typescript-eslint/no-base-to-string": "off",
       "@typescript-eslint/no-duplicate-type-constituents": "off",

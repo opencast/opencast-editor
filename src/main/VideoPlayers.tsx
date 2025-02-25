@@ -55,6 +55,8 @@ const VideoPlayers: React.FC<{
   primaryIndex = primaryIndex < 0 ? 0 : primaryIndex;
   const videoCount = useAppSelector(selectVideoCount);
 
+  const [videoPlayers, setVideoPlayers] = useState<JSX.Element[]>([]);
+
   const videoPlayerAreaStyle = css({
     display: "flex",
     flexDirection: "row",
@@ -67,38 +69,42 @@ const VideoPlayers: React.FC<{
   });
 
   // Initialize video players
-  const videoPlayers: JSX.Element[] = [];
-  for (let i = 0; i < videoCount; i++) {
-    videoPlayers.push(
-      <VideoPlayer
-        key={i}
-        dataKey={i}
-        url={videos[i].uri}
-        isPrimary={i === primaryIndex}
-        subtitleUrl={""}
-        first={i === 0}
-        last={i === videoCount - 1}
-        selectIsPlaying={selectIsPlaying}
-        selectIsMuted={selectIsMuted}
-        selectVolume={selectVolume}
-        selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
-        selectPreviewTriggered={selectPreviewTriggered}
-        selectClickTriggered={selectClickTriggered}
-        selectJumpTriggered={selectJumpTriggered}
-        selectAspectRatio={selectAspectRatio}
-        setIsPlaying={setIsPlaying}
-        setPreviewTriggered={setPreviewTriggered}
-        setClickTriggered={setClickTriggered}
-        setJumpTriggered={setJumpTriggered}
-        setCurrentlyAt={setCurrentlyAt}
-        setAspectRatio={setAspectRatio}
-        ref={el => {
-          if (refs === undefined) { return; }
-          (refs.current[i] = el);
-        }}
-      />,
-    );
-  }
+  useEffect(() => {
+    const videoPlayers: JSX.Element[] = [];
+    for (let i = 0; i < videoCount; i++) {
+      videoPlayers.push(
+        <VideoPlayer
+          key={i}
+          dataKey={i}
+          url={videos[i].uri}
+          isPrimary={i === primaryIndex}
+          subtitleUrl={""}
+          first={i === 0}
+          last={i === videoCount - 1}
+          selectIsPlaying={selectIsPlaying}
+          selectIsMuted={selectIsMuted}
+          selectVolume={selectVolume}
+          selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
+          selectPreviewTriggered={selectPreviewTriggered}
+          selectClickTriggered={selectClickTriggered}
+          selectJumpTriggered={selectJumpTriggered}
+          selectAspectRatio={selectAspectRatio}
+          setIsPlaying={setIsPlaying}
+          setPreviewTriggered={setPreviewTriggered}
+          setClickTriggered={setClickTriggered}
+          setJumpTriggered={setJumpTriggered}
+          setCurrentlyAt={setCurrentlyAt}
+          setAspectRatio={setAspectRatio}
+          ref={el => {
+            if (refs === undefined) { return; }
+            (refs.current[i] = el);
+          }}
+        />,
+      );
+    }
+    setVideoPlayers(videoPlayers);
+  }, [primaryIndex, refs, videoCount, videos]);
+
 
   return (
     <div css={videoPlayerAreaStyle}>
