@@ -121,7 +121,7 @@ const WorkflowSelection: React.FC = () => {
           false,
           <SaveButton />,
           saveStatus,
-          saveError
+          saveError,
         )
       );
     } else if (workflows.length === 1) {
@@ -139,7 +139,7 @@ const WorkflowSelection: React.FC = () => {
             text={t("workflowSelection.startProcessing-button")}
           />,
           saveStatus,
-          saveError
+          saveError,
         )
       );
     } else {
@@ -155,7 +155,7 @@ const WorkflowSelection: React.FC = () => {
             text={t("workflowSelection.startProcessing-button")}
           />,
           saveStatus,
-          saveError
+          saveError,
         )
       );
     }

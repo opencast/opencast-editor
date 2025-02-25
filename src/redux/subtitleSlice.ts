@@ -108,7 +108,7 @@ export const subtitleSlice = createSlice({
     },
     addCueAtIndex: (
       state,
-      action: PayloadAction<{ identifier: string, cueIndex: number, text: string, startTime: number, endTime: number; }>
+      action: PayloadAction<{ identifier: string, cueIndex: number, text: string, startTime: number, endTime: number; }>,
     ) => {
       const startTime = action.payload.startTime >= 0 ? action.payload.startTime : 0;
       const cue: SubtitleCue = {
@@ -143,7 +143,7 @@ export const subtitleSlice = createSlice({
     },
     removeCue: (state, action: PayloadAction<{ identifier: string, cue: SubtitleCue; }>) => {
       const cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(
-        i => i.idInternal === action.payload.cue.idInternal
+        i => i.idInternal === action.payload.cue.idInternal,
       );
       if (cueIndex > -1) {
         state.subtitles[action.payload.identifier].cues.splice(cueIndex, 1);
@@ -167,10 +167,10 @@ export const subtitleSlice = createSlice({
     },
     setFocusToSegmentAboveId: (
       state,
-      action: PayloadAction<{ identifier: string, segmentId: subtitle["focusSegmentId"]; }>
+      action: PayloadAction<{ identifier: string, segmentId: subtitle["focusSegmentId"]; }>,
     ) => {
       let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(
-        i => i.idInternal === action.payload.segmentId
+        i => i.idInternal === action.payload.segmentId,
       );
       cueIndex = cueIndex - 1;
       if (cueIndex < 0) {
@@ -180,10 +180,10 @@ export const subtitleSlice = createSlice({
     },
     setFocusToSegmentBelowId: (
       state,
-      action: PayloadAction<{ identifier: string, segmentId: subtitle["focusSegmentId"]; }>
+      action: PayloadAction<{ identifier: string, segmentId: subtitle["focusSegmentId"]; }>,
     ) => {
       let cueIndex = state.subtitles[action.payload.identifier].cues.findIndex(
-        i => i.idInternal === action.payload.segmentId
+        i => i.idInternal === action.payload.segmentId,
       );
       cueIndex = cueIndex + 1;
       if (cueIndex >= state.subtitles[action.payload.identifier].cues.length) {

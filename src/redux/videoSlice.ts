@@ -252,7 +252,7 @@ const videoSlice = createSlice({
     },
     moveCut: (
       state,
-      action: PayloadAction<{ leftSegmentIndex: number, time: Segment["start"] }>
+      action: PayloadAction<{ leftSegmentIndex: number, time: Segment["start"] }>,
     ) => {
       const leftSegmentIndex = action.payload.leftSegmentIndex;
       const rightSegmentIndex = action.payload.leftSegmentIndex + 1;
@@ -347,7 +347,7 @@ const videoSlice = createSlice({
         state.workflows = payload.workflows;
         state.waveformImages = payload.waveformURIs ? payload.waveformURIs : state.waveformImages;
         state.originalThumbnails = state.tracks.map(
-          (track: Track) => { return { id: track.id, uri: track.thumbnailUri }; }
+          (track: Track) => { return { id: track.id, uri: track.thumbnailUri }; },
         );
 
         state.aspectRatios = new Array(state.videoCount);
@@ -453,7 +453,7 @@ const mergeSegments = (state: video, startSegmentIndex: number, endSegmentIndex:
   // Remove the end segment and segments between
   state.segments.splice(
     startSegmentIndex < endSegmentIndex ? startSegmentIndex + 1 : endSegmentIndex,
-    Math.abs(endSegmentIndex - startSegmentIndex)
+    Math.abs(endSegmentIndex - startSegmentIndex),
   );
 
   // Update active segment

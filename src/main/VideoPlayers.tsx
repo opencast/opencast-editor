@@ -96,7 +96,7 @@ const VideoPlayers: React.FC<{
           if (refs === undefined) { return; }
           (refs.current[i] = el);
         }}
-      />
+      />,
     );
   }
 

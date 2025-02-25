@@ -11,7 +11,6 @@ export default [
   {
     rules: {
       // // TODO: We want to turn these on eventually
-      "comma-dangle": "off",
       "indent": "off",
       "max-len": "off",
       "no-undef": "off",
@@ -33,6 +32,6 @@ export default [
       "@typescript-eslint/require-await": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
       "@typescript-eslint/unbound-method": "off",
-    }
-  }
+    },
+  },
 ];

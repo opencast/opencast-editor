@@ -53,7 +53,7 @@ const CuttingActions: React.FC = () => {
     actionWithPayload?: ActionCreatorWithPayload<number, string> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload?: any,
-    ref?: React.RefObject<HTMLButtonElement>
+    ref?: React.RefObject<HTMLButtonElement>,
   ) => {
     if (action) {
       dispatch(action());
@@ -73,37 +73,37 @@ const CuttingActions: React.FC = () => {
     KEYMAP.cutting.cut.key,
     () => dispatchAction(cut),
     { preventDefault: true },
-    [cut]
+    [cut],
   );
   useHotkeys(
     KEYMAP.cutting.delete.key,
     () => dispatchAction(markAsDeletedOrAlive),
     { preventDefault: true },
-    [markAsDeletedOrAlive]
+    [markAsDeletedOrAlive],
   );
   useHotkeys(
     KEYMAP.cutting.mergeLeft.key,
     () => dispatchAction(mergeLeft),
     { preventDefault: true },
-    [mergeLeft]
+    [mergeLeft],
   );
   useHotkeys(
     KEYMAP.cutting.mergeRight.key,
     () => dispatchAction(mergeRight),
     { preventDefault: true },
-    [mergeRight]
+    [mergeRight],
   );
   useHotkeys(
     KEYMAP.cutting.zoomIn.key,
     () => dispatchAction(timelineZoomIn),
     { preventDefault: true, combinationKey: KEYMAP.cutting.zoomIn.combinationKey },
-    [timelineZoomIn]
+    [timelineZoomIn],
   );
   useHotkeys(
     KEYMAP.cutting.zoomOut.key,
     () => dispatchAction(timelineZoomOut, undefined),
     { preventDefault: true },
-    [timelineZoomOut]
+    [timelineZoomOut],
   );
 
   const cuttingStyle = css({
