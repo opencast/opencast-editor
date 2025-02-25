@@ -11,7 +11,6 @@ export default [
   {
     rules: {
       // // TODO: We want to turn these on eventually
-      "indent": "off",
       "max-len": "off",
       "no-undef": "off",
       "quotes": "off",

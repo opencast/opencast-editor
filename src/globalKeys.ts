@@ -23,7 +23,7 @@ const groupSubtitleList = "keyboardControls.groupSubtitleList";
 export const rewriteKeys = (key: string | IKey) => {
   const newKey = typeof key === "string" ?
     key : key.combinationKey ?
-    key.key.replaceAll(key.combinationKey, "+") : key.key;
+      key.key.replaceAll(key.combinationKey, "+") : key.key;
 
   return isMacOs ? newKey.replace("Alt", "Option") : newKey;
 };
