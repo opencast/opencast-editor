@@ -87,6 +87,7 @@ const Timeline: React.FC<{
     zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(updateScroll, [currentlyAt, timelineZoom, width]);
 
   useEffect(() => {
@@ -250,25 +251,25 @@ export const Scrubber: React.FC<{
     KEYMAP.timeline.left.key,
     () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
     {},
-    [currentlyAt, keyboardJumpDelta]
+    [currentlyAt, keyboardJumpDelta],
   );
   useHotkeys(
     KEYMAP.timeline.right.key,
     () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
     {},
-    [currentlyAt, keyboardJumpDelta, duration]
+    [currentlyAt, keyboardJumpDelta, duration],
   );
   useHotkeys(
     KEYMAP.timeline.increase.key,
     () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
     {},
-    [keyboardJumpDelta]
+    [keyboardJumpDelta],
   );
   useHotkeys(
     KEYMAP.timeline.decrease.key,
     () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)),
     {},
-    [keyboardJumpDelta]
+    [keyboardJumpDelta],
   );
 
   const scrubberStyle = css({
