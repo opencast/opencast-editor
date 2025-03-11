@@ -1,7 +1,7 @@
 # This workflow runs on any change made to a pull-request and aims to verify
 # that the correct label is present.
 
-name: Check proper lable usage
+name: Check proper label usage
 
 on:
   pull_request_target:
