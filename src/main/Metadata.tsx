@@ -278,7 +278,15 @@ const Metadata: React.FC = () => {
    * Validator for required fields
    * @param value
    */
-  const required = (value: string) => (value ? undefined : t("metadata.validation.required"));
+  const required = (value: unknown) => {
+    let val = value;
+
+    if (value && typeof value === "object" && "submitValue" in value) {
+      val = value.submitValue;
+    }
+
+    return val ? undefined : t("metadata.validation.required");
+  };
 
   /**
    * Validator for the duration field
