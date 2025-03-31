@@ -665,7 +665,7 @@ const Metadata: React.FC = () => {
             }</label>
 
             {generateComponentWithModifiedInput(field, input)}
-            {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
+            {meta.error && <span css={validateStyle(true)}>{meta.error}</span>}
           </div>
         )}
       </Field>
