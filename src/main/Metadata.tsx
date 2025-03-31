@@ -328,24 +328,27 @@ const Metadata: React.FC = () => {
   };
 
   // // Function that combines multiple validation functions. Needs to be made typescript conform
-  // const composeValidators = (...validators) => value =>
-  // validators.reduce((error, validator) => error || validator(value), undefined)
+  // @ts-expect-error: This is copy-pasted from the non-typescript documentation of react-final-form
+  const composeValidators = (...validators) => value =>
+    validators.reduce((error, validator) => error || validator(value), undefined);
 
   /**
    * Returns the desired combination of validators for a given field
-   * TODO: Fix "composeValidators" so this function can actually work as advertised
    * @param field
    */
   const getValidators = (field: MetadataField) => {
+    const validators = [];
     if (field.required) {
-      return required;
-    } else if (field.id === "duration") {
-      return duration;
-    } else if (field.type === "date" || field.type === "time") {
-      return dateTimeValidator;
-    } else {
-      return undefined;
+      validators.push(required);
     }
+    if (field.id === "duration") {
+      validators.push(duration);
+    }
+    if (field.type === "date" || field.type === "time") {
+      validators.push(dateTimeValidator);
+    }
+
+    return composeValidators(...validators);
   };
 
   /**
