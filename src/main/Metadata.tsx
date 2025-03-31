@@ -128,6 +128,12 @@ const Metadata: React.FC = () => {
     fontWeight: "bold",
     color: `${theme.text}`,
     lineHeight: "32px",
+    display: "flex",
+    flexDirection: "row",
+  });
+
+  const fieldLabelRequiredStyle = css({
+    color: `${theme.metadata_highlight}`,
   });
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
@@ -659,10 +665,17 @@ const Metadata: React.FC = () => {
       >
         {({ input, meta }) => (
           <div css={fieldStyle} data-testid={field.id}>
-            <label css={fieldLabelStyle} htmlFor={input.name}>{
-              i18n.exists(`metadata.labels.${field.id}`) ?
+            <label css={fieldLabelStyle} htmlFor={input.name}>
+              <>{
+                i18n.exists(`metadata.labels.${field.id}`) ?
                 t(`metadata.labels.${field.id}` as ParseKeys) as string : field.id
-            }</label>
+              }</>
+              {field.required &&
+                <span css={fieldLabelRequiredStyle}>
+                  {t("metadata.required")}
+                </span>
+              }
+            </label>
 
             {generateComponentWithModifiedInput(field, input)}
             {meta.error && <span css={validateStyle(true)}>{meta.error}</span>}
