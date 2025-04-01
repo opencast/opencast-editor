@@ -33,7 +33,7 @@ export const getGroupName = (groupName: string): ParseKeys => {
     cutting: () => groupCuttingView,
     timeline: () => groupCuttingViewScrubber,
     subtitleList: () => groupSubtitleList,
-  });
+  }) ?? "keyboardControls.defaultGroupName";
 };
 
 export interface IKeyMap {

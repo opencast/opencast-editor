@@ -2,7 +2,7 @@ import React from "react";
 
 import { css } from "@emotion/react";
 
-import { LuCheckCircle, LuXCircle } from "react-icons/lu";
+import { LuCircleCheck, LuCircleX } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
 import { selectEndState } from "../redux/endSlice";
@@ -51,7 +51,7 @@ const TheEnd: React.FC = () => {
 
   return (
     <div css={theEndStyle}>
-      {endState === "discarded" ? <LuXCircle css={{ fontSize: 80 }} /> : <LuCheckCircle css={{ fontSize: 80 }} />}
+      {endState === "discarded" ? <LuCircleX css={{ fontSize: 80 }} /> : <LuCircleCheck css={{ fontSize: 80 }} />}
       <div>{text()}</div>
       <div css={restartOrBackStyle}>
         <CallbackButton />
