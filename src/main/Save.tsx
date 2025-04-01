@@ -181,6 +181,7 @@ export const SaveButton: React.FC<{
       dispatch(metadataSetHasChanges(false));
       dispatch(subtitleSetHasChanges(false));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, workflowStatus]);
 
   return (

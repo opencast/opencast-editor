@@ -55,6 +55,8 @@ const VideoPlayers: React.FC<{
   primaryIndex = primaryIndex < 0 ? 0 : primaryIndex;
   const videoCount = useAppSelector(selectVideoCount);
 
+  const [videoPlayers, setVideoPlayers] = useState<JSX.Element[]>([]);
+
   const videoPlayerAreaStyle = css({
     display: "flex",
     flexDirection: "row",
@@ -67,38 +69,42 @@ const VideoPlayers: React.FC<{
   });
 
   // Initialize video players
-  const videoPlayers: JSX.Element[] = [];
-  for (let i = 0; i < videoCount; i++) {
-    videoPlayers.push(
-      <VideoPlayer
-        key={i}
-        dataKey={i}
-        url={videos[i].uri}
-        isPrimary={i === primaryIndex}
-        subtitleUrl={""}
-        first={i === 0}
-        last={i === videoCount - 1}
-        selectIsPlaying={selectIsPlaying}
-        selectIsMuted={selectIsMuted}
-        selectVolume={selectVolume}
-        selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
-        selectPreviewTriggered={selectPreviewTriggered}
-        selectClickTriggered={selectClickTriggered}
-        selectJumpTriggered={selectJumpTriggered}
-        selectAspectRatio={selectAspectRatio}
-        setIsPlaying={setIsPlaying}
-        setPreviewTriggered={setPreviewTriggered}
-        setClickTriggered={setClickTriggered}
-        setJumpTriggered={setJumpTriggered}
-        setCurrentlyAt={setCurrentlyAt}
-        setAspectRatio={setAspectRatio}
-        ref={el => {
-          if (refs === undefined) { return; }
-          (refs.current[i] = el);
-        }}
-      />
-    );
-  }
+  useEffect(() => {
+    const videoPlayers: JSX.Element[] = [];
+    for (let i = 0; i < videoCount; i++) {
+      videoPlayers.push(
+        <VideoPlayer
+          key={i}
+          dataKey={i}
+          url={videos[i].uri}
+          isPrimary={i === primaryIndex}
+          subtitleUrl={""}
+          first={i === 0}
+          last={i === videoCount - 1}
+          selectIsPlaying={selectIsPlaying}
+          selectIsMuted={selectIsMuted}
+          selectVolume={selectVolume}
+          selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
+          selectPreviewTriggered={selectPreviewTriggered}
+          selectClickTriggered={selectClickTriggered}
+          selectJumpTriggered={selectJumpTriggered}
+          selectAspectRatio={selectAspectRatio}
+          setIsPlaying={setIsPlaying}
+          setPreviewTriggered={setPreviewTriggered}
+          setClickTriggered={setClickTriggered}
+          setJumpTriggered={setJumpTriggered}
+          setCurrentlyAt={setCurrentlyAt}
+          setAspectRatio={setAspectRatio}
+          ref={el => {
+            if (refs === undefined) { return; }
+            (refs.current[i] = el);
+          }}
+        />,
+      );
+    }
+    setVideoPlayers(videoPlayers);
+  }, [primaryIndex, refs, videoCount, videos]);
+
 
   return (
     <div css={videoPlayerAreaStyle}>
@@ -277,6 +283,7 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
         // Update the store with video dimensions for rendering purposes
         updateAspectRatio();
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAspectRatioUpdated, ready]);
 
     // Callback specifically for the subtitle editor view
@@ -332,34 +339,25 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       }
 
       if (playerConfig && playerConfig.file && playerConfig.file.tracks) {
-        // eslint-disable-next-line array-callback-return
         playerConfig.file.tracks.map((t, trackIdx) => {
           const track = document.createElement("track");
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.kind = t.kind!;
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.label = t.label!;
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.srclang = t.srcLang!;
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.default = t.default!;
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           track.src = t.src!;
           track.track.mode = "showing";    // Because the load callback may sometimes not execute properly
           track.addEventListener("error", (_e: Event) => {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            console.warn(`Cannot load track ${t.src!}`);
+            console.warn(`Cannot load track ${t.src}`);
           });
           track.addEventListener("load", (e: Event) => {
             const textTrack = e.currentTarget as HTMLTrackElement;
             if (textTrack) {
               if (t.default === true) {
                 textTrack.track.mode = "showing";
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 video!.textTracks[trackIdx].mode = "showing"; // thanks Firefox
               } else {
                 textTrack.track.mode = "hidden";
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 video!.textTracks[trackIdx].mode = "hidden"; // thanks Firefox
               }
             }

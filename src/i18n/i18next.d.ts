@@ -1,10 +1,10 @@
 // import the original type declarations
-import 'i18next';
+import "i18next";
 
 // import all namespaces (for the default language, only)
-import translation from './locales/en-US.json';
+import translation from "./locales/en-US.json";
 
-declare module 'i18next' {
+declare module "i18next" {
   interface CustomTypeOptions {
     resources: {
       translation: typeof translation;

@@ -138,7 +138,7 @@ const PreviewMode: React.FC<{
     KEYMAP.videoPlayer.preview.key,
     () => switchPlayPreview(undefined),
     { preventDefault: true },
-    [isPlayPreview]
+    [isPlayPreview],
   );
 
   const previewModeStyle = css({
