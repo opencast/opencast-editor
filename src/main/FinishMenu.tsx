@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import { basicButtonStyle, tileButtonStyle } from "../cssStyles";
 
 import { IconType } from "react-icons";
-import { LuSave, LuDatabase, LuXCircle } from "react-icons/lu";
+import { LuSave, LuDatabase, LuCircleX } from "react-icons/lu";
 
 import { useAppDispatch } from "../redux/store";
 import { setState, setPageNumber, finish } from "../redux/finishSlice";
@@ -30,7 +30,7 @@ const FinishMenu: React.FC = () => {
     <div css={finishMenuStyle}>
       <FinishMenuButton Icon={LuSave} stateName="Save changes" />
       <FinishMenuButton Icon={LuDatabase} stateName="Start processing" />
-      <FinishMenuButton Icon={LuXCircle} stateName="Discard changes" />
+      <FinishMenuButton Icon={LuCircleX} stateName="Discard changes" />
     </div>
   );
 };
