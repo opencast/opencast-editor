@@ -18,7 +18,7 @@ export default class LazyLoadingPlugin implements BackendModule {
     import(`./locales/${lng}.json`).then(
       obj => {
         callback(null, obj);
-      }
+      },
     );
   }
 

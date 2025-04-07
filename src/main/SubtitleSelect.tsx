@@ -126,7 +126,7 @@ const SubtitleSelect: React.FC = () => {
           key={subtitle.id}
           title={generateButtonTitle(subtitle.tags, t)}
           icon={icon}
-        />
+        />,
       );
     }
     return buttons.sort((dat1, dat2) => dat1.props["title"].localeCompare(dat2.props["title"]));

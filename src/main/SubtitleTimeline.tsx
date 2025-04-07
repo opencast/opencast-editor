@@ -77,22 +77,22 @@ const SubtitleTimeline: React.FC = () => {
   useHotkeys(
     KEYMAP.timeline.left.key,
     () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
-    {}, [currentlyAt, keyboardJumpDelta]
+    {}, [currentlyAt, keyboardJumpDelta],
   );
   useHotkeys(
     KEYMAP.timeline.right.key,
     () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
-    {}, [currentlyAt, keyboardJumpDelta, duration]
+    {}, [currentlyAt, keyboardJumpDelta, duration],
   );
   useHotkeys(
     KEYMAP.timeline.increase.key,
     () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
-    {}, [keyboardJumpDelta]
+    {}, [keyboardJumpDelta],
   );
   useHotkeys(
     KEYMAP.timeline.decrease.key,
     () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)),
-    {}, [keyboardJumpDelta]
+    {}, [keyboardJumpDelta],
   );
 
   // Callback for the scroll container
@@ -335,7 +335,7 @@ const TimelineSubtitleSegment: React.FC<{
     const { x } = position;
     dispatchNewTimes(
       (x / props.timelineWidth) * (duration),
-      (x / props.timelineWidth) * (duration) + (props.cue.endTime - props.cue.startTime)
+      (x / props.timelineWidth) * (duration) + (props.cue.endTime - props.cue.startTime),
     );
 
     setIsGrabbed(false);
