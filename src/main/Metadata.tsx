@@ -477,15 +477,8 @@ const Metadata: React.FC = () => {
     if (field.collection) {
       // For whatever reason react-select uses "value" as their key, which is not at all confusing
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const library: [{ value: any, label: string, submitValue: any; }] =
-        [{ value: "", label: "No value", submitValue: "" }];
+      const library: { value: any, label: string, submitValue: any; }[] = [];
       Object.entries(field.collection).forEach(([key, value]) => {
-        // // Parse License
-        // let [err, result] = safeJsonParse(key)
-        // if (!err) {
-        //   console.log(result)
-        // }
-
         // Parse Label
         let descLabel = null;
         if (i18n.exists(`metadata.${field.id}`)) {
@@ -508,6 +501,8 @@ const Metadata: React.FC = () => {
           submitValue: value,
         });
       });
+      library.sort((a, b) => a.label.localeCompare(b.label));
+      library.unshift({ value: "", label: "No value", submitValue: "" });
       return library;
     } else {
       return null;
