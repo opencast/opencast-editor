@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { IconType } from "react-icons";
-import { LuCamera, LuCopy, LuXCircle, LuUpload } from "react-icons/lu";
+import { LuCamera, LuCopy, LuCircleX, LuUpload } from "react-icons/lu";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
@@ -419,7 +419,7 @@ const ThumbnailButtons: React.FC<{
         text={t("thumbnail.buttonDiscard")}
         tooltipText={t("thumbnail.buttonDiscard-tooltip")}
         ariaLabel={t("thumbnail.buttonDiscard-tooltip-aria")}
-        Icon={LuXCircle}
+        Icon={LuCircleX}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>
@@ -611,7 +611,7 @@ const ThumbnailButtonsSimple: React.FC<{
         text={t("thumbnail.buttonDiscard")}
         tooltipText={t("thumbnail.buttonDiscard-tooltip")}
         ariaLabel={t("thumbnail.buttonDiscard-tooltip-aria")}
-        Icon={LuXCircle}
+        Icon={LuCircleX}
         active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
       />
     </div>

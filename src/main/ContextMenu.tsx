@@ -40,7 +40,7 @@ export const ThemedContextMenu: React.FC<{
 
     setContextMenuPosition(contextMenuPosition === null
       ? { left: e.clientX + 5, top: e.clientY }
-      : null  // Prevent relocation of context menu outside the element
+      : null,  // Prevent relocation of context menu outside the element
     );
   };
 

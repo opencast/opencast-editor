@@ -366,11 +366,11 @@ const Metadata: React.FC = () => {
   const submitSingleField = (value: any, fieldId: string) => {
     const catalogIndexString = fieldId.substring(
       fieldId.indexOf("g") + 1,
-      fieldId.indexOf(".")
+      fieldId.indexOf("."),
     );
     const fieldName = fieldId.substring(
       fieldId.indexOf(".") + 1,
-      fieldId.length
+      fieldId.length,
     );
     const catalogIndex = parseInt(catalogIndexString);
 
@@ -395,7 +395,7 @@ const Metadata: React.FC = () => {
   const blurWithSubmit = (
     e: React.FocusEvent<HTMLInputElement, Element> | React.FocusEvent<HTMLTextAreaElement, Element>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    input: any
+    input: any,
   ) => {
     input.onBlur(e);
     submitSingleField(input.value, input.name);
@@ -671,7 +671,7 @@ const Metadata: React.FC = () => {
             <label css={fieldLabelStyle} htmlFor={input.name}>
               <>{
                 i18n.exists(`metadata.labels.${field.id}`) ?
-                t(`metadata.labels.${field.id}` as ParseKeys) as string : field.id
+                  t(`metadata.labels.${field.id}` as ParseKeys) : field.id
               }</>
               {field.required &&
                 <span css={fieldLabelRequiredStyle}>
@@ -691,7 +691,7 @@ const Metadata: React.FC = () => {
   const renderCatalog = (
     catalog: Catalog,
     catalogIndex: number,
-    configureFields: { [key: string]: configureFieldsAttributes; }
+    configureFields: { [key: string]: configureFieldsAttributes; },
   ) => {
 
 
@@ -699,7 +699,7 @@ const Metadata: React.FC = () => {
       <div key={catalogIndex} css={catalogStyle}>
         <div css={[titleStyle(theme), titleStyleBold(theme)]}>
           {i18n.exists(`metadata.${catalog.title.replaceAll(".", "-")}`) ?
-            t(`metadata.${catalog.title.replaceAll(".", "-")}` as ParseKeys) as string : catalog.title
+            t(`metadata.${catalog.title.replaceAll(".", "-")}` as ParseKeys) : catalog.title
           }
         </div>
 
