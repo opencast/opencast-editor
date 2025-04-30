@@ -104,6 +104,7 @@ jobs:
 
   member:
     name: Check organization membership
+    if: github.repository_owner == 'opencast'
     runs-on: ubuntu-latest
 
     # Map a step output to a job output
@@ -134,6 +135,7 @@ jobs:
 
   translations:
     name: Translations only via Crowdin
+    if: github.repository_owner == 'opencast'
     runs-on: ubuntu-latest
 
     steps:
