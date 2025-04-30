@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   main:
+    if: github.repository_owner == 'opencast'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout sources
