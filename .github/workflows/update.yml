@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - r/*
 
 concurrency:
   group: editor.opencast.org
@@ -58,16 +59,16 @@ jobs:
 
     - name: Commit new version
       run: |
-        # store build
-        cp -r build ~/editor-build
-        # save CNAME
-        touch ~/editor-clone/CNAME
-        cp ~/editor-clone/CNAME ~/CNAME
+        #Temp becomes something like r/17.x
+        export TEMP=${{ github.ref_name }}
+        #Strip the r/ prefix, giving us just 17.x.  If this is main/develop this does nothing
+        export TARGET=~/editor-clone/${TEMP#r\/}
         # Update gh-pages
+        rm -rf $TARGET
+        mkdir -p $TARGET
+        cp -r build/* $TARGET
+        # Add the new build to the repo
         cd ~/editor-clone
-        git rm -rf .
-        cp ~/CNAME .
-        cp -r ~/editor-build/* .
         git add ./*
         git diff --staged --quiet || git commit -m "Build $(date)"
 
