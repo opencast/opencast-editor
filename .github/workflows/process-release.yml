@@ -5,11 +5,15 @@ on:
       # CF: 17.x-YYYY-MM-DD
       - '*.x-*-*-*'
 
-name: Create release draft
+name: Create release
 jobs:
   build:
     name: Create release from tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: write #for the release
+      pull-requests: write #For the PR in the upstream repo
+
     steps:
       - name: checkout code
         uses: actions/checkout@v4
@@ -22,8 +26,19 @@ jobs:
       - name: download dependencies
         run: npm ci
 
+      - name: build release
+        env:
+          PUBLIC_URL: /editor-ui
+          VITE_APP_SETTINGS_PATH: /ui/config/editor/editor-settings.toml
+        run: npm run build
+
       - name: create release tarball
-        run: ./.github/build-release.sh
+        working-directory: build
+        run: |
+          tar -czf "../oc-editor-$(git describe --tags).tar.gz" *
+          echo EDITOR_CHECKSUM=`sha256sum oc-editor-$(git describe --tags).tar.gz | cut -f 1 -d " "` >> $GITHUB_ENV
+          echo EDITOR_TAG=$(git describe --tags) >> $GITHUB_ENV
+          echo BASE_BRANCH=$(git describe --tags | cut -c 1-4) >> $GITHUB_ENV
 
       - name: create new release
         uses: softprops/action-gh-release@v2
@@ -31,3 +46,41 @@ jobs:
           files: oc-editor-*.tar.gz
           fail_on_unmatched_files: true
           generate_release_notes: true
+
+      - name: Prepare git
+        run: |
+          git config --global user.name "Release Bot"
+          git config --global user.email "cloud@opencast.org"
+
+      - name: Prepare GitHub SSH key
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          install -dm 700 ~/.ssh/
+          echo "${DEPLOY_KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Clone upstream repository
+        run: |
+          #This token is an account wide token which allows creation of PRs and pushes.
+          #echo "GH_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> token.txt
+          #gh auth login --with-token < token.txt
+          git clone -b r/$BASE_BRANCH "git@github.com:opencast/opencast.git" ~/opencast
+          cd ~/opencast
+          git checkout -b t/editor-$EDITOR_TAG
+
+      - name: Update the editor pom file
+        #env:
+        #  GH_TOKEN: ${{ github.token }}
+        run: |
+          cd ~/opencast
+          sed -i "s#<editor.sha256>.*</editor.sha256>#<editor.sha256>$EDITOR_CHECKSUM</editor.sha256>#" modules/editor/pom.xml
+          sed -i "s#<editor.url>.*</editor.url>#<editor.url>https://github.com/opencast/opencast-editor/releases/download/$EDITOR_TAG/oc-editor-$EDITOR_TAG.tar.gz</editor.url>#" modules/editor/pom.xml
+          git add modules/editor/pom.xml
+          git commit -m "Updating editor to $EDITOR_TAG"
+          git push origin t/editor-$EDITOR_TAG
+          #This token is an account wide token which allows creation of PRs and pushes.
+          echo "${{ secrets.PR_TOKEN }}" > token.txt
+          gh auth login --with-token < token.txt
+          gh pr create --title "Update $BASE_BRANCH Editor to $EDITOR_TAG" --label editor --label maintenance --body "Updating Opencast $BASE_BRANCH Editor module to $EDITOR_TAG" --head=opencast:t/editor-$EDITOR_TAG --base r/$BASE_BRANCH -R opencast/opencast
