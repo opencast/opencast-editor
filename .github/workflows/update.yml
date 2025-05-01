@@ -69,6 +69,13 @@ jobs:
         cp -r build/* $TARGET
         # Add the new build to the repo
         cd ~/editor-clone
+        #Generate an index, in case anyone lands at the root of the test domain
+        echo '<html><body><ul>' > index.html
+        find . -mindepth 1 -maxdepth 1 -type d \
+          | grep -v .git \
+          | sort -r \
+          | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
+        echo '</ul></body></html>' >> index.html
         git add ./*
         git diff --staged --quiet || git commit -m "Build $(date)"
 
