@@ -9,6 +9,7 @@ name: Create release
 jobs:
   build:
     name: Create release from tag
+    if: github.repository_owner == 'opencast'
     runs-on: ubuntu-latest
     permissions:
       contents: write #for the release
