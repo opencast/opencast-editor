@@ -345,7 +345,13 @@ const videoSlice = createSlice({
         state.title = payload.title;
         state.segments = parseSegments(payload.segments, payload.duration);
         state.workflows = payload.workflows;
-        state.waveformImages = payload.waveformURIs ? payload.waveformURIs : state.waveformImages;
+        state.waveformImages = payload.waveformURIs ? payload.waveformURIs.map((waveformURI: string) => {
+          if (payload.local && settings.opencast.local) {
+            console.debug("Replacing waveform image URL");
+            waveformURI = waveformURI.replace(/https?:\/\/[^/]*/g, window.location.origin);
+          }
+          return waveformURI;
+        }) : state.waveformImages;
         state.originalThumbnails = state.tracks.map(
           (track: Track) => { return { id: track.id, uri: track.thumbnailUri }; },
         );
