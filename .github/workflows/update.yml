@@ -77,9 +77,9 @@ jobs:
           | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
         echo '</ul></body></html>' >> index.html
         git add ./*
-        git diff --staged --quiet || git commit -m "Build $(date)"
+        git diff --staged --quiet || git commit --amend -m "Build $(date)"
 
     - name: Push updates
       run: |
         cd ~/editor-clone
-        git push origin gh-pages
+        git push origin gh-pages --force
