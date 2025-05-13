@@ -136,5 +136,9 @@ export const KEYMAP: IKeyMap = {
       name: "subtitleList.deleteSegment",
       key: "Shift+Alt+d",
     },
+    addCue: {
+      name: "subtitleList.addCue",
+      key: "Shift+Alt+e",
+    },
   },
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
 import {
+  addCueAtIndex,
   selectCurrentlyAt,
   selectSelectedSubtitleById,
   selectSelectedSubtitleId,
@@ -25,6 +26,7 @@ import { ThemedTooltip } from "./Tooltip";
 import { useTranslation } from "react-i18next";
 import { useHotkeys } from "react-hotkeys-hook";
 import { KEYMAP } from "../globalKeys";
+import { shallowEqual } from "react-redux";
 
 /**
  * Copy-paste of the timeline in Video.tsx, so that we can make some small adjustments,
@@ -39,6 +41,7 @@ const SubtitleTimeline: React.FC = () => {
   const dispatch = useAppDispatch();
   const duration = useAppSelector(selectDuration);
   const currentlyAt = useAppSelector(selectCurrentlyAt);
+  const subtitleId = useAppSelector(selectSelectedSubtitleId, shallowEqual);
 
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
   const refTop = useRef<HTMLElement>(null);
@@ -71,6 +74,17 @@ const SubtitleTimeline: React.FC = () => {
 
   const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000);  // In milliseconds. For keyboard navigation
 
+  // Callback for adding subtitle segment by hotkey
+  const addCue = (time: number) => {
+    dispatch(addCueAtIndex({
+      identifier: subtitleId,
+      cueIndex: -1,
+      text: "",
+      startTime: time,
+      endTime: time + 5000,
+    }));
+  };
+
   // Callbacks for keyboard controls
   // TODO: Better increases and decreases than ten intervals
   // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
@@ -94,6 +108,11 @@ const SubtitleTimeline: React.FC = () => {
     () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)),
     {}, [keyboardJumpDelta],
   );
+  useHotkeys(
+    KEYMAP.subtitleList.addCue.key,
+    () => addCue(currentlyAt),
+    {}, [currentlyAt]
+  );
 
   // Callback for the scroll container
   const onEndScroll = (e: ScrollEvent) => {
@@ -102,6 +121,14 @@ const SubtitleTimeline: React.FC = () => {
       const offsetX = refTop.current.scrollLeft;
       const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth);
       dispatch(setCurrentlyAt((offsetX / scrollLeftMax) * (duration)));
+
+      // Blur active element after scrolling, to ensure hotkeys are working
+      // This is a little hack to work around focus getting stuck in textarea elements from the subtitle list
+      try {
+        (document.activeElement as HTMLElement).blur();
+      } catch (_e) {
+        console.error("Tried to blur active element, but active element cannot be blurred.");
+      }
     }
   };
 
