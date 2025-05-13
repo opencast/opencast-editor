@@ -596,6 +596,7 @@ export const Waveforms: React.FC<{ timelineHeight: number; }> = ({ timelineHeigh
   const waveformStyle = css({
     background: `${theme.waveform_bg}`,
     borderRadius: "5px",
+    imageRendering: "pixelated",
   });
 
   // When the URLs to the videos are fetched, generate waveforms
