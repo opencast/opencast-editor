@@ -8,10 +8,11 @@ on:
   push:
     branches:
       - main
+      - r/*
 
 concurrency:
   group: editor.opencast.org
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   main:
@@ -38,8 +39,8 @@ jobs:
 
     - name: Prepare git
       run: |
-        git config --global user.name "Editor Deployment Bot"
-        git config --global user.email "opencast-support@elan-ev.de"
+        git config --global user.name "Release Bot"
+        git config --global user.email "cloud@opencast.org"
 
     - name: Prepare GitHub SSH key
       env:
@@ -58,20 +59,27 @@ jobs:
 
     - name: Commit new version
       run: |
-        # store build
-        cp -r build ~/editor-build
-        # save CNAME
-        touch ~/editor-clone/CNAME
-        cp ~/editor-clone/CNAME ~/CNAME
+        #Temp becomes something like r/17.x
+        export TEMP=${{ github.ref_name }}
+        #Strip the r/ prefix, giving us just 17.x.  If this is main/develop this does nothing
+        export TARGET=~/editor-clone/${TEMP#r\/}
         # Update gh-pages
+        rm -rf $TARGET
+        mkdir -p $TARGET
+        cp -r build/* $TARGET
+        # Add the new build to the repo
         cd ~/editor-clone
-        git rm -rf .
-        cp ~/CNAME .
-        cp -r ~/editor-build/* .
+        #Generate an index, in case anyone lands at the root of the test domain
+        echo '<html><body><ul>' > index.html
+        find . -mindepth 1 -maxdepth 1 -type d \
+          | grep -v .git \
+          | sort -r \
+          | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
+        echo '</ul></body></html>' >> index.html
         git add ./*
-        git diff --staged --quiet || git commit -m "Build $(date)"
+        git diff --staged --quiet || git commit --amend -m "Build $(date)"
 
     - name: Push updates
       run: |
         cd ~/editor-clone
-        git push origin gh-pages
+        git push origin gh-pages --force
