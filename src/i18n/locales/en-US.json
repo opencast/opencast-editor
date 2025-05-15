@@ -125,6 +125,7 @@
       "reset-button": "Reset",
       "reset-button-tooltip": "Undo all your changes",
       "submit-helpertext": "Make changes as you like, then hit the {{buttonName}} button.\nNote that you will still have to start processing for your changes to take effect.",
+      "required": "*",
       "validation": {
         "required": "Required",
         "duration-format": "Format must be HH:MM:SS",
