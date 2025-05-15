@@ -291,6 +291,10 @@ const Metadata: React.FC = () => {
       val = value.submitValue;
     }
 
+    if (value && Array.isArray(value) && value.length === 0) {
+      val = false;
+    }
+
     return val ? undefined : t("metadata.validation.required");
   };
 
