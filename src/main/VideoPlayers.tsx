@@ -36,9 +36,10 @@ import { ActionCreatorWithPayload, AsyncThunk } from "@reduxjs/toolkit";
 
 import { useTheme } from "../themes";
 
-import { backgroundBoxStyle } from "../cssStyles";
+import { backgroundBoxStyle, basicButtonStyle } from "../cssStyles";
 import { BaseReactPlayerProps } from "react-player/base";
 import { ErrorBox } from "@opencast/appkit";
+import { LuFullscreen } from "react-icons/lu";
 
 const VideoPlayers: React.FC<{
   refs?: React.MutableRefObject<(VideoPlayerForwardRef | null)[]>,
@@ -56,6 +57,7 @@ const VideoPlayers: React.FC<{
   const videoCount = useAppSelector(selectVideoCount);
 
   const [videoPlayers, setVideoPlayers] = useState<JSX.Element[]>([]);
+  const [fullscreenPlayerIndex, setFullscreenPlayerIndex] = useState<number | undefined>(undefined);
 
   const videoPlayerAreaStyle = css({
     display: "flex",
@@ -65,7 +67,9 @@ const VideoPlayers: React.FC<{
     borderRadius: "5px",
     gap: "10px",
 
-    maxHeight: maxHeightInPixel + "px",
+    maxHeight: fullscreenPlayerIndex === undefined
+      ? maxHeightInPixel + "px"
+      : maxHeightInPixel * 2 + "px",
   });
 
   // Initialize video players
@@ -81,6 +85,9 @@ const VideoPlayers: React.FC<{
           subtitleUrl={""}
           first={i === 0}
           last={i === videoCount - 1}
+          isFullscreenPossible={true}
+          fullscreenPlayerIndex={fullscreenPlayerIndex}
+          setFullscreenPlayerIndex={setFullscreenPlayerIndex}
           selectIsPlaying={selectIsPlaying}
           selectIsMuted={selectIsMuted}
           selectVolume={selectVolume}
@@ -103,7 +110,7 @@ const VideoPlayers: React.FC<{
       );
     }
     setVideoPlayers(videoPlayers);
-  }, [primaryIndex, refs, videoCount, videos]);
+  }, [primaryIndex, refs, videoCount, videos, fullscreenPlayerIndex]);
 
 
   return (
@@ -125,6 +132,9 @@ interface VideoPlayerProps {
   subtitleUrl: string,
   first: boolean,
   last: boolean,
+  isFullscreenPossible: boolean,
+  fullscreenPlayerIndex: number | undefined,
+  setFullscreenPlayerIndex: (index: number | undefined) => void,
   selectIsPlaying: (state: RootState) => boolean,
   selectIsMuted: (state: RootState) => boolean,
   selectVolume: (state: RootState) => number,
@@ -167,6 +177,9 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       subtitleUrl,
       first,
       last,
+      isFullscreenPossible,
+      fullscreenPlayerIndex,
+      setFullscreenPlayerIndex,
       selectCurrentlyAtInSeconds,
       selectPreviewTriggered,
       selectClickTriggered,
@@ -391,6 +404,7 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
     }));
 
     const reactPlayerStyle = css({
+      position: "relative",     // For fullscreen button
       aspectRatio: "16 / 9",    // Hard-coded for now because there are problems with updating this value at runtime
 
       overflow: "hidden", // Required for borderRadius to show
@@ -404,10 +418,12 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
       },
     });
 
+    const shouldHide = fullscreenPlayerIndex !== undefined && fullscreenPlayerIndex !== dataKey;
+
     const videoPlayerWrapperStyles = css({
       height: "100%",
       width: "100%",
-      display: "flex",
+      display: shouldHide ? "none" : "flex",
 
       // For single video, center!
       ...(first && last) && { justifyContent: "center" },
@@ -420,30 +436,51 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
 
       // For multi videos, in between, fit content and center!
       ...(!first && !last) && { justifyContent: "center", flexBasis: "fit-content" },
+
+      // If fullscreen, treat like single video
+      ...fullscreenPlayerIndex !== undefined && { justifyContent: "center" },
     });
 
     const render = () => {
       if (!errorState) {
         return (
           <div css={videoPlayerWrapperStyles}>
-            <ReactPlayer url={url}
-              css={[backgroundBoxStyle(theme), reactPlayerStyle]}
-              ref={ref}
-              width="unset"
-              height="100%"
-              playing={isPlaying}
-              volume={volume}
-              muted={!isPrimary || isMuted}
-              onProgress={onProgressCallback}
-              progressInterval={100}
-              onReady={onReadyCallback}
-              onPlay={onPlay}
-              onEnded={onEndedCallback}
-              onError={onErrorCallback}
-              tabIndex={-1}
-              config={playerConfig}
-              disablePictureInPicture
-            />
+            {/* wrapper for positioning fullscreen button*/}
+            <div css={[backgroundBoxStyle(theme), reactPlayerStyle]}>
+              <ReactPlayer url={url}
+                // css={[backgroundBoxStyle(theme), reactPlayerStyle]}  // moved to wrapper
+                ref={ref}
+                width="unset"
+                height="100%"
+                playing={isPlaying}
+                volume={volume}
+                muted={!isPrimary || isMuted}
+                onProgress={onProgressCallback}
+                progressInterval={100}
+                onReady={onReadyCallback}
+                onPlay={onPlay}
+                onEnded={onEndedCallback}
+                onError={onErrorCallback}
+                tabIndex={-1}
+                config={playerConfig}
+                disablePictureInPicture
+              />
+              {isFullscreenPossible &&
+                <button css={[basicButtonStyle(theme), css({
+                  position: "absolute",
+                  bottom: "10px",
+                  right: "10px",
+                })]}
+                onClick={() => {
+                  if (fullscreenPlayerIndex === undefined) {
+                    setFullscreenPlayerIndex(dataKey);
+                  } else {
+                    setFullscreenPlayerIndex(undefined);
+                  }
+                }}
+                ><LuFullscreen /></button>
+              }
+            </div>
           </div>
         );
       } else {

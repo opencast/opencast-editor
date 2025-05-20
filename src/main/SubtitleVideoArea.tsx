@@ -127,6 +127,9 @@ const SubtitleVideoArea: React.FC = () => {
             subtitleUrl={subtitleUrl}
             first={true}
             last={true}
+            isFullscreenPossible={false}
+            fullscreenPlayerIndex={undefined}
+            setFullscreenPlayerIndex={() => {}}
             selectIsPlaying={selectIsPlaying}
             selectIsMuted={selectIsMuted}
             selectCurrentlyAtInSeconds={selectCurrentlyAtInSeconds}
