@@ -3,7 +3,7 @@ import React from "react";
 import { css } from "@emotion/react";
 import { basicButtonStyle, backOrContinueStyle, navigationButtonStyle } from "../cssStyles";
 
-import { LuChevronLeft, LuXCircle } from "react-icons/lu";
+import { LuChevronLeft, LuCircleX } from "react-icons/lu";
 
 import { useAppDispatch } from "../redux/store";
 import { setEnd } from "../redux/endSlice";
@@ -63,7 +63,7 @@ const DiscardButton: React.FC = () => {
       onClick={discard}
       css={[basicButtonStyle(theme), navigationButtonStyle(theme)]}
     >
-      <LuXCircle />
+      <LuCircleX />
       <span>{t("discard.confirm-button")}</span>
     </ProtoButton>
   );
