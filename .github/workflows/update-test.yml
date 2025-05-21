@@ -39,8 +39,8 @@ jobs:
 
     - name: Prepare Git
       run: |
-        git config --global user.name "Editor Deployment Bot"
-        git config --global user.email "opencast-support@elan-ev.de"
+        git config --global user.name "Release Bot"
+        git config --global user.email "cloud@opencast.org"
 
     - name: Prepare GitHub SSH key
       env:

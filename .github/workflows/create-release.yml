@@ -1,33 +1,26 @@
 on:
-  push:
-    tags:
-    - '*-*-*'
+  workflow_dispatch:
 
-name: Create release draft
+name: Create release tag
 
 jobs:
   build:
-    name: Create release from tag
+    name: Create release tag
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
         uses: actions/checkout@v4
-
-      - name: use node.js 18.x
-        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          fetch-depth: 0
 
-      - name: download dependencies
-        run: npm ci
+      - name: prepare git
+        run: |
+          git config --global user.email 'cloud@opencast.org'
+          git config --global user.name 'Release Bot'
 
-      - name: create release tarball
-        run: ./.github/build-release.sh
-
-      - name: create new release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: oc-editor-*.tar.gz
-          draft: true
-          fail_on_unmatched_files: true
-          generate_release_notes: true
+      - name: tag and push
+        run: |
+          export TEMP=${{ github.ref_name }}
+          export TAG=${TEMP#r\/}-`date +%Y-%m-%d`
+          git tag $TAG
+          git push origin $TAG
