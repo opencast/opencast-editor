@@ -221,10 +221,10 @@ const InfoBox: React.FC = () => {
   return (
     <div css={backgroundBoxStyle(theme)}>
       <LuInfo />
-      <span css={{marginLeft: "10px"}}>{t("trackSelection.noSelectionPossible")}</span>
+      <span css={{ marginLeft: "10px" }}>{t("trackSelection.noSelectionPossible")}</span>
     </div>
-  )
-}
+  );
+};
 
 const TrackSelectionEnabler: React.FC<{
   customizable: boolean,
