@@ -16,6 +16,7 @@ import {
   setWaveformImages,
   selectTimelineZoom,
   moveCut,
+  selectDurationInSeconds,
 } from "../redux/videoSlice";
 
 import { LuMenu } from "react-icons/lu";
@@ -64,11 +65,14 @@ const Timeline: React.FC<{
   const currentlyAt = useAppSelector(selectCurrentlyAt);
   const dispatch = useAppDispatch();
   const duration = useAppSelector(selectDuration);
+  const durationInSeconds = useAppSelector(selectDurationInSeconds);
   const timelineZoom = useAppSelector(selectTimelineZoom);
 
   const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
   const scrollContainerRef = useRef<HTMLElement>(null);
+  const { width: scrollContainerWidth = 1 } = useResizeObserver<HTMLElement>({ ref: scrollContainerRef });
   const topOffset = 20;
+  const minDisplayTime = 10; // in seconds, what is shown at max zoom
 
   const currentlyScrolling = useRef(false);
   const zoomCenter = useRef(0);
@@ -101,10 +105,19 @@ const Timeline: React.FC<{
     scrollContainerRef.current.scrollLeft = left;
   }, [timelineZoom]);
 
+  const getDisplayDuration = (zoomValue: number) => {
+    return (1 - zoomValue) * (durationInSeconds - minDisplayTime) + minDisplayTime;
+  };
+  const getWaveformWidth = (baseWidth: number, zoomValue: number) => {
+    const displayDuration = getDisplayDuration(zoomValue);
+    return baseWidth * (durationInSeconds / displayDuration);
+  };
+  const zoomedWidth = getWaveformWidth(scrollContainerWidth, timelineZoom);
+
   const timelineStyle = css({
     position: "relative",     // Need to set position for Draggable bounds to work
     height: timelineHeight + "px",
-    width: (timelineZoom) * 100 + "%",    // Width modified by zoom
+    width: `${zoomedWidth}px`,    // Width modified by zoom
     top: `${topOffset}px`,
   });
 
