@@ -74,7 +74,7 @@
 
 [trackSelection]
 
-# If the track selection appears in the main menu
+# If the track selection appears in the main menu.
 # Type: boolean
 # Default: true
 #show = true
