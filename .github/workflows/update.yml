@@ -27,11 +27,29 @@ jobs:
       with:
         node-version: 20
 
+    - name: Determine branch name
+      id: branch-name
+      run: |
+        #Temp becomes something like r/17.x
+        export TEMP=${{ github.ref_name }}
+        #Strip the r/ prefix, giving us just 17.x.  If this is main/develop this does nothing
+        echo "${TEMP#r\/}" >> $GITHUB_OUTPUT
+
+    - name: determine the correct test server
+      id: test-server
+      run: ./.github/get-release-server.sh ${{ github.ref_name }} >> $GITHUB_OUTPUT
+
     - name: Clean install
       run: npm ci
 
     - name: Build App
-      run: npm run build
+      run: |
+        # This set the editor's datasource to the relevant test server
+        sed -i "s#url.*#url = 'http://${steps.test-server.outputs.*}'#" public/editor-settings.toml
+        npm run build
+      env:
+        PUBLIC_URL: ${steps.branch-name.outputs.*}/editor-ui
+        VITE_APP_SETTINGS_PATH: ${steps.branch-name.outputs.*}/ui/config/editor/editor-settings.toml
 
     # tests are currently failing
     #- run: npm test
