@@ -28,8 +28,6 @@ show = true
 
 [trackSelection]
 show = true
-atLeastOneVideo = true
-atMostTwoVideos = true
 
 [subtitles]
 show = true
