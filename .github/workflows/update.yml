@@ -15,41 +15,48 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  detect-env:
+    runs-on: ubuntu-latest
+    outputs:
+      server: ${{ steps.test-server.outputs.server }}
+      branch: ${{ steps.branch-name.outputs.branch }}
+    steps:
+      - name: determine the correct test server
+        id: test-server
+        run: echo "server=`./.github/get-release-server.sh ${{ github.ref_name }}`" >> $GITHUB_OUTPUT
+
+      - name: Determine branch name
+        id: branch-name
+        run: |
+          #Temp becomes something like r/17.x
+          export TEMP=${{ github.ref_name }}
+          #Strip the r/ prefix, giving us just 17.x.  If this is main/develop this does nothing
+          echo "branch=${TEMP#r\/}" >> $GITHUB_OUTPUT
+
   main:
     runs-on: ubuntu-latest
+    needs: detect-env
     steps:
-    - name: Checkout sources
-      uses: actions/checkout@v4
+      - name: Checkout sources
+        uses: actions/checkout@v4
 
-    - name: Use Node.js 20.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    - name: Determine branch name
-      id: branch-name
-      run: |
-        #Temp becomes something like r/17.x
-        export TEMP=${{ github.ref_name }}
-        #Strip the r/ prefix, giving us just 17.x.  If this is main/develop this does nothing
-        echo BRANCH="${TEMP#r\/}" >> $GITHUB_OUTPUT
+      - name: Clean install
+        run: npm ci
 
-    - name: determine the correct test server
-      id: test-server
-      run: ./.github/get-release-server.sh ${{ github.ref_name }} >> $GITHUB_OUTPUT
-
-    - name: Clean install
-      run: npm ci
-
-    - name: Build App
-      run: |
-        # This set the editor's datasource to the relevant test server
-        echo ${steps.test-server.outputs}
-        sed -i "s#url.*#url = 'http://${steps.test-server.outputs.*}'#" public/editor-settings.toml
-        npm run build
-      env:
-        PUBLIC_URL: ${steps.branch-name.outputs.*}/editor-ui
-        VITE_APP_SETTINGS_PATH: ${steps.branch-name.outputs.*}/ui/config/editor/editor-settings.toml
+      - name: Build App
+        run: |
+          # This set the editor's datasource to the relevant test server
+          echo ${steps.test-server.outputs}
+          sed -i "s#url.*#url = 'http://${needs.detect-env.outputs.server}'#" public/editor-settings.toml
+          npm run build
+        env:
+          PUBLIC_URL: ${needs.detect-env.outputs.branch}/editor-ui
+          VITE_APP_SETTINGS_PATH: ${needs.detect-env.outputs.branch}/ui/config/editor/editor-settings.toml
 
     # tests are currently failing
     #- run: npm test
