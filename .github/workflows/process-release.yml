@@ -55,7 +55,7 @@ jobs:
 
       - name: Prepare GitHub SSH key
         env:
-          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DEPLOY_KEY: ${{ secrets.MODULE_PR_DEPLOY_KEY }}
         run: |
           install -dm 700 ~/.ssh/
           echo "${DEPLOY_KEY}" > ~/.ssh/id_ed25519
