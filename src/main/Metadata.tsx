@@ -128,6 +128,12 @@ const Metadata: React.FC = () => {
     fontWeight: "bold",
     color: `${theme.text}`,
     lineHeight: "32px",
+    display: "flex",
+    flexDirection: "row",
+  });
+
+  const fieldLabelRequiredStyle = css({
+    color: `${theme.metadata_highlight}`,
   });
 
   const fieldTypeStyle = (isReadOnly: boolean) => {
@@ -278,7 +284,19 @@ const Metadata: React.FC = () => {
    * Validator for required fields
    * @param value
    */
-  const required = (value: string) => (value ? undefined : t("metadata.validation.required"));
+  const required = (value: unknown) => {
+    let val = value;
+
+    if (value && typeof value === "object" && "submitValue" in value) {
+      val = value.submitValue;
+    }
+
+    if (value && Array.isArray(value) && value.length === 0) {
+      val = false;
+    }
+
+    return val ? undefined : t("metadata.validation.required");
+  };
 
   /**
    * Validator for the duration field
@@ -314,24 +332,27 @@ const Metadata: React.FC = () => {
   };
 
   // // Function that combines multiple validation functions. Needs to be made typescript conform
-  // const composeValidators = (...validators) => value =>
-  // validators.reduce((error, validator) => error || validator(value), undefined)
+  // @ts-expect-error: This is copy-pasted from the non-typescript documentation of react-final-form
+  const composeValidators = (...validators) => value =>
+    validators.reduce((error, validator) => error || validator(value), undefined);
 
   /**
    * Returns the desired combination of validators for a given field
-   * TODO: Fix "composeValidators" so this function can actually work as advertised
    * @param field
    */
   const getValidators = (field: MetadataField) => {
+    const validators = [];
     if (field.required) {
-      return required;
-    } else if (field.id === "duration") {
-      return duration;
-    } else if (field.type === "date" || field.type === "time") {
-      return dateTimeValidator;
-    } else {
-      return undefined;
+      validators.push(required);
     }
+    if (field.id === "duration") {
+      validators.push(duration);
+    }
+    if (field.type === "date" || field.type === "time") {
+      validators.push(dateTimeValidator);
+    }
+
+    return composeValidators(...validators);
   };
 
   /**
@@ -651,13 +672,20 @@ const Metadata: React.FC = () => {
       >
         {({ input, meta }) => (
           <div css={fieldStyle} data-testid={field.id}>
-            <label css={fieldLabelStyle} htmlFor={input.name}>{
-              i18n.exists(`metadata.labels.${field.id}`) ?
-                t(`metadata.labels.${field.id}` as ParseKeys) : field.id
-            }</label>
+            <label css={fieldLabelStyle} htmlFor={input.name}>
+              <>{
+                i18n.exists(`metadata.labels.${field.id}`) ?
+                  t(`metadata.labels.${field.id}` as ParseKeys) : field.id
+              }</>
+              {field.required &&
+                <span css={fieldLabelRequiredStyle}>
+                  {t("metadata.required")}
+                </span>
+              }
+            </label>
 
             {generateComponentWithModifiedInput(field, input)}
-            {meta.error && meta.touched && <span css={validateStyle(true)}>{meta.error}</span>}
+            {meta.error && <span css={validateStyle(true)}>{meta.error}</span>}
           </div>
         )}
       </Field>
