@@ -71,10 +71,13 @@ jobs:
           git config --global user.name "Release Bot"
           git config --global user.email "cloud@opencast.org"
 
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+
       - name: Commit new version
         run: |
-          git fetch origin gh-pages
-          git checkout gh-pages
           # Update gh-pages
           rm -rf $BRANCH
           mv build $BRANCH
