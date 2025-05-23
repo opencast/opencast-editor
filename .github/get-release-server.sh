@@ -14,7 +14,7 @@ cd ~/opencast
 #Get the list of *all* branches in the format remotes/origin/r/N.m
 #grep for r/N.x
 #then use cut to remove remotes/origin
-ary=( `git branch -a | grep 'r/[0-9]*.x' | head -n 3 | cut -f 3- -d '/'` )
+ary=( `git branch -a | grep 'r/[0-9]*.x' | sort -nr | head -n 3 | cut -f 3- -d '/'` )
 
 #Iterate through the array above.
 #If the script input matches the first item, spit out develop
