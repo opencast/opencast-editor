@@ -11,6 +11,8 @@ fi
 git clone https://github.com/opencast/opencast.git ~/opencast
 cd ~/opencast
 
+git branch -a
+
 #Get the list of *all* branches in the format remotes/origin/r/N.m
 #grep for r/N.x
 #then use cut to remove remotes/origin
