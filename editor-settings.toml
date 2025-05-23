@@ -79,19 +79,6 @@
 # Default: true
 #show = true
 
-# Ensure that at least one video stream remains selected
-# Typically, the track selection ensures that at least one video stream
-# remains selected. If you would like your users to be able to create selections
-# with only audio streams, set this to false.
-# Default: true
-#atLeastOneVideo = true
-
-# Disables track selection for events with more than two videos
-# If your Opencast can handle track selection for more than two videos, set this
-# to false.
-# Default: true
-#atMostTwoVideos = true
-
 ####
 # Subtitles
 ##

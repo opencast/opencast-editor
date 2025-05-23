@@ -240,22 +240,13 @@
 
     "trackSelection": {
       "title": "Select track(s) for processing",
-      "help": "At least one track has to be selected.",
-      "helpAtLeastOneVideo": "At least one video track has to be selected.",
-      "atMostTwoVideos": "Track Selection is disabled for events with more than two videos",
-      "customizeLabel": "Customize track selection",
-      "videoTracksHeader": "Video tracks",
-      "audioTracksHeader": "Audio tracks",
-      "confirmText": "Confirm selection",
-      "confirmTooltip": "Confirm selected tracks",
-      "noAudioAvailable": "No audio available",
-      "selectionAlertInfoVideo_zero": "You have not selected any video track.",
-      "selectionAlertInfoVideo_one": "You have selected 1 video track.",
-      "selectionAlertInfoVideo_other": "You have selected {{count}} video tracks.",
-      "selectionAlertInfoAudio_zero": "You have not selected any audio track.",
-      "selectionAlertInfoAudio_one": "You have selected 1 audio track. It will be duplicated onto all videos.",
-      "selectionAlertInfoAudio_other": "You have selected {{count}} audio tracks.",
-      "selectionAlertError": "At least one video or audio track has to be selected."
+      "trackInactive": "inactive",
+      "deleteTrackText": "Delete Track",
+      "restoreTrackText": "Restore Track",
+      "cannotDeleteTrackText": "Cannot Delete Track",
+      "deleteTrackTooltip": "Do not encode and publish this track.",
+      "restoreTrackTooltip": "Encode and publish this track.",
+      "cannotDeleteTrackTooltip": "Cannot remove this track from publication."
     },
 
     "subtitles": {
