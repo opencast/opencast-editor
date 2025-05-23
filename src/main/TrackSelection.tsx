@@ -339,7 +339,7 @@ const AudioTrackItem: React.FC<{
         <img
           src={waveform ?? PlaceholderWaveform}
           css={imgStyle}
-          style={{ opacity: track.audio_stream.enabled ? "1" : "0.5" }}
+          style={{ opacity: track.audio_stream.enabled ? "1" : "0.5", imageRendering: "pixelated" }}
           alt="placeholder for audio stream"
         />
         :
