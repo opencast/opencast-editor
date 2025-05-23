@@ -14,7 +14,7 @@ cd ~/opencast
 #then use cut to remove remotes/origin
 #then use sort, with a field delimiter of '/', sorting on the *second* key in 'n'umeric 'r'evers order
 #then only consider the first 3 entries
-ary=( `git branch -a | grep 'r/[0-9]*.x' | cut -f 3- d- '/' | sort -t '/' -k 2nr | head -n 3 )
+ary=( `git branch -a | grep 'r/[0-9]*.x' | cut -f 3- d- '/' | sort -t '/' -k 2nr | head -n 3` )
 
 #Iterate through the array above.
 #If the script input matches the first item, spit out develop
