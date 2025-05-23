@@ -51,7 +51,6 @@ jobs:
       - name: Build App
         run: |
           # This set the editor's datasource to the relevant test server
-          echo ${steps.test-server.outputs}
           sed -i "s#url.*#url = 'http://${needs.detect-env.outputs.server}'#" public/editor-settings.toml
           npm run build
         env:
