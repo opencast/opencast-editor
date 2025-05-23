@@ -54,11 +54,13 @@ jobs:
       - name: Build App
         run: |
           # This set the editor's datasource to the relevant test server
-          sed -i "s#url.*#url = 'http://${needs.detect.outputs.server}'#" public/editor-settings.toml
+          sed -i "s#url.*#url = \'http://$SERVER\'#" public/editor-settings.toml
           npm run build
         env:
-          PUBLIC_URL: ${needs.detect.outputs.branch}/editor-ui
-          VITE_APP_SETTINGS_PATH: ${needs.detect.outputs.branch}/ui/config/editor/editor-settings.toml
+          BRANCH: ${{needs.detect.outputs.branch}}
+          SERVER: ${{needs.detect.outputs.server}}
+          PUBLIC_URL: $BRANCH/editor-ui
+          VITE_APP_SETTINGS_PATH: $BRANCH/ui/config/editor/editor-settings.toml
 
       # tests are currently failing
       #- run: npm test
@@ -72,7 +74,6 @@ jobs:
 
       - name: Commit new version
         run: |
-          export BRANCH="${needs.detect.outputs.branch}"
           git checkout gh-pages
           # Update gh-pages
           rm -rf $BRANCH
@@ -86,6 +87,8 @@ jobs:
           echo '</ul></body></html>' >> index.html
           git add $BRANCH index.html
           git diff --staged --quiet || git commit --amend -m "Build $(date)"
+        env:
+          BRANCH: ${{needs.detect.outputs.branch}}
 
       - name: Push updates
         run: git push origin gh-pages --force
