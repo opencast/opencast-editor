@@ -55,6 +55,8 @@ interface iSettings {
   },
   trackSelection: {
     show: boolean,
+    atLeastOneVideo: boolean,
+    atMostTwoVideos: boolean,
   },
   thumbnail: {
     show: boolean,
@@ -93,6 +95,8 @@ const defaultSettings: iSettings = {
   },
   trackSelection: {
     show: true,
+    atLeastOneVideo: true,
+    atMostTwoVideos: true,
   },
   thumbnail: {
     show: false,
@@ -404,6 +408,8 @@ const SCHEMA = {
   },
   trackSelection: {
     show: types.boolean,
+    atLeastOneVideo: types.boolean,
+    atMostTwoVideos: types.boolean,
   },
   subtitles: {
     show: types.boolean,

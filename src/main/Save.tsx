@@ -10,6 +10,7 @@ import { LuCircleCheck, LuCircleAlert, LuChevronLeft, LuSave, LuCheck } from "re
 
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
+  selectCustomizedTrackSelection,
   selectHasChanges,
   selectSegments,
   selectSelectedWorkflowId,
@@ -122,6 +123,7 @@ export const SaveButton: React.FC<{
 
   const segments = useAppSelector(selectSegments);
   const tracks = useAppSelector(selectTracks);
+  const customizedTrackSelection = useAppSelector(selectCustomizedTrackSelection);
   const subtitles = useAppSelector(selectSubtitles);
   const metadata = useAppSelector(selectCatalogs);
   const selectedWorkflowId = useAppSelector(selectSelectedWorkflowId);
@@ -162,6 +164,7 @@ export const SaveButton: React.FC<{
     dispatch(postVideoInformation({
       segments: segments,
       tracks: tracks,
+      customizedTrackSelection,
       subtitles: prepareSubtitles(),
       metadata: metadata,
       workflow: selectedWorkflowId ? [{ id: selectedWorkflowId }] : undefined,
