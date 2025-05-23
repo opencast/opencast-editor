@@ -74,13 +74,15 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
+          path: 'gh-pages'
           ref: 'gh-pages'
 
       - name: Commit new version
         run: |
           # Update gh-pages
-          rm -rf $BRANCH
-          mv build $BRANCH
+          rm -rf gh-pages/$BRANCH
+          mv build gh-pages/$BRANCH
+          cd gh-pages
           #Generate an index, in case anyone lands at the root of the test domain
           echo '<html><body><ul>' > index.html
           find . -mindepth 1 -maxdepth 1 -type d \
