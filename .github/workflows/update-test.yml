@@ -8,9 +8,6 @@ on:
 
 jobs:
   main:
-    if: ${{ needs.member.outputs.is_team_member == 'true'
-      || github.event.pull_request.head.repo.full_name == 'opencast/opencast-editor' }}
-    needs: member
     runs-on: ubuntu-latest
 
     steps:
@@ -75,7 +72,7 @@ jobs:
 
     - name: Clone repository
       run: |
-        git clone "git@github.com:opencast/opencast-editor-test.git" ~/editor-test
+        git clone "git@github.com:gregorydlogan/opencast-editor-test.git" ~/editor-test
         cd ~/editor-test
         git checkout gh-pages
 
@@ -129,7 +126,7 @@ jobs:
     steps:
       - name: Check if user is Opencast developer
         id: is_developer
-        if: ${{ github.event.pull_request.head.repo.full_name != 'opencast/opencast-editor' }}
+        if: ${{ github.event.pull_request.head.repo.full_name != 'gregorydlogan/opencast-editor' }}
         uses: TheModdingInquisition/actions-team-membership@v1.0
         with:
           team: developers
@@ -139,7 +136,7 @@ jobs:
 
       - name: Check if user is Opencast committer
         id: is_committer
-        if: ${{ github.event.pull_request.head.repo.full_name != 'opencast/opencast-editor' }}
+        if: ${{ github.event.pull_request.head.repo.full_name != 'gregorydlogan/opencast-editor' }}
         uses: TheModdingInquisition/actions-team-membership@v1.0
         with:
           team: committers

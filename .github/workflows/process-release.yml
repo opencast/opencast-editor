@@ -67,7 +67,7 @@ jobs:
           #This token is an account wide token which allows creation of PRs and pushes.
           #echo "GH_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> token.txt
           #gh auth login --with-token < token.txt
-          git clone -b r/$BASE_BRANCH "git@github.com:opencast/opencast.git" ~/opencast
+          git clone -b r/$BASE_BRANCH "git@github.com:gregorydlogan/opencast.git" ~/opencast
           cd ~/opencast
           git checkout -b t/editor-$EDITOR_TAG
 
@@ -77,11 +77,11 @@ jobs:
         run: |
           cd ~/opencast
           sed -i "s#<editor.sha256>.*</editor.sha256>#<editor.sha256>$EDITOR_CHECKSUM</editor.sha256>#" modules/editor/pom.xml
-          sed -i "s#<editor.url>.*</editor.url>#<editor.url>https://github.com/opencast/opencast-editor/releases/download/$EDITOR_TAG/oc-editor-$EDITOR_TAG.tar.gz</editor.url>#" modules/editor/pom.xml
+          sed -i "s#<editor.url>.*</editor.url>#<editor.url>https://github.com/gregorydlogan/opencast-editor/releases/download/$EDITOR_TAG/oc-editor-$EDITOR_TAG.tar.gz</editor.url>#" modules/editor/pom.xml
           git add modules/editor/pom.xml
           git commit -m "Updating editor to $EDITOR_TAG"
           git push origin t/editor-$EDITOR_TAG
           #This token is an account wide token which allows creation of PRs and pushes.
           echo "${{ secrets.PR_TOKEN }}" > token.txt
           gh auth login --with-token < token.txt
-          gh pr create --title "Update $BASE_BRANCH Editor to $EDITOR_TAG" --label editor --label maintenance --body "Updating Opencast $BASE_BRANCH Editor module to $EDITOR_TAG" --head=opencast:t/editor-$EDITOR_TAG --base r/$BASE_BRANCH -R opencast/opencast
+          gh pr create --title "Update $BASE_BRANCH Editor to $EDITOR_TAG" --label editor --label maintenance --body "Updating Opencast $BASE_BRANCH Editor module to $EDITOR_TAG" --head=opencast:t/editor-$EDITOR_TAG --base r/$BASE_BRANCH -R gregorydlogan/opencast
