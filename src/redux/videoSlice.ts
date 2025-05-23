@@ -61,7 +61,7 @@ export const initialState: video & httpRequestState = {
   jumpTriggered: false,
   aspectRatios: [],
   hasChanges: false,
-  timelineZoom: 1,
+  timelineZoom: 0,
   waveformImages: [],
   originalThumbnails: [],
 
@@ -195,7 +195,7 @@ const videoSlice = createSlice({
       state.hasChanges = action.payload;
     },
     setTimelineZoom: (state, action: PayloadAction<video["timelineZoom"]>) => {
-      state.timelineZoom = clamp(action.payload, 1, timelineZoomMax(state));
+      state.timelineZoom = clamp(action.payload, 0, 1);
     },
     setWaveformImages: (state, action: PayloadAction<video["waveformImages"]>) => {
       state.waveformImages = action.payload;
@@ -293,10 +293,10 @@ const videoSlice = createSlice({
       state.hasChanges = true;
     },
     timelineZoomIn: state => {
-      state.timelineZoom = clamp(state.timelineZoom + 1, 1, timelineZoomMax(state));
+      state.timelineZoom = clamp(state.timelineZoom + 0.01, 0, 1);
     },
     timelineZoomOut: state => {
-      state.timelineZoom = clamp(state.timelineZoom - 1, 1, timelineZoomMax(state));
+      state.timelineZoom = clamp(state.timelineZoom - 0.01, 0, 1);
     },
   },
   // For Async Requests
@@ -374,7 +374,6 @@ const videoSlice = createSlice({
     selectSelectedWorkflowId: state => state.selectedWorkflowId,
     selectHasChanges: state => state.hasChanges,
     selectTimelineZoom: state => state.timelineZoom,
-    selectTimelineZoomMax: timelineZoomMax,
     selectWaveformImages: state => state.waveformImages,
     selectOriginalThumbnails: state => state.originalThumbnails,
     // Selectors mainly pertaining to the information fetched from Opencast
@@ -513,14 +512,6 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
-const ZOOM_SECONDS_VISIBLE = 20 * 1000;
-
-function timelineZoomMax(state: { duration: number }) {
-  const maxZoom = state.duration / ZOOM_SECONDS_VISIBLE;
-
-  return Math.max(2, Math.ceil(maxZoom));
-}
-
 export const {
   setTrackEnabled,
   setIsPlaying,
@@ -576,7 +567,6 @@ export const {
   selectSelectedWorkflowId,
   selectHasChanges,
   selectTimelineZoom,
-  selectTimelineZoomMax,
   selectWaveformImages,
   selectOriginalThumbnails,
   selectVideoURL,

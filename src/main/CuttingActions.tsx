@@ -17,7 +17,6 @@ import {
   mergeRight,
   selectIsCurrentSegmentAlive,
   selectTimelineZoom,
-  selectTimelineZoomMax,
   setTimelineZoom,
   timelineZoomIn,
   timelineZoomOut,
@@ -313,7 +312,6 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({
   const { t } = useTranslation();
   const theme = useTheme();
   const timelineZoom = useAppSelector(selectTimelineZoom);
-  const timelineZoomMax = useAppSelector(selectTimelineZoomMax);
 
   // Callback for the zoom slider
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -354,9 +352,9 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({
         <span>{t("cuttingActions.zoom")}</span>
         <Slider
           css={sliderStyle}
-          min={1}
-          max={timelineZoomMax}
-          step={0.1}
+          min={0}
+          max={1}
+          step={0.01}
           value={timelineZoom}
           onChange={zoomSliderOnChange}
           aria-label={ariaLabelText}
