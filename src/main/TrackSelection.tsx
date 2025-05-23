@@ -32,7 +32,7 @@ const TrackSelection: React.FC = () => {
   const tracks: Track[] = useAppSelector(selectVideos);
   const enabledCount = tracks.filter(t => t.video_stream.enabled).length;
   const trackItems: JSX.Element[] = tracks.map((track: Track) =>
-    <TrackItem key={track.id} track={track} enabledCount={enabledCount} />
+    <TrackItem key={track.id} track={track} enabledCount={enabledCount} />,
   );
 
   const trackSelectionStyle = css({

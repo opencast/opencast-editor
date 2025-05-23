@@ -556,7 +556,7 @@ export const {
 
 export const selectVideos = createSelector(
   [(state: { videoState: { tracks: video["tracks"]; }; }) => state.videoState.tracks],
-  tracks => tracks.filter((track: Track) => track.video_stream.available === true)
+  tracks => tracks.filter((track: Track) => track.video_stream.available === true),
 );
 
 // Export selectors
