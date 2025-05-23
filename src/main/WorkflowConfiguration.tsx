@@ -8,9 +8,7 @@ import {
 import { LuChevronLeft, LuMoveHorizontal } from "react-icons/lu";
 
 import { useAppSelector } from "../redux/store";
-
 import { PageButton } from "./Finish";
-
 import { useTranslation } from "react-i18next";
 import { ErrorBox } from "@opencast/appkit";
 import { selectError, selectStatus } from "../redux/workflowPostSlice";
