@@ -84,4 +84,4 @@ jobs:
           #This token is an account wide token which allows creation of PRs and pushes.
           echo "${{ secrets.PR_TOKEN }}" > token.txt
           gh auth login --with-token < token.txt
-          gh pr create --title "Update $BASE_BRANCH Editor to $EDITOR_TAG" --label editor --label maintenance --body "Updating Opencast $BASE_BRANCH Editor module to $EDITOR_TAG" --head=opencast:t/editor-$EDITOR_TAG --base r/$BASE_BRANCH -R gregorydlogan/opencast
+          gh pr create --title "Update $BASE_BRANCH Editor to $EDITOR_TAG" --label editor --label maintenance --body "Updating Opencast $BASE_BRANCH Editor module to [$EDITOR_TAG](https://github.com/opencast/opencast-editor/releases/tag/$EDITOR_TAG)" --head=opencast:t/editor-$EDITOR_TAG --base r/$BASE_BRANCH -R gregorydlogan/opencast
