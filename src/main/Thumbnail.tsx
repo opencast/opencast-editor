@@ -253,7 +253,7 @@ const ThumbnailTableRow: React.FC<{
     // The "+40" comes from padding that is not included in the "getWidth" function
     generateRef.getWidth() + 40 :
     // Random default
-    440;
+    740;
 
   const renderPriority = (thumbnailPriority: number) => {
     if (isNaN(thumbnailPriority)) {
@@ -300,15 +300,17 @@ const ThumbnailDisplayer: React.FC<{ track: Track; }> = ({ track }) => {
 
   const generalStyle = css({
     width: "100%",
-    maxWidth: "457px",
+    maxWidth: "740px",
     aspectRatio: "16/9",
   });
 
   const imageStyle = css({
+    maxWidth: "457px",
   });
 
   const placeholderStyle = css({
     width: "100vw", // TODO: This is necessary to make the placeholder large enough, but prevents it from shrinking
+    maxWidth: "457px",
     backgroundColor: "grey",
     display: "flex",
     justifyContent: "center",
