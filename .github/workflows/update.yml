@@ -57,10 +57,9 @@ jobs:
           sed -i "s#url.*#url = \'http://$SERVER\'#" public/editor-settings.toml
           npm run build
         env:
-          BRANCH: ${{needs.detect.outputs.branch}}
           SERVER: ${{needs.detect.outputs.server}}
-          PUBLIC_URL: $BRANCH/editor-ui
-          VITE_APP_SETTINGS_PATH: $BRANCH/ui/config/editor/editor-settings.toml
+          PUBLIC_URL: ${{needs.detect.outputs.branch}}/editor-ui
+          VITE_APP_SETTINGS_PATH: ${{needs.detect.outputs.branch}}/ui/config/editor/editor-settings.toml
 
       # tests are currently failing
       #- run: npm test
@@ -74,6 +73,7 @@ jobs:
 
       - name: Commit new version
         run: |
+          git fetch origin gh-pages
           git checkout gh-pages
           # Update gh-pages
           rm -rf $BRANCH
