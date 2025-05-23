@@ -32,7 +32,7 @@ jobs:
         #Temp becomes something like r/17.x
         export TEMP=${{ github.ref_name }}
         #Strip the r/ prefix, giving us just 17.x.  If this is main/develop this does nothing
-        echo "${TEMP#r\/}" >> $GITHUB_OUTPUT
+        echo BRANCH="${TEMP#r\/}" >> $GITHUB_OUTPUT
 
     - name: determine the correct test server
       id: test-server
