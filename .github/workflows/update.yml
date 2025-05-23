@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  detect-env:
+  detect:
     runs-on: ubuntu-latest
     outputs:
       server: ${{ steps.test-server.outputs.server }}
@@ -35,7 +35,7 @@ jobs:
 
   main:
     runs-on: ubuntu-latest
-    needs: detect-env
+    needs: detect
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -51,11 +51,11 @@ jobs:
       - name: Build App
         run: |
           # This set the editor's datasource to the relevant test server
-          sed -i "s#url.*#url = 'http://${needs.detect-env.outputs.server}'#" public/editor-settings.toml
+          sed -i "s#url.*#url = 'http://${needs.detect.outputs.server}'#" public/editor-settings.toml
           npm run build
         env:
-          PUBLIC_URL: ${needs.detect-env.outputs.branch}/editor-ui
-          VITE_APP_SETTINGS_PATH: ${needs.detect-env.outputs.branch}/ui/config/editor/editor-settings.toml
+          PUBLIC_URL: ${needs.detect.outputs.branch}/editor-ui
+          VITE_APP_SETTINGS_PATH: ${needs.detect.outputs.branch}/ui/config/editor/editor-settings.toml
 
     # tests are currently failing
     #- run: npm test
