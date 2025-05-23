@@ -57,54 +57,32 @@ jobs:
           PUBLIC_URL: ${needs.detect.outputs.branch}/editor-ui
           VITE_APP_SETTINGS_PATH: ${needs.detect.outputs.branch}/ui/config/editor/editor-settings.toml
 
-    # tests are currently failing
-    #- run: npm test
-    #  env:
-    #    CI: true
+      # tests are currently failing
+      #- run: npm test
+      #  env:
+      #    CI: true
 
-    - name: Prepare git
-      run: |
-        git config --global user.name "Release Bot"
-        git config --global user.email "cloud@opencast.org"
+      - name: Prepare git
+        run: |
+          git config --global user.name "Release Bot"
+          git config --global user.email "cloud@opencast.org"
 
-    - name: Prepare GitHub SSH key
-      env:
-        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-      run: |
-        install -dm 700 ~/.ssh/
-        echo "${DEPLOY_KEY}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Commit new version
+        run: |
+          export BRANCH="${needs.detect.outputs.branch}"
+          git checkout gh-pages
+          # Update gh-pages
+          rm -rf $BRANCH
+          mv build $BRANCH
+          #Generate an index, in case anyone lands at the root of the test domain
+          echo '<html><body><ul>' > index.html
+          find . -mindepth 1 -maxdepth 1 -type d \
+            | grep '[0-9]*.x\|develop' \
+            | sort -r \
+            | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
+          echo '</ul></body></html>' >> index.html
+          git add $BRANCH index.html
+          git diff --staged --quiet || git commit --amend -m "Build $(date)"
 
-    - name: Clone repository
-      run: |
-        git clone "git@github.com:opencast/opencast-editor.git" ~/editor-clone
-        cd ~/editor-clone
-        git checkout gh-pages
-
-    - name: Commit new version
-      run: |
-        #Temp becomes something like r/17.x
-        export TEMP=${{ github.ref_name }}
-        #Strip the r/ prefix, giving us just 17.x.  If this is main/develop this does nothing
-        export TARGET=~/editor-clone/${TEMP#r\/}
-        # Update gh-pages
-        rm -rf $TARGET
-        mkdir -p $TARGET
-        cp -r build/* $TARGET
-        # Add the new build to the repo
-        cd ~/editor-clone
-        #Generate an index, in case anyone lands at the root of the test domain
-        echo '<html><body><ul>' > index.html
-        find . -mindepth 1 -maxdepth 1 -type d \
-          | grep -v .git \
-          | sort -r \
-          | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
-        echo '</ul></body></html>' >> index.html
-        git add ./*
-        git diff --staged --quiet || git commit --amend -m "Build $(date)"
-
-    - name: Push updates
-      run: |
-        cd ~/editor-clone
-        git push origin gh-pages --force
+      - name: Push updates
+        run: git push origin gh-pages --force
