@@ -71,18 +71,13 @@ jobs:
           git config --global user.name "Release Bot"
           git config --global user.email "cloud@opencast.org"
 
-      - name: Checkout sources
-        uses: actions/checkout@v4
-        with:
-          path: 'gh-pages'
-          ref: 'origin/gh-pages'
-
       - name: Commit new version
         run: |
+          git fetch --unshallow origin gh-pages
+          git checkout gh-pages
           # Update gh-pages
-          rm -rf gh-pages/$BRANCH
-          mv build gh-pages/$BRANCH
-          cd gh-pages
+          rm -rf $BRANCH
+          mv build $BRANCH
           #Generate an index, in case anyone lands at the root of the test domain
           echo '<html><body><ul>' > index.html
           find . -mindepth 1 -maxdepth 1 -type d \
