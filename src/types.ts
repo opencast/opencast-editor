@@ -16,6 +16,7 @@ export interface Track {
   video_stream: {available: boolean, enabled: boolean, thumbnail_uri: string},
   thumbnailUri: string | undefined,
   thumbnailPriority: number,
+  thumbnailTime?: string,
 }
 
 export interface Flavor {

@@ -1,7 +1,7 @@
 import { css, SerializedStyles } from "@emotion/react";
 import { IconType } from "react-icons";
 import { LuCamera, LuCopy, LuCircleX, LuUpload } from "react-icons/lu";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -16,11 +16,13 @@ import {
   setHasChanges,
   setThumbnail,
   setThumbnails,
+  setThumbnailTime,
 } from "../redux/videoSlice";
 import { Track } from "../types";
 import { ThemedTooltip } from "./Tooltip";
 import { ProtoButton } from "@opencast/appkit";
 import { setIndex, setIsDisplayEditView } from "../redux/thumbnailSlice";
+import ReactPlayer from "react-player";
 
 /**
  * Choose between various thumbnail actions for the available tracks.
@@ -98,6 +100,7 @@ const ThumbnailSelector: React.FC<{
         track={track}
         trackIndex={trackIndex}
       />
+      <WorkaroundThumbnailGenerator track={track} />
     </div>
   );
 };
@@ -265,6 +268,7 @@ export const UploadButton: React.FC<{
       if (e.target && e.target.result) {
         const uri = e.target.result as string; // We know this must be string because we use "readAsDataURL"
         dispatch(setThumbnail({ id: track.id, uri: uri }));
+        dispatch(setThumbnailTime({ id: track.id, time: undefined }));
         dispatch(setHasChanges(true));
       }
     };
@@ -451,6 +455,63 @@ export const ThumbnailButton: React.FC<{
         {text}
       </ProtoButton>
     </ThemedTooltip>
+  );
+};
+
+/**
+ * Generates a temporary thumbnail from a timestamp
+ *
+ * Workaround for the backend being unable to send us thumbnails from
+ * publications. This way, we can at least show a thumbnail to a user
+ * if they previously generated one via timestamp.
+ */
+const WorkaroundThumbnailGenerator: React.FC<{
+  track: Track,
+}> = ({ track }) => {
+  const dispatch = useAppDispatch();
+
+  const ref = useRef<ReactPlayer>(null);
+  const [ready, setReady] = useState(false);
+  const [seeked, setSeeked] = useState(false);
+
+  useEffect(() => {
+    if (ref.current && ready && track && track.thumbnailTime && !track.thumbnailUri) {
+      ref.current.seekTo(parseFloat(track.thumbnailTime), "seconds");
+    }
+  }, [dispatch, ready, track]);
+
+  useEffect(() => {
+    if (seeked) {
+      const videoElement = ref.current?.getInternalPlayer() as HTMLVideoElement;
+      const canvas = document.createElement("canvas");
+      canvas.width = videoElement.videoWidth;
+      canvas.height = videoElement.videoHeight;
+      const canvasContext = canvas.getContext("2d");
+      if (canvasContext !== null) {
+        canvasContext.drawImage(videoElement, 0, 0);
+        const uri = canvas.toDataURL("image/png");
+
+        if (uri) {
+          dispatch(setThumbnail({ id: track.id, uri: uri }));
+        }
+      }
+    }
+  }, [dispatch, seeked, track]);
+
+  const playerStyle = css({
+    display: "none",
+  });
+
+  return (
+    <ReactPlayer url={track.uri}
+      css={playerStyle}
+      ref={ref}
+      width="unset"
+      height="100%"
+      playing={false}
+      onReady={() => setReady(true)}
+      onSeek={() => setSeeked(true)}
+    />
   );
 };
 

@@ -238,6 +238,9 @@ const videoSlice = createSlice({
         setThumbnailHelper(state, element.id, element.uri);
       }
     },
+    setThumbnailTime: (state, action: PayloadAction<{ id: Track["id"], time: Track["thumbnailTime"]; }>) => {
+      setThumbnailTimeHelper(state, action.payload.id, action.payload.time);
+    },
     removeThumbnail: (state, action: PayloadAction<string>) => {
       const index = state.tracks.findIndex(t => t.id === action.payload);
       state.tracks[index].thumbnailUri = undefined;
@@ -573,6 +576,13 @@ const setThumbnailHelper = (state: video, id: Track["id"], uri: Track["thumbnail
   }
 };
 
+const setThumbnailTimeHelper = (state: video, id: Track["id"], time: Track["thumbnailTime"]) => {
+  const index = state.tracks.findIndex(t => t.id === id);
+  if (index >= 0) {
+    state.tracks[index].thumbnailTime = time;
+  }
+};
+
 export const {
   addSegment,
   cut,
@@ -603,6 +613,7 @@ export const {
   setSelectedWorkflowIndex,
   setThumbnail,
   setThumbnails,
+  setThumbnailTime,
   setVideoEnabled,
   setVolume,
   setWaveformImages,
