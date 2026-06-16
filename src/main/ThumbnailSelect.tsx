@@ -346,13 +346,10 @@ export const UseForAllTracksButton: React.FC<{
   const tracks = useAppSelector(selectTracks);
 
   // Set the given thumbnail for all tracks
-  const setForOtherThumbnails = (uri: string | undefined) => {
-    if (uri === undefined) {
-      return;
-    }
+  const setForOtherThumbnails = ({ uri, time }: {uri: string | undefined, time: string | undefined}) => {
     const thumbnails = [];
     for (const track of tracks) {
-      thumbnails.push({ id: track.id, uri: uri });
+      thumbnails.push({ id: track.id, uri, time });
     }
     dispatch(setThumbnails(thumbnails));
     dispatch(setHasChanges(true));
@@ -360,7 +357,7 @@ export const UseForAllTracksButton: React.FC<{
 
   return (
     <ThumbnailButton
-      handler={() => { setForOtherThumbnails(track.thumbnailUri); }}
+      handler={() => { setForOtherThumbnails({uri: track.thumbnailUri, time: track.thumbnailTime }); }}
       text={t("thumbnail.buttonUseForOtherThumbnails")}
       tooltipText={t("thumbnail.buttonUseForOtherThumbnails-tooltip")}
       ariaLabel={t("thumbnail.buttonUseForOtherThumbnails-tooltip-aria")}

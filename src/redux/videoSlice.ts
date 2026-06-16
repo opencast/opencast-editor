@@ -233,9 +233,14 @@ const videoSlice = createSlice({
     setThumbnail: (state, action: PayloadAction<{ id: Track["id"], uri: Track["thumbnailUri"]; }>) => {
       setThumbnailHelper(state, action.payload.id, action.payload.uri);
     },
-    setThumbnails: (state, action: PayloadAction<{ id: Track["id"], uri: Track["thumbnailUri"]; }[]>) => {
+    setThumbnails: (state, action: PayloadAction<{ 
+      id: Track["id"],
+      uri: Track["thumbnailUri"],
+      time: Track["thumbnailTime"];
+    }[]>) => {
       for (const element of action.payload) {
         setThumbnailHelper(state, element.id, element.uri);
+        setThumbnailTimeHelper(state, element.id, element.time);
       }
     },
     setThumbnailTime: (state, action: PayloadAction<{ id: Track["id"], time: Track["thumbnailTime"]; }>) => {
