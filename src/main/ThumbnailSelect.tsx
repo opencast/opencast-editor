@@ -315,8 +315,13 @@ export const DiscardButton: React.FC<{
 
   const originalThumbnails = useAppSelector(selectOriginalThumbnails);
 
+  const originalThumbnail = originalThumbnails.find(e => e.id === track.id);
+  const active = (track.thumbnailUri && track.thumbnailUri.startsWith("data") && !track.thumbnailTime)
+    || (track.thumbnailTime && originalThumbnail && track.thumbnailTime != originalThumbnail.time);
+
   const discardThumbnail = (id: string) => {
-    dispatch(setThumbnail({ id: id, uri: originalThumbnails.find(e => e.id === id)?.uri }));
+    dispatch(setThumbnail({ id: id, uri: originalThumbnail?.uri }));
+    dispatch(setThumbnailTime({ id: id, time: originalThumbnail?.time }));
   };
 
   return (
@@ -326,7 +331,7 @@ export const DiscardButton: React.FC<{
       tooltipText={t("thumbnail.buttonDiscard-tooltip")}
       ariaLabel={t("thumbnail.buttonDiscard-tooltip-aria")}
       Icon={LuCircleX}
-      active={(track.thumbnailUri && track.thumbnailUri.startsWith("data") ? true : false)}
+      active={(active ? true : false)}
       index={index}
       overwriteCSS={overwriteCSS}
     />
@@ -357,7 +362,7 @@ export const UseForAllTracksButton: React.FC<{
 
   return (
     <ThumbnailButton
-      handler={() => { setForOtherThumbnails({uri: track.thumbnailUri, time: track.thumbnailTime }); }}
+      handler={() => { setForOtherThumbnails({ uri: track.thumbnailUri, time: track.thumbnailTime }); }}
       text={t("thumbnail.buttonUseForOtherThumbnails")}
       tooltipText={t("thumbnail.buttonUseForOtherThumbnails-tooltip")}
       ariaLabel={t("thumbnail.buttonUseForOtherThumbnails-tooltip-aria")}
@@ -478,7 +483,8 @@ const WorkaroundThumbnailGenerator: React.FC<{
   }, [dispatch, ready, track]);
 
   useEffect(() => {
-    if (seeked) {
+    if (ref.current && ready && track && track.thumbnailTime && !track.thumbnailUri
+      && seeked) {
       const videoElement = ref.current?.getInternalPlayer() as HTMLVideoElement;
       const canvas = document.createElement("canvas");
       canvas.width = videoElement.videoWidth;
@@ -493,7 +499,7 @@ const WorkaroundThumbnailGenerator: React.FC<{
         }
       }
     }
-  }, [dispatch, seeked, track]);
+  }, [dispatch, ready, seeked, track]);
 
   const playerStyle = css({
     display: "none",
