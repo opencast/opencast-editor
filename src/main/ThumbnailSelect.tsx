@@ -351,7 +351,10 @@ export const UseForAllTracksButton: React.FC<{
   const tracks = useAppSelector(selectTracks);
 
   // Set the given thumbnail for all tracks
-  const setForOtherThumbnails = ({ uri, time }: {uri: string | undefined, time: string | undefined}) => {
+  const setForOtherThumbnails = ({ uri, time }: {
+    uri: string | undefined,
+    time?: { time: string; flavorType: string }
+  }) => {
     const thumbnails = [];
     for (const track of tracks) {
       thumbnails.push({ id: track.id, uri, time });
@@ -472,13 +475,19 @@ const WorkaroundThumbnailGenerator: React.FC<{
 }> = ({ track }) => {
   const dispatch = useAppDispatch();
 
+  const tracks = useAppSelector(selectTracks);
+  const thumbnailTime = track.thumbnailTime;
+  const thumbnailTrack = thumbnailTime
+    ? tracks.find(t => t.flavor.type === thumbnailTime.flavorType)
+    : undefined;
+
   const ref = useRef<ReactPlayer>(null);
   const [ready, setReady] = useState(false);
   const [seeked, setSeeked] = useState(false);
 
   useEffect(() => {
     if (ref.current && ready && track && track.thumbnailTime && !track.thumbnailUri) {
-      ref.current.seekTo(parseFloat(track.thumbnailTime), "seconds");
+      ref.current.seekTo(parseFloat(track.thumbnailTime.time), "seconds");
     }
   }, [dispatch, ready, track]);
 
@@ -505,8 +514,12 @@ const WorkaroundThumbnailGenerator: React.FC<{
     display: "none",
   });
 
+  if (!thumbnailTrack) {
+    return null;
+  }
+
   return (
-    <ReactPlayer url={track.uri}
+    <ReactPlayer url={thumbnailTrack.uri}
       css={playerStyle}
       ref={ref}
       width="unset"
