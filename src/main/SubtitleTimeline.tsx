@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
-import { SegmentsList as CuttingSegmentsList, Scrubber, Waveforms } from "./Timeline";
+import { SegmentsList as CuttingSegmentsList, Scrubber, Waveforms, useZoomableTimeline } from "./Timeline";
 import { ZoomDropdown, ZoomSlider } from "./CuttingActions";
 import {
   addCueAtIndex,
@@ -20,11 +20,8 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
   moveCut,
   selectActiveSegmentIndex,
-  selectDisplayDuration,
   selectDuration,
-  selectDurationInSeconds,
   selectSegments,
-  selectTimelineZoom,
   timelineZoomIn,
   timelineZoomOut,
 } from "../redux/videoSlice";
@@ -40,7 +37,6 @@ import { shallowEqual } from "react-redux";
 import TimelineStamps from "./TimelineStamps";
 import { rewriteKeys } from "../globalKeys";
 import { selectKeymap } from "../redux/hotkeySlice";
-import { useResizeObserver } from "usehooks-ts";
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 /**
@@ -54,12 +50,8 @@ const SubtitleTimeline: React.FC = () => {
   // Init redux variables
   const dispatch = useAppDispatch();
   const keymap = useAppSelector(selectKeymap);
-  const duration = useAppSelector(selectDuration);
-  const durationInSeconds = useAppSelector(selectDurationInSeconds);
   const currentlyAt = useAppSelector(selectCurrentlyAt);
   const subtitleId = useAppSelector(selectSelectedSubtitleId, shallowEqual);
-  const displayDuration = useAppSelector(selectDisplayDuration);
-  const timelineZoom = useAppSelector(selectTimelineZoom);
 
   // Height of the time codes ruler that overlays the top of the scrollable timeline area
   const timelineStampsHeight = 20;
@@ -70,15 +62,11 @@ const SubtitleTimeline: React.FC = () => {
   const timelineHeight = timelineStampsHeight + subtitleSegmentsHeight + waveformHeight;
 
   const scrubberRef = useRef<HTMLDivElement | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
-  const { width = 1 } = useResizeObserver<HTMLDivElement>({ ref: ref as React.RefObject<HTMLDivElement> });
-  const scrollContainerRef = useRef<HTMLElement>(null);
-  const { width: scrollContainerWidth = 1 } = useResizeObserver({
-    ref: scrollContainerRef as React.RefObject<HTMLElement>,
-  });
-
-  const currentlyScrolling = useRef(false);
-  const zoomCenter = useRef(0);
+  const {
+    duration, ref, width, scrollContainerRef, scrollContainerWidth,
+    scrollLeft, visibleWidth, zoomedWidth,
+    updateScrollMetrics, updateScroll, setCurrentlyAtToClick, scrollByOwnWidth,
+  } = useZoomableTimeline(currentlyAt, setClickTriggered, setCurrentlyAt);
 
   // Callback for the zoom slider/dropdown, dispatching the zoom action to redux
   const dispatchZoomAction = (
@@ -108,79 +96,11 @@ const SubtitleTimeline: React.FC = () => {
     [],
   );
 
-  // Vars for timelineStamps
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [visibleWidth, setVisibleWidth] = useState(0);
-
-  // Keep track of what point of the timeline should stay in view when the zoom level changes
-  const updateScroll = () => {
-    if (currentlyScrolling.current) {
-      currentlyScrolling.current = false;
-      return;
-    }
-    const scrollLeft = scrollContainerRef.current?.scrollLeft ?? 0;
-    const clientWidth = scrollContainerRef.current?.clientWidth ?? 0;
-    const centerPosition = scrollLeft + 0.5 * clientWidth;
-    const scrubberPosition = duration ? (currentlyAt / duration) * width : 0;
-    const scrubberVisible = scrollLeft <= scrubberPosition && scrubberPosition <= scrollLeft + clientWidth;
-
-    zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
-  };
-
-  const updateScrollMetrics = () => {
-    if (!scrollContainerRef.current) {
-      return;
-    }
-    const el = scrollContainerRef.current;
-    setScrollLeft(el.scrollLeft);
-    setVisibleWidth(el.clientWidth);
-  };
-
-  const displayPercentage = (durationInSeconds / displayDuration);
-  const zoomedWidth = scrollContainerWidth * displayPercentage;
-
-  // Make sure visibleWidth is set so canvas is drawn on first render
-  useLayoutEffect(() => {
-    updateScrollMetrics();
-  }, [width, duration]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(updateScroll, [currentlyAt, timelineZoom, width, scrollContainerWidth]);
-
-  // Keep the previously visible point of the timeline in view when the zoom level changes
-  useEffect(() => {
-    if (!scrollContainerRef.current) {
-      return;
-    }
-    const clientWidth = scrollContainerRef.current.clientWidth ?? 0;
-    const left = zoomCenter.current * displayPercentage * clientWidth - 0.5 * clientWidth;
-
-    currentlyScrolling.current = true;
-    scrollContainerRef.current.scrollLeft = left;
-  }, [displayPercentage]);
-
   const timelineStyle = css({
     position: "relative",     // Need to set position for Draggable bounds to work
     height: timelineHeight + "px",
     width: `${zoomedWidth}px`,    // Width modified by zoom
   });
-
-  // Update the current time based on the position clicked on the timeline
-  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    dispatch(setClickTriggered(true));
-    dispatch(setCurrentlyAt((offsetX / width) * (duration)));
-  };
-
-  // Scroll the scroll container by its width one time
-  // To be used when the scrubber moves out of sight while playing the video.
-  const scrollByOwnWidth = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft = scrollContainerRef.current?.scrollLeft + scrollContainerWidth;
-      updateScroll();
-    }
-  };
 
   // Callback for adding subtitle segment by hotkey
   const addCue = (time: number) => {
