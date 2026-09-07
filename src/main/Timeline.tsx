@@ -296,13 +296,25 @@ export const Scrubber = React.forwardRef<HTMLDivElement, ScrubberProps>((props, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineWidth]);
 
-  // Check when the scrubber moves out of sight (can happen when playing the video while zoomed in)
-  // and then scroll the container
+  // Latest scroll metrics, read without making the effect below re-run on every manual scroll
+  const scrollLeftRef = useRef(scrollLeft);
+  const scrollContainerWidthRef = useRef(scrollContainerWidth);
+  const scrollTheContainerbyOwnWidthRef = useRef(scrollTheContainerbyOwnWidth);
   useEffect(() => {
-    if (controlledPosition.x > (scrollLeft + scrollContainerWidth)) {
-      scrollTheContainerbyOwnWidth();
+    scrollLeftRef.current = scrollLeft;
+    scrollContainerWidthRef.current = scrollContainerWidth;
+    scrollTheContainerbyOwnWidthRef.current = scrollTheContainerbyOwnWidth;
+  });
+
+  // Check when the scrubber moves out of sight (can happen when playing the video while zoomed in)
+  // and then scroll the container. Only reacts to the scrubber actually moving, so that manually
+  // scrolling the scrubber out of view (e.g. to look at another part of the timeline) doesn't
+  // immediately get overridden.
+  useEffect(() => {
+    if (controlledPosition.x > (scrollLeftRef.current + scrollContainerWidthRef.current)) {
+      scrollTheContainerbyOwnWidthRef.current();
     }
-  }, [controlledPosition.x, scrollContainerWidth, scrollLeft, scrollTheContainerbyOwnWidth]);
+  }, [controlledPosition.x]);
 
   // Callback for when the scrubber gets dragged by the user
   const onControlledDrag: DraggableEventHandler = debounce((_e, position: { x: number, y : number }) => {

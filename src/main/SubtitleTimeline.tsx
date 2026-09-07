@@ -1,17 +1,20 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
-import { SegmentsList as CuttingSegmentsList, Waveforms } from "./Timeline";
+import { SegmentsList as CuttingSegmentsList, Scrubber, Waveforms } from "./Timeline";
 import { ZoomDropdown, ZoomSlider } from "./CuttingActions";
 import {
   addCueAtIndex,
   selectCurrentlyAt,
+  selectIsPlaying,
   selectSelectedSubtitleById,
   selectSelectedSubtitleId,
+  setClickTriggered,
   setCueAtIndex,
   setCurrentlyAt,
   setFocusSegmentId,
   setFocusSegmentTriggered,
   setFocusSegmentTriggered2,
+  setIsPlaying,
 } from "../redux/subtitleSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import {
@@ -19,7 +22,9 @@ import {
   selectActiveSegmentIndex,
   selectDisplayDuration,
   selectDuration,
+  selectDurationInSeconds,
   selectSegments,
+  selectTimelineZoom,
   timelineZoomIn,
   timelineZoomOut,
 } from "../redux/videoSlice";
@@ -45,22 +50,35 @@ import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/
 const SubtitleTimeline: React.FC = () => {
 
   const { t } = useTranslation();
-  const theme = useTheme();
 
   // Init redux variables
   const dispatch = useAppDispatch();
   const keymap = useAppSelector(selectKeymap);
   const duration = useAppSelector(selectDuration);
+  const durationInSeconds = useAppSelector(selectDurationInSeconds);
   const currentlyAt = useAppSelector(selectCurrentlyAt);
   const subtitleId = useAppSelector(selectSelectedSubtitleId, shallowEqual);
   const displayDuration = useAppSelector(selectDisplayDuration);
+  const timelineZoom = useAppSelector(selectTimelineZoom);
 
+  // Height of the time codes ruler that overlays the top of the scrollable timeline area
+  const timelineStampsHeight = 20;
+  // Height of the subtitle segments row and of the waveform below it
+  const subtitleSegmentsHeight = 80;
+  const waveformHeight = 120;
+  // Height of the scrollable timeline area. Also used to size the scrubber
+  const timelineHeight = timelineStampsHeight + subtitleSegmentsHeight + waveformHeight;
+
+  const scrubberRef = useRef<HTMLDivElement | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const { width = 1 } = useResizeObserver<HTMLDivElement>({ ref: ref as React.RefObject<HTMLDivElement> });
-  const refTop = useRef<HTMLElement>(null);
+  const scrollContainerRef = useRef<HTMLElement>(null);
+  const { width: scrollContainerWidth = 1 } = useResizeObserver({
+    ref: scrollContainerRef as React.RefObject<HTMLElement>,
+  });
 
-  // How much of the timeline should be visible in milliseconds. Driven by the shared timeline zoom level
-  const timelineCutoutInMs = displayDuration * 1000;
+  const currentlyScrolling = useRef(false);
+  const zoomCenter = useRef(0);
 
   // Callback for the zoom slider/dropdown, dispatching the zoom action to redux
   const dispatchZoomAction = (
@@ -90,33 +108,79 @@ const SubtitleTimeline: React.FC = () => {
     [],
   );
 
-  const timelineStyle = css({
-    position: "relative",     // Need to set position for Draggable bounds to work
-    width: ((duration / timelineCutoutInMs)) * 100 + "%",    // Total length of timeline based on number of cutouts
-    paddingLeft: "50%",
-    paddingRight: "50%",
-  });
-
   // Vars for timelineStamps
   const [scrollLeft, setScrollLeft] = useState(0);
   const [visibleWidth, setVisibleWidth] = useState(0);
-  const paddingOffset = visibleWidth / 2;
-  const virtualScrollLeft = scrollLeft - paddingOffset;
+
+  // Keep track of what point of the timeline should stay in view when the zoom level changes
+  const updateScroll = () => {
+    if (currentlyScrolling.current) {
+      currentlyScrolling.current = false;
+      return;
+    }
+    const scrollLeft = scrollContainerRef.current?.scrollLeft ?? 0;
+    const clientWidth = scrollContainerRef.current?.clientWidth ?? 0;
+    const centerPosition = scrollLeft + 0.5 * clientWidth;
+    const scrubberPosition = duration ? (currentlyAt / duration) * width : 0;
+    const scrubberVisible = scrollLeft <= scrubberPosition && scrubberPosition <= scrollLeft + clientWidth;
+
+    zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
+  };
+
+  const updateScrollMetrics = () => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+    const el = scrollContainerRef.current;
+    setScrollLeft(el.scrollLeft);
+    setVisibleWidth(el.clientWidth);
+  };
+
+  const displayPercentage = (durationInSeconds / displayDuration);
+  const zoomedWidth = scrollContainerWidth * displayPercentage;
 
   // Make sure visibleWidth is set so canvas is drawn on first render
   useLayoutEffect(() => {
     updateScrollMetrics();
   }, [width, duration]);
 
-  // Apply horizonal scrolling when scrolled from somewhere else
-  useEffect(() => {
-    if (currentlyAt !== undefined && refTop.current) {
-      const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth);
-      refTop.current.scrollTo(Math.round((currentlyAt / duration) * scrollLeftMax), 0);
-    }
-  }, [currentlyAt, duration, width]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(updateScroll, [currentlyAt, timelineZoom, width, scrollContainerWidth]);
 
-  const [keyboardJumpDelta, setKeyboardJumpDelta] = useState(1000);  // In milliseconds. For keyboard navigation
+  // Keep the previously visible point of the timeline in view when the zoom level changes
+  useEffect(() => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+    const clientWidth = scrollContainerRef.current.clientWidth ?? 0;
+    const left = zoomCenter.current * displayPercentage * clientWidth - 0.5 * clientWidth;
+
+    currentlyScrolling.current = true;
+    scrollContainerRef.current.scrollLeft = left;
+  }, [displayPercentage]);
+
+  const timelineStyle = css({
+    position: "relative",     // Need to set position for Draggable bounds to work
+    height: timelineHeight + "px",
+    width: `${zoomedWidth}px`,    // Width modified by zoom
+  });
+
+  // Update the current time based on the position clicked on the timeline
+  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    dispatch(setClickTriggered(true));
+    dispatch(setCurrentlyAt((offsetX / width) * (duration)));
+  };
+
+  // Scroll the scroll container by its width one time
+  // To be used when the scrubber moves out of sight while playing the video.
+  const scrollByOwnWidth = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollContainerRef.current?.scrollLeft + scrollContainerWidth;
+      updateScroll();
+    }
+  };
 
   // Callback for adding subtitle segment by hotkey
   const addCue = (time: number) => {
@@ -129,33 +193,6 @@ const SubtitleTimeline: React.FC = () => {
     }));
   };
 
-  // Callbacks for keyboard controls
-  // TODO: Better increases and decreases than ten intervals
-  // TODO: Additional helpful controls (e.g. jump to start/end of segment/next segment)
-  useHotkeys(
-    keymap.timeline.left.key,
-    () => dispatch(setCurrentlyAt(Math.max(currentlyAt - keyboardJumpDelta, 0))),
-    keymap.timeline.left.options,
-    [currentlyAt, keyboardJumpDelta],
-  );
-  useHotkeys(
-    keymap.timeline.right.key,
-    () => dispatch(setCurrentlyAt(Math.min(currentlyAt + keyboardJumpDelta, duration))),
-    keymap.timeline.right.options,
-    [currentlyAt, keyboardJumpDelta, duration],
-  );
-  useHotkeys(
-    keymap.timeline.increase.key,
-    () => setKeyboardJumpDelta(keyboardJumpDelta => Math.min(keyboardJumpDelta * 10, 1000000)),
-    keymap.timeline.increase.options,
-    [keyboardJumpDelta],
-  );
-  useHotkeys(
-    keymap.timeline.decrease.key,
-    () => setKeyboardJumpDelta(keyboardJumpDelta => Math.max(keyboardJumpDelta / 10, 1)),
-    keymap.timeline.decrease.options,
-    [keyboardJumpDelta],
-  );
   useHotkeys(
     keymap.subtitleList.addCue.key,
     () => addCue(currentlyAt),
@@ -163,25 +200,13 @@ const SubtitleTimeline: React.FC = () => {
     [currentlyAt],
   );
 
-  const updateScrollMetrics = () => {
-    if (!refTop.current) {
-      return;
-    }
-    const el = refTop.current;
-    setScrollLeft(el.scrollLeft);
-    setVisibleWidth(el.clientWidth);
-  };
-
   // Callback for the scroll container
   const onEndScroll = (e: ScrollEvent) => {
-    // If scrolled by user
-    if (!e.external && refTop && refTop.current) {
-      const offsetX = refTop.current.scrollLeft;
-      const scrollLeftMax = (refTop.current.scrollWidth - refTop.current.clientWidth);
-      dispatch(setCurrentlyAt((offsetX / scrollLeftMax) * (duration)));
+    updateScroll();
 
-      // Blur active element after scrolling, to ensure hotkeys are working
-      // This is a little hack to work around focus getting stuck in textarea elements from the subtitle list
+    // Blur active element after scrolling, to ensure hotkeys are working
+    // This is a little hack to work around focus getting stuck in textarea elements from the subtitle list
+    if (!e.external) {
       try {
         (document.activeElement as HTMLElement).blur();
       } catch (_e) {
@@ -198,27 +223,19 @@ const SubtitleTimeline: React.FC = () => {
 
   return (
     <div css={subtitleTimelineStyle}>
-      {/* "Scrubber". Sits smack dab in the middle and does not move */}
-      <div
-        css={{
-          position: "absolute",
-          width: "2px",
-          height: "222px",
-          ...(refTop.current) && { left: (refTop.current.clientWidth / 2) },
-          background: `${theme.text}`,
-          zIndex: 100,
-        }}
-      />
-      {/* Time codes above the timeline */}
-      <TimelineStamps
-        durationMs={duration}
-        zoomedWidth={width}
-        scrollLeft={virtualScrollLeft}
-        visibleWidth={visibleWidth}
-        height={20}
-      />
+      {/* Time codes above the timeline. Overlays the top of the scrollable container, like the scrubber does */}
+      <div css={css({ position: "absolute" })}>
+        <TimelineStamps
+          durationMs={duration}
+          zoomedWidth={zoomedWidth}
+          scrollLeft={scrollLeft}
+          visibleWidth={visibleWidth}
+          height={timelineStampsHeight}
+        />
+      </div>
       {/* Scrollable timeline container. Has width of parent*/}
-      <ScrollContainer innerRef={refTop} css={{ overflowY: "hidden", width: "100%", height: "215px" }}
+      <ScrollContainer innerRef={scrollContainerRef}
+        css={{ overflowY: "hidden", width: "100%", height: `${timelineHeight}px` }}
         vertical={false}
         horizontal={true}
         onEndScroll={onEndScroll}
@@ -228,19 +245,34 @@ const SubtitleTimeline: React.FC = () => {
         hideScrollbars={false}            // ScrollContainer hides scrollbars per default
       >
         {/* Container. Overflows. Width based on parent times zoom level*/}
-        <div ref={ref} css={timelineStyle}>
-          <TimelineSubtitleSegmentsList timelineWidth={width} />
-          <div css={{ position: "relative", height: "100px" }} >
-            <Waveforms timelineHeight={120} />
-            <CuttingSegmentsList
-              timelineWidth={width}
-              timelineHeight={120}
-              styleByActiveSegment={false}
-              tabable={false}
-              selectSegments={selectSegments}
-              selectActiveSegmentIndex={selectActiveSegmentIndex}
-              moveCut={moveCut}
-            />
+        <div ref={ref} css={timelineStyle} onMouseDown={e => setCurrentlyAtToClick(e)}>
+          <Scrubber
+            ref={scrubberRef}
+            timelineWidth={width}
+            timelineHeight={timelineHeight}
+            scrollContainerWidth={scrollContainerWidth}
+            scrollLeft={scrollContainerRef.current?.scrollLeft ?? 0}
+            scrollTheContainerbyOwnWidth={scrollByOwnWidth}
+            selectCurrentlyAt={selectCurrentlyAt}
+            selectIsPlaying={selectIsPlaying}
+            setCurrentlyAt={setCurrentlyAt}
+            setIsPlaying={setIsPlaying}
+          />
+          {/* Pushed down below the time codes, which overlay this content from above */}
+          <div css={{ position: "relative", top: `${timelineStampsHeight}px` }}>
+            <TimelineSubtitleSegmentsList timelineWidth={width} />
+            <div css={{ position: "relative", height: `${waveformHeight}px` }} >
+              <Waveforms timelineHeight={waveformHeight} />
+              <CuttingSegmentsList
+                timelineWidth={width}
+                timelineHeight={waveformHeight}
+                styleByActiveSegment={false}
+                tabable={false}
+                selectSegments={selectSegments}
+                selectActiveSegmentIndex={selectActiveSegmentIndex}
+                moveCut={moveCut}
+              />
+            </div>
           </div>
         </div>
       </ScrollContainer>
@@ -475,6 +507,7 @@ const TimelineSubtitleSegment: React.FC<{
     <Draggable
       onStart={onStartDrag}
       onStop={onStopDrag}
+      onMouseDown={e => e.stopPropagation()}  // Prevent timeline click from also jumping the scrubber here
       defaultPosition={{ x: 10, y: 10 }}
       position={controlledPosition}
       axis="x"
