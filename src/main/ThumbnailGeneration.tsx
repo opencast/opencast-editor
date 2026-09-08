@@ -25,6 +25,7 @@ import {
 } from "../redux/videoSlice";
 import { Track } from "../types";
 import Timeline from "./Timeline";
+import { ZoomDropdown, ZoomSlider } from "./CuttingActions";
 import {
   selectIsPlaying,
   selectIsMuted,
@@ -39,6 +40,8 @@ import {
   setCurrentlyAt,
   jumpToPreviousSegment,
   jumpToNextSegment,
+  timelineZoomIn,
+  timelineZoomOut,
 } from "../redux/videoSlice";
 import { ThemedTooltip } from "./Tooltip";
 import { VideoPlayer, VideoPlayerForwardRef } from "./VideoPlayers";
@@ -51,6 +54,10 @@ import {
   UploadButton,
 } from "./ThumbnailSelect";
 import { selectIndex, setIsDisplayEditView } from "../redux/thumbnailSlice";
+import { selectKeymap } from "../redux/hotkeySlice";
+import { useHotkeys } from "react-hotkeys-hook";
+import { rewriteKeys } from "../globalKeys";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 
 /**
@@ -202,6 +209,7 @@ const ThumbnailActions: React.FC<{
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const keymap = useAppSelector(selectKeymap);
   const theme = useTheme();
 
   const primaryTrack = useAppSelector(selectPrimaryThumbnailTrack);
@@ -214,6 +222,34 @@ const ThumbnailActions: React.FC<{
     dispatch(setThumbnail({ id: track.id, uri: uri }));
     dispatch(setHasChanges(true));
   };
+
+  // Callback for the zoom slider/dropdown, dispatching the zoom action to redux
+  const dispatchZoomAction = (
+    action: ActionCreatorWithoutPayload<string> | undefined,
+    actionWithPayload: ActionCreatorWithPayload<number, string> | undefined,
+    payload: number,
+  ) => {
+    if (action) {
+      dispatch(action());
+    }
+    if (actionWithPayload) {
+      dispatch(actionWithPayload(payload));
+    }
+  };
+
+  // Hotkeys for zooming, shared with the Cutting/Chapter/Subtitle timelines
+  useHotkeys(
+    keymap.cutting.zoomIn.key,
+    () => dispatch(timelineZoomIn()),
+    keymap.cutting.zoomIn.options,
+    [],
+  );
+  useHotkeys(
+    keymap.cutting.zoomOut.key,
+    () => dispatch(timelineZoomOut()),
+    keymap.cutting.zoomOut.options,
+    [],
+  );
 
   const thumbnailActionsStyle = css({
     display: "flex",
@@ -269,7 +305,17 @@ const ThumbnailActions: React.FC<{
           <div css={verticalLineStyle} />
         </>
       }
-
+      <ZoomSlider actionHandler={dispatchZoomAction}
+        tooltip={t("cuttingActions.zoomSlider-tooltip", {
+          hotkeyNameIn: rewriteKeys(keymap.cutting.zoomIn.key),
+          hotkeyNameOut: rewriteKeys(keymap.cutting.zoomOut.key),
+        })}
+        ariaLabelText={t("cuttingActions.zoomSlider-aria", {
+          hotkeyNameIn: rewriteKeys(keymap.cutting.zoomIn.key),
+          hotkeyNameOut: rewriteKeys(keymap.cutting.zoomOut.key),
+        })}
+      />
+      <ZoomDropdown />
     </div>
   );
 };

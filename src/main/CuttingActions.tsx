@@ -393,7 +393,7 @@ interface ZoomSliderInterface {
   ariaLabelText: string,
 }
 
-const ZoomSlider : React.FC<ZoomSliderInterface> = ({
+export const ZoomSlider : React.FC<ZoomSliderInterface> = ({
   actionHandler,
   tooltip,
   ariaLabelText,
@@ -462,7 +462,7 @@ const ZoomSlider : React.FC<ZoomSliderInterface> = ({
   );
 };
 
-const ZoomDropdown : React.FC = () => {
+export const ZoomDropdown : React.FC = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const seconds = useAppSelector(selectDisplayDuration);

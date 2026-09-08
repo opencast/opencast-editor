@@ -47,6 +47,106 @@ import { selectKeymap } from "../redux/hotkeySlice";
 import { useResizeObserver } from "usehooks-ts";
 
 /**
+ * Bundles the scroll/zoom mechanics shared by every zoomable, horizontally scrollable
+ * timeline (Cutting, Chapters, Subtitles): measuring the visible and total width, keeping
+ * the current view centered on zoom changes, and turning a click into a seek.
+ */
+export const useZoomableTimeline = (
+  currentlyAt: number,
+  setClickTriggered: ActionCreatorWithPayload<boolean, string>,
+  setCurrentlyAt: ActionCreatorWithPayload<number, string>,
+) => {
+  const dispatch = useAppDispatch();
+  const duration = useAppSelector(selectDuration);
+  const durationInSeconds = useAppSelector(selectDurationInSeconds);
+  const timelineZoom = useAppSelector(selectTimelineZoom);
+  const displayDuration = useAppSelector(selectDisplayDuration);
+
+  const ref = useRef<HTMLDivElement>(null);
+  const { width = 1 } = useResizeObserver({ ref: ref as React.RefObject<HTMLDivElement> });
+  const scrollContainerRef = useRef<HTMLElement>(null);
+  const { width: scrollContainerWidth = 1 } = useResizeObserver({
+    ref: scrollContainerRef as React.RefObject<HTMLElement>,
+  });
+
+  const currentlyScrolling = useRef(false);
+  const zoomCenter = useRef(0);
+
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [visibleWidth, setVisibleWidth] = useState(0);
+
+  // Keep track of what point of the timeline should stay in view when the zoom level changes
+  const updateScroll = () => {
+    if (currentlyScrolling.current) {
+      currentlyScrolling.current = false;
+      return;
+    }
+    const scrollLeft = scrollContainerRef.current?.scrollLeft ?? 0;
+    const clientWidth = scrollContainerRef.current?.clientWidth ?? 0;
+    const centerPosition = scrollLeft + 0.5 * clientWidth;
+    const scrubberPosition = duration ? (currentlyAt / duration) * width : 0;
+    const scrubberVisible = scrollLeft <= scrubberPosition && scrubberPosition <= scrollLeft + clientWidth;
+
+    zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
+  };
+
+  const updateScrollMetrics = () => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+    const el = scrollContainerRef.current;
+    setScrollLeft(el.scrollLeft);
+    setVisibleWidth(el.clientWidth);
+  };
+
+  const displayPercentage = (durationInSeconds / displayDuration);
+  const zoomedWidth = scrollContainerWidth * displayPercentage;
+
+  // Make sure visibleWidth is set so canvas is drawn on first render
+  useLayoutEffect(() => {
+    updateScrollMetrics();
+  }, [width, duration]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(updateScroll, [currentlyAt, timelineZoom, width, scrollContainerWidth]);
+
+  // Keep the previously visible point of the timeline in view when the zoom level changes
+  useEffect(() => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+    const clientWidth = scrollContainerRef.current.clientWidth ?? 0;
+    const left = zoomCenter.current * displayPercentage * clientWidth - 0.5 * clientWidth;
+
+    currentlyScrolling.current = true;
+    scrollContainerRef.current.scrollLeft = left;
+  }, [displayPercentage]);
+
+  // Update the current time based on the position clicked on the timeline
+  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    dispatch(setClickTriggered(true));
+    dispatch(setCurrentlyAt((offsetX / width) * (duration)));
+  };
+
+  // Scroll the scroll container by its width one time
+  // To be used when the scrubber moves out of sight while playing the video.
+  const scrollByOwnWidth = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollContainerRef.current?.scrollLeft + scrollContainerWidth;
+      updateScroll();
+    }
+  };
+
+  return {
+    duration, ref, width, scrollContainerRef, scrollContainerWidth,
+    scrollLeft, visibleWidth, zoomedWidth,
+    updateScrollMetrics, updateScroll, setCurrentlyAtToClick, scrollByOwnWidth,
+  };
+};
+
+/**
  * A container for visualizing the cutting of the video, as well as for controlling
  * the current position in the video
  * Its width corresponds to the duration of the video
@@ -74,100 +174,23 @@ const Timeline: React.FC<{
 
   // Init redux variables
   const currentlyAt = useAppSelector(selectCurrentlyAt);
-  const dispatch = useAppDispatch();
-  const duration = useAppSelector(selectDuration);
-  const durationInSeconds = useAppSelector(selectDurationInSeconds);
-  const timelineZoom = useAppSelector(selectTimelineZoom);
-  const displayDuration = useAppSelector(selectDisplayDuration);
 
   const scrubberRef = useRef<HTMLDivElement | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
-  const { width = 1 } = useResizeObserver({ ref: ref as React.RefObject<HTMLDivElement> });
-  const scrollContainerRef = useRef<HTMLElement>(null);
-  const { width: scrollContainerWidth = 1 } = useResizeObserver({
-    ref: scrollContainerRef as React.RefObject<HTMLElement>,
-  });
-
-  const currentlyScrolling = useRef(false);
-  const zoomCenter = useRef(0);
+  const {
+    duration, ref, width, scrollContainerRef, scrollContainerWidth,
+    scrollLeft, visibleWidth, zoomedWidth,
+    updateScrollMetrics, updateScroll, setCurrentlyAtToClick, scrollByOwnWidth,
+  } = useZoomableTimeline(currentlyAt, setClickTriggered, setCurrentlyAt);
 
   // Vars for timelineStamps
   const timelineStampsHeight = 20;
   const waveformHeight = timelineHeight - timelineStampsHeight;
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [visibleWidth, setVisibleWidth] = useState(0);
-
-  const updateScroll = () => {
-    if (currentlyScrolling.current) {
-      currentlyScrolling.current = false;
-      return;
-    }
-    const scrollLeft = scrollContainerRef.current?.scrollLeft ?? 0;
-    const clientWidth = scrollContainerRef.current?.clientWidth ?? 0;
-    const centerPosition = scrollLeft + 0.5 * clientWidth;
-    const scrubberPosition = duration ? (currentlyAt / duration) * width : 0;
-    const scrubberVisible = scrollLeft <= scrubberPosition && scrubberPosition <= scrollLeft + clientWidth;
-
-    zoomCenter.current = (scrubberVisible ? scrubberPosition : centerPosition) / width;
-
-  };
-
-  const updateScrollMetrics = () => {
-    if (!scrollContainerRef.current) {
-      return;
-    }
-    const el = scrollContainerRef.current;
-    setScrollLeft(el.scrollLeft);
-    setVisibleWidth(el.clientWidth);
-  };
-
-  const displayPercentage = (durationInSeconds / displayDuration);
-  const getWaveformWidth = (baseWidth: number) => {
-    return baseWidth * displayPercentage;
-  };
-  const zoomedWidth = getWaveformWidth(scrollContainerWidth);
-
-  // Make sure visibleWidth is set so canvas is drawn on first render
-  useLayoutEffect(() => {
-    updateScrollMetrics();
-  }, [width, duration]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(updateScroll, [currentlyAt, timelineZoom, width, scrollContainerWidth]);
-
-  useEffect(() => {
-    if (!scrollContainerRef.current) {
-      return;
-    }
-    const clientWidth = scrollContainerRef.current.clientWidth ?? 0;
-    const left = zoomCenter.current * displayPercentage * clientWidth - 0.5 * clientWidth;
-
-    currentlyScrolling.current = true;
-    scrollContainerRef.current.scrollLeft = left;
-  }, [displayPercentage]);
 
   const timelineStyle = css({
     position: "relative",     // Need to set position for Draggable bounds to work
     height: timelineHeight + "px",
     width: `${zoomedWidth}px`,    // Width modified by zoom
   });
-
-  // Update the current time based on the position clicked on the timeline
-  const setCurrentlyAtToClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    dispatch(setClickTriggered(true));
-    dispatch(setCurrentlyAt((offsetX / width) * (duration)));
-  };
-
-  // Scroll the scroll container by its width one time
-  // To be used when the scrubber moves out of sight while playing the video.
-  const scrollByOwnWidth = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft = scrollContainerRef.current?.scrollLeft + scrollContainerWidth;
-      updateScroll();
-    }
-  };
 
   return (
     <CuttingActionsContextMenu>
@@ -296,13 +319,25 @@ export const Scrubber = React.forwardRef<HTMLDivElement, ScrubberProps>((props, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineWidth]);
 
-  // Check when the scrubber moves out of sight (can happen when playing the video while zoomed in)
-  // and then scroll the container
+  // Latest scroll metrics, read without making the effect below re-run on every manual scroll
+  const scrollLeftRef = useRef(scrollLeft);
+  const scrollContainerWidthRef = useRef(scrollContainerWidth);
+  const scrollTheContainerbyOwnWidthRef = useRef(scrollTheContainerbyOwnWidth);
   useEffect(() => {
-    if (controlledPosition.x > (scrollLeft + scrollContainerWidth)) {
-      scrollTheContainerbyOwnWidth();
+    scrollLeftRef.current = scrollLeft;
+    scrollContainerWidthRef.current = scrollContainerWidth;
+    scrollTheContainerbyOwnWidthRef.current = scrollTheContainerbyOwnWidth;
+  });
+
+  // Check when the scrubber moves out of sight (can happen when playing the video while zoomed in)
+  // and then scroll the container. Only reacts to the scrubber actually moving, so that manually
+  // scrolling the scrubber out of view (e.g. to look at another part of the timeline) doesn't
+  // immediately get overridden.
+  useEffect(() => {
+    if (controlledPosition.x > (scrollLeftRef.current + scrollContainerWidthRef.current)) {
+      scrollTheContainerbyOwnWidthRef.current();
     }
-  }, [controlledPosition.x, scrollContainerWidth, scrollLeft, scrollTheContainerbyOwnWidth]);
+  }, [controlledPosition.x]);
 
   // Callback for when the scrubber gets dragged by the user
   const onControlledDrag: DraggableEventHandler = debounce((_e, position: { x: number, y : number }) => {
