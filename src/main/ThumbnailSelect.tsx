@@ -481,20 +481,20 @@ const WorkaroundThumbnailGenerator: React.FC<{
     ? tracks.find(t => t.flavor.type === thumbnailTime.flavorType)
     : undefined;
 
-  const ref = useRef<ReactPlayer>(null);
+  const ref = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [seeked, setSeeked] = useState(false);
 
   useEffect(() => {
     if (ref.current && ready && track && track.thumbnailTime && !track.thumbnailUri) {
-      ref.current.seekTo(parseFloat(track.thumbnailTime.time), "seconds");
+      ref.current.currentTime = parseFloat(track.thumbnailTime.time);
     }
   }, [dispatch, ready, track]);
 
   useEffect(() => {
     if (ref.current && ready && track && track.thumbnailTime && !track.thumbnailUri
       && seeked) {
-      const videoElement = ref.current?.getInternalPlayer() as HTMLVideoElement;
+      const videoElement = ref.current as HTMLVideoElement;
       const canvas = document.createElement("canvas");
       canvas.width = videoElement.videoWidth;
       canvas.height = videoElement.videoHeight;
@@ -519,14 +519,14 @@ const WorkaroundThumbnailGenerator: React.FC<{
   }
 
   return (
-    <ReactPlayer url={thumbnailTrack.uri}
+    <ReactPlayer src={thumbnailTrack.uri}
       css={playerStyle}
       ref={ref}
       width="unset"
       height="100%"
       playing={false}
       onReady={() => setReady(true)}
-      onSeek={() => setSeeked(true)}
+      onSeeked={() => setSeeked(true)}
     />
   );
 };

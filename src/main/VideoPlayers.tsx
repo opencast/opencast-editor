@@ -394,7 +394,7 @@ export const VideoPlayer = React.forwardRef<VideoPlayerForwardRef, VideoPlayerPr
         return ref.current?.clientWidth ?? 0;
       },
       getCurrentTime() {
-        return (ref.current?.getInternalPlayer() as HTMLVideoElement).currentTime;
+        return (ref.current as HTMLVideoElement).currentTime;
       },
     }));
 
